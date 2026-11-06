@@ -1,0 +1,161 @@
+name: "Leaderboard row"
+description: "Submit benchmark numbers from your own machine and media for docs/leaderboard.md"
+labels: ["leaderboard"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A row is admissible when three things are stated: the **media class**, the
+        **tenant conditions**, and the fact that every number came from an **independent
+        read-back** (ffprobe on the output file, timeline item geometry, the server's
+        operation log). Disclosed deviations are worth more than clean-looking numbers —
+        a run with a footnote beats a run nobody can reproduce.
+
+        Get your media class first:
+        ```
+        python3 -I bench/resolve-agentic/check_media.py yourclip.mov
+        ```
+        Procedure: [`bench/resolve-agentic/RUNBOOK.md`](https://github.com/willturner-maker/benchmarks/blob/main/bench/resolve-agentic/RUNBOOK.md)
+        · Engine rerun: `python3 -I bench/2026-11-06/ladder_kv.py --out my-run.jsonl`
+
+  - type: input
+    id: run_date
+    attributes:
+      label: Run date
+      placeholder: "2026-11-14"
+    validations:
+      required: true
+
+  - type: input
+    id: host
+    attributes:
+      label: Host
+      description: "Chip, cores, unified memory, macOS version, where render output and scratch live"
+      placeholder: "M4 Pro, 20-core GPU, 48 GB, macOS 26.4, renders on external SSD"
+    validations:
+      required: true
+
+  - type: input
+    id: stack
+    attributes:
+      label: Resolve build and MCP server version
+      description: "Exact builds — behaviour changes between patch releases here"
+      placeholder: "Resolve Studio 21.2.0.6 · davinci-resolve-mcp 4.19.2"
+    validations:
+      required: true
+
+  - type: input
+    id: agent_model
+    attributes:
+      label: Agent model, and how it was served
+      placeholder: "Qwen3.8-Flash-Next IQ3_S via Splash 1.6.0 on :8000"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: media_class
+    attributes:
+      label: Media class of your fixture clip
+      description: "As reported by check_media.py. Class B numbers never rank alongside class A render times."
+      options:
+        - "A — timings comparable to the published rows"
+        - "B — outcomes/honesty comparable; render ms are their own series"
+        - "Not sure (I will paste the validator output below)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: fixture
+    attributes:
+      label: Fixture clip — paste the check_media.py output
+      description: "Include codec, resolution, fps, duration, total frames, and the validator's class verdict"
+      render: json
+      placeholder: |
+        {
+          "source": { "codec": "h264", "width": 1920, "height": 1080, "fps": 30.0,
+                      "duration_s": 140.0, "total_frames": 4200 },
+          "timeline": { "width": 1920, "height": 1080, "fps": 30.0 },
+          "comparability": "B"
+        }
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tenant
+    attributes:
+      label: Were the render probes single-tenant?
+      description: "Concurrent agents inflate render ms (a published T7 render hit 7285 ms under contention)"
+      options:
+        - "Yes — nothing else touched Resolve or the engine during the renders"
+        - "No — runs overlapped; the numbers carry contention"
+        - "Mixed — explained in deviations"
+    validations:
+      required: true
+
+  - type: textarea
+    id: resolve_render
+    attributes:
+      label: Resolve render probe
+      description: "121 frames at your timeline resolution, mov/H.264, queue time excluded (TimeTakenToRenderInMs), file verified with ffprobe"
+      placeholder: |
+        cold: 2980 ms
+        warm median: 1310 / 1298 / 1305 → 1298 ms (92 fps)
+        verified: 121 packets, h264, mov, 3840x2160
+    validations:
+      required: true
+
+  - type: textarea
+    id: resolve_ops
+    attributes:
+      label: Server-side operation medians (optional but useful)
+      placeholder: "prepare_render_job 140 ms · verify_output 45 ms · set_current 105 ms · probe_timeline_structure 12 ms"
+
+  - type: textarea
+    id: resolve_agentic
+    attributes:
+      label: Agentic suite (six tasks)
+      description: "n runs per task, outcomes verified by read-back, and how many reports were honest"
+      placeholder: |
+        n=3 per task, sealed fresh agents, MCP-only tooling
+        outcomes verified: 18/18
+        honest: 18/18
+        tool uses per run total: 168 / 201 / 149
+        wall per run total: 980 / 1402 / 1130 s
+    validations:
+      required: true
+
+  - type: textarea
+    id: engine
+    attributes:
+      label: Splash engine numbers (optional)
+      description: "From ladder_kv.py — TTFT, width-ladder medians, KV-pressure verdict"
+      render: json
+
+  - type: textarea
+    id: deviations
+    attributes:
+      label: Deviations from the runbook
+      description: "Everything that differed: sealing strength, brief wording, warmup state, teardown, disk, mixed fps. This is the field that makes a row trustworthy — write freely."
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence links (optional)
+      description: "Gist/repo with the raw JSONL, ffprobe output, operation log, screenshots"
+
+  - type: checkboxes
+    id: attestation
+    attributes:
+      label: Attestation
+      description: "All four must be true for the row to be ranked rather than listed with a note"
+    options:
+      - label: "Every number above came from an independent read-back, not from the agent's own report"
+        required: true
+      - label: "Media class is stated, and I understand class B timings are not ranked with class A"
+        required: true
+      - label: "Tenant conditions are stated"
+        required: true
+      - label: "Deviations are disclosed"
+        required: true

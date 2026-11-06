@@ -70,10 +70,16 @@ stack versions, n, and whether runs were single-tenant.
 2. Run the suite: [`bench/resolve-agentic/RUNBOOK.md`](../bench/resolve-agentic/RUNBOOK.md)
    (fixture setup → seal the conditions → six briefs in `tasks.md` → grade from read-backs).
 3. For the engine suite: `python3 -I bench/2026-11-06/ladder_kv.py --out my-run.jsonl`.
-4. Open an issue or PR adding one object to `suites.community_runs` in
-   `leaderboard/results.json`. Include: date, host, Resolve build, MCP version, media
-   class, n, the numbers, and **any deviation from the runbook** — deviations disclosed
-   are worth more than numbers without them.
+4. Submit it through the
+   **[Leaderboard row issue form](https://github.com/willturner-maker/benchmarks/issues/new?labels=leaderboard&template=leaderboard-row.yml)**
+   — it asks for exactly what `suites.community_runs` needs (date, host, exact builds,
+   agent model and how it was served, media class plus the validator output, tenant
+   conditions, the numbers, and deviations). You don't have to know the JSON schema;
+   the row gets added to `leaderboard/results.json` from your issue.
+
+   The form ends in a four-item attestation — read-back-only grading, media class stated,
+   tenant conditions stated, deviations disclosed. All four must be true for a row to be
+   **ranked**; a row missing one is still welcome, listed with a note instead.
 
 Rows that omit the media class or mix tenant conditions get the row, not the number:
 they're listed with a note rather than ranked.

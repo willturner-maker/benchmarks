@@ -20,7 +20,10 @@ macOS 27.2.0.
 
 Standings across versions live in [`docs/leaderboard.md`](docs/leaderboard.md)
 (machine-readable: [`leaderboard/results.json`](leaderboard/results.json)) — including the
-rules about which rows are comparable at all. The full scorecards are self-contained HTML
+rules about which rows are comparable at all. Your own run comes in through the
+[**Leaderboard row issue form**](https://github.com/willturner-maker/benchmarks/issues/new?labels=leaderboard&template=leaderboard-row.yml),
+which asks for media class, tenant conditions, exact builds and a read-back attestation
+before a row can be ranked. The full scorecards are self-contained HTML
 (no external assets, no build step). GitHub's file view shows their source; **view them
 rendered** through GitHub Pages:
 
