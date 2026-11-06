@@ -170,14 +170,20 @@ refusal-to-fabricate check stays part of the suite.
 
 ## Re-running against a future Splash version
 
-Scripts committed under `bench/2026-11-06/` (engine_probe.py, width512.py, width_ladder.py,
-kv_pressure_v4.py, driver2.py, fixture_status.json). Procedure: start the engine the usual way
-(`~/start-resolve-ai.sh`), warm it (one unscored agent session), run `python3 -I
-engine_probe.py && python3 -I width_ladder.py`, then `python3 -I driver2.py` (adjust
-`DIR`/model id; the model id is read from `/v1/models`). Compare: cold/warm TTFT, decode w1
-aggregate tok/s (512-token rounds), the full width ladder **against the plateau shape**
-(baseline: rise to ~378 by width 4, dip at 6, flat 372–383 through 32, stop rule never
-fired), and the 12-trial agentic table. Do **not** restart the engine mid-suite; note
+Scripts committed under `bench/2026-11-06/`. The **combined entry point is
+`ladder_kv.py`** — one run performs BOTH the v3 width ladder and the v4 KV-pressure
+probe and prints one combined SUMMARY, so every future report carries both methods;
+`--out` picks the JSONL, `--quick` is a harness smoke test, not for baselining. The
+per-method originals (engine_probe.py, width512.py, width_ladder.py, kv_pressure_v4.py)
+stay committed for provenance, plus the agentic driver (driver2.py, fixture_status.json).
+Procedure: start the engine the usual way (`~/start-resolve-ai.sh`), warm it (one
+unscored agent session), run `python3 -I engine_probe.py && python3 -I ladder_kv.py`,
+then `python3 -I driver2.py` (model id is read from `/v1/models`). Compare: cold/warm
+TTFT; the width ladder **against the plateau shape** (baseline: rise to ~378 by width 4,
+dip at 6, flat 372–383 through 32, stop rule never fired); the KV probe **against the
+no-suspension baseline** (611k tokens ≈ 4.4× budget with zero suspensions; first
+`waiting_memory` hold at w12 — a moved lifetime suspension counter is the regression
+signal); and the 12-trial agentic table. Do **not** restart the engine mid-suite; note
 cache state in the results header.
 
 ## Baseline headline (for the next version's diff)

@@ -20,7 +20,9 @@ macOS 27.2.0.
 
 - `docs/` — the results write-ups; each carries its own re-run recipe.
 - `bench/<suite-date>/` — runnable scripts + raw JSONL for that run, so future reruns
-  compare against committed raw data, not summaries.
+  compare against committed raw data, not summaries. Splash reruns go through the single
+  entry point `bench/2026-11-06/ladder_kv.py` (width ladder + KV-pressure probe in one run,
+  one combined summary).
 
 Moved out of `willturner-maker/splash-dashboard` on 2026-11-06 (the dashboard repo's git
 history still holds the pre-move commits).
