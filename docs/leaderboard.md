@@ -6,7 +6,7 @@ Version-to-version standings for the local AI/editing stack. Machine-readable so
 **Three rules before you read or add a row** (they're what keep a leaderboard honest):
 
 1. **Same media class or different table.** Render ms from class B media (anything that
-   isn't the [class A](bench/resolve-agentic/MEDIA.md) equivalence class) go in the
+   isn't the [class A](../bench/resolve-agentic/MEDIA.md) equivalence class) go in the
    community table below, never alongside class A rows. A 1080p H.264 render being
    "faster" than an 8K HEVC one says nothing about the toolchain.
 2. **Tenant conditions are part of the number.** Single-tenant renders only; two-agent
