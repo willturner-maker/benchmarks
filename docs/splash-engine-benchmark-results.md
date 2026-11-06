@@ -73,6 +73,50 @@ measure the real impact). `decode_batches_by_width` plus **peak `admission.waiti
   lifetime counters (b1 74,602 / b2 23,546 / b3 959 / b4 0) confirm production traffic
   rarely reaches width 3 — everything past width ~3 is headroom in reserve, now quantified.
 
+### v4 KV-pressure probe — chasing the first suspension (long-context, short-output)
+
+Question: how far can load go before `admission.suspended` reaches 1? v3 showed stream
+*width* can never get there (transport caps at 32 requests; KV footprint at width 32 was
+~17% of budget), and live `/status` gave the budget: **resident KV = 139,264 tokens**
+(4,352 pages × 32; int8 ≈ 13.2 KB/token). Prediction: suspension past ~139k summed live
+context. Shape: per-request unique ~46.7k-token prompts (sequential-number streams,
+offset per request so prefix-cache dedup can't share KV — the tokenizer ran ~2.3× denser
+than the 20k calibration target, which only strengthened the test: reported token counts
+are measured from `usage.prompt_tokens`), `max_tokens` 8, widths 2→12; sampler every 0.5 s
+over admission/KV/spill/governor gauges plus **lifetime `resource_suspensions` /
+`priority_suspensions` counter deltas** (catches a suspension that opens and closes
+between samples). Script: `bench/2026-11-06/kv_pressure_v4.py`.
+
+| width | unique tokens total | wall (s) | peak waiting / waiting_memory | kv.pages_active peak (tokens) | disk kv_demotions Δ |
+|---|---|---|---|---|---|
+| 2 | 93,394 | 25.9 | 0 / 0 | 52,480 | 0 |
+| 4 | 186,788 | 51.9 | 0 / 0 | 52,448 | 0 |
+| 6 | 280,182 | 77.6 | 0 / 0 | **142,272 — the full resident ring** | 0 |
+| 8 | 373,576 | 104.4 | 0 / 0 | 52,512 | +308 |
+| 10 | 509,370 | 142.9 | 0 / 0 | 60,928 | +645 |
+| 12 | **611,244** (4.4× budget) | 170.9 | **1 / 1** | 59,104 | +97 |
+
+**Findings.**
+- **No suspension at any round, up to 4.4× the KV budget.** Gauge peak 0; lifetime
+  counters unmoved (`resource_suspensions` 90→90, `priority_suspensions` 0→0);
+  `capacity_failures` 0.
+- **The 139k-sum prediction was wrong as a mechanism.** Summed *accepted* contexts far
+  exceed resident KV, but simultaneous *live* KV never did: the scheduler serializes
+  prefills (wall = total tokens ÷ ~3.6 k tok/s, perfectly linear), reclaims cache pages
+  ahead of demand (at w6 live KV touched 142k tokens — exactly the ring capacity — with
+  free pages never below 460), and **demoted 1,050 blocks to the disk cache instead of
+  spilling** (`kv_spill` requests stayed 0 for these fire-and-forget rounds).
+- The memory gate first *paced* at 611k tokens: one `waiting_memory` hold at w12, oldest
+  wait 265 ms. Pacing, not suspension.
+- Suspension therefore needs **context that holds**: concurrent sessions that keep large
+  contexts alive over minutes (real agent sessions), not fire-and-forget prefills. The
+  lifetime counters prove the engine already does exactly that under real use — 90
+  suspensions, 90 resumptions, 263k replay tokens, zero user-visible failures.
+- Answer to the standing question: **`suspended` is not a throughput cliff to chase.**
+  Neither stream width (v3, to 32) nor long-context prefill volume (v4, to 4.4× KV budget)
+  moves it; it only fires for held-context contention, and when it does, it's a routine
+  self-healing park-and-replay.
+
 ## Layer 2 — agentic suite (headless Claude Code served by Splash/Qwen)
 
 Condition (fixed, reproducible): `claude -p` fresh session per trial;
@@ -127,7 +171,7 @@ refusal-to-fabricate check stays part of the suite.
 ## Re-running against a future Splash version
 
 Scripts committed under `bench/2026-11-06/` (engine_probe.py, width512.py, width_ladder.py,
-driver2.py, fixture_status.json). Procedure: start the engine the usual way
+kv_pressure_v4.py, driver2.py, fixture_status.json). Procedure: start the engine the usual way
 (`~/start-resolve-ai.sh`), warm it (one unscored agent session), run `python3 -I
 engine_probe.py && python3 -I width_ladder.py`, then `python3 -I driver2.py` (adjust
 `DIR`/model id; the model id is read from `/v1/models`). Compare: cold/warm TTFT, decode w1
@@ -142,5 +186,8 @@ Splash 1.6.0 @ M5 Ultra, warm: **TTFT 201 ms warm / 380 ms cold** (341-token pro
 **decode w1 149–170 tok/s** (session-dependent warmth) · **width ladder: rise to ~378 by
 width 4, reproducible dip at 6 (~330), then a flat plateau ~372–383 tok/s through width 32
 (2.5–2.6x w1) — no collapse by 32; the ceiling is compute saturation, not a cliff** ·
+**v4 KV-pressure: no suspension even at 4.4x the 139k-token resident KV budget — the
+scheduler serializes prefills and demotes to disk; suspension is a held-context,
+self-healing mechanism, not a throughput cliff** ·
 **agentic 11/12 verified, 12/12 honest, median 2 turns / ~7 s per trial** ·
 engine-side prefix-cache reuse 20–45 k tokens per fresh agent session.
