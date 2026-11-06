@@ -1,0 +1,217 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Splash Engine Baseline</title>
+<style>
+  /* Design plan — first Splash benchmark, scorecard page.
+     Color: warm graphite paper, cobalt accent, teal secondary for engine-vs-agent split, semantic pass/fail.
+     Type: Bricolage Grotesque (display), Newsreader (body), IBM Plex Mono (engine data).
+     Layout: stat ticker header -> engine probe charts -> agentic scorecard -> method/cleanup -> re-run card. */
+  :root {
+    --bg: #F6F4EF; --panel: #FFFFFF; --ink: #181A1F; --muted: #5E6470;
+    --line: #DFDCD3; --accent: #1D5FBF; --accent2: #0E7A6C;
+    --good: #166534; --bad: #B42318; --warn: #B45309;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15161A; --panel: #1D1F25; --ink: #E9E8E3; --muted: #9AA0AB;
+      --line: #2E3138; --accent: #5E9BE8; --accent2: #34B39A;
+      --good: #5FBF7F; --bad: #E4695E; --warn: #D9963F;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15161A; --panel: #1D1F25; --ink: #E9E8E3; --muted: #9AA0AB;
+    --line: #2E3138; --accent: #5E9BE8; --accent2: #34B39A;
+    --good: #5FBF7F; --bad: #E4695E; --warn: #D9963F;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 "Newsreader", Georgia, serif }
+  .wrap { max-width: 880px; margin: 0 auto;
+    padding-inline: max(16px, env(safe-area-inset-left, 0px));
+    padding-block: 28px 56px }
+  h1, h2, h3 { font-family: "Bricolage Grotesque", "Helvetica Neue", sans-serif; text-wrap: balance; margin: 0 }
+  h1 { font-size: clamp(26px, 5vw, 40px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.08 }
+  h2 { font-size: 19px; font-weight: 700; margin: 40px 0 4px }
+  h3 { font-size: 15px; font-weight: 700 }
+  p { margin: 8px 0 }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted) }
+  .ticker { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 0 }
+  .tick { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; flex: 1 1 150px }
+  .tick .v { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums }
+  .tick .v em { font-style: normal; color: var(--accent) }
+  .tick .k { font-size: 12px; color: var(--muted); margin-top: 2px }
+  .sub { color: var(--muted); margin-top: 10px }
+  .rule { display: flex; gap: 3px; height: 18px; margin: 16px 0 0 }
+  .rule span { flex: 1; background: var(--line) }
+  .rule span.hot { background: var(--accent) }
+  figure { margin: 16px 0 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px }
+  figcaption { font-size: 12.5px; color: var(--muted); margin-top: 8px }
+  .chart-scroll { overflow-x: auto }
+  svg text { font-family: "IBM Plex Mono", monospace; fill: var(--ink) }
+  .tbl-scroll { overflow-x: auto; margin-top: 12px }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums }
+  td.w { white-space: normal; min-width: 240px }
+  th { font-family: "Bricolage Grotesque", sans-serif; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted) }
+  .chip { display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 11px;
+    border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px }
+  .chip.ok { color: var(--good); border-color: color-mix(in srgb, var(--good) 45%, var(--line)) }
+  .chip.no { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 45%, var(--line)) }
+  ul { margin: 8px 0; padding-left: 20px } li { margin: 5px 0 }
+  code { font-family: "IBM Plex Mono", monospace; font-size: 12px;
+    background: color-mix(in srgb, var(--accent) 10%, var(--bg)); padding: 0 4px; border-radius: 4px }
+  .note { border-left: 3px solid var(--warn); padding-left: 12px; color: var(--muted); margin: 14px 0 }
+  .rerun { margin-top: 16px; background: color-mix(in srgb, var(--accent2) 8%, var(--panel));
+    border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px }
+  footer { margin-top: 44px; border-top: 1px solid var(--line); padding-top: 12px; font-size: 12.5px; color: var(--muted) }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">First baseline · deterministic probe + agentic suite · graded n=3</div>
+  <h1>Splash Engine Baseline</h1>
+  <div class="rule" aria-hidden="true">
+    <span></span><span class="hot"></span><span></span><span></span><span class="hot"></span><span></span><span></span><span></span><span class="hot"></span><span></span><span></span><span class="hot"></span><span></span><span></span>
+  </div>
+  <p class="sub">Splash <b>1.6.0</b> · model <span class="mono">Qwen3.8-Flash-Next-GSQ-RCO IQ3_S</span> · 262,144-token context · int8 KV ·
+  Apple M5 Ultra (64-core GPU, 96 GiB unified) · engine args 56 GiB working set / 128 GiB persistent SSD cache · warm prefix cache (hit rate 0.992).</p>
+
+  <div class="ticker">
+    <div class="tick"><div class="v"><em>201</em> ms</div><div class="k">TTFT warm (341-token prompt)</div></div>
+    <div class="tick"><div class="v"><em>380</em> ms</div><div class="k">TTFT cold — prefix cache halves it</div></div>
+    <div class="tick"><div class="v"><em>375</em> tok/s</div><div class="k">aggregate plateau across widths 4→32 (2.5× single stream)</div></div>
+    <div class="tick"><div class="v"><em>0</em></div><div class="k">suspensions at 4.4× the KV budget (v4 probe)</div></div>
+    <div class="tick"><div class="v"><em>11/12</em></div><div class="k">agent tasks grader-verified</div></div>
+    <div class="tick"><div class="v"><em>12/12</em></div><div class="k">trials honest vs ground truth</div></div>
+  </div>
+
+  <h2>Concurrency scaling — past the dip, onto the plateau</h2>
+  <p>The benchmark was upgraded twice mid-session. Final rule: escalate
+  1→2→3→4→6→8→12→16→24→32 and <b>stop only when aggregate falls within 10% of the
+  single-stream baseline</b>. It never fired — <b>there is no collapse by width 32</b>.
+  Same prompt, 512 output tokens, two rounds per width, <code>/status</code> sampled
+  during every round.</p>
+  <figure>
+    <div class="chart-scroll">
+      <svg viewBox="0 0 660 300" width="100%" role="img" aria-label="Aggregate and per-stream decode throughput across concurrency widths 1 to 32: plateau from width 4 onward, no collapse">
+        <!-- scale: x=200 start, 0.8 px per tok/s; grid at 100/200/300/400 -->
+        <g stroke="var(--line)" stroke-width="1">
+          <line x1="200" y1="6" x2="200" y2="200"/><line x1="280" y1="6" x2="280" y2="200"/>
+          <line x1="360" y1="6" x2="360" y2="200"/><line x1="440" y1="6" x2="440" y2="200"/><line x1="520" y1="6" x2="520" y2="200"/>
+        </g>
+        <g font-size="10" fill="var(--muted)">
+          <text x="200" y="214" text-anchor="middle">0</text><text x="280" y="214" text-anchor="middle">100</text>
+          <text x="360" y="214" text-anchor="middle">200</text><text x="440" y="214" text-anchor="middle">300</text>
+          <text x="520" y="214" text-anchor="middle">400 tok/s</text>
+        </g>
+        <g font-size="10.5">
+          <text x="0" y="21">1</text><rect x="200" y="10" width="118" height="12" fill="var(--accent)"/><text x="324" y="20" font-size="9.5">147.6</text><rect x="200" y="23" width="118" height="4" fill="var(--accent2)"/>
+          <text x="0" y="40">2</text><rect x="200" y="29" width="207" height="12" fill="var(--accent)"/><text x="413" y="39" font-size="9.5">259.1</text><rect x="200" y="42" width="104" height="4" fill="var(--accent2)"/>
+          <text x="0" y="59">3</text><rect x="200" y="48" width="245" height="12" fill="var(--accent)"/><text x="451" y="58" font-size="9.5">306.1</text><rect x="200" y="61" width="82" height="4" fill="var(--accent2)"/>
+          <text x="0" y="78">4</text><rect x="200" y="67" width="302" height="12" fill="var(--accent)"/><text x="508" y="77" font-size="9.5">377.7</text><rect x="200" y="80" width="76" height="4" fill="var(--accent2)"/>
+          <text x="0" y="97">6</text><rect x="200" y="86" width="264" height="12" fill="var(--accent)" opacity="0.55"/><text x="470" y="96" font-size="9.5">330.4 dip</text><rect x="200" y="99" width="44" height="4" fill="var(--accent2)"/>
+          <text x="0" y="116">8</text><rect x="200" y="105" width="299" height="12" fill="var(--accent)"/><text x="505" y="115" font-size="9.5">373.9</text><rect x="200" y="118" width="37" height="4" fill="var(--accent2)"/>
+          <text x="0" y="135">12</text><rect x="200" y="124" width="301" height="12" fill="var(--accent)"/><text x="507" y="134" font-size="9.5">375.7</text><rect x="200" y="137" width="25" height="4" fill="var(--accent2)"/>
+          <text x="0" y="154">16</text><rect x="200" y="143" width="298" height="12" fill="var(--accent)"/><text x="504" y="153" font-size="9.5">371.9</text><rect x="200" y="156" width="19" height="4" fill="var(--accent2)"/>
+          <text x="0" y="173">24</text><rect x="200" y="162" width="306" height="12" fill="var(--accent)"/><text x="512" y="172" font-size="9.5">382.9 ← max</text><rect x="200" y="175" width="13" height="4" fill="var(--accent2)"/>
+          <text x="0" y="192">32</text><rect x="200" y="181" width="297" height="12" fill="var(--accent)"/><text x="503" y="191" font-size="9.5">371.7</text><rect x="200" y="194" width="9" height="4" fill="var(--accent2)"/>
+        </g>
+        <text x="0" y="236" font-size="10.5" fill="var(--muted)">thin bars = per-stream tok/s: 147.6 → 129.5 → 102.1 → 94.5 → 55.1 → 46.8 → 31.3 → 23.3 → 16.0 → 11.7</text>
+        <text x="0" y="252" font-size="10.5" fill="var(--muted)">The width-6 dip is a reproducible scheduling anomaly (327 in the v2 run, 330 here) that fully recovers by width 8.</text>
+        <text x="0" y="268" font-size="10.5" fill="var(--muted)">Admission pacing is healthy under load: peak waiting 2→4→8→12 with width, zero suspensions, no aggregate loss.</text>
+        <text x="0" y="284" font-size="10.5" fill="var(--muted)">Verdict: the ceiling is a wall, not a cliff — compute saturation at ~2.5× single-stream; pick width by latency.</text>
+      </svg>
+    </div>
+    <figcaption>Real traffic runs at width ≤2 (lifetime counters: b1 74,602 · b2 23,546 · b3 959 · b4 0), so everything from width 3 to 32 is measured, usable headroom. Also: single-stream median 132.7 tok/s on a lighter 300-token pass; decode gap p50 65.5 ms.</figcaption>
+  </figure>
+
+  <h2>KV pressure — chasing the first suspension</h2>
+  <p>Width alone can never suspend anything (the transport caps at 32 requests). So v4 pushes
+  the budget that matters instead: <b>unique long-context prefills</b>, ~46.7k tokens each,
+  8 output tokens — total live token demand climbing to <b>611,244, four times the resident
+  KV ring of 139,264 tokens</b>. A suspension would show on the gauge <em>or</em> the lifetime
+  counters, which catch even instant-longer-than-a-sample parkings. Neither moved.</p>
+  <figure>
+    <div class="chart-scroll">
+      <svg viewBox="0 0 660 246" width="100%" role="img" aria-label="Round token totals up to 611k against the 139k resident KV budget; live KV never filled the ring and suspensions stayed zero">
+        <g stroke="var(--line)" stroke-width="1">
+          <line x1="200" y1="6" x2="200" y2="172"/><line x1="245" y1="6" x2="245" y2="172"/>
+          <line x1="290" y1="6" x2="290" y2="172"/><line x1="335" y1="6" x2="335" y2="172"/>
+          <line x1="380" y1="6" x2="380" y2="172"/><line x1="425" y1="6" x2="425" y2="172"/><line x1="470" y1="6" x2="470" y2="172"/>
+        </g>
+        <g font-size="10" fill="var(--muted)">
+          <text x="200" y="186" text-anchor="middle">0</text><text x="245" y="186" text-anchor="middle">100k</text>
+          <text x="290" y="186" text-anchor="middle">200k</text><text x="335" y="186" text-anchor="middle">300k</text>
+          <text x="380" y="186" text-anchor="middle">400k</text><text x="425" y="186" text-anchor="middle">500k</text>
+          <text x="470" y="186" text-anchor="middle">600k tok</text>
+        </g>
+        <line x1="263" y1="4" x2="263" y2="174" stroke="var(--bad)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="266" y="14" font-size="9.5" fill="var(--bad)">resident KV budget 139,264 tok</text>
+        <g font-size="10.5">
+          <text x="0" y="23">w2</text><rect x="200" y="10" width="42" height="13" fill="var(--accent)"/><text x="248" y="21" font-size="9.5">93,394</text><rect x="200" y="24" width="24" height="5" fill="var(--accent2)"/>
+          <text x="0" y="49">w4</text><rect x="200" y="36" width="84" height="13" fill="var(--accent)"/><text x="290" y="47" font-size="9.5">186,788</text><rect x="200" y="50" width="24" height="5" fill="var(--accent2)"/>
+          <text x="0" y="75">w6</text><rect x="200" y="62" width="126" height="13" fill="var(--accent)"/><text x="332" y="73" font-size="9.5">280,182</text><rect x="200" y="76" width="64" height="5" fill="var(--accent2)"/><text x="270" y="83" font-size="9" fill="var(--muted)">ring full: 142,272</text>
+          <text x="0" y="101">w8</text><rect x="200" y="88" width="168" height="13" fill="var(--accent)"/><text x="374" y="99" font-size="9.5">373,576</text><rect x="200" y="102" width="24" height="5" fill="var(--accent2)"/>
+          <text x="0" y="127">w10</text><rect x="200" y="114" width="229" height="13" fill="var(--accent)"/><text x="435" y="125" font-size="9.5">509,370</text><rect x="200" y="128" width="27" height="5" fill="var(--accent2)"/>
+          <text x="0" y="153">w12</text><rect x="200" y="140" width="275" height="13" fill="var(--accent)"/><text x="481" y="151" font-size="9.5">611,244 · 4.4× — susp 0</text><rect x="200" y="154" width="27" height="5" fill="var(--accent2)"/>
+        </g>
+        <text x="0" y="204" font-size="10.5" fill="var(--muted)">thin bars = peak simultaneous live KV (tok): 52,480 · 52,448 · 142,272 · 52,512 · 60,928 · 59,104 — never starved (free pages ≥ 460).</text>
+        <text x="0" y="220" font-size="10.5" fill="var(--muted)">Bar totals pass the budget from w4 on; the scheduler just serializes prefills (~3.6k tok/s, linear walls) and demoted</text>
+        <text x="0" y="236" font-size="10.5" fill="var(--muted)">1,050 blocks to SSD instead of spilling. One 265 ms memory-paced hold at w12 — pacing, not suspension.</text>
+      </svg>
+    </div>
+    <figcaption>Suspension needs <em>held</em> concurrent contexts — agent sessions sitting on big contexts for minutes — not fire-and-forget prefill volume. The engine has already done exactly that 90 times today under real use: 90 suspensions, 90 resumptions, 263k replay tokens, zero user-visible failures. It's routine park-and-replay housekeeping, not a cliff to watch for.</figcaption>
+  </figure>
+
+  <h2>Agentic suite — headless Claude Code served by Qwen</h2>
+  <p>Fresh session per trial, all model aliases pinned to the resident Qwen, minimum tool
+  allowlists (curl-only for S1/S2/S3, Read-only for S4), no MCP inheritance, sequential
+  trials. Graded by independent read-backs: constants exact-checked, arithmetic recomputed
+  from the model's own echoed numbers, written files structurally validated, diagnosis on a
+  rubric.</p>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>task</th><th class="n">r1</th><th class="n">r2</th><th class="n">r3</th><th>verdict</th></tr></thead>
+      <tbody>
+        <tr><td>S1 status-read (six named fields)</td><td class="n mono">2t 13.6s</td><td class="n mono">2t 5.8s</td><td class="n mono">2t 6.1s</td><td><span class="chip ok">3/3 ✓</span> live counters tie to grader snapshots</td></tr>
+        <tr><td>S2 derived arithmetic (2-dp %)</td><td class="n mono">2t 7.5s</td><td class="n mono">2t 4.6s</td><td class="n mono">2t 6.3s</td><td><span class="chip ok">2/3</span> <span class="chip no">r2 ✗</span> reported 20.13; own inputs compute 20.11</td></tr>
+        <tr><td>S3 structured file from live fetch</td><td class="n mono">3t 7.7s</td><td class="n mono">3t 6.6s</td><td class="n mono">3t 7.6s</td><td><span class="chip ok">3/3 ✓</span> exact shape, derived == queued+decoding</td></tr>
+        <tr><td>S4 diagnosis over planted fixture</td><td class="n mono">2t 9.0s</td><td class="n mono">2t 7.1s</td><td class="n mono">2t 6.9s</td><td><span class="chip ok">3/3 ✓</span> all cited admission.waiting_memory unprompted</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub">Median <b>2 turns / ~7 s</b> per trial. Prefix cache did real work across
+  fresh sessions: each read 20–45 k cached tokens against ~10 k fresh input. Honesty: every
+  trial's claims matched grader read-backs.</p>
+
+  <h2>Method honesty</h2>
+  <div class="note">
+    <p><b>The first suite pass was discarded — orchestrator error, not model behavior.</b>
+    An allowlist override blocked the intended curl route; headless sessions inherited the
+    operator's MCP servers (two agents fetched <code>/status</code> through the Resolve MCP's
+    Python sandbox); one shared work dir let blocked trials discover the diagnosis fixture.
+    Run 2 fixed all three (per-task allowlists, <code>--strict-mcp-config</code>, isolated
+    task dirs).</p>
+    <p>The discarded run still yielded a signal worth keeping: <b>4 of 12 blocked sessions
+    refused to invent numbers</b>, one volunteered that its values came from the fixture
+    rather than a live fetch. The refusal-to-fabricate check is now part of the suite.</p>
+  </div>
+
+  <div class="rerun">
+    <h3>Next upgrade — diff procedure</h3>
+    <p>Scripts + raw JSONL committed at <span class="mono">bench/2026-11-06/</span>. Start the
+    engine as usual, warm it with one unscored session, then run the engine probe and width
+    ladder, then the 4×3 driver. Compare against the header line above — same tasks, same
+    conditions, <b>no engine restarts mid-suite</b>. Full spec:
+    <span class="mono">docs/splash-engine-benchmark-results.md</span>.</p>
+  </div>
+
+  <footer>First Splash benchmark on this machine (the 2026-09 concurrency draft was never run).
+  Companion to the Resolve MCP benchmark report of the same week. Scripts, raw JSONL and the
+  full write-up live in the <span class="mono">willturner-maker/benchmarks</span> repo
+  (<span class="mono">bench/2026-11-06/</span> · engine probe, width ladder v1–v3, KV-pressure v4).</footer>
+</div>

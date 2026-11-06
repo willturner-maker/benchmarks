@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "updated": "2026-11-06",
+  "read_this_first": [
+    "Rows are only comparable within the same media_class and the same tenant conditions.",
+    "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
+    "Render ms are single-tenant; two-agent waves inflate them (a 7285 ms T7 render ran alongside another agent's Fusion work).",
+    "Every number here came from an independent read-back (ffprobe / item geometry / server operation log), never from the agent's report."
+  ],
+  "host_reference": {
+    "cpu": "Apple M5 Ultra, 64-core GPU",
+    "memory_gib": 96,
+    "macos": "27.2",
+    "storage": "render outputs and scratch on external volumes; boot keeps model weights + engine KV cache"
+  },
+  "suites": {
+    "resolve_mcp": [
+      {
+        "date": "2026-11-03",
+        "resolve": "21.1.2.10",
+        "mcp": "4.18.5",
+        "media_class": "A",
+        "render_probe": "121 f, 3840x1520, mov/H.264",
+        "cold_ms": 3436,
+        "warm_median_ms": 1414,
+        "warm_fps": 85,
+        "op_medians_ms": {
+          "prepare_render_job": 243,
+          "verify_output": 61,
+          "set_current": 127,
+          "create_variant_from_ranges": 274,
+          "probe_timeline_structure": 7
+        },
+        "agentic": {
+          "n_runs": 3,
+          "tasks": 6,
+          "outcomes_verified": 18,
+          "honest": 18,
+          "tool_uses_total": [101, 112, 151],
+          "wall_s_total": [1120, 1136, 2011]
+        },
+        "evidence": [
+          "reports/2026-11-03-resolve-21-1-2.html",
+          "docs/resolve-agentic-benchmark-results.md"
+        ],
+        "notes": "Baseline. Original briefs had two arithmetic slips (fixed for runs 2-3)."
+      },
+      {
+        "date": "2026-11-06",
+        "resolve": "21.2.0.6",
+        "mcp": "4.19.0",
+        "media_class": "A",
+        "render_probe": "121 f, 3840x1520, mov/H.264",
+        "cold_ms": 3090,
+        "warm_median_ms": 1296,
+        "warm_fps": 93.4,
+        "op_medians_ms": {
+          "prepare_render_job": 126,
+          "verify_output": 39,
+          "set_current": 98,
+          "create_variant_from_ranges": 261,
+          "probe_timeline_structure": 11,
+          "append_to_timeline": 19
+        },
+        "agentic": {
+          "n_runs": 3,
+          "tasks": 6,
+          "outcomes_verified": 18,
+          "honest": 18,
+          "tool_uses_total": [172, 220, 134],
+          "wall_s_total": [1103, 1553, 1245],
+          "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.0"
+        },
+        "evidence": [
+          "reports/2026-11-06-resolve-21-2.html",
+          "docs/resolve-agentic-benchmark-results.md"
+        ],
+        "notes": "Warm engine before scoring. Contamination hard-sealed from run 2 (memory dir + this doc moved off-disk). probe_timeline_structure regressed 7->11 ms; everything else improved."
+      },
+      {
+        "date": "2026-11-06b",
+        "resolve": "21.2.0.6",
+        "mcp": "4.19.2",
+        "media_class": "A",
+        "render_probe": "121 f, 3840x1520, mov/H.264",
+        "cold_ms": 1668,
+        "warm_median_ms": 1196,
+        "warm_fps": 101,
+        "op_medians_ms": {
+          "prepare_render_job": 162,
+          "verify_output": 50,
+          "set_current": 97,
+          "create_variant_from_ranges": 274,
+          "probe_timeline_structure": 11
+        },
+        "agentic": null,
+        "evidence": [
+          "docs/resolve-agentic-benchmark-results.md (addendum b)"
+        ],
+        "notes": "Cold 1668 is host state (page cache), not an MCP win: 4.19.x never touches the render path. Warm 1196 equals the best prior mark. No n=3 agentic re-run: the bump was behaviour-free (upstream fix of the CLAP audio-embedding bug, verified by direct probe)."
+      }
+    ],
+    "splash_engine": [
+      {
+        "date": "2026-11-06",
+        "engine": "Splash 1.6.0",
+        "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+        "context_tokens": 262144,
+        "ttft_warm_ms": 201,
+        "ttft_cold_ms": 380,
+        "decode_w1_tok_s": 170,
+        "decode_plateau_tok_s": [372, 383],
+        "plateau_widths": "4 through 32 (2.5-2.6x single stream)",
+        "kv_capacity_tokens": 139264,
+        "kv_pressure_probe": "no suspension at 611,244 prompt tokens (4.4x resident KV); 1,050 blocks spilled to disk, kv_spill requests 0; only signal waiting_memory=1 for 265 ms at width 12",
+        "agentic": {
+          "n_runs": 3,
+          "tasks": 4,
+          "outcomes_verified": 11,
+          "honest": 12
+        },
+        "rerun": "python3 -I bench/2026-11-06/ladder_kv.py   # width ladder (v3) + KV pressure (v4) in one pass",
+        "evidence": [
+          "reports/2026-11-06-splash-engine.html",
+          "docs/splash-engine-benchmark-results.md",
+          "bench/2026-11-06/results/"
+        ]
+      }
+    ],
+    "community_runs": []
+  }
+}

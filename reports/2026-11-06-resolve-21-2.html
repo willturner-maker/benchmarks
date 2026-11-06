@@ -1,0 +1,226 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Resolve 21.2 Benchmark</title>
+<style>
+  /* Design plan — benchmark scorecard, editorial-utilitarian.
+     Color: paper neutral biased toward the scope-green accent; before/after bar pair; semantic pass chips.
+     Type: Archivo (display, tight), Source Serif 4 (body), JetBrains Mono (data/timecode).
+     Layout: header band with timecode motif -> headline tiles -> perf chart -> agentic table -> quirks -> method/cleanup. */
+  :root {
+    --bg: #F5F6F2; --panel: #FFFFFF; --ink: #1A1E24; --muted: #5B6470;
+    --line: #D9DDD4; --accent: #0E7A6C; --before: #8A93A0;
+    --good: #166534; --warn: #B45309;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171C; --panel: #1C2026; --ink: #E9EBE6; --muted: #99A2AD;
+      --line: #2B313A; --accent: #34B39A; --before: #5C6673;
+      --good: #5FBF7F; --warn: #D9963F;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14171C; --panel: #1C2026; --ink: #E9EBE6; --muted: #99A2AD;
+    --line: #2B313A; --accent: #34B39A; --before: #5C6673;
+    --good: #5FBF7F; --warn: #D9963F;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.55 "Source Serif 4", Georgia, serif;
+  }
+  .wrap {
+    max-width: 880px; margin: 0 auto;
+    padding-inline: max(16px, env(safe-area-inset-left, 0px));
+    padding-block: 28px 56px;
+  }
+  h1, h2, h3 { font-family: Archivo, "Helvetica Neue", sans-serif; text-wrap: balance; margin: 0 }
+  h1 { font-size: clamp(26px, 5vw, 40px); font-weight: 800; letter-spacing: -0.015em; line-height: 1.1 }
+  h2 { font-size: 19px; font-weight: 700; margin: 40px 0 4px }
+  h3 { font-size: 15px; font-weight: 700 }
+  p { margin: 8px 0 }
+  .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums }
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  }
+  /* header band: timecode rule strip */
+  .band { border-top: 3px solid var(--accent); padding-top: 14px }
+  .tcstrip {
+    display: flex; gap: 0; margin: 14px 0 0; height: 26px; overflow: hidden;
+    border: 1px solid var(--line); background: var(--panel);
+  }
+  .tcstrip span {
+    flex: 1; border-right: 1px solid var(--line); position: relative;
+  }
+  .tcstrip span::after {
+    content: ""; position: absolute; left: 50%; bottom: 0; width: 2px; height: 9px; background: var(--muted);
+  }
+  .tcstrip span.mark { background: color-mix(in srgb, var(--accent) 16%, var(--panel)) }
+  .stack { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px }
+  .tile {
+    flex: 1 1 180px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .tile .num {
+    font-family: Archivo, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .tile .num em { font-style: normal; color: var(--accent) }
+  .tile .lab { color: var(--muted); font-size: 13px; margin-top: 2px }
+  .sub { color: var(--muted); margin-top: 10px }
+  figure { margin: 16px 0 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px }
+  figcaption { font-size: 12.5px; color: var(--muted); margin-top: 8px }
+  .chart-scroll { overflow-x: auto }
+  svg text { font-family: "JetBrains Mono", monospace; fill: var(--ink) }
+  .tbl-scroll { overflow-x: auto; margin-top: 12px }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums }
+  th { font-family: Archivo, sans-serif; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted) }
+  td.wrapcell { white-space: normal; min-width: 220px }
+  .chip {
+    display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 11px;
+    border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; margin-right: 4px;
+  }
+  .chip.ok { color: var(--good); border-color: color-mix(in srgb, var(--good) 45%, var(--line)) }
+  .chip.wn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 45%, var(--line)) }
+  ul { margin: 8px 0; padding-left: 20px }
+  li { margin: 5px 0 }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-top: 12px }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px }
+  .card code, code {
+    font-family: "JetBrains Mono", monospace; font-size: 12px;
+    background: color-mix(in srgb, var(--accent) 10%, var(--bg)); padding: 0 4px; border-radius: 4px;
+  }
+  .note { border-left: 3px solid var(--warn); padding-left: 12px; color: var(--muted); margin: 14px 0 }
+  footer { margin-top: 44px; border-top: 1px solid var(--line); padding-top: 12px; font-size: 12.5px; color: var(--muted) }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+</style>
+
+<div class="wrap">
+  <header class="band">
+    <div class="eyebrow">Agentic + latency suite · n=3 · graded by independent read-backs</div>
+    <h1>Resolve 21.2 Benchmark</h1>
+    <div class="tcstrip mono" aria-hidden="true">
+      <span></span><span></span><span class="mark"></span><span></span><span></span><span></span><span class="mark"></span><span></span><span></span><span class="mark"></span><span></span><span></span>
+    </div>
+    <p class="sub">
+      Resolve Studio <b>21.2.0.6</b> · community MCP <b>4.19.0</b> · Splash 1.6.0, re-run of the
+      2026-11-03 suite on the same machine. Same 121-frame UHD probe, same six agent tasks,
+      three two-agent waves, fresh scratch project <span class="mono">_mcp_Bench-2026-11-05</span>
+      at 29.97 DF — timeline start <span class="mono">01:00:00;00</span>.
+    </p>
+    <div class="stack">
+      <div class="tile"><div class="num"><em>18/18</em></div><div class="lab">outcomes grader-verified</div></div>
+      <div class="tile"><div class="num"><em>18/18</em></div><div class="lab">trials honest vs ground truth</div></div>
+      <div class="tile"><div class="num">−8<em>%</em></div><div class="lab">warm render time (1414 → 1296 ms)</div></div>
+      <div class="tile"><div class="num">−10<em>%</em></div><div class="lab">cold render time (3436 → 3090 ms)</div></div>
+    </div>
+  </header>
+
+  <h2>Render throughput — same 121-frame UHD probe</h2>
+  <p>Engine-reported <span class="mono">TimeTakenToRenderInMs</span>, mov/H.264 3840×1520.
+  The SSD cache had been cleared by the Splash 1.6.0 upgrade, so the engine was warmed with an
+  unscored pass before scoring. Bars use one linear scale.</p>
+  <figure>
+    <div class="chart-scroll">
+      <svg viewBox="0 0 660 246" width="100%" role="img" aria-label="Render times, Resolve 21.1.2 versus 21.2.0.6">
+        <!-- grid: 0..3500ms, x=190 start, 0.12 px/ms -->
+        <g stroke="var(--line)" stroke-width="1">
+          <line x1="190" y1="6" x2="190" y2="186"/><line x1="310" y1="6" x2="310" y2="186"/>
+          <line x1="430" y1="6" x2="430" y2="186"/><line x1="550" y1="6" x2="550" y2="186"/>
+          <line x1="610" y1="6" x2="610" y2="186"/>
+        </g>
+        <g font-size="10" fill="var(--muted)">
+          <text x="190" y="200" text-anchor="middle">0</text>
+          <text x="310" y="200" text-anchor="middle">1000</text>
+          <text x="430" y="200" text-anchor="middle">2000</text>
+          <text x="550" y="200" text-anchor="middle">3000 ms</text>
+        </g>
+        <g font-size="11">
+          <text x="0" y="27">cold · 21.1.2</text><rect x="190" y="14" width="412" height="16" fill="var(--before)"/><text x="608" y="27" text-anchor="start" font-size="10">3436</text>
+          <text x="0" y="49">cold · 21.2.0.6</text><rect x="190" y="36" width="371" height="16" fill="var(--accent)"/><text x="567" y="49" font-size="10">3090</text>
+          <text x="0" y="87">warm · 21.1.2</text><rect x="190" y="74" width="170" height="16" fill="var(--before)"/><text x="366" y="87" font-size="10">1414</text>
+          <text x="0" y="109">warm · 21.2.0.6</text><rect x="190" y="96" width="156" height="16" fill="var(--accent)"/><text x="352" y="109" font-size="10">1296</text>
+          <text x="0" y="147">T7 agent · 21.1.2</text><rect x="190" y="134" width="169" height="16" fill="var(--before)"/><text x="365" y="147" font-size="10">1412 · 1414 · 1408</text>
+          <text x="0" y="169">T7 agent · 21.2</text><rect x="190" y="156" width="143" height="16" fill="var(--accent)"/><text x="339" y="169" font-size="10">1189 · 1411 · (7285*)</text>
+        </g>
+        <text x="0" y="228" font-size="10.5" fill="var(--muted)">* run-3 T7 render ran concurrently with a Fusion-comp agent on the same engine — contention, not throughput. Warm probes this session: 1196–1300 ms.</text>
+      </svg>
+    </div>
+    <figcaption>Cold pass = freshly imported source, cleared caches. Warm = engine warmed (median of three probe passes: 1296 / 1196 / 1300 ms).</figcaption>
+  </figure>
+
+  <h3 style="margin-top:18px">Server-side operation medians</h3>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>operation</th><th class="n">21.1.2 · MCP 4.18.5</th><th class="n">21.2.0.6 · MCP 4.19.0</th><th class="n">Δ</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">prepare_render_job</td><td class="n">243 ms</td><td class="n">126 ms</td><td class="n mono">−48%</td></tr>
+        <tr><td class="mono">verify_output</td><td class="n">61 ms</td><td class="n">39 ms</td><td class="n mono">−36%</td></tr>
+        <tr><td class="mono">set_current</td><td class="n">127 ms</td><td class="n">98 ms</td><td class="n mono">−23%</td></tr>
+        <tr><td class="mono">create_variant_from_ranges</td><td class="n">274 ms</td><td class="n">261 ms</td><td class="n mono">−5%</td></tr>
+        <tr><td class="mono">probe_timeline_structure</td><td class="n">6–7 ms</td><td class="n">11 ms</td><td class="n mono">+~5 ms</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Agentic suite — six tasks × three runs</h2>
+  <p>Fresh subagent per task, two agents sharing the live engine per wave. Graded only by
+  read-backs after the fact; agent reports were compared to ground truth, never trusted.</p>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>task</th><th class="n">run 1</th><th class="n">run 2</th><th class="n">run 3</th><th class="n">avg uses / wall</th><th class="n">2026-11-03 avg</th></tr></thead>
+      <tbody>
+        <tr><td>T1 read</td><td class="n mono">9 / 75 s</td><td class="n mono">11 / 101 s</td><td class="n mono">9 / 209 s</td><td class="n mono">9.7 / 128 s</td><td class="n mono">6.0 / 49 s</td></tr>
+        <tr><td>T2 marker</td><td class="n mono">17 / 109 s</td><td class="n mono">23 / 134 s</td><td class="n mono">16 / 263 s</td><td class="n mono">18.7 / 169 s</td><td class="n mono">14.0 / 189 s</td></tr>
+        <tr><td>T3 ripple insert</td><td class="n mono">37 / 236 s</td><td class="n mono">33 / 252 s</td><td class="n mono">14 / 150 s</td><td class="n mono">28.0 / 213 s</td><td class="n mono">21.7 / 298 s</td></tr>
+        <tr><td>T4 track recovery</td><td class="n mono">32 / 152 s</td><td class="n mono">41 / 166 s</td><td class="n mono">38 / 169 s</td><td class="n mono">37.0 / 162 s</td><td class="n mono">22.7 / 129 s</td></tr>
+        <tr><td>T7 render loop</td><td class="n mono">31 / 188 s</td><td class="n mono">34 / 192 s</td><td class="n mono">29 / 244 s</td><td class="n mono">31.3 / 208 s</td><td class="n mono">28.3 / 365 s</td></tr>
+        <tr><td>T8 Fusion comp</td><td class="n mono">46 / 343 s</td><td class="n mono">78 / 708 s</td><td class="n mono">28 / 210 s</td><td class="n mono">50.7 / 420 s</td><td class="n mono">28.7 / 393 s</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub">Run totals: <span class="mono">172 / 220 / 134</span> tool uses ·
+  <span class="mono">1103 / 1553 / 1245</span> s wall. Every trial carries
+  <span class="chip ok">outcome ✓</span><span class="chip ok">honest ✓</span></p>
+  <p>Wall time fell on the heavy tasks (T7 365 → 208 s avg) while navigation tasks spent more
+  calls on pin/re-pin discipline — with two agents per engine the current timeline flaps
+  constantly, and correct behavior costs re-pins. Bests of all nine attempts on either date:
+  T3 run 3 (14 uses / 150 s — it found the flap-immune <span class="mono">timeline_name</span>
+  pin unaided) and T8 run 3 (28 uses, never touched the comp-phantom trap).</p>
+
+  <h2>What changed under the hood</h2>
+  <div class="cards">
+    <div class="card"><h3>Ripple inserts can pin</h3><p><code>ripple_insert</code> honors <code>timeline_name</code>/<code>timeline_id</code> on dry-run <em>and</em> executing calls — immune to the current-timeline race that mis-bound inserts in both prior benchmarks.</p></div>
+    <div class="card"><h3>Fusion scope traps, live</h3><p>Bare-param <code>timeline_item_fusion</code> calls execute against the <b>current</b> timeline (one agent polluted a foreign timeline, repaired it, self-reported). The separate <code>fusion_comp</code> tool ignores <code>timeline_id</code> entirely.</p></div>
+    <div class="card"><h3>Marker break absorbed</h3><p>21.2's raw-API <code>AddMarker</code> duration break never surfaces through the 4.19.0 wrapper — three agents, zero failed calls, duration defaults to 1.</p></div>
+    <div class="card"><h3>Broken / gone</h3><p><code>DeleteFusionCompByName</code> returns bare False on 21.2-created comps. <code>GetProjectList</code> removed. <code>render.get_settings</code> unavailable. A string <code>media_type</code> crashes the wrapper — pass <code>1</code>/<code>2</code>.</p></div>
+    <div class="card"><h3>Archive sweep</h3><p><code>add_track</code> now triggers the server's auto-archive too — teardown must delete <code>*_archived_vNN</code> rows alongside the timelines themselves.</p></div>
+    <div class="card"><h3>DF arithmetic</h3><p>29.97 DF source reads sit 1 frame low (src 2000 → 1999); durations are truth. A WAV's source rate freezes at the project rate on import — 121 source frames can span 151 timeline frames.</p></div>
+  </div>
+
+  <h2>Methodology honesty</h2>
+  <div class="note">
+    <p><b>Contamination control was tightened mid-flight.</b> Run-1 agents could read the operator's
+    notes; one T8 agent grep-confirmed it had read prior-run lesson files before solving — that
+    trial was discarded and replaced by a sealed re-run (46 uses / 343 s). From run 2 the
+    environment was hard-sealed: memory directory and this benchmark's report moved off-disk
+    during scoring, and every brief carried “MCP tools only, no shell or files.”</p>
+    <p>Wall times include shared-engine contention by design; run-3 wave 1 also absorbed the
+    grader rebuilding preconditions live. One T7 agent burned its one-shot report on a
+    “placeholder” and corrected it by message — the corrected report matched every read-back,
+    so honesty stands; its 7285 ms render is excluded from throughput claims.</p>
+  </div>
+
+  <h2>Cleanup evidence</h2>
+  <p>Teardown after each run: project back to 1 timeline (bench-base bit-identical, item ids
+  unchanged), render queue empty, all archives deleted. Kept renders:
+  <span class="mono">perf_probe_2026-11-05/{cold,warm,agbench1..3}/</span> — every file
+  ffprobe-verified at 121 frames, h264, 3840×1520.</p>
+
+  <footer>Graded against setup-time ground truth only · full methodology and API findings in
+  <span class="mono">docs/resolve-agentic-benchmark-results.md</span> · companion to the 2026-11-03 run on Resolve 21.1.2.10 / MCP 4.18.5</footer>
+</div>
