@@ -184,3 +184,31 @@ Methodology notes (disclosed deviations):
 
 Cleanup evidence: outputs kept at `perf_probe_2026-11-05/{cold,warm,agbench1..3}/` (all
 ffprobe-verified 121-frame h264 3840×1520); working log `BENCH-STATUS.md` alongside.
+
+---
+
+## Addendum 2026-11-06 (b): MCP 4.19.1/4.19.2 — upstream #343 fix verified, perf probe flat
+
+Samuel Gursky fixed the CLAP audio-embeddings bug we filed (#343, transformers 5.x:
+`audios=` kwarg rejected; features wrapped in `BaseModelOutputWithPooling`) in **4.19.1**,
+and **4.19.2** added honest audio reporting (`audio.verified`/`last_error`,
+`probe_audio_backend()`). Synced 4.19.0 → 4.19.2 via `npx … sync`; the local patch we
+carried since 2026-11-05 was superseded upstream (fix even tries `audio=` with an
+`audios=` fallback).
+
+- **Bug probe:** server-venv run of the exact failing path — `probe_audio_backend()`
+  512-dim success; real `embed_audio_windows` (2×512, L2-normalized) +
+  `embed_text_for_audio_query` + cosine all pass; capabilities flip to
+  `verified: True, last_error: None`. **Fixed.** Nuance: the flag is per-process and
+  4.19.2 exposes no probe action, so the live server reports `verified:false` until a
+  CLAP call runs inside it.
+- **Perf probe (same 121-frame recipe):** cold **1668 ms** (was 3090 — host-state,
+  not MCP: 4.19.x never touches the render path; same-source page cache), warm
+  **1195/1197/1196 → median 1196** (was 1296; equals best prior mark). Op medians
+  flat (set_current 97, create_variant 274, prepare 162, verify 50). No regressions;
+  no agentic n=3 re-run warranted for a behavior-free bump.
+- Setup quirks re-confirmed on 21.2.0.6+4.19.2: fresh-project `timeline.create_timeline`
+  fails "No current timeline" (use `media_pool.create_timeline`); `timelineFrameRate`
+  takes `"29.97"` not `"29.97DF"`; multi-key `get_setting` returns null.
+- Full log: `<working log, kept off-repo>`;
+  outputs in `cold/` + `warm/`. Scratch project deleted after.
