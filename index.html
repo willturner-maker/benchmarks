@@ -1,0 +1,70 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resolve + local AI benchmarks</title>
+<style>
+  :root {
+    --bg: #fbfaf8; --fg: #1c1b19; --muted: #6b6862; --line: #e3e0da;
+    --accent: #1f6f5c; --card: #ffffff;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #16181a; --fg: #e8e6e2; --muted: #9c9a94; --line: #2c2f33;
+      --accent: #6bc4a8; --card: #1d2023; color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 46rem; margin: 0 auto; padding-block: 3rem 4rem }
+  h1 { font-size: 1.6rem; margin: 0 0 .35rem; text-wrap: balance; letter-spacing: -0.01em }
+  p.lede { color: var(--muted); margin: 0 0 2rem }
+  h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em;
+       color: var(--muted); margin: 2.2rem 0 .8rem; font-weight: 600 }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem }
+  a.card {
+    display: block; text-decoration: none; color: var(--fg);
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: .85rem 1rem; transition: border-color .15s ease;
+  }
+  a.card:hover { border-color: var(--accent) }
+  .name { font-weight: 600 }
+  .sub { color: var(--muted); font-size: .9rem; margin-top: .2rem }
+  .tag { display: inline-block; font-size: .72rem; letter-spacing: .04em;
+         border: 1px solid var(--line); border-radius: 999px; padding: .1rem .5rem;
+         color: var(--muted); margin-left: .5rem; vertical-align: 1px }
+  code { font: .85rem/1.4 ui-monospace, SFMono-Regular, Menlo, monospace }
+</style>
+<main>
+  <h1>Resolve + local AI benchmarks</h1>
+  <p class="lede">Version-to-version measurements of a DaVinci Resolve Studio workstation
+    driven by a fully local LLM. Every number comes from an independent read-back.</p>
+
+  <h2>Scorecards</h2>
+  <ul>
+    <li><a class="card" href="reports/2026-11-06-splash-engine.html">
+      <span class="name">Splash engine baseline</span><span class="tag">1.6.0</span>
+      <div class="sub">TTFT, the width-ladder plateau at 372–383 tok/s, and the KV-pressure
+        chase for a first suspension that never came.</div></a></li>
+    <li><a class="card" href="reports/2026-11-06-resolve-21-2.html">
+      <span class="name">Resolve MCP benchmark</span><span class="tag">21.2.0.6 · MCP 4.19.0</span>
+      <div class="sub">Render probes, server-side operation medians, and the six-task
+        agentic suite run by sealed fresh agents.</div></a></li>
+    <li><a class="card" href="reports/2026-11-03-resolve-21-1-2.html">
+      <span class="name">Resolve MCP benchmark</span><span class="tag">21.1.2.10 · MCP 4.18.5</span>
+      <div class="sub">The baseline run: cold/warm renders, agentic n=3, concurrency sweep.</div></a></li>
+  </ul>
+
+  <h2>Data &amp; re-runs</h2>
+  <ul>
+    <li><a class="card" href="https://github.com/willturner-maker/benchmarks">
+      <span class="name">Repository, leaderboard and docs</span>
+      <div class="sub">Standings live in <code>docs/leaderboard.md</code>; raw JSONL,
+        runnable scripts and the bring-your-own-media contract are in the repo.</div></a></li>
+  </ul>
+</main>
