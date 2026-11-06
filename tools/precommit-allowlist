@@ -1,0 +1,5 @@
+# known-legit matches (regex per line)
+# placeholder volume names used in docs/examples
+/Volumes/YourSSD
+# the scanner's own rules table (it contains the patterns it hunts for)
+^\s*(home-path|named-volume|camera-filename|credential-assignment|key-format|private-key-block|secret-file-path|email)\|
