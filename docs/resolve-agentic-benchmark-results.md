@@ -226,3 +226,113 @@ carried since 2026-11-05 was superseded upstream (fix even tries `audio=` with a
   takes `"29.97"` not `"29.97DF"`; multi-key `get_setting` returns null.
 - Full log: `<working log, kept off-repo>`;
   outputs in `cold/` + `warm/`. Scratch project deleted after.
+
+---
+
+## Addendum 2026-11-06 (c): MCP 4.19.3 — both shipped fixes probed live; one ships incomplete
+
+Synced 4.19.2 → 4.19.3 (`npx -y davinci-resolve-mcp@latest sync`) and reconnected both
+community servers. Reconnect proved itself **behaviorally**, not by version string: every
+pinned call now carries `timeline:{pinned:true, restored_current:{…}}`, fields that did not
+exist in 4.19.2. Graded from read-backs (report JSON on disk, SQLite row counts, ffprobe on
+renders, timeline geometry) — never from the server's own summaries.
+
+### #345 — audio-only media no longer fails analysis: **FIXED, verified live**
+
+Re-ran the exact fixture that started the bug report (the 12 s WAV):
+`analyze_file` → `success:true, clip_count:1, successful_clip_count:1, failed_clip_count:0`.
+The report now carries `visual.status:"not_applicable"` /
+`reason:"Audio-only media has no video stream."` instead of failing the clip, and the clip
+**registers** — DB read-back: `clips` 1, `clip_aliases` 3, `transcript_segments` 3,
+`transcript_words` 20, one clip marker.
+
+### …but the audio-embedding path that fix was meant to open is still shut: **NEW BUG**
+
+`build_embeddings(kinds:['audio'])` answers `success:true, embedded:0, model:null,
+note:"all up to date"` in ~1 ms — no CLAP load — for audio-only clips *and* for
+vision-skipped video clips. Mechanism, read from source: audio windows come from the
+**`shots` table** (`embeddings.py:761-784`), and `shots` rows are written only from
+`visual.shot_descriptions` (`analysis_store.py:364`). No shots → `if not windows: continue`
+→ silent zero, reported as success. So on exactly the footage where audio similarity search
+pays off — one continuous take — the call is a no-op wearing a success envelope. Two of my
+three control clips produced `scenes.items:[]` legitimately (no detectable cut: adaptive
+floor `min_floor 0.15` vs measured `p99 0.0055`; and concatenating two renders of the *same*
+content gives `cut_count:0` at ffmpeg `threshold 0.3`).
+
+Positive control, built to prove CLAP itself is healthy: synthetic 8 s two-shot clip
+(testsrc2 → black, scene score 1.0, `cut_count:1`) plus a real host vision pass
+(`commit_vision` → `db_ingest.shot_count:2`) → **`embedded:3`** (2 shot windows + clip mean)
+against `transformers_clap:laion/clap-htsat-unfused` in 3.3 s, after which
+`capabilities` reports `audio.verified:true, last_error:null`. **CLAP works; the shot
+gating is the bug.** Filed shape: fall back to fixed windows when a clip has no shot rows,
+and return a truthful envelope (`no_audio_targets`) instead of "all up to date".
+
+### Parameter traps found while probing (all silent)
+
+- `build_embeddings` / `find_similar` read **`clip_id` / `clipId` / `clip_dir` / `clipDir`**
+  — **not `clip_ref`**. `clip_ref` is ignored *silently* and the call runs project-wide
+  (caught it: a "scoped" call reported `skipped_missing_media` for a different clip). With
+  `clip_id` the same call fails loudly (`clip not found in DB`).
+- `clip_aliases` stores the absolute path, the folder hash and `name-hash` — **not the bare
+  clip name**. `clip_id:"name.mov"` fails; use the hash or the folder name.
+- `commit_vision` won't take the hash alias either — use the `file_path` + `analysis_root`
+  pair its own `commit_action` returns.
+- First **video** analyze now returns `status:"confirmation_required"` with a
+  frame-sampling-mode prompt (fixed / per_minute / adaptive_capped / adaptive). An agent
+  that doesn't re-call with `sampling_mode` reads this as a failure.
+- `probe_audio_backend()` remains unexposed as an action, so `audio.verified` can only flip
+  as a side effect of a real embedding run.
+
+### #344 — pinned writes can no longer land on the caller's timeline: **FIXED, verified live**
+
+Fixture: two timelines A/B in a scratch project, A current.
+- Pinned write (`timeline_item.set_name` with `timeline_id`=B): B changed, **A untouched**,
+  current still A. Envelope reports `pinned:true, restored_current:{A}`.
+- Selector guards verified: bogus name → `TIMELINE_NOT_FOUND`; id+name naming different
+  timelines → `TIMELINE_SELECTOR_MISMATCH`; both `retryable:false` with remediation text.
+- `TIMELINE_PIN_FAILED` itself **was not provoked** — `SetCurrentTimeline` never answered
+  True-while-staying-put on 21.2.0.6, so the read-back branch stays mocked-only upstream
+  (the release says so itself: "Covered by mocked unit tests only"). Consistent with
+  observation, not demonstrated.
+
+### The pin fix did not reach the `fusion_comp` tool: **asymmetry, verified**
+
+`timeline_item_fusion` now honors `timeline_id`: comp added with `timeline_id`=B while A was
+current → `get_comp_count` = 1 on B, 0 on A. This **supersedes** the 2026-11-06 finding
+"bare `timeline_item_fusion` params hit the CURRENT timeline" *when a selector is passed*.
+The separate **`fusion_comp`** tool still binds to the current timeline: with A current,
+`get_comp_info(timeline_item={video,1,0}, timeline_id=B)` returned "Timeline item has no
+Fusion compositions" — A's comp-free item — while B's item has one. Item-id addressing
+(`clip_id`/`timeline_item_id`) at least fails loudly ("No timeline item with clip_id=…")
+because the lookup still runs against the current timeline. Rule of thumb stands: drive
+item-scoped Fusion through `timeline_item_fusion`, never `fusion_comp`.
+
+### Timeline settings on 21.2 (each cost a rebuild)
+
+- `timeline.set_setting("timelineFrameRate")` returns bare `false` — **even on an empty
+  timeline**. Set it at the project level (`project_manager.safe_set_project_settings`, which
+  returns per-key `requested/original/write/readback`) *before* creating timelines.
+- A **failed** `set_setting` still fires the auto-archive: an `_archived_v01` predecessor
+  appears. Teardown must delete archives regardless of success.
+- Drift detector false positive: `append_to_timeline` logged "duration drifted … during
+  non-duration altering action" for the append that caused the drift.
+
+### Perf probe (same class-A recipe, single-tenant, scratch project, deleted after)
+
+| pass | 4.19.3 | 4.19.2 | Δ |
+|---|---|---|---|
+| cold | **1748 ms** | 1668 ms | +4.8 % |
+| warm | 1185 / 1303 / 1215 → **1215 ms (99.6 fps)** | 1196 ms (101 fps) | +1.6 % |
+
+Op medians (ms): `prepare_render_job` 165 (162; first call 248 incl. preset load),
+`verify_output` 46 (50), `set_current` 100 (97), `create_variant_from_ranges` 292 (274),
+`probe_timeline_structure` 12 (11). **No regression** — all inside run-to-run noise.
+Disclosed deviation: the probe offset is fixture-derived and sits 72 source frames from the
+4.19.2 run, so output size differs (16.4 MB vs 20.9 MB) at identical codec/geometry; ms stay
+comparable. Cold here is *not* page-cache-warmed the way the 4.19.2 row was.
+
+**Agentic n=3 not re-run for this bump.** The behaviour changes above are single-probe
+verified and cheap to probe; a full sealed wave is ~25–35 min. Outputs kept at
+`perf_probe_2026-11-06/{cold,warm}/` (ffprobe-verified 121-frame h264 + pcm_s24le,
+`verify_output` duration_ratio 1.0, no warnings). Scratch project and all probe timelines
+(including archives) deleted after; Resolve left with an empty untitled project.

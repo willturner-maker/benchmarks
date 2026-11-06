@@ -98,6 +98,36 @@
           "docs/resolve-agentic-benchmark-results.md (addendum b)"
         ],
         "notes": "Cold 1668 is host state (page cache), not an MCP win: 4.19.x never touches the render path. Warm 1196 equals the best prior mark. No n=3 agentic re-run: the bump was behaviour-free (upstream fix of the CLAP audio-embedding bug, verified by direct probe)."
+      },
+      {
+        "date": "2026-11-06c",
+        "resolve": "21.2.0.6",
+        "mcp": "4.19.3",
+        "media_class": "A",
+        "render_probe": "121 f, 3840x1520, mov/H.264",
+        "cold_ms": 1748,
+        "warm_median_ms": 1215,
+        "warm_fps": 99.6,
+        "warm_passes_ms": [1185, 1303, 1215],
+        "op_medians_ms": {
+          "prepare_render_job": 165,
+          "verify_output": 46,
+          "set_current": 100,
+          "create_variant_from_ranges": 292,
+          "probe_timeline_structure": 12
+        },
+        "agentic": null,
+        "behavior_probes": {
+          "issue_345_audio_only_analyze": "fixed - clip registers; visual.status=not_applicable instead of a failed clip",
+          "audio_embeddings_reachability": "still unreachable without shot rows: shots are written only from visual.shot_descriptions, and the envelope reports success / embedded 0 / 'all up to date'",
+          "clap_backend": "verified live - embedded 3 via transformers_clap:laion/clap-htsat-unfused; capabilities audio.verified true, last_error null",
+          "issue_344_timeline_pin": "fixed - pinned write lands on the target, caller's timeline restored; TIMELINE_NOT_FOUND and TIMELINE_SELECTOR_MISMATCH verified; TIMELINE_PIN_FAILED not provokable on 21.2.0.6 (mocked-only upstream)",
+          "fusion_comp_timeline_scope": "timeline_item_fusion honors timeline_id (comps 1 on target / 0 on caller); the fusion_comp tool still binds to the CURRENT timeline"
+        },
+        "evidence": [
+          "docs/resolve-agentic-benchmark-results.md (addendum c)"
+        ],
+        "notes": "No regression: warm 1215 vs 1196 (+1.6%), cold 1748 vs 1668 (+4.8%; this cold pass was not page-cache-warmed). Probe offset sits 72 source frames from the 4.19.2 run (fixture-derived), so output size differs (16.4 vs 20.9 MB) at identical codec/geometry. No n=3 agentic wave for this bump - both shipped fixes verified by targeted probe."
       }
     ],
     "splash_engine": [

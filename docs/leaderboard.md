@@ -26,6 +26,7 @@ macOS 27.2, render output and scratch on external volumes.
 | 2026-11-03 | 21.1.2.10 | 4.18.5 | 3436 ms | 1414 ms | ~85 | 243 | 61 | 127 | 7 | **18/18** | 18/18 |
 | 2026-11-06 | 21.2.0.6 | 4.19.0 | 3090 ms | 1296 ms | 93.4 | 126 | 39 | 98 | 11 | **18/18** | 18/18 |
 | 2026-11-06b | 21.2.0.6 | 4.19.2 | 1668 ms¹ | **1196 ms** | 101 | 162 | 50 | 97 | 11 | n/a² | n/a |
+| 2026-11-06c | 21.2.0.6 | **4.19.3** | 1748 ms³ | 1215 ms | 99.6 | 165 | 46 | 100 | 12 | n/a³ | n/a |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
@@ -36,13 +37,25 @@ the same-source page cache was warm-ish. Warm 1196 ms equals the best prior mark
 ² No agentic n=3 for 4.19.2: the bump was behaviour-free (upstream fix of the CLAP
 audio-embedding bug we filed, verified by direct probe the day it shipped).
 
+³ **4.19.3: no regression, and both shipped fixes held under live probes.** #345 (audio-only
+media no longer fails analysis) and #344 (a pinned write can't land on the caller's timeline)
+both verified against real Resolve, plus the guards around them (`TIMELINE_NOT_FOUND`,
+`TIMELINE_SELECTOR_MISMATCH`). The probes also found one **incomplete** fix and one
+asymmetry: audio embeddings remain unreachable unless a clip has shot rows (they come only
+from vision's `shot_descriptions`, and the call reports `success / embedded 0 / "all up to
+date"`), and `fusion_comp` still ignores `timeline_id` where `timeline_item_fusion` now
+honors it. Method caveat on cold: this pass was not page-cache-warmed the way the 4.19.2 row
+was (most of its +4.8%), and the fixture-derived probe offset sits 72 source frames away, so
+output size differs (16.4 vs 20.9 MB) at identical codec/geometry. Full write-up in
+[addendum c](resolve-agentic-benchmark-results.md).
+
 Agentic column = six tasks × three fresh sealed agents, graded only from read-backs;
 details and per-task cost in
 [the results doc](resolve-agentic-benchmark-results.md). The 2026-11-06 run's agents were
 served by the local model (Qwen3.8-Flash-Next IQ3_S via Splash 1.6.0), not a cloud API.
 
-**Regression worth watching:** `probe_timeline_structure` went 7 → 11 ms between
-21.1.2 and 21.2. Everything else improved.
+**Regression worth watching:** `probe_timeline_structure` went 7 → 11 ms between 21.1.2 and
+21.2 and holds at 11–12 through 4.19.3. Everything else is flat or improved.
 
 ## Splash engine — reference host
 
