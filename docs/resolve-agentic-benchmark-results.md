@@ -111,8 +111,10 @@ Same suite, corrected briefs, same grading (independent read-backs only). New ho
 Resolve Studio **21.2.0.6**, community MCP server **4.19.0**, Splash 1.6.0. The SSD render
 cache had been cleared by the Splash upgrade, so the engine was deliberately warmed
 (unscored T7/T8 warmup trials: render 1282 ms, comp verified) before scoring.
-Fresh scratch project `_mcp_Bench-2026-11-05` (29.97 DF, 3840×1520, the reference stage-performance clip + 12 s
-Tascam slice); ground truth recorded at setup; teardown returned the project 11→1 timelines,
+Fresh scratch project `_mcp_Bench-2026-11-05` (29.97 DF, 3840×1520, one 8128×4288
+HEVC Main 10 stage-performance clip — 56 min, 100,725 frames — plus a 12 s
+field-recorder audio slice; fixture class A per
+[`bench/resolve-agentic/MEDIA.md`](../bench/resolve-agentic/MEDIA.md)); ground truth recorded at setup; teardown returned the project 11→1 timelines,
 bench-base bit-identical, queue empty.
 
 ### Perf probe (121-frame UHD mov/H264, same geometry as 2026-11-03)
