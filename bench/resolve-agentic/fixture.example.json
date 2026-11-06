@@ -1,0 +1,36 @@
+{
+  "media_path": "/path/to/yourclip.mov",
+  "clip_name": "yourclip.mov",
+  "source": {
+    "codec": "h264",
+    "profile": "High",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30.0,
+    "pix_fmt": "yuv420p",
+    "duration_s": 140.0,
+    "total_frames": 4200
+  },
+  "timeline": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30.0,
+    "name_base": "_mcp_AGBench-2026-11-06",
+    "base_segments": [221, 221]
+  },
+  "derived": {
+    "base_source_start": 210,
+    "insert_source_start": 1050,
+    "insert_frames": 101,
+    "probe_source_start": 1000,
+    "probe_frames": 121,
+    "drop_frame_caveat": false
+  },
+  "comparability": "B",
+  "comparability_notes": [
+    "source 1920x1080 narrower than the published 8128x4288",
+    "codec h264 != published hevc Main 10 (decode cost differs → render ms not comparable)",
+    "timeline would be 1920x1080, not 3840x1520 (pixel count differs → render ms not comparable)"
+  ],
+  "warnings": []
+}

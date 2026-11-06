@@ -52,11 +52,23 @@ cost bought correctness there.
   `perf_probe_2026-11-03/agbench/agbench_T7.mov` and `perf_probe_2026-11-03/bench_probe_2026-11-03.mov`
   under `<scratch folder on a render volume>`.
 
-## Re-running this benchmark
-Task texts above are reproducible; note two intentional traps: the locked-track delete (T4)
-and the Fusion-comp phantom (T8). Fix the two arithmetic slips when reusing briefs
-(T4: 121 not 241 frames; T3: totals 543 not 343). — *done for runs 2–3, plus the DF
-source-read caveat added to the T3 brief, which saved that detour entirely.*
+## Re-running this benchmark (on your own media)
+
+**Canonical re-run material: [`bench/resolve-agentic/`](../bench/resolve-agentic/)** —
+`MEDIA.md` (media contract + which published numbers survive a media swap),
+`check_media.py` (validates your clip, derives the frame numbers), `tasks.md` (the six
+briefs, placeholders filled from your `fixture.json`), `RUNBOOK.md` (fixture setup,
+sealing rules, grading probes, teardown).
+
+The published run used one long stage-performance camera clip (HEVC Main 10, 8128×4288,
+29.97 DF, 100,725 frames, 56 min) on a 3840×1520 timeline — that is **class A** media.
+Any usable clip (≥90 s, ≥1280 px wide) reproduces the *behavioural* results; the render
+and op **timings** only belong next to the numbers above if your media is class A too.
+
+Task texts in `tasks.md` are reproducible; note two intentional traps: the locked-track
+delete (T4) and the Fusion-comp phantom (T8). The two arithmetic slips in the original
+briefs (T4: 121 not 241 frames; T3: totals 543 not 343) were fixed for runs 2–3, along
+with the DF source-read caveat added to the T3 brief, which saved that detour entirely.
 
 ## Addendum — runs 2 & 3 (n=3, same day, warm engine)
 
