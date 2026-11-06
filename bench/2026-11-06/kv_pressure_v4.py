@@ -16,12 +16,14 @@ scheduler, memory_governor headroom, and LIFETIME counters cache.resource_suspen
 priority_suspensions (catches a suspension even if the gauge sampling misses the instant).
 STOP rule: first round where peak admission.suspended > 0 OR lifetime suspension delta > 0
 (one round past the first `waiting_memory` trip signal is kept, per the question)."""
-import json, time, threading, urllib.request
+import json, os, time, threading, urllib.request
 import concurrent.futures as cf
 
 BASE = "http://127.0.0.1:8000"
 MODEL = "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S"
-OUT = "results/kv_pressure_v4.jsonl"
+# Script-relative: same file the committed baseline lives in, and it runs on any clone.
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results", "kv_pressure_v4.jsonl")
+os.makedirs(os.path.dirname(OUT), exist_ok=True)
 TARGET_PROMPT = 20000   # tokens per request
 MAXTOK = 8
 WIDTHS = [2, 4, 6, 8, 10, 12]
