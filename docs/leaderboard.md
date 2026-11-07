@@ -26,7 +26,8 @@ macOS 27.2, render output and scratch on external volumes.
 | 2026-11-03 | 21.1.2.10 | 4.18.5 | 3436 ms | 1414 ms | ~85 | 243 | 61 | 127 | 7 | **18/18** | 18/18 |
 | 2026-11-06 | 21.2.0.6 | 4.19.0 | 3090 ms | 1296 ms | 93.4 | 126 | 39 | 98 | 11 | **18/18** | 18/18 |
 | 2026-11-06b | 21.2.0.6 | 4.19.2 | 1668 ms¹ | **1196 ms** | 101 | 162 | 50 | 97 | 11 | n/a² | n/a |
-| 2026-11-06c | 21.2.0.6 | **4.19.3** | 1748 ms³ | 1215 ms | 99.6 | 165 | 46 | 100 | 12 | n/a³ | n/a |
+| 2026-11-06c | 21.2.0.6 | **4.19.3** | 1748 ms³ | 1215 ms | 99.6 | 165 | 46 | 100 | 12 | n/a⁴ | n/a |
+| 2026-11-06d | 21.2.0.6 | **4.19.3** | — | 1403 ms⁵ | 86.2 | — | — | — | 12 | **18/18** | 17/18 |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
@@ -49,10 +50,21 @@ was (most of its +4.8%), and the fixture-derived probe offset sits 72 source fra
 output size differs (16.4 vs 20.9 MB) at identical codec/geometry. Full write-up in
 [addendum c](resolve-agentic-benchmark-results.md).
 
+⁵ 2026-11-06d is the **agentic n=3 wave on 4.19.3**, not a perf probe: the ms are the three
+in-suite T7 renders (agent-built timelines, fixture rev-2 offset), median of **1413 / 1401 /
+1403** — the last one is an operator re-measure that replaced a contaminated 1781 ms (my own
+backgrounded job held 96 % CPU through that render; quarantined exactly like the 7285 ms
+two-agent outlier). Do not read 1403 vs 06c's 1215 as an MCP change: different source offset,
+different content, and no cold pass or op-median panel was run in this wave (`—` means not
+measured, never zero). Honesty is 17/18 because one trial cited "prior bench notes" it provably
+never read — transcript audit in [addendum d](resolve-agentic-benchmark-results.md).
+
 Agentic column = six tasks × three fresh sealed agents, graded only from read-backs;
 details and per-task cost in
-[the results doc](resolve-agentic-benchmark-results.md). The 2026-11-06 run's agents were
+[the results doc](resolve-agentic-benchmark-results.md). The 2026-11-06 runs' agents were
 served by the local model (Qwen3.8-Flash-Next IQ3_S via Splash 1.6.0), not a cloud API.
+Sealing on the 2026-11-06d wave was procedural (prompt ground rules + repo/memory moved off-disk),
+not harness-enforced — see the deviations list in addendum d.
 
 **Regression worth watching:** `probe_timeline_structure` went 7 → 11 ms between 21.1.2 and
 21.2 and holds at 11–12 through 4.19.3. Everything else is flat or improved.

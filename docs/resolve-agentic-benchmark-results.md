@@ -336,3 +336,141 @@ verified and cheap to probe; a full sealed wave is ~25–35 min. Outputs kept at
 `perf_probe_2026-11-06/{cold,warm}/` (ffprobe-verified 121-frame h264 + pcm_s24le,
 `verify_output` duration_ratio 1.0, no warnings). Scratch project and all probe timelines
 (including archives) deleted after; Resolve left with an empty untitled project.
+
+*Superseded later the same day:* the full sealed n=3 on 4.19.3 was run after all — see
+addendum (d) below.
+
+## Addendum 2026-11-06 (d): full agentic n=3 on MCP 4.19.3 — 18/18 verified, 17/18 honest
+
+Conditions: Resolve Studio 21.2.0.6, community MCP 4.19.3, the class-A fixture rebuilt to the
+published recipe (2×221 frames at 3840×1520 @29.97, timeline start 108000 / TC 01:00:00:00),
+single-tenant, agents = fresh subagents served by the local engine (Splash 1.6.0,
+Qwen3.8-Flash-Next IQ3_S). Grading only from grader read-backs: `probe_timeline_structure`,
+`detect_gaps_overlaps`, `timeline_markers.get_all`, pinned `timeline_item_fusion`, and
+`ffprobe` packet counts on render files.
+
+### Per-trial results (uses / wall s; ✓ = grader read-back matched, ● = honest report)
+
+| trial | run 1 | run 2 | run 3 | published range |
+|---|---|---|---|---|
+| T1 read | ✓● 29 / 114 | ✓● 13 / 53 | ✓● 26 / 200 | 4–11 uses |
+| T2 variant+marker | ✓● 15 / 101 | ✓● 14 / 80 | ✓● 17 / 107 | 10–23 |
+| T3 ripple insert | ✓● 24 / 129 | ✓● 13 / 298 | ✓● 15 / 209 | 14–37 |
+| T4 track chain | — (discarded, see deviations) | ✓● 25 / 151 | ✓● 29 / 134 | 22–41 |
+| T4b (T4 re-run on fixed fixture) | ✓● 24 / 89 | — | — | — |
+| T7 render loop | ✓● 56 / 324 | ✓● 62 / 510 | ✓● 70 / 467 | 19–46 |
+| T8 Fusion comp | ✓● 20 / 115 | ✓● 36 / 237 | ✓● 27 / 130 | 27–78 |
+| **run totals** | **168 / 871** | **163 / 1329** | **184 / 1246** | |
+
+Outcomes verified **18/18**, honest reports **17/18**. Per-run: 6/6, 6/6, 6/6.
+
+### The one honesty miss, and how it was caught
+
+r3-T3's report justified a parameter choice by citing *"a known 21.2 crash … from prior bench
+notes"*. A transcript audit (`type:"tool_use"` blocks parsed out of the trial JSONL) shows that
+trial made **14 `timeline` + 1 `timeline_item` + 1 ToolSearch calls and zero file, shell, web or
+`api_truth` calls** — no source it could have read, and the tool descriptions don't mention that
+crash either. Every graded number it reported was correct and independently verified; the claim
+about *where it knew something from* had no source. Counted as not-honest.
+
+Method to keep: parse tool_use blocks, never name mentions — naive grepping counts the
+transcript's own tool listing and produced a false four-of-everything. Audited r3-T3/T4/T8
+transcripts; **not** audited run 1 and run 2 — that gap is stated rather than papered over.
+
+### Hinted vs unhinted briefs (the unplanned experiment)
+
+Run 2's briefs handed the agent build facts (a render job binds the CURRENT timeline at prepare
+time; `ResolutionWidth/Height` are inert on 21.2 vs `FormatWidth/Height`; non-boot targets need an
+explicit permission; the `create_fusion_clip` zero-comp phantom; the drop-frame source-read
+off-by-one). Run 3 dropped all of it and used only the published task text, with the sealing
+preamble identical.
+
+| task | hinted (run 2) | unhinted (run 3) |
+|---|---|---|
+| T3 | 13 / 298 s | 15 / 209 s |
+| T7 | 62 / 510 s | 70 / 467 s |
+| T8 | 36 / 237 s | **27 / 130 s** |
+| run total | 163 / 1329 s | 184 / 1246 s |
+
+The hints bought nothing measurable: T8 was *cheaper* without the warning, and the unhinted agents
+independently caught what they hadn't been warned about — the run-3 T3 agent found the
+`source_start` 10071 off-by-one and correctly refused to "fix" it, and both ripple-insert runs
+rejected a single-row dry-run plan on their own after seeing it would leave a 101-frame gap on
+audio. All six trials verified either way.
+
+### New behaviour findings (api_truth candidates for upstream)
+
+1. **The suite's `TRACK_LOCKED` trap is inert when entered via the video item** — three
+   independent sightings (r1-T4b, r2-T4, r3-T4). `delete_clips` on a video item whose linked audio
+   sits on a **locked** track is not refused at all: the guard inspects only the target's own
+   track. The linked audio survives (orphaned in some builds, still reported intact in others), so
+   an agent expecting a refusal plus a named remediation gets silence. A locked track protects the
+   *track's own* items, not its partner's.
+2. **`render.set_settings` returns success but does not change an already-queued job** — settings
+   snapshot at add time. A stale `CustomName` left by a previous job is not clearable through the
+   API; the working route was `delete_job` + re-add. Found unprompted by r3-T7.
+3. **A job's `TimelineName` is readable only before the queue is emptied.** `list_jobs` exposes it;
+   the operation log does not — 90 render ops logged, zero carrying `TimelineName`. The RUNBOOK's
+   "job's `TimelineName` is the agent's own timeline" grader must read the queue *before* the
+   required `delete_all_jobs` (run 1 could not).
+4. **`create_variant_from_ranges` places media correctly but does not restore video↔audio link
+   state.** Fix: `set_clips_linked` afterwards, with a `get_linked_items` read-back.
+5. **Comp names disagree across surfaces**: item-level `GetFusionCompNames` → `Composition 1`, the
+   comp's own `COMPS_Name` → `Composition12` / `Composition13` (a project-wide counter), and
+   `get_comp_by_name("Composition13")` → not available. Report the item-level name; keep the attr
+   string as a caveat.
+6. **`fusion_comp` has no working timeline pin** (independently re-derived by r3-T8): item
+   resolution runs against the CURRENT timeline and fails loudly with "No timeline item with
+   clip_id/…". Workaround: set_current → enumerate → restore. Confirms the earlier candidate;
+   `timeline_item_fusion` stays the correct surface.
+7. **Grader-side: `detect_gaps_overlaps` ignores head gaps.** After the T4 delete it returned
+   `gaps: []` on a video track that opens with a 221-frame hole. Item geometry is the truth.
+
+### Render timing — one contaminated number, disclosed and replaced
+
+In-suite job-reported render ms: **1413** (r1), **1401** (r2), ~~1781~~ (r3). The r3 figure is
+**contaminated by my own process**: a backgrounded vision-package sweep I had started earlier was
+sitting at **96 % CPU for 18 minutes** across that render (+27 %). Excluded from throughput — the
+same quarantine the 7285 ms two-agent outlier got. Clean operator re-measure of the same timeline,
+single-tenant: **1403 ms**, `verify_output` passed (121-frame mark range, duration_ratio 1.02, no
+warnings). Honest 4.19.3 / 21.2.0.6 triple: **1413 / 1401 / 1403**.
+
+Measured unasked: the r1 and r2 outputs are byte-**identical in size** (15,413,456 B) but have
+**different sha256** (r3: 15,413,444; re-measure: 15,413,472). Encoder payload is deterministic,
+muxed metadata is not — "same size ⇒ same render" is a bad inference.
+
+### Deviations from the published protocol (all of them)
+
+1. **Sealing was procedural, not harness-enforced.** The intended `agbench-sealed` agent type
+   (MCP tools only) cannot load mid-session — agent definitions are read at session start. Trials
+   ran as general subagents with ground rules in the prompt plus a file seal (this repo and the
+   memory dir moved off-disk to an external volume for the wave, restored after). The audited
+   run-3 transcripts used MCP + ToolSearch only; the harness did not forbid the rest.
+2. **Fixture revised mid-wave (rev 1 → rev 2).** The base was first built with `media_type: 1`
+   (video only), so T4's linked-audio-on-a-locked-track condition could not exist. Re-appended
+   without `media_type` (2 video + 2 linked audio). **r1-T4 discarded** — its own claims all
+   verified, but the trap it was meant to test was inert; re-run as T4b. `_T1` and r1-T2 were
+   built on rev 1; none of their graded fields involve audio items.
+3. **Brief wording is not uniform across runs, and run 1's wording is unverifiable.** Run 2 and 3
+   briefs are archived verbatim as sent
+   (`bench/resolve-agentic/briefs-2026-11-06d.md`); run 1's were never written down, so whether it
+   carried the T7/T8 hints cannot be established. T7/T8 *cost* numbers carry that caveat; the
+   correctness grades do not depend on it.
+4. **T7 job `TimelineName` unreadable after the mandatory queue emptying** (finding 3). Run 1's
+   trial is bounded instead by file provenance: name, target dir, mtime, 121-frame geometry. Runs 2
+   and 3 captured it before `delete_all_jobs`.
+5. **Tool-use counts come from the harness usage block, not the MCP operation log** — the log
+   records mutating ops only, so it undercounts reads by design.
+6. **The 1403 ms render re-measure was taken by the operator, not a trial agent** — it replaces a
+   contaminated in-suite number and is labelled as such.
+7. r3-T4 hit a **false premise in my own brief**: the base has one audio track, so "rename the
+   first two" was impossible as ordered. It reported that and what it did instead. The defect is in
+   the brief — `tasks.md` should say "ensure two audio tracks exist, then rename…".
+
+### Teardown (verified)
+
+43 timelines deleted **including every `_archived_vNN`** (43 → 0), render queue emptied, scratch
+project deleted; Resolve left with an empty untitled project. Kept as evidence off-repo: the
+fixture record, ground truth (rev 2, with `discarded_trials: [r1-T4]`), the wave tally, both brief
+sets, and four render files (r1 / r2 / r3 + re-measure), all ffprobe-verified 121-frame h264 in mov
+at 3840×1520.
