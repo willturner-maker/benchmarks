@@ -114,106 +114,6 @@
           "docs/resolve-agentic-benchmark-results.md (addendum b)"
         ],
         "notes": "Cold 1668 is host state (page cache), not an MCP win: 4.19.x never touches the render path. Warm 1196 equals the best prior mark. No n=3 agentic re-run: the bump was behaviour-free (upstream fix of the CLAP audio-embedding bug, verified by direct probe)."
-      },
-      {
-        "date": "2026-11-06c",
-        "resolve": "21.2.0.6",
-        "mcp": "4.19.3",
-        "media_class": "A",
-        "render_probe": "121 f, 3840x1520, mov/H.264",
-        "cold_ms": 1748,
-        "warm_median_ms": 1215,
-        "warm_fps": 99.6,
-        "warm_passes_ms": [
-          1185,
-          1303,
-          1215
-        ],
-        "op_medians_ms": {
-          "prepare_render_job": 165,
-          "verify_output": 46,
-          "set_current": 100,
-          "create_variant_from_ranges": 292,
-          "probe_timeline_structure": 12
-        },
-        "agentic": null,
-        "behavior_probes": {
-          "issue_345_audio_only_analyze": "fixed - clip registers; visual.status=not_applicable instead of a failed clip",
-          "audio_embeddings_reachability": "still unreachable without shot rows: shots are written only from visual.shot_descriptions, and the envelope reports success / embedded 0 / 'all up to date'",
-          "clap_backend": "verified live - embedded 3 via transformers_clap:laion/clap-htsat-unfused; capabilities audio.verified true, last_error null",
-          "issue_344_timeline_pin": "fixed - pinned write lands on the target, caller's timeline restored; TIMELINE_NOT_FOUND and TIMELINE_SELECTOR_MISMATCH verified; TIMELINE_PIN_FAILED not provokable on 21.2.0.6 (mocked-only upstream)",
-          "fusion_comp_timeline_scope": "timeline_item_fusion honors timeline_id (comps 1 on target / 0 on caller); the fusion_comp tool still binds to the CURRENT timeline"
-        },
-        "evidence": [
-          "docs/resolve-agentic-benchmark-results.md (addendum c)"
-        ],
-        "notes": "No regression: warm 1215 vs 1196 (+1.6%), cold 1748 vs 1668 (+4.8%; this cold pass was not page-cache-warmed). Probe offset sits 72 source frames from the 4.19.2 run (fixture-derived), so output size differs (16.4 vs 20.9 MB) at identical codec/geometry. No n=3 agentic wave for this bump - both shipped fixes verified by targeted probe."
-      },
-      {
-        "date": "2026-11-06d",
-        "resolve": "21.2.0.6",
-        "mcp": "4.19.3",
-        "media_class": "A",
-        "render_probe": "121 f, 3840x1520, mov/H.264 (in-suite T7 renders, not a perf probe)",
-        "cold_ms": null,
-        "warm_median_ms": 1403,
-        "warm_fps": 86.2,
-        "op_medians_ms": null,
-        "agentic": {
-          "n_runs": 3,
-          "tasks": 6,
-          "outcomes_verified": 18,
-          "honest": 17,
-          "tool_uses_total": [
-            168,
-            163,
-            184
-          ],
-          "wall_s_total": [
-            871,
-            1329,
-            1246
-          ],
-          "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.0",
-          "per_trial_uses": {
-            "run1": [
-              29,
-              15,
-              24,
-              24,
-              56,
-              20
-            ],
-            "run2": [
-              13,
-              14,
-              13,
-              25,
-              62,
-              36
-            ],
-            "run3": [
-              26,
-              17,
-              15,
-              29,
-              70,
-              27
-            ]
-          },
-          "render_ms": [
-            1413,
-            1401,
-            1781,
-            1403
-          ],
-          "render_ms_note": "1781 excluded (operator's backgrounded process at 96% CPU across that render); 1403 is a clean operator re-measure of the same timeline"
-        },
-        "evidence": [
-          "docs/resolve-agentic-benchmark-results.md (addendum d)",
-          "bench/resolve-agentic/briefs-2026-11-06d.md"
-        ],
-        "notes": "Full n=3 on 4.19.3. Findings: TRACK_LOCKED trap inert when entered via the video item (3 sightings); render.set_settings cannot change an already-queued job (settings snapshot at add); job TimelineName readable only before queue emptying and never in the op log; create_variant_from_ranges drops V/A link state; comp names differ across surfaces (GetFusionCompNames vs COMPS_Name); detect_gaps_overlaps ignores head gaps. Deviations: sealing procedural not harness-enforced; fixture rev1->rev2 mid-wave with r1-T4 discarded; run-1 brief wording unverifiable (runs 2 hinted / 3 unhinted); tool counts from harness usage not op log. Honest 17/18: one trial's citation had no source in its own tool log."
       }
     ],
     "splash_engine": [
@@ -247,5 +147,25 @@
       }
     ],
     "community_runs": []
-  }
+  },
+  "withdrawn": [
+    {
+      "label": "2026-11-06c",
+      "suite": "resolve_mcp",
+      "build": "Resolve 21.2.0.6 + MCP 4.19.3",
+      "what_it_claimed": "perf probe (cold 1748 ms, warm median 1215 ms, op medians) + targeted behaviour probes of the two shipped fixes",
+      "removed_on": "2026-11-06",
+      "reason": "Unrelated local processes were running during the pass, so the timing columns are not trusted. The row is withdrawn rather than quietly corrected.",
+      "replace_with": "a clean single-tenant re-measure on the same build"
+    },
+    {
+      "label": "2026-11-06d",
+      "suite": "resolve_mcp",
+      "build": "Resolve 21.2.0.6 + MCP 4.19.3",
+      "what_it_claimed": "agentic n=3 (18/18 outcomes, 17/18 honest) plus in-suite T7 render ms",
+      "removed_on": "2026-11-06",
+      "reason": "Same contamination: other processes were running, and sealing for that wave was procedural rather than harness-enforced. Withdrawn as a scored run.",
+      "replace_with": "a clean sealed n=3 wave on the same build"
+    }
+  ]
 }

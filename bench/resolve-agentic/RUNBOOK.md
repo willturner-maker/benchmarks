@@ -54,8 +54,10 @@ agent hits them, but the operator hits them first here.
 
 ## 3. Run
 
-For each task in `tasks.md`: fill the placeholders, launch a fresh agent, record
-tool-use count and wall time from the harness, keep the agent's report verbatim.
+For each task in `tasks.md`: fill the placeholders, **archive the filled brief as sent** (one file
+per wave — a brief you never wrote down can't be compared against the next wave, and a withdrawn
+run lost exactly that check), launch a fresh agent, record tool-use count and wall time from the
+harness, keep the agent's report verbatim.
 
 ## 4. Grade — read-backs only
 

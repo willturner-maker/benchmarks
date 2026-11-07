@@ -65,7 +65,7 @@ quietly unlocking everything.
 *Grader:* track names applied, track count +1, A1 still **locked** or explicitly
 unlocked with the reason reported, item gone, geometry otherwise intact.
 *Published:* 22–41 uses, 3/3 verified. The intended trap is `TRACK_LOCKED`.
-*Fixture precondition (2026-11-06d lesson):* append the base items **without** `media_type`, so
+*Fixture precondition (learned the hard way):* append the base items **without** `media_type`, so
 each video item carries its linked audio partner. Built video-only, the trap cannot exist and the
 trial is unmeasurable (one trial was discarded that way).
 *Trap may be inert (3 sightings on MCP 4.19.3 / Resolve 21.2):* deleting the **video** item whose
