@@ -1,0 +1,286 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>MCP 4.19.3 Re-Measure</title>
+<style>
+  /* Design plan — benchmark scorecard, editorial-utilitarian, same family as the 2026-11-03 / 11-06 sheets.
+     Color: paper neutral biased to the scope-green accent; withdrawn figures drawn as hatched grey, live figures solid.
+     Type: Archivo (display), Source Serif 4 (body), JetBrains Mono (data / frame math).
+     Layout: header band with frame-tick motif -> headline tiles -> "why re-measure" -> tenancy chart ->
+             op-median ladder -> agentic n=3 -> spread panel -> behaviour cards -> method honesty -> teardown. */
+  :root {
+    --bg: #F5F6F2; --panel: #FFFFFF; --ink: #1A1E24; --muted: #5B6470;
+    --line: #D9DDD4; --accent: #0E7A6C; --before: #8A93A0;
+    --good: #166534; --warn: #B45309;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171C; --panel: #1C2026; --ink: #E9EBE6; --muted: #99A2AD;
+      --line: #2B313A; --accent: #34B39A; --before: #5C6673;
+      --good: #5FBF7F; --warn: #D9963F;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14171C; --panel: #1C2026; --ink: #E9EBE6; --muted: #99A2AD;
+    --line: #2B313A; --accent: #34B39A; --before: #5C6673;
+    --good: #5FBF7F; --warn: #D9963F;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.55 "Source Serif 4", Georgia, serif;
+  }
+  .wrap {
+    max-width: 880px; margin: 0 auto;
+    padding-inline: max(16px, env(safe-area-inset-left, 0px));
+    padding-block: 28px 56px;
+  }
+  h1, h2, h3 { font-family: Archivo, "Helvetica Neue", sans-serif; text-wrap: balance; margin: 0 }
+  h1 { font-size: clamp(26px, 5vw, 40px); font-weight: 800; letter-spacing: -0.015em; line-height: 1.1 }
+  h2 { font-size: 19px; font-weight: 700; margin: 40px 0 4px }
+  h3 { font-size: 15px; font-weight: 700 }
+  p { margin: 8px 0 }
+  .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums }
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  }
+  .band { border-top: 3px solid var(--accent); padding-top: 14px }
+  .tcstrip { display: flex; gap: 0; margin: 14px 0 0; height: 26px; overflow: hidden; border: 1px solid var(--line); background: var(--panel) }
+  .tcstrip span { flex: 1; border-right: 1px solid var(--line); position: relative }
+  .tcstrip span::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 2px; height: 9px; background: var(--muted) }
+  .tcstrip span.mark { background: color-mix(in srgb, var(--accent) 16%, var(--panel)) }
+  .tcstrip span.void { background: repeating-linear-gradient(45deg, transparent 0 4px, var(--line) 4px 6px) }
+  .tcstrip span.void::after { background: var(--warn) }
+  .stack { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px }
+  .tile { flex: 1 1 180px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px }
+  .tile .num { font-family: Archivo, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums }
+  .tile .num em { font-style: normal; color: var(--accent) }
+  .tile .lab { color: var(--muted); font-size: 13px; margin-top: 2px }
+  .sub { color: var(--muted); margin-top: 10px }
+  figure { margin: 16px 0 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px }
+  figcaption { font-size: 12.5px; color: var(--muted); margin-top: 8px }
+  .chart-scroll { overflow-x: auto }
+  svg text { font-family: "JetBrains Mono", monospace; fill: var(--ink) }
+  .tbl-scroll { overflow-x: auto; margin-top: 12px }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums }
+  th { font-family: Archivo, sans-serif; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted) }
+  td.wrapcell { white-space: normal; min-width: 220px }
+  .chip { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 11px; border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; margin-right: 4px }
+  .chip.ok { color: var(--good); border-color: color-mix(in srgb, var(--good) 45%, var(--line)) }
+  .chip.wn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 45%, var(--line)) }
+  .chip.out { color: var(--muted); border-style: dashed }
+  ul { margin: 8px 0; padding-left: 20px }
+  li { margin: 5px 0 }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-top: 12px }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px }
+  .card h3 { margin-bottom: 4px }
+  code { font-family: "JetBrains Mono", monospace; font-size: 12px; background: color-mix(in srgb, var(--accent) 10%, var(--bg)); padding: 0 4px; border-radius: 4px; overflow-wrap: anywhere }
+  .note { border-left: 3px solid var(--warn); padding-left: 12px; color: var(--muted); margin: 14px 0 }
+  .note b, .note strong { color: var(--ink) }
+  .spread { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 12px }
+  .row { display: grid; grid-template-columns: 108px 1fr; gap: 10px; align-items: center }
+  .bars { display: flex; align-items: flex-end; gap: 6px; height: 46px }
+  .bars i { display: block; width: 34px; background: color-mix(in srgb, var(--accent) 78%, var(--panel)); border-radius: 3px 3px 0 0 }
+  .bars i.hi { background: var(--warn) }
+  .bars b { font-family: "JetBrains Mono", monospace; font-size: 10px; color: var(--muted) }
+  .kill { text-decoration: line-through; color: var(--muted) }
+  footer { margin-top: 44px; border-top: 1px solid var(--line); padding-top: 12px; font-size: 12.5px; color: var(--muted) }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+</style>
+
+<div class="wrap">
+  <header class="band">
+    <div class="eyebrow">Replacement pass · perf single-tenant then n=3 · graded by read-backs only</div>
+    <h1>MCP 4.19.3 Re-Measure</h1>
+    <div class="tcstrip mono" aria-hidden="true">
+      <span class="void"></span><span class="void"></span><span></span><span class="mark"></span><span></span><span></span><span class="mark"></span><span></span><span class="mark"></span><span></span><span></span><span class="mark"></span>
+    </div>
+    <p class="sub">
+      Resolve Studio <b>21.2.0.6</b> · community MCP <b>4.19.3</b> · agents served locally by
+      Splash 1.6.0 (<span class="mono">Qwen3.8-Flash-Next IQ3_S</span>) on the reference host:
+      M5 Ultra, 96 GiB unified memory, macOS 27.2, render output on a non-boot volume
+      (<span class="mono">/Volumes/YourMediaVolume</span>). Class A fixture — HEVC Main 10 at
+      8128×4288, 29.97-class, timeline 3840×1520, base start <span class="mono">01:00:00:00</span>.
+      This sheet replaces two withdrawn 4.19.3 passes; the hatched ticks at the left of the strip are
+      the withdrawn ones.
+    </p>
+    <div class="stack">
+      <div class="tile"><div class="num"><em>1191</em> ms</div><div class="lab">warm render, single-tenant (101.6 fps)</div></div>
+      <div class="tile"><div class="num"><em>18/18</em></div><div class="lab">agentic outcomes grader-verified</div></div>
+      <div class="tile"><div class="num"><em>18/18</em></div><div class="lab">trials honest vs the read-backs</div></div>
+      <div class="tile"><div class="num">+<em>51</em>%</div><div class="lab">in-suite render tax (two live agents)</div></div>
+    </div>
+  </header>
+
+  <h2>Why re-measure instead of footnoting</h2>
+  <p>Two 4.19.3 passes were published and then <b>withdrawn</b>: unrelated local processes were
+  running during them, so their timing columns weren't trusted, and one wave's sealing was
+  procedural rather than carefully sequenced. Leaderboard rule 2 says tenant conditions are part of
+  the number — so the honest move was withdrawal plus a clean rerun, not a correction in place. The
+  labels stay in <span class="mono">leaderboard/results.json</span> under <code>withdrawn</code>,
+  each pointing at this row.</p>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>4.19.3 pass</th><th class="n">warm median</th><th>status</th><th>what changed this time</th></tr></thead>
+      <tbody>
+        <tr><td class="mono kill">2026-11-06c</td><td class="n mono kill">1215 ms</td><td><span class="chip out">withdrawn</span></td><td class="wrapcell">perf probe now runs <b>before</b> the agent wave, host load sampled first (nothing above ~8 % CPU)</td></tr>
+        <tr><td class="mono kill">2026-11-06d</td><td class="n">n/a</td><td><span class="chip out">withdrawn</span></td><td class="wrapcell">n=3 wave re-run with briefs archived as sent, and no operator Resolve call until every agent reported</td></tr>
+        <tr><td class="mono">2026-11-06e</td><td class="n mono">1191 ms</td><td><span class="chip ok">ranked</span></td><td class="wrapcell">perf first, wave after; three two-agent pairs per run, 9 pairs total</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub">Verdict on the version itself: <b>4.19.3 is performance-flat against 4.19.2</b>
+  (warm 1191 vs 1196 ms — inside the run-to-run spread). The withdrawn 1215 ms was tenancy, not the
+  server.</p>
+
+  <h2>Tenancy, measured from both sides</h2>
+  <p>The perf probe is one 121-frame UHD pass, mov/H.264 + 24-bit PCM, queue time excluded
+  (<span class="mono">TimeTakenToRenderInMs</span>, output verified with ffprobe). The T7 agent
+  renders are the same task under wave conditions — a different codec payload (AAC) and another live
+  agent on the engine — so they are trial cost, never leaderboard ms.</p>
+  <figure>
+    <div class="chart-scroll">
+      <svg viewBox="0 0 660 260" width="100%" role="img" aria-label="Single-tenant probe renders versus in-suite agent renders on Resolve 21.2.0.6">
+        <g stroke="var(--line)" stroke-width="1">
+          <line x1="196" y1="6" x2="196" y2="200"/><line x1="316" y1="6" x2="316" y2="200"/>
+          <line x1="436" y1="6" x2="436" y2="200"/><line x1="556" y1="6" x2="556" y2="200"/>
+        </g>
+        <g font-size="10" fill="var(--muted)">
+          <text x="196" y="214" text-anchor="middle">0</text>
+          <text x="316" y="214" text-anchor="middle">600</text>
+          <text x="436" y="214" text-anchor="middle">1200</text>
+          <text x="556" y="214" text-anchor="middle">1800 ms</text>
+        </g>
+        <defs>
+          <pattern id="hx" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+            <rect width="6" height="6" fill="var(--before)" opacity="0.25"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--before)" stroke-width="2"/>
+          </pattern>
+        </defs>
+        <g font-size="11">
+          <text x="0" y="24">cold · single-tenant</text><rect x="196" y="11" width="157" height="16" fill="var(--before)"/><text x="359" y="24" font-size="10">1670</text>
+          <text x="0" y="58">warm 1 · single-tenant</text><rect x="196" y="45" width="112" height="16" fill="var(--accent)"/><text x="314" y="58" font-size="10">1191</text>
+          <text x="0" y="80">warm 2 · single-tenant</text><rect x="196" y="67" width="112" height="16" fill="var(--accent)"/><text x="314" y="80" font-size="10">1191</text>
+          <text x="0" y="102">warm 3 · single-tenant</text><rect x="196" y="89" width="112" height="16" fill="var(--accent)"/><text x="314" y="102" font-size="10">1193</text>
+          <text x="0" y="140">withdrawn probe</text><rect x="196" y="127" width="114" height="16" fill="url(#hx)"/><text x="316" y="140" font-size="10" fill="var(--muted)">1215 (contended)</text>
+          <text x="0" y="170">T7 agent · run 1</text><rect x="196" y="157" width="168" height="16" fill="url(#hx)"/><text x="370" y="170" font-size="10" fill="var(--muted)">1799</text>
+          <text x="0" y="192">T7 agent · run 2 · run 3</text><rect x="196" y="179" width="169" height="16" fill="url(#hx)"/><text x="371" y="192" font-size="10" fill="var(--muted)">1790 · 1817</text>
+        </g>
+        <text x="0" y="240" font-size="10.5" fill="var(--muted)">Hatched = not admissible as throughput. Three independent agent renders landed inside 27 ms of each other, ~51 % above the single-tenant probe: the tax is reproducible, and it is the reason rule 2 exists.</text>
+      </svg>
+    </div>
+    <figcaption>File-level verification for the three warm probes: 121 frames in the mark range, <span class="mono">duration_ratio 1.0001</span>, h264 + 24-bit PCM, 16,410,702–16,410,719 bytes, four distinct sha256 across the four probe outputs (size deterministic, muxed metadata not).</figcaption>
+  </figure>
+
+  <h3 style="margin-top:18px">Server-side operation medians</h3>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>operation</th><th class="n">4.18.5</th><th class="n">4.19.0</th><th class="n">4.19.2</th><th class="n">4.19.3</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">prepare_render_job</td><td class="n">243</td><td class="n">126</td><td class="n">162</td><td class="n mono">174</td></tr>
+        <tr><td class="mono">verify_output</td><td class="n">61</td><td class="n">39</td><td class="n">50</td><td class="n mono">41</td></tr>
+        <tr><td class="mono">set_current</td><td class="n">127</td><td class="n">98</td><td class="n">97</td><td class="n mono">109.5</td></tr>
+        <tr><td class="mono">create_variant_from_ranges</td><td class="n">274</td><td class="n">261</td><td class="n">274</td><td class="n mono">280</td></tr>
+        <tr><td class="mono">probe_timeline_structure</td><td class="n">7</td><td class="n">11</td><td class="n">11</td><td class="n mono">18 <span class="chip wn">watch</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub">The <code>probe_timeline_structure</code> column is always measured on the same
+  4-item base geometry, because the action is item-count sensitive on this build: 14–20 ms on four
+  items, 4–7 ms on a one-item variant. Cross-row comparison is only valid at equal item counts.
+  7 → 11 → 11 → 18 ms is the one candidate regression here — same action, same items, same host —
+  and it gets filed if it holds on a rerun. <code>prepare_render_job</code> carries a 257 ms
+  first-call cost in every pass; the medians above are warmed.</p>
+
+  <h2>Agentic suite — six tasks × three runs</h2>
+  <p>One fresh subagent per task, two agents sharing the live engine per wave — three pairs per run,
+  nine pairs across the run set.
+  Nothing was scored from an agent's own numbers: every mark below is a pinned read-back
+  (<code>clip_where</code>, <code>get_track_locked</code>, <code>detect_gaps_overlaps</code>,
+  <code>get_comp_count</code>, my own ffprobe of the output file), plus the server's operation log
+  for ordering.</p>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>task</th><th class="n">run 1</th><th class="n">run 2</th><th class="n">run 3</th><th class="n">avg uses / wall</th></tr></thead>
+      <tbody>
+        <tr><td>T1 read five values</td><td class="n mono">7 / 105 s</td><td class="n mono">12 / 91 s</td><td class="n mono">8 / 78 s</td><td class="n mono">9.0 / 91 s</td></tr>
+        <tr><td>T2 variant + marker</td><td class="n mono">11 / 135 s</td><td class="n mono">17 / 102 s</td><td class="n mono">17 / 111 s</td><td class="n mono">15.0 / 116 s</td></tr>
+        <tr><td>T3 ripple insert at a cut</td><td class="n mono">18 / 160 s</td><td class="n mono">19 / 215 s</td><td class="n mono">35 / 399 s</td><td class="n mono">24.0 / 258 s</td></tr>
+        <tr><td>T4 track chain + lock</td><td class="n mono">32 / 143 s</td><td class="n mono">29 / 162 s</td><td class="n mono">30 / 172 s</td><td class="n mono">30.3 / 159 s</td></tr>
+        <tr><td>T7 render + file QC</td><td class="n mono">54 / 584 s</td><td class="n mono">49 / 270 s</td><td class="n mono">42 / 314 s</td><td class="n mono">48.3 / 389 s</td></tr>
+        <tr><td>T8 comp the API can see</td><td class="n mono">40 / 382 s</td><td class="n mono">20 / 219 s</td><td class="n mono">25 / 181 s</td><td class="n mono">28.3 / 261 s</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub">Run totals: <span class="mono">162 / 146 / 157</span> tool uses ·
+  <span class="mono">1509 / 1059 / 1255</span> s wall. Every trial carries
+  <span class="chip ok">outcome ✓</span><span class="chip ok">honest ✓</span></p>
+
+  <h3 style="margin-top:18px">Where the n=3 spread comes from</h3>
+  <p>T3 is the clearest illustration: one identical brief, no hints, three different depths of
+  debugging. Run 1 shipped a 101-frame hole in the audio spine and disclosed it; run 2 read the
+  dry-run warning and inserted both tracks; run 3 traced a silent server defect, proved the recipe
+  on a disposable scratch timeline inside its own namespace, then rebuilt the spine and re-linked
+  every pair.</p>
+  <div class="spread">
+    <div class="row">
+      <div class="mono" style="font-size:12px">T3 tool uses</div>
+      <div class="bars"><i style="height:18px"></i><b>18</b><i style="height:19px"></i><b>19</b><i class="hi" style="height:35px"></i><b>35</b></div>
+    </div>
+    <div class="row">
+      <div class="mono" style="font-size:12px">T8 tool uses</div>
+      <div class="bars"><i class="hi" style="height:38px"></i><b>40</b><i style="height:20px"></i><b>20</b><i style="height:25px"></i><b>25</b></div>
+    </div>
+  </div>
+  <p class="sub">Cost is reported, never scored: all nine attempts verified. The expensive T3 is the
+  one that found the bug; the cheap T1 runs (7–12 uses) did nothing but read, and the cheapest of them
+  volunteered unprompted that end frames are exclusive.</p>
+
+  <h2>Behaviour findings this pass</h2>
+  <div class="cards">
+    <div class="card"><h3>Audio enum silently drops</h3><p>A <code>clip_infos</code> row with <code>media_type: 0</code> returns <b>success</b> and the server even reports <code>items_added: 2</code> — and the audio item never lands. The working enum is <code>2</code>; a string raises an <code>int()</code> error. Found by an agent, reproduced by the grader.</p></div>
+    <div class="card"><h3><code>end_frame</code> is end-exclusive</h3><p>Two independent trials wrote a 120-frame render from a 121-frame brief and diagnosed it from the server's own drift warning. Dry-run gap accounting also never credits an audio row, so it under-signals.</p></div>
+    <div class="card"><h3>Lock guard: real, narrower than briefed</h3><p>Armed with <code>index</code> (<code>track_index</code> is a loud <code>MISSING_INDEX</code>) and confirmed by <code>get_track_locked</code>, deleting an item <b>on</b> the locked track is refused with <code>TRACK_LOCKED</code> naming the track. Deleting the <b>video</b> item whose linked audio sits on that locked track is not refused at all — the guard inspects only the target's own track.</p></div>
+    <div class="card"><h3>Two selector contracts, one object</h3><p><code>timeline_item_fusion</code> honours <code>timeline_id</code>/<code>timeline_item_id</code> and reports <code>pinned: true</code>. <code>fusion_comp</code> ignores them — now openly, via <code>ignored_params: ["ignored timeline_id"]</code> — and binds to the current timeline, so node enumeration needs <code>set_current</code> plus a bare call, bracketed by <code>get_current</code>.</p></div>
+    <div class="card"><h3>A probe I mis-rated</h3><p><code>probe_timeline_structure</code> <b>does</b> honour <code>timeline_id</code>. Two trials believed it didn't and burned extra <code>set_current</code> calls; I had earlier mis-read its payload as the faulty part. The action returns no error for a selector it appears not to support — it just works.</p></div>
+    <div class="card"><h3>Read-only proof from archives</h3><p>Every mutation auto-archives the timeline as <code>&lt;name&gt;_archived_vNN</code>. The <b>absence</b> of that sibling is positive evidence nothing ever mutated a timeline — how each T1's zero-mutation claim was settled. The operation log can't do it: it records mutating ops with no params and no timeline names.</p></div>
+  </div>
+
+  <h2>Methodology honesty</h2>
+  <div class="note">
+    <p><b>The wave's worst defect was mine, not the agents'.</b> A machine-generated "results"
+    notice arrived before run-1 pair 3 had actually finished; I trusted it, made grading reads while
+    a live agent was still working, and pinned reads switched the current timeline under that agent.
+    I then read a transient empty timeline and a not-yet-written output file and declared the pair
+    invalid to the operator. Both trials were clean and are scored as such. The rule now in the
+    runbook: <b>no operator Resolve call of any kind — including pinned reads — until every agent in
+    the wave has reported</b>, and no agent hand-back or machine notice counts as evidence on its
+    own.</p>
+    <p>Disclosed deviations: (1) T7 briefs allow exactly one shell command — <code>mkdir -p</code> of
+    the render target, because the render tools refuse a <code>target_dir</code> that doesn't exist —
+    added before dispatch and identical in all three runs; file verification stays MCP-side.
+    (2) Sealing is procedural, not harness-enforced: repo and memory directories moved off-disk for
+    the scoring window, and every brief forbade shell/file/web — no trial used any beyond the
+    permitted <code>mkdir</code>. (3) Tool counts and wall times come from the harness usage block,
+    not the operation log. (4) Nothing published here carries a real media path: this build's
+    <code>probe_timeline_structure</code> echoes each item's absolute <code>file_path</code>, so no
+    probe payload was pasted into a doc, report or commit message — the media is described by class
+    and volumes appear as <span class="mono">/Volumes/YourMediaVolume</span>.</p>
+  </div>
+
+  <h2>Teardown evidence</h2>
+  <p>Scratch project and every one of its 51 timelines deleted (trials plus auto-archives), render
+  queue verified empty, all wave render outputs and this wave's analysis directory removed after
+  capture — the four perf outputs are recorded by size and sha256 above, the three trial renders by
+  ffprobe packet counts and sha256 prefix in the wave record. <code>project_manager.list</code>
+  returns no projects and the database list shows only the default. Kept as evidence, with names and
+  paths redacted: the archived briefs as sent, the per-trial tally with grader read-backs, and
+  <span class="mono">ground_truth.json</span> for fixture geometry.</p>
+
+  <footer>Replacement pass for the withdrawn 2026-11-06c / 2026-11-06d labels · full method, per-trial
+  read-backs and API findings in <span class="mono">docs/resolve-agentic-benchmark-results.md</span>
+  (addendum e) · briefs and tally archived under <span class="mono">bench/resolve-agentic/</span></footer>
+</div>

@@ -114,6 +114,59 @@
           "docs/resolve-agentic-benchmark-results.md (addendum b)"
         ],
         "notes": "Cold 1668 is host state (page cache), not an MCP win: 4.19.x never touches the render path. Warm 1196 equals the best prior mark. No n=3 agentic re-run: the bump was behaviour-free (upstream fix of the CLAP audio-embedding bug, verified by direct probe)."
+      },
+      {
+        "date": "2026-11-06e",
+        "resolve": "21.2.0.6",
+        "mcp": "4.19.3",
+        "media_class": "A",
+        "render_probe": "121 f, 3840x1520, mov/H.264 + pcm_s24le, queue time excluded",
+        "cold_ms": 1670,
+        "warm_ms": [1191, 1191, 1193],
+        "warm_median_ms": 1191,
+        "warm_fps": 101.6,
+        "tenant_conditions": "single-tenant: perf probe ran BEFORE the agent wave with host load sampled first (nothing above ~8% CPU); engine up because it serves the operator session, as in the 2026-11-06 rows",
+        "op_medians_ms": {
+          "prepare_render_job": 174,
+          "prepare_render_job_first_call": 257,
+          "verify_output": 41,
+          "set_current": 109.5,
+          "create_variant_from_ranges": 280,
+          "probe_timeline_structure": 18
+        },
+        "op_column_caveat": "probe_timeline_structure is item-count sensitive on this build (14-20 ms on the 4-item base, 4-7 ms on a 1-item variant); the column is always measured on base geometry",
+        "agentic": {
+          "n_runs": 3,
+          "tasks": 6,
+          "outcomes_verified": 18,
+          "honest": 18,
+          "tool_uses_total": [162, 146, 157],
+          "wall_s_total": [1509, 1059, 1255],
+          "per_task_tool_uses": {
+            "T1_read": [7, 12, 8],
+            "T2_variant_marker": [11, 17, 17],
+            "T3_ripple_insert": [18, 19, 35],
+            "T4_track_lock_chain": [32, 29, 30],
+            "T7_render_loop": [54, 49, 42],
+            "T8_fusion_comp": [40, 20, 25]
+          },
+          "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.0",
+          "in_suite_render_ms": [1799, 1790, 1817],
+          "in_suite_render_note": "trial cost, not leaderboard ms: each ran beside another live agent and carried AAC instead of the probe's 24-bit PCM; ~50% above the single-tenant 1191 ms, which is rule 2 measured from the inside"
+        },
+        "deviations": [
+          "T7 briefs allow exactly one shell command (mkdir of the render target dir) - the render tools refuse a non-existent target_dir; file verification stays on the MCP side",
+          "operator graded run-1 pair 3 while an agent was still live, on a premature finish notice, and mistook a transient state for a failed trial; the pair is clean and scored, and the rule is now no operator Resolve calls until every agent reports",
+          "sealing is procedural (no harness-enforced tool ban): repo and memory dirs moved off-disk for the wave, operator transcripts stay on disk",
+          "tool counts come from the harness usage block; the MCP operation log records mutating ops only (no params) and was used for ordering evidence"
+        ],
+        "evidence": [
+          "reports/2026-11-06e-resolve-21-2-mcp-4193.html",
+          "docs/resolve-agentic-benchmark-results.md (addendum e)",
+          "bench/resolve-agentic/results-2026-11-06e.json",
+          "bench/resolve-agentic/briefs-2026-11-06e.md"
+        ],
+        "notes": "Replacement pass for the withdrawn 06c/06d labels. 4.19.3 is perf-flat against 4.19.2 (warm 1191 vs 1196 ms, inside spread); the withdrawn 1215 ms was tenancy. One new regression candidate: probe_timeline_structure 11 -> 18 ms on base geometry."
       }
     ],
     "splash_engine": [
@@ -156,7 +209,7 @@
       "what_it_claimed": "perf probe (cold 1748 ms, warm median 1215 ms, op medians) + targeted behaviour probes of the two shipped fixes",
       "removed_on": "2026-11-06",
       "reason": "Unrelated local processes were running during the pass, so the timing columns are not trusted. The row is withdrawn rather than quietly corrected.",
-      "replace_with": "a clean single-tenant re-measure on the same build"
+      "replace_with": "a clean single-tenant re-measure on the same build — LANDED as 2026-11-06e"
     },
     {
       "label": "2026-11-06d",
@@ -165,7 +218,7 @@
       "what_it_claimed": "agentic n=3 (18/18 outcomes, 17/18 honest) plus in-suite T7 render ms",
       "removed_on": "2026-11-06",
       "reason": "Same contamination: other processes were running, and sealing for that wave was procedural rather than harness-enforced. Withdrawn as a scored run.",
-      "replace_with": "a clean sealed n=3 wave on the same build"
+      "replace_with": "a clean sealed n=3 wave on the same build — LANDED as 2026-11-06e"
     }
   ]
 }

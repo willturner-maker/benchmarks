@@ -373,10 +373,11 @@ one, and anything that does not reproduce gets corrected rather than defended.
 
 **Observed during the withdrawn agentic wave** (found by agents and graders, not by timing):
 
-1. **The suite's `TRACK_LOCKED` trap is inert when entered via the video item** — three independent
+1. **The suite's `TRACK_LOCKED` guard inspects only the target item's own track** — three independent
    sightings. `delete_clips` on a video item whose linked audio sits on a **locked** track is not
-   refused: the guard inspects only the target's own track. A locked track protects its own items,
-   not its partner's.
+   refused: a locked track protects its own items, not its partner's. *(Re-verified in addendum (e),
+   where the lock was proven armed by read-back; the same pass also caught and corrected a bogus
+   operator claim that the lock could not be armed at all.)*
 2. **`render.set_settings` reports success but cannot change an already-queued job** — settings
    snapshot at add time; a stale `CustomName` is not clearable through the API
    (`delete_job` + re-add is the working route).
@@ -396,4 +397,148 @@ one, and anything that does not reproduce gets corrected rather than defended.
 8. **Encoder determinism, measured unasked:** two renders of the same timeline were byte-identical
    in size but differed in sha256. Encoder payload is deterministic, muxed metadata is not —
    "same size ⇒ same render" is a bad inference.
+
+---
+
+## Addendum 2026-11-06 (e): 4.19.3 re-measured single-tenant, and the n=3 wave that replaces the withdrawn one
+
+Label **`2026-11-06e`**. Resolve Studio 21.2.0.6, community MCP **4.19.3**, Splash 1.6.0 serving
+`Qwen3.8-Flash-Next IQ3_S` (the same engine serving the operator session, as in the 2026-11-06 rows).
+Class A media, same fixture recipe as every kept row (`check_media.py`-derived offsets).
+
+**Order mattered this time.** The perf probe ran **first, single-tenant**, before any agent touched
+Resolve — host load sampled immediately beforehand (nothing above ~8 % CPU). That is the exact
+mistake the `06c`/`06d` withdrawal was about, so the fix is structural, not a promise: nothing that
+can contend runs until the timing pass is on disk.
+
+### Perf probe (single-tenant)
+
+| | cold | warm ×3 | warm median | warm fps |
+|---|---|---|---|---|
+| 2026-11-06e | **1670 ms** | 1191 / 1191 / 1193 | **1191 ms** | **101.6** |
+
+Op medians (ms): `prepare_render_job` 174 (first call 257), `verify_output` 41,
+`set_current` 109.5, `create_variant_from_ranges` 280, `probe_timeline_structure` **18**.
+
+All four outputs verified by file probe: 121 frames in the mark range, `duration_ratio` 1.0001,
+h264 + 24-bit PCM streams, no warnings; 16,410,702–16,410,719 B, four distinct sha256 (checksums
+kept in the run record). So: **4.19.3 is perf-flat against 4.19.2** (warm 1191 vs 1196 ms — inside
+run-to-run spread), and the withdrawn pass's 1215 ms was tenancy, not the toolchain.
+
+**Column caveat, now footnoted rather than assumed:** `probe_timeline_structure` is **item-count
+sensitive** on this build — 14–20 ms on the 4-item base, 4–7 ms on a 1-item variant. The published
+`probe` column has always been measured on base geometry, so 18 ms is the like-for-like number, and
+the 7 → 11 → 11 → 18 ms trend is a real regression candidate rather than a measurement accident.
+
+### Agentic suite — 3 runs × 6 tasks, 18 trials
+
+**18/18 outcomes grader-verified, 18/18 honest.** Every value below came from a pinned read-back or a
+file probe; no trial's own numbers entered a cell.
+
+| Task | r1 uses / wall | r2 | r3 | what the spread is |
+|---|---|---|---|---|
+| T1 read | 7 / 105 s | 12 / 91 s | 8 / 78 s | near-noise; all five values exact every run |
+| T2 variant + marker | 11 / 135 s | 17 / 102 s | 17 / 111 s | marker proven every run |
+| T3 ripple insert | 18 / 160 s | 19 / 215 s | **35 / 399 s** | the interesting one — see below |
+| T4 track chain + lock | 32 / 143 s | 29 / 162 s | 30 / 172 s | stable; lock read back every run |
+| T7 render loop | 54 / 584 s | 49 / 270 s | 42 / 314 s | cost is the append-semantics trap |
+| T8 Fusion comp | 40 / 382 s | 20 / 219 s | 25 / 181 s | halves after run 1 |
+| **run total** | **162 / 1509 s** | **146 / 1059 s** | **157 / 1255 s** | |
+
+**T3, three times on one identical brief, no hints:** run 1 shipped the insert with a 101-frame hole
+in the audio spine and *disclosed* it; run 2 read the dry run's own `gap_frames_by_track` warning and
+avoided the hole; run 3 diagnosed **why** — a `clip_infos` row with `media_type: 0` for audio returns
+**success** from Resolve's `AppendToTimeline`, the server even reports `items_added:2`, and the item
+never lands (enum `2` is correct) — proved the recipe on a throwaway timeline inside its own namespace,
+then rebuilt the spine and re-linked all three pairs. Same task, 18/19/35 calls. That is the n=3
+spread: not measurement noise, three different depths of debugging.
+
+**The three T7 renders are a tenant-condition measurement from the inside:** 1799 / 1790 / 1817 ms —
+inside 27 ms of each other, all ~50 % above the single-tenant 1191 ms, because each ran beside
+another live agent (and carried AAC rather than the probe's 24-bit PCM). They are recorded as trial
+cost, never as leaderboard ms, per rule 2.
+
+### Deviations from the published protocol, all disclosed
+
+1. The T7 brief carries a **one-command `mkdir` exception** (identical in all three runs, added
+   before dispatch and archived): the render tools refuse a `target_dir` that doesn't exist, so the
+   task as written was unsatisfiable under a total shell ban. File verification stayed on the MCP side
+   (`render.verify_output`, plus my own ffprobe as grader), and a `mkdir` cannot read prior findings.
+2. **Operator error, run 1 pair 3:** I acted on a premature "pair finished" notice and graded while an
+   agent was still live. Pinned reads are context switches (they echo `restored_current`), so I moved
+   the shared current-timeline pointer under a running trial, and I read a transient state — an empty
+   timeline mid delete/re-append, and a render file one minute before it was written — then called the
+   pair failed. The pair was fine and is scored. The rule is now: **no operator Resolve call of any
+   kind, and no "finished" assumption, until every agent in the wave has reported.**
+3. One machine-generated "results" notice in that same window carried timeline ids matching nothing
+   live and a marker claim that read-back disproved. Only agent hand-backs plus my own read-backs were
+   used as evidence after that point.
+4. **Sealing is procedural, not harness-enforced:** trials were told no shell/file/web and none used
+   any beyond the permitted `mkdir`, but nothing in the harness prevented it. The repo and memory dirs
+   were moved off-disk for the wave. Operator session transcripts remain on disk and reachable by a
+   shell-capable agent.
+5. Tool-use and wall-clock cells come from the harness usage block. The MCP operation log records
+   mutating ops only and carries no params, so it is used for *ordering* evidence (e.g. proving a T1
+   trial made no mutations) — never for counts.
+
+### Behaviour findings, re-verified on this pass
+
+Every item in the section above is now re-probed. **One is corrected, one is strengthened, and one of
+my own operator probes turns out to have been the faulty part.**
+
+- **`TRACK_LOCKED` — corrected, and the finding stands.** With a lock *proven armed*
+  (`get_track_locked` → `locked:true`), `delete_clips` on an item **on that track** is refused with
+  `TRACK_LOCKED`, naming the track and giving the unlock-and-retry remediation, and deletes nothing.
+  The linked-partner half also survives: three more sightings this wave — a video item deleted with no
+  refusal while its linked audio sat on a read-back-confirmed locked track, and the partner survived.
+- **My own earlier probe was wrong, and it is recorded as an error, not an API fact.** The claim that
+  "no calling shape arms a track lock on 21.2.0.6" came from a probe that passed an **integer** track
+  type to the raw API. With `SetTrackLock("audio"|"video", idx, True)` it returns True and
+  `GetIsTrackLocked` agrees on every timeline probed. A contradiction between an agent's read-back and
+  the operator's probe should be resolved by re-running the probe, not by overruling the agent.
+- **Key trap (loud, not silent):** `set_track_lock`/`set_track_name` want `index`; `track_index`
+  returns `MISSING_INDEX` naming the fix. Two trials took the remediation on the spot.
+- **`clip_infos` audio enum is `media_type: 2`.** `0` is accepted and silently drops the insert;
+  a string value raises an `int()` error. The `ripple_insert` dry run's gap accounting never credits
+  an audio row either, so it under-signals.
+- **`append_to_timeline` / `create_timeline_from_clips` `end_frame` is end-exclusive** (10072→10192
+  gives 120 frames). Two of three T7 runs found this independently and diagnosed it from the server's
+  own drift warning; one turned it into proof that the *source start passes through unchanged* — the
+  120-frame arithmetic shows the reader quirk sits in the read-back, not in the placement.
+- **`fusion_comp` and `timeline_item_fusion` have different selector contracts.** `timeline_item_fusion`
+  honours `timeline_id`/`timeline_item_id` and reports `pinned:true`; `fusion_comp` now says so
+  explicitly — `ignored_params: ["timeline_id"]` — and binds to the current timeline. Item-scoped
+  Fusion enumeration needs `set_current` + a bare call, bracketed by a `get_current` check.
+- **`probe_timeline_structure` does honour `timeline_id`** (measured with the current pointer on a
+  different timeline: it returned the selector's timeline, `pinned:true`). Two trials believed it
+  didn't and paid extra `set_current` calls for nothing; the action gives no error for a selector it
+  accepts, so read the `pinned` field rather than inferring. It also echoes each item's **absolute
+  file path** — useful for proving a media class, and a reason no probe payload may be pasted into a
+  public doc verbatim.
+- Re-confirmed unchanged this pass: `render.set_settings` cannot mutate an already-queued job;
+  `detect_gaps_overlaps` ignores head gaps; `create_variant_from_ranges` places media correctly but
+  does not restore video↔audio links; comp names disagree across surfaces (`Composition 1` item-level
+  vs `Composition15`/`16`/`17` internal, a project-wide counter); #345 audio-only analysis still fine.
+- **Grading-integrity lesson, inverted this wave:** no trial overclaimed (18/18 honest, transcript
+  audited). The honesty failure was the **operator's** — see deviation 2. A wave can be clean at the
+  trial level and still produce a wrong published claim through the grader's own haste, which is why
+  the correction is in the doc rather than in a private note.
+
+### Artifacts / cleanup
+
+Scratch project `_mcp_AGBench-2026-11-06e` and all 51 of its timelines (18 trial + 1 trial probe +
+2 perf + 1 operator probe + base + 28 server-generated `_archived_vNN` predecessors) deleted after
+grading; render queue verified empty; all render outputs and the wave's analysis artifacts removed
+from both external volumes (perf-output checksums recorded first).
+
+In-repo evidence for this pass: briefs exactly as sent
+([`bench/resolve-agentic/briefs-2026-11-06e.md`](../bench/resolve-agentic/briefs-2026-11-06e.md)),
+the per-trial tally with every grader read-back inline
+([`bench/resolve-agentic/results-2026-11-06e.json`](../bench/resolve-agentic/results-2026-11-06e.json)),
+the leaderboard row (`leaderboard/results.json`, both withdrawn entries now pointing at it), and a
+self-contained scorecard at
+[`reports/2026-11-06e-resolve-21-2-mcp-4193.html`](../reports/2026-11-06e-resolve-21-2-mcp-4193.html).
+Volume paths in the archived tally are rewritten to the `/Volumes/Your…` placeholder convention and
+no probe payload is reproduced verbatim, per the publish guard; the raw fixture file with real clip
+and folder names stayed outside the repo.
 

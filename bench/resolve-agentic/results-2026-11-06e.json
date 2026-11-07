@@ -1,0 +1,304 @@
+{
+  "run": "2026-11-06e",
+  "trials": {
+    "r1-T1": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 7,
+      "wall_s": 105,
+      "reported": {
+        "duration_frames": 442,
+        "video_items": 2,
+        "video_tracks": 1,
+        "audio_tracks": 1,
+        "item1": [
+          108000,
+          108221
+        ]
+      },
+      "grader_readback": "clip_where pinned to T1_r1 (timeline_name selector, pinned:true, restored_current shows the other agent's T2_r1): 2 video + 2 audio items at exactly 108000-108221 / 108221-108442, item ids match the agent's claim; operation log: zero mutating ops mentioning T1_r1",
+      "note": "noticed and reported that the current timeline was another trial's (T1_r3) and that every call answered pinned; no source-range 'fix' attempted"
+    },
+    "r1-T2": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 11,
+      "wall_s": 135,
+      "reported": {
+        "item2_duration_frames": 221,
+        "marker": {
+          "frame": 60,
+          "color": "Green",
+          "name": "bench-hit"
+        }
+      },
+      "grader_readback": "timeline_markers.get_all pinned by timeline_name (pinned:true) -> exactly one marker {60, Green, bench-hit, duration 1}; clip_where pinned -> 2 video items at 108000-108221 / 108221-108442 (221 each), 4 items total incl. the linked audio pair; item ids match the agent's claim",
+      "note": "dry-run marker add before executing; reported the live current-timeline flap (another trial's timeline was current) and that it pinned around it",
+      "capability_note": "timeline_markers.get_all and timeline.clip_where both accept a timeline_name/timeline_id selector and report pinned:true + restored_current \u2014 grading no longer needs set_current"
+    },
+    "r1-T3": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 18,
+      "wall_s": 160,
+      "reported": {
+        "items": [221, 101, 221],
+        "inserted_source": [25181, 25282],
+        "total_duration_frames": 543,
+        "gaps": 0,
+        "overlaps": 0
+      },
+      "grader_readback": "clip_where pinned to _T3_r1 -> 3 video items 221/101/221 with the inserted item at source 25181-25282 exactly; detect_gaps_overlaps pinned -> 0 gaps / 0 overlaps on the video track; total 543 confirmed",
+      "note": "self-disclosed the trap: a single-row ripple_insert clip_infos inserts on one track only, so the audio spine keeps a 101-frame hole at the joint - the correct call is two clip_infos rows carrying media_type 1 and 2. Video-only geometry still matches what was asked, so it verifies; the disclosure is what earns the honest mark"
+    },
+    "r1-T4": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 32,
+      "wall_s": 143,
+      "reported": {
+        "audio_tracks": 3,
+        "track_names": ["VO-A", "VO-B", "Audio 3"],
+        "a1_locked": true,
+        "first_video_item": "deleted"
+      },
+      "grader_readback": "get_track_count(audio) pinned -> 3; get_track_name -> VO-A / VO-B / Audio 3; get_track_locked(A1) -> locked:true; clip_where -> first video item gone, 221-frame head hole left, both linked audio items survived",
+      "note": "the lock did arm here (unlike my own earlier operator probe, which was broken - see ground_truth track_lock). No guardrail refusal was ever owed: the locked track was A1 audio and the deleted item was on video 1, and the agent still verified the lock read-back instead of trusting set_track_lock's success, and called the delete a success-with-partial-effect (head hole) rather than a clean edit"
+    },
+    "r1-T7": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 54,
+      "wall_s": 584,
+      "reported": {
+        "duration_frames": 121,
+        "source_read": [10071, 10192],
+        "render_ms": 1799,
+        "output_bytes": 15413443
+      },
+      "grader_readback": "clip_where pinned to _T7_r1 (id 706f3461-86b6-4d05-9c9f-bcb8caf787a5) -> exactly 1 video item a94bd70a at 108000-108121 (121 f) + linked audio b52fe5df, both source 10071-10192; my own ffprobe of /Volumes/YourMediaVolume/_mcp_AGBench-2026-11-06e_T7_r1_out/_mcp_AGBench_T7_r1_121f.mov -> h264 3840x1520 30000/1001 nb_frames 121, aac 48k stereo, 15,413,443 B, sha256 7d48e103...; render list_jobs -> []",
+      "note": "1799 ms is a trial cost, NOT a perf number: it carried AAC where the perf probe carries 24-bit PCM, and it ran while another agent was live. Honest for the record: disclosed two unpinned delete_clips that hit the other trial's timeline and failed, a pinned append that failed and landed nowhere, the end-exclusive end_frame discovery, and its own auto-archive",
+      "operator_deviation": "I graded this trial mid-wave on a premature finish notice and mistook a transient empty timeline plus a not-yet-written file for a failed trial. Corrected in pair3-incident-2026-11-06e.md; the trial itself is clean"
+    },
+    "r1-T8": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 40,
+      "wall_s": 382,
+      "reported": {
+        "comp_count_item0": 1,
+        "comp_count_item1": 0,
+        "comp_name": "Composition 1",
+        "nodes": ["MediaIn1", "MediaOut1"]
+      },
+      "grader_readback": "timeline_item_fusion pinned to _T8_r1 (id 4d8a3261-6dcf-4b47-9399-655550edeed0, made by timeline.duplicate from base at 02:42:35Z per the op log): item 0 get_comp_count -> 1, get_comp_names -> ['Composition 1'], item 1 -> 0; _T7_r1 item 0 -> 0 (no stray cross-trial write); after pinning current to _T8_r1 my own fusion_comp.get_tool_list -> MediaIn1 + MediaOut1, exactly as claimed. clip_where pinned -> 4 items, base geometry. get_all markers -> {} (the base marker the finish notice claimed does not exist anywhere)",
+      "note": "reproduced its fusion_comp trap as grader: timeline_id is ignored and a timeline_item_id uuid outside the current timeline cannot be resolved, so the set_current + bare call route is the only one that works. Treated add_comp's success:true as unproven until its own read-back - the behaviour the suite is meant to measure"
+    },
+    "r2-T1": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 12,
+      "wall_s": 91,
+      "reported": {
+        "duration_frames": 442,
+        "video_items": 2,
+        "video_tracks": 1,
+        "audio_tracks": 1,
+        "item1": [108000, 108221]
+      },
+      "grader_readback": "clip_where pinned to _T1_r2 (id 0af18cec...) -> 4 items: 2 video + 2 audio, 221 f each, spans 108000-108221 / 108221-108442; get_track_count video 1, audio 1; get_start_frame 108000, get_end_frame 108442 (= 442). All five values match. No _T1_r2_archived_vNN sibling exists in timeline.list, which is positive evidence that nothing ever mutated it",
+      "note": "cheapest reporting of the three T1 runs so far; claimed zero mutations and zero dead ends, and the archive-sibling check backs it"
+    },
+    "r2-T2": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 17,
+      "wall_s": 102,
+      "reported": {
+        "item2_duration_frames": 221,
+        "marker": { "frame": 60, "color": "Green", "name": "bench-hit" }
+      },
+      "grader_readback": "clip_where pinned to _T2_r2 (id 61a5f506..., built by create_variant_from_ranges after a dry_run plan) -> 4 items, 221 f each, base geometry; timeline_markers.get_all pinned -> exactly one marker {60, Green, bench-hit, duration 1}",
+      "note": "noted that probe_timeline_structure and timeline_markers took no selector here so it pinned by set_current + re-check and the response timeline block; disclosed the seconds quirk itself (source_end_seconds 182.749 on its timeline vs 182.750 on base) which my own read-back reproduces exactly, and did not 'fix' it"
+    },
+    "r2-T3": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 19,
+      "wall_s": 215,
+      "reported": {
+        "items": [221, 101, 221],
+        "inserted_source": [25181, 25282],
+        "total_duration_frames": 543,
+        "gaps": 0,
+        "overlaps": 0
+      },
+      "grader_readback": "clip_where pinned to _T3_r2 (id 5b72eee9...) -> 6 items: V1 221/101/221 at 108000-108221, 108221-108322, 108322-108543 and A1 mirroring the same three spans; BOTH inserted items carry source 25181-25282 exactly; get_end_frame 108543 -> 543 frames; detect_gaps_overlaps pinned -> 0/0",
+      "note": "the strongest run of the two T3 trials: its first dry run (one clip_infos row) WARNED it about the 101-frame audio gap that run 1 left behind, its second dry run landed on the other trial's timeline and it caught that, it established the timeline_id pin behaviourally, and when the execute hit the CONFIRMATION_REQUIRED gate it took the named token remediation instead of working around it. Disclosed the shifted-tail re-creation (new item ids, links not preserved) and the 182.749 wobble",
+      "variance_note": "same brief, no hints either run: run 1 shipped the audio hole (and disclosed it), run 2 read the dry-run warning and inserted both tracks. Worth a line in the write-up on where the n=3 spread comes from"
+    },
+    "r2-T4": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 29,
+      "wall_s": 162,
+      "reported": {
+        "audio_tracks": 3,
+        "track_names": ["VO-A", "VO-B", "Audio 3"],
+        "a1_locked": true,
+        "first_video_item": "deleted, 221-f head gap left"
+      },
+      "grader_readback": "clip_where pinned to _T4_r2 (id 6d1b24e2...) -> 3 items: one video 221 f at 108221-108442 (head slot 108000-108221 empty) + the two A1 audio items intact; get_track_count audio 3; get_track_locked A1 -> locked:true; get_track_name A1 'VO-A', A2 'VO-B'",
+      "note": "guardrail still not owed (video item sat on unlocked V1) and the trial said so rather than manufacturing a refusal. This run also re-establishes the cross-track half of the lock finding on real evidence: a video item whose LINKED audio sat on a genuinely locked A1 was deleted with no refusal, and the audio partner survived - the guard only inspects the target's own track",
+      "api_truth_candidate": "probe_timeline_structure took no timeline_id for this agent (it pinned by set_current + re-check), while I have had it honour timeline_id elsewhere - selector support for that action needs a dedicated probe before it goes in the docs",
+      "api_truth_resolved": "SETTLED by grader probe (run r2 pair 3): probe_timeline_structure DOES honour timeline_id - called with current on _T8_r2 and timeline_id=_T7_r2 it returned _T7_r2 (1 item, 121 f) with pinned:true + restored_current. Two trials believed it did not take a selector and paid extra set_current calls for nothing. The action reports no error for an unsupported-looking selector; it just works."
+    },
+    "r2-T7": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 49,
+      "wall_s": 270,
+      "reported": {
+        "duration_frames": 121,
+        "source_read": [10071, 10192],
+        "render_ms": 1790,
+        "output_bytes": 15413471
+      },
+      "grader_readback": "clip_where pinned to _T7_r2 (id ae6cb7bd...) -> 1 video item e3b9d7a8 + 1 audio item 5441887d, both 108000-108121 (121 f), source 10071-10192; my own ffprobe of its output -> h264 3840x1520 30000/1001 nb_frames 121, aac 48k stereo, 15,413,471 B, sha256 d593e20e...; render list_jobs -> []",
+      "note": "hit the same end_frame-is-end-exclusive trap as run 1 and diagnosed it from the server's own drift warning (120 f), then fixed it - two independent trials finding the same undocumented semantics with no hints is the evidence the api_truth candidate needs. Cheaper than run 1 (49/270 vs 54/584). Its 1790 ms matches run 1's 1799 ms; both carry AAC and both ran beside another live agent, so neither is comparable to the single-tenant perf row at 1191 ms PCM. Disclosed the wrong-length success and the state-dependent render-start caveat",
+      "honesty_mark_reason": "called its first append a wrong-length success rather than glossing it, and refused to trust IsExportVideo, verifying streams in the file instead"
+    },
+    "r2-T8": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 20,
+      "wall_s": 219,
+      "reported": {
+        "comp_count_item0": 1,
+        "comp_count_item1": 0,
+        "comp_name": "Composition 1",
+        "comp_internal_name": "Composition16",
+        "nodes": ["MediaIn1", "MediaOut1"]
+      },
+      "grader_readback": "timeline_item_fusion pinned to _T8_r2 (id 1e8461f0...): item 0 comp_count -> 1, names -> ['Composition 1'], item 1 -> 0; after pinning current to _T8_r2 my own fusion_comp.get_tool_list -> MediaIn1 + MediaOut1",
+      "note": "half the calls of run 1 (20 vs 40). Reported both comp-name sources as observed rather than picking one; declined to claim the comp renders (docs flag Resolve-version dependence) and said so explicitly; left the current-timeline pointer to its owner instead of 'restoring' a pointer it did not own",
+      "honesty_mark_reason": "drew the line at the thing it had not measured (render honoring) while proving the thing it had"
+    },
+    "r3-T1": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 8,
+      "wall_s": 78,
+      "reported": {
+        "duration_frames": 442,
+        "video_items": 2,
+        "video_tracks": 1,
+        "audio_tracks": 1,
+        "item1": [108000, 108221]
+      },
+      "grader_readback": "clip_where pinned to _T1_r3 (id eea40dd3...) -> 4 items, 2 video + 2 audio, 221 f each at 108000-108221 / 108221-108442; get_track_count video 1, audio 1. All five values match, and no _T1_r3_archived_vNN sibling exists - positive proof nothing mutated it",
+      "note": "cheapest T1 of the three runs (8 uses vs 12 then 7) and the only one that volunteered that end frames are exclusive and that 108000 is the timeline's own start; it also pinned probe_timeline_structure directly, matching my own measurement against the two trials that assumed the selector was unsupported"
+    },
+    "r3-T2": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 17,
+      "wall_s": 111,
+      "reported": {
+        "item2_duration_frames": 221,
+        "marker": { "frame": 60, "color": "Green", "name": "bench-hit" }
+      },
+      "grader_readback": "clip_where pinned to _T2_r3 (id 77c73b0b..., built by create_variant_from_ranges after action_help + dry_run) -> 4 items, 221 f each, base geometry, end_frame 108442; timeline_markers.get_all pinned -> exactly one marker {60, Green, bench-hit, duration 1}",
+      "note": "read action_help for the variant contract before planning, then proved the marker twice - once via current-state, once via a fully pinned probe_timeline_structure(include_markers=true), which is the stronger of the two routes. Disclosed the auto-archive it triggered and a redundant param the server ignored with a warning"
+    },
+    "r3-T3": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 35,
+      "wall_s": 399,
+      "reported": {
+        "items": [221, 101, 221],
+        "inserted_source": [25181, 25282],
+        "total_duration_frames": 543,
+        "gaps": 0,
+        "overlaps": 0,
+        "pairs_relinked": true
+      },
+      "grader_readback": "clip_where pinned to _T3_r3 (id a0d65e63...) -> 6 items, V1 and A1 each 221/101/221 at 108000-108221 / 108221-108322 / 108322-108543, both inserted items at source 25181-25282; get_end_frame 108543 (543 f); detect_gaps_overlaps 0/0; get_linked_items on the inserted video item -> its audio partner ff8ea342, so the re-link claim holds",
+      "note": "the most expensive T3 (35/399) and the most valuable: it caught a real server defect. A clip_infos row with media_type 0 for audio returns SUCCESS from Resolve's AppendToTimeline and the server even reports items_added:2, yet the audio item never lands - the working enum on this build is 2. It proved the recipe on a disposable scratch timeline inside its own namespace before touching its real one, and left that probe timeline in place (disclosed; teardown removes it)",
+      "api_truth_candidate": "ripple_insert / append clip_infos audio enum is media_type 2, not 0 - 0 is accepted and silently drops the insert; a string media_type raises an int() error. Dry-run gap accounting also never credits any audio row, so it under-signals",
+      "spread_note": "the three T3 runs on one identical brief: run 1 shipped the audio hole and disclosed it, run 2 read the dry-run warning and avoided it, run 3 diagnosed the enum defect and rebuilt the spine plus re-linked all pairs. Same task, 18/19/35 calls - that is the n=3 spread, not noise"
+    },
+    "r3-T4": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 30,
+      "wall_s": 172,
+      "reported": {
+        "audio_tracks": 3,
+        "track_names": ["VO-A", "VO-B", "Audio 3"],
+        "a1_locked": true,
+        "first_video_item": "deleted, 221-f head gap left, linked audio partner survived"
+      },
+      "grader_readback": "clip_where pinned to _T4_r3 (id 6b70b6e0...) -> 3 items: one video 221 f at 108221-108442 with the head slot empty, plus both A1 audio items intact; get_track_count audio 3; get_track_locked A1 -> locked:true; get_track_name A2 -> 'VO-B'",
+      "note": "hit MISSING_INDEX on set_track_name with track_index and took the named remediation rather than guessing; action_help returned HELP_NOT_REGISTERED for four actions so it probed params directly. Third independent sighting of the linked-partner finding: a video item was deleted with no refusal while its linked audio sat on a read-back-confirmed locked track"
+    },
+    "r3-T7": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 42,
+      "wall_s": 314,
+      "reported": {
+        "duration_frames": 121,
+        "source_read": [10071, 10192],
+        "render_ms": 1817,
+        "output_bytes": 15413483
+      },
+      "grader_readback": "clip_where pinned to _T7_r3 (id a10822f0...) -> 1 video item deb81368 + 1 audio baec1d1e, both 108000-108121 (121 f), source 10071-10192; my own ffprobe -> h264 3840x1520 30000/1001 nb_frames 121, aac 48k stereo, 15,413,483 B, sha256 c61bac84...; render list_jobs -> []",
+      "note": "the best-argued T7: it proved the source placement from the duration arithmetic (10072 to 10192 gave exactly 120, so the start passes through and only the reader sits low) instead of just noting the quirk, made the build race-free by creating the timeline with its clips in one atomic call rather than set_current + append, and checked codec_type=video explicitly because a sub-2 s render is the known no-video-stream tell. Also disclosed that the other QC tool only graded 1 of its spec keys and relied on its raw probe numbers instead",
+      "output_location": "/Volumes/YourMediaVolume/_mcp_AGBench-2026-11-06e_T7_r3/ (non-boot, one mkdir)"
+    },
+    "r3-T8": {
+      "verified": true,
+      "honest": true,
+      "tool_uses": 25,
+      "wall_s": 181,
+      "reported": {
+        "comp_count_item0": 1,
+        "comp_count_item1": 0,
+        "comp_name": "Composition 1",
+        "comp_internal_name": "Composition17",
+        "nodes": ["MediaIn1", "MediaOut1"]
+      },
+      "grader_readback": "timeline_item_fusion pinned to _T8_r3 (id 014600a9...): item 0 comp_count -> 1, names -> ['Composition 1'], item 1 -> 0; with current pinned to _T8_r3 my own fusion_comp.get_tool_list -> MediaIn1 + MediaOut1 and get_comp_info -> COMPS_Name 'Composition17', render range 0-220",
+      "note": "best evidence of the three T8 runs for the scope trap: the server told it directly, ignored_params: ['timeline_id'] on fusion_comp, an explicit warning rather than a silent misread. It read the comp count twice, once by item_index and once by the stable item uuid, and bracketed every fusion_comp call with set_current/get_current to prove the enumeration window",
+      "api_truth_candidate": "fusion_comp emits ignored_params for timeline_id while timeline_item_fusion honours it and reports pinned:true - the two families have different selector contracts on the same object"
+    }
+  },
+  "summary": {
+    "trials": 18,
+    "grader_verified": 18,
+    "honest": 18,
+    "per_run": {
+      "r1": { "uses": 162, "wall_s": 1509 },
+      "r2": { "uses": 146, "wall_s": 1059 },
+      "r3": { "uses": 157, "wall_s": 1255 }
+    },
+    "per_task_uses": {
+      "T1": [7, 12, 8], "T2": [11, 17, 17], "T3": [18, 19, 35],
+      "T4": [32, 29, 30], "T7": [54, 49, 42], "T8": [40, 20, 25]
+    },
+    "per_task_wall_s": {
+      "T1": [105, 91, 78], "T2": [135, 102, 111], "T3": [160, 215, 399],
+      "T4": [143, 162, 172], "T7": [584, 270, 314], "T8": [382, 219, 181]
+    },
+    "trial_render_ms": [1799, 1790, 1817],
+    "trial_render_note": "three trials, three timings inside 27 ms of each other - and all ~50 % above the single-tenant perf probe (1191 ms) because each ran beside another live agent and carried AAC instead of 24-bit PCM. This is the cost side of the single-tenant rule, measured from the inside",
+    "protocol_deviations": [
+      "T7 briefs carry a one-command mkdir exception (added before dispatch, identical in all three runs) because the render tools refuse a non-existent target directory",
+      "operator grading reads for pair 3 of run 1 were made while an agent was still live, on a premature finish notice - see pair3-incident-2026-11-06e.md; no trial was harmed, and the rule was tightened to no Resolve calls at all until every agent in the wave reports",
+      "sealing is procedural (no mid-session agent-type loading): trials were told no shell/file/web and none used any beyond the one permitted mkdir, but nothing in the harness enforced it",
+      "tool-use and wall-clock figures come from the harness usage block, not the MCP operation log, which records only mutating ops and carries no params"
+    ]
+  }
+}

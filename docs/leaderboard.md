@@ -26,6 +26,7 @@ macOS 27.2, render output and scratch on external volumes.
 | 2026-11-03 | 21.1.2.10 | 4.18.5 | 3436 ms | 1414 ms | ~85 | 243 | 61 | 127 | 7 | **18/18** | 18/18 |
 | 2026-11-06 | 21.2.0.6 | 4.19.0 | 3090 ms | 1296 ms | 93.4 | 126 | 39 | 98 | 11 | **18/18** | 18/18 |
 | 2026-11-06b | 21.2.0.6 | 4.19.2 | 1668 ms¹ | **1196 ms** | 101 | 162 | 50 | 97 | 11 | n/a² | n/a |
+| **2026-11-06e** | 21.2.0.6 | **4.19.3** | 1670 ms | **1191 ms** | **101.6** | 174 | 41 | 109.5 | 18³ | **18/18** | 18/18 |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
@@ -35,22 +36,28 @@ operation medians in ms.
 the same-source page cache was warm-ish. Warm 1196 ms equals the best prior mark.
 ² No agentic n=3 for 4.19.2: the bump was behaviour-free (upstream fix of the CLAP
 audio-embedding bug we filed, verified by direct probe the day it shipped).
+³ The `probe` column is measured on **base geometry (4 items)**, and `probe_timeline_structure` is
+item-count sensitive on this build: 14–20 ms on 4 items, 4–7 ms on a 1-item variant. Comparisons
+across rows are only valid at the same item count.
 
 **Withdrawn rows.** Two 4.19.3 passes carried the labels `2026-11-06c` (perf probe + targeted
 behaviour probes) and `2026-11-06d` (agentic n=3). Both were **removed on 2026-11-06**: unrelated
 local processes were running during them, so their timing columns are not trusted, and rule 2
 ("tenant conditions are part of the number") means the honest response is withdrawal, not a
 footnote. The labels stay in [`leaderboard/results.json`](../leaderboard/results.json) under
-`withdrawn` so the gap is explainable; a clean single-tenant re-measure on the same build replaces
-them. Nothing about 4.19.3 is being claimed here until that re-measure lands.
+`withdrawn` so the gap is explainable. **The replacement landed** as `2026-11-06e`: the perf probe
+ran single-tenant *before* the agent wave (host load sampled first) and the agentic n=3 ran after it,
+so nothing could contend with the timing. Read that row, not the withdrawn ones.
 
 Agentic column = six tasks × three fresh sealed agents, graded only from read-backs;
 details and per-task cost in
 [the results doc](resolve-agentic-benchmark-results.md). The 2026-11-06 runs' agents were
 served by the local model (Qwen3.8-Flash-Next IQ3_S via Splash 1.6.0), not a cloud API.
 
-**Regression worth watching:** `probe_timeline_structure` went 7 → 11 ms between 21.1.2 and
-21.2 and holds at 11 ms on 4.19.0 and 4.19.2. Everything else is flat or improved.
+**Regression worth watching:** `probe_timeline_structure` on base geometry went 7 → 11 → 11 → **18 ms**
+across 4.18.5 / 4.19.0 / 4.19.2 / 4.19.3 — the 4.19.3 step is the one to file if it holds on a rerun
+(same action, same item count, same host). `verify_output` improved to 41 ms and `set_current` is
+within spread; render ms are flat, as expected for a release that never touches the render path.
 
 ## Splash engine — reference host
 

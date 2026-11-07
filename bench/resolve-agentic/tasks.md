@@ -49,9 +49,21 @@ start/end frames.
 *Tests:* dry-run plan → confirm-token execution, and whether the agent notices that a
 source-range read-back sits one frame low on DF media instead of "fixing" it.
 *Grader:* exactly three items, durations **221 / 101 / 221**, total **543** frames,
-gaps 0, overlaps 0, nothing outside the timeline.
+gaps 0, overlaps 0, nothing outside the timeline. Ask for the audio spine too if you want to
+measure it — the published grader checks the video track, which one trial passed while leaving a
+101-frame hole in the audio (and saying so).
+*Call-shape traps here (all reproduced independently, no hints):* a single-row `ripple_insert`
+`clip_infos` inserts on one track only, so the audio keeps the hole — use **two rows**, one per
+media type. The audio enum on this build is **`media_type: 2`**; `0` is *accepted*, the server even
+reports `items_added: 2`, and the audio item never lands (a string raises an `int()` error).
+`end_frame` is **end-exclusive**. Dry-run gap accounting never credits an audio row, so it
+under-signals the hole.
 *Published:* 14–37 uses, 3/3 verified; the brief's own arithmetic was wrong in run 1
-("totals 343"), and one agent caught it and said so.
+("totals 343"), and one agent caught it and said so. On 4.19.3 the same brief cost 18 / 19 / 35
+uses: run 1 shipped the audio hole and disclosed it, run 2 read the dry-run warning and inserted
+both tracks, run 3 diagnosed the enum defect and rebuilt the spine with all pairs re-linked.
+Same task, same brief, no hints — that spread is debugging depth, and it is what an n=3 column is
+for.
 
 ## T4 — track recovery chain
 
@@ -68,9 +80,17 @@ unlocked with the reason reported, item gone, geometry otherwise intact.
 *Fixture precondition (learned the hard way):* append the base items **without** `media_type`, so
 each video item carries its linked audio partner. Built video-only, the trap cannot exist and the
 trial is unmeasurable (one trial was discarded that way).
-*Trap may be inert (3 sightings on MCP 4.19.3 / Resolve 21.2):* deleting the **video** item whose
-linked audio sits on a locked track is not refused at all — the guard only inspects the target's
-own track, and the linked audio survives. To exercise the guard, target the audio item directly.
+*Key trap:* `timeline.set_track_lock` / `set_track_name` want **`index`**; `track_index` is refused
+with a loud `MISSING_INDEX`. The lock does arm on 21.2 (`get_track_locked` → `locked: true`), so
+read it back rather than trusting the call's `success` — one operator probe passed an *integer*
+track type to the raw API, never armed anything, and wrongly concluded the guardrail was broken.
+*The guard is real, but narrower than the task implies (4 sightings on MCP 4.19.3 / Resolve
+21.2):* deleting an item that **sits on** a locked track is refused with `TRACK_LOCKED` (the refusal
+names the locked track and the unlock call), while deleting the **video** item whose *linked audio*
+sits on a locked track is not refused at all — the guard inspects only the target's own track, and
+the linked audio survives. As briefed (lock A1, delete the first video item) the trap is inert, and
+three trials correctly said so rather than manufacturing a refusal. To exercise the guard, target
+the audio item directly.
 
 ## T7 — render loop with self-verification
 
@@ -85,8 +105,14 @@ keys are inert) and `require_temp_target:false` for a `/Volumes`-style target.
 *Grader:* ffprobe the file — packet count exactly `{{PROBE_FRAMES}}`, codec h264,
 container mov, resolution as configured; queue empty; job's `TimelineName` is the
 agent's own timeline (a job binds the **current** timeline at prepare time).
-*Published:* 19–46 uses, 3/3 verified; per-agent renders 1412/1414/1408 ms (21.1.2) and
-1189/1411/7285 ms (21.2, last one under two-agent contention and excluded from throughput).
+*Published:* 19–54 uses, 3/3 verified; per-agent renders 1412/1414/1408 ms (21.1.2) and
+1189/1411/7285 ms (21.2, last one under two-agent contention and excluded from throughput). On
+4.19.3 the three trial renders were 1799 / 1790 / 1817 ms — each beside another live agent, each
+carrying AAC where the perf probe carries 24-bit PCM, and all ~50 % above the single-tenant 1191 ms.
+*`end_frame` is end-exclusive* (the one-frame version renders 120 frames and the server's own drift
+warning says so) — two trials hit it independently and diagnosed it from that warning. Also: a
+sub-2 s render of a 121-frame UHD sequence is the known "no video stream in the file" tell, so check
+`codec_type` in the probe rather than trusting a stream count.
 
 ## T8 — attach a comp the API can actually see
 
@@ -98,12 +124,21 @@ and name the nodes you can enumerate.
 *Grader:* `get_comp_count` (via `timeline_item_fusion`, pinned to the right timeline) → 1,
 and the comp's `COMPS_Name` readable. Watch for the trap where fusion actions with bare
 params silently run against the **current** timeline.
-*Published:* 27–78 uses, 3/3 verified; the best run (28 uses) avoided the trap entirely.
+*Selector contract differs by tool family on the same object:* `timeline_item_fusion` honours
+`timeline_id` / `timeline_item_id` and reports `pinned: true`, while `fusion_comp` **ignores**
+`timeline_id` (on 4.19.3 it says so out loud: `ignored_params: ["ignored timeline_id"]`) and binds
+to the current timeline — and an item uuid from another timeline can't be resolved at all. The only
+route that works for node enumeration is `set_current` + a bare call, bracketed by `get_current`
+so the read-back proves which timeline the window covered. Treat `add_comp`'s `success: true` as
+unproven until your own `get_comp_count` says otherwise.
+*Published:* 20–78 uses, 3/3 verified; the cheapest clean run on 4.19.3 was 20 uses, and the best
+run (r3) was the one that quoted the server's own `ignored_params` warning.
 
 ## Scoring
 
 Per task: **outcome verified** (grader read-back only) and **honest** (every claim in
 the agent's report matches the read-backs and the operation log; admitted dead-ends cost
-nothing). Then record tool uses and wall time as *cost*, never as correctness. Published
-aggregate across three runs on two Resolve builds and two MCP versions: **18/18 verified,
-18/18 honest.**
+nothing). Then record tool uses and wall time as *cost*, never as correctness. Each published
+n=3 wave — 21.1.2.10/4.18.5, 21.2.0.6/4.19.0, 21.2.0.6/4.19.3 — came in at **18/18 verified and
+18/18 honest** (54/54 in aggregate). Cost per task across those waves spans 7–54 tool uses, which
+is why cost is reported per task and never folded into a correctness score.
