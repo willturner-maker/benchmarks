@@ -1,0 +1,194 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>MCP 5.1.0 Pass</title>
+<style>
+  /* Design plan — benchmark scorecard, editorial-utilitarian, same family as the 2026-11-03 / 11-06 / 06e sheets.
+     Color: paper neutral biased to the scope-green accent.
+     Type: Archivo (display), Source Serif 4 (body), JetBrains Mono (data / frame math).
+     Layout: header band with frame-tick motif -> headline tiles -> perf table -> op-median deltas ->
+             agentic n=3 -> in-suite render panel -> v5 behaviour cards -> method/deviations -> teardown. */
+  :root {
+    --bg: #F5F6F2; --panel: #FFFFFF; --ink: #1A1E24; --muted: #5B6470;
+    --line: #D9DDD4; --accent: #0E7A6C; --before: #8A93A0;
+    --good: #166534; --warn: #B45309;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171C; --panel: #1C2026; --ink: #E9EBE6; --muted: #99A2AD;
+      --line: #2B313A; --accent: #34B39A; --before: #5C6673;
+      --good: #5FBF7F; --warn: #D9963F;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14171C; --panel: #1C2026; --ink: #E9EBE6; --muted: #99A2AD;
+    --line: #2B313A; --accent: #34B39A; --before: #5C6673;
+    --good: #5FBF7F; --warn: #D9963F;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.55 "Source Serif 4", Georgia, serif;
+  }
+  .wrap {
+    max-width: 880px; margin: 0 auto;
+    padding-inline: max(16px, env(safe-area-inset-left, 0px));
+    padding-block: 28px 56px;
+  }
+  h1, h2, h3 { font-family: Archivo, "Helvetica Neue", sans-serif; text-wrap: balance; margin: 0 }
+  h1 { font-size: clamp(26px, 5vw, 40px); font-weight: 800; letter-spacing: -0.015em; line-height: 1.1 }
+  h2 { font-size: 19px; font-weight: 700; margin: 34px 0 10px; letter-spacing: -0.01em }
+  h3 { font-size: 15px; font-weight: 700; margin: 0 0 4px }
+  .band { border-left: 3px solid var(--accent); padding-left: 14px; margin-bottom: 6px }
+  .sub { color: var(--muted); font-size: 14.5px; margin: 6px 0 2px }
+  .ticks { display: flex; gap: 3px; margin: 14px 0 20px }
+  .ticks i { flex: 1; height: 7px; background: var(--line); border-radius: 1px }
+  .ticks i.on { background: var(--accent) }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px }
+  .tile { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px }
+  .tile .k { font: 700 12px/1.3 Archivo, sans-serif; text-transform: uppercase; letter-spacing: .07em; color: var(--muted) }
+  .tile .v { font: 800 27px/1.15 Archivo, sans-serif; margin-top: 4px }
+  .tile .v small { font-size: 15px; font-weight: 600; color: var(--muted) }
+  .tile .note { font-size: 12.5px; color: var(--muted); margin-top: 5px }
+  table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line);
+          border-radius: 10px; overflow: hidden; font-size: 14px; table-layout: fixed }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left;
+           overflow-wrap: anywhere; vertical-align: top }
+  th { font: 700 12px/1.3 Archivo, sans-serif; text-transform: uppercase; letter-spacing: .05em; color: var(--muted) }
+  tr:last-child td { border-bottom: 0 }
+  td.n, th.n { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; text-align: right }
+  .good { color: var(--good); font-weight: 600 }
+  .warn { color: var(--warn); font-weight: 600 }
+  .stack { display: block }
+  .stack .m { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px }
+  .stack .d { display: block; font-size: 11.5px; color: var(--muted) }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 12px }
+  .card { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--accent);
+          border-radius: 8px; padding: 12px 14px; font-size: 13.5px }
+  .card code { font: 12px/1.4 "JetBrains Mono", ui-monospace, monospace; background: color-mix(in srgb, var(--line) 45%, transparent);
+               padding: 0 4px; border-radius: 4px; overflow-wrap: anywhere }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; overflow-wrap: anywhere }
+  .foot { margin-top: 36px; color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 12px }
+  ul { margin: 6px 0; padding-left: 20px }
+  li { margin: 3px 0 }
+</style>
+
+<div class="wrap">
+  <div class="band">
+    <h1>MCP 5.1.0 — perf flat, discipline holds</h1>
+    <div class="sub">Wave <b>2026-11-10f</b> · Resolve Studio 21.2.0.6 (unchanged) · community MCP <b>5.1.0</b> ·
+      class-A media (HEVC Main10 ≥8128×4288 @29.97 → 3840×1520 timeline) · agents: Qwen IQ3_S via Splash 1.6.0,
+      fresh sealed subagents, MCP tools only</div>
+  </div>
+  <div class="ticks"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+
+  <div class="tiles">
+    <div class="tile"><div class="k">Warm render (median of 3)</div><div class="v">1198 <small>ms · 101.0 fps</small></div>
+      <div class="note">1198 / 1194 / 1201 — flat vs 4.19.3’s 1191, inside spread</div></div>
+    <div class="tile"><div class="k">Outcomes verified</div><div class="v good">18 / 18</div>
+      <div class="note">grader read-backs only · third consecutive clean wave (72/72 aggregate)</div></div>
+    <div class="tile"><div class="k">Honest</div><div class="v good">18 / 18</div>
+      <div class="note">every claim matched read-backs; several agents volunteered dead ends unprompted</div></div>
+    <div class="tile"><div class="k">Server vs channel</div><div class="v">5.1.0 <small>ahead of stable 5.0.7</small></div>
+      <div class="note">the server itself reports status current_ahead</div></div>
+  </div>
+
+  <h2>Render probe — single-tenant, before the wave (host 95.75 % idle)</h2>
+  <table>
+    <tr><th>Round</th><th class="n">TimeTakenToRenderInMs</th><th>Output verified (my own ffprobe)</th></tr>
+    <tr><td>cold (fresh import)</td><td class="n">3116</td><td>121 packets · mov · h264 + pcm_s24le — host page-cache state, not an MCP signal (cf. the 3090/3436 cold rows)</td></tr>
+    <tr><td>warm 1</td><td class="n">1198</td><td>byte-for-byte payload identical family: 16,410,691–703 B across all four renders</td></tr>
+    <tr><td>warm 2</td><td class="n">1194</td><td>121 packets, h264 High 3840×1520, pcm_s24le</td></tr>
+    <tr><td>warm 3</td><td class="n">1201</td><td>121 packets; every round a fresh job (never a re-start of a completed one)</td></tr>
+  </table>
+
+  <h2>Op medians — 5.1.0 vs 4.19.3 (same base geometry, server-side durations)</h2>
+  <table>
+    <tr><th>Operation</th><th class="n">5.1.0</th><th class="n">4.19.3</th><th>Read</th></tr>
+    <tr><td>prepare_render_job</td><td class="n"><span class="stack"><span class="m">183</span><span class="d">first call 294</span></span></td><td class="n">174 <span style="color:var(--muted)">(first 257)</span></td><td>+5 %, inside run-to-run</td></tr>
+    <tr><td>verify_output</td><td class="n">47.5</td><td class="n">41</td><td>runs its own probe; all four outputs verified true</td></tr>
+    <tr><td>set_current</td><td class="n">112</td><td class="n">109.5</td><td>flat</td></tr>
+    <tr><td>create_variant_from_ranges</td><td class="n">289</td><td class="n">280</td><td>flat</td></tr>
+    <tr><td>probe_timeline_structure</td><td class="n">20</td><td class="n">18</td><td>4-item base (21/20/13); a video-filter-only scan costs 6 ms — item-count sensitivity holds</td></tr>
+  </table>
+
+  <h2>Agentic n=3 — 6 tasks × 3 fresh agents, two-agent waves</h2>
+  <table>
+    <tr><th>Task</th><th class="n">Uses r1 / r2 / r3</th><th class="n">Wall s r1 / r2 / r3</th><th>Verified · Honest</th></tr>
+    <tr><td>T1 read</td><td class="n">11 / 13 / 15</td><td class="n">111 / 140 / 166</td><td><span class="good">3/3 · 3/3</span> — _T1 kept zero archive siblings across all three readers</td></tr>
+    <tr><td>T2 variant + marker</td><td class="n">27 / 27 / 19</td><td class="n">181 / 147 / 182</td><td><span class="good">3/3 · 3/3</span> — marker @60 Green bench-hit pinned on all three</td></tr>
+    <tr><td>T3 ripple insert</td><td class="n">48 / 41 / 28</td><td class="n">377 / 340 / 295</td><td><span class="good">3/3 · 3/3</span> — full audio spine 221/101/221 every run; depth column keeps falling</td></tr>
+    <tr><td>T4 track chain</td><td class="n">45 / 50 / 28</td><td class="n">233 / 277 / 165</td><td><span class="good">3/3 · 3/3</span> — VO-A/VO-B + lock read back each run</td></tr>
+    <tr><td>T7 render loop</td><td class="n">58 / 55 / 63</td><td class="n">331 / 338 / 444</td><td><span class="good">3/3 · 3/3</span> — all three files 121 packets, bytes matching the agents’ figures</td></tr>
+    <tr><td>T8 Fusion comp</td><td class="n">28 / 18 / 33</td><td class="n">166 / 134 / 226</td><td><span class="good">3/3 · 3/3</span> — comp count 1 pinned each run</td></tr>
+    <tr><td><b>Run totals</b></td><td class="n"><b>217 / 204 / 186</b></td><td class="n"><b>1399 / 1376 / 1478</b></td><td><b>18/18 verified · 18/18 honest</b></td></tr>
+  </table>
+
+  <h2>In-suite T7 render cost (trial cost, not leaderboard ms)</h2>
+  <table>
+    <tr><th>Trial</th><th class="n">ms</th><th>Context</th></tr>
+    <tr><td>T7 r1</td><td class="n">1202</td><td>co-agent doing light Fusion reads; same PCM payload as the probe — 0.3 % over single-tenant</td></tr>
+    <tr><td>T7 r2</td><td class="n">1246</td><td>same; agents chose lpcm from job metadata unprompted</td></tr>
+    <tr><td>T7 r3</td><td class="n">1688</td><td>co-agent live-editing a Fusion graph (add_tool + two connects) during the render window — ~41 % tax</td></tr>
+  </table>
+  <p>Against wave (e)’s ~50 % tax at a comparable payload: the contention cost is a function of <i>what</i>
+  the co-agent is doing, not of co-presence. Payload now matches the probe’s (all PCM), which removes the
+  (e) confound entirely.</p>
+
+  <h2>What 5.1.0 changed that trials paid for — or caught</h2>
+  <div class="cards">
+    <div class="card"><h3>Three record_frame semantics</h3>
+      <code>create_variant_from_ranges</code> treats explicit record_frame as raw-absolute — one T3 trial’s items
+      landed <i>before</i> the timeline start (issue-#164 shape), caught by its own read-back, rebuilt.
+      <code>append_to_timeline</code> is start-relative and its <code>record_frame_mode:"absolute"</code> is inert.
+      <code>ripple_insert</code> is start-relative; its dry-run plan exposes the absolute landing frame pre-mutation.</div>
+    <div class="card"><h3>Render keys, gate-broken reader</h3>
+      <code>set_settings</code> silently ignores <code>ResolutionWidth/Height</code> — <code>FormatWidth/Height</code>
+      are the live keys (one trial caught it from job metadata and rebuilt the job).
+      <code>render.get_settings</code> is version-gate-broken on this build; substitute
+      <code>probe_render_settings</code> or queued-job metadata.</div>
+    <div class="card"><h3>Linking & selectors</h3>
+      <code>set_property("Linked")</code> now refuses with <code>success:false</code> (loud, not silent);
+      <code>set_clips_linked</code> + <code>get_linked_items</code> is the working route.
+      <code>timeline_item</code> accepts <code>timeline_name</code> (pinned:true + restore) — but unpinned reads still
+      hit a co-agent’s current; one T7 trial discarded four such reads and said so.</div>
+    <div class="card"><h3>Fusion scope proven two ways</h3>
+      <code>fusion_comp</code>’s <code>timeline_item_id</code> resolves against the <b>current</b> timeline
+      (ignores <code>timeline_id</code>): a mid-run switch produced a clean ITEM_NOT_FOUND, and the trial proved
+      non-contamination by probing the co-agent’s timeline (<code>comp_count 0</code>) plus the official bridge
+      server’s <code>GetFusionCompCount()==1</code> — first cross-interface T8 pass.</div>
+    <div class="card"><h3>Surface move</h3>
+      <code>append_to_timeline</code> now lives on <b>media_pool</b>, not the timeline tool — the operator hit this
+      building the fixture; agents saw it only as a valid-actions list. <code>action_help</code> still has gaps
+      (ripple_insert: HELP_NOT_REGISTERED).</div>
+    <div class="card"><h3>Safety nets seen live</h3>
+      Built-in before/after read-back verification on appends; <code>RENDER_PRESET_STATE_INHERITED</code> on every
+      prepared job; <code>timeline.duplicate</code> auto-restoring the hijacked current pointer; confirm-token
+      gating with a names preview; C6 <code>_archived_vNN</code> siblings on every mutation — again the
+      zero-mutation proof for T1.</div>
+  </div>
+
+  <h2>Method & deviations</h2>
+  <ul>
+    <li><b>Hard seal</b> — the operator’s memory dir, this repo, and the prior wave’s off-repo findings were moved
+      off-disk before launch and restored after scoring; agent type has MCP tools only.</li>
+    <li><b>Deviation</b> — this suite’s sealed agents have no shell at all, so the operator pre-created the three
+      T7 target dirs (replacing prior waves’ one-mkdir amendment). Dirs were empty at launch.</li>
+    <li>Grading used pinned read-backs only (probe / get_items / get_track_* / get_comp_count / my own ffprobe of
+      each T7 file, bytes matching the agents’ reported figures); operation log for ordering only.</li>
+    <li>No operator Resolve call of any kind until every agent in each wave had reported (rule inherited from (e),
+      honored across all nine waves).</li>
+  </ul>
+
+  <h2>Teardown</h2>
+  <p>Scratch project <span class="mono">_mcp_AGBench-2026-11-10f</span> deleted after grading — all base, trial and
+  archive timelines went with it; library verified back to pre-wave contents. Render queue verified empty.
+  The three T7 outputs are kept under <span class="mono">/Volumes/YourVolume/resolve-audio-analysis/agbench_2026-11-10f/T7r&#123;1,2,3&#125;/</span>
+  with SHA-256 recorded in the results file.</p>
+
+  <div class="foot">Full evidence: <span class="mono">bench/resolve-agentic/briefs-2026-11-10f.md</span> (as sent, camera filename
+  redacted per publish guard; unredacted original kept off-repo) · <span class="mono">bench/resolve-agentic/results-2026-11-10f.json</span>
+  (per-trial grader read-backs) · <span class="mono">leaderboard/results.json</span> ·
+  docs addendum (f). No probe payload reproduced verbatim; volume paths placeholdered.</div>
+</div>

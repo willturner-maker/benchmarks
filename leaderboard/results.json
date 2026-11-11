@@ -167,6 +167,58 @@
           "bench/resolve-agentic/briefs-2026-11-06e.md"
         ],
         "notes": "Replacement pass for the withdrawn 06c/06d labels. 4.19.3 is perf-flat against 4.19.2 (warm 1191 vs 1196 ms, inside spread); the withdrawn 1215 ms was tenancy. One new regression candidate: probe_timeline_structure 11 -> 18 ms on base geometry."
+      },
+      {
+        "date": "2026-11-10f",
+        "resolve": "21.2.0.6",
+        "mcp": "5.1.0",
+        "media_class": "A",
+        "render_probe": "121 f, 3840x1520, mov/H.264 + pcm_s24le, fresh job per round, queue time excluded",
+        "cold_ms": 3116,
+        "warm_ms": [1198, 1194, 1201],
+        "warm_median_ms": 1198,
+        "warm_fps": 101.0,
+        "tenant_conditions": "single-tenant: perf probe ran BEFORE the agent wave with host load sampled first (95.75% idle, load avg 1.95); engine up because it serves the operator session, as in prior rows",
+        "op_medians_ms": {
+          "prepare_render_job": 183,
+          "prepare_render_job_first_call": 294,
+          "verify_output": 47.5,
+          "set_current": 112,
+          "create_variant_from_ranges": 289,
+          "probe_timeline_structure": 20
+        },
+        "op_column_caveat": "probe medians measured on base geometry (4 items): 21/20/13 ms; a track_types=[video] filter scans in 6 ms - the column stays full-geometry per the 2026-11-06e item-count caveat",
+        "agentic": {
+          "n_runs": 3,
+          "tasks": 6,
+          "outcomes_verified": 18,
+          "honest": 18,
+          "tool_uses_total": [217, 204, 186],
+          "wall_s_total": [1399, 1376, 1478],
+          "per_task_tool_uses": {
+            "T1_read": [11, 13, 15],
+            "T2_variant_marker": [27, 27, 19],
+            "T3_ripple_insert": [48, 41, 28],
+            "T4_track_lock_chain": [45, 50, 28],
+            "T7_render_loop": [58, 55, 63],
+            "T8_fusion_comp": [28, 18, 33]
+          },
+          "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.0",
+          "in_suite_render_ms": [1202, 1246, 1688],
+          "in_suite_render_note": "trial cost, not leaderboard ms: all three carried the probe's 24-bit PCM (T7r2/r3 chose lpcm unprompted); 1202/1246 sit near the single-tenant 1198, 1688 ran against a co-agent's live Fusion graph work"
+        },
+        "deviations": [
+          "operator pre-created the three T7 render target dirs: this suite's sealed agent type has no shell at all, replacing the prior waves' one-mkdir amendment; dirs were empty at launch",
+          "5.1.0 auto-archives (_archived_v01 siblings) fire on every agent mutation (C6 version-on-mutate) and one _base archive came from the operator's pre-wave duplicate; all removed with the scratch project",
+          "sealing procedural as published: memory dir, repo, and prior-wave findings moved off-disk for the wave; agents MCP-only by agent type"
+        ],
+        "evidence": [
+          "reports/2026-11-10f-resolve-21-2-mcp-510.html",
+          "docs/resolve-agentic-benchmark-results.md (addendum f)",
+          "bench/resolve-agentic/results-2026-11-10f.json",
+          "bench/resolve-agentic/briefs-2026-11-10f.md"
+        ],
+        "notes": "First row on MCP 5.1.0 (installed ahead of the stable channel's 5.0.7). Render probe unchanged from 4.19.3 (warm 1198 vs 1191, inside spread; cold 3116 is host page-cache state, like the 3090 row). Op medians flat-to-slightly-up: prepare 174->183, set_current 109.5->112, create_variant 280->289, probe 18->20 on base geometry. Agentic n=3: third straight 18/18 verified + honest; T3 debugging depth keeps improving (48->41->28 uses on one identical brief), T7 cost is the floor (55-63: the whole path plus three file-verification routes). Tool surface moved: append_to_timeline now lives on media_pool; several new 5.1.0 behaviours in the results file's api_truth candidates (record_frame semantics x3, FormatWidth/Height keys, gate-broken get_settings, silent set_property('Linked') refusal)."
       }
     ],
     "splash_engine": [

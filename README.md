@@ -13,7 +13,7 @@ macOS 27.2.0.
 | Suite | Doc | Scripts / raw data | Baseline headline |
 |---|---|---|---|
 | Splash engine + Qwen | [`docs/splash-engine-benchmark-results.md`](docs/splash-engine-benchmark-results.md) | `bench/2026-11-06/` | Splash 1.6.0 warm: TTFT 201 ms / 380 ms cold; width ladder plateaus 372–383 tok/s (2.5–2.6× w1) from width 4 through 32, no collapse; KV-pressure probe never suspends, even at 4.4× the KV budget; agentic suite 11/12 verified, 12/12 honest |
-| DaVinci Resolve MCP | [`docs/resolve-agentic-benchmark-results.md`](docs/resolve-agentic-benchmark-results.md) | **[`bench/resolve-agentic/`](bench/resolve-agentic/)** — briefs, runbook, and `check_media.py` so you can run it on **your own footage** | latest standing row: 21.2.0.6 + MCP 4.19.3, warm render 1191 ms single-tenant, cold 1670 ms; 18/18 verified, 18/18 honest across n=3 (three waves now: 4.18.5 / 4.19.0 / 4.19.3) |
+| DaVinci Resolve MCP | [`docs/resolve-agentic-benchmark-results.md`](docs/resolve-agentic-benchmark-results.md) | **[`bench/resolve-agentic/`](bench/resolve-agentic/)** — briefs, runbook, and `check_media.py` so you can run it on **your own footage** | latest standing row: 21.2.0.6 + MCP 5.1.0 (2026-11-10f), warm render 1198 ms single-tenant (flat vs 4.19.3's 1191), cold 3116 ms host-state; 18/18 verified, 18/18 honest across n=3 — four waves now: 4.18.5 / 4.19.0 / 4.19.3 / 5.1.0, 72/72 aggregate |
 | Concurrency spec (draft, 2026-09) | [`docs/concurrency-scaling-test.md`](docs/concurrency-scaling-test.md) | — | the never-run design the Splash ladder later implemented |
 
 ## Leaderboard & reports
@@ -32,6 +32,7 @@ rendered** through GitHub Pages:
 | [Resolve MCP, 21.1.2.10](https://willturner-maker.github.io/benchmarks/reports/2026-11-03-resolve-21-1-2.html) | perf cold/warm render probes, agentic n=3 scorecard, concurrency sweep | `reports/2026-11-03-resolve-21-1-2.html` |
 | [Resolve MCP, 21.2.0.6](https://willturner-maker.github.io/benchmarks/reports/2026-11-06-resolve-21-2.html) | the 21.2 + MCP 4.19.0 run: render probes, op medians, n=3 agentic | `reports/2026-11-06-resolve-21-2.html` |
 | [Resolve MCP, 21.2.0.6 + MCP 4.19.3](https://willturner-maker.github.io/benchmarks/reports/2026-11-06e-resolve-21-2-mcp-4193.html) | the replacement pass after two withdrawals: single-tenant probe, tenancy tax, n=3 agentic, method-honesty section | `reports/2026-11-06e-resolve-21-2-mcp-4193.html` |
+| [Resolve MCP, 21.2.0.6 + MCP 5.1.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-10f-resolve-21-2-mcp-510.html) | the 5.1.0 pass: perf flat, op medians collected, n=3 agentic (18/18 again), the record_frame-semantics trio and other v5 deltas | `reports/2026-11-10f-resolve-21-2-mcp-510.html` |
 | [Splash engine, 1.6.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-06-splash-engine.html) | engine probe, width-ladder plateau, KV-pressure chase for the first suspension | `reports/2026-11-06-splash-engine.html` |
 
 If Pages is ever disabled, the same files are readable through any raw viewer — e.g.

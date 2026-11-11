@@ -27,13 +27,16 @@ macOS 27.2, render output and scratch on external volumes.
 | 2026-11-06 | 21.2.0.6 | 4.19.0 | 3090 ms | 1296 ms | 93.4 | 126 | 39 | 98 | 11 | **18/18** | 18/18 |
 | 2026-11-06b | 21.2.0.6 | 4.19.2 | 1668 ms¹ | **1196 ms** | 101 | 162 | 50 | 97 | 11 | n/a² | n/a |
 | **2026-11-06e** | 21.2.0.6 | **4.19.3** | 1670 ms | **1191 ms** | **101.6** | 174 | 41 | 109.5 | 18³ | **18/18** | 18/18 |
+| **2026-11-10f** | 21.2.0.6 | **5.1.0** | 3116 ms¹ | **1198 ms** | 101.0 | 183 | 47.5 | 112 | 20³ | **18/18** | 18/18 |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
 operation medians in ms.
 
-¹ Cold 1668 ms is **host state, not an MCP win** — 4.19.x never touches the render path;
-the same-source page cache was warm-ish. Warm 1196 ms equals the best prior mark.
+¹ Cold ms is **host state, not an MCP signal** — the community server never touches the
+render path, and the cold column has swung 3436 / 3090 / 1668 / 1670 / 3116 across five
+waves of identical media and settings. Read only the warm column. Warm 1196 (4.19.2)
+equals the best prior mark; 5.1.0's 3116 ms cold is the same host-state caveat.
 ² No agentic n=3 for 4.19.2: the bump was behaviour-free (upstream fix of the CLAP
 audio-embedding bug we filed, verified by direct probe the day it shipped).
 ³ The `probe` column is measured on **base geometry (4 items)**, and `probe_timeline_structure` is
@@ -54,10 +57,17 @@ details and per-task cost in
 [the results doc](resolve-agentic-benchmark-results.md). The 2026-11-06 runs' agents were
 served by the local model (Qwen3.8-Flash-Next IQ3_S via Splash 1.6.0), not a cloud API.
 
-**Regression worth watching:** `probe_timeline_structure` on base geometry went 7 → 11 → 11 → **18 ms**
-across 4.18.5 / 4.19.0 / 4.19.2 / 4.19.3 — the 4.19.3 step is the one to file if it holds on a rerun
-(same action, same item count, same host). `verify_output` improved to 41 ms and `set_current` is
-within spread; render ms are flat, as expected for a release that never touches the render path.
+**Regression worth watching:** `probe_timeline_structure` on base geometry went 7 → 11 → 11 → 18 → **20 ms**
+across 4.18.5 / 4.19.0 / 4.19.2 / 4.19.3 / 5.1.0 — the 4.19.3 step (7+ ms) is the one to file if it holds;
+the 5.1.0 step is +2 ms, inside run-to-run. `verify_output` sits at 47.5 ms (was 41), `prepare` 183 (was 174) —
+all op columns flat-to-slightly-up; render ms are flat, as expected for releases that never touch the render path.
+
+**5.1.0 row:** the server installed ahead of the stable channel (5.0.7) and reports `current_ahead`. The tool
+surface moved (`append_to_timeline` now lives on `media_pool`) and the wave collected twelve 5.1.0 behavior
+notes in [the results file](../bench/resolve-agentic/results-2026-11-10f.json) — three distinct
+`record_frame` semantics, the `FormatWidth/Height` vs `ResolutionWidth/Height` render-key trap, a
+gate-broken `render.get_settings`, and a now-loud `set_property("Linked")` refusal. Agentic is the third
+consecutive clean 18/18 wave (four waves, 72/72 verified + honest aggregate).
 
 ## Splash engine — reference host
 

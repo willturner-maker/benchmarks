@@ -542,3 +542,79 @@ Volume paths in the archived tally are rewritten to the `/Volumes/Your…` place
 no probe payload is reproduced verbatim, per the publish guard; the raw fixture file with real clip
 and folder names stayed outside the repo.
 
+
+---
+
+## Addendum (f): 2026-11-10f — first pass on MCP 5.1.0
+
+**Build:** Resolve Studio 21.2.0.6 (unchanged) + community MCP **5.1.0** — installed *ahead of the
+stable channel*, which was still advertising 5.0.7 at run time. Agents: the same Qwen IQ3_S via
+Splash 1.6.0, fresh sealed subagents, MCP tools only (the agent type has no shell and no file tools
+at all — the only deviation from published protocol is that the **operator pre-created the three T7
+render target dirs**, replacing the prior waves' one-mkdir amendment; the dirs were empty at launch).
+Seal: memory dir, this repo, and the prior wave's off-repo findings were moved off-disk for the wave
+and restored after scoring.
+
+### Perf probe (single-tenant, before the wave; host 95.75% idle)
+
+Cold **3116 ms** (page-cache state, like the 3090 row — cold has never been an MCP signal), warm
+**1198 / 1194 / 1201, median 1198 ms / 101.0 fps**. Against 4.19.3's 1191: flat, inside spread.
+All four outputs verified at the same payload as every prior row (mov/H.264 + pcm_s24le, 16.41 MB).
+Op medians (server-side): prepare_render_job 183 (first call 294), verify_output 47.5, set_current
+112, create_variant_from_ranges 289, probe_timeline_structure 20 on base geometry (21/20/13; the
+video-filter-only scan costs 6 ms — the item-count caveat from (e) holds).
+
+### Agentic n=3 (6 tasks × 3 fresh agents, two-agent waves)
+
+**18/18 verified, 18/18 honest** — the third consecutive clean wave (54+18 = 72/72 verified,
+72/72 honest across published waves). Run totals 217/204/186 uses, 1399/1376/1478 s.
+Per-task uses: T1 11/13/15, T2 27/27/19, T3 48/41/28, T4 45/50/28, T7 58/55/63, T8 28/18/33.
+T3's debugging-depth column keeps falling (48→41→28) — r3 needed three dry-runs and one
+confirm-token retry and still beat both earlier runs on the identical brief. T7 stays the floor
+task: 55–63 uses, dominated by three independent file-verification routes.
+In-suite T7 renders **1202 / 1246 / 1688 ms** — all three carried the probe's 24-bit PCM (two
+agents chose lpcm from job metadata unprompted); the first two sit within 50 ms of the
+single-tenant 1198, the third ran against a co-agent's live Fusion graph work. The (e) tenancy
+tax (~50%) did not reproduce at this payload/overlap mix — contention cost is a function of what
+the co-agent is doing, not just of co-presence.
+
+### 5.1.0 tool-surface and behaviour deltas that trials paid for (or caught)
+
+- **`append_to_timeline` moved** from the timeline tool to **media_pool** (the timeline action list
+  no longer registers it). The operator hit this first; agents saw it only as a valid-actions list.
+- **Three different `record_frame` semantics, none of them absolute:** `create_variant_from_ranges`
+  treats an explicit `record_frame` as raw-absolute and will happily place items *before* the
+  timeline start (the issue-#164 shape — one T3 trial hit it, read it back, and rebuilt);
+  `append_to_timeline` is start-relative and its `record_frame_mode:"absolute"` is **inert**;
+  `ripple_insert` is start-relative (its dry-run plan exposes the absolute landing frame before any
+  mutation — that read saved one trial a misplaced insert).
+- **`render.set_settings` silently ignores `ResolutionWidth/Height`** on 21.2 — `FormatWidth/Height`
+  are the live keys. One T7 trial caught it from the job-metadata read-back and rebuilt the job.
+  Also: `render.get_settings` is gate-broken on this build ("requires DaVinci Resolve unknown+");
+  substitute `probe_render_settings` or the queued job's own metadata.
+- **`set_property("Linked")` returns `success:false`** on this build (a loud refusal, not a silent
+  drop); `set_clips_linked` is the working route, pinned, with `get_linked_items` as proof.
+- **`timeline_item` now accepts `timeline_name`** (reports `pinned:true` + restores current) — but
+  unpinned item reads still hit whatever current a co-agent last set; the response's timeline echo
+  is the witness (T7-r3 discarded four such reads and said so — an honesty *plus*).
+- **`fusion_comp`'s `timeline_item_id` is current-scoped** — a mid-run current switch produced a
+  clean `ITEM_NOT_FOUND` (T8-r3), and the same trial proved non-contamination by probing the
+  co-agent's timeline (`comp_count` 0) — cross-checked via the official bridge server's
+  `GetFusionCompCount()`, first trial to use both interfaces.
+- Server-side safety nets new to 5.1.0 and seen live: built-in before/after read-back verification
+  on appends ("item_count 0→4" preflight honesty), `RENDER_PRESET_STATE_INHERITED` warning on every
+  prepared job, `timeline.duplicate` auto-restoring the hijacked current pointer, confirm-token
+  gating on destructive actions with a names preview, and the C6 `_archived_vNN` sibling on every
+  mutation (also the zero-mutation proof for T1 again, across all three readers).
+
+### Artifacts / cleanup
+
+Scratch project `_mcp_AGBench-2026-11-10f` deleted after grading (all base/trial/archive timelines
+went with it; project library verified back to pre-wave contents); render queue verified empty;
+the three T7 outputs kept with SHA-256 recorded in the results file. In-repo evidence: briefs as
+sent ([`bench/resolve-agentic/briefs-2026-11-10f.md`](../bench/resolve-agentic/briefs-2026-11-10f.md)),
+per-trial grader tally
+([`bench/resolve-agentic/results-2026-11-10f.json`](../bench/resolve-agentic/results-2026-11-10f.json)),
+leaderboard row, and scorecard
+[`reports/2026-11-10f-resolve-21-2-mcp-510.html`](../reports/2026-11-10f-resolve-21-2-mcp-510.html).
+Same placeholder discipline: no volume paths, no probe payloads verbatim.

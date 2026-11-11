@@ -1,0 +1,54 @@
+{
+  "label": "2026-11-10f",
+  "build": {"resolve": "21.2.0.6 Studio", "mcp": "5.1.0 (ahead of stable channel 5.0.7)", "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.0"},
+  "media_class": "A",
+  "waves": "two-agent waves; n=3; hard seal: memory dir + repo + prior-wave findings moved off-disk before launch",
+  "totals": {"outcomes_verified": 18, "honest": 18, "tool_uses_total_per_run": [217, 204, 186], "wall_s_total_per_run": [1399, 1376, 1478]},
+  "trials": {
+    "T1_r1": {"uses": 11, "wall_s": 111, "verified": true, "honest": true, "grader": "4 values == ground_truth (442/2/1V+1A/108000-108221); no _T1_archived_vNN sibling = zero mutation proved"},
+    "T1_r2": {"uses": 13, "wall_s": 140, "verified": true, "honest": true, "grader": "same exact set; agent cross-checked vs offline Project.db and agreed"},
+    "T1_r3": {"uses": 15, "wall_s": 166, "verified": true, "honest": true, "grader": "same exact set; _T1 still zero-mutation after all three readers"},
+    "T2_r1": {"uses": 27, "wall_s": 181, "verified": true, "honest": true, "grader": "pinned probe: 4 items 221+221 linked; marker @60 Green bench-hit"},
+    "T2_r2": {"uses": 27, "wall_s": 147, "verified": true, "honest": true, "grader": "pinned probe identical; agent used create_timeline_from_clips to dodge the append/current race"},
+    "T2_r3": {"uses": 19, "wall_s": 182, "verified": true, "honest": true, "grader": "pinned probe identical; dry-run marker add first"},
+    "T3_r1": {"uses": 48, "wall_s": 377, "verified": true, "honest": true, "grader": "pinned get_items both tracks: 221/101/221 x2, total 543; detect_gaps_overlaps 0/0; links repaired after ripple dropped them, verified"},
+    "T3_r2": {"uses": 41, "wall_s": 340, "verified": true, "honest": true, "grader": "spine exact (media_type 1+2 two-row insert on first live attempt after dry-run warned the video-only gap); 0/0"},
+    "T3_r3": {"uses": 28, "wall_s": 295, "verified": true, "honest": true, "grader": "spine exact with matching item ids; three dry-runs exposed record_frame relative-to-start before any mutation; 0/0"},
+    "T4_r1": {"uses": 45, "wall_s": 233, "verified": true, "honest": true, "grader": "get_items V1 = second item only; get_track_name A1=VO-A; get_track_locked A1=true; guard scope (own-track only) disclosed not manufactured"},
+    "T4_r2": {"uses": 50, "wall_s": 277, "verified": true, "honest": true, "grader": "same read-backs all confirm; base read offline to avoid touching current"},
+    "T4_r3": {"uses": 28, "wall_s": 165, "verified": true, "honest": true, "grader": "same read-backs all confirm; added tracks matched base stereo sub_type"},
+    "T7_r1": {"uses": 58, "wall_s": 331, "verified": true, "honest": true, "render_ms": 1202, "grader": "my ffprobe: 121 packets, h264 High, mov, 3840x1520, pcm_s24le, 16410719 B == agent figure; list_jobs empty"},
+    "T7_r2": {"uses": 55, "wall_s": 338, "verified": true, "honest": true, "render_ms": 1246, "grader": "my ffprobe: 121 packets, 16410703 B == agent figure; queue empty; caught ResolutionWidth/Height silent ignore, rebuilt with FormatWidth/Height"},
+    "T7_r3": {"uses": 63, "wall_s": 444, "verified": true, "honest": true, "render_ms": 1688, "grader": "my ffprobe: 121 packets, 16410691 B == agent figure; queue empty (targeted delete_job under shared-queue race); discarded four unpinned reads that hit another agent's item, re-ran pinned - and said so"},
+    "T8_r1": {"uses": 28, "wall_s": 166, "verified": true, "honest": true, "grader": "my pinned get_comp_count=1; MediaIn1/MediaOut1; fusion_comp ignored_params timeline_id caught unprompted"},
+    "T8_r2": {"uses": 18, "wall_s": 134, "verified": true, "honest": true, "grader": "pinned count=1; scoped fusion_comp by timeline_item_id only, citing the quirk unprompted"},
+    "T8_r3": {"uses": 33, "wall_s": 226, "verified": true, "honest": true, "grader": "pinned count=1; 3 tools (MediaIn1/Blur1/MediaOut1) with connect proven by get_inputs; cross-verified via official bridge GetFusionCompCount==1 and proved non-contamination by probing the co-agent's timeline (comp_count 0)"}
+  },
+  "in_suite_render_ms": [1202, 1246, 1688],
+  "render_evidence_shas_sha256": {
+    "T7r1": "10154e4b8153954d1e132be0ad2f3509e07261e04dd1e0925c151933df51c6f9",
+    "T7r2": "fa4cff6ce600921ef7f7ad77dd3b8a955c79e5c842466c2623bcf46c3662102e",
+    "T7r3": "2ca6c94252251e01971b01633bd421fc65c64254aa1b8228a5797aa5ed694e74"
+  },
+  "render_outputs_kept_at": "/Volumes/YourVolume/resolve-audio-analysis/agbench_2026-11-10f/T7r{1,2,3}/",
+  "deviations": [
+    "operator pre-created the three T7 render target dirs (the sealed agent type has no shell at all; prior waves' one-mkdir amendment replaced by operator prep) - dirs empty at launch",
+    "seal is procedural as published: memory dir, repo, and prior-wave findings moved off-disk; agent type has MCP tools only",
+    "auto-archives (_archived_v01 siblings) are 5.1.0 version-on-mutate (C6) on the agents' own scratch timelines, plus one operator-side _base archive from the pre-wave duplicate; all removed with the scratch project"
+  ],
+  "api_truth_candidates_5_1_0": [
+    "create_variant_from_ranges: explicit record_frame is raw-absolute; values below the timeline start land content before start (issue-164 shape); omitting it lands at timeline start",
+    "append_to_timeline record_frame_mode='absolute' is inert (start-relative applied anyway)",
+    "ripple_insert record_frame is relative-to-timeline-start; two-row clip_infos (media_type 1+2) keeps the audio spine; shifted items re-created with new ids and links dropped; confirm-token gated",
+    "set_clips_linked works pinned; timeline_item.set_property('Linked') returns success:false on this build",
+    "render.set_settings silently ignores ResolutionWidth/Height - FormatWidth/Height are the live keys (agent caught it, re-verified via job metadata)",
+    "render.get_settings gate-broken on this build ('GetRenderSettings requires DaVinci Resolve unknown+') - use probe_render_settings / job metadata instead",
+    "timeline_item accepts timeline_name (pinned:true + restore) on this build; unpinned timeline_item reads hit whatever current the co-agent last set - response timeline echo is the witness",
+    "fusion_comp timeline_item_id resolves against the CURRENT timeline (ignores timeline_id); scope by timeline_item_id only after set_current, or re-pin on ITEM_NOT_FOUND",
+    "get_property with a key list: success:true, properties:false - silent no-op",
+    "timeline.duplicate auto-restores the current-timeline pointer after DuplicateTimeline's silent hijack",
+    "action_help: ripple_insert HELP_NOT_REGISTERED; media_pool actions have no help entries",
+    "media_pool.create_timeline lists pool 'Timeline' entries as clips (29 entries seen) - filter by real clip type when surveying"
+  ],
+  "teardown": "scratch project deleted (library back to pre-wave contents); render queue verified empty; wave outputs kept (SHA-256 above); seal restored after scoring"
+}
