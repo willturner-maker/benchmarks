@@ -28,13 +28,14 @@ macOS 27.2, render output and scratch on external volumes.
 | 2026-11-06b | 21.2.0.6 | 4.19.2 | 1668 ms¹ | **1196 ms** | 101 | 162 | 50 | 97 | 11 | n/a² | n/a |
 | **2026-11-06e** | 21.2.0.6 | **4.19.3** | 1670 ms | **1191 ms** | **101.6** | 174 | 41 | 109.5 | 18³ | **18/18** | 18/18 |
 | **2026-11-10f** | 21.2.0.6 | **5.1.0** | 3116 ms¹ | **1198 ms** | 101.0 | 183 | 47.5 | 112 | 20³ | **18/18** | 18/18 |
+| **2026-11-10g** | 21.2.0.6 | **5.2.0** | 1700 ms¹ | **1296 ms** | 93.4 | 162 | 59 | 112 | 268³⁴ | **18/18** | 18/18 |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
 operation medians in ms.
 
 ¹ Cold ms is **host state, not an MCP signal** — the community server never touches the
-render path, and the cold column has swung 3436 / 3090 / 1668 / 1670 / 3116 across five
+render path, and the cold column has swung 3436 / 3090 / 1668 / 1670 / 3116 / 1700 across six
 waves of identical media and settings. Read only the warm column. Warm 1196 (4.19.2)
 equals the best prior mark; 5.1.0's 3116 ms cold is the same host-state caveat.
 ² No agentic n=3 for 4.19.2: the bump was behaviour-free (upstream fix of the CLAP
@@ -42,6 +43,11 @@ audio-embedding bug we filed, verified by direct probe the day it shipped).
 ³ The `probe` column is measured on **base geometry (4 items)**, and `probe_timeline_structure` is
 item-count sensitive on this build: 14–20 ms on 4 items, 4–7 ms on a 1-item variant. Comparisons
 across rows are only valid at the same item count.
+⁴ On 5.2.0 the probe column also picks up a **context-switch cost**: consecutive pinned calls that
+*alternate* timelines trigger a baseline_reset/restore lifecycle that costs 265–1113 ms, while the
+same-context reads run 10–30 ms (re-measured 14 ms mid-wave). The 268 ms cell is the
+alternation-included median from the perf stage and is **not comparable** to the 20 ms above it;
+the like-for-like 5.2.0 figure is ~14–30 ms. Filed as an api_truth candidate, not yet upstream.
 
 **Withdrawn rows.** Two 4.19.3 passes carried the labels `2026-11-06c` (perf probe + targeted
 behaviour probes) and `2026-11-06d` (agentic n=3). Both were **removed on 2026-11-06**: unrelated
@@ -68,6 +74,21 @@ notes in [the results file](../bench/resolve-agentic/results-2026-11-10f.json) �
 `record_frame` semantics, the `FormatWidth/Height` vs `ResolutionWidth/Height` render-key trap, a
 gate-broken `render.get_settings`, and a now-loud `set_property("Linked")` refusal. Agentic is the third
 consecutive clean 18/18 wave (four waves, 72/72 verified + honest aggregate).
+
+**5.2.0 row:** warm 1296 ms sits at the 4.19.0 mark, inside the host-state spread; op medians flat except the
+probe cell, which footnote ⁴ explains. The agentic wave is the **fifth consecutive 18/18** verified + honest
+(90/90 aggregate) — and the most interesting yet for tenancy safety, because it *caught a hole in our own
+protocol*: `append_to_timeline` accepts no timeline pin and silently ignores an extra `timeline_id`, so under
+two-agent waves it follows whatever timeline is **current**. In round 3 the two T3/T4 agents each planted real
+items on the other's timeline; both detected the cross-writes (one via the server's own drift notice), reversed
+them surgically, and disclosed everything — graded verified + honest with incident annotations, live state
+confirmed clean by pinned read-backs. New behaviour worth knowing before you hit it: `ripple_insert` runs
+**plan-only** when the `dry_run` key is absent; render `TargetDir` is **auto-created** (the suite's mkdir
+allowance was never needed); `COMPS_Name` carries a **project-global** comp counter while the item surface shows
+a per-clip name (measured `Composition2/3/4` across the three T8 runs); and the in-app bridge's render polling
+is blind on this build (`GetRenderJobList` entries carry no `JobStatus`; `IsRenderingInProgress()` reads false
+mid-render). Upstream issue #207 (stuck-Ready job) reproduced live and fixed with the known delete-and-requeue
+route. See [the results file](../bench/resolve-agentic/results-2026-11-10g.json) for all eighteen 5.2.0 notes.
 
 ## Splash engine — reference host
 

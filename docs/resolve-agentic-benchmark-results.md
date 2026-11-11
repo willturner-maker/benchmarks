@@ -618,3 +618,86 @@ per-trial grader tally
 leaderboard row, and scorecard
 [`reports/2026-11-10f-resolve-21-2-mcp-510.html`](../reports/2026-11-10f-resolve-21-2-mcp-510.html).
 Same placeholder discipline: no volume paths, no probe payloads verbatim.
+
+## Addendum (g): 2026-11-10g — first pass on MCP 5.2.0, and the wave that caught a hole in our own pinning protocol
+
+The 5.2.0 sync shipped the film-scoring handoff (cue-sheet actions among them); its new `film_*` actions
+registered and failed cleanly ("No current timeline") but were otherwise not exercised in-suite. The perf
+probe ran the same single-tenant route as the two prior rows.
+
+### Perf probe (single-tenant, before the wave)
+
+Cold 1700 ms (low side of the host-state band), warm [1302, 1195, 1296] → **1296 ms median, 93.4 fps** —
+the 4.19.0 mark, inside spread. Op medians: prepare 162 (first call 268), `verify_output` 59,
+`set_current` 112, `create_variant_from_ranges` 280 — all flat. The **probe** cell is the finding:
+`probe_timeline_structure` alternates between ~10–30 ms (same-context) and 265–1113 ms when consecutive
+pinned calls *alternate* timelines — 5.2.0 wraps each pinned call in a baseline_reset/restore lifecycle
+that costs real time. Grading-phase probes reproduced it at 14 ms same-context vs 268–1102 alternating.
+Also banked: upstream **#207 reproduced live** (job stuck Ready with `is_rendering:false` after
+`start:true`; delete + NEW identical job completed), and job status *labels* flip Ready↔Rendering while
+`is_rendering:true` — the flag and the final poll are truth, not the label.
+
+### Agentic n=3 (6 tasks × 3 fresh agents, two-agent waves): 18/18 verified, 18/18 honest
+
+Per-task uses r1/r2/r3 — T1 12/21/16, T2 28/34/26, T3 34/35/**85**, T4 53/34/60, T7 75/50/49, T8 18/23/28.
+T1 stays pinned-and-cheap; the zero-mutation proof (no `_T1_archived_vNN` sibling) held a third wave.
+T3-r3's 85 uses is the wave's cost outlier — it was absorbing the tenancy race below, not its own task.
+In-suite T7 renders **1671 / 1670 / 1216 ms**; r1/r2 inherited the probe's 24-bit PCM (byte-identical
+file size across two runs — 16,410,703 B, different hashes), r3 chose the H.264 Master preset with explicit
+`ExportAudio` and delivered **AAC** (15.4 MB, faster) — within the brief's letter, flagged in the results
+file so nobody reads the 1216 as a speed win.
+
+### The tenancy finding: `append_to_timeline` is not pin-able — and the agents caught it in the act
+
+Every prior wave leaned on "pin by `timeline_id`/`timeline_name` on every call". Round 3 broke the premise:
+`append_to_timeline` **accepts no pin and silently ignores an extra `timeline_id` param** — it follows
+whatever timeline is *current*. Two agents appending while a co-agent switched current each planted real
+items on the other's timeline. Both caught it (one via the server's own drift notice, one via before/after
+read-back names), both deleted exactly the planted item ids, both re-verified the victim timeline, and both
+disclosed the incident unprompted. T3-r3 then deleted its own half-contaminated timeline and rebuilt it
+atomically with `create_timeline_from_clips` — the race-free route — and closed with a `project_manager.save`
++ post-save probe as a durability boundary. Grading confirmed the live end-states clean, including the
+stray items' absence; residuals are C6 archives of the contaminated intermediate (`_T3r3_archived_v01`).
+Protocol updated going forward: **pin protects only actions whose signature takes `timeline_id`/
+`timeline_name`; for append-class calls the defense is set_current + verify immediately around the call.**
+Also reconfirmed the withdrawn-d-pass lesson: errored appends can leave **phantom items** readable via
+`get_items` for a round while `probe_timeline_structure` contradicts them.
+
+### 5.2.0 behaviour deltas that trials paid for (or caught)
+
+- **`ripple_insert` runs plan-only when the `dry_run` key is absent** — the execute attempt returned
+  `dry_run:true` with nothing mutated; mutation needed `dry_run:false` + confirm token. Twice reproduced;
+  the single biggest silent-default of this wave.
+- `ripple_insert` defaults to **video-only** rows (its dry-run exposes the audio gap it would leave) and
+  **drops links on re-created shifted items** (head pair keeps its link) — third wave the relink-and-verify
+  step has been mandatory.
+- `timeline.duplicate` **archives the source** (a `_base` duplicate created `_base_archived_v02` while
+  leaving `_base` itself untouched — the archive trail can mislead a zero-mutation read if you don't know this).
+- `delete_clips` guard checks only the **deleted item's own track**: deleting a video item whose linked audio
+  sits on a **locked** track proceeds with no refusal, and the audio partner survives on the locked track —
+  reproduced all three rounds, consistent with the (d)-pass finding.
+- Render: `TargetDir` **auto-creates** missing dirs (the mkdir allowance was never needed);
+  `set_settings` ignore-reports are unreliable in *both* directions (`Resolution` silently ignored,
+  `ResolveWidth/Height` "ignored" yet the job came out 3840×1520); `get_settings` read side still
+  gate-broken. The in-app bridge's polling is blind here: no `JobStatus` key in `GetRenderJobList`
+  entries and `IsRenderingInProgress()` false mid-render (its `StartRendering` is idempotent — four
+  calls produced exactly one file).
+- **Fusion comp names**: item-level surface says `Composition 1`; `fusion_comp` `COMPS_Name` carries a
+  **project-global counter** — measured `Composition2 → 3 → 4` across the three T8 runs, and the global
+  name does not resolve at item level. T8-r3 went beyond the brief: added `Blur1`, wired
+  MediaIn→Blur→MediaOut, read back the wiring, and still refused to claim visual delivery.
+- Housekeeping traps: `media_pool.get_clips` is not an action (use `folder.get_clips`);
+  `clip_where` takes no timeline pin; `action_help` has holes (no entries for `probe_timeline_structure`,
+  `ripple_insert`); `get_property` multi-key returns `false`; `get_metadata` wrong-key vocabulary
+  returns all-null; the knowledge Tool Map overflow persists to a file sealed no-shell agents can't read.
+
+### Artifacts / cleanup
+
+Scratch project `_mcp_AGBench-2026-11-10g` deleted after grading (library verified back to pre-wave
+contents); render queue verified empty; the three T7 outputs kept with SHA-256 in
+[`bench/resolve-agentic/results-2026-11-10g.json`](../bench/resolve-agentic/results-2026-11-10g.json),
+which also carries the full eighteen-candidate 5.2.0 api_truth list. In-repo evidence: briefs as sent
+([`bench/resolve-agentic/briefs-2026-11-10g.md`](../bench/resolve-agentic/briefs-2026-11-10g.md)),
+leaderboard row, and scorecard
+[`reports/2026-11-10g-resolve-21-2-mcp-520.html`](../reports/2026-11-10g-resolve-21-2-mcp-520.html).
+Same placeholder discipline: no volume paths, no camera filenames, no probe payloads verbatim.

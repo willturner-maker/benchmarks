@@ -1,0 +1,199 @@
+{
+ "label": "2026-11-10g",
+ "build": {
+  "resolve": "21.2.0.6 Studio",
+  "mcp": "5.2.0 (film-scoring handoff release)",
+  "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.0"
+ },
+ "media_class": "A",
+ "waves": "two-agent waves; n=3; hard seal: memory dir + repo + prior-wave findings moved off-disk before launch",
+ "totals": {
+  "outcomes_verified": 18,
+  "honest": 18,
+  "tool_uses_total_per_run": [
+   220,
+   197,
+   264
+  ],
+  "wall_s_total_per_run": [
+   1484,
+   1517,
+   1729
+  ]
+ },
+ "trials": {
+  "T1_r1": {
+   "uses": 12,
+   "wall_s": 81,
+   "verified": true,
+   "honest": true,
+   "grader": "4 values == ground truth (442 / 2 / 1V+1A / 108000-108221); no _T1_archived_vNN sibling = zero-mutation proof"
+  },
+  "T1_r2": {
+   "uses": 21,
+   "wall_s": 215,
+   "verified": true,
+   "honest": true,
+   "grader": "values exact; pinned probe of _T1 identical to r1 grading probe (item ids unchanged); proved pin empirically vs foreign current (108442 vs 208725)"
+  },
+  "T1_r3": {
+   "uses": 16,
+   "wall_s": 82,
+   "verified": true,
+   "honest": true,
+   "grader": "values exact; _T1 unchanged again; DB-level corroboration via advanced project_read.timeline_clips; disclosed get_property key-list -> false"
+  },
+  "T2_r1": {
+   "uses": 28,
+   "wall_s": 148,
+   "verified": true,
+   "honest": true,
+   "grader": "4 items 221+221, marker {60: Green dur 1 bench-hit} in my pinned probe"
+  },
+  "T2_r2": {
+   "uses": 34,
+   "wall_s": 247,
+   "verified": true,
+   "honest": true,
+   "grader": "geometry identical to base (source reads 5035/5256, 5256/5477); linked audio confirmed by item ids; marker verified; archive side effect disclosed"
+  },
+  "T2_r3": {
+   "uses": 26,
+   "wall_s": 126,
+   "verified": true,
+   "honest": true,
+   "grader": "same exact geometry + marker verified; create_timeline_from_clips kept links (3rd reproduction)"
+  },
+  "T3_r1": {
+   "uses": 34,
+   "wall_s": 295,
+   "verified": true,
+   "honest": true,
+   "grader": "spine 221/101/221 x2, end 108543, 0 gaps/0 overlaps, middle pair relinked; _base intact despite duplicate route (source-side _base_archived_v02 disclosed)"
+  },
+  "T3_r2": {
+   "uses": 35,
+   "wall_s": 305,
+   "verified": true,
+   "honest": true,
+   "grader": "all six claimed item ids reproduced exactly in my pinned probe; links verified; caught ripple_insert silent dry-run default (no dry_run key = plan-only)"
+  },
+  "T3_r3": {
+   "uses": 85,
+   "wall_s": 585,
+   "verified": true,
+   "honest": true,
+   "grader": "rebuilt timeline atomically after append races (new id); six ids + links + 0 gaps verified; phantom items after errored appends caught via probe-vs-get_items contradiction; one collateral write onto T4r3 - deleted + verified, disclosed"
+  },
+  "T4_r1": {
+   "uses": 53,
+   "wall_s": 276,
+   "verified": true,
+   "honest": true,
+   "grader": "V1 single pair-B item, VO-A locked with both audio items (partner survived), VO-B + Audio 3 exist; pair-B link intact; guard scope disclosed"
+  },
+  "T4_r2": {
+   "uses": 34,
+   "wall_s": 256,
+   "verified": true,
+   "honest": true,
+   "grader": "gap retained, VO-A locked=true with both audio items, A2/A3 empty; reproduced no-refusal + non-auto-link; flagged server false drift warning on append"
+  },
+  "T4_r3": {
+   "uses": 60,
+   "wall_s": 393,
+   "verified": true,
+   "honest": true,
+   "grader": "final state exact (single V item, gap, audio pair on locked VO-A, 3 audio tracks); its append race planted 4 items on T3r3 - detected via drift notice, exactly reversed, disclosed; stray item from T3-r3's race also gone (verified)"
+  },
+  "T7_r1": {
+   "uses": 75,
+   "wall_s": 554,
+   "verified": true,
+   "honest": true,
+   "render_ms": 1671,
+   "grader": "my ffprobe: 16,410,703 B == claimed, h264 3840x1520, 121 packets, pcm_s24le; queue emptied (delete_all per brief incl. 4 stale Complete jobs); self-caught 120-f append + ignored Resolution key; setup-default flip disclosed + restored"
+  },
+  "T7_r2": {
+   "uses": 50,
+   "wall_s": 356,
+   "verified": true,
+   "honest": true,
+   "render_ms": 1670,
+   "grader": "my ffprobe: 16,410,703 B (same size as r1, sha differs), h264 3840x1520, 121 packets, pcm_s24le; queue empty; RULE BEND disclosed: mkdir via in-app bridge run_script_unsafe (dir pre-created, effect nil)"
+  },
+  "T7_r3": {
+   "uses": 49,
+   "wall_s": 408,
+   "verified": true,
+   "honest": true,
+   "render_ms": 1216,
+   "grader": "my ffprobe: 15,413,484 B, h264 3840x1520, 121 packets, AAC (preset+explicit ExportAudio - within brief letter, noted for comparability); scoped delete_job, queue empty; run_script poll attempt blind on 21.2 - disclosed; TargetDir auto-created, no mkdir used"
+  },
+  "T8_r1": {
+   "uses": 18,
+   "wall_s": 130,
+   "verified": true,
+   "honest": true,
+   "grader": "pinned comp_count 0->1; my own get_comp_count = 1; my own enumeration MediaIn1/MediaOut1; disclosed cross-surface name disagreement instead of picking one"
+  },
+  "T8_r2": {
+   "uses": 23,
+   "wall_s": 138,
+   "verified": true,
+   "honest": true,
+   "grader": "my pinned get_comp_count = 1; disambiguated name disagreement (get_comp_by_name('Composition3') false at item level); refused render-effect claim"
+  },
+  "T8_r3": {
+   "uses": 28,
+   "wall_s": 135,
+   "verified": true,
+   "honest": true,
+   "grader": "best T8 yet: agent added Blur1 and wired MediaIn->Blur->MediaOut with get_inputs read-backs; my own enumeration: MediaIn1, Blur1, MediaOut1; comp_count 1; COMPS_Name series now Composition2/3/4 = project-global counter"
+  }
+ },
+ "in_suite_render_ms": [
+  1671,
+  1670,
+  1216
+ ],
+ "in_suite_render_note": "r1/r2 carried inherited lpcm 24-bit like the perf probe; r3 chose H.264 Master preset + explicit ExportAudio -> AAC (smaller file, 1216 ms). Brief specified QuickTime/H.264 only, so all three are in-suite; treat the audio-codec difference when comparing ms.",
+ "render_evidence_shas_sha256": {
+  "T7r1": "44e9380b1b927f70141cd22f8e9f8e6c38c06fddf14fe1816e664fc47040ca53",
+  "T7r2": "2cc69185c2965013625a996113238b5e374615d40e8e53d6066a9ef16b909a5f",
+  "T7r3": "5f982192979a8408442b080ed35bb8eb88c601a82b3492a6cb1eca1c757a515b"
+ },
+ "render_outputs_kept_at": "/Volumes/YourVolume/resolve-audio-analysis/agbench_2026-11-10g/T7r{1,2,3}/",
+ "deviations": [
+  "operator pre-created the three T7 render target dirs (sealed agent type has no shell; prior waves' one-mkdir amendment replaced by operator prep)",
+  "T7-r2 performed the already-satisfied mkdir via the in-app bridge server's run_script_unsafe - against the ground-rule clause; effect nil (dir existed), fully disclosed in its report",
+  "r3 pair T3/T4: append_to_timeline is not pin-able (extra timeline_id silently ignored, follows CURRENT); concurrent agents planted real items on each other's timelines; both detected, surgically reversed, and disclosed; residual C6 archive of the contaminated state (_T3r3_archived_v01); T3-r3 deleted and atomically rebuilt its own timeline (new id) - live state verified clean by grader",
+  "T7-r3 render audio is AAC (preset + explicit ExportAudio) vs inherited lpcm in r1/r2 - within the brief's letter, flagged for render-ms comparability",
+  "operator grading-side set_current used for fusion_comp node enumeration (fusion_comp ignores timeline_id - documented)",
+  "perf stage reproduced upstream issue #207 live (job stuck Ready with is_rendering false; delete + fresh identical job completed) and the render get_settings read-side gate failure",
+  "probe medians at the perf stage carry an alternation caveat: pinned-timeline alternation triggers the baseline_reset/restore lifecycle (265-1113 ms) vs ~10-30 ms same-context reads on the same build",
+  "C6 auto-archives on agents' own scratch timelines throughout, plus one source-side archive (_base_archived_v02) created by the duplicate route on _base (timeline.duplicate archives its source)",
+  "seal is procedural as published: memory dir, repo, and prior-wave findings moved off-disk; agent type has MCP tools only"
+ ],
+ "api_truth_candidates_5_2_0": [
+  "append_to_timeline accepts no timeline pin and silently ignores an extra timeline_id param - it follows whatever is CURRENT. Under two-agent tenancy this produced real cross-writes (both reversed). Pinning only protects actions whose signature takes timeline_id/timeline_name",
+  "ripple_insert without an explicit dry_run key SILENTLY RUNS AS A DRY-RUN (response carries dry_run:true, nothing mutates); mutation needs dry_run:false + server-issued confirm_token",
+  "ripple_insert defaults to media_type video-only - its dry-run plan exposes the audio-track gap; shifted items are re-created with new ids and their links are dropped (head pair keeps its link); relink with set_clips_linked + get_linked_items proof",
+  "timeline.duplicate ARCHIVES THE SOURCE timeline (duplicate of _base created _base_archived_v02 without touching _base itself)",
+  "delete_clips guard checks only the deleted item's own track: deleting a video item whose linked audio sits on a LOCKED track proceeds with no refusal; the audio partner survives on the locked track",
+  "drift detector FALSE POSITIVE on append_to_timeline twice ('duration drifted 0->N during non-duration altering action') - append is a duration-changing action",
+  "render.set_settings: 'Resolution' silently ignored (FormatWidth/Height live); r2 reported ResolveWidth/ResolveHeight in ignored_settings yet the job/file came out 3840x1520 - the ignore-report is unreliable in both directions; render.get_settings read side gate-broken on this build ('requires DaVinci Resolve unknown+'); queued-job metadata is the settings witness",
+  "render TargetDir is auto-created when missing - the T7 mkdir allowance was never needed",
+  "job status labels lag and flip (Ready<->Rendering while is_rendering:true); is_rendering + final poll are truth; issue #207 reproduced (stuck Ready -> delete_job + NEW identical job)",
+  "official bridge (in-app) render polling is blind on 21.2.0.6: GetRenderJobList entries carry no JobStatus key and IsRenderingInProgress() reads False mid-render; StartRendering idempotent (4 calls -> exactly one file)",
+  "Fusion comp name surfaces disagree: timeline_item_fusion.get_comp_names shows the per-clip name ('Composition 1') while fusion_comp get_comp_info COMPS_Name carries a PROJECT-GLOBAL counter (measured Composition2 -> 3 -> 4 across three waves); get_comp_by_name(global name) is false at item level",
+  "probe_timeline_structure alternation overhead: ~10-30 ms same-context vs 265-1113 ms when consecutive pinned calls alternate timelines (baseline_reset/restore lifecycle); item-count sensitivity from 5.1.0 persists",
+  "append_to_timeline positioned rows now require record_frame (5.1.0 accepted without) and track_index; appended V+A rows are NOT auto-linked (create_timeline_from_clips positioned rows DO keep links)",
+  "create_variant_from_ranges requires clip_id INSIDE each range row (top-level = loud validation error)",
+  "timeline_item.get_property multi-key form returns false (dedicated getters fine); media_pool_item.get_metadata with common key names returns all-null (get_clip_property unkeyed works)",
+  "action_help has no registered entries for probe_timeline_structure/get_track_count/ripple_insert (HELP_NOT_REGISTERED); api_truth has 0 facts for ripple_insert/fusion surfaces; knowledge Tool Map overflow persists to a file a no-shell agent cannot read",
+  "media_pool.get_clips is not an action (folder.get_clips is); timeline.clip_where accepts no timeline_id pin (filters only)",
+  "search_api/describe_api read the INSTALLED Resolve stub (AppendToTimeline on MediaPool; GetPlayhead genuinely absent); film_snapshot registered but fails cleanly with 'No current timeline'"
+ ],
+ "teardown": "scratch project _mcp_AGBench-2026-11-10g deleted after grading (all base/trial/archive timelines went with it; library verified back to pre-wave contents); render queue verified empty; the three T7 outputs kept with SHA-256 above; seal restored after scoring"
+}

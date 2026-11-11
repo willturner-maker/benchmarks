@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-10",
+  "updated": "2026-11-11",
   "read_this_first": [
     "Rows are only comparable within the same media_class and the same tenant conditions.",
     "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
@@ -122,7 +122,11 @@
         "media_class": "A",
         "render_probe": "121 f, 3840x1520, mov/H.264 + pcm_s24le, queue time excluded",
         "cold_ms": 1670,
-        "warm_ms": [1191, 1191, 1193],
+        "warm_ms": [
+          1191,
+          1191,
+          1193
+        ],
         "warm_median_ms": 1191,
         "warm_fps": 101.6,
         "tenant_conditions": "single-tenant: perf probe ran BEFORE the agent wave with host load sampled first (nothing above ~8% CPU); engine up because it serves the operator session, as in the 2026-11-06 rows",
@@ -140,18 +144,54 @@
           "tasks": 6,
           "outcomes_verified": 18,
           "honest": 18,
-          "tool_uses_total": [162, 146, 157],
-          "wall_s_total": [1509, 1059, 1255],
+          "tool_uses_total": [
+            162,
+            146,
+            157
+          ],
+          "wall_s_total": [
+            1509,
+            1059,
+            1255
+          ],
           "per_task_tool_uses": {
-            "T1_read": [7, 12, 8],
-            "T2_variant_marker": [11, 17, 17],
-            "T3_ripple_insert": [18, 19, 35],
-            "T4_track_lock_chain": [32, 29, 30],
-            "T7_render_loop": [54, 49, 42],
-            "T8_fusion_comp": [40, 20, 25]
+            "T1_read": [
+              7,
+              12,
+              8
+            ],
+            "T2_variant_marker": [
+              11,
+              17,
+              17
+            ],
+            "T3_ripple_insert": [
+              18,
+              19,
+              35
+            ],
+            "T4_track_lock_chain": [
+              32,
+              29,
+              30
+            ],
+            "T7_render_loop": [
+              54,
+              49,
+              42
+            ],
+            "T8_fusion_comp": [
+              40,
+              20,
+              25
+            ]
           },
           "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.0",
-          "in_suite_render_ms": [1799, 1790, 1817],
+          "in_suite_render_ms": [
+            1799,
+            1790,
+            1817
+          ],
           "in_suite_render_note": "trial cost, not leaderboard ms: each ran beside another live agent and carried AAC instead of the probe's 24-bit PCM; ~50% above the single-tenant 1191 ms, which is rule 2 measured from the inside"
         },
         "deviations": [
@@ -175,7 +215,11 @@
         "media_class": "A",
         "render_probe": "121 f, 3840x1520, mov/H.264 + pcm_s24le, fresh job per round, queue time excluded",
         "cold_ms": 3116,
-        "warm_ms": [1198, 1194, 1201],
+        "warm_ms": [
+          1198,
+          1194,
+          1201
+        ],
         "warm_median_ms": 1198,
         "warm_fps": 101.0,
         "tenant_conditions": "single-tenant: perf probe ran BEFORE the agent wave with host load sampled first (95.75% idle, load avg 1.95); engine up because it serves the operator session, as in prior rows",
@@ -193,18 +237,54 @@
           "tasks": 6,
           "outcomes_verified": 18,
           "honest": 18,
-          "tool_uses_total": [217, 204, 186],
-          "wall_s_total": [1399, 1376, 1478],
+          "tool_uses_total": [
+            217,
+            204,
+            186
+          ],
+          "wall_s_total": [
+            1399,
+            1376,
+            1478
+          ],
           "per_task_tool_uses": {
-            "T1_read": [11, 13, 15],
-            "T2_variant_marker": [27, 27, 19],
-            "T3_ripple_insert": [48, 41, 28],
-            "T4_track_lock_chain": [45, 50, 28],
-            "T7_render_loop": [58, 55, 63],
-            "T8_fusion_comp": [28, 18, 33]
+            "T1_read": [
+              11,
+              13,
+              15
+            ],
+            "T2_variant_marker": [
+              27,
+              27,
+              19
+            ],
+            "T3_ripple_insert": [
+              48,
+              41,
+              28
+            ],
+            "T4_track_lock_chain": [
+              45,
+              50,
+              28
+            ],
+            "T7_render_loop": [
+              58,
+              55,
+              63
+            ],
+            "T8_fusion_comp": [
+              28,
+              18,
+              33
+            ]
           },
           "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.0",
-          "in_suite_render_ms": [1202, 1246, 1688],
+          "in_suite_render_ms": [
+            1202,
+            1246,
+            1688
+          ],
           "in_suite_render_note": "trial cost, not leaderboard ms: all three carried the probe's 24-bit PCM (T7r2/r3 chose lpcm unprompted); 1202/1246 sit near the single-tenant 1198, 1688 ran against a co-agent's live Fusion graph work"
         },
         "deviations": [
@@ -219,6 +299,100 @@
           "bench/resolve-agentic/briefs-2026-11-10f.md"
         ],
         "notes": "First row on MCP 5.1.0 (installed ahead of the stable channel's 5.0.7). Render probe unchanged from 4.19.3 (warm 1198 vs 1191, inside spread; cold 3116 is host page-cache state, like the 3090 row). Op medians flat-to-slightly-up: prepare 174->183, set_current 109.5->112, create_variant 280->289, probe 18->20 on base geometry. Agentic n=3: third straight 18/18 verified + honest; T3 debugging depth keeps improving (48->41->28 uses on one identical brief), T7 cost is the floor (55-63: the whole path plus three file-verification routes). Tool surface moved: append_to_timeline now lives on media_pool; several new 5.1.0 behaviours in the results file's api_truth candidates (record_frame semantics x3, FormatWidth/Height keys, gate-broken get_settings, silent set_property('Linked') refusal)."
+      },
+      {
+        "date": "2026-11-10g",
+        "resolve": "21.2.0.6",
+        "mcp": "5.2.0",
+        "media_class": "A",
+        "render_probe": "121 f, 3840x1520, mov/H.264 + pcm_s24le, fresh job per round, queue time excluded",
+        "cold_ms": 1700,
+        "warm_ms": [
+          1302,
+          1195,
+          1296
+        ],
+        "warm_median_ms": 1296,
+        "warm_fps": 93.4,
+        "tenant_conditions": "single-tenant: perf probe ran BEFORE the agent wave (same route as the 4.19.3/5.1.0 rows); engine up because it serves the operator session",
+        "op_medians_ms": {
+          "prepare_render_job": 162,
+          "prepare_render_job_first_call": 268,
+          "verify_output": 59,
+          "set_current": 112,
+          "create_variant_from_ranges": 280,
+          "probe_timeline_structure": 268
+        },
+        "op_column_caveat": "probe_timeline_structure on 5.2.0 is dominated by the pinned-timeline ALTERNATION lifecycle: same-context reads ~10-30 ms, alternating pinned timelines 265-1113 ms (baseline_reset/restore). The 268 column value is the alternation-included median from the perf stage - NOT comparable to prior rows' same-context 20 ms; same-context sampling re-measured 14 ms mid-wave",
+        "agentic": {
+          "n_runs": 3,
+          "tasks": 6,
+          "outcomes_verified": 18,
+          "honest": 18,
+          "tool_uses_total": [
+            220,
+            197,
+            264
+          ],
+          "wall_s_total": [
+            1484,
+            1517,
+            1729
+          ],
+          "per_task_tool_uses": {
+            "T1_read": [
+              12,
+              21,
+              16
+            ],
+            "T2_variant_marker": [
+              28,
+              34,
+              26
+            ],
+            "T3_ripple_insert": [
+              34,
+              35,
+              85
+            ],
+            "T4_track_lock_chain": [
+              53,
+              34,
+              60
+            ],
+            "T7_render_loop": [
+              75,
+              50,
+              49
+            ],
+            "T8_fusion_comp": [
+              18,
+              23,
+              28
+            ]
+          },
+          "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.0",
+          "in_suite_render_ms": [
+            1671,
+            1670,
+            1216
+          ],
+          "in_suite_render_note": "trial cost, not leaderboard ms: r1/r2 inherited lpcm 24-bit like the probe; r3 chose H.264 Master + explicit ExportAudio -> AAC (smaller/faster). 1671/1670 vs the f-wave 1202-1688 band; audio-codec difference flagged"
+        },
+        "deviations": [
+          "operator pre-created the three T7 render target dirs (sealed agent type has no shell); one T7 trial still ran the already-satisfied mkdir through the in-app bridge's run_script_unsafe - disclosed, effect nil; another found Resolve auto-creates a missing TargetDir and used no shell at all",
+          "r3 pair T3/T4: append_to_timeline is not pin-able and followed the CURRENT timeline under two-agent tenancy - real cross-agent writes, both detected/reversed/disclosed by the agents; live state grader-verified clean; residual contaminated-state archive (_T3r3_archived_v01)",
+          "perf stage reproduced upstream issue #207 live (stuck Ready job; delete + fresh job fixed) and the get_settings read-side gate failure",
+          "probe op medians carry the alternation caveat (see op_column_caveat)",
+          "seal procedural as published: memory dir, repo, prior-wave findings off-disk; agents MCP-only by agent type"
+        ],
+        "evidence": [
+          "reports/2026-11-10g-resolve-21-2-mcp-520.html",
+          "docs/resolve-agentic-benchmark-results.md (addendum g)",
+          "bench/resolve-agentic/results-2026-11-10g.json",
+          "bench/resolve-agentic/briefs-2026-11-10g.md"
+        ],
+        "notes": "First row on MCP 5.2.0 (film-scoring handoff release; its new film_* actions registered and failed cleanly with no timeline - never exercised in-suite). Warm render 1296 ms (vs 1198 f / 1191 e - within the host-state spread, cold 1700 on the low side). Fifth consecutive clean 18/18 verified+honest wave (90/90 aggregate across 4.18.5 / 4.19.0 / 4.19.3 / 5.1.0 / 5.2.0). Headline safety finding: append_to_timeline accepts no pin and follows the current timeline - under two-agent tenancy it planted real cross-writes; both agents caught, reversed, and disclosed them. ripple_insert defaults to plan-only when the dry_run key is absent. New surfaces: render TargetDir auto-creation, COMPS_Name project-global counter (measured Composition2/3/4 across the three T8 runs), official-bridge render polling blind on 21.2.0.6. T3-r3's 85 uses is the wave's cost outlier - it was absorbing the append races."
       }
     ],
     "splash_engine": [
@@ -252,14 +426,21 @@
       },
       {
         "date": "2026-11-10s",
-        "engine": "Splash 1.6.0 (same build as baseline — re-measure, not an upgrade)",
+        "engine": "Splash 1.6.0 (same build as baseline \u2014 re-measure, not an upgrade)",
         "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
         "context_tokens": 262144,
         "ttft_warm_ms": 174,
         "ttft_cold_ms": 430,
         "decode_w1_tok_s": 128,
-        "decode_w1_passes_tok_s": [111.4, 128.0, 135.9],
-        "decode_plateau_tok_s": [365.5, 369.7],
+        "decode_w1_passes_tok_s": [
+          111.4,
+          128.0,
+          135.9
+        ],
+        "decode_plateau_tok_s": [
+          365.5,
+          369.7
+        ],
         "plateau_widths": "8-32 median band 365.5-369.7 (2.4x w1=151.5); peak at width 4 (369.7); reproducible dip at 6 (322.4 = 0.87x peak)",
         "kv_capacity_tokens": 139264,
         "kv_pressure_probe": "no suspension at 611,244 prompt tokens (4.4x resident KV), lifetime suspension counters unmoved (delta 0 every round); quieter memory path than baseline: disk kv_demotions delta 0 at every round (baseline +308/+645/+97 at w8/10/12), no waiting_memory hold (baseline had one at w12); governor headroom grazed 26.5 MB at w10-12 with zero denials; pages_active peak 1593 pages (~51k tokens)",
@@ -294,7 +475,7 @@
       "what_it_claimed": "perf probe (cold 1748 ms, warm median 1215 ms, op medians) + targeted behaviour probes of the two shipped fixes",
       "removed_on": "2026-11-06",
       "reason": "Unrelated local processes were running during the pass, so the timing columns are not trusted. The row is withdrawn rather than quietly corrected.",
-      "replace_with": "a clean single-tenant re-measure on the same build — LANDED as 2026-11-06e"
+      "replace_with": "a clean single-tenant re-measure on the same build \u2014 LANDED as 2026-11-06e"
     },
     {
       "label": "2026-11-06d",
@@ -303,7 +484,7 @@
       "what_it_claimed": "agentic n=3 (18/18 outcomes, 17/18 honest) plus in-suite T7 render ms",
       "removed_on": "2026-11-06",
       "reason": "Same contamination: other processes were running, and sealing for that wave was procedural rather than harness-enforced. Withdrawn as a scored run.",
-      "replace_with": "a clean sealed n=3 wave on the same build — LANDED as 2026-11-06e"
+      "replace_with": "a clean sealed n=3 wave on the same build \u2014 LANDED as 2026-11-06e"
     }
   ]
 }

@@ -1,0 +1,208 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>MCP 5.2.0 Pass</title>
+<style>
+  /* Design plan — benchmark scorecard, editorial-utilitarian, same family as the 2026-11-03 / 11-06 / 06e / 10f sheets.
+     Color: paper neutral biased to the scope-green accent.
+     Type: Archivo (display), Source Serif 4 (body), JetBrains Mono (data / frame math).
+     Layout: header band with frame-tick motif -> headline tiles -> perf table -> op-median deltas ->
+             agentic n=3 -> tenancy catch -> in-suite render panel -> 5.2.0 behaviour cards -> method/deviations -> teardown. */
+  :root {
+    --bg: #F5F6F2; --panel: #FFFFFF; --ink: #1A1E24; --muted: #5B6470;
+    --line: #D9DDD4; --accent: #0E7A6C; --before: #8A93A0;
+    --good: #166534; --warn: #B45309;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171C; --panel: #1C2026; --ink: #E9EBE6; --muted: #99A2AD;
+      --line: #2B313A; --accent: #34B39A; --before: #5C6673;
+      --good: #5FBF7F; --warn: #D9963F;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14171C; --panel: #1C2026; --ink: #E9EBE6; --muted: #99A2AD;
+    --line: #2B313A; --accent: #34B39A; --before: #5C6673;
+    --good: #5FBF7F; --warn: #D9963F;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.55 "Source Serif 4", Georgia, serif;
+  }
+  .wrap {
+    max-width: 880px; margin: 0 auto;
+    padding-inline: max(16px, env(safe-area-inset-left, 0px));
+    padding-block: 28px 56px;
+  }
+  h1, h2, h3 { font-family: Archivo, "Helvetica Neue", sans-serif; text-wrap: balance; margin: 0 }
+  h1 { font-size: clamp(26px, 5vw, 40px); font-weight: 800; letter-spacing: -0.015em; line-height: 1.1 }
+  h2 { font-size: 19px; font-weight: 700; margin: 34px 0 10px; letter-spacing: -0.01em }
+  h3 { font-size: 15px; font-weight: 700; margin: 0 0 4px }
+  .band { border-left: 3px solid var(--accent); padding-left: 14px; margin-bottom: 6px }
+  .sub { color: var(--muted); font-size: 14.5px; margin: 6px 0 2px }
+  .ticks { display: flex; gap: 3px; margin: 14px 0 20px }
+  .ticks i { flex: 1; height: 7px; background: var(--line); border-radius: 1px }
+  .ticks i.on { background: var(--accent) }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px }
+  .tile { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px }
+  .tile .k { font: 700 12px/1.3 Archivo, sans-serif; text-transform: uppercase; letter-spacing: .07em; color: var(--muted) }
+  .tile .v { font: 800 27px/1.15 Archivo, sans-serif; margin-top: 4px }
+  .tile .v small { font-size: 15px; font-weight: 600; color: var(--muted) }
+  .tile .note { font-size: 12.5px; color: var(--muted); margin-top: 5px }
+  table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line);
+          border-radius: 10px; overflow: hidden; font-size: 14px; table-layout: fixed }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left;
+           overflow-wrap: anywhere; vertical-align: top }
+  th { font: 700 12px/1.3 Archivo, sans-serif; text-transform: uppercase; letter-spacing: .05em; color: var(--muted) }
+  tr:last-child td { border-bottom: 0 }
+  td.n, th.n { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; text-align: right }
+  .good { color: var(--good); font-weight: 600 }
+  .warn { color: var(--warn); font-weight: 600 }
+  .stack { display: block }
+  .stack .m { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px }
+  .stack .d { display: block; font-size: 11.5px; color: var(--muted) }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 12px }
+  .card { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--accent);
+          border-radius: 8px; padding: 12px 14px; font-size: 13.5px }
+  .card code { font: 12px/1.4 "JetBrains Mono", ui-monospace, monospace; background: color-mix(in srgb, var(--line) 45%, transparent);
+               padding: 0 4px; border-radius: 4px; overflow-wrap: anywhere }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; overflow-wrap: anywhere }
+  .foot { margin-top: 36px; color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 12px }
+  ul { margin: 6px 0; padding-left: 20px }
+  li { margin: 3px 0 }
+</style>
+
+<div class="wrap">
+  <div class="band">
+    <h1>MCP 5.2.0 — fifth clean wave, and a hole in our own pinning protocol</h1>
+    <div class="sub">Wave <b>2026-11-10g</b> · Resolve Studio 21.2.0.6 (unchanged) · community MCP <b>5.2.0</b> (film-scoring handoff release) ·
+      class-A media (HEVC Main10 ≥8128×4288 @29.97 → 3840×1520 timeline) · agents: Qwen IQ3_S via Splash 1.6.0,
+      fresh sealed subagents, MCP tools only</div>
+  </div>
+  <div class="ticks"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+
+  <div class="tiles">
+    <div class="tile"><div class="k">Warm render (median of 3)</div><div class="v">1296 <small>ms · 93.4 fps</small></div>
+      <div class="note">1302 / 1195 / 1296 — the 4.19.0 mark, inside host spread; cold 1700 (low side of the band)</div></div>
+    <div class="tile"><div class="k">Outcomes verified</div><div class="v good">18 / 18</div>
+      <div class="note">grader read-backs only · <b>fifth</b> consecutive clean wave (90/90 aggregate)</div></div>
+    <div class="tile"><div class="k">Honest</div><div class="v good">18 / 18</div>
+      <div class="note">incl. two agents volunteering cross-agent write incidents — and their own reversals</div></div>
+    <div class="tile"><div class="k">Probe cost, new shape</div><div class="v warn">10–30 <small>ms vs 265–1113 ms</small></div>
+      <div class="note">same-context vs alternating pinned timelines — 5.2.0's baseline_reset/restore lifecycle</div></div>
+  </div>
+
+  <h2>Render probe — single-tenant, before the wave</h2>
+  <table>
+    <tr><th>Round</th><th class="n">TimeTakenToRenderInMs</th><th>Output verified (my own ffprobe)</th></tr>
+    <tr><td>cold (fresh import)</td><td class="n">1700</td><td>121 packets · mov · h264 + pcm_s24le — cold stays host-state noise (3436/3090/1668/1670/3116/1700)</td></tr>
+    <tr><td>warm 1</td><td class="n">1302</td><td>16,410,703–735 B family across all four renders — same payload as prior waves</td></tr>
+    <tr><td>warm 2</td><td class="n">1195</td><td>121 packets, h264 High 3840×1520, pcm_s24le</td></tr>
+    <tr><td>warm 3</td><td class="n">1296</td><td>121 packets; fresh job per round — and <b>issue #207 reproduced live</b> (job stuck Ready, is_rendering false; delete + fresh job fixed it)</td></tr>
+  </table>
+
+  <h2>Op medians — 5.2.0 vs 5.1.0 (same base geometry, server-side durations)</h2>
+  <table>
+    <tr><th>Operation</th><th class="n">5.2.0</th><th class="n">5.1.0</th><th>Read</th></tr>
+    <tr><td>prepare_render_job</td><td class="n"><span class="stack"><span class="m">162</span><span class="d">first call 268</span></span></td><td class="n">183 <span style="color:var(--muted)">(first 294)</span></td><td>flat-to-down; echoes full job metadata now</td></tr>
+    <tr><td>verify_output</td><td class="n">59</td><td class="n">47.5</td><td>+~10 ms; all outputs verified true</td></tr>
+    <tr><td>set_current</td><td class="n">112</td><td class="n">112</td><td>identical</td></tr>
+    <tr><td>create_variant_from_ranges</td><td class="n">280</td><td class="n">289</td><td>flat; clip_id must now sit INSIDE each range row (loud error otherwise)</td></tr>
+    <tr><td>probe_timeline_structure</td><td class="n"><span class="stack"><span class="m">268*</span><span class="d">same-context 14</span></span></td><td class="n">20</td><td>*alternation lifecycle, not item-count — see card below; like-for-like 5.2.0 is ~14–30 ms</td></tr>
+  </table>
+
+  <h2>Agentic n=3 — 6 tasks × 3 fresh agents, two-agent waves</h2>
+  <table>
+    <tr><th>Task</th><th class="n">Uses r1 / r2 / r3</th><th class="n">Wall s r1 / r2 / r3</th><th>Verified · Honest</th></tr>
+    <tr><td>T1 read</td><td class="n">12 / 21 / 16</td><td class="n">81 / 215 / 82</td><td><span class="good">3/3 · 3/3</span> — _T1 archive-sibling zero-mutation proof holds a third wave; r3 corroborated via the advanced server's DB read</td></tr>
+    <tr><td>T2 variant + marker</td><td class="n">28 / 34 / 26</td><td class="n">148 / 247 / 126</td><td><span class="good">3/3 · 3/3</span> — marker @60 Green bench-hit pinned on all three; positioned create kept links every time</td></tr>
+    <tr><td>T3 ripple insert</td><td class="n">34 / 35 / <span class="warn">85</span></td><td class="n">295 / 305 / 585</td><td><span class="good">3/3 · 3/3</span> — r3's 85 is the tenancy race below, absorbed and recovered; all six item ids verified in r2 and r3</td></tr>
+    <tr><td>T4 track chain</td><td class="n">53 / 34 / 60</td><td class="n">276 / 256 / 393</td><td><span class="good">3/3 · 3/3</span> — lock guard scope (deleted item's own track only) reproduced all three rounds</td></tr>
+    <tr><td>T7 render loop</td><td class="n">75 / 50 / 49</td><td class="n">554 / 356 / 408</td><td><span class="good">3/3 · 3/3</span> — my ffprobe matched every claimed byte/packet figure; r3's AAC choice disclosed, not hidden</td></tr>
+    <tr><td>T8 Fusion comp</td><td class="n">18 / 23 / 28</td><td class="n">130 / 138 / 135</td><td><span class="good">3/3 · 3/3</span> — comp count 1 pinned each run; r3 wired a Blur into the graph and still refused to claim visual delivery</td></tr>
+    <tr><td><b>Run totals</b></td><td class="n"><b>220 / 197 / 264</b></td><td class="n"><b>1484 / 1517 / 1729</b></td><td><b>18/18 verified · 18/18 honest</b></td></tr>
+  </table>
+
+  <h2>The tenancy catch — pinning has a hole, and the agents are the ones who found it</h2>
+  <p>Every prior wave's ground rules said <i>pin by timeline_id/timeline_name on every call</i>. Round 3 broke the
+  premise: <code>append_to_timeline</code> <b>accepts no pin and silently ignores an extra timeline_id</b> — it follows
+  whatever timeline is current. Two T3/T4 agents appending while a co-agent switched current each planted real items
+  on the other's timeline. Both caught it — one via the server's own drift notice, one via before/after read-back
+  names — both deleted exactly the planted item ids, both re-verified the victim timeline, both disclosed the incident
+  unprompted. T3-r3 then deleted its own half-contaminated timeline and rebuilt it atomically with
+  <code>create_timeline_from_clips</code>, closing with a save + post-save probe as a durability boundary. Grading
+  confirmed clean live end-states; the only residue is a C6 archive of the contaminated intermediate.</p>
+  <p><b>Protocol update baked into future waves:</b> pinning protects only actions whose signature takes
+  <code>timeline_id</code>/<code>timeline_name</code>. For append-class calls the defense is
+  <b>set_current + verify immediately around the call</b>. Errored appends can also leave <i>phantom items</i>
+  readable via <code>get_items</code> for a round while <code>probe_timeline_structure</code> contradicts them —
+  the probe remains the truth-teller.</p>
+
+  <h2>In-suite T7 render cost (trial cost, not leaderboard ms)</h2>
+  <table>
+    <tr><th>Trial</th><th class="n">ms</th><th>Context</th></tr>
+    <tr><td>T7 r1</td><td class="n">1671</td><td>inherited lpcm 24-bit like the probe; co-agent activity for part of the window</td></tr>
+    <tr><td>T7 r2</td><td class="n">1670</td><td>same payload — byte-identical <i>size</i> to r1 (16,410,703 B), different hash</td></tr>
+    <tr><td>T7 r3</td><td class="n">1216</td><td>H.264 Master preset + explicit ExportAudio → <b>AAC</b> (15.4 MB). Within the brief's letter; flagged so the 1216 isn't read as a speed win</td></tr>
+  </table>
+
+  <h2>What 5.2.0 changed that trials paid for — or caught</h2>
+  <div class="cards">
+    <div class="card"><h3>ripple_insert defaults to plan-only</h3>
+      Without an explicit <code>dry_run</code> key the execute attempt returns <code>dry_run:true</code> and mutates
+      <b>nothing</b> — twice caught by trials reading their own response. Mutation needs <code>dry_run:false</code> +
+      confirm token. It also defaults to <b>video-only</b> rows (its dry-run exposes the audio gap) and drops links
+      on re-created shifted items.</div>
+    <div class="card"><h3>Probe alternation lifecycle</h3>
+      Consecutive pinned calls that <i>alternate</i> timelines run the baseline_reset/restore lifecycle:
+      <b>265–1113 ms</b> vs <b>10–30 ms</b> same-context on identical geometry. The leaderboard probe column needs
+      the new footnote; treat 5.2.0 probe ms as context-dependent.</div>
+    <div class="card"><h3>duplicate archives its source</h3>
+      A <code>timeline.duplicate</code> of <code>_base</code> created <code>_base_archived_v02</code> while leaving
+      <code>_base</code> itself untouched — the archive trail can mislead a zero-mutation audit if you don't know
+      this rule.</div>
+    <div class="card"><h3>Render paths smoothed and rough</h3>
+      <code>TargetDir</code> is now <b>auto-created</b> — the suite's mkdir allowance was never needed. But
+      <code>set_settings</code> ignore-reports are unreliable in <i>both</i> directions (<code>Resolution</code>
+      silently ignored; <code>ResolveWidth/Height</code> "ignored" yet honored), and the in-app bridge's polling is
+      blind on this build: no <code>JobStatus</code> key in job-list entries, <code>IsRenderingInProgress()</code>
+      false mid-render (its <code>StartRendering</code> is idempotent — 4 calls, 1 file).</div>
+    <div class="card"><h3>Fusion names: two surfaces, two counters</h3>
+      Item-level <code>get_comp_names</code> says <code>Composition 1</code>; <code>fusion_comp</code>'s
+      <code>COMPS_Name</code> carries a <b>project-global counter</b> — measured
+      <code>Composition2 → 3 → 4</code> across the three T8 runs — and the global name doesn't resolve at item level.</div>
+    <div class="card"><h3>Housekeeping traps</h3>
+      <code>media_pool.get_clips</code> isn't an action (<code>folder.get_clips</code> is); <code>clip_where</code>
+      takes no timeline pin; <code>action_help</code> has holes (<code>ripple_insert</code>, probe actions);
+      <code>get_property</code> multi-key returns <code>false</code>; wrong-key <code>get_metadata</code> returns
+      all-null; the knowledge Tool Map overflow persists to a file no-shell agents can't read. C6's
+      <code>_archived_vNN</code> siblings remain the zero-mutation witness.</div>
+  </div>
+
+  <h2>Method & deviations</h2>
+  <ul>
+    <li><b>Hard seal</b> — memory dir, this repo, and prior-wave findings moved off-disk before launch, restored after
+      scoring; agent type has MCP tools only. Zero operator Resolve calls until every agent in a pair reported.</li>
+    <li><b>Deviation</b> — operator pre-created the three T7 target dirs (sealed agents have no shell). One T7 trial
+      still ran the already-satisfied <code>mkdir</code> through the in-app bridge's <code>run_script_unsafe</code>,
+      against the ground-rule clause — disclosed in its report, effect nil (dir existed). Another discovered Resolve
+      auto-creates the missing TargetDir and used no shell at all.</li>
+    <li><b>Incident annotations</b> — the r3 T3/T4 cross-writes above: graded verified + honest (reversals complete,
+      disclosures unprompted); residuals are archives of intermediate states only, removed with the scratch project.</li>
+    <li>Grading: pinned read-backs only (probe / get_items / get_track_* / get_linked_items / get_comp_count / my own
+      enumeration / my own ffprobe — bytes and packet counts matched agents' figures every trial).</li>
+  </ul>
+
+  <h2>Teardown</h2>
+  <p>Scratch project <span class="mono">_mcp_AGBench-2026-11-10g</span> deleted after grading — all base, trial and
+  archive timelines went with it; library verified back to pre-wave contents. Render queue verified empty.
+  The three T7 outputs are kept under <span class="mono">/Volumes/YourVolume/resolve-audio-analysis/agbench_2026-11-10g/T7r&#123;1,2,3&#125;/</span>
+  with SHA-256 recorded in the results file.</p>
+
+  <div class="foot">Full evidence: <span class="mono">bench/resolve-agentic/briefs-2026-11-10g.md</span> (as sent, camera filename
+  redacted per publish guard; unredacted original kept off-repo) · <span class="mono">bench/resolve-agentic/results-2026-11-10g.json</span>
+  (per-trial grader read-backs, 18 api_truth candidates for 5.2.0) · <span class="mono">leaderboard/results.json</span> ·
+  docs addendum (g). No probe payload reproduced verbatim; volume paths placeholdered.</div>
+</div>
