@@ -28,7 +28,9 @@ unified memory, macOS 27.2.0.
 | DaVinci Resolve MCP | [`docs/resolve-agentic-benchmark-results.md`](docs/resolve-agentic-benchmark-results.md) | **[`bench/resolve-agentic/`](bench/resolve-agentic/)** — briefs, runbook, and `check_media.py` so you can run it on **your own footage** | 21.2.0.6 + MCP 5.2.2 (wave `2026-11-11h`): **18/18 verified, 18/18 honest — sixth consecutive clean wave, 108/108 aggregate**; walls down 23–38 % vs the 5.2.0 wave with zero cross-agent write incidents; warm render 1205 ms (ran concurrent — ranked with note, see leaderboard rule 2) |
 | Splash engine + Qwen | [`docs/splash-engine-benchmark-results.md`](docs/splash-engine-benchmark-results.md) | `bench/splash-concurrency/` — single entry point `ladder_kv.py` (width ladder + KV-pressure probe in one run) | Splash 1.6.1 (2026-11-11): plateau **510–525 tok/s, +39 %** over 1.6.0, aggregate peak moves width 4→12, KV probe still never suspends at 4.4× budget (demote path partially re-engaged at w10 — instance-dependent); agentic suite 12/12 + 12/12 |
 | Visual venv (OpenCV) | [`bench/visual-venv/README.md`](bench/visual-venv/README.md) | `bench/visual-venv/` — bench script, cold-run probe, run1/run2 JSON (**fixtures withheld**: real face frames; hashes in the JSONs) | opencv-python 5.0.0.93 baseline + same-build rerun: every deterministic value bit-identical, uniform ~11 % timing drift band (×1.15 ceiling for the future 5.1.x diff); watched for 5.1.x wheels by a launchd agent |
-| Concurrency spec (draft, 2026-09) | [`docs/concurrency-scaling-test.md`](docs/concurrency-scaling-test.md) | — | the never-run design the Splash ladder later implemented |
+
+(Superseded drafts live in [`archive/`](archive/) — including the never-run 2026-09
+concurrency spec the Splash ladder later implemented.)
 
 ## Leaderboard & reports
 
@@ -71,6 +73,8 @@ served by a browser, or just `open reports/<name>.html` after a clone.
   the briefs use, `tasks.md` + `RUNBOOK.md` are the six briefs and the procedure.
 - `reports/` — the rendered scorecards, one self-contained HTML per wave, front-doored by
   the Pages `index.html`.
+- `archive/` — superseded design docs kept for provenance, each banner-marked at the top;
+  not suites, not runnable.
 - `tools/precommit-scan.sh` — pre-commit guard: refuses staged content containing local
   paths, camera/reel filenames, credential shapes, emails, or repo-local **deny terms**
   (client/project/event names kept in `.git/info/precommit-terms`, which is never

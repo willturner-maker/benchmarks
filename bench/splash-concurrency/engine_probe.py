@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Splash engine deterministic probe — 2026-11-06 baseline (Splash 1.6.0, schema 8).
-Adapted from docs/concurrency-scaling-test.md (draft, never run) for schema 8 + keyless :8000.
+Adapted from archive/concurrency-scaling-test.md (draft, never run) for schema 8 + keyless :8000.
 Lighter context size (800-1000 tokens, not 32K) to spare the shared engine; noted in results."""
 import json, time, urllib.request, statistics as st
 

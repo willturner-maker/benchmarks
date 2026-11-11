@@ -3,7 +3,7 @@
 **Purpose:** version-to-version performance tracking of the Splash engine + resident Qwen
 model on this machine — the Splash counterpart to the Resolve MCP benchmark
 (`resolve-agentic-benchmark-results.md`). No prior baseline existed; the only earlier
-artifact was the never-run draft spec in `docs/concurrency-scaling-test.md` (2026-09-26),
+artifact was the never-run draft spec in `archive/concurrency-scaling-test.md` (2026-09-26),
 whose design this reuses in adapted form.
 
 **Host (fixed for comparison):** Apple M5 Ultra, 64-core GPU, 96 GiB unified memory,
