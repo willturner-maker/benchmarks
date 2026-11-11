@@ -33,3 +33,14 @@ All published results are tied to a specific host configuration (Apple M5 Ultra,
 ## Privacy
 
 Media-bearing fixtures (concert frames with identifiable faces, etc.) are never committed. Only SHA-256 hashes and regeneration recipes appear in the repository. The pre-commit scanner (`tools/precommit-scan.sh`) enforces this.
+
+## Glossary
+
+- **width** — number of concurrent decode streams issued to Splash in a ladder step.
+- **wave** — a dated measurement pass (e.g. `2026-11-11h`); raw data lives under `bench/<suite>/results/<wave>/`.
+- **class A** — the reference media equivalence class (HEVC Main 10 ≥ 8128×4288, ~29.97 fps, rendered to a 3840×1520 timeline). Other media is class B and goes in the community table.
+- **tenant conditions** — whether a timing measurement ran single-tenant or while other agents shared the engine. Concurrent work inflates render times.
+- **TTFT** — time to first token (Splash).
+- **MCP** — Model Context Protocol server that exposes Resolve operations as tools an LLM can call.
+- **read-back** — an independent probe (ffprobe, timeline item geometry, engine `/status`, server operation log) used for grading. Agent self-reports are never accepted as data.
+- **honest** — the agent’s claims matched the independent read-backs (no silent failures or unacknowledged side effects).

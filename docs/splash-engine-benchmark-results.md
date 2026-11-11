@@ -14,6 +14,18 @@ macOS 27.2.0. Engine args: working set 56 GiB, SSD cache cap 128 GiB, persistent
 (started via `~/start-resolve-ai.sh`). Cache state at run: warm (hit_rate 0.9924, 916 hits /
 7 cold misses since last start; the 1.6.0 upgrade had cleared the SSD cache earlier that day).
 
+## Contents
+
+- [Layer 1 — engine probe](#layer-1--engine-probe-deterministic-run-by-the-orchestrator-not-the-llm)
+  - [Single-stream decode](#single-stream-decode-median-of-3-max_tokens-300)
+  - [TTFT](#ttft-341-token-prompt-8-token-output)
+  - [Concurrency scaling (width ladder)](#concurrency-scaling--escalating-ladder-v3-same-prompt-max_tokens-512-2-roundswidth)
+  - [KV-pressure probe](#v4-kv-pressure-probe--chasing-the-first-suspension-long-context-short-output)
+- [Layer 2 — agentic suite](#layer-2--agentic-suite-headless-claude-code-served-by-splashqwen)
+- [Re-running against a future Splash version](#re-running-against-a-future-splash-version)
+- [Re-run 2026-11-10s](#re-run-2026-11-10s--same-build-shape-reproduces-raw-benchsplash-concurrencyresultsrerun-2026-11-10s)
+- [Baseline headline](#baseline-headline-for-the-next-versions-diff)
+
 ## Layer 1 — engine probe (deterministic, run by the orchestrator, not the LLM)
 
 Method: direct `curl`/urllib to `/v1/chat/completions`, temperature 0, engine idle between

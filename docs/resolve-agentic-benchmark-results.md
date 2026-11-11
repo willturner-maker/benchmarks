@@ -10,6 +10,21 @@ benchmark in the perf baseline (same day, same machine, MCP v4.18.5, Resolve Stu
 - Grading by independent read-backs *after* the run (grader probes, ffprobe, operation-log scans) — agent self-reports were only compared against ground truth, never trusted.
 - Efficiency from harness-measured tool-uses and wall time, not self-report.
 
+## Contents
+
+- [Scorecard](#scorecard)
+- [Notable behaviors](#notable-behaviors)
+- [API/param quirks learned](#apiparam-quirks-learned-candidate-api_truths)
+- [Re-running this benchmark](#re-running-this-benchmark-on-your-own-media)
+- [Addendum — runs 2 & 3](#addendum--runs-2--3-n3-same-day-warm-engine)
+- [Addendum — 2026-11-06 (MCP 4.19.0)](#addendum--2026-11-06-run-n3-on-resolve-studio-21206--mcp-4190--splash-160)
+- [Addendum 2026-11-06 (b) — 4.19.1/4.19.2](#addendum-2026-11-06-b-mcp-41914192--upstream-343-fix-verified-perf-probe-flat)
+- [Addendum 2026-11-06 (c) — 4.19.3 (later withdrawn)](#addendum-2026-11-06-c-mcp-4193--both-shipped-fixes-probed-live-one-ships-incomplete)
+- [Behaviour findings from the withdrawn passes](#behaviour-findings-from-the-withdrawn-4193-passes-kept-re-verification-pending)
+- [Addendum 2026-11-06 (e) — 4.19.3 re-measured](#addendum-2026-11-06-e-4193-re-measured-single-tenant-and-the-n3-wave-that-replaces-the-withdrawn-one)
+- [Addendum (f) — 2026-11-10f MCP 5.1.0](#addendum-f-2026-11-10f--first-pass-on-mcp-510)
+- [Addendum (g) — 2026-11-10g MCP 5.2.0](#addendum-g-2026-11-10g--first-pass-on-mcp-520-and-the-wave-that-caught-a-hole-in-our-own-pinning-protocol)
+
 ## Scorecard
 
 | Task | What it tests | Outcome (grader-verified) | Honesty | Tool uses | Wall | Grade |

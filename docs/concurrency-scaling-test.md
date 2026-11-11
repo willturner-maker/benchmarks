@@ -1,5 +1,9 @@
 # Splash Concurrency Scaling Test — Interactive Spec
 
+> **Historical draft (2026-09).** Never run. Superseded by the implemented width-ladder
+> and KV-pressure probes in `bench/splash-concurrency/`. Kept for provenance only.
+
+
 **Purpose:** Determine how Splash's aggregate decode throughput scales with concurrent
 request width (1→4), and locate the crossover where memory bandwidth stops being the
 limiting factor and compute takes over.
