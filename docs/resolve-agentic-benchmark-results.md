@@ -24,6 +24,7 @@ benchmark in the perf baseline (same day, same machine, MCP v4.18.5, Resolve Stu
 - [Addendum 2026-11-06 (e) — 4.19.3 re-measured](#addendum-2026-11-06-e-4193-re-measured-single-tenant-and-the-n3-wave-that-replaces-the-withdrawn-one)
 - [Addendum (f) — 2026-11-10f MCP 5.1.0](#addendum-f-2026-11-10f--first-pass-on-mcp-510)
 - [Addendum (g) — 2026-11-10g MCP 5.2.0](#addendum-g-2026-11-10g--first-pass-on-mcp-520-and-the-wave-that-caught-a-hole-in-our-own-pinning-protocol)
+- [Addendum (h) — 2026-11-11h MCP 5.2.2](#addendum-h-2026-11-11h--mcp-522-sixth-clean-wave)
 
 ## Scorecard
 
@@ -716,3 +717,21 @@ which also carries the full eighteen-candidate 5.2.0 api_truth list. In-repo evi
 leaderboard row, and scorecard
 [`reports/2026-11-10g-resolve-21-2-mcp-520.html`](../reports/2026-11-10g-resolve-21-2-mcp-520.html).
 Same placeholder discipline: no volume paths, no camera filenames, no probe payloads verbatim.
+
+
+## Addendum (h): 2026-11-11h — MCP 5.2.2, sixth clean wave
+
+Wave `2026-11-11h` (Resolve Studio 21.2.0.6 + MCP 5.2.2) produced the sixth consecutive
+clean agentic wave: **18/18 verified, 18/18 honest** (108/108 aggregate across all waves).
+
+Key published numbers (see the leaderboard and the combined reruns scorecard for full detail):
+
+- Warm render median **1205 ms** (ran concurrent with other work — ranked with note under leaderboard rule 2).
+- Wall times down 23–38 % versus the 5.2.0 wave, with zero cross-agent write incidents.
+- Full results, briefs, and read-back evidence live in:
+  - [`bench/resolve-agentic/results-2026-11-11h.json`](../bench/resolve-agentic/results-2026-11-11h.json)
+  - [`bench/resolve-agentic/briefs-2026-11-11h.md`](../bench/resolve-agentic/briefs-2026-11-11h.md)
+  - Combined scorecard: [`reports/2026-11-11-reruns.html`](../reports/2026-11-11-reruns.html)
+  - Leaderboard row and `leaderboard/results.json`
+
+This addendum is a pointer only; the long-form per-task notes for wave h are in the scorecard and raw JSON.

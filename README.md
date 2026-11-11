@@ -18,6 +18,7 @@ unified memory, macOS 27.2.0.
 | Current standings, comparability rules, and score tables | [`docs/leaderboard.md`](docs/leaderboard.md) |
 | How to run a suite on your own machine / submit a row | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | Machine-readable results schema | [`docs/schema.md`](docs/schema.md) |
+| Community runs (class B / other hosts) | [`docs/leaderboard.md#community-runs--your-numbers`](docs/leaderboard.md#community-runs--your-numbers) |
 | Self-contained HTML scorecards (GitHub Pages) | [index.html](https://willturner-maker.github.io/benchmarks/) or the `reports/` directory |
 | Latest combined results | [2026-11-11 reruns](https://willturner-maker.github.io/benchmarks/reports/2026-11-11-reruns.html) |
 
