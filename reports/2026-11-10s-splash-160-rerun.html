@@ -1,0 +1,170 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Splash Rerun — Shape Holds</title>
+<style>
+  /* Design plan — benchmark scorecard, editorial-utilitarian, same family as the Resolve sheets.
+     Color: paper neutral biased to the scope-green accent.
+     Type: Archivo (display), Source Serif 4 (body), JetBrains Mono (data).
+     Layout: header band with width-tick motif -> headline tiles -> ladder diff -> KV diff ->
+             probe -> agentic 12/12 -> method/deviation cards -> footer. */
+  :root {
+    --bg: #F5F6F2; --panel: #FFFFFF; --ink: #1A1E24; --muted: #5B6470;
+    --line: #D9DDD4; --accent: #0E7A6C; --before: #8A93A0;
+    --good: #166534; --warn: #B45309;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171C; --panel: #1C2026; --ink: #E9EBE6; --muted: #99A2AD;
+      --line: #2B313A; --accent: #34B39A; --before: #5C6673;
+      --good: #5FBF7F; --warn: #D9963F;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14171C; --panel: #1C2026; --ink: #E9EBE6; --muted: #99A2AD;
+    --line: #2B313A; --accent: #34B39A; --before: #5C6673;
+    --good: #5FBF7F; --warn: #D9963F;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.55 "Source Serif 4", Georgia, serif;
+  }
+  .wrap {
+    max-width: 880px; margin: 0 auto;
+    padding-inline: max(16px, env(safe-area-inset-left, 0px));
+    padding-block: 28px 56px;
+  }
+  h1, h2, h3 { font-family: Archivo, "Helvetica Neue", sans-serif; text-wrap: balance; margin: 0 }
+  h1 { font-size: clamp(26px, 5vw, 40px); font-weight: 800; letter-spacing: -0.015em; line-height: 1.1 }
+  h2 { font-size: 19px; font-weight: 700; margin: 34px 0 10px; letter-spacing: -0.01em }
+  h3 { font-size: 15px; font-weight: 700; margin: 0 0 4px }
+  .band { border-left: 3px solid var(--accent); padding-left: 14px; margin-bottom: 6px }
+  .sub { color: var(--muted); font-size: 14.5px; margin: 6px 0 2px }
+  .ticks { display: flex; gap: 3px; margin: 14px 0 20px }
+  .ticks i { flex: 1; height: 7px; background: var(--line); border-radius: 1px }
+  .ticks i.on { background: var(--accent) }
+  .ticks i.dip { background: var(--warn) }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px }
+  .tile { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px }
+  .tile .k { font: 700 12px/1.3 Archivo, sans-serif; text-transform: uppercase; letter-spacing: .07em; color: var(--muted) }
+  .tile .v { font: 800 27px/1.15 Archivo, sans-serif; margin-top: 4px }
+  .tile .v small { font-size: 15px; font-weight: 600; color: var(--muted) }
+  .tile .note { font-size: 12.5px; color: var(--muted); margin-top: 5px }
+  table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line);
+          border-radius: 10px; overflow: hidden; font-size: 14px; table-layout: fixed }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left;
+           overflow-wrap: anywhere; vertical-align: top }
+  th { font: 700 12px/1.3 Archivo, sans-serif; text-transform: uppercase; letter-spacing: .05em; color: var(--muted) }
+  tr:last-child td { border-bottom: 0 }
+  td.n, th.n { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; text-align: right }
+  .good { color: var(--good); font-weight: 600 }
+  .warn { color: var(--warn); font-weight: 600 }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 12px }
+  .card { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--accent);
+          border-radius: 8px; padding: 12px 14px; font-size: 13.5px }
+  .card code { font: 12px/1.4 "JetBrains Mono", ui-monospace, monospace; background: color-mix(in srgb, var(--line) 45%, transparent);
+               padding: 0 4px; border-radius: 4px; overflow-wrap: anywhere }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; overflow-wrap: anywhere }
+  .foot { margin-top: 36px; color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 12px }
+  ul { margin: 6px 0; padding-left: 20px }
+  li { margin: 3px 0 }
+</style>
+
+<div class="wrap">
+  <div class="band">
+    <h1>Splash 1.6.0, again — the shape holds</h1>
+    <div class="sub">Wave <b>2026-11-10s</b> · same engine build as the 2026-11-06 baseline (a re-measure, not an
+      upgrade) · Qwen3.8-Flash-Next IQ3_S, 262k ctx, int8 KV · host: M5 Ultra 64-core, 96 GiB, ~95 % idle ·
+      engine never restarted; combined entry point <span class="mono">ladder_kv.py</span> ran end to end for the first time</div>
+  </div>
+  <div class="ticks"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="dip"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+
+  <div class="tiles">
+    <div class="tile"><div class="k">Width plateau (8→32)</div><div class="v">366–369 <small>tok/s · 2.4× w1</small></div>
+      <div class="note">every median ~2 % under baseline, every shape feature reproduced</div></div>
+    <div class="tile"><div class="k">Suspensions at 4.4× KV</div><div class="v good">0</div>
+      <div class="note">611,244 prompt tokens again; lifetime counters unmoved every round</div></div>
+    <div class="tile"><div class="k">Agentic verified</div><div class="v good">12 / 12</div>
+      <div class="note">baseline’s single arithmetic miss did not reproduce</div></div>
+    <div class="tile"><div class="k">Honest</div><div class="v good">12 / 12</div>
+      <div class="note">S1 live counters tie to grader snapshots; no invented inputs</div></div>
+  </div>
+
+  <h2>Width ladder (v3) — baseline vs rerun, median aggregate tok/s</h2>
+  <table>
+    <tr><th class="n">Width</th><th class="n">2026-11-06</th><th class="n">2026-11-10s</th><th class="n">Δ</th><th>Shape feature</th></tr>
+    <tr><td class="n">1</td><td class="n">147.6</td><td class="n">151.45</td><td class="n">+2.6 %</td><td>warming trend identical (132→170 this pass)</td></tr>
+    <tr><td class="n">2</td><td class="n">259.1</td><td class="n">250.7</td><td class="n">−3.2 %</td><td>—</td></tr>
+    <tr><td class="n">3</td><td class="n">306.1</td><td class="n">290.9</td><td class="n">−5.0 %</td><td>—</td></tr>
+    <tr><td class="n">4</td><td class="n">377.7</td><td class="n"><b>369.7</b></td><td class="n">−2.1 %</td><td><b>peak at 4 — reproduced</b></td></tr>
+    <tr><td class="n">6</td><td class="n">330.4</td><td class="n"><span class="warn">322.35</span></td><td class="n">−2.4 %</td><td><b>dip = 0.87× peak — reproduced (baseline 0.875×)</b></td></tr>
+    <tr><td class="n">8</td><td class="n">373.9</td><td class="n">368.65</td><td class="n">−1.4 %</td><td>recovery — reproduced</td></tr>
+    <tr><td class="n">12</td><td class="n">375.7</td><td class="n">367.65</td><td class="n">−2.1 %</td><td rowspan="4">flat plateau to 32; <b>stop rule never fired</b> — no collapse by 32, both waves</td></tr>
+    <tr><td class="n">16</td><td class="n">371.9</td><td class="n">369.05</td><td class="n">−0.8 %</td></tr>
+    <tr><td class="n">24</td><td class="n">382.9</td><td class="n">368.8</td><td class="n">−3.7 %</td></tr>
+    <tr><td class="n">32</td><td class="n">371.7</td><td class="n">365.45</td><td class="n">−1.7 %</td></tr>
+  </table>
+  <p>Admission pacing identical: peak <code>waiting</code> 0/0/0/0/2/4/8/12/12/12,
+  <code>suspended</code> zero everywhere. The uniform ~2 % offset bounds run-to-run spread for
+  future version diffs — one engine instance each wave, engine-side, so read it as a spread band,
+  not a regression.</p>
+
+  <h2>KV-pressure (v4) — headline reproduces, memory path ran quieter</h2>
+  <table>
+    <tr><th class="n">Width</th><th class="n">Tokens</th><th class="n">Wall s</th><th class="n">Suspensions Δ</th><th class="n">Disk demotions Δ</th><th>Notes</th></tr>
+    <tr><td class="n">2</td><td class="n">93,394</td><td class="n">26.1</td><td class="n">0</td><td class="n">0</td><td rowspan="6">prefill serialization linear again: 611k tokens ÷ 171.1 s = 3.57 k tok/s, same as baseline. <code>pages_active</code> peaked at 1,593 pages (~51 k tokens). Governor headroom grazed <b>26.5 MB</b> at w10–12 with zero denials.</td></tr>
+    <tr><td class="n">4</td><td class="n">186,788</td><td class="n">52.2</td><td class="n">0</td><td class="n">0</td></tr>
+    <tr><td class="n">6</td><td class="n">280,182</td><td class="n">78.0</td><td class="n">0</td><td class="n">0</td></tr>
+    <tr><td class="n">8</td><td class="n">373,576</td><td class="n">104.2</td><td class="n">0</td><td class="n">0 <span class="d" style="color:var(--muted)">baseline +308</span></td></tr>
+    <tr><td class="n">10</td><td class="n">509,370</td><td class="n">142.3</td><td class="n">0</td><td class="n">0 <span style="color:var(--muted)">baseline +645</span></td></tr>
+    <tr><td class="n">12</td><td class="n"><b>611,244</b> (4.4× budget)</td><td class="n">171.1</td><td class="n">0</td><td class="n">0 <span style="color:var(--muted)">baseline +97</span></td></tr>
+  </table>
+  <p>No <code>waiting_memory</code> hold at all (baseline had its single one at w12), and no width-6
+  ring touch. The no-suspension conclusion stands; the spill/demote/pacing side-signals turn out to be
+  <b>instance-history dependent</b> — this engine had ~2.5 h of uptime and a zero <code>hot_kv</code>
+  account vs the baseline instance’s day-plus of production traffic.</p>
+
+  <h2>Engine probe (run standalone after the stages — deviation, see below)</h2>
+  <table>
+    <tr><th>Metric</th><th class="n">2026-11-06</th><th class="n">2026-11-10s</th><th>Read</th></tr>
+    <tr><td>decode w1, 3 passes</td><td class="n">105 → 133 → 165</td><td class="n">111 → 128 → 136</td><td>same warming shape; median 128 vs 133</td></tr>
+    <tr><td>TTFT warm / cold</td><td class="n">201 / 380 ms</td><td class="n">174 / 430 ms</td><td>inside single-sample spread; warm better, cold worse</td></tr>
+  </table>
+
+  <h2>Agentic suite (4 tasks × 3 fresh headless sessions)</h2>
+  <table>
+    <tr><th>Task</th><th>r1 / r2 / r3</th><th>Verified</th><th>Grading notes</th></tr>
+    <tr><td>S1 status-read</td><td class="n">2 t·9.0 s / 2 t·6.9 s / 2 t·5.3 s</td><td><span class="good">3/3</span></td><td>constants exact; live counters monotonic and tie to grader snapshots (hits 1016→1025→1036, grader-after 1077)</td></tr>
+    <tr><td>S2 arithmetic</td><td class="n">2 t·10.4 s / 3 t·25.0 s / 2 t·7.5 s</td><td><span class="good">3/3</span></td><td>15.02 / 15.00 / 14.98 — all recompute exactly from each trial’s own echoed counters; the baseline miss did not reproduce</td></tr>
+    <tr><td>S3 file artifact</td><td class="n">3 t·8.1 s / 3 t·7.2 s / 3 t·7.4 s</td><td><span class="good">3/3</span></td><td>surviving <code>out.json</code> exact six-key shape, <code>derived == queued + decoding</code>; committed as evidence</td></tr>
+    <tr><td>S4 diagnosis</td><td class="n">2 t·6.2 s / 2 t·8.4 s / 2 t·4.3 s</td><td><span class="good">3/3</span></td><td>bottleneck + <code>admission.waiting_memory</code> + sound remediation, citing fixture internals each time</td></tr>
+    <tr><td><b>Aggregate</b></td><td colspan="3"><b>12/12 verified · 12/12 honest</b> · turns 2–3 · wall 4.3–25.0 s · prefix-cache reuse 20–46 k tokens per fresh session</td></tr>
+  </table>
+
+  <h2>Method & deviations</h2>
+  <div class="cards">
+    <div class="card"><h3>Probe stage crashed, then re-ran</h3>
+      The committed <code>engine_probe.py</code> appends to a hardcoded <code>/tmp</code> dir that had been
+      cleaned, and never mkdirs — FileNotFoundError on its first emit. Re-ran standalone <b>after</b> the
+      ladder/KV/agentic stages with the engine idle; probe numbers are post-suite, not interleaved.
+      (The chain log also misreported the exit code: <code>$(date)</code> before <code>rc=$?</code> in zsh.)</div>
+    <div class="card"><h3>Combined entry point, first full run</h3>
+      The baseline tables came from the per-method originals; this is the first end-to-end
+      <code>ladder_kv.py</code> pass. Its KV stage reports gauge peaks in <b>raw pages</b> (×32 = tokens)
+      where the baseline table printed tokens — cross-compare at the ×32 factor.</div>
+    <div class="card"><h3>Conditions identical to baseline rows</h3>
+      Engine 1.6.0, same args (56 GiB working set / 128 GiB SSD cap / persistent cache), started 16:21
+      local, cache warm (hit_rate 0.9920 at suite start), never restarted. Operator session live through
+      the whole suite. Agentic driver used the run-2 conditions: <code>--strict-mcp-config</code>,
+      per-task dirs, curl-only/Read-only allowlists, fixture seeded into S4 by the operator.</div>
+  </div>
+
+  <div class="foot">Raw data: <span class="mono">bench/2026-11-06/results/rerun-2026-11-10s/</span>
+  (engine_probe.jsonl · ladder_kv.jsonl · driver2_summary.jsonl · s3_out.json) ·
+  docs: <span class="mono">docs/splash-engine-benchmark-results.md</span> re-run section ·
+  leaderboard row <span class="mono">2026-11-10s</span> in <span class="mono">leaderboard/results.json</span> ·
+  rerun yourself: <span class="mono">python3 -I bench/2026-11-06/ladder_kv.py --out &lt;jsonl&gt;</span>,
+  then <span class="mono">engine_probe.py</span> + <span class="mono">driver2.py</span>.</div>
+</div>

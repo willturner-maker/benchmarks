@@ -73,11 +73,20 @@ consecutive clean 18/18 wave (four waves, 72/72 verified + honest aggregate).
 
 | Date | Engine | Model | TTFT warm | TTFT cold | decode w1 | decode plateau | suspensions at 4.4× KV | agentic | honest |
 |---|---|---|---|---|---|---|---|---|---|
-| 2026-11-06 | Splash 1.6.0 | Qwen3.8-Flash-Next IQ3_S (262k ctx) | 201 ms | 380 ms | 170 tok/s | **372–383 tok/s**, widths 4→32 (2.5–2.6×) | **0** | 11/12 | 12/12 |
+| 2026-11-06 | Splash 1.6.0 | Qwen3.8-Flash-Next IQ3_S (262k ctx) | 201 ms | 380 ms | 170 tok/s¹ | **372–383 tok/s**, widths 4→32 (2.5–2.6×) | **0** | 11/12 | 12/12 |
+| **2026-11-10s** | Splash 1.6.0 (same build) | same | 174 ms | 430 ms | 128 tok/s¹ | **366–369 tok/s**, widths 8→32 (2.4×)² | **0** | **12/12** | 12/12 |
+
+¹ decode w1 is warmth-sensitive — the probe's own three passes trend (105→133→165 baseline,
+111→128→136 rerun); the column is the warmed value on the baseline row, the median on the rerun row.
+² The rerun rides ~2 % under the baseline plateau at every width — same shape, same dip at 6
+(0.87× the width-4 peak both waves), same admission counts. Not a regression claim on one
+engine instance; it bounds run-to-run spread for future diffs.
 
 Rerun in one pass: `python3 -I bench/2026-11-06/ladder_kv.py` (width ladder + KV-pressure
 probe, one combined summary). The plateau is a wall, not a cliff; the KV probe's negative
-result (no suspension at 611,244 prompt tokens) is a finding, not a missing number.
+result (no suspension at 611,244 prompt tokens) is a finding, not a missing number — and it
+reproduced, with a quieter memory path on the rerun (no disk demotions, no `waiting_memory`
+hold where the baseline had one; governor headroom still grazed 26 MB at width 12).
 
 ## Community runs — your numbers
 

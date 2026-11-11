@@ -186,6 +186,56 @@ no-suspension baseline** (611k tokens ≈ 4.4× budget with zero suspensions; fi
 signal); and the 12-trial agentic table. Do **not** restart the engine mid-suite; note
 cache state in the results header.
 
+## Re-run 2026-11-10s — same build, shape reproduces (raw: `bench/2026-11-06/results/rerun-2026-11-10s/`)
+
+Conditions: Splash **1.6.0 again** (not an upgrade — this pass measures run-to-run reproducibility),
+engine instance started 16:21 local the same day, cache warm (hit_rate 0.9920 at suite start),
+never restarted; host ~95 % idle; operator session live through the suite (identical tenant
+condition to the baseline). Combined entry point `ladder_kv.py` ran end to end for the first
+time; the probe and agentic stages ran around it (deviations below).
+
+**Layer 1 probe:** decode w1 passes 111.4 → 128.0 → 135.9 tok/s (median 128.0; baseline 105→133→165 —
+same warming shape, slightly cooler instance). TTFT **174 ms warm / 430 ms cold** (baseline 201/380 —
+both inside single-sample spread).
+
+**Width ladder (v3):** medians 151.45 / 250.7 / 290.9 / **369.7** / 322.35 / 368.65 / 367.65 / 369.05 /
+368.8 / 365.45 at widths 1/2/3/4/6/8/12/16/24/32. **The shape reproduces exactly**: peak at width 4,
+dip at 6 = 0.87× the peak (baseline 0.875× — the anomaly is real and stable), flat plateau from 8 to
+32, stop rule never fired. Every median sits **~2 % below the baseline** at every width — read that as
+run-to-run spread bounding future diffs, not a regression claim (one instance, engine-side; the ladder
+never touches code paths that changed because none changed). Admission pacing identical:
+peak waiting 0/0/0/0/2/4/8/12/12/12, `suspended` 0 throughout.
+
+**KV pressure (v4):** headline **reproduces — no suspension at 611,244 tokens (4.4× the 139,264-token
+budget)**, lifetime counters unmoved (delta 0 every round), prefill serialization linear again
+(171.1 s at w12 ≈ 3.57 k tok/s, same as baseline's 170.9 s). The **secondary memory-path signals did
+not reproduce**: disk `kv_demotions` delta 0 at every round (baseline +308/+645/+97 at w8/10/12), no
+`waiting_memory` hold (baseline had its single one at w12), `kv.pages_active` peaked at 1,593 pages
+(~51 k tokens) without the baseline's width-6 ring touch. The instance difference is the obvious
+candidate — this engine had ~2.5 h of history and a zero `hot_kv` account vs the baseline instance's
+day-plus of production traffic. The governor still grazed hard: headroom 26.5 MB at w10–12, zero
+denials. Conclusion stands unchanged: suspension is a held-context mechanism, and how much of the
+spill/demote machinery engages depends on instance cache history.
+
+**Agentic suite (4×3, run-2 conditions):** **12/12 verified, 12/12 honest** — the baseline's only miss
+(S2 computing 20.13 from its own inputs that recomputed to 20.11) did **not** reproduce: all three
+S2 percentages recompute exactly (15.02 / 15.00 / 14.98). S1 constants exact ×3 with live counters
+tying to grader snapshots (hits 1016→1025→1036, grader-after 1077; cold_misses 12/12→13); S3's
+surviving `out.json` is the six-key exact shape with `derived == queued + decoding` (committed as
+`s3_out.json`); S4 rubric 3/3, every trial citing the fixture's own evidence chain. Turns 2–3,
+wall 4.3–25.0 s; prefix-cache reuse 20–46 k tokens per fresh session, as before.
+
+**Deviations:** (1) the committed `engine_probe.py` crashed on the chained first attempt — its hardcoded
+`/tmp` output dir had been cleaned and the provenance script never mkdirs; re-ran standalone **after**
+the other stages with the engine idle, so probe numbers are post-suite, not interleaved. (2) The
+combined `ladder_kv.py` KV stage reports gauge peaks in raw pages (×32 = tokens) where the baseline
+table printed tokens — cross-compare at the ×32 factor. (3) S4's fixture dir is seeded by the operator
+before the driver stage (same as baseline).
+
+**Revised headline for the next version's diff:** the plateau shape (peak 4, dip 0.87× at 6, flat to
+32, no collapse) and the no-suspension KV result are now **established as reproducible**, with a
+~2 % run-to-run band on throughput medians and instance-dependent behavior in the spill/demote paths.
+
 ## Baseline headline (for the next version's diff)
 
 Splash 1.6.0 @ M5 Ultra, warm: **TTFT 201 ms warm / 380 ms cold** (341-token prompt) ·

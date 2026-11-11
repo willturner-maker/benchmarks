@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-06",
+  "updated": "2026-11-10",
   "read_this_first": [
     "Rows are only comparable within the same media_class and the same tenant conditions.",
     "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
@@ -248,6 +248,39 @@
           "reports/2026-11-06-splash-engine.html",
           "docs/splash-engine-benchmark-results.md",
           "bench/2026-11-06/results/"
+        ]
+      },
+      {
+        "date": "2026-11-10s",
+        "engine": "Splash 1.6.0 (same build as baseline — re-measure, not an upgrade)",
+        "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+        "context_tokens": 262144,
+        "ttft_warm_ms": 174,
+        "ttft_cold_ms": 430,
+        "decode_w1_tok_s": 128,
+        "decode_w1_passes_tok_s": [111.4, 128.0, 135.9],
+        "decode_plateau_tok_s": [365.5, 369.7],
+        "plateau_widths": "8-32 median band 365.5-369.7 (2.4x w1=151.5); peak at width 4 (369.7); reproducible dip at 6 (322.4 = 0.87x peak)",
+        "kv_capacity_tokens": 139264,
+        "kv_pressure_probe": "no suspension at 611,244 prompt tokens (4.4x resident KV), lifetime suspension counters unmoved (delta 0 every round); quieter memory path than baseline: disk kv_demotions delta 0 at every round (baseline +308/+645/+97 at w8/10/12), no waiting_memory hold (baseline had one at w12); governor headroom grazed 26.5 MB at w10-12 with zero denials; pages_active peak 1593 pages (~51k tokens)",
+        "agentic": {
+          "n_runs": 3,
+          "tasks": 4,
+          "outcomes_verified": 12,
+          "honest": 12,
+          "note": "the baseline's only miss (S2 arithmetic rounding) did not reproduce: all three S2 percentages recompute exactly from their own echoed counters (15.02 / 15.00 / 14.98)"
+        },
+        "tenant_conditions": "single-tenant apart from the operator session (identical condition to baseline rows); engine 1.6.0 started 16:21 local, cache warm (hit_rate 0.9920), never restarted mid-suite; host ~95% idle",
+        "deviations": [
+          "engine_probe.py crashed on the first chain attempt (its hardcoded /tmp output dir had been cleaned; the provenance script never mkdirs) and was re-run standalone AFTER the ladder/KV/agentic stages with the engine idle - probe numbers are post-suite, not interleaved",
+          "first full end-to-end run of the combined ladder_kv.py entry point (the baseline's tables came from the per-method originals); its KV stage reports gauge peaks in raw pages (x32 tokens) where the baseline table printed tokens",
+          "operator session (this conversation) ran live through the whole suite, same as every prior row; the agentic driver used the same run-2 conditions (strict-mcp-config, per-task dirs, fixture seeded into S4 by the operator before the stage)"
+        ],
+        "rerun": "python3 -I bench/2026-11-06/ladder_kv.py --out <jsonl>   # then engine_probe.py + driver2.py",
+        "evidence": [
+          "reports/2026-11-10s-splash-160-rerun.html",
+          "docs/splash-engine-benchmark-results.md (re-run section)",
+          "bench/2026-11-06/results/rerun-2026-11-10s/"
         ]
       }
     ],
