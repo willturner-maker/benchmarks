@@ -16,7 +16,7 @@ body:
         python3 -I bench/resolve-agentic/check_media.py yourclip.mov
         ```
         Procedure: [`bench/resolve-agentic/RUNBOOK.md`](https://github.com/willturner-maker/benchmarks/blob/main/bench/resolve-agentic/RUNBOOK.md)
-        · Engine rerun: `python3 -I bench/2026-11-06/ladder_kv.py --out my-run.jsonl`
+        · Engine rerun: `python3 -I bench/splash-concurrency/ladder_kv.py --out my-run.jsonl`
 
   - type: input
     id: run_date

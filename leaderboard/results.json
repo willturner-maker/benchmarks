@@ -417,11 +417,11 @@
           "outcomes_verified": 11,
           "honest": 12
         },
-        "rerun": "python3 -I bench/2026-11-06/ladder_kv.py   # width ladder (v3) + KV pressure (v4) in one pass",
+        "rerun": "python3 -I bench/splash-concurrency/ladder_kv.py   # width ladder (v3) + KV pressure (v4) in one pass",
         "evidence": [
           "reports/2026-11-06-splash-engine.html",
           "docs/splash-engine-benchmark-results.md",
-          "bench/2026-11-06/results/"
+          "bench/splash-concurrency/results/"
         ]
       },
       {
@@ -457,11 +457,11 @@
           "first full end-to-end run of the combined ladder_kv.py entry point (the baseline's tables came from the per-method originals); its KV stage reports gauge peaks in raw pages (x32 tokens) where the baseline table printed tokens",
           "operator session (this conversation) ran live through the whole suite, same as every prior row; the agentic driver used the same run-2 conditions (strict-mcp-config, per-task dirs, fixture seeded into S4 by the operator before the stage)"
         ],
-        "rerun": "python3 -I bench/2026-11-06/ladder_kv.py --out <jsonl>   # then engine_probe.py + driver2.py",
+        "rerun": "python3 -I bench/splash-concurrency/ladder_kv.py --out <jsonl>   # then engine_probe.py + driver2.py",
         "evidence": [
           "reports/2026-11-10s-splash-160-rerun.html",
           "docs/splash-engine-benchmark-results.md (re-run section)",
-          "bench/2026-11-06/results/rerun-2026-11-10s/"
+          "bench/splash-concurrency/results/rerun-2026-11-10s/"
         ]
       }
     ],

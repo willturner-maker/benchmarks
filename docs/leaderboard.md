@@ -103,7 +103,7 @@ route. See [the results file](../bench/resolve-agentic/results-2026-11-10g.json)
 (0.87× the width-4 peak both waves), same admission counts. Not a regression claim on one
 engine instance; it bounds run-to-run spread for future diffs.
 
-Rerun in one pass: `python3 -I bench/2026-11-06/ladder_kv.py` (width ladder + KV-pressure
+Rerun in one pass: `python3 -I bench/splash-concurrency/ladder_kv.py` (width ladder + KV-pressure
 probe, one combined summary). The plateau is a wall, not a cliff; the KV probe's negative
 result (no suspension at 611,244 prompt tokens) is a finding, not a missing number — and it
 reproduced, with a quieter memory path on the rerun (no disk demotions, no `waiting_memory`
@@ -124,7 +124,7 @@ stack versions, n, and whether runs were single-tenant.
    → it prints your **class** and derives the frame numbers.
 2. Run the suite: [`bench/resolve-agentic/RUNBOOK.md`](../bench/resolve-agentic/RUNBOOK.md)
    (fixture setup → seal the conditions → six briefs in `tasks.md` → grade from read-backs).
-3. For the engine suite: `python3 -I bench/2026-11-06/ladder_kv.py --out my-run.jsonl`.
+3. For the engine suite: `python3 -I bench/splash-concurrency/ladder_kv.py --out my-run.jsonl`.
 4. Submit it through the
    **[Leaderboard row issue form](https://github.com/willturner-maker/benchmarks/issues/new?labels=leaderboard&template=leaderboard-row.yml)**
    — it asks for exactly what `suites.community_runs` needs (date, host, exact builds,

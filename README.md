@@ -12,7 +12,7 @@ macOS 27.2.0.
 
 | Suite | Doc | Scripts / raw data | Baseline headline |
 |---|---|---|---|
-| Splash engine + Qwen | [`docs/splash-engine-benchmark-results.md`](docs/splash-engine-benchmark-results.md) | `bench/2026-11-06/` | Splash 1.6.0 warm: TTFT 201 ms / 380 ms cold; width ladder plateaus 372–383 tok/s (2.5–2.6× w1) from width 4 through 32, no collapse; KV-pressure probe never suspends, even at 4.4× the KV budget; agentic suite 11/12 verified, 12/12 honest. **Re-run 2026-11-10s (same build):** every shape feature reproduced — peak at 4, dip 0.87× at 6, flat plateau ~2 % lower (366–369), zero suspensions again, agentic now 12/12 |
+| Splash engine + Qwen | [`docs/splash-engine-benchmark-results.md`](docs/splash-engine-benchmark-results.md) | `bench/splash-concurrency/` | Splash 1.6.0 warm: TTFT 201 ms / 380 ms cold; width ladder plateaus 372–383 tok/s (2.5–2.6× w1) from width 4 through 32, no collapse; KV-pressure probe never suspends, even at 4.4× the KV budget; agentic suite 11/12 verified, 12/12 honest. **Re-run 2026-11-10s (same build):** every shape feature reproduced — peak at 4, dip 0.87× at 6, flat plateau ~2 % lower (366–369), zero suspensions again, agentic now 12/12 |
 | DaVinci Resolve MCP | [`docs/resolve-agentic-benchmark-results.md`](docs/resolve-agentic-benchmark-results.md) | **[`bench/resolve-agentic/`](bench/resolve-agentic/)** — briefs, runbook, and `check_media.py` so you can run it on **your own footage** | latest standing row: 21.2.0.6 + MCP 5.2.0 (2026-11-10g), warm render 1296 ms single-tenant (inside host spread), cold 1700 ms; 18/18 verified, 18/18 honest across n=3 — **fifth consecutive clean wave, 90/90 aggregate**; headline catch: `append_to_timeline` is not pin-able and follows the current timeline — two agents caught, reversed, and disclosed real cross-writes it caused |
 | Concurrency spec (draft, 2026-09) | [`docs/concurrency-scaling-test.md`](docs/concurrency-scaling-test.md) | — | the never-run design the Splash ladder later implemented |
 
@@ -46,7 +46,7 @@ served by a browser, or just `open reports/<name>.html` after a clone.
 - `docs/` — the results write-ups; each carries its own re-run recipe.
 - `bench/<suite-date>/` — runnable scripts + raw JSONL for that run, so future reruns
   compare against committed raw data, not summaries. Splash reruns go through the single
-  entry point `bench/2026-11-06/ladder_kv.py` (width ladder + KV-pressure probe in one run,
+  entry point `bench/splash-concurrency/ladder_kv.py` (width ladder + KV-pressure probe in one run,
   one combined summary).
 
 - `bench/resolve-agentic/` — the Resolve suite is **not** tied to my media: `MEDIA.md` is

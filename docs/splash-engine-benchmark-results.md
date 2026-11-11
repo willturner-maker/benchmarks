@@ -41,7 +41,7 @@ Spec evolved twice this session: fixed 1/2/4 → escalate-and-stop-at-first-drop
 of the width-1 baseline** (v3, the standing spec — user call: width 6 looked practical,
 measure the real impact). `decode_batches_by_width` plus **peak `admission.waiting` /
 `queued` / `suspended`, sampled every 0.8 s during each round**. Script:
-`bench/2026-11-06/width_ladder.py`.
+`bench/splash-concurrency/width_ladder.py`.
 
 | width | aggregate tok/s (median) | per-stream tok/s | vs w1 baseline (147.6) | peak admission.waiting |
 |---|---|---|---|---|
@@ -85,7 +85,7 @@ than the 20k calibration target, which only strengthened the test: reported toke
 are measured from `usage.prompt_tokens`), `max_tokens` 8, widths 2→12; sampler every 0.5 s
 over admission/KV/spill/governor gauges plus **lifetime `resource_suspensions` /
 `priority_suspensions` counter deltas** (catches a suspension that opens and closes
-between samples). Script: `bench/2026-11-06/kv_pressure_v4.py`.
+between samples). Script: `bench/splash-concurrency/kv_pressure_v4.py`.
 
 | width | unique tokens total | wall (s) | peak waiting / waiting_memory | kv.pages_active peak (tokens) | disk kv_demotions Δ |
 |---|---|---|---|---|---|
@@ -170,7 +170,7 @@ refusal-to-fabricate check stays part of the suite.
 
 ## Re-running against a future Splash version
 
-Scripts committed under `bench/2026-11-06/`. The **combined entry point is
+Scripts committed under `bench/splash-concurrency/`. The **combined entry point is
 `ladder_kv.py`** — one run performs BOTH the v3 width ladder and the v4 KV-pressure
 probe and prints one combined SUMMARY, so every future report carries both methods;
 `--out` picks the JSONL, `--quick` is a harness smoke test, not for baselining. The
@@ -186,7 +186,7 @@ no-suspension baseline** (611k tokens ≈ 4.4× budget with zero suspensions; fi
 signal); and the 12-trial agentic table. Do **not** restart the engine mid-suite; note
 cache state in the results header.
 
-## Re-run 2026-11-10s — same build, shape reproduces (raw: `bench/2026-11-06/results/rerun-2026-11-10s/`)
+## Re-run 2026-11-10s — same build, shape reproduces (raw: `bench/splash-concurrency/results/rerun-2026-11-10s/`)
 
 Conditions: Splash **1.6.0 again** (not an upgrade — this pass measures run-to-run reproducibility),
 engine instance started 16:21 local the same day, cache warm (hit_rate 0.9920 at suite start),
