@@ -67,6 +67,10 @@
   .card code { font: 12px/1.4 "JetBrains Mono", ui-monospace, monospace; background: color-mix(in srgb, var(--line) 45%, transparent);
                padding: 0 4px; border-radius: 4px; overflow-wrap: anywhere }
   .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; overflow-wrap: anywhere }
+  figure { margin: 18px 0 }
+  .chart-scroll { overflow-x: auto }
+  figcaption { color: var(--muted); font-size: 12.5px; margin-top: 8px }
+  svg text { font-family: "JetBrains Mono", ui-monospace, monospace }
   .foot { margin-top: 36px; color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 12px }
   ul { margin: 6px 0; padding-left: 20px }
   li { margin: 3px 0 }
@@ -106,6 +110,39 @@
     <tr><td class="n">24</td><td class="n">382.9</td><td class="n">368.8</td><td class="n">−3.7 %</td></tr>
     <tr><td class="n">32</td><td class="n">371.7</td><td class="n">365.45</td><td class="n">−1.7 %</td></tr>
   </table>
+  <figure>
+    <div class="chart-scroll">
+      <svg viewBox="0 0 660 300" width="100%" role="img" aria-label="Rerun ladder: aggregate and per-stream decode throughput across widths 1 to 32 — peak at 4, dip at 6, flat plateau to 32, no collapse">
+        <!-- scale: x=200 start, 0.8 px per tok/s; grid at 100/200/300/400 -->
+        <g stroke="var(--line)" stroke-width="1">
+          <line x1="200" y1="6" x2="200" y2="200"/><line x1="280" y1="6" x2="280" y2="200"/>
+          <line x1="360" y1="6" x2="360" y2="200"/><line x1="440" y1="6" x2="440" y2="200"/><line x1="520" y1="6" x2="520" y2="200"/>
+        </g>
+        <g font-size="10" fill="var(--muted)">
+          <text x="200" y="214" text-anchor="middle">0</text><text x="280" y="214" text-anchor="middle">100</text>
+          <text x="360" y="214" text-anchor="middle">200</text><text x="440" y="214" text-anchor="middle">300</text>
+          <text x="520" y="214" text-anchor="middle">400 tok/s</text>
+        </g>
+        <g font-size="10.5">
+          <text x="0" y="21">1</text><rect x="200" y="10" width="121" height="12" fill="var(--accent)"/><text x="327" y="20" font-size="9.5">151.4</text><rect x="200" y="23" width="121" height="4" fill="var(--before)"/>
+          <text x="0" y="40">2</text><rect x="200" y="29" width="201" height="12" fill="var(--accent)"/><text x="407" y="39" font-size="9.5">250.7</text><rect x="200" y="42" width="100" height="4" fill="var(--before)"/>
+          <text x="0" y="59">3</text><rect x="200" y="48" width="233" height="12" fill="var(--accent)"/><text x="439" y="58" font-size="9.5">290.9</text><rect x="200" y="61" width="78" height="4" fill="var(--before)"/>
+          <text x="0" y="78">4</text><rect x="200" y="67" width="296" height="12" fill="var(--accent)"/><text x="502" y="77" font-size="9.5">369.7 ← peak</text><rect x="200" y="80" width="74" height="4" fill="var(--before)"/>
+          <text x="0" y="97">6</text><rect x="200" y="86" width="258" height="12" fill="var(--accent)" opacity="0.55"/><text x="464" y="96" font-size="9.5">322.4 dip 0.87×</text><rect x="200" y="99" width="43" height="4" fill="var(--before)"/>
+          <text x="0" y="116">8</text><rect x="200" y="105" width="295" height="12" fill="var(--accent)"/><text x="501" y="115" font-size="9.5">368.7</text><rect x="200" y="118" width="37" height="4" fill="var(--before)"/>
+          <text x="0" y="135">12</text><rect x="200" y="124" width="294" height="12" fill="var(--accent)"/><text x="500" y="134" font-size="9.5">367.7</text><rect x="200" y="137" width="24" height="4" fill="var(--before)"/>
+          <text x="0" y="154">16</text><rect x="200" y="143" width="295" height="12" fill="var(--accent)"/><text x="501" y="153" font-size="9.5">369.1</text><rect x="200" y="156" width="18" height="4" fill="var(--before)"/>
+          <text x="0" y="173">24</text><rect x="200" y="162" width="295" height="12" fill="var(--accent)"/><text x="501" y="172" font-size="9.5">368.8</text><rect x="200" y="175" width="12" height="4" fill="var(--before)"/>
+          <text x="0" y="192">32</text><rect x="200" y="181" width="292" height="12" fill="var(--accent)"/><text x="498" y="191" font-size="9.5">365.5</text><rect x="200" y="194" width="9" height="4" fill="var(--before)"/>
+        </g>
+        <text x="0" y="236" font-size="10.5" fill="var(--muted)">thin bars = per-stream tok/s: 151.4 → 125.4 → 97.0 → 92.4 → 53.7 → 46.1 → 30.6 → 23.1 → 15.4 → 11.4</text>
+        <text x="0" y="252" font-size="10.5" fill="var(--muted)">Every shape feature of the 2026-11-06 baseline reproduced: peak at 4, dip 0.87× at 6, recovery at 8, flat to 32.</text>
+        <text x="0" y="268" font-size="10.5" fill="var(--muted)">Medians sit ~2 % under baseline across the plateau — the run-to-run spread band, not a regression.</text>
+        <text x="0" y="284" font-size="10.5" fill="var(--muted)">Stop rule never fired: the tightest post-w1 aggregate is still 1.66× single-stream (at width 2); the dip holds 2.13×.</text>
+      </svg>
+    </div>
+    <figcaption>Same graph family as the 2026-11-06 report, drawn from this wave's own <code>ladder_kv.jsonl</code> medians (raw: <span class="mono">bench/splash-concurrency/results/rerun-2026-11-10s/</span>).</figcaption>
+  </figure>
   <p>Admission pacing identical: peak <code>waiting</code> 0/0/0/0/2/4/8/12/12/12,
   <code>suspended</code> zero everywhere. The uniform ~2 % offset bounds run-to-run spread for
   future version diffs — one engine instance each wave, engine-side, so read it as a spread band,
