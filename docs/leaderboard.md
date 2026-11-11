@@ -29,6 +29,7 @@ macOS 27.2, render output and scratch on external volumes.
 | **2026-11-06e** | 21.2.0.6 | **4.19.3** | 1670 ms | **1191 ms** | **101.6** | 174 | 41 | 109.5 | 18³ | **18/18** | 18/18 |
 | **2026-11-10f** | 21.2.0.6 | **5.1.0** | 3116 ms¹ | **1198 ms** | 101.0 | 183 | 47.5 | 112 | 20³ | **18/18** | 18/18 |
 | **2026-11-10g** | 21.2.0.6 | **5.2.0** | 1700 ms¹ | **1296 ms** | 93.4 | 162 | 59 | 112 | 268³⁴ | **18/18** | 18/18 |
+| **2026-11-11h** | 21.2.0.6 | **5.2.2** | 3129 ms¹ | **1205 ms**⁵ | 100.4 | n/a⁵ | n/a | n/a | n/a³⁴ | **18/18** | 18/18 |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
@@ -90,12 +91,31 @@ is blind on this build (`GetRenderJobList` entries carry no `JobStatus`; `IsRend
 mid-render). Upstream issue #207 (stuck-Ready job) reproduced live and fixed with the known delete-and-requeue
 route. See [the results file](../bench/resolve-agentic/results-2026-11-10g.json) for all eighteen 5.2.0 notes.
 
+⁵ **5.2.2 wave honesty notes:** the warm probe ran *concurrent with pair 1* — a deviation from rule 2 that
+the operator recorded up front, so the 1205 ms cell is kept but ranked-with-note, not held against the
+single-tenant column. Op medians were **not collected single-tenant** this wave; the pinned grading reads
+(240–1136 ms) include the baseline_reset alternation lifecycle and would be a different measurement, so
+the cells read `n/a` rather than being filled with a non-comparable number.
+
+**5.2.2 row:** 5.2.1/5.2.2 changed no tool surface (21.0.4 method probing; a caption word-wrap fix), and
+the wave confirms it: the story is on the agent side, not the server's. Walls came down **−22.8…−37.8 %**
+vs the 5.2.0 wave (1484/1517/1729 → 1146/1077/1076 s) with leaner use counts and — for the first time —
+**zero cross-agent write incidents**, despite `append_to_timeline` still being exactly as un-pin-able as
+before. The wave ran under a **softer seal than published** (session classifier refused the off-disk move;
+`chmod go-rwx` fallback, disclosed in the briefs, results and deviations). Two new API truths, both loud
+enough to trip an unwary agent: positioned rows **silently ignore `record_frame_mode:"absolute"`** (items
+land at wrong frames with `success:true`), and the official in-app `run_script` sandbox **returns `None`
+for non-allowlisted API methods** — scripting-based grading is dead on arrival; grade from pinned read-backs.
+See [the results file](../bench/resolve-agentic/results-2026-11-11h.json); note its audit-errata history
+(review agents corrected three stat errors in the original record — commit `81d77cc`).
+
 ## Splash engine — reference host
 
 | Date | Engine | Model | TTFT warm | TTFT cold | decode w1 | decode plateau | suspensions at 4.4× KV | agentic | honest |
 |---|---|---|---|---|---|---|---|---|---|
 | 2026-11-06 | Splash 1.6.0 | Qwen3.8-Flash-Next IQ3_S (262k ctx) | 201 ms | 380 ms | 170 tok/s¹ | **372–383 tok/s**, widths 4→32 (2.5–2.6×) | **0** | 11/12 | 12/12 |
 | **2026-11-10s** | Splash 1.6.0 (same build) | same | 174 ms | 430 ms | 128 tok/s¹ | **366–369 tok/s**, widths 8→32 (2.4×)² | **0** | **12/12** | 12/12 |
+| **2026-11-11h** | **Splash 1.6.1** (INT8 activations default on M5+) | same | 294 ms⁶ | 442 ms | **186.9 tok/s**⁷ | **510–525 tok/s**, widths 12→32 (**+39 %** vs 1.6.0 plateau) | **0** (but +645 disk demotions at w10) | **12/12** | 12/12 |
 
 ¹ decode w1 is warmth-sensitive — the probe's own three passes trend (105→133→165 baseline,
 111→128→136 rerun); the column is the warmed value on the baseline row, the median on the rerun row.
@@ -103,11 +123,86 @@ route. See [the results file](../bench/resolve-agentic/results-2026-11-10g.json)
 (0.87× the width-4 peak both waves), same admission counts. Not a regression claim on one
 engine instance; it bounds run-to-run spread for future diffs.
 
+⁶ warm TTFT 294 ms is a **single sample under shared-engine conditions** with no corroborating
+measurement — logged as an open flag (contention or real regression), to be settled on the next run;
+cold matches prior waves.
+⁷ decode w1 on the 1.6.1 row is the **clean ladder width-1** value; that run's `engine_probe` decode
+rows (81.6/80.7/149.6) were contention-contaminated by the operator session and are excluded — see
+[NOTES.md](../bench/splash-concurrency/results/splash-1.6.1-rerun-2026-11-11h/NOTES.md).
+
 Rerun in one pass: `python3 -I bench/splash-concurrency/ladder_kv.py` (width ladder + KV-pressure
 probe, one combined summary). The plateau is a wall, not a cliff; the KV probe's negative
 result (no suspension at 611,244 prompt tokens) is a finding, not a missing number — and it
-reproduced, with a quieter memory path on the rerun (no disk demotions, no `waiting_memory`
-hold where the baseline had one; governor headroom still grazed 26 MB at width 12).
+reproduced on all three waves, with the memory path's secondary signals shifting wave to wave
+(the rerun ran quietest; 1.6.1 demoted 645 blocks to disk at width 10, exactly where the
+baseline did).
+
+### Splash width-ladder scores — aggregate tok/s medians, all waves
+
+Same host, same model (Qwen3.8-Flash-Next IQ3_S, 262k ctx), same spec: 512-token rounds, two
+rounds per width, median shown. Comparable across rows only because the harness is identical;
+1.6.1's INT8 default means numerics are not bit-comparable with the 1.6.0 rows.
+
+| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | **1.6.1 (11-11h)** |
+|---|---|---|---|
+| 1 | 147.6 | 151.5 | **186.9** |
+| 2 | 259.1 | 250.7 | 301.0 |
+| 3 | 306.1 | 290.9 | 378.5 |
+| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 |
+| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) |
+| 8 | 373.9 | 368.7 | 488.4 |
+| 12 | 375.7 | 367.7 | **524.8** ← peak |
+| 16 | 371.9 | 369.1 | 510.0 |
+| 24 | 382.9 | 368.8 | 518.5 |
+| 32 | 371.7 | 365.5 | 519.8 |
+
+The 1.6.1 plateau is **+39.2 %** mean (per-width +32.5…+42.7 %), but read the shape with it: the
+peak moves from width 4 to width 12, the w6 dip gets shallower, and w1 itself rose +23.4 % —
+concurrency-normalized (plateau ÷ w1) the gain is only +12.8 %, so most of the headline is
+single-stream decode speed. The gain is decode-side (prefill walls: 611k tokens in 170.5 vs
+171.1 s — unchanged), consistent with, but not proven by, the INT8-activations default. Stop
+rule (halt when median aggregate falls below 1.10× w1) never fired in any wave.
+
+## Visual venv (OpenCV) — reference host
+
+Face-pipeline baseline for the Resolve vision tooling, version-pinned against the pending
+OpenCV 5.1.x wheels (watched by a launchd agent; wheels land as `5.1.0.xxxx`).
+
+| Date | OpenCV | Canonical 4×3 @0.5 | Threshold ladder (merged) | Embed window | Cold process | Markers |
+|---|---|---|---|---|---|---|
+| 2026-11-11 run1 | 5.0.0.93 | **91 faces / 0.278 s** (PNG; 89 / 0.273 s H.264) | 0.90→57 · 0.75→85 · 0.60→89 · 0.50→91 · 0.45→94 · 0.30→98 | 10.99 ms/face⁸ | 1.488 / 1.491 / 1.486 s | `match()` mutates in-place ✓ · TF reader present · Caffe reader absent |
+| 2026-11-11 run2 (same build) | 5.0.0.93 | 91 / 0.302 s | counts **bit-identical** | 11.59 ms/face⁸ | not captured⁹ | all identical |
+
+Run2 is a same-build rerun that calibrates the noise band before the upgrade: **every deterministic
+value reproduced** (48/48 detect counts, whole-frame 92, match-probe, cosine stats, surface markers,
+fixture hashes) while all 48 timings rose uniformly ~11 % (median ×1.111) — machine-state drift, not
+an OpenCV effect. **×1.15 is therefore the ceiling for calling a future 5.1.x timing change "real."**
+The `match()` in-place-mutation marker flipping to false will be the first visible upstream fix.
+
+⁸ units normalized: run2's script emits `*_ms`-named keys holding seconds (erratum in
+[the README](../bench/visual-venv/README.md)); 1.055 s ÷ 91 = 11.59 ms/face.
+⁹ `cold_run.py` prints to stdout; run2's stdout was never saved.
+
+Fixtures are real face frames and are **never committed** — SHA-256s live in the run JSONs, and
+`bench/visual-venv/README.md` documents reproducing the harness on your own face-dense media.
+Rerun: `~/resolve-vision-venv312/bin/python -I bench/visual-venv/bench_visvenv.py --out runN.json`
+(+ `--models <dir with the two opencv_zoo ONNX files>`).
+
+## Reports — what's in each scorecard
+
+Self-contained HTML (no external assets, no build step). GitHub's file view shows source;
+view them rendered through Pages (links), or open the files after a clone. Newest first.
+
+| Report | What's in it |
+|---|---|
+| [**Benchmark reruns, all four suites**](https://willturner-maker.github.io/benchmarks/reports/2026-11-11-reruns.html) (`reports/2026-11-11-reruns.html`) | The 2026-11-11 day: MCP 5.2.2 agentic wave h (18/18, sixth clean wave, walls −23…−38 %), Splash 1.6.1 engine rerun (+39 % plateau, peak moves to width 12, KV secondary signals shift), agentic suite 12/12, OpenCV same-build rerun (bit-identical, ×1.11 band) — plus the ladder comparison chart and every review-audit correction |
+| [Resolve MCP 21.2.0.6 · MCP 5.2.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-10g-resolve-21-2-mcp-520.html) (`reports/2026-11-10g-resolve-21-2-mcp-520.html`) | Fifth straight 18/18; the append-pinning tenancy catch (agents' cross-writes caught, reversed, disclosed), ripple's plan-only default, probe alternation cost, upstream #207 live |
+| [Splash engine 1.6.0 rerun](https://willturner-maker.github.io/benchmarks/reports/2026-11-10s-splash-160-rerun.html) (`reports/2026-11-10s-splash-160-rerun.html`) | Same-build re-measure: shape-by-shape ladder diff (peak 4, dip 0.87×, ~2 % spread band), quieter KV memory path, agentic 12/12; now carries the concurrency-scaling bar ladder |
+| [Resolve MCP 21.2.0.6 · MCP 5.1.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-10f-resolve-21-2-mcp-510.html) (`reports/2026-11-10f-resolve-21-2-mcp-510.html`) | First 5.1.0 pass: 18/18, the `record_frame` semantics trio, append moved to `media_pool`, other v5 deltas |
+| [Resolve MCP 21.2.0.6 · MCP 4.19.3](https://willturner-maker.github.io/benchmarks/reports/2026-11-06e-resolve-21-2-mcp-4193.html) (`reports/2026-11-06e-resolve-21-2-mcp-4193.html`) | The replacement pass after two withdrawals: single-tenant probe first, tenancy tax measured, method-honesty section |
+| [Splash engine 1.6.0 baseline](https://willturner-maker.github.io/benchmarks/reports/2026-11-06-splash-engine.html) (`reports/2026-11-06-splash-engine.html`) | Engine probe, the width-ladder plateau and its concurrency-scaling figure, KV-pressure chase for a first suspension that never came |
+| [Resolve MCP 21.2.0.6 · MCP 4.19.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-06-resolve-21-2.html) (`reports/2026-11-06-resolve-21-2.html`) | The 21.2 debut: render probes, op medians, n=3 agentic |
+| [Resolve MCP 21.1.2.10 · MCP 4.18.5](https://willturner-maker.github.io/benchmarks/reports/2026-11-03-resolve-21-1-2.html) (`reports/2026-11-03-resolve-21-1-2.html`) | The baseline: cold/warm render probes, agentic n=3, two-tier concurrency sweep |
 
 ## Community runs — your numbers
 

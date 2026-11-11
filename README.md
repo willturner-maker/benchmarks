@@ -10,32 +10,35 @@ macOS 27.2.0.
 
 ## Suites
 
-| Suite | Doc | Scripts / raw data | Baseline headline |
+| Suite | Doc | Scripts / raw data | Latest standing |
 |---|---|---|---|
-| Splash engine + Qwen | [`docs/splash-engine-benchmark-results.md`](docs/splash-engine-benchmark-results.md) | `bench/splash-concurrency/` | Splash 1.6.0 warm: TTFT 201 ms / 380 ms cold; width ladder plateaus 372–383 tok/s (2.5–2.6× w1) from width 4 through 32, no collapse; KV-pressure probe never suspends, even at 4.4× the KV budget; agentic suite 11/12 verified, 12/12 honest. **Re-run 2026-11-10s (same build):** every shape feature reproduced — peak at 4, dip 0.87× at 6, flat plateau ~2 % lower (366–369), zero suspensions again, agentic now 12/12 |
-| DaVinci Resolve MCP | [`docs/resolve-agentic-benchmark-results.md`](docs/resolve-agentic-benchmark-results.md) | **[`bench/resolve-agentic/`](bench/resolve-agentic/)** — briefs, runbook, and `check_media.py` so you can run it on **your own footage** | latest standing row: 21.2.0.6 + MCP 5.2.0 (2026-11-10g), warm render 1296 ms single-tenant (inside host spread), cold 1700 ms; 18/18 verified, 18/18 honest across n=3 — **fifth consecutive clean wave, 90/90 aggregate**; headline catch: `append_to_timeline` is not pin-able and follows the current timeline — two agents caught, reversed, and disclosed real cross-writes it caused |
+| DaVinci Resolve MCP | [`docs/resolve-agentic-benchmark-results.md`](docs/resolve-agentic-benchmark-results.md) | **[`bench/resolve-agentic/`](bench/resolve-agentic/)** — briefs, runbook, and `check_media.py` so you can run it on **your own footage** | 21.2.0.6 + MCP 5.2.2 (wave `2026-11-11h`): **18/18 verified, 18/18 honest — sixth consecutive clean wave, 108/108 aggregate**; walls down 23–38 % vs the 5.2.0 wave with zero cross-agent write incidents; warm render 1205 ms (ran concurrent — ranked with note, see leaderboard rule 2) |
+| Splash engine + Qwen | [`docs/splash-engine-benchmark-results.md`](docs/splash-engine-benchmark-results.md) | `bench/splash-concurrency/` — single entry point `ladder_kv.py` (width ladder + KV-pressure probe in one run) | Splash 1.6.1 (2026-11-11): plateau **510–525 tok/s, +39 %** over 1.6.0, aggregate peak moves width 4→12, KV probe still never suspends at 4.4× budget (demote path partially re-engaged at w10 — instance-dependent); agentic suite 12/12 + 12/12 |
+| Visual venv (OpenCV) | [`bench/visual-venv/README.md`](bench/visual-venv/README.md) | `bench/visual-venv/` — bench script, cold-run probe, run1/run2 JSON (**fixtures withheld**: real face frames; hashes in the JSONs) | opencv-python 5.0.0.93 baseline + same-build rerun: every deterministic value bit-identical, uniform ~11 % timing drift band (×1.15 ceiling for the future 5.1.x diff); watched for 5.1.x wheels by a launchd agent |
 | Concurrency spec (draft, 2026-09) | [`docs/concurrency-scaling-test.md`](docs/concurrency-scaling-test.md) | — | the never-run design the Splash ladder later implemented |
 
 ## Leaderboard & reports
 
 Standings across versions live in [`docs/leaderboard.md`](docs/leaderboard.md)
 (machine-readable: [`leaderboard/results.json`](leaderboard/results.json)) — including the
-rules about which rows are comparable at all. Your own run comes in through the
+comparability rules, the withdrawn-row history, the **width-ladder score table**, the
+**visual-venv table**, and a section describing **what's in each report**. Your own run
+comes in through the
 [**Leaderboard row issue form**](https://github.com/willturner-maker/benchmarks/issues/new?labels=leaderboard&template=leaderboard-row.yml),
 which asks for media class, tenant conditions, exact builds and a read-back attestation
-before a row can be ranked. The full scorecards are self-contained HTML
-(no external assets, no build step). GitHub's file view shows their source; **view them
-rendered** through GitHub Pages:
+before a row can be ranked.
 
-| Report | What's in it | Rendered |
-|---|---|---|
-| [Resolve MCP, 21.1.2.10](https://willturner-maker.github.io/benchmarks/reports/2026-11-03-resolve-21-1-2.html) | perf cold/warm render probes, agentic n=3 scorecard, concurrency sweep | `reports/2026-11-03-resolve-21-1-2.html` |
-| [Resolve MCP, 21.2.0.6](https://willturner-maker.github.io/benchmarks/reports/2026-11-06-resolve-21-2.html) | the 21.2 + MCP 4.19.0 run: render probes, op medians, n=3 agentic | `reports/2026-11-06-resolve-21-2.html` |
-| [Resolve MCP, 21.2.0.6 + MCP 4.19.3](https://willturner-maker.github.io/benchmarks/reports/2026-11-06e-resolve-21-2-mcp-4193.html) | the replacement pass after two withdrawals: single-tenant probe, tenancy tax, n=3 agentic, method-honesty section | `reports/2026-11-06e-resolve-21-2-mcp-4193.html` |
-| [Resolve MCP, 21.2.0.6 + MCP 5.1.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-10f-resolve-21-2-mcp-510.html) | the 5.1.0 pass: perf flat, op medians collected, n=3 agentic (18/18 again), the record_frame-semantics trio and other v5 deltas | `reports/2026-11-10f-resolve-21-2-mcp-510.html` |
-| [Resolve MCP, 21.2.0.6 + MCP 5.2.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-10g-resolve-21-2-mcp-520.html) | the 5.2.0 pass: fifth straight 18/18, the append-pinning tenancy catch, ripple's plan-only default, probe alternation cost, #207 live | `reports/2026-11-10g-resolve-21-2-mcp-520.html` |
-| [Splash engine, 1.6.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-06-splash-engine.html) | engine probe, width-ladder plateau, KV-pressure chase for the first suspension | `reports/2026-11-06-splash-engine.html` |
-| [Splash engine, 1.6.0 rerun](https://willturner-maker.github.io/benchmarks/reports/2026-11-10s-splash-160-rerun.html) | same-build re-measure: shape-by-shape ladder diff, quieter KV memory path, agentic 12/12 | `reports/2026-11-10s-splash-160-rerun.html` |
+The scorecards themselves are self-contained HTML (no external assets, no build step) and
+render on Pages:
+
+- [Benchmark reruns, all four suites — 2026-11-11](https://willturner-maker.github.io/benchmarks/reports/2026-11-11-reruns.html)
+- [Resolve MCP · MCP 5.2.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-10g-resolve-21-2-mcp-520.html)
+- [Splash engine 1.6.0 rerun](https://willturner-maker.github.io/benchmarks/reports/2026-11-10s-splash-160-rerun.html)
+- [Resolve MCP · MCP 5.1.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-10f-resolve-21-2-mcp-510.html)
+- [Resolve MCP · MCP 4.19.3](https://willturner-maker.github.io/benchmarks/reports/2026-11-06e-resolve-21-2-mcp-4193.html)
+- [Splash engine 1.6.0 baseline](https://willturner-maker.github.io/benchmarks/reports/2026-11-06-splash-engine.html)
+- [Resolve MCP · MCP 4.19.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-06-resolve-21-2.html)
+- [Resolve MCP 21.1.2.10 · MCP 4.18.5](https://willturner-maker.github.io/benchmarks/reports/2026-11-03-resolve-21-1-2.html)
 
 If Pages is ever disabled, the same files are readable through any raw viewer — e.g.
 `https://raw.githubusercontent.com/willturner-maker/benchmarks/main/reports/<name>.html`
@@ -44,22 +47,25 @@ served by a browser, or just `open reports/<name>.html` after a clone.
 ## Layout convention
 
 - `docs/` — the results write-ups; each carries its own re-run recipe.
-- `bench/<suite-date>/` — runnable scripts + raw JSONL for that run, so future reruns
-  compare against committed raw data, not summaries. Splash reruns go through the single
-  entry point `bench/splash-concurrency/ladder_kv.py` (width ladder + KV-pressure probe in one run,
-  one combined summary).
-
+- `bench/<suite>/` — runnable scripts + raw JSONL for that suite, named **by what the
+  suite measures**, not by its first run date: `splash-concurrency`, `resolve-agentic`,
+  `visual-venv`. Individual waves get dated labels inside (`results/<wave>/`), so future
+  reruns compare against committed raw data, not summaries.
 - `bench/resolve-agentic/` — the Resolve suite is **not** tied to my media: `MEDIA.md` is
   the media contract (what kind of clip you need, and which published numbers survive a
   media swap), `check_media.py` validates a candidate clip and derives every frame number
   the briefs use, `tasks.md` + `RUNBOOK.md` are the six briefs and the procedure.
-
+- `reports/` — the rendered scorecards, one self-contained HTML per wave, front-doored by
+  the Pages `index.html`.
 - `tools/precommit-scan.sh` — pre-commit guard: refuses staged content containing local
   paths, camera/reel filenames, credential shapes, emails, or repo-local **deny terms**
   (client/project/event names kept in `.git/info/precommit-terms`, which is never
   committed). `bash tools/precommit-scan.sh --install` to wire it up, `--all` to audit
   the whole tree. This repo went public carrying a camera filename and a home path, so
   the guard exists; both are scrubbed from history now.
+
+Media-bearing assets (bench fixtures with identifiable faces, concert frames) are never
+committed in this repo, anywhere — only their SHA-256s and regeneration recipes.
 
 Moved out of `willturner-maker/splash-dashboard` on 2026-11-06 (the dashboard repo's git
 history still holds the pre-move commits).
