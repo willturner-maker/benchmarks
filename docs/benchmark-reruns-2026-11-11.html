@@ -1,0 +1,221 @@
+<title>Benchmark Reruns 2026-11-11</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  /* report: cool slate neutrals, one blue accent doubling as series-1; series-2 orange */
+  --bg:#f6f7f9; --panel:#fcfcfd; --fg:#14171c; --fg-2:#4d555f; --mut:#7b848f;
+  --line:#dfe3e8; --accent:#2a78d6; --s2:#eb6834;
+  --good:#0f7a4d; --warn:#b26a00;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',Inter,system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 56px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.5vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 var(--mono);color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.lede{color:var(--fg-2);max-width:65ch;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:9px 13px}
+.chip b{font-family:var(--disp);font-size:16px}
+.chip span{font-size:12.5px;color:var(--fg-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--good);flex:none;align-self:center}
+section{margin-top:44px;border-top:1px solid var(--line);padding-top:26px}
+h2{font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 .tag{font:500 11px/1 var(--mono);color:var(--mut);letter-spacing:.06em;border:1px solid var(--line);
+  border-radius:6px;padding:4px 7px}
+p.note{color:var(--fg-2);max-width:65ch}
+.tbl-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;min-width:0}
+th{font:600 12px/1.3 var(--body);color:var(--fg-2)}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--good);font-weight:600}
+.dim{color:var(--mut)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:18px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.stat .v{font-family:var(--disp);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12.5px;color:var(--fg-2);margin-top:2px}
+ul.tight{margin:12px 0 0;padding-left:20px;color:var(--fg-2)}
+ul.tight li{margin:5px 0}
+code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.chartwrap{position:relative;margin-top:10px}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:8px 10px;font:500 12px/1.5 var(--mono);box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+.grid{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--mut);stroke-width:1}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
+.foot code{font-size:11.5px}
+@media (prefers-reduced-motion:reduce){.tip{transition:none}}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Will's local AI pipeline · same-day reruns</div>
+  <h1>Benchmark Reruns 2026-11-11</h1>
+  <p class="lede">Four suites rerun after a machine restart and two upgrades — davinci-resolve-mcp 5.2.0→5.2.2 and Splash 1.6.0→1.6.1. All four came back clean; the engine rerun is the first with real news, showing the speedup the 1.6.1 release notes promised.</p>
+
+  <div class="chips">
+    <div class="chip"><span class="dot"></span><b>18/18</b><span>Resolve agentic wave h (5th straight clean wave)</span></div>
+    <div class="chip"><span class="dot"></span><b>+39%</b><span>Splash plateau, 1.6.1 INT8 on M5 Ultra</span></div>
+    <div class="chip"><span class="dot"></span><b>12/12</b><span>Splash agentic suite, verified + honest</span></div>
+    <div class="chip"><span class="dot"></span><b>0 drift</b><span>OpenCV venv rerun bit-identical counts</span></div>
+  </div>
+
+  <section>
+    <h2>1 · Resolve MCP agentic — wave <span class="tag">2026-11-11h</span></h2>
+    <p class="note">Six edit tasks × 3 runs each, run by sealed MCP-only agents (Qwen IQ3_S served locally) against a scratch project, graded only by independent read-backs after teardown-style pinned probes. Fifth consecutive 18/18 wave (90→108 verified trials across five waves), and the first wave where no cross-agent write accidents occurred.</p>
+    <div class="tbl-scroll"><table>
+      <tr><th>Task</th><th class="num">r1 uses · wall</th><th class="num">r2 uses · wall</th><th class="num">r3 uses · wall</th><th>Read-back verdict</th></tr>
+      <tr><td>T1 read-only probe</td><td class="num">15 · 98 s</td><td class="num">12 · 70 s</td><td class="num">11 · 61 s</td><td class="ok">✓ ×3 — values exact, zero-mutation (no archive sibling)</td></tr>
+      <tr><td>T2 clone + marker</td><td class="num">25 · 137 s</td><td class="num">32 · 116 s</td><td class="num">37 · 164 s</td><td class="ok">✓ ×3 — 2×221 f items, marker {60, Green, bench-hit}</td></tr>
+      <tr><td>T3 ripple insert</td><td class="num">49 · 263 s</td><td class="num">62 · 289 s</td><td class="num">27 · 235 s</td><td class="ok">✓ ×3 — 221/101/221, 0 gaps, 0 overlaps</td></tr>
+      <tr><td>T4 tracks + lock + delete</td><td class="num">50 · 237 s</td><td class="num">59 · 225 s</td><td class="num">35 · 233 s</td><td class="ok">✓ ×3 — VO-A locked, VO-B, 3rd track, one item left</td></tr>
+      <tr><td>T7 build + render + verify</td><td class="num">61 · 308 s</td><td class="num">50 · 265 s</td><td class="num">58 · 293 s</td><td class="ok">✓ ×3 — 121-packet h264 3840×1520 files, queue empty</td></tr>
+      <tr><td>T8 Fusion on item</td><td class="num">19 · 103 s</td><td class="num">17 · 112 s</td><td class="num">21 · 90 s</td><td class="ok">✓ ×3 — comp_count 1 per item</td></tr>
+      <tr><td class="dim">Total</td><td class="num dim">219 · 1146 s</td><td class="num dim">232 · 1077 s</td><td class="num dim">189 · 1076 s</td><td class="dim">honesty 18/18 vs read-backs</td></tr>
+    </table></div>
+    <div class="kv">
+      <div class="stat"><div class="v">−23…38%</div><div class="l">wall time vs wave 10g (1484/1517/1729 s → 1146/1077/1076 s)</div></div>
+      <div class="stat"><div class="v">1673 / 1196 / 1290 ms</div><div class="l">in-suite render ms, all three carrying PCM audio</div></div>
+      <div class="stat"><div class="v">3129 / 1205 ms</div><div class="l">perf-probe renders cold / warm (warm ran concurrent with pair 1 — flagged)</div></div>
+    </div>
+    <ul class="tight">
+      <li><b>Methodology deviation:</b> the published hard seal (move benchmark records off-disk) was refused by the session classifier; this wave ran with a softer <code>chmod go-rwx</code> seal. Same-user agents could in principle have read the records; the agents had no shell or file tools, and reports stayed consistent with a clean seal.</li>
+      <li><b>One rule bend, disclosed:</b> a T7-r3 agent used the in-app bridge's <code>run_script_unsafe</code> twice (an already-satisfied mkdir, one ffprobe) against the no-filesystem clause.</li>
+      <li><b>New API truths (21.2.0.6 / MCP 5.2.2):</b> <code>record_frame_mode:"absolute"</code> is silently ignored on positioned rows (items land wrong with success:true); the official in-app <code>run_script</code> sandbox neutralizes non-allowlisted API methods (TimelineItem getters → None); <code>clip_where</code> takes fixed filter keys only. <code>append_to_timeline</code> is still not pin-able — no cross-writes this wave because agents pinned discipline, not because the tool got safer.</li>
+      <li>Tool surface is unchanged 5.2.0→5.2.2, so the −23…38% wall and leaner use counts are agent-side economy, not MCP deltas.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>2 · Splash engine — 1.6.1 <span class="tag">first upgrade diff</span></h2>
+    <p class="note">Width-ladder rerun under the standing spec (stop only when the aggregate falls toward width-1). The rule never fired again. On M5+ chips 1.6.1 defaults to INT8 activations, and the ladder shows what that buys: the plateau lifts from ~368 to ~510–525 tok/s aggregate (mean +39%), and the curve itself changes shape — the aggregate peak moves from width-4 to width-12 (524.8), with the flat band now w12–32. Width-1 decode also lifts 151→187, so part of the jump is single-stream speed, not scheduling (concurrency-normalized it's +13%). The long-standing width-6 dip persists but gets shallower (0.87× → 0.93× of the w4 peak).</p>
+    <div class="viz-root">
+      <div class="vtitle">Aggregate decode throughput by concurrency width</div>
+      <div class="vsub">Median tok/s across rounds, same ladder spec · Splash 1.6.0 (rerun 11-10) vs 1.6.1 (11-11)</div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Splash 1.6.0</span><span><i style="background:var(--s2)"></i>Splash 1.6.1</span></div>
+      <div class="chartwrap" id="cw"><svg id="chart" viewBox="0 0 860 300" style="width:100%;height:auto" role="img" aria-label="Width ladder: 1.6.0 plateau near 368 tok/s, 1.6.1 near 519"></svg>
+        <div class="tip" id="tip"></div></div>
+    </div>
+    <ul class="tight">
+      <li><b>KV headline reproduced:</b> 611,244 long-context prefill tokens = 4.4× the 139,264-token resident budget — still zero suspensions and zero spill. The secondary memory signals are instance-dependent as established: this run demoted 645 KV blocks to disk at width-10 (exactly what the 2026-11-06 baseline did there; the 1.6.0 rerun did zero), took one brief waiting_memory hold (59.6 ms), and never touched the full page ring. Prefill walls are near-identical to 1.6.0 (611k tokens in 170.5 s) — the whole gain is decode-side.</li>
+      <li><b>Open flag:</b> warm time-to-first-token read 294 ms vs 174 ms in the prior rerun (cold ≈ unchanged at 442/430). Single sample under a shared engine with no corroborating measurement — logged, to be settled on the next run.</li>
+      <li><b>Honest caveat:</b> the probe's single-stream decode lines from this run (81–150 tok/s) were captured while the operator's own session — this very model — shared the engine; they are excluded. The clean-window ladder width-1 row (186.9) is the comparable figure.</li>
+      <li><b>Not bit-comparable:</b> 1.6.1's INT8 default means numerics differ from the 1.6.0 baselines; differences beyond the established ~2% spread band are real change or quantization, not drift.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3 · Splash agentic suite <span class="tag">4 tasks × 3</span></h2>
+    <p class="note">Headless agent trials against the live engine API: field extraction, arithmetic over fetched values, structured file output, and a fixture-diagnosis rubric. Third clean suite run in a row.</p>
+    <div class="tbl-scroll"><table>
+      <tr><th>Task</th><th class="num">turns</th><th class="num">median wall</th><th>Verdict</th></tr>
+      <tr><td>S1 six-line status extract</td><td class="num">2</td><td class="num">5.6 s</td><td class="ok">✓ ×3 exact six lines; one trial honestly reported active_sum 1 (self-count at fetch time)</td></tr>
+      <tr><td>S2 KV disk-share arithmetic</td><td class="num">2</td><td class="num">6.6 s</td><td class="ok">✓ ×3 division exact (17.97 / 17.92 / 17.90%)</td></tr>
+      <tr><td>S3 six-key JSON file</td><td class="num">3</td><td class="num">5.7 s</td><td class="ok">✓ file validates, derived = queued + decoding</td></tr>
+      <tr><td>S4 fixture diagnosis</td><td class="num">2</td><td class="num">6.7 s</td><td class="ok">✓ ×3 all rubric elements: memory-blocked admission, <code>admission.waiting_memory</code>, free KV capacity</td></tr>
+    </table></div>
+    <p class="note" style="margin-top:12px">12/12 verified, 12/12 honest — no invented values, no arithmetic misses (the baseline wave's single S2 arithmetic miss has now failed to reproduce twice). Review audit kept the scorecard with two grade-neutral flags: two S4 answers overstated "batches stuck at width 1" against the fixture's own width-2/3 counters, and one S3 trial claimed JSON validation its toolset couldn't perform.</p>
+  </section>
+
+  <section>
+    <h2>4 · OpenCV vision venv <span class="tag">pre-5.1.0 watch rerun</span></h2>
+    <p class="note">The pre-upgrade baseline (opencv-python 5.0.0.93) rerun in the same venv to establish the noise band before the 5.1.x wheels land. Determinism held completely.</p>
+    <div class="tbl-scroll"><table>
+      <tr><th>Metric</th><th class="num">run 1</th><th class="num">run 2</th><th>Assessment</th></tr>
+      <tr><td>Canonical 4×3 grid @0.5 — faces</td><td class="num">91</td><td class="num">91</td><td class="ok">identical</td></tr>
+      <tr><td>Ladder counts 0.30–0.90 / grid timings</td><td class="num">57…98</td><td class="num">57…98</td><td>counts identical; all 48 timings uniformly ~11% slower — machine-state drift, same cv2 5.0.0 build</td></tr>
+      <tr><td>Diff markers (match() mutation, DNN surface)</td><td class="num" colspan="2">unchanged</td><td class="ok">markers stable across reruns</td></tr>
+      <tr><td>Embedding window per face</td><td class="num">10.99 ms</td><td class="num">≈11.6 ms</td><td>within the rerun noise band</td></tr>
+    </table></div>
+    <p class="note" style="margin-top:12px"><b>Script erratum:</b> the current bench script emits duration keys named <code>*_ms</code> whose values are seconds — three keys: <code>feat_ms_total</code>, <code>det_ms_same_pass</code>, and <code>ms_per_face</code> (which also loses precision at round(…,3)) — while the original run used correctly-labeled <code>*_s</code> keys. Comparisons above normalize the units; the script label fix belongs with the post-upgrade run.</p>
+  </section>
+
+  <section>
+    <h2>Provenance</h2>
+    <p class="note">All raw data lives in the public <b>benchmarks</b> repo (<code>bench/resolve-agentic/</code>, <code>bench/2026-11-06/</code>), with publication scanning on every commit. Today's records: <code>910792a</code> (wave h briefs + results), <code>fe02001</code> (engine rerun jsonl), <code>a244428</code> (agentic suite). Wave h render evidence: three QuickTime/H.264 files kept on the media volume, SHA-256 in the repo record. Four independent review agents audited each suite's records as this document was written; any correction they surface lands as a repo fix, not a page edit.</p>
+    <div class="foot">Machine: M5 Ultra, 96 GiB · DaVinci Resolve Studio 21.2.0.6 · davinci-resolve-mcp 5.2.2 (npm-managed) · Splash 1.6.1 with INT8 activations · OpenCV 5.0.0.93</div>
+  </section>
+</div>
+
+<script>
+(function(){
+  const widths=[1,2,3,4,6,8,12,16,24,32];
+  const a=[151.4,250.7,290.9,369.7,322.4,368.6,367.6,369.1,368.8,365.5];
+  const b=[186.9,301.0,378.5,427.5,396.9,488.4,524.8,510.0,518.5,519.8];
+  const svg=document.getElementById('chart'), cw=document.getElementById('cw'), tip=document.getElementById('tip');
+  const W=860,H=300,mL=46,mR=14,mT=14,mB=34;
+  const yMax=560, plotW=W-mL-mR, plotH=H-mT-mB;
+  const X=i=>mL+i*(plotW/(widths.length-1));
+  const Y=v=>mT+plotH-(v/yMax)*plotH;
+  const ns='http://www.w3.org/2000/svg';
+  function el(t,at){const e=document.createElementNS(ns,t);for(const k in at)e.setAttribute(k,at[k]);return e;}
+  const cs=getComputedStyle(document.documentElement);
+  function tok(n){return cs.getPropertyValue(n).trim();}
+  function build(){
+    svg.innerHTML='';
+    const grid=tok('--grid')||tok('--line'), mut=tok('--mut'), acc=tok('--accent'), s2=tok('--s2');
+    for(let v=0;v<=500;v+=100){
+      svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(v),y2:Y(v),class:'grid'}));
+      const t=el('text',{x:mL-8,y:Y(v)+4,'text-anchor':'end','font-size':'11'});t.textContent=v;svg.appendChild(t);
+    }
+    svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(0),y2:Y(0),class:'axis'}));
+    widths.forEach((w,i)=>{const t=el('text',{x:X(i),y:H-12,'text-anchor':'middle','font-size':'11'});t.textContent=w;svg.appendChild(t);});
+    const ax=el('text',{x:mL,y:H-1,'font-size':'10',fill:mut,'text-anchor':'start'});ax.textContent='concurrency width →';svg.appendChild(ax);
+    [[a,acc],[b,s2]].forEach(([d,col])=>{
+      const pts=d.map((v,i)=>X(i)+','+Y(v)).join(' ');
+      svg.appendChild(el('polyline',{points:pts,fill:'none',stroke:col,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
+      d.forEach((v,i)=>svg.appendChild(el('circle',{cx:X(i),cy:Y(v),r:3.5,fill:col,stroke:tok('--panel'),'stroke-width':2})));
+    });
+    // direct end labels
+    const la=el('text',{x:X(9)-6,y:Y(a[9])-8,'font-size':'11','text-anchor':'end',fill:acc});la.textContent='1.6.0 · 366';svg.appendChild(la);
+    const lb=el('text',{x:X(9)-6,y:Y(b[9])+16,'font-size':'11','text-anchor':'end',fill:s2});lb.textContent='1.6.1 · 520';svg.appendChild(lb);
+    const guide=el('line',{x1:0,x2:0,y1:mT,y2:mT+plotH,stroke:mut,'stroke-width':1,'stroke-dasharray':'3 3',opacity:0});
+    svg.appendChild(guide);
+    const hit=el('rect',{x:mL,y:mT,width:plotW,height:plotH,fill:'transparent'});svg.appendChild(hit);
+    function show(e){
+      const r=svg.getBoundingClientRect();
+      const px=(e.clientX-r.left)*(W/r.width);
+      let i=Math.round((px-mL)/(plotW/(widths.length-1)));
+      i=Math.max(0,Math.min(9,i));
+      guide.setAttribute('x1',X(i));guide.setAttribute('x2',X(i));guide.setAttribute('opacity',1);
+      tip.style.opacity=1;
+      tip.innerHTML='width '+widths[i]+'<br>1.6.0 &nbsp;'+a[i].toFixed(1)+'<br>1.6.1 &nbsp;'+b[i].toFixed(1);
+      const lx=X(i)*(r.width/W), half=(r.width/2);
+      tip.style.left=(lx+ (lx<half? 12 : -tip.offsetWidth-12))+'px';
+      tip.style.top=(Y(b[i])*(r.height/H)-10)+'px';
+    }
+    hit.addEventListener('mousemove',show);
+    hit.addEventListener('mouseleave',()=>{tip.style.opacity=0;guide.setAttribute('opacity',0);});
+  }
+  build();
+  if(window.matchMedia){
+    const mq=window.matchMedia('(prefers-color-scheme: dark)');
+    (mq.addEventListener?mq.addEventListener('change',build):mq.addListener(build));
+  }
+})();
+</script>
