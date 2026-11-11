@@ -1,0 +1,467 @@
+{
+ "label": "visvenv-baseline-2026-11-11",
+ "env": {
+  "python": "3.12.16",
+  "cv2": "5.0.0",
+  "numpy": "2.5.4",
+  "platform": "Darwin Williams-Mac-Studio.local 27.2.0 Darwin Kernel Version 27.2.0: Wed Oct 14 23:47:58 PDT 2026; root:xnu-13432.41.4~25/RELEASE_ARM64_T6050"
+ },
+ "fixtures": {
+  "png": {
+   "path_sha256": "12662c771c1aa6fb5a205df36e489122700b2070ad22f460c89fb44db472a0c0",
+   "shape": [
+    4288,
+    8128,
+    3
+   ]
+  },
+  "mp4_h264": {
+   "path_sha256": "1ec7a3a6677de568a2ed17c745e1f0e7c9b8952a90a1375c7bc0066c2afc099b",
+   "decoded": true,
+   "shape": [
+    4288,
+    8128,
+    3
+   ]
+  }
+ },
+ "import_cv2_s": 0.0632,
+ "detect": [
+  {
+   "fixture": "png",
+   "grid": "2x2",
+   "thr": 0.9,
+   "raw": 55,
+   "merged": 54,
+   "det_s": 0.315
+  },
+  {
+   "fixture": "png",
+   "grid": "2x2",
+   "thr": 0.75,
+   "raw": 92,
+   "merged": 88,
+   "det_s": 0.213
+  },
+  {
+   "fixture": "png",
+   "grid": "2x2",
+   "thr": 0.6,
+   "raw": 97,
+   "merged": 93,
+   "det_s": 0.206
+  },
+  {
+   "fixture": "png",
+   "grid": "2x2",
+   "thr": 0.5,
+   "raw": 100,
+   "merged": 95,
+   "det_s": 0.21
+  },
+  {
+   "fixture": "png",
+   "grid": "2x2",
+   "thr": 0.45,
+   "raw": 101,
+   "merged": 96,
+   "det_s": 0.205
+  },
+  {
+   "fixture": "png",
+   "grid": "2x2",
+   "thr": 0.3,
+   "raw": 113,
+   "merged": 108,
+   "det_s": 0.21
+  },
+  {
+   "fixture": "png",
+   "grid": "4x3",
+   "thr": 0.9,
+   "raw": 57,
+   "merged": 57,
+   "det_s": 0.292
+  },
+  {
+   "fixture": "png",
+   "grid": "4x3",
+   "thr": 0.75,
+   "raw": 85,
+   "merged": 85,
+   "det_s": 0.272
+  },
+  {
+   "fixture": "png",
+   "grid": "4x3",
+   "thr": 0.6,
+   "raw": 89,
+   "merged": 89,
+   "det_s": 0.27
+  },
+  {
+   "fixture": "png",
+   "grid": "4x3",
+   "thr": 0.5,
+   "raw": 91,
+   "merged": 91,
+   "det_s": 0.278
+  },
+  {
+   "fixture": "png",
+   "grid": "4x3",
+   "thr": 0.45,
+   "raw": 94,
+   "merged": 94,
+   "det_s": 0.275
+  },
+  {
+   "fixture": "png",
+   "grid": "4x3",
+   "thr": 0.3,
+   "raw": 98,
+   "merged": 98,
+   "det_s": 0.272
+  },
+  {
+   "fixture": "png",
+   "grid": "4x4",
+   "thr": 0.9,
+   "raw": 53,
+   "merged": 52,
+   "det_s": 0.305
+  },
+  {
+   "fixture": "png",
+   "grid": "4x4",
+   "thr": 0.75,
+   "raw": 91,
+   "merged": 88,
+   "det_s": 0.301
+  },
+  {
+   "fixture": "png",
+   "grid": "4x4",
+   "thr": 0.6,
+   "raw": 96,
+   "merged": 93,
+   "det_s": 0.304
+  },
+  {
+   "fixture": "png",
+   "grid": "4x4",
+   "thr": 0.5,
+   "raw": 99,
+   "merged": 96,
+   "det_s": 0.308
+  },
+  {
+   "fixture": "png",
+   "grid": "4x4",
+   "thr": 0.45,
+   "raw": 100,
+   "merged": 97,
+   "det_s": 0.313
+  },
+  {
+   "fixture": "png",
+   "grid": "4x4",
+   "thr": 0.3,
+   "raw": 111,
+   "merged": 108,
+   "det_s": 0.303
+  },
+  {
+   "fixture": "png",
+   "grid": "8x4",
+   "thr": 0.9,
+   "raw": 52,
+   "merged": 52,
+   "det_s": 0.408
+  },
+  {
+   "fixture": "png",
+   "grid": "8x4",
+   "thr": 0.75,
+   "raw": 91,
+   "merged": 88,
+   "det_s": 0.408
+  },
+  {
+   "fixture": "png",
+   "grid": "8x4",
+   "thr": 0.6,
+   "raw": 97,
+   "merged": 93,
+   "det_s": 0.419
+  },
+  {
+   "fixture": "png",
+   "grid": "8x4",
+   "thr": 0.5,
+   "raw": 102,
+   "merged": 97,
+   "det_s": 0.412
+  },
+  {
+   "fixture": "png",
+   "grid": "8x4",
+   "thr": 0.45,
+   "raw": 103,
+   "merged": 98,
+   "det_s": 0.414
+  },
+  {
+   "fixture": "png",
+   "grid": "8x4",
+   "thr": 0.3,
+   "raw": 116,
+   "merged": 111,
+   "det_s": 0.412
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "2x2",
+   "thr": 0.9,
+   "raw": 53,
+   "merged": 52,
+   "det_s": 0.21
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "2x2",
+   "thr": 0.75,
+   "raw": 91,
+   "merged": 88,
+   "det_s": 0.207
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "2x2",
+   "thr": 0.6,
+   "raw": 94,
+   "merged": 90,
+   "det_s": 0.207
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "2x2",
+   "thr": 0.5,
+   "raw": 99,
+   "merged": 95,
+   "det_s": 0.206
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "2x2",
+   "thr": 0.45,
+   "raw": 102,
+   "merged": 98,
+   "det_s": 0.215
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "2x2",
+   "thr": 0.3,
+   "raw": 110,
+   "merged": 105,
+   "det_s": 0.207
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "4x3",
+   "thr": 0.9,
+   "raw": 53,
+   "merged": 53,
+   "det_s": 0.279
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "4x3",
+   "thr": 0.75,
+   "raw": 85,
+   "merged": 85,
+   "det_s": 0.27
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "4x3",
+   "thr": 0.6,
+   "raw": 88,
+   "merged": 88,
+   "det_s": 0.278
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "4x3",
+   "thr": 0.5,
+   "raw": 89,
+   "merged": 89,
+   "det_s": 0.273
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "4x3",
+   "thr": 0.45,
+   "raw": 92,
+   "merged": 92,
+   "det_s": 0.271
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "4x3",
+   "thr": 0.3,
+   "raw": 99,
+   "merged": 99,
+   "det_s": 0.273
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "4x4",
+   "thr": 0.9,
+   "raw": 52,
+   "merged": 52,
+   "det_s": 0.307
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "4x4",
+   "thr": 0.75,
+   "raw": 89,
+   "merged": 87,
+   "det_s": 0.308
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "4x4",
+   "thr": 0.6,
+   "raw": 92,
+   "merged": 90,
+   "det_s": 0.301
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "4x4",
+   "thr": 0.5,
+   "raw": 98,
+   "merged": 95,
+   "det_s": 0.304
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "4x4",
+   "thr": 0.45,
+   "raw": 101,
+   "merged": 98,
+   "det_s": 0.3
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "4x4",
+   "thr": 0.3,
+   "raw": 110,
+   "merged": 107,
+   "det_s": 0.301
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "8x4",
+   "thr": 0.9,
+   "raw": 51,
+   "merged": 51,
+   "det_s": 0.426
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "8x4",
+   "thr": 0.75,
+   "raw": 90,
+   "merged": 87,
+   "det_s": 0.438
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "8x4",
+   "thr": 0.6,
+   "raw": 95,
+   "merged": 92,
+   "det_s": 0.427
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "8x4",
+   "thr": 0.5,
+   "raw": 97,
+   "merged": 93,
+   "det_s": 0.435
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "8x4",
+   "thr": 0.45,
+   "raw": 100,
+   "merged": 96,
+   "det_s": 0.416
+  },
+  {
+   "fixture": "mp4_h264",
+   "grid": "8x4",
+   "thr": 0.3,
+   "raw": 113,
+   "merged": 108,
+   "det_s": 0.428
+  }
+ ],
+ "whole_frame_050": {
+  "raw": 92,
+  "det_s": 0.278
+ },
+ "embed": {
+  "crops": 91,
+  "ms_per_face": 10.99,
+  "embedding_norm_median": 10.341,
+  "feat_s_total": 1.0,
+  "det_s_same_pass": 1.017,
+  "unit_note": "feat_s_total seconds; timed window re-runs detection + alignCrop + feature per face, so ms_per_face includes a second detect pass"
+ },
+ "match_probe": {
+  "cosine_dist": 0.0499,
+  "norm_a_before": 9.821,
+  "norm_a_after": 1.0,
+  "norm_b_before": 12.4,
+  "norm_b_after": 1.0,
+  "in_place_mutation": true
+ },
+ "cosine": {
+  "pairs": 4095,
+  "median": 0.1265,
+  "p95": 0.3121,
+  "mean_self": 1.0
+ },
+ "surface": {
+  "cv2.setLogLevel_present": false,
+  "cv2.utils.logging_present": true,
+  "readNetFromTensorflow_present": true,
+  "readNetFromCaffe_present": false,
+  "readNetFromONNX_present": true,
+  "FaceDetectorYN_present": true,
+  "FaceRecognizerSF_present": true
+ },
+ "det_model_init_s": 0.0026,
+ "sface_model_init_s": 0.0249,
+ "cold_process": {
+  "recipe": "fresh interpreter: import cv2 + imread png + YuNet create + 4x3@0.5 tiles",
+  "wall_s": [
+   1.488,
+   1.491,
+   1.486
+  ],
+  "in_process_s": [
+   1.464,
+   1.467,
+   1.462
+  ],
+  "raw_faces": 91,
+  "note": "external subprocess timing"
+ }
+}
