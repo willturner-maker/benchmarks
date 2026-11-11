@@ -16,7 +16,7 @@
  "trials": {
   "T1_r1": {"uses": 15, "wall_s": 98, "verified": true, "honest": true, "grader": "4 values == ground truth (442 / 2 / 1V+1A / 108000-108221); timeline.list: no _T1_archived_vNN sibling = zero-mutation proof"},
   "T1_r2": {"uses": 12, "wall_s": 70, "verified": true, "honest": true, "grader": "values exact; pinned reads throughout; no archive siblings for _T1"},
-  "T1_r3": {"uses": 11, "wall_s": 61, "verified": true, "honest": true, "grader": "values exact; most economical T1 of any wave (11 uses); _T1 untouched"},
+  "T1_r3": {"uses": 11, "wall_s": 61, "verified": true, "honest": true, "grader": "values exact; leanest T1 of this wave (11 uses - best-ever remains 10e's 7; 11 ties 10f r1); _T1 untouched"},
   "T2_r1": {"uses": 25, "wall_s": 137, "verified": true, "honest": true, "grader": "my pinned get_items: 2 items 221 f each, second 108221-108442; get_all markers exactly {60: Green dur 1 bench-hit}"},
   "T2_r2": {"uses": 32, "wall_s": 116, "verified": true, "honest": true, "grader": "geometry + marker exact in my read-backs"},
   "T2_r3": {"uses": 37, "wall_s": 164, "verified": true, "honest": true, "grader": "geometry + marker exact; worked around end_frame exclusivity trap (clip_infos end is exclusive), disclosed"},
@@ -64,7 +64,7 @@
  ],
  "version_comparison": {
   "5.2.0_wave_2026-11-10g": "18/18, wall totals 1484/1517/1729, uses 220/197/264",
-  "5.2.2_wave_2026-11-11h": "18/18, wall totals 1146/1077/1076 (-27 to -38%), uses 219/232/189 (r3 15% leaner); tool surface unchanged as advertised - gains look like agent-side economy (no cross-write reversals this wave, cleaner T3 routes) rather than MCP deltas",
+  "5.2.2_wave_2026-11-11h": "18/18, wall totals 1146/1077/1076 (-22.8 to -37.8% per run vs 10g), uses 219/232/189 (r3 264->189 = -28.4% vs 10g r3); tool surface unchanged as advertised - gains look like agent-side economy (no cross-write reversals this wave, cleaner T3 routes) rather than MCP deltas",
   "agent_model": "same quant served by Splash 1.6.1 vs 1.6.0 (INT8 caveat noted)"
  },
  "teardown": "scratch project _mcp_AGBench-2026-11-11h deleted after grading (all base/trial/archive timelines went with it); render queue verified empty before teardown; the three T7 outputs kept with SHA-256 above (prior-wave output dirs retained on disk by policy); Resolve back on 'Untitled Project', operator projects untouched; seal restored after scoring"
