@@ -24,6 +24,7 @@
   main { max-width: 46rem; margin: 0 auto; padding-block: 3rem 4rem }
   h1 { font-size: 1.6rem; margin: 0 0 .35rem; text-wrap: balance; letter-spacing: -0.01em }
   p.lede { color: var(--muted); margin: 0 0 2rem }
+  p.lede a { color: var(--accent) }
   h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em;
        color: var(--muted); margin: 2.2rem 0 .8rem; font-weight: 600 }
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem }
@@ -42,8 +43,9 @@
 </style>
 <main>
   <h1>Resolve + local AI benchmarks</h1>
-  <p class="lede">Version-to-version measurements of a DaVinci Resolve Studio workstation
-    driven by a fully local LLM. Every number comes from an independent read-back.</p>
+  <p class="lede">Version-to-version measurements of a fully local DaVinci Resolve Studio
+    + Splash LLM workstation. Every number comes from an independent read-back.
+    See the <a href="https://github.com/willturner-maker/benchmarks/blob/main/docs/OVERVIEW.md">stack overview</a> if you are new.</p>
 
   <h2>Scorecards</h2>
   <ul>
@@ -81,11 +83,19 @@
       <div class="sub">The baseline run: cold/warm renders, agentic n=3, concurrency sweep.</div></a></li>
   </ul>
 
-  <h2>Data &amp; re-runs</h2>
+  <h2>Documentation & data</h2>
   <ul>
+    <li><a class="card" href="https://github.com/willturner-maker/benchmarks/blob/main/docs/OVERVIEW.md">
+      <span class="name">Stack overview</span>
+      <div class="sub">What Splash, the Resolve MCP server, and the visual venv are, and why these suites exist.</div></a></li>
+    <li><a class="card" href="https://github.com/willturner-maker/benchmarks/blob/main/docs/leaderboard.md">
+      <span class="name">Leaderboard</span>
+      <div class="sub">Current standings, comparability rules, withdrawn rows, and score tables.</div></a></li>
+    <li><a class="card" href="https://github.com/willturner-maker/benchmarks/blob/main/CONTRIBUTING.md">
+      <span class="name">Run a suite or submit a row</span>
+      <div class="sub">How to reproduce the measurements on your own media and machine.</div></a></li>
     <li><a class="card" href="https://github.com/willturner-maker/benchmarks">
-      <span class="name">Repository, leaderboard and docs</span>
-      <div class="sub">Standings live in <code>docs/leaderboard.md</code>; raw JSONL,
-        runnable scripts and the bring-your-own-media contract are in the repo.</div></a></li>
+      <span class="name">Full repository</span>
+      <div class="sub">Scripts, raw JSONL, media contract, and pre-commit guard.</div></a></li>
   </ul>
 </main>

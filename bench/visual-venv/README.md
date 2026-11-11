@@ -39,7 +39,7 @@ Note (kept honest): the embed timed window re-runs detection, so 11 ms/face is a
 
 ## Fixtures are NOT committed (privacy)
 
-`fixture_f240.png` / `fixture_f264_h264.mp4` are real concert frames with identifiable faces and stay on the
+`fixture_f240.png` / `fixture_f240_h264.mp4` are real concert frames with identifiable faces and stay on the
 local bench dir. SHA-256s are recorded in `run1.json`/`run2.json` (`fixtures.*.path_sha256`). To reproduce
 the harness on your own media: put any face-dense frame at `fixture_f240.png` (8128×4288 or resize to match
 your source) plus its CRF18 H.264 encode, run `bench_visvenv.py --out run1.json --models <dir with the two

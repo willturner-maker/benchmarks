@@ -1,12 +1,24 @@
 # Benchmarks
 
-Version-to-version benchmark baselines for the local AI/editing stack, kept separate from
-the dashboards they instrument. Each suite is a fixed-condition measurement meant to be
-re-run and diffed after an upgrade — grading is always from independent read-backs, never
-from the model's own claims.
+Version-to-version benchmark baselines for a fully local DaVinci Resolve Studio + AI
+workstation (Splash inference engine + Resolve MCP server + supporting vision tools),
+kept separate from the dashboards they instrument. Each suite is a fixed-condition
+measurement meant to be re-run and diffed after an upgrade. Grading is always from
+independent read-backs (ffprobe, timeline geometry, engine status, operation logs),
+never from a model's own claims.
 
-**Host (fixed for all baselines):** Apple M5 Ultra, 64-core GPU, 96 GiB unified memory,
-macOS 27.2.0.
+**Reference host for all published baselines:** Apple M5 Ultra, 64-core GPU, 96 GiB
+unified memory, macOS 27.2.0.
+
+## Start here
+
+| What you want | Go to |
+|---|---|
+| High-level explanation of the stack and why these suites exist | [`docs/OVERVIEW.md`](docs/OVERVIEW.md) |
+| Current standings, comparability rules, and score tables | [`docs/leaderboard.md`](docs/leaderboard.md) |
+| How to run a suite on your own machine / submit a row | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
+| Self-contained HTML scorecards (GitHub Pages) | [index.html](https://willturner-maker.github.io/benchmarks/) or the `reports/` directory |
+| Latest combined results | [2026-11-11 reruns](https://willturner-maker.github.io/benchmarks/reports/2026-11-11-reruns.html) |
 
 ## Suites
 
@@ -46,7 +58,8 @@ served by a browser, or just `open reports/<name>.html` after a clone.
 
 ## Layout convention
 
-- `docs/` — the results write-ups; each carries its own re-run recipe.
+- `docs/` — the results write-ups; each carries its own re-run recipe. Start with
+  [`docs/OVERVIEW.md`](docs/OVERVIEW.md) if you are new.
 - `bench/<suite>/` — runnable scripts + raw JSONL for that suite, named **by what the
   suite measures**, not by its first run date: `splash-concurrency`, `resolve-agentic`,
   `visual-venv`. Individual waves get dated labels inside (`results/<wave>/`), so future
@@ -69,3 +82,5 @@ committed in this repo, anywhere — only their SHA-256s and regeneration recipe
 
 Moved out of `willturner-maker/splash-dashboard` on 2026-11-06 (the dashboard repo's git
 history still holds the pre-move commits).
+
+See also [`CONTRIBUTING.md`](CONTRIBUTING.md).
