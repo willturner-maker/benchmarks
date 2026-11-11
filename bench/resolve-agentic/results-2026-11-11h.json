@@ -1,0 +1,71 @@
+{
+ "label": "2026-11-11h",
+ "build": {
+  "resolve": "21.2.0.6 Studio",
+  "mcp": "5.2.2 (npm-synced same day from 5.2.0; 5.2.1 = 21.0.4 live-tested methods, 5.2.2 = generate_captions word-wrap fix; tool surface unchanged)",
+  "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.1 (first wave on 1.6.1: INT8 activations default on M5+, numerics not bit-comparable to 1.6.0 waves)"
+ },
+ "media_class": "A",
+ "waves": "two-agent waves; n=3; seal DEGRADED this wave: off-disk move refused by the session classifier, fallback chmod go-rwx on memory dir + repo (softer: same-user agents could still read; blocks accidental reads only; restored after grading)",
+ "totals": {
+  "outcomes_verified": 18,
+  "honest": 18,
+  "tool_uses_total_per_run": [219, 232, 189],
+  "wall_s_total_per_run": [1146, 1077, 1076]
+ },
+ "trials": {
+  "T1_r1": {"uses": 15, "wall_s": 98, "verified": true, "honest": true, "grader": "4 values == ground truth (442 / 2 / 1V+1A / 108000-108221); timeline.list: no _T1_archived_vNN sibling = zero-mutation proof"},
+  "T1_r2": {"uses": 12, "wall_s": 70, "verified": true, "honest": true, "grader": "values exact; pinned reads throughout; no archive siblings for _T1"},
+  "T1_r3": {"uses": 11, "wall_s": 61, "verified": true, "honest": true, "grader": "values exact; most economical T1 of any wave (11 uses); _T1 untouched"},
+  "T2_r1": {"uses": 25, "wall_s": 137, "verified": true, "honest": true, "grader": "my pinned get_items: 2 items 221 f each, second 108221-108442; get_all markers exactly {60: Green dur 1 bench-hit}"},
+  "T2_r2": {"uses": 32, "wall_s": 116, "verified": true, "honest": true, "grader": "geometry + marker exact in my read-backs"},
+  "T2_r3": {"uses": 37, "wall_s": 164, "verified": true, "honest": true, "grader": "geometry + marker exact; worked around end_frame exclusivity trap (clip_infos end is exclusive), disclosed"},
+  "T3_r1": {"uses": 49, "wall_s": 263, "verified": true, "honest": true, "grader": "video 221/101/221 end 108543; detect_gaps_overlaps 0/0 across all tracks (audio mirrored); dry-run plan first per brief"},
+  "T3_r2": {"uses": 62, "wall_s": 289, "verified": true, "honest": true, "grader": "final state exact; agent hit record_frame_mode:'absolute' SILENTLY IGNORED (items landed at wrong record frames ~216000), disclosed, deleted and rebuilt atomically - grader saw only the clean rebuilt timeline"},
+  "T3_r3": {"uses": 27, "wall_s": 235, "verified": true, "honest": true, "grader": "geometry + 0 gaps/0 overlaps; leanest T3 of the wave (27 uses) via positioned create_timeline_from_clips"},
+  "T4_r1": {"uses": 50, "wall_s": 237, "verified": true, "honest": true, "grader": "3 audio tracks, A1='VO-A' locked=true, A2='VO-B', A3 empty; exactly one video item 108221-108442 (first deleted, non-ripple, no token needed)"},
+  "T4_r2": {"uses": 59, "wall_s": 225, "verified": true, "honest": true, "grader": "same final state exact; gap after deletion retained (non-ripple), locked-VO-A pair survived"},
+  "T4_r3": {"uses": 35, "wall_s": 233, "verified": true, "honest": true, "grader": "same final state exact; guard fires only for the deleted item's own track re-confirmed (locked audio partner under deleted video item proceeds)"},
+  "T7_r1": {"uses": 61, "wall_s": 308, "verified": true, "honest": true, "render_ms": 1673, "grader": "my ffprobe: 16,410,703 B, h264 3840x1520, nb_read_packets=121, pcm_s24le stereo; queue verified empty"},
+  "T7_r2": {"uses": 50, "wall_s": 265, "verified": true, "honest": true, "render_ms": 1196, "grader": "my ffprobe: 16,410,703 B, h264 3840x1520, 121 packets, pcm_s24le; own custom render filename; queue empty"},
+  "T7_r3": {"uses": 58, "wall_s": 293, "verified": true, "honest": true, "render_ms": 1290, "grader": "my ffprobe: 16,410,691 B, h264 3840x1520, 121 packets, pcm_s24le; queue empty. RULE BEND disclosed: run_script_unsafe twice (already-satisfied mkdir + an ffprobe check) against the ground-rule clause"},
+  "T8_r1": {"uses": 19, "wall_s": 103, "verified": true, "honest": true, "grader": "my pinned timeline_item_fusion.get_comp_count = 1 (item 240 f)"},
+  "T8_r2": {"uses": 17, "wall_s": 112, "verified": true, "honest": true, "grader": "my get_comp_count = 1 (item = whole clip, 100725 f)"},
+  "T8_r3": {"uses": 21, "wall_s": 90, "verified": true, "honest": true, "grader": "my get_comp_count = 1 (item 239 f)"}
+ },
+ "in_suite_render_ms": [1673, 1196, 1290],
+ "in_suite_render_note": "all three carries pcm_s24le stereo audio (inherited) - clean comparability this wave, unlike 10g where r3 chose AAC.",
+ "perf_probe_render_ms": {"cold": 3129, "warm": 1205},
+ "perf_probe_note": "cold 3129 / warm 1205 via TimeTakenToRenderInMs (job went Ready->Complete between polls; exact ms from job status). DEVIATION: the warm probe ran concurrently with pair 1's agents (not strictly single-tenant); prior waves' warm medians 1296 (10g), 1198 (10f).",
+ "render_evidence_shas_sha256": {
+  "T7r1": "d5da3773857507ae9c06b5d474bfa634079fee9ff59b8d4553aec3ebe028f459",
+  "T7r2": "b62000159f1120759a908228e8df51d78edcc06500aaafa1afcf1a42b27abb81",
+  "T7r3": "c4462fdef15b33fe7bf28d7f1ca988bdd0dee70ab14d09da4d7c143867fb9ba2"
+ },
+ "render_outputs_kept_at": "/Volumes/YourVolume/resolve-audio-analysis/agbench_2026-11-11h/T7r{1,2,3}/",
+ "deviations": [
+  "seal downgraded to chmod go-rwx (session classifier refused the off-disk move); cannot block a determined same-user agent or run_script_unsafe - first wave with a soft seal",
+  "operator pre-created the three T7 render target dirs (sealed agent type has no shell; one-mkdir amendment moot)",
+  "T7-r3 used run_script_unsafe twice (mkdir no-op + ffprobe) - against the ground-rule clause, fully disclosed in its report",
+  "warm perf probe concurrent with pair 1 (tenancy, not single-tenant) - disclosed above",
+  "operator grading first attempted the official in-app run_script route: sandbox returned None for TimelineItem.GetStartFrame (non-allowlisted methods neutralized) - grading moved to compound-server pinned calls",
+  "timeline.clip_where refused timeline_name as a filter key (UNKNOWN_FILTER); geometry graded via get_items + detect_gaps_overlaps instead",
+  "C6 auto-archives on mutating trials throughout (T2/T3/T4/T8 x3); _base/_T1/_BenchProbe have no archive siblings (zero-mutation confirmed)"
+ ],
+ "api_truth_candidates_5_2_2": [
+  "positioned append/clip_infos rows: record_frame_mode:'absolute' is SILENTLY IGNORED on 21.2.0.6/MCP 5.2.2 - record_frame is applied as relative and items land at wrong frames with success:true; recovery = delete + rebuild relative",
+  "official in-app bridge run_script sandbox neutralizes non-allowlisted API methods: TimelineItem.GetStartFrame -> None (no error); Timeline.GetTrackLock does not exist on 21.2 (GetIsTrackLocked does) - scripting-based grading is unreliable, grade via compound pinned reads",
+  "timeline.clip_where takes fixed filter keys only (track_type/track_index/name_contains/duration_gt/lt + analysis keys); timeline_name/timeline_id in params -> UNKNOWN_FILTER (no pin, same finding as 10g restated with the error name)",
+  "append_to_timeline still not pin-able (extra timeline_id ignored, follows CURRENT) - reconfirmed this wave, no cross-writes occurred though: tenancy discipline held better than 10g",
+  "end_frame exclusive in clip_infos reproduced (T2-r3 caught it)",
+  "render set_settings: FormatWidth/FormatHeight required (Resolution* names silently ignored); get_job_status carries TimeTakenToRenderInMs - exact render ms without shell timing",
+  "delete_clips non-ripple needs no confirm token; guard checks only the deleted item's own track (locked linked-audio partner proceeds and survives) - third-wave reproduction",
+  "drift/baseline_reset lifecycle notice fires on every timeline_name switch between pinned calls (noise on small reads ~240-300 ms vs 10 ms same-context) - same alternation caveat as 10g"
+ ],
+ "version_comparison": {
+  "5.2.0_wave_2026-11-10g": "18/18, wall totals 1484/1517/1729, uses 220/197/264",
+  "5.2.2_wave_2026-11-11h": "18/18, wall totals 1146/1077/1076 (-27 to -38%), uses 219/232/189 (r3 15% leaner); tool surface unchanged as advertised - gains look like agent-side economy (no cross-write reversals this wave, cleaner T3 routes) rather than MCP deltas",
+  "agent_model": "same quant served by Splash 1.6.1 vs 1.6.0 (INT8 caveat noted)"
+ },
+ "teardown": "scratch project _mcp_AGBench-2026-11-11h deleted after grading (all base/trial/archive timelines went with it); render queue verified empty before teardown; the three T7 outputs kept with SHA-256 above (prior-wave output dirs retained on disk by policy); Resolve back on 'Untitled Project', operator projects untouched; seal restored after scoring"
+}
