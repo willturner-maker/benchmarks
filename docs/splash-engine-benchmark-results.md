@@ -24,6 +24,7 @@ macOS 27.2.0. Engine args: working set 56 GiB, SSD cache cap 128 GiB, persistent
 - [Layer 2 — agentic suite](#layer-2--agentic-suite-headless-claude-code-served-by-splashqwen)
 - [Re-running against a future Splash version](#re-running-against-a-future-splash-version)
 - [Re-run 2026-11-10s](#re-run-2026-11-10s--same-build-shape-reproduces-raw-benchsplash-concurrencyresultsrerun-2026-11-10s)
+- [Clean-window rerun 2026-11-13](#clean-window-rerun-2026-11-13-standalone-driver-raw-benchsplash-concurrencyresultsclean-2026-11-13)
 - [Baseline headline](#baseline-headline-for-the-next-versions-diff)
 - [Cross-hardware comparison](#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13)
 
@@ -280,6 +281,38 @@ scheduler serializes prefills and demotes to disk; suspension is a held-context,
 self-healing mechanism, not a throughput cliff** ·
 **agentic 11/12 verified, 12/12 honest, median 2 turns / ~7 s per trial** ·
 engine-side prefix-cache reuse 20–45 k tokens per fresh agent session.
+
+## Clean-window rerun 2026-11-13 — standalone driver (raw: `bench/splash-concurrency/results/clean-2026-11-13/`)
+
+The suite the other waves could never quite run **truly single-tenant**: a detached python runner
+(`bench/clean-run-2026-11-13/run_clean.py`, launched from a terminal) drove engine probe → ladder+KV
+→ visual-venv → agentic while the operator's Claude session — itself served by this engine — sat
+completely idle, zero turns, for every timed stage. Splash 1.6.1 (now version-confirmed via
+`splash --version`, not assumed), engine warm at start (cache hit-rate 0.996).
+
+Headline deltas vs the three prior 1.6.1 waves (full table in the leaderboard):
+
+- **Ladder w1 209.5 tok/s** — best recorded; probe/ladder ratio 0.760 reproduces 11-12's 0.745, so
+  the probe-vs-ladder gap is a harness constant, not contention.
+- **Plateau 470–475 (w8–32, peak w12 475.2)** — the *lowest* plateau of any 1.6.1 wave despite zero
+  contention: the w6 dip all but vanishes (0.97× of w4) and the plateau mean keeps drifting
+  (518.3 → 496.6 → 473.7). Read: plateau level is engine-instance state; the tenancy tax is a
+  latency-suite effect (agentic/resolve walls), not something a saturated-decode aggregate feels.
+  Shape invariants hold: no collapse by 32, stop rule never fired, admission peaks identical
+  (2/4/8/12/12/12 at w6/8/12/16/24/32).
+- **TTFT 159 ms warm / 229 ms cold** — best cold recorded; warm corroborates 11-12's 151.
+- **KV: no trip at 611,244 = 4.66× the 131,072-token budget** — fifth-wave reproduction; memory path
+  middling-quiet (waiting_memory peaks 1, holds 72–196 ms; `spill+0 demote+0`;
+  `lifetime_final` suspensions 0, capacity_failures 0 in the ladder_kv SUMMARY).
+- **Agentic n=3 back: 12/12 verified + 12/12 honest**; S3's `out.json` exact on all three passes,
+  S1/S2 values cross-checked against live `/status` counters (monotonic, consistent).
+- The visual-venv baseline (run3) co-ran in the same idle-engine window — every deterministic value
+  bit-identical, canonical 0.278 s; see the leaderboard's Visual venv section.
+
+Harness note: the runner's intended warm-up completion 404'd (Splash doesn't serve
+`/v1/chat/completions`); harmless — the probe's own first passes warmed the engine (decode rows
+159→174→143 trend visible in `engine_probe.jsonl`). Future reruns should warm via the Messages
+route or just accept the probe trend.
 
 ## Cross-hardware — the same model on NVIDIA boxes (external data, 2026-11-13)
 

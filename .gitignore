@@ -1,3 +1,5 @@
 .DS_Store
 __pycache__/
 *.pyc
+fixture.json
+ground_truth.json

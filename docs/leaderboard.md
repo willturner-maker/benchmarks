@@ -30,6 +30,7 @@ macOS 27.2, render output and scratch on external volumes.
 | **2026-11-10f** | 21.2.0.6 | **5.1.0** | 3116 ms¹ | **1198 ms** | 101.0 | 183 | 47.5 | 112 | 20³ | **18/18** | 18/18 |
 | **2026-11-10g** | 21.2.0.6 | **5.2.0** | 1700 ms¹ | **1296 ms** | 93.4 | 162 | 59 | 112 | 268³⁴ | **18/18** | 18/18 |
 | **2026-11-11h** | 21.2.0.6 | **5.2.2** | 3129 ms¹ | **1205 ms**⁵ | 100.4 | n/a⁵ | n/a | n/a | n/a³⁴ | **18/18** | 18/18 |
+| **2026-11-13i** | 21.2.0.6 | **5.2.2** (same-build repro) | 1303 ms¹ | **1192 ms**⁶ | **101.5** | 155⁶ | 35 | 80 | 13³⁶ | **18/18** | 18/18 |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
@@ -109,6 +110,30 @@ for non-allowlisted API methods** — scripting-based grading is dead on arrival
 See [the results file](../bench/resolve-agentic/results-2026-11-11h.json); note its audit-errata history
 (review agents corrected three stat errors in the original record — commit `81d77cc`).
 
+⁶ **2026-11-13i — same server build as 11h, methodology wave:** the wave ran from a **standalone python
+driver** (`wave_driver.py`) instead of the operator's session, and the operator made zero Resolve calls and
+zero model turns during it — the first agbench with **no operator tenancy at all**. The op cells re-open
+single-tenant (perf stage before the wave): warm 1192 ms is the best recorded and reproduces the published
+1196 within 0.3 %; `set_current` 80 ms shows no alternation lifecycle while the perf stage stays on one
+timeline. The probe cell (13 ms, 4 items, same-context) shows the 4.19.3 step-up (18–20 ms) **did not
+reproduce** on 5.2.2 — the flag stays open, not called fixed.
+
+**2026-11-13i row:** the **seventh consecutive clean 18/18** (126/126 aggregate), and the split verdict is the
+point: with tenancy removed, the placeholder-free tasks ran faster than 11h (T3 walls −27…−48 %,
+T4 −25…−41 %, T2 r1 −42 %), while all three T7 runs went 1.5–2.5× **slower** — the briefs' published
+`/Volumes/YourVolume` placeholder sent each agent on an honest dead-end hunt (all three named the placeholder
+as such and rendered to the real pre-created dirs; T7r3 spent 118 uses surveying six MCP actions before
+declaring packet counts unobtainable in-engine, which is exactly the honesty the rubric pays for). Zero
+cross-agent write incidents for a second running. The seal came back **hard**, upgraded by necessity: the
+strict-MCP config (which carries server env) is built at runtime into a tempfile **outside the public repo**
+and deleted on exit — a session classifier rightly refused to persist credentials in the tree, and that
+refusal designed the pattern. In-suite render ms (1445/1425/1447) were read by the **agents** before grading
+(queue emptied per brief), so they sit in the record but not in a cell. Three new API truths:
+`get_clips_linked` is not pin-able (answers `not found` against the CURRENT timeline), `render.set_settings`
+silently accepts a bogus `TargetDir` (only `add_job` refuses), and `timeline.duplicate` archives the **source**
+fixture — six `_base` archive siblings this wave where 11h had none.
+See [the results file](../bench/resolve-agentic/results-2026-11-13i.json).
+
 ## Splash engine — reference host
 
 | Date | Engine | Model | TTFT warm | TTFT cold | decode w1 | decode plateau | suspensions at 4.4× KV | agentic | honest |
@@ -116,7 +141,8 @@ See [the results file](../bench/resolve-agentic/results-2026-11-11h.json); note 
 | 2026-11-06 | Splash 1.6.0 | Qwen3.8-Flash-Next IQ3_S (262k ctx) | 201 ms | 380 ms | 170 tok/s¹ | **372–383 tok/s**, widths 4→32 (2.5–2.6×) | **0** | 11/12 | 12/12 |
 | **2026-11-10s** | Splash 1.6.0 (same build) | same | 174 ms | 430 ms | 128 tok/s¹ | **366–369 tok/s**, widths 8→32 (2.4×)² | **0** | **12/12** | 12/12 |
 | **2026-11-11h** | **Splash 1.6.1** (INT8 activations default on M5+) | same | 294 ms⁶ | 442 ms | **186.9 tok/s**⁷ | **510–525 tok/s**, widths 12→32 (**+39 %** vs 1.6.0 plateau) | **0** (but +645 disk demotions at w10) | **12/12** | 12/12 |
-| **2026-11-12** | **Splash 1.6.1** (assumed — version not exposed by `/status`; see ⁸) | same | **151 ms**⁶ | 355 ms | **205.2 tok/s**⁷ | **487–506 tok/s**, widths 12→32 (peak back at w8: 522.7) | **0** at 4.66× — this instance's budget is 131,072 tok⁸ | n/a⁹ | n/a |
+| **2026-11-12** | **Splash 1.6.1** (assumed — version not exposed by `/status`; see ⁸) | same | **151 ms**⁶ | 355 ms | 205.2 tok/s⁷ | **487–506 tok/s**, widths 12→32 (peak back at w8: 522.7) | **0** at 4.66× — this instance's budget is 131,072 tok⁸ | n/a⁹ | n/a |
+| **2026-11-13** | **Splash 1.6.1** (`splash --version` confirms — the ⁸ assumption resolves) | same | 159 ms⁶ | **229 ms** | **209.5 tok/s**⁷ | **470–475 tok/s**, widths 8→32 (peak w12: 475.2)¹⁰ | **0** at 4.66× (budget 131,072 tok)⁸ | **12/12** | 12/12 |
 
 ¹ decode w1 is warmth-sensitive — the probe's own three passes trend (105→133→165 baseline,
 111→128→136 rerun); the column is the warmed value on the baseline row, the median on the rerun row.
@@ -128,12 +154,14 @@ engine instance; it bounds run-to-run spread for future diffs.
 logged as an open flag (contention or real regression). **Resolved by the 2026-11-12 wave: warm
 151 ms**, the best warm figure recorded, corroborated by the same wave's ladder w1 (205.2 tok/s,
 the highest w1 seen). The 294 ms reads as contention contamination, not a regression; cold
-figures stay in band (442/355 vs 380/430 before INT8).
+figures stay in band (442/355 vs 380/430 before INT8). The 2026-11-13 clean window corroborates
+again — warm 159 ms, and **cold 229 ms**, the best cold recorded.
 ⁷ decode w1 on both 1.6.1 rows is the **clean ladder width-1** value; the 11-11h `engine_probe`
 decode rows (81.6/80.7/149.6) were contention-contaminated by the operator session and are
 excluded — see [NOTES.md](../bench/splash-concurrency/results/splash-1.6.1-rerun-2026-11-11h/NOTES.md).
 The 11-12 probe was clean (152.8/167.0/148.4, flat walls) and sits at 0.745 × the ladder w1 —
-the ladder figure is the comparable one across rows.
+the ladder figure is the comparable one across rows. The 11-13 probe (159.3/173.6/143.3) sits at
+**0.760 ×** its ladder w1 (209.5) — the ratio itself reproduces.
 ⁸ 11-12 wave caveats (full detail in
 [NOTES.md](../bench/splash-concurrency/results/rerun-2026-11-12/NOTES.md)): engine version
 **assumed 1.6.1** (`/status` schema 8 exposes no version; no reported update since the 1.6.1
@@ -145,14 +173,26 @@ not 4.4×; the demote path engaged in three rounds (w6/10/12 = +382/+645/+97) �
 memory path of any wave, still zero suspensions/spills.
 ⁹ No agentic n=3 this wave — the suite ran `engine_probe.py && ladder_kv.py` from a fresh
 terminal only; driver2.py was not run.
+¹⁰ **2026-11-13 clean-window run** — the first suite run with **true** single-tenancy: a detached
+runner (`bench/clean-run-2026-11-13/run_clean.py`) launched from a terminal, operator session
+making zero engine turns during timed stages (the tenancy lesson from the Resolve waves, applied
+to the engine suite). Caveats: the driver's warm-up completion 404'd (Splash does not serve
+`/v1/chat/completions`) — harmless, the probe's first passes warmed the engine; the KV memory path
+ran middling-quiet (waiting_memory holds 72–196 ms at w4/6/10/12, restoring ≤2, spill/demote 0);
+prefill wall not re-sampled this wave. agentic n=3 returned: 12/12 + 12/12 (S3 `out.json` exact,
+S1/S2 cross-checked against live `/status` counters — monotonic and consistent). The plateau reads
+**lowest** of the three 1.6.1 waves despite zero contention — plateau scatter is engine-instance
+state, not tenancy; the tenancy tax lives in latency-bound suites (agentic walls), not in
+saturated-decode aggregates.
 
 Rerun in one pass: `python3 -I bench/splash-concurrency/ladder_kv.py` (width ladder + KV-pressure
 probe, one combined summary). The plateau is a wall, not a cliff; the KV probe's negative
 result (no suspension at 611,244 prompt tokens) is a finding, not a missing number — and it
-reproduced on **all four waves**, with the memory path's secondary signals shifting wave to wave
+reproduced on **all five waves**, with the memory path's secondary signals shifting wave to wave
 (the 11-10s rerun ran quietest; the 1.6.1 waves ran hottest — 11-11h demoted 645 blocks at width
-10, exactly the baseline's figure, and 11-12 demoted at w6/10/12 with one pacing hold at w10;
-suspensions and spills stayed zero everywhere).
+10, exactly the baseline's figure, 11-12 demoted at w6/10/12 with one pacing hold at w10, and the
+11-13 clean window ran middling-quiet: small waiting_memory holds at w4/6/10/12 but spill and
+demote deltas zero; suspensions and spills stayed zero everywhere).
 
 Cross-hardware context (DGX Spark / RTX Spark / RTX 5090 on the same resident model): the
 [comparison section](splash-engine-benchmark-results.md#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13).
@@ -166,18 +206,18 @@ Same host, same model (Qwen3.8-Flash-Next IQ3_S, 262k ctx), same spec: 512-token
 rounds per width, median shown. Comparable across rows only because the harness is identical;
 1.6.1's INT8 default means numerics are not bit-comparable with the 1.6.0 rows.
 
-| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | 1.6.1 (11-11h) | **1.6.1 (11-12)** |
-|---|---|---|---|---|
-| 1 | 147.6 | 151.5 | 186.9 | **205.2** |
-| 2 | 259.1 | 250.7 | 301.0 | 334.5 |
-| 3 | 306.1 | 290.9 | 378.5 | 393.4 |
-| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 | 464.3 |
-| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) | 417.6 (0.90×) |
-| 8 | 373.9 | 368.7 | 488.4 | **522.7** ← peak |
-| 12 | 375.7 | 367.7 | **524.8** ← peak | 487.1 |
-| 16 | 371.9 | 369.1 | 510.0 | 505.7 |
-| 24 | 382.9 | 368.8 | 518.5 | 493.1 |
-| 32 | 371.7 | 365.5 | 519.8 | 500.5 |
+| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | 1.6.1 (11-11h) | 1.6.1 (11-12) | **1.6.1 (11-13 clean)** |
+|---|---|---|---|---|---|
+| 1 | 147.6 | 151.5 | 186.9 | 205.2 | **209.5** |
+| 2 | 259.1 | 250.7 | 301.0 | 334.5 | 299.2 |
+| 3 | 306.1 | 290.9 | 378.5 | 393.4 | 362.6 |
+| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 | 464.3 | 453.3 |
+| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) | 417.6 (0.90×) | 438.1 (0.97×) |
+| 8 | 373.9 | 368.7 | 488.4 | **522.7** ← peak | 470.2 |
+| 12 | 375.7 | 367.7 | **524.8** ← peak | 487.1 | **475.2** ← peak |
+| 16 | 371.9 | 369.1 | 510.0 | 505.7 | 470.7 |
+| 24 | 382.9 | 368.8 | 518.5 | 493.1 | 474.5 |
+| 32 | 371.7 | 365.5 | 519.8 | 500.5 | 474.4 |
 
 The 1.6.1 plateau is **+39.2 %** mean (per-width +32.5…+42.7 %), but read the shape with it: the
 peak moves from width 4 to width 12, the w6 dip gets shallower, and w1 itself rose +23.4 % —
@@ -186,13 +226,17 @@ single-stream decode speed. The gain is decode-side (prefill walls: 611k tokens 
 171.1 s — unchanged), consistent with, but not proven by, the INT8-activations default. Stop
 rule (halt when median aggregate falls below 1.10× w1) never fired in any wave.
 
-**Two 1.6.1 waves bound the current run-to-run band** (11-12 vs 11-11h): plateau (w12–32)
-518.3 → 496.6 (−4.2 %, noisier), w1 **+9.8 %** (186.9 → 205.2, best recorded), the w6 dip
-shallower again (0.90× w4 vs 0.93×), peak position swinging w12 → w8. Read peak position and the
-±4 % plateau swing as instance-to-instance scatter (the 11-10s lesson), not a shape change.
-The 1.6.1 gain over 1.6.0 stands at either wave: plateau 496.6 vs 375.6 (11-06) / 367.7 (11-10s)
-means, w1 205.2 vs 147.6 / 151.5 — and the prefill walls stayed 170.5–171.5 s across all four
-waves, so decode-side remains the unchanged-half of the story.
+**Three 1.6.1 waves bound the current run-to-run band** (11-11h → 11-12 → 11-13 clean): plateau
+(w12–32) means 518.3 → 496.6 → 473.7 (the swing is now −8.6 % end to end), w1
+**186.9 → 205.2 → 209.5** (best recorded), the w6 dip flattening 0.93× → 0.90× → 0.97×, peak
+position swinging w12 → w8 → w12. Crucially, the cleanest wave has the **lowest** plateau — so the
+plateau scatter is engine-instance state, not contention: the tenancy tax is a latency-suite effect
+(see the Resolve wave walls), not something a saturated-decode aggregate feels. Read plateau and
+peak position as scatter (the 11-10s lesson), not shape change; the invariants that hold are w1
+rising, the no-collapse-by-32 result, and identical admission counts. The 1.6.1 gain over 1.6.0
+stands at every wave: plateau 473.7–518.3 vs 375.6 (11-06) / 367.7 (11-10s) means, w1 186.9–209.5
+vs 147.6 / 151.5 — and the prefill walls stayed 170.5–171.5 s in every wave that sampled them, so
+decode-side remains the unchanged-half of the story.
 
 ## Visual venv (OpenCV) — reference host
 
@@ -203,16 +247,25 @@ OpenCV 5.1.x wheels (watched by a launchd agent; wheels land as `5.1.0.xxxx`).
 |---|---|---|---|---|---|---|
 | 2026-11-11 run1 | 5.0.0.93 | **91 faces / 0.278 s** (PNG; 89 / 0.273 s H.264) | 0.90→57 · 0.75→85 · 0.60→89 · 0.50→91 · 0.45→94 · 0.30→98 | 10.99 ms/face⁸ | 1.488 / 1.491 / 1.486 s | `match()` mutates in-place ✓ · TF reader present · Caffe reader absent |
 | 2026-11-11 run2 (same build) | 5.0.0.93 | 91 / 0.302 s | counts **bit-identical** | 11.59 ms/face⁸ | not captured⁹ | all identical |
+| 2026-11-13 run3 (same build, clean window) | 5.0.0.93 (unchanged install)¹⁰ | 91 / **0.278 s** (PNG; 89 / 0.270 s H.264) | counts **bit-identical** (third time) | 10.34 ms/face⁸ | not captured⁹ | all identical |
 
 Run2 is a same-build rerun that calibrates the noise band before the upgrade: **every deterministic
 value reproduced** (48/48 detect counts, whole-frame 92, match-probe, cosine stats, surface markers,
 fixture hashes) while all 48 timings rose uniformly ~11 % (median ×1.111) — machine-state drift, not
 an OpenCV effect. **×1.15 is therefore the ceiling for calling a future 5.1.x timing change "real."**
 The `match()` in-place-mutation marker flipping to false will be the first visible upstream fix.
+A third data point landed on 2026-11-13 (run3, from the clean-window driver, engine idle): every
+deterministic value bit-identical again, canonical timing back at run1's 0.278 s — the ×1.15 band
+holds, and run1 ≈ run3 is more evidence the run2 lift was machine state, not the harness.
 
 ⁸ units normalized: run2's script emits `*_ms`-named keys holding seconds (erratum in
-[the README](../bench/visual-venv/README.md)); 1.055 s ÷ 91 = 11.59 ms/face.
-⁹ `cold_run.py` prints to stdout; run2's stdout was never saved.
+[the README](../bench/visual-venv/README.md)); run3's 0.941 s ÷ 91 = 10.34 ms/face.
+⁹ `cold_run.py` prints to stdout; run2's stdout was never saved. Its repo-local fixture has since
+moved, so run3 ran without a cold stage too — run2/run3 stay comparable without it.
+¹⁰ run3 ran inside the Splash clean window (engine idle) — timings the fastest recorded, canonical
+back at run1's 0.278 s (×0.92 vs run2, inside the ×1.15 band). Every deterministic value bit-identical
+for a third consecutive run. `cv2.__version__` now reads the 3-segment `5.0.0` while pip still shows
+the 5.0.0.93 wheels — same install, untouched since October.
 
 Fixtures are real face frames and are **never committed** — SHA-256s live in the run JSONs, and
 `bench/visual-venv/README.md` documents reproducing the harness on your own face-dense media.

@@ -1,0 +1,17 @@
+{
+  "schema_version": 8,
+  "memory_pressure": "normal",
+  "admission": {
+    "waiting": 0,
+    "waiting_memory": 0,
+    "waiting_concurrency": 0,
+    "held_behind_refusal": 0,
+    "restoring": 0,
+    "suspended": 0,
+    "draining": false,
+    "oldest_wait_ms": 0
+  },
+  "queued": 0,
+  "decoding": 0,
+  "derived": 0
+}

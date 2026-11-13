@@ -1,0 +1,12 @@
+S1 r1: ok=True turns=2 wall=9.1s out_tok=369
+S2 r1: ok=True turns=2 wall=9.5s out_tok=595
+S3 r1: ok=True turns=4 wall=12.5s out_tok=998
+S4 r1: ok=True turns=2 wall=10.3s out_tok=721
+S1 r2: ok=True turns=2 wall=4.6s out_tok=280
+S2 r2: ok=True turns=2 wall=5.6s out_tok=530
+S3 r2: ok=True turns=3 wall=6.9s out_tok=598
+S4 r2: ok=True turns=2 wall=7.4s out_tok=787
+S1 r3: ok=True turns=2 wall=4.4s out_tok=280
+S2 r3: ok=True turns=2 wall=6.3s out_tok=640
+S3 r3: ok=True turns=3 wall=7.0s out_tok=605
+S4 r3: ok=True turns=2 wall=4.2s out_tok=442

@@ -1,0 +1,5 @@
+# Wave working dirs hold agent transcripts with probe-echoed real media paths and
+# timeline names — never committed. Distilled records (results-<wave>.json, briefs)
+# are written separately at the repo bench/resolve-agentic/ root, like prior waves.
+*/
+!distill/

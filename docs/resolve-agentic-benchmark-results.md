@@ -25,6 +25,7 @@ benchmark in the perf baseline (same day, same machine, MCP v4.18.5, Resolve Stu
 - [Addendum (f) — 2026-11-10f MCP 5.1.0](#addendum-f-2026-11-10f--first-pass-on-mcp-510)
 - [Addendum (g) — 2026-11-10g MCP 5.2.0](#addendum-g-2026-11-10g--first-pass-on-mcp-520-and-the-wave-that-caught-a-hole-in-our-own-pinning-protocol)
 - [Addendum (h) — 2026-11-11h MCP 5.2.2](#addendum-h-2026-11-11h--mcp-522-sixth-clean-wave)
+- [Addendum (i) — 2026-11-13i clean-window driver](#addendum-i-2026-11-13i--same-build-clean-window-driver-and-the-tenancy-control-result)
 
 ## Scorecard
 
@@ -742,3 +743,31 @@ Key published numbers (see the leaderboard and the combined reruns scorecard for
   - Leaderboard row and `leaderboard/results.json`
 
 This addendum is a pointer only; the long-form per-task notes for wave h are in the scorecard and raw JSON.
+
+
+## Addendum (i): 2026-11-13i — same build, clean-window driver, and the tenancy control result
+
+Wave `2026-11-13i` re-ran the **identical build** (Resolve Studio 21.2.0.6 + MCP 5.2.2, agents on
+Splash 1.6.1) with the methodology changed: the two-agent wave (n=3, 9 pairs) was driven by a
+**standalone python process** — `bench/resolve-agentic/wave_driver.py` — and the operator's own
+session made zero Resolve calls and zero model turns during it. That turns the wave into the
+tenancy control the earlier waves could only measure from the contaminated side: **the
+placeholder-free tasks ran faster with zero operator traffic** (T3 walls −27…−48 %, T4 −25…−41 %,
+T2 r1 −42 % vs wave h), while all three T7 runs ran 1.5–2.5× slower on an honest dead-end hunt
+through the published `/Volumes/YourVolume` placeholder — brief friction, not agent regression.
+The perf stage ran single-tenant before the wave: warm render **1192 ms** (best recorded), ops
+prepare 155 / verify 35 / set_current 80 / probe (4 items) 13 ms — and that 13 ms says the
+4.19.3-era probe step-up (18–20 ms) did not reproduce on 5.2.2.
+
+**18/18 verified, 18/18 honest — seventh consecutive clean wave (126/126 aggregate)**, second
+consecutive with zero cross-agent write incidents. The seal came back hard and was improved under
+classifier pressure: the strict MCP config is built at runtime into a tempfile **outside the
+(public) repo** and deleted on exit, so nothing credential-bearing ever lands in the tree. Three
+new API truths (get_clips_linked not pin-able; `set_settings` silently accepts a bogus `TargetDir`
+while only `add_job` refuses; `duplicate` archives the SOURCE timeline) plus the agent-side
+highlights — T1r2 discarding a contaminated identical-valued read, T3r3 catching the
+relative-vs-absolute `record_frame` trap in dry-run, T7r3 declaring packet counts unobtainable
+in-engine after surveying six MCP actions — are in the record:
+
+- [`bench/resolve-agentic/results-2026-11-13i.json`](../bench/resolve-agentic/results-2026-11-13i.json)
+- [`bench/resolve-agentic/briefs-2026-11-13.md`](../bench/resolve-agentic/briefs-2026-11-13.md)

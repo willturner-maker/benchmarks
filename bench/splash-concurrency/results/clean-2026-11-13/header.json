@@ -1,0 +1,31 @@
+{
+ "date": "2026-11-13",
+ "note": "clean-window run: operator session idle during timed stages; driver is a standalone python process",
+ "engine_cache": {
+  "hits": 220,
+  "cold_misses": 1,
+  "hit_rate": 0.9955
+ },
+ "engine_model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+ "kv_budget_tokens": {
+  "block_tokens": 32,
+  "pages_allocated": 9216,
+  "pages_active": 6951,
+  "extents_active": 28,
+  "active_bytes": 278396928,
+  "pages_cache": 8806,
+  "pages_free": 384,
+  "allocated_bytes": 1044381696,
+  "reclaimable_bytes": 6291456,
+  "extent_allocations": 196,
+  "extent_releases": 160,
+  "extent_allocate_max_ms": 11.053458,
+  "extent_release_max_ms": 0.066958,
+  "extent_compactions": 139,
+  "pages_moved": 9552,
+  "extent_compact_max_ms": 6.774917
+ },
+ "splash_version": "Splash 1.6.1",
+ "cv2_version": "5.0.0",
+ "repo_head": "31715d9"
+}

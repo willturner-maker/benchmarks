@@ -5,3 +5,6 @@
 ^\s*(Co-Authored-By|Signed-off-by|Reviewed-by|Thanks-to|Acked-by):
 # the scanner's own rules table (it contains the patterns it hunts for)
 ^\s*(home-path|named-volume|camera-filename|credential-assignment|key-format|private-key-block|secret-file-path|email)\|
+# the strict-seal driver READS the stock Claude Code config filename at runtime
+# (server definitions; credentials are never written to the tree — filename alone leaks nothing)
+\.claude\.json

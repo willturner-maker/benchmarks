@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "updated": "2026-11-13 (Splash 2026-11-12 wave row added; cross-hardware comparison section in docs)",
+ "updated": "2026-11-13 (clean-window suites: Resolve agbench 2026-11-13i, Splash 2026-11-13 clean rerun, visual-venv run3 — all from a standalone driver with the operator session idle)",
  "read_this_first": [
   "Rows are only comparable within the same media_class and the same tenant conditions.",
   "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
@@ -410,6 +410,23 @@
     "honest": "18/18",
     "notes": "tool surface unchanged 5.2.0->5.2.2; wall totals 1146/1077/1076 s = -22.8..-37.8% vs 10g (agent-side economy, no cross-writes this wave); seal downgraded to chmod go-rwx (session classifier refused off-disk move) \u2014 disclosed deviation; new api_truth: record_frame_mode:'absolute' silently ignored on positioned rows, official in-app run_script sandbox returns None for non-allowlisted methods",
     "evidence": "bench/resolve-agentic/{briefs,results}-2026-11-11h.{md,json}; render SHAs in results file; commits 910792a/81d77cc"
+   },
+   {
+    "date": "2026-11-13i",
+    "resolve": "21.2.0.6",
+    "mcp": "5.2.2",
+    "media_class": "A",
+    "cold_ms": 1303,
+    "warm_median_ms": 1192,
+    "warm_fps": 101.5,
+    "render_probe": "121 f 3840x1520 mov/H.264, TimeTakenToRenderInMs; perf stage single-tenant BEFORE the wave (best warm recorded; reproduces published 1196 within 0.3%)",
+    "op_medians_ms": {"prepare": 155, "verify": 35, "set_current": 80, "probe_4item": 13},
+    "op_column_caveat": "single-tenant, collected before the wave per RUNBOOK; probe 4-item 13 ms is same-context — the 4.19.3 probe step-up (18-20 ms) did NOT reproduce on 5.2.2, flag stays open rather than being called fixed; set_current 80 ms shows no alternation lifecycle cost while the perf stage stays on one timeline",
+    "tenant_conditions": "two-agent waves n=3 driven by STANDALONE python (wave_driver.py); zero operator Resolve calls and zero operator model turns for the whole wave — first agbench wave with no operator tenancy at all",
+    "agentic": "18/18 (seventh consecutive clean wave; 126/126 aggregate over seven waves)",
+    "honest": "18/18",
+    "notes": "methodology wave (same build as 11h): placeholder-free tasks ran faster with tenancy removed (T3 walls -27..-48%, T4 -25..-41%, T2 r1 -42%) while T7 ran 1.5-2.5x slower on the briefs' /Volumes/YourVolume placeholder dead-end hunt (all three agents honestly named the placeholder; T7r3 surveyed six MCP actions before declaring packet counts unobtainable in-engine); second consecutive wave with zero cross-agent write incidents; in-suite render ms 1445/1425/1447 read by the AGENTS (queue emptied before grading) — kept in the record, out of the cells; new api_truth: get_clips_linked not pin-able (answers 'not found' against CURRENT), render.set_settings silently accepts bogus TargetDir (add_job refuses), timeline.duplicate archives the SOURCE fixture (six _base archive siblings); hard seal restored via runtime-tempfile strict-MCP config built from ~/.claude.json outside the repo, deleted on exit (no credentials in the public tree)",
+    "evidence": "bench/resolve-agentic/{briefs,results}-2026-11-13i.{md,json}; driver bench/resolve-agentic/wave_driver.py; T7 output SHAs in the results file (outputs kept on the external volume)"
    }
   ],
   "splash_engine": [
@@ -638,6 +655,31 @@
      "single-tenant hygiene mild violation (see tenant_conditions)"
     ],
     "evidence": "bench/splash-concurrency/results/rerun-2026-11-12/ (NOTES.md, combined_stdout.txt, engine_probe.jsonl, ladder_kv.jsonl); commit bff3643"
+   },
+   {
+    "date": "2026-11-13 (clean-window rerun)",
+    "engine": "Splash 1.6.1 (CONFIRMED via splash --version; the 11-12 'assumed' caveat resolves)",
+    "model": "same (ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S)",
+    "context_tokens": 262144,
+    "ttft_warm_ms": 159,
+    "ttft_cold_ms": 229,
+    "ttft_caveat": "corroborates the 151 ms warm best (11-12); cold 229 ms is the best cold recorded",
+    "decode_w1_tok_s": 209.5,
+    "decode_w1_source": "ladder width-1 median (best w1 ever); probe decode 159.3/173.6/143.3 -> probe/ladder ratio 0.760, reproducing 11-12's 0.745",
+    "decode_plateau_tok_s": "470-475",
+    "plateau_widths": "8-32 (peak w12 475.2; the w6 dip all but vanishes at 0.97x of w4)",
+    "ladder_medians_tok_s": {"1": 209.5, "2": 299.2, "3": 362.6, "4": 453.3, "6": 438.1, "8": 470.2, "12": 475.2, "16": 470.7, "24": 474.5, "32": 474.4},
+    "kv_capacity_tokens": 131072,
+    "kv_pressure_probe": "no trip through w12: 611,244 tokens = 4.66x the 131,072-token budget; ladder_kv SUMMARY lifetime_final suspensions 0 / capacity_failures 0; middling-quiet memory path: waiting_memory peak 1 (holds 72-196 ms) at w4/6/10/12, restoring max 2, spill and demote deltas 0",
+    "agentic": "12/12 verified + 12/12 honest (driver2 n=3 back after the 11-12 gap; S3 out.json exact on first pass all three runs, S1/S2 cross-checked against live /status counters - monotonic and consistent)",
+    "tenant_conditions": "TRUE single-tenant: detached runner (bench/clean-run-2026-11-13/run_clean.py) started from a terminal, operator session made ZERO engine turns during timed stages — the tenancy lesson from the Resolve waves applied to the engine suite for the first time",
+    "deviations": [
+     "driver warm-up completion 404'd (Splash does not serve /v1/chat/completions) - harmless, the probe's own first passes warmed the engine (decode 159->174->143)",
+     "prefill wall not re-measured (ladder_kv SUMMARY reports submission walls; the ~171 s scheduler-polled figure was not sampled this wave)",
+     "visual-venv run3 ran inside the same window with the engine idle: every deterministic value bit-identical to run1/run2 (canonical 0.278 s, within the x1.15 band)",
+     "plateau read LOWEST of the three 1.6.1 waves despite zero contention - plateau scatter is engine-instance state, not tenancy (tenancy tax is a latency-suite effect, visible in the agentic/resolve walls instead)"
+    ],
+    "evidence": "bench/splash-concurrency/results/clean-2026-11-13/ (header.json, engine_probe.jsonl, ladder_kv.jsonl, run3.json, agentic/sessions/summary.jsonl, stage stdout) + bench/clean-run-2026-11-13/run_clean.py"
    }
   ],
   "community_runs": [],
@@ -679,6 +721,16 @@
     "embed_window_ms_per_face": 11.59,
     "errata": "current script's feat_ms_total/det_ms_same_pass/ms_per_face keys hold SECONDS (ms_per_face also precision-degraded); run1's *_s keys correct; run2 cold_process not captured; run1 made by an earlier script version (provenance note in README)",
     "evidence": "bench/visual-venv/run2.json + README addendum; commit f672bd8"
+   },
+   {
+    "date": "2026-11-13 run3 (same build; run inside the Splash clean window, engine idle)",
+    "opencv": "5.0.0.93 (pip unchanged since the Oct install; the script's env field now shows cv2.__version__ = 5.0.0, the 3-segment form of the same wheel)",
+    "determinism": "48/48 detect counts, whole-frame 92, cosine stats (0.1265/0.3121), match-probe incl. in-place mutation, surface markers, fixture hashes - ALL bit-identical a third time",
+    "canonical": "91 merged / 0.278 s PNG (89 / 0.270 s H.264) - identical to run1, x0.92 vs run2, well inside the x1.15 noise band",
+    "embed_window_ms_per_face": 10.34,
+    "cold_process_s": null,
+    "notes": "cold stage dropped (cold_run.py's repo-local fixture has moved; run2 had no cold section either, so run3 stays comparable without it); timings the fastest recorded (engine idle), but run1==run3 on the canonical cell - no new band claim, third confirmation of determinism",
+    "evidence": "bench/splash-concurrency/results/clean-2026-11-13/run3.json (kept beside the engine suite it ran with; bench/visual-venv/ still holds run1+run2)"
    }
   ]
  },
