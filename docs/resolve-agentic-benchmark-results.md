@@ -759,6 +759,14 @@ The perf stage ran single-tenant before the wave: warm render **1192 ms** (best 
 prepare 155 / verify 35 / set_current 80 / probe (4 items) 13 ms — and that 13 ms says the
 4.19.3-era probe step-up (18–20 ms) did not reproduce on 5.2.2.
 
+**One honesty correction on "identical build" — the agent harness flipped mid-wave.** Backfilling
+harness versions from the transcripts (2026-11-13): wave h ran wholly on Claude Code **2.1.322**,
+while in `13i` the auto-updater flipped the on-disk build **2.1.323 → 2.1.325 between pair 4 and
+pair 5** — 8 trials (T1r1–T3r2) ran on 323, the remaining 10 (T3r3, T4, T7, T8) on 325. "Identical
+build" therefore holds for Resolve + MCP + engine; the T4/T7/T8 tenancy-control walls carry a
+harness bump stacked on top, and T3 is internally split. `wave_driver.py` now writes `harness.json`
+at dispatch; future same-build repro waves should also disable CLI auto-update before launching.
+
 **18/18 verified, 18/18 honest — seventh consecutive clean wave (126/126 aggregate)**, second
 consecutive with zero cross-agent write incidents. The seal came back hard and was improved under
 classifier pressure: the strict MCP config is built at runtime into a tempfile **outside the

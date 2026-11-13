@@ -3,7 +3,8 @@
  "build": {
   "resolve": "21.2.0.6 Studio",
   "mcp": "5.2.2 (same build as the 2026-11-11h wave — this is a methodology-change reproduction wave, not a server bump)",
-  "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.1 (INT8 activations default on M5+)"
+  "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.1 (INT8 activations default on M5+)",
+  "claude_code": "MIXED — 2.1.323 for pairs 1-4 (T1r1, T1r2, T1r3, T2r1, T2r2, T2r3, T3r1, T3r2), 2.1.325 from pair 5 (T3r3+T4r1) onward: T3r3, T4r1-r3, T7r1-r3, T8r1-r3. The auto-updater flipped the on-disk build mid-wave; verified per-trial from the trial transcripts' version field (backfilled 2026-11-13)"
  },
  "media_class": "A",
  "waves": "two-agent waves; n=3; HARD seal restored and upgraded: wave driven by a standalone python process (wave_driver.py), every trial `claude -p --strict-mcp-config` with an MCP config built at RUNTIME from ~/.claude.json into a tempfile outside the repo (deleted on exit — no credentials in the tree) + all non-MCP tools denied. Zero operator Resolve calls and zero operator model turns during the wave (first agbench wave with no operator tenancy at all).",
@@ -48,7 +49,8 @@
   "operator pre-created the three T7 target dirs + the perf dir (sealed agents have no shell); the briefs' YourVolume placeholder then cost every T7 agent an honest dead-end hunt (all three named the placeholder and rendered to the real pre-created dirs) — T7 walls +47…+148 % vs 11h are brief friction, not agent regression",
   "agents emptied render jobs before grading → operator could not read job-status render ms (see in_suite_render_note)",
   "credential-safe strict-MCP config pattern (runtime tempfile outside the repo, deleted on exit) replaced the on-disk runtime config used by earlier waves — required because the repo is public; a session classifier refused writing the config (which carries server env) into the results dir",
-  "six _base_archived_vNN siblings appeared (five trials duplicated while _base was current; C6 archives the duplicated SOURCE timeline) — 11h saw none; fixtures themselves verified bit-identical after grading, archives removed with the project at teardown"
+  "six _base_archived_vNN siblings appeared (five trials duplicated while _base was current; C6 archives the duplicated SOURCE timeline) — 11h saw none; fixtures themselves verified bit-identical after grading, archives removed with the project at teardown",
+  "HARNESS FLIP MID-WAVE: Claude Code auto-updated 2.1.323 → 2.1.325 between pair 4 (12:46:16) and pair 5 (12:49:43) dispatches — 8 trials ran on 323, 10 on 325. The T4/T7/T8 tenancy-control comparisons against 11h (harness 2.1.322) therefore carry a harness bump as well; T3 is internally split (r1/r2 on 323, r3 on 325). Wave comparability rule tightened after this: record the harness build at dispatch (wave_driver.py now writes harness.json) and consider pinning auto-update before a wave"
  ],
  "api_truth_candidates_5_2_2_repro": [
   "timeline.get_clips_linked does NOT honour the timeline_id pin: it resolves clip ids against the CURRENT timeline and answers per-id 'not found' for foreign ids (no error) — same current-timeline asymmetry as fusion_comp; grade link state only while the target timeline is current",

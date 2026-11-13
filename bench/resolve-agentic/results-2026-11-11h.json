@@ -3,7 +3,8 @@
  "build": {
   "resolve": "21.2.0.6 Studio",
   "mcp": "5.2.2 (npm-synced same day from 5.2.0; 5.2.1 = 21.0.4 live-tested methods, 5.2.2 = generate_captions word-wrap fix; tool surface unchanged)",
-  "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.1 (first wave on 1.6.1: INT8 activations default on M5+, numerics not bit-comparable to 1.6.0 waves)"
+  "agent_model": "ISTA-DASLab/Qwen3.8-Flash-Next IQ3_S served locally by Splash 1.6.1 (first wave on 1.6.1: INT8 activations default on M5+, numerics not bit-comparable to 1.6.0 waves)",
+  "claude_code": "2.1.322 (backfilled 2026-11-13 from the version field of the dispatching operator transcript — the per-trial transcripts were removed at wave teardown; only one build appears inside the dispatch window. NOT 2.1.323: that shipped 2026-11-12, the day after this wave)"
  },
  "media_class": "A",
  "waves": "two-agent waves; n=3; seal DEGRADED this wave: off-disk move refused by the session classifier, fallback chmod go-rwx on memory dir + repo (softer: same-user agents could still read; blocks accidental reads only; restored after grading)",
