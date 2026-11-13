@@ -116,6 +116,7 @@ See [the results file](../bench/resolve-agentic/results-2026-11-11h.json); note 
 | 2026-11-06 | Splash 1.6.0 | Qwen3.8-Flash-Next IQ3_S (262k ctx) | 201 ms | 380 ms | 170 tok/s¹ | **372–383 tok/s**, widths 4→32 (2.5–2.6×) | **0** | 11/12 | 12/12 |
 | **2026-11-10s** | Splash 1.6.0 (same build) | same | 174 ms | 430 ms | 128 tok/s¹ | **366–369 tok/s**, widths 8→32 (2.4×)² | **0** | **12/12** | 12/12 |
 | **2026-11-11h** | **Splash 1.6.1** (INT8 activations default on M5+) | same | 294 ms⁶ | 442 ms | **186.9 tok/s**⁷ | **510–525 tok/s**, widths 12→32 (**+39 %** vs 1.6.0 plateau) | **0** (but +645 disk demotions at w10) | **12/12** | 12/12 |
+| **2026-11-12** | **Splash 1.6.1** (assumed — version not exposed by `/status`; see ⁸) | same | **151 ms**⁶ | 355 ms | **205.2 tok/s**⁷ | **487–506 tok/s**, widths 12→32 (peak back at w8: 522.7) | **0** at 4.66× — this instance's budget is 131,072 tok⁸ | n/a⁹ | n/a |
 
 ¹ decode w1 is warmth-sensitive — the probe's own three passes trend (105→133→165 baseline,
 111→128→136 rerun); the column is the warmed value on the baseline row, the median on the rerun row.
@@ -123,19 +124,35 @@ See [the results file](../bench/resolve-agentic/results-2026-11-11h.json); note 
 (0.87× the width-4 peak both waves), same admission counts. Not a regression claim on one
 engine instance; it bounds run-to-run spread for future diffs.
 
-⁶ warm TTFT 294 ms is a **single sample under shared-engine conditions** with no corroborating
-measurement — logged as an open flag (contention or real regression), to be settled on the next run;
-cold matches prior waves.
-⁷ decode w1 on the 1.6.1 row is the **clean ladder width-1** value; that run's `engine_probe` decode
-rows (81.6/80.7/149.6) were contention-contaminated by the operator session and are excluded — see
-[NOTES.md](../bench/splash-concurrency/results/splash-1.6.1-rerun-2026-11-11h/NOTES.md).
+⁶ warm TTFT 294 ms on the 11-11h wave was a **single sample under shared-engine conditions** —
+logged as an open flag (contention or real regression). **Resolved by the 2026-11-12 wave: warm
+151 ms**, the best warm figure recorded, corroborated by the same wave's ladder w1 (205.2 tok/s,
+the highest w1 seen). The 294 ms reads as contention contamination, not a regression; cold
+figures stay in band (442/355 vs 380/430 before INT8).
+⁷ decode w1 on both 1.6.1 rows is the **clean ladder width-1** value; the 11-11h `engine_probe`
+decode rows (81.6/80.7/149.6) were contention-contaminated by the operator session and are
+excluded — see [NOTES.md](../bench/splash-concurrency/results/splash-1.6.1-rerun-2026-11-11h/NOTES.md).
+The 11-12 probe was clean (152.8/167.0/148.4, flat walls) and sits at 0.745 × the ladder w1 —
+the ladder figure is the comparable one across rows.
+⁸ 11-12 wave caveats (full detail in
+[NOTES.md](../bench/splash-concurrency/results/rerun-2026-11-12/NOTES.md)): engine version
+**assumed 1.6.1** (`/status` schema 8 exposes no version; no reported update since the 1.6.1
+install on 2026-11-11); **single-tenant hygiene violated mildly** — the engine also served the
+operator's Claude session between messages, with all per-round suspension counters at delta 0
+(lifetime 16, all pre-existing), so numbers are kept with this note; the **resident-KV budget is
+instance-variable** (131,072 tok here vs 139,264 in 1.6.0 waves), so the KV probe reads 4.66×
+not 4.4×; the demote path engaged in three rounds (w6/10/12 = +382/+645/+97) — the busiest
+memory path of any wave, still zero suspensions/spills.
+⁹ No agentic n=3 this wave — the suite ran `engine_probe.py && ladder_kv.py` from a fresh
+terminal only; driver2.py was not run.
 
 Rerun in one pass: `python3 -I bench/splash-concurrency/ladder_kv.py` (width ladder + KV-pressure
 probe, one combined summary). The plateau is a wall, not a cliff; the KV probe's negative
 result (no suspension at 611,244 prompt tokens) is a finding, not a missing number — and it
-reproduced on all three waves, with the memory path's secondary signals shifting wave to wave
-(the rerun ran quietest; 1.6.1 demoted 645 blocks to disk at width 10, exactly where the
-baseline did).
+reproduced on **all four waves**, with the memory path's secondary signals shifting wave to wave
+(the 11-10s rerun ran quietest; the 1.6.1 waves ran hottest — 11-11h demoted 645 blocks at width
+10, exactly the baseline's figure, and 11-12 demoted at w6/10/12 with one pacing hold at w10;
+suspensions and spills stayed zero everywhere).
 
 Cross-hardware context (DGX Spark / RTX Spark / RTX 5090 on the same resident model): the
 [comparison section](splash-engine-benchmark-results.md#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13).
@@ -149,18 +166,18 @@ Same host, same model (Qwen3.8-Flash-Next IQ3_S, 262k ctx), same spec: 512-token
 rounds per width, median shown. Comparable across rows only because the harness is identical;
 1.6.1's INT8 default means numerics are not bit-comparable with the 1.6.0 rows.
 
-| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | **1.6.1 (11-11h)** |
-|---|---|---|---|
-| 1 | 147.6 | 151.5 | **186.9** |
-| 2 | 259.1 | 250.7 | 301.0 |
-| 3 | 306.1 | 290.9 | 378.5 |
-| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 |
-| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) |
-| 8 | 373.9 | 368.7 | 488.4 |
-| 12 | 375.7 | 367.7 | **524.8** ← peak |
-| 16 | 371.9 | 369.1 | 510.0 |
-| 24 | 382.9 | 368.8 | 518.5 |
-| 32 | 371.7 | 365.5 | 519.8 |
+| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | 1.6.1 (11-11h) | **1.6.1 (11-12)** |
+|---|---|---|---|---|
+| 1 | 147.6 | 151.5 | 186.9 | **205.2** |
+| 2 | 259.1 | 250.7 | 301.0 | 334.5 |
+| 3 | 306.1 | 290.9 | 378.5 | 393.4 |
+| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 | 464.3 |
+| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) | 417.6 (0.90×) |
+| 8 | 373.9 | 368.7 | 488.4 | **522.7** ← peak |
+| 12 | 375.7 | 367.7 | **524.8** ← peak | 487.1 |
+| 16 | 371.9 | 369.1 | 510.0 | 505.7 |
+| 24 | 382.9 | 368.8 | 518.5 | 493.1 |
+| 32 | 371.7 | 365.5 | 519.8 | 500.5 |
 
 The 1.6.1 plateau is **+39.2 %** mean (per-width +32.5…+42.7 %), but read the shape with it: the
 peak moves from width 4 to width 12, the w6 dip gets shallower, and w1 itself rose +23.4 % —
@@ -168,6 +185,14 @@ concurrency-normalized (plateau ÷ w1) the gain is only +12.8 %, so most of the 
 single-stream decode speed. The gain is decode-side (prefill walls: 611k tokens in 170.5 vs
 171.1 s — unchanged), consistent with, but not proven by, the INT8-activations default. Stop
 rule (halt when median aggregate falls below 1.10× w1) never fired in any wave.
+
+**Two 1.6.1 waves bound the current run-to-run band** (11-12 vs 11-11h): plateau (w12–32)
+518.3 → 496.6 (−4.2 %, noisier), w1 **+9.8 %** (186.9 → 205.2, best recorded), the w6 dip
+shallower again (0.90× w4 vs 0.93×), peak position swinging w12 → w8. Read peak position and the
+±4 % plateau swing as instance-to-instance scatter (the 11-10s lesson), not a shape change.
+The 1.6.1 gain over 1.6.0 stands at either wave: plateau 496.6 vs 375.6 (11-06) / 367.7 (11-10s)
+means, w1 205.2 vs 147.6 / 151.5 — and the prefill walls stayed 170.5–171.5 s across all four
+waves, so decode-side remains the unchanged-half of the story.
 
 ## Visual venv (OpenCV) — reference host
 

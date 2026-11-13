@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "updated": "2026-11-11 (wave h 5.2.2, Splash 1.6.1 rerun, visual-venv suite added)",
+ "updated": "2026-11-13 (Splash 2026-11-12 wave row added; cross-hardware comparison section in docs)",
  "read_this_first": [
   "Rows are only comparable within the same media_class and the same tenant conditions.",
   "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
@@ -404,11 +404,11 @@
     "warm_fps": 100.4,
     "render_probe": "121 f 3840x1520 mov/H.264, TimeTakenToRenderInMs; file verified via ffprobe (121 packets, pcm_s24le)",
     "op_medians_ms": null,
-    "op_column_caveat": "op medians not collected single-tenant this wave; graded pinned reads ran 240-1136 ms and include the baseline_reset alternation lifecycle (footnote 4) — not rankable, marked n/a rather than filled",
-    "tenant_conditions": "two-agent waves n=3; warm perf probe ran CONCURRENT with pair 1 (deviation from single-tenant rule — value kept, ranked with note)",
+    "op_column_caveat": "op medians not collected single-tenant this wave; graded pinned reads ran 240-1136 ms and include the baseline_reset alternation lifecycle (footnote 4) \u2014 not rankable, marked n/a rather than filled",
+    "tenant_conditions": "two-agent waves n=3; warm perf probe ran CONCURRENT with pair 1 (deviation from single-tenant rule \u2014 value kept, ranked with note)",
     "agentic": "18/18 (sixth consecutive clean wave; 108/108 aggregate over six waves)",
     "honest": "18/18",
-    "notes": "tool surface unchanged 5.2.0->5.2.2; wall totals 1146/1077/1076 s = -22.8..-37.8% vs 10g (agent-side economy, no cross-writes this wave); seal downgraded to chmod go-rwx (session classifier refused off-disk move) — disclosed deviation; new api_truth: record_frame_mode:'absolute' silently ignored on positioned rows, official in-app run_script sandbox returns None for non-allowlisted methods",
+    "notes": "tool surface unchanged 5.2.0->5.2.2; wall totals 1146/1077/1076 s = -22.8..-37.8% vs 10g (agent-side economy, no cross-writes this wave); seal downgraded to chmod go-rwx (session classifier refused off-disk move) \u2014 disclosed deviation; new api_truth: record_frame_mode:'absolute' silently ignored on positioned rows, official in-app run_script sandbox returns None for non-allowlisted methods",
     "evidence": "bench/resolve-agentic/{briefs,results}-2026-11-11h.{md,json}; render SHAs in results file; commits 910792a/81d77cc"
    }
   ],
@@ -469,7 +469,7 @@
    },
    {
     "date": "2026-11-10s",
-    "engine": "Splash 1.6.0 (same build as baseline — re-measure, not an upgrade)",
+    "engine": "Splash 1.6.0 (same build as baseline \u2014 re-measure, not an upgrade)",
     "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
     "context_tokens": 262144,
     "ttft_warm_ms": 174,
@@ -540,7 +540,7 @@
     "context_tokens": 262144,
     "ttft_warm_ms": 294,
     "ttft_cold_ms": 442,
-    "ttft_caveat": "warm TTFT single sample under shared-engine conditions, no corroborating measurement — OPEN FLAG, could be contention or a real regression; cold matches prior waves",
+    "ttft_caveat": "warm TTFT single sample under shared-engine conditions, no corroborating measurement \u2014 OPEN FLAG, could be contention or a real regression; cold matches prior waves",
     "decode_w1_tok_s": 186.9,
     "decode_w1_source": "ladder width-1 row (clean window); engine_probe decode rows this run (81.6/80.7/149.6) were contention-contaminated and are excluded",
     "decode_plateau_tok_s": [
@@ -576,16 +576,68 @@
      ]
     },
     "kv_capacity_tokens": 139264,
-    "kv_pressure_probe": "no suspension/spill at 611,244 prompt tokens (4.4x); BUT disk.kv_demotions delta +645 at w10 (reproduces the 2026-11-06 baseline figure; the 1.6.0 rerun had zero) and one waiting_memory hold at w10 (59.6 ms) — instance-dependent signals, the headline negative result stands",
+    "kv_pressure_probe": "no suspension/spill at 611,244 prompt tokens (4.4x); BUT disk.kv_demotions delta +645 at w10 (reproduces the 2026-11-06 baseline figure; the 1.6.0 rerun had zero) and one waiting_memory hold at w10 (59.6 ms) \u2014 instance-dependent signals, the headline negative result stands",
     "agentic": "12/12 (4 tasks x 3, driver2 suite; S2 arithmetic exact all three)",
     "agentic_honest": "12/12",
-    "tenant_conditions": "ladder + KV stage quiet; engine_probe rows and warm agentic adjacency shared the engine with the operator session — flagged per field",
+    "tenant_conditions": "ladder + KV stage quiet; engine_probe rows and warm agentic adjacency shared the engine with the operator session \u2014 flagged per field",
     "deviations": [
      "probe decode rows contention-contaminated (excluded)",
      "warm TTFT open flag",
      "commit made while agentic driver still running (harmless overlap)"
     ],
     "evidence": "bench/splash-concurrency/results/splash-1.6.1-rerun-2026-11-11h/ (ladder_kv.jsonl, engine_probe.jsonl, driver2_summary.jsonl, NOTES.md); commits fe02001/c27019b/a244428"
+   },
+   {
+    "date": "2026-11-12",
+    "engine": "Splash 1.6.1 (assumed: /status schema 8 exposes no version; no reported update since the 2026-11-11 1.6.1 install)",
+    "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+    "context_tokens": 262144,
+    "ttft_warm_ms": 151,
+    "ttft_cold_ms": 355,
+    "ttft_caveat": "RESOLVES the 11-11h open flag: warm 151 ms is the best recorded and corroborated by the same wave's ladder w1 (205.2); the 294 ms read was contention contamination, not a regression",
+    "decode_w1_tok_s": 205.2,
+    "decode_w1_source": "ladder width-1 median, best w1 recorded; probe was clean this wave (152.8/167.0/148.4 flat walls) and sits at 0.745 x the ladder w1 - ladder figure is the comparable one",
+    "decode_plateau_tok_s": [
+     487.1,
+     505.7
+    ],
+    "plateau_widths": "12-32 median band 487-506, mean 496.6 (-4.2% vs 11-11h's 518.3, noisier - instance scatter per the 11-10s lesson, not a shape claim); peak back at w8 (522.7) not w12; w6 dip 0.900x of w4; stop rule never fired (min post-w1 ratio 1.63x)",
+    "ladder_medians_tok_s": {
+     "widths": [
+      1,
+      2,
+      3,
+      4,
+      6,
+      8,
+      12,
+      16,
+      24,
+      32
+     ],
+     "values": [
+      205.2,
+      334.5,
+      393.4,
+      464.3,
+      417.6,
+      522.7,
+      487.1,
+      505.7,
+      493.1,
+      500.5
+     ]
+    },
+    "kv_capacity_tokens": 131072,
+    "kv_pressure_probe": "no trip through w12: 611,244 tokens = 4.66x THIS instance's 131,072-token budget (budget itself is instance-variable; 1.6.0 waves reported 139,264); prefill wall near-identical (171.5 s); demote path engaged in 3 rounds (w6 +382, w10 +645, w12 +97) - busiest memory path of any wave; one waiting_memory+waiting hold at w10; susp_peak 0 and susp_delta 0 every round",
+    "agentic": "n/a - engine stages only this wave (engine_probe.py + ladder_kv.py); driver2.py not run",
+    "tenant_conditions": "engine on :8000 also served the operator's Claude session (inter-message turns) - a mild rule-2 deviation, disclosed in NOTES; lifetime resource_suspensions 16, all pre-existing, per-round deltas 0; engine idle-sampled between rounds",
+    "deviations": [
+     "engine_probe.py /tmp output dir crash fixed (os.makedirs + SPLASH_BENCH_OUT) - probe stage clean this wave",
+     "engine version assumed 1.6.1 (not exposed by /status; no reported update between waves)",
+     "single-tenant hygiene mild violation (see tenant_conditions)"
+    ],
+    "evidence": "bench/splash-concurrency/results/rerun-2026-11-12/ (NOTES.md, combined_stdout.txt, engine_probe.jsonl, ladder_kv.jsonl); commit bff3643"
    }
   ],
   "community_runs": [],
@@ -616,13 +668,13 @@
      "readNetFromTensorflow": "present",
      "readNetFromCaffe": "absent"
     },
-    "fixtures": "f240 png sha 12662c77…, h264 sha 1ec7a3a6… (real face frames — NEVER committed; hashes in the run JSONs)",
+    "fixtures": "f240 png sha 12662c77\u2026, h264 sha 1ec7a3a6\u2026 (real face frames \u2014 NEVER committed; hashes in the run JSONs)",
     "evidence": "bench/visual-venv/run1.json"
    },
    {
-    "date": "2026-11-11 run2 (same-build rerun, noise-band calibration — not the 5.1.x upgrade run)",
+    "date": "2026-11-11 run2 (same-build rerun, noise-band calibration \u2014 not the 5.1.x upgrade run)",
     "opencv": "5.0.0.93 (identical)",
-    "determinism": "48/48 detect counts, ladder counts, whole-frame 92, match-probe, surface markers, cosine stats, fixture hashes — ALL bit-identical",
+    "determinism": "48/48 detect counts, ladder counts, whole-frame 92, match-probe, surface markers, cosine stats, fixture hashes \u2014 ALL bit-identical",
     "timing_band": "uniform +~11% across all 48 samples (median x1.111, range 1.04-1.27; canonical 0.278->0.302 s) with the identical cv2 build = machine-state drift ceiling for the future 5.1.x diff",
     "embed_window_ms_per_face": 11.59,
     "errata": "current script's feat_ms_total/det_ms_same_pass/ms_per_face keys hold SECONDS (ms_per_face also precision-degraded); run1's *_s keys correct; run2 cold_process not captured; run1 made by an earlier script version (provenance note in README)",
@@ -638,7 +690,7 @@
    "what_it_claimed": "perf probe (cold 1748 ms, warm median 1215 ms, op medians) + targeted behaviour probes of the two shipped fixes",
    "removed_on": "2026-11-06",
    "reason": "Unrelated local processes were running during the pass, so the timing columns are not trusted. The row is withdrawn rather than quietly corrected.",
-   "replace_with": "a clean single-tenant re-measure on the same build — LANDED as 2026-11-06e"
+   "replace_with": "a clean single-tenant re-measure on the same build \u2014 LANDED as 2026-11-06e"
   },
   {
    "label": "2026-11-06d",
@@ -647,7 +699,7 @@
    "what_it_claimed": "agentic n=3 (18/18 outcomes, 17/18 honest) plus in-suite T7 render ms",
    "removed_on": "2026-11-06",
    "reason": "Same contamination: other processes were running, and sealing for that wave was procedural rather than harness-enforced. Withdrawn as a scored run.",
-   "replace_with": "a clean sealed n=3 wave on the same build — LANDED as 2026-11-06e"
+   "replace_with": "a clean sealed n=3 wave on the same build \u2014 LANDED as 2026-11-06e"
   }
  ]
 }
