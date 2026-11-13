@@ -7,13 +7,18 @@ baseline (< 1.10 x the w1 median) — i.e. when added concurrency buys nothing a
 Samples /status DURING each round for admission.waiting / queued / suspended peaks.
 Widths: 1,2,3,4,6,8,12,16,24,32 (cap 32); 2 rounds per width; same prompt & 512-token
 output as the v1 width512 runs for comparability."""
-import json, time, threading, urllib.request
+import json, os, time, threading, urllib.request
 import concurrent.futures as cf
 import statistics as st
 
 BASE = "http://127.0.0.1:8000"
 MODEL = "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S"
-OUT = "/tmp/splash-bench-2026-11-06/width_ladder_v3.jsonl"
+# /tmp got wiped by macOS; write beside the repo like kv_pressure_v4.py. NOTE: the 2026-11-06
+# baseline record IS results/width_ladder_v3.jsonl and this file appends — for a re-run set
+# SPLASH_BENCH_OUT to a dated results/<run>/ path so waves don't mix.
+OUT = os.environ.get("SPLASH_BENCH_OUT",
+                     os.path.join(os.path.dirname(os.path.abspath(__file__)), "results", "width_ladder_v3.jsonl"))
+os.makedirs(os.path.dirname(OUT), exist_ok=True)
 PROMPT = "List integers from 1 to 240, one per line, and nothing else."
 MAXTOK = 512
 

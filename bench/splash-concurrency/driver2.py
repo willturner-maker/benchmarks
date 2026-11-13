@@ -5,9 +5,12 @@
 3) per-task isolated cwd (run-1 agents found S4's fixture from other tasks' dirs).
 Condition otherwise unchanged: fresh session per trial, all model aliases = resident Qwen,
 default permission mode, WebSearch/WebFetch disabled, 4 tasks x 3 runs, sequential."""
-import json, os, subprocess, time, pathlib
+import json, os, shutil, subprocess, time, pathlib
 
-DIR = "/tmp/splash-bench-2026-11-06/run2"
+HERE = os.path.dirname(os.path.abspath(__file__))
+# run-2 state used to live in wiped /tmp; keep it beside the results tree now. For a re-run,
+# set SPLASH_BENCH_DIR to a dated results/<run>/ path (commit distilled rows only, as prior waves did).
+DIR = os.environ.get("SPLASH_BENCH_DIR", os.path.join(HERE, "results", "agentic-run2"))
 MODEL = "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S"
 ENV = {**os.environ,
        "ANTHROPIC_BASE_URL": "http://127.0.0.1:8000",
@@ -65,6 +68,9 @@ def run(k, n):
 if __name__ == "__main__":
     for t in TASKS.values(): pathlib.Path(t["cwd"]).mkdir(parents=True, exist_ok=True)
     pathlib.Path(f"{DIR}/sessions").mkdir(exist_ok=True)
+    # S4 reads fixture_status.json from its cwd; the old /tmp/run2 had it planted by hand.
+    fx = pathlib.Path(f"{DIR}/S4/fixture_status.json")
+    if not fx.exists(): shutil.copy(os.path.join(HERE, "fixture_status.json"), fx)
     for n in (1, 2, 3):
         for k in ("S1", "S2", "S3", "S4"):
             r = run(k, n)

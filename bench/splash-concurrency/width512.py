@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
-import json, time, urllib.request
+import json, os, time, urllib.request
 import concurrent.futures as cf
-exec(open("/tmp/splash-bench-2026-11-06/engine_probe.py").read().split('if __name__')[0])
+HERE = os.path.dirname(os.path.abspath(__file__))
+# engine_probe helpers used to live in wiped /tmp; exec the sibling in this dir.
+# Redirect its emit (this script's rows) to our own results file — set SPLASH_BENCH_OUT before
+# the exec so engine_probe's module-level OUT/makedirs land there too.
+os.environ.setdefault("SPLASH_BENCH_OUT", os.path.join(HERE, "results", "width512.jsonl"))
+exec(open(os.path.join(HERE, "engine_probe.py")).read().split('if __name__')[0])
 for width in (1, 2, 4):
     for rnd in (1, 2, 3):
         wait_idle(); a = snap(status())
