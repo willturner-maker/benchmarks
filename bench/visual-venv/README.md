@@ -60,3 +60,16 @@ opencv_zoo ONNX files>` — absolute counts will differ; the ladder *shape* and 
   stdout, which was not captured for run2).
 - Provenance note: `run1.json` was produced by an earlier script version (it carries `unit_note`,
   `*_s` keys, and a hand-merged `cold_process` section the current script cannot emit).
+
+## Rerun 2026-11-13 (`run3.json`, same opencv-python 5.0.0.93 — clean-window co-run)
+
+Co-ran inside the 2026-11-13 clean window (detached driver, engine session idle); the JSON lives
+with that window's records at `../splash-concurrency/results/clean-2026-11-13/run3.json` rather
+than here. Every deterministic value bit-identical for a **third** consecutive run (48/48 detect
+counts, whole-frame 92, cosine 0.1265 / 0.3121, `match()` still mutating in place, all surface
+markers, fixture hashes). Canonical 4×3@0.5 came back at run1's exact **0.278 s** (×0.92 vs run2
+— inside the ×1.15 band, so run2's lift was machine state, not the harness); embed window
+10.34 ms/face, fastest recorded. Note: `cv2.__version__` reports three-segment `"5.0.0"` while pip
+still shows the 5.0.0.93 wheels (same Oct install) — don't read the string as a build change.
+Cold stage not captured (the repo-local fixture `cold_run.py` used has moved; run2 had none
+either).

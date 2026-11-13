@@ -20,15 +20,15 @@ unified memory, macOS 27.2.0.
 | Machine-readable results schema | [`docs/schema.md`](docs/schema.md) |
 | Community runs (class B / other hosts) | [`docs/leaderboard.md#community-runs--your-numbers`](docs/leaderboard.md#community-runs--your-numbers) |
 | Self-contained HTML scorecards (GitHub Pages) | [index.html](https://willturner-maker.github.io/benchmarks/) or the `reports/` directory |
-| Latest combined results | [2026-11-11 reruns](https://willturner-maker.github.io/benchmarks/reports/2026-11-11-reruns.html) |
+| Latest combined results | [Clean-window suites, 2026-11-13](https://willturner-maker.github.io/benchmarks/reports/2026-11-13-clean-window.html) |
 
 ## Suites
 
 | Suite | Doc | Scripts / raw data | Latest standing |
 |---|---|---|---|
-| DaVinci Resolve MCP | [`docs/resolve-agentic-benchmark-results.md`](docs/resolve-agentic-benchmark-results.md) | **[`bench/resolve-agentic/`](bench/resolve-agentic/)** — briefs, runbook, and `check_media.py` so you can run it on **your own footage** | 21.2.0.6 + MCP 5.2.2 (wave `2026-11-11h`): **18/18 verified, 18/18 honest — sixth consecutive clean wave, 108/108 aggregate**; walls down 23–38 % vs the 5.2.0 wave with zero cross-agent write incidents; warm render 1205 ms (ran concurrent — ranked with note, see leaderboard rule 2) |
-| Splash engine + Qwen | [`docs/splash-engine-benchmark-results.md`](docs/splash-engine-benchmark-results.md) | `bench/splash-concurrency/` — single entry point `ladder_kv.py` (width ladder + KV-pressure probe in one run) | Splash 1.6.1 (2026-11-11): plateau **510–525 tok/s, +39 %** over 1.6.0, aggregate peak moves width 4→12, KV probe still never suspends at 4.4× budget (demote path partially re-engaged at w10 — instance-dependent); agentic suite 12/12 + 12/12 |
-| Visual venv (OpenCV) | [`bench/visual-venv/README.md`](bench/visual-venv/README.md) | `bench/visual-venv/` — bench script, cold-run probe, run1/run2 JSON (**fixtures withheld**: real face frames; hashes in the JSONs) | opencv-python 5.0.0.93 baseline + same-build rerun: every deterministic value bit-identical, uniform ~11 % timing drift band (×1.15 ceiling for the future 5.1.x diff); watched for 5.1.x wheels by a launchd agent |
+| DaVinci Resolve MCP | [`docs/resolve-agentic-benchmark-results.md`](docs/resolve-agentic-benchmark-results.md) | **[`bench/resolve-agentic/`](bench/resolve-agentic/)** — briefs, runbook, `wave_driver.py`, and `check_media.py` so you can run it on **your own footage** | 21.2.0.6 + MCP 5.2.2 (wave `2026-11-13i`, same-build repro on a standalone driver): **18/18 verified, 18/18 honest — seventh consecutive clean wave, 126/126 aggregate**; zero operator tenancy during the wave (tenancy control reproduced: placeholder-free task walls −25…−48 % vs `11h`); single-tenant warm render **1192 ms** (best recorded) |
+| Splash engine + Qwen | [`docs/splash-engine-benchmark-results.md`](docs/splash-engine-benchmark-results.md) | `bench/splash-concurrency/` — single entry point `ladder_kv.py` (width ladder + KV-pressure probe in one run); full clean-window driver at `bench/clean-run-2026-11-13/` | Splash 1.6.1 (clean-window rerun 2026-11-13, true single-tenant): ladder w1 **209.5 tok/s** (best), TTFT 159 warm / **229 cold**; plateau 470–475 — the LOWEST of the 1.6.1 waves despite zero contention, so plateau level is engine-instance state, not tenancy; KV never suspends at **4.66×** budget; agentic suite 12/12 + 12/12 |
+| Visual venv (OpenCV) | [`bench/visual-venv/README.md`](bench/visual-venv/README.md) | `bench/visual-venv/` — bench script, cold-run probe, run1/run2 JSON (**fixtures withheld**: real face frames; hashes in the JSONs) | opencv-python 5.0.0.93: every deterministic value **bit-identical across three runs** (run3 co-ran in the 2026-11-13 clean window; canonical 4×3@0.5 = 91 faces / 0.278 s); uniform ~11 % timing drift band (×1.15 ceiling for the future 5.1.x diff); watched for 5.1.x wheels by a launchd agent |
 
 (Superseded drafts live in [`archive/`](archive/) — including the never-run 2026-09
 concurrency spec the Splash ladder later implemented.)
@@ -47,6 +47,7 @@ before a row can be ranked.
 The scorecards themselves are self-contained HTML (no external assets, no build step) and
 render on Pages:
 
+- [Clean-window suites, all three live suites — 2026-11-13](https://willturner-maker.github.io/benchmarks/reports/2026-11-13-clean-window.html)
 - [Benchmark reruns, all four suites — 2026-11-11](https://willturner-maker.github.io/benchmarks/reports/2026-11-11-reruns.html)
 - [Resolve MCP · MCP 5.2.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-10g-resolve-21-2-mcp-520.html)
 - [Splash engine 1.6.0 rerun](https://willturner-maker.github.io/benchmarks/reports/2026-11-10s-splash-160-rerun.html)

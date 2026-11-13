@@ -321,11 +321,15 @@ someone else's harness, gathered 2026-11-13: usually n=1, tenant conditions unst
 and quants differing row to row. That fails leaderboard rules 2–3, so it lives here as
 context, not as rows. Links at the end; treat every cell as "as published, accessed 2026-11-13".
 
-**Reference-host anchor:** the latest 1.6.1 wave (rerun 2026-11-12; wave detail in
-[NOTES.md](../bench/splash-concurrency/results/rerun-2026-11-12/NOTES.md) and the
-[leaderboard](leaderboard.md)): decode w1 **205.2 tok/s** (ladder), plateau **487–506 tok/s**
-(widths 12–32, stop rule never fired), prefill wall 611,244 tokens / 171.5 s ≈ **3.56 k tok/s**,
-TTFT **151 ms warm / 355 ms cold**.
+**Reference-host anchor:** the 2026-11-13 **clean-window** rerun (wave detail in
+[NOTES.md](../bench/splash-concurrency/results/clean-2026-11-13/NOTES.md) and the
+[leaderboard](leaderboard.md)) — the first wave with zero co-resident session traffic, so the
+single-tenant caveat that hedged every earlier host row is gone: decode w1 **209.5 tok/s**
+(ladder, best recorded), plateau **470–475 tok/s** (widths 8–32, stop rule never fired — the
+plateau scatters 470–525 across 1.6.1 waves and is engine-instance state, not tenancy),
+TTFT **159 ms warm / 229 ms cold**. Prefill keeps the 2026-11-12 figure — 611,244 tokens /
+171.5 s ≈ **3.56 k tok/s** — because the clean-window KV pass is submit-timed only and prefill
+walls are unchanged across these builds anyway.
 
 **Model facts that frame the whole comparison.** Locally measured: the IQ3_S GGUF is **78 GB**
 (51 GB + 27 GB shards). Community reports describe Qwen3.8-Flash-Next as a **125B MoE with
@@ -337,14 +341,14 @@ cache exists for.
 
 | Platform | Memory / bandwidth | This model, single-stream decode | Prefill | Aggregate / concurrency |
 |---|---|---|---|---|
-| **Reference host** — M5 Ultra 96 GiB, Splash **1.6.1**, INT8 | 96 GiB unified; Apple never states the M5 Ultra bus, unmeasured here | **205.2 tok/s** (IQ3_S, ladder w1) | **~3.56 k tok/s** | **487–506 tok/s** plateau, widths 12–32, single-tenant |
+| **Reference host** — M5 Ultra 96 GiB, Splash **1.6.1**, INT8 | 96 GiB unified; Apple never states the M5 Ultra bus, unmeasured here | **209.5 tok/s** (IQ3_S, ladder w1, clean window) | **~3.56 k tok/s** | **470–475 tok/s** plateau, widths 8–32 (wave band 470–525), true single-tenant |
 | NVIDIA **DGX Spark** (GB10) | 128 GB LPDDR5x, **273 GB/s** | **55.6 tok/s** — Mia's recipe (FP4 QAD or INT4-AR **+ MTP** draft, TensorFold Zig). Same-class quants without drafters land lower (27B dense: 35–51) | 2.4k tok/s (gpt-oss-120b b1 — different model) | 262 tok/s (gpt-oss-120b, 32×4096 — different model); dense 70B FP8: **2.7 tok/s** (bus-bound) |
 | NVIDIA **RTX Spark** (N1X, launched 2026-10-16) | up to 128 GB unified LPDDR5X-9400, **~300 GB/s** est. (StorageReview, from Dell's 256-bit listing) | **no published Flash-Next figure yet** — device-class numbers: GPT-OSS-120B ~65 tok/s (llama.cpp); dense 27B 13.4 (no draft) / ~33 (DFlash2); community 5-device comparison places Spark ≈ DGX Spark ±10 % | — | Windows-on-Arm caveats: GPU gets only part of the pool; no Linux reported at gather time |
 | NVIDIA **RTX 5090** (32 GB GDDR7, ~1.79 TB/s) + 64–128 GB DDR5 | ~29 GB model-hot in VRAM; experts over PCIe 5.0 (~64 GB/s) + DDR5 (~90–100 GB/s); n-gram table on NVMe | **30–50 tok/s** stock llama.cpp/vLLM (43.4 vLLM bench Aug 2026; 30.7 unsloth GGUF + 96 GB); **90–107 tok/s** purpose-built engines (Strata IQ3_S @ 262k ctx int8-KV: **106.8 median**, drops to ~62 sharing the card; MTP: 45→90) | 2.3–4k tok/s | 2× 5090, QEngine: **504 tok/s** decode; dual-5090 FreeToken 217 stable, 350+ with drafting |
 
 **Findings.**
-- **Same-model, same-quant-class single stream: the host is ~1.9× the best published 5090
-  result (205.2 vs 106.8, both IQ3_S) and ~3.7× the best Spark figure (55.6, FP4 ≈ same memory
+- **Same-model, same-quant-class single stream: the host is ~2.0× the best published 5090
+  result (209.5 vs 106.8, both IQ3_S) and ~3.8× the best Spark figure (55.6, FP4 ≈ same memory
   demand), and 4–7× stock llama.cpp/vLLM on the 5090.** The mechanism is bandwidth tiering at
   decode: this model wants well past 100 GB resident while streaming 78 GB-class weights per
   sweep. Unified memory touches it all directly; the Sparks sit on a 273/300 GB/s bus; the 5090's
@@ -353,9 +357,11 @@ cache exists for.
   the engine's own finding that INT8 decode gains left prefill walls unchanged.
 - **x86 engine momentum is the real counter-story.** Strata, FreeToken, ik_llama.cpp MTP and
   QEngine exist *because* Flash-Next is an offload-designed model, and they earn 2–3× over stock
-  stacks on the 5090. A **2× 5090 QEngine box (504 tok/s aggregate) sits inside the host
-  plateau (487–506)** — but at ~$13 k in cards alone at Nov-2026 street prices, versus the
-  plateau being single-tenant headroom the host already has.
+  stacks on the 5090. The host's saturated-decode plateau **scatters 470–525 tok/s across 1.6.1
+  waves** (instance state, not contention — the clean-window rerun sits at the bottom of that
+  band with zero co-tenancy), so a **2× 5090 QEngine box (504 tok/s aggregate) lands inside the
+  host's range** — but at ~$13 k in cards alone at Nov-2026 street prices, versus the plateau
+  being headroom the host already has.
 - **Where the NVIDIA boxes actually win:** capacity and the CUDA stack. 128 GB holds gpt-oss-120b
   (59–65 tok/s) and dense models the 32 GB card cannot; two Sparks ≈ 400B, four ≈ 700B (NVIDIA's
   own figures); the 5090 runs *models that fit it* fast (Qwen3.8-27B NVFP4: 77–114 tok/s single,
@@ -370,9 +376,10 @@ the headline NVIDIA figures (the 55.6 includes an MTP draft; MTP turns 45→90 o
 cross-row comparisons should read the *without-drafters* numbers where given; quants differ
 row to row (FP4 QAD / INT4-AR / IQ3_XXS vs IQ3_S — same memory class but not same weights);
 NVIDIA-side numbers are owner-reported, n≈1, tenancy unstated; the host figure is the **ladder
-w1 median, not the probe** (probe/ladder ratio 0.745 on the 11-12 wave — quoting the probe
-would understate the host); and the M5 Ultra bus width is quoted nowhere official — the
-bandwidth-tier claim rests on observed decode rates, not a spec-sheet number.
+w1 median, not the probe** (probe/ladder ratio 0.760 on the 11-13 clean window, 0.745 on 11-12 —
+a harness constant; quoting the probe would understate the host); and the M5 Ultra bus width is
+quoted nowhere official — the bandwidth-tier claim rests on observed decode rates, not a
+spec-sheet number.
 
 **Links (accessed 2026-11-13):**
 DGX Spark: getrigbase.com/dgx-spark/ (Mia's recipes, the 55.6) ·
