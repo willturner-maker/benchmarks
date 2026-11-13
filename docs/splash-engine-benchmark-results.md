@@ -25,6 +25,7 @@ macOS 27.2.0. Engine args: working set 56 GiB, SSD cache cap 128 GiB, persistent
 - [Re-running against a future Splash version](#re-running-against-a-future-splash-version)
 - [Re-run 2026-11-10s](#re-run-2026-11-10s--same-build-shape-reproduces-raw-benchsplash-concurrencyresultsrerun-2026-11-10s)
 - [Baseline headline](#baseline-headline-for-the-next-versions-diff)
+- [Cross-hardware comparison](#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13)
 
 ## Layer 1 — engine probe (deterministic, run by the orchestrator, not the LLM)
 
@@ -279,3 +280,78 @@ scheduler serializes prefills and demotes to disk; suspension is a held-context,
 self-healing mechanism, not a throughput cliff** ·
 **agentic 11/12 verified, 12/12 honest, median 2 turns / ~7 s per trial** ·
 engine-side prefix-cache reuse 20–45 k tokens per fresh agent session.
+
+## Cross-hardware — the same model on NVIDIA boxes (external data, 2026-11-13)
+
+**Not a leaderboard section.** Every non-host number below is someone else's measurement on
+someone else's harness, gathered 2026-11-13: usually n=1, tenant conditions unstated, engines
+and quants differing row to row. That fails leaderboard rules 2–3, so it lives here as
+context, not as rows. Links at the end; treat every cell as "as published, accessed 2026-11-13".
+
+**Reference-host anchor:** the latest 1.6.1 wave (rerun 2026-11-12; wave detail in
+[NOTES.md](../bench/splash-concurrency/results/rerun-2026-11-12/NOTES.md) and the
+[leaderboard](leaderboard.md)): decode w1 **205.2 tok/s** (ladder), plateau **487–506 tok/s**
+(widths 12–32, stop rule never fired), prefill wall 611,244 tokens / 171.5 s ≈ **3.56 k tok/s**,
+TTFT **151 ms warm / 355 ms cold**.
+
+**Model facts that frame the whole comparison.** Locally measured: the IQ3_S GGUF is **78 GB**
+(51 GB + 27 GB shards). Community reports describe Qwen3.8-Flash-Next as a **125B MoE with
+~6B active per token plus a ~51 GB n-gram/PLE lookup table**; smallest common quant downloads
+are ~70 GB, NVFP4 checkpoints 124–126 GiB. **No consumer GPU holds it whole** — on every
+platform the question is the quality of the weight-offload pipeline (VRAM→RAM→SSD streaming),
+not the GPU's raw speed. That is exactly the regime Splash's 56 GiB working set + 128 GiB disk
+cache exists for.
+
+| Platform | Memory / bandwidth | This model, single-stream decode | Prefill | Aggregate / concurrency |
+|---|---|---|---|---|
+| **Reference host** — M5 Ultra 96 GiB, Splash **1.6.1**, INT8 | 96 GiB unified; Apple never states the M5 Ultra bus, unmeasured here | **205.2 tok/s** (IQ3_S, ladder w1) | **~3.56 k tok/s** | **487–506 tok/s** plateau, widths 12–32, single-tenant |
+| NVIDIA **DGX Spark** (GB10) | 128 GB LPDDR5x, **273 GB/s** | **55.6 tok/s** — Mia's recipe (FP4 QAD or INT4-AR **+ MTP** draft, TensorFold Zig). Same-class quants without drafters land lower (27B dense: 35–51) | 2.4k tok/s (gpt-oss-120b b1 — different model) | 262 tok/s (gpt-oss-120b, 32×4096 — different model); dense 70B FP8: **2.7 tok/s** (bus-bound) |
+| NVIDIA **RTX Spark** (N1X, launched 2026-10-16) | up to 128 GB unified LPDDR5X-9400, **~300 GB/s** est. (StorageReview, from Dell's 256-bit listing) | **no published Flash-Next figure yet** — device-class numbers: GPT-OSS-120B ~65 tok/s (llama.cpp); dense 27B 13.4 (no draft) / ~33 (DFlash2); community 5-device comparison places Spark ≈ DGX Spark ±10 % | — | Windows-on-Arm caveats: GPU gets only part of the pool; no Linux reported at gather time |
+| NVIDIA **RTX 5090** (32 GB GDDR7, ~1.79 TB/s) + 64–128 GB DDR5 | ~29 GB model-hot in VRAM; experts over PCIe 5.0 (~64 GB/s) + DDR5 (~90–100 GB/s); n-gram table on NVMe | **30–50 tok/s** stock llama.cpp/vLLM (43.4 vLLM bench Aug 2026; 30.7 unsloth GGUF + 96 GB); **90–107 tok/s** purpose-built engines (Strata IQ3_S @ 262k ctx int8-KV: **106.8 median**, drops to ~62 sharing the card; MTP: 45→90) | 2.3–4k tok/s | 2× 5090, QEngine: **504 tok/s** decode; dual-5090 FreeToken 217 stable, 350+ with drafting |
+
+**Findings.**
+- **Same-model, same-quant-class single stream: the host is ~1.9× the best published 5090
+  result (205.2 vs 106.8, both IQ3_S) and ~3.7× the best Spark figure (55.6, FP4 ≈ same memory
+  demand), and 4–7× stock llama.cpp/vLLM on the 5090.** The mechanism is bandwidth tiering at
+  decode: this model wants well past 100 GB resident while streaming 78 GB-class weights per
+  sweep. Unified memory touches it all directly; the Sparks sit on a 273/300 GB/s bus; the 5090's
+  1.79 TB/s helps only the ~29 GB it pins, and everything else pays PCIe + DDR5.
+- **Prefill is parity** (2.3–4k vs 3.56k) — compute-bound, not bandwidth-bound. Consistent with
+  the engine's own finding that INT8 decode gains left prefill walls unchanged.
+- **x86 engine momentum is the real counter-story.** Strata, FreeToken, ik_llama.cpp MTP and
+  QEngine exist *because* Flash-Next is an offload-designed model, and they earn 2–3× over stock
+  stacks on the 5090. A **2× 5090 QEngine box (504 tok/s aggregate) sits inside the host
+  plateau (487–506)** — but at ~$13 k in cards alone at Nov-2026 street prices, versus the
+  plateau being single-tenant headroom the host already has.
+- **Where the NVIDIA boxes actually win:** capacity and the CUDA stack. 128 GB holds gpt-oss-120b
+  (59–65 tok/s) and dense models the 32 GB card cannot; two Sparks ≈ 400B, four ≈ 700B (NVIDIA's
+  own figures); the 5090 runs *models that fit it* fast (Qwen3.8-27B NVFP4: 77–114 tok/s single,
+  425 aggregate at 4 users). NVIDIA is also software-boosting the line ("agentic Qwen3.8-27B up
+  to 1.3×", NVIDIA, 2026-10-21) — the 55.6 will creep up; the 273 GB/s will not.
+- **Prices as of 2026-11-13 (volatile, memory-crisis market):** DGX Spark 128 GB ~$4 k nominal
+  but sold out / inflated (64 GB units reported at $5 k); RTX Spark laptops $2,399–2,599 entry,
+  128 GB configs $5,899–6,999; RTX 5090 restocked at Newegg (mid-Nov) at $6,250–6,660/card.
+
+**Comparability caveats (house rules, applied in reverse):** speculative decoding is baked into
+the headline NVIDIA figures (the 55.6 includes an MTP draft; MTP turns 45→90 on the 5090) —
+cross-row comparisons should read the *without-drafters* numbers where given; quants differ
+row to row (FP4 QAD / INT4-AR / IQ3_XXS vs IQ3_S — same memory class but not same weights);
+NVIDIA-side numbers are owner-reported, n≈1, tenancy unstated; the host figure is the **ladder
+w1 median, not the probe** (probe/ladder ratio 0.745 on the 11-12 wave — quoting the probe
+would understate the host); and the M5 Ultra bus width is quoted nowhere official — the
+bandwidth-tier claim rests on observed decode rates, not a spec-sheet number.
+
+**Links (accessed 2026-11-13):**
+DGX Spark: getrigbase.com/dgx-spark/ (Mia's recipes, the 55.6) ·
+verdictbits.com/reviews/dgx-spark-benchmarks/ (published-measurement roundup + NVIDIA multi-node
+tables) · eurokommerz.at/blog/nvidia-dgx-spark-real-benchmarks/ (llama.cpp b7941 58.7 / 262.2;
+LMSYS 2.7 dense) · kevinwelter.com/en/blog/qwen-3-8-lokal (27B NVFP4 SGLang 50.7) ·
+gpuwerk.com/dgx-spark/guides/best-models-2026/.
+RTX Spark: lttlabs.com N1X review · shattered.io N1X spec/price + review-roundup posts ·
+tech-insider.org RTX Spark launch pricing · mindstudio.ai RTX Spark real-numbers post ·
+sourceit.com.sg RTX-vs-DGX comparison · vdf.ai (Windows memory split).
+RTX 5090: en.wiselychen.com Strata hands-on (IQ3_S 106.8 median) · r/LocalLLaMA
+"Qwen-3.8-Flash-Next on 1× RTX 5090" (TG 50 / PP 2300; MTP 45→90) · r/LocalLLM unsloth-GGUF 5090
+(30.7) and llm-bench.io vLLM (43.4) · QEngine 2×5090 (504) ·
+suhailmohebi.com/notes/qwen3-8-flash-next-hardware-requirements/ (download sizes).
+Local measurement for the model-size framing: the IQ3_S snapshot, 51 GB + 27 GB shards.

@@ -137,6 +137,12 @@ reproduced on all three waves, with the memory path's secondary signals shifting
 (the rerun ran quietest; 1.6.1 demoted 645 blocks to disk at width 10, exactly where the
 baseline did).
 
+Cross-hardware context (DGX Spark / RTX Spark / RTX 5090 on the same resident model): the
+[comparison section](splash-engine-benchmark-results.md#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13).
+Those numbers are external, n≈1 and fail rules 2–3, so they deliberately do **not** appear as
+leaderboard rows — the section exists precisely to keep them out of the ranked tables while
+keeping the comparison on the record.
+
 ### Splash width-ladder scores — aggregate tok/s medians, all waves
 
 Same host, same model (Qwen3.8-Flash-Next IQ3_S, 262k ctx), same spec: 512-token rounds, two
