@@ -60,6 +60,13 @@ cost bought correctness there.
 - `timeline.ripple_insert` executing call fails `MISSING_RECORD_POINT` after the confirm token unless re-sent in the exact shape the dry-run accepted.
 - `render.prepare_render_job` refuses `/Volumes` targets unless `require_temp_target=False` (already known from perf run).
 - `GetRenderJobList()` entries carry no `Status` — poll `GetRenderJobStatus(jobId)`.
+- **Harness-side (checked 2026-11-12, MCP 5.2.7 / Claude Code 2.1.323):** MCP backgrounding — the
+  automatic kind (main-conversation calls still running after 2 min detach to a task) and the
+  server-declared MCP-tasks extension (protocol rev 2026-07-28) — is verified **inert for sealed
+  trials**: both mechanisms exclude subagent calls, and neither community server declares task
+  support (compound Python tree and advanced Node bundle grep clean). Re-check before every wave:
+  if the compound server ever adopts the tasks extension (its bundled mcp SDK already supports it),
+  per-call timing semantics change and prior call-latency comparisons need re-baselining.
 
 ## Artifacts / cleanup
 - All `agbench_*` timelines deleted (46→36 = pre-benchmark count), orphan pool item
