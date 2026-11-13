@@ -1,11 +1,12 @@
 {
  "schema": 1,
- "updated": "2026-11-13 (clean-window suites: Resolve agbench 2026-11-13i, Splash 2026-11-13 clean rerun, visual-venv run3 — all from a standalone driver with the operator session idle)",
+ "updated": "2026-11-13 (probe regression flag CLOSED by the three-build side-by-side sweep — addendum (j), probe cost law in read_this_first, errata_probe_flag on the 06e/10f/13i rows; earlier same day: clean-window suites Resolve agbench 13i + Splash clean rerun + visual-venv run3, all from a standalone driver with the operator session idle)",
  "read_this_first": [
   "Rows are only comparable within the same media_class and the same tenant conditions.",
   "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
   "Render ms are single-tenant; two-agent waves inflate them (a 7285 ms T7 render ran alongside another agent's Fusion work).",
-  "Every number here came from an independent read-back (ffprobe / item geometry / server operation log), never from the agent's report."
+  "Every number here came from an independent read-back (ffprobe / item geometry / server operation log), never from the agent's report.",
+  "probe_timeline_structure ms is item-count linear (~3 ms/item on 5.1.0+, ~2 ms/item on 4.19.3): probe cells compare only at matched item counts — every published cell uses the 4-item base geometry (2026-11-13 addendum (j))."
  ],
  "host_reference": {
   "cpu": "Apple M5 Ultra, 64-core GPU",
@@ -206,7 +207,8 @@
      "bench/resolve-agentic/results-2026-11-06e.json",
      "bench/resolve-agentic/briefs-2026-11-06e.md"
     ],
-    "notes": "Replacement pass for the withdrawn 06c/06d labels. 4.19.3 is perf-flat against 4.19.2 (warm 1191 vs 1196 ms, inside spread); the withdrawn 1215 ms was tenancy. One new regression candidate: probe_timeline_structure 11 -> 18 ms on base geometry."
+    "notes": "Replacement pass for the withdrawn 06c/06d labels. 4.19.3 is perf-flat against 4.19.2 (warm 1191 vs 1196 ms, inside spread); the withdrawn 1215 ms was tenancy. One new regression candidate: probe_timeline_structure 11 -> 18 ms on base geometry.",
+    "errata_probe_flag": "Closed 2026-11-13 by the three-build side-by-side sweep (addendum (j) in docs/resolve-agentic-benchmark-results.md): at the 4-item base geometry 4.19.3/5.1.0/5.2.7 measure 14.5/13/13 ms in ONE host state, so the step-up was host/context state, not a build regression. Cost law: ms ~= 3.0*items + 1 (5.1.0/5.2.7), ms ~= 2.0*items + 5 (4.19.3). This row's 18 ms stays a valid single-tenant measurement of that day; only the interpretation changed."
    },
    {
     "date": "2026-11-10f",
@@ -298,7 +300,8 @@
      "bench/resolve-agentic/results-2026-11-10f.json",
      "bench/resolve-agentic/briefs-2026-11-10f.md"
     ],
-    "notes": "First row on MCP 5.1.0 (installed ahead of the stable channel's 5.0.7). Render probe unchanged from 4.19.3 (warm 1198 vs 1191, inside spread; cold 3116 is host page-cache state, like the 3090 row). Op medians flat-to-slightly-up: prepare 174->183, set_current 109.5->112, create_variant 280->289, probe 18->20 on base geometry. Agentic n=3: third straight 18/18 verified + honest; T3 debugging depth keeps improving (48->41->28 uses on one identical brief), T7 cost is the floor (55-63: the whole path plus three file-verification routes). Tool surface moved: append_to_timeline now lives on media_pool; several new 5.1.0 behaviours in the results file's api_truth candidates (record_frame semantics x3, FormatWidth/Height keys, gate-broken get_settings, silent set_property('Linked') refusal)."
+    "notes": "First row on MCP 5.1.0 (installed ahead of the stable channel's 5.0.7). Render probe unchanged from 4.19.3 (warm 1198 vs 1191, inside spread; cold 3116 is host page-cache state, like the 3090 row). Op medians flat-to-slightly-up: prepare 174->183, set_current 109.5->112, create_variant 280->289, probe 18->20 on base geometry. Agentic n=3: third straight 18/18 verified + honest; T3 debugging depth keeps improving (48->41->28 uses on one identical brief), T7 cost is the floor (55-63: the whole path plus three file-verification routes). Tool surface moved: append_to_timeline now lives on media_pool; several new 5.1.0 behaviours in the results file's api_truth candidates (record_frame semantics x3, FormatWidth/Height keys, gate-broken get_settings, silent set_property('Linked') refusal).",
+    "errata_probe_flag": "Closed 2026-11-13 by the three-build side-by-side sweep (addendum (j)): at 4 items 4.19.3/5.1.0/5.2.7 measure 14.5/13/13 ms in one host state — no build step. This row's 20 ms sits on the 4-item line of the 5.1.0 curve (in-cell spread); 5.1.0's real delta is per-item cost doubling, visible only at >=8 items (16 items: 34 ms on 4.19.3 vs 49 ms on 5.1.0/5.2.7)."
    },
    {
     "date": "2026-11-10g",
@@ -421,7 +424,8 @@
     "warm_fps": 101.5,
     "render_probe": "121 f 3840x1520 mov/H.264, TimeTakenToRenderInMs; perf stage single-tenant BEFORE the wave (best warm recorded; reproduces published 1196 within 0.3%)",
     "op_medians_ms": {"prepare": 155, "verify": 35, "set_current": 80, "probe_4item": 13},
-    "op_column_caveat": "single-tenant, collected before the wave per RUNBOOK; probe 4-item 13 ms is same-context — the 4.19.3 probe step-up (18-20 ms) did NOT reproduce on 5.2.2, flag stays open rather than being called fixed; set_current 80 ms shows no alternation lifecycle cost while the perf stage stays on one timeline",
+    "op_column_caveat": "single-tenant, collected before the wave per RUNBOOK; probe 4-item 13 ms is same-context — the 4.19.3 probe step-up (18-20 ms) did NOT reproduce on 5.2.7 (the perf stage ran 5.2.7, not 5.2.2 — build correction 6202258); the flag was CLOSED the same day by the side-by-side build sweep — see addendum (j) and this row's errata_probe_flag; set_current 80 ms shows no alternation lifecycle cost while the perf stage stays on one timeline",
+    "errata_probe_flag": "Two same-day edits to this row's op_column_caveat: build label inside the probe clause corrected 5.2.2 -> 5.2.7 (the perf stage ran 5.2.7 per correction commit 6202258), and 'flag stays open' replaced by the CLOSED verdict from the addendum (j) sweep (4-item geometry, one host state: 14.5/13/13 ms for 4.19.3/5.1.0/5.2.7). The 13 ms cell itself is untouched.",
     "tenant_conditions": "two-agent waves n=3 driven by STANDALONE python (wave_driver.py); zero operator Resolve calls and zero operator model turns for the whole wave — first agbench wave with no operator tenancy at all",
     "agentic": "18/18 (seventh consecutive clean wave; 126/126 aggregate over seven waves)",
     "honest": "18/18",
