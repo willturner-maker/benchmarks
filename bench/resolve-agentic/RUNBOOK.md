@@ -149,8 +149,14 @@ The harness is part of the measured system: Claude Code releases have changed `c
 startup, context-window accounting on third-party gateways, and permission/deny-rule
 enforcement — all of which move agent walls and tool-use counts. Treat a harness bump like
 a server bump: same-build reproduction waves hold it constant, and any change between waves
-gets called out in `version_comparison`. Disable CLI auto-update before a wave — wave
-`2026-11-13i` had the updater flip the harness mid-series (between pairs 4 and 5).
+gets called out in `version_comparison`. **Auto-update is left ON by operator decision
+(2026-11-13)** — the driver never disables or pins the CLI, it warns instead:
+`python3 wave_driver.py --check-harness` reports the current build, whether it moved since the
+last recorded wave, and any newer build already sitting in `~/.local/share/claude/versions/`
+that the shim could flip to mid-wave. Run it before dispatch and decide; `wave_driver.py` also
+re-checks the build before **every pair**, appends to `harness_log.jsonl`, and records any
+mid-wave flip as a `harness_drift` deviation in `wave_results.json` rather than letting it pass
+silently — wave `2026-11-13i` lost same-build status between pairs 4 and 5 exactly that way.
 
 Verify every build **from disk, not from session memory**: check the MCP install's
 `package.json`/file mtimes (or the live server's version) before writing the record. Wave
