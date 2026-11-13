@@ -149,7 +149,15 @@ The harness is part of the measured system: Claude Code releases have changed `c
 startup, context-window accounting on third-party gateways, and permission/deny-rule
 enforcement — all of which move agent walls and tool-use counts. Treat a harness bump like
 a server bump: same-build reproduction waves hold it constant, and any change between waves
-gets called out in `version_comparison`.
+gets called out in `version_comparison`. Disable CLI auto-update before a wave — wave
+`2026-11-13i` had the updater flip the harness mid-series (between pairs 4 and 5).
+
+Verify every build **from disk, not from session memory**: check the MCP install's
+`package.json`/file mtimes (or the live server's version) before writing the record. Wave
+`2026-11-13i` recorded MCP 5.2.2 "same build as the prior wave" when an npx sync to 5.2.7
+had actually landed the day before — the whole wave, including its perf stage, had run on
+5.2.7. Sealed trials each spawn their own stdio server, so disk state at dispatch beats
+whatever version the operator's session connected to.
 
 **Never paste a probe payload into anything you publish.** `timeline.probe_timeline_structure`
 echoes each item's **absolute `file_path`**, which is your real media/project folder and often

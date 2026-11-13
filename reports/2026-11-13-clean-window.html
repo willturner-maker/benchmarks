@@ -91,10 +91,17 @@ svg text{font-family:var(--mono);fill:var(--fg-2)}
 
   <section>
     <h2>1 · Resolve MCP agentic — wave <span class="tag">2026-11-13i</span></h2>
-    <p class="note">Same build as wave h (Resolve 21.2.0.6 · MCP 5.2.2 · agents on Splash 1.6.1), new
-    method: 9 two-agent pairs dispatched by <code>wave_driver.py</code> — no operator Resolve call, no
-    operator model turn, for the whole wave. Graded after the wave from pinned read-backs only.
-    Seventh consecutive clean wave; second straight with zero cross-agent write incidents.</p>
+    <p class="note">Same Resolve + engine as wave h (21.2.0.6 · Splash 1.6.1), but two build facts
+    corrected after first publication: the MCP was <b>5.2.7</b>, not the 5.2.2 this record first stated —
+    the npx sync had landed the day before the wave (install <code>package.json</code>/mtime plus
+    server-process start times), so every trial and the perf stage ran 5.2.7. The Claude Code harness moved
+    too: wave h ran wholly on 2.1.322, and here the auto-updater flipped 323→325 between pairs 4 and 5
+    (8 trials on 323, 10 on 325, verified per-trial from transcripts). The vs-11h wall
+    deltas therefore stack MCP + harness + tenancy changes: the tenancy finding stands in direction, its
+    per-task magnitudes are multi-factor. New method: 9 two-agent pairs dispatched by
+    <code>wave_driver.py</code> — no operator Resolve call, no operator model turn, for the whole wave.
+    Graded after the wave from pinned read-backs only. Seventh consecutive clean wave; second straight
+    with zero cross-agent write incidents.</p>
     <div class="tbl-scroll"><table>
       <tr><th>Task</th><th class="num">r1 uses · wall</th><th class="num">r2 uses · wall</th><th class="num">r3 uses · wall</th><th>Read-back verdict</th></tr>
       <tr><td>T1 read-only probe</td><td class="num">11 · 61 s</td><td class="num">17 · 86 s</td><td class="num">13 · 60 s</td><td class="ok">✓ ×3 — values exact; fixtures bit-identical after wave</td></tr>

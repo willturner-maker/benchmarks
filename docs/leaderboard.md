@@ -30,7 +30,7 @@ macOS 27.2, render output and scratch on external volumes.
 | **2026-11-10f** | 21.2.0.6 | **5.1.0** | 3116 ms¹ | **1198 ms** | 101.0 | 183 | 47.5 | 112 | 20³ | **18/18** | 18/18 |
 | **2026-11-10g** | 21.2.0.6 | **5.2.0** | 1700 ms¹ | **1296 ms** | 93.4 | 162 | 59 | 112 | 268³⁴ | **18/18** | 18/18 |
 | **2026-11-11h** | 21.2.0.6 | **5.2.2** | 3129 ms¹ | **1205 ms**⁵ | 100.4 | n/a⁵ | n/a | n/a | n/a³⁴ | **18/18** | 18/18 |
-| **2026-11-13i** | 21.2.0.6 | **5.2.2** (same-build repro) | 1303 ms¹ | **1192 ms**⁶ | **101.5** | 155⁶ | 35 | 80 | 13³⁶ | **18/18** | 18/18 |
+| **2026-11-13i** | 21.2.0.6 | **5.2.7**⁶ | 1303 ms¹ | **1192 ms**⁶ | **101.5** | 155⁶ | 35 | 80 | 13³⁶ | **18/18** | 18/18 |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
@@ -110,17 +110,26 @@ for non-allowlisted API methods** — scripting-based grading is dead on arrival
 See [the results file](../bench/resolve-agentic/results-2026-11-11h.json); note its audit-errata history
 (review agents corrected three stat errors in the original record — commit `81d77cc`).
 
-⁶ **2026-11-13i — same server build as 11h, methodology wave:** the wave ran from a **standalone python
-driver** (`wave_driver.py`) instead of the operator's session, and the operator made zero Resolve calls and
-zero model turns during it — the first agbench with **no operator tenancy at all**. The op cells re-open
-single-tenant (perf stage before the wave): warm 1192 ms is the best recorded and reproduces the published
-1196 within 0.3 %; `set_current` 80 ms shows no alternation lifecycle while the perf stage stays on one
-timeline. The probe cell (13 ms, 4 items, same-context) shows the 4.19.3 step-up (18–20 ms) **did not
-reproduce** on 5.2.2 — the flag stays open, not called fixed.
+⁶ **2026-11-13i — methodology wave, with a correction:** the row was first written as MCP **5.2.2,
+same build as 11h**; that was wrong. The 5.2.7 npx sync landed 2026-11-12 15:41, the day before the wave —
+verified from the install's package.json/mtime and the server-process start time — so this row's numbers
+are the **first 5.2.7 measurements**, and 13i is a new-build wave, not a same-build repro. The wave ran
+from a **standalone python driver** (`wave_driver.py`) instead of the operator's session, and the operator
+made zero Resolve calls and zero model turns during it — the first agbench with **no operator tenancy at
+all**. The op cells re-open single-tenant (perf stage before the wave): warm 1192 ms is the best recorded
+and reproduces the published 1196 within 0.3 %; `set_current` 80 ms shows no alternation lifecycle while
+the perf stage stays on one timeline. The probe cell (13 ms, 4 items, same-context) shows the 4.19.3
+step-up (18–20 ms) **did not reproduce** on 5.2.7 — the flag stays open, not called fixed. The harness
+also moved (Claude Code 2.1.322 in 11h; 2.1.323→2.1.325 flipped mid-13i between pairs 4 and 5) — see the
+record's deviations.
 
 **2026-11-13i row:** the **seventh consecutive clean 18/18** (126/126 aggregate), and the split verdict is the
 point: with tenancy removed, the placeholder-free tasks ran faster than 11h (T3 walls −27…−48 %,
 T4 −25…−41 %, T2 r1 −42 %), while all three T7 runs went 1.5–2.5× **slower** — the briefs' published
+(caveat after the fact: the 11h→13i deltas stack **three** changes — MCP 5.2.2→5.2.7, harness
+2.1.322→2.1.323/325, and the tenancy change — so the direction of the tenancy result stands, the per-task
+magnitudes do not isolate tenancy; the clean same-build tenancy numbers remain the 10g/11h-era measurements.)
+The briefs' published
 `/Volumes/YourVolume` placeholder sent each agent on an honest dead-end hunt (all three named the placeholder
 as such and rendered to the real pre-created dirs; T7r3 spent 118 uses surveying six MCP actions before
 declaring packet counts unobtainable in-engine, which is exactly the honesty the rubric pays for). Zero
@@ -128,10 +137,12 @@ cross-agent write incidents for a second running. The seal came back **hard**, u
 strict-MCP config (which carries server env) is built at runtime into a tempfile **outside the public repo**
 and deleted on exit — a session classifier rightly refused to persist credentials in the tree, and that
 refusal designed the pattern. In-suite render ms (1445/1425/1447) were read by the **agents** before grading
-(queue emptied per brief), so they sit in the record but not in a cell. Three new API truths:
-`get_clips_linked` is not pin-able (answers `not found` against the CURRENT timeline), `render.set_settings`
-silently accepts a bogus `TargetDir` (only `add_job` refuses), and `timeline.duplicate` archives the **source**
-fixture — six `_base` archive siblings this wave where 11h had none.
+(queue emptied per brief), so they sit in the record but not in a cell. Three new API truths — all
+**first observed on 5.2.7**, so they may be 5.2.7 behaviours rather than the 5.2.2 reproductions the record
+first claimed: `get_clips_linked` is not pin-able (answers `not found` against the CURRENT timeline),
+`render.set_settings` silently accepts a bogus `TargetDir` (only `add_job` refuses), and
+`timeline.duplicate` archives the **source** fixture — six `_base` archive siblings this wave where 11h
+had none.
 See [the results file](../bench/resolve-agentic/results-2026-11-13i.json).
 
 ## Splash engine — reference host

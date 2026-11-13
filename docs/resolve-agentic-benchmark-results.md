@@ -25,7 +25,7 @@ benchmark in the perf baseline (same day, same machine, MCP v4.18.5, Resolve Stu
 - [Addendum (f) — 2026-11-10f MCP 5.1.0](#addendum-f-2026-11-10f--first-pass-on-mcp-510)
 - [Addendum (g) — 2026-11-10g MCP 5.2.0](#addendum-g-2026-11-10g--first-pass-on-mcp-520-and-the-wave-that-caught-a-hole-in-our-own-pinning-protocol)
 - [Addendum (h) — 2026-11-11h MCP 5.2.2](#addendum-h-2026-11-11h--mcp-522-sixth-clean-wave)
-- [Addendum (i) — 2026-11-13i clean-window driver](#addendum-i-2026-11-13i--same-build-clean-window-driver-and-the-tenancy-control-result)
+- [Addendum (i) — 2026-11-13i clean-window driver + build corrections](#addendum-i-2026-11-13i--clean-window-driver-tenancy-control-and-two-build-corrections)
 
 ## Scorecard
 
@@ -745,10 +745,11 @@ Key published numbers (see the leaderboard and the combined reruns scorecard for
 This addendum is a pointer only; the long-form per-task notes for wave h are in the scorecard and raw JSON.
 
 
-## Addendum (i): 2026-11-13i — same build, clean-window driver, and the tenancy control result
+## Addendum (i): 2026-11-13i — clean-window driver, tenancy control, and two build corrections
 
-Wave `2026-11-13i` re-ran the **identical build** (Resolve Studio 21.2.0.6 + MCP 5.2.2, agents on
-Splash 1.6.1) with the methodology changed: the two-agent wave (n=3, 9 pairs) was driven by a
+Wave `2026-11-13i` kept Resolve Studio 21.2.0.6 and the agent engine, changed the methodology — and,
+as corrected further below, actually ran a **new MCP build (5.2.7**, not the 5.2.2 the record first
+claimed, and a Claude Code harness that flipped mid-wave). The two-agent wave (n=3, 9 pairs) was driven by a
 **standalone python process** — `bench/resolve-agentic/wave_driver.py` — and the operator's own
 session made zero Resolve calls and zero model turns during it. That turns the wave into the
 tenancy control the earlier waves could only measure from the contaminated side: **the
@@ -757,15 +758,23 @@ T2 r1 −42 % vs wave h), while all three T7 runs ran 1.5–2.5× slower on an h
 through the published `/Volumes/YourVolume` placeholder — brief friction, not agent regression.
 The perf stage ran single-tenant before the wave: warm render **1192 ms** (best recorded), ops
 prepare 155 / verify 35 / set_current 80 / probe (4 items) 13 ms — and that 13 ms says the
-4.19.3-era probe step-up (18–20 ms) did not reproduce on 5.2.2.
+4.19.3-era probe step-up (18–20 ms) did not reproduce (on 5.2.7 — see the corrections below).
 
-**One honesty correction on "identical build" — the agent harness flipped mid-wave.** Backfilling
-harness versions from the transcripts (2026-11-13): wave h ran wholly on Claude Code **2.1.322**,
-while in `13i` the auto-updater flipped the on-disk build **2.1.323 → 2.1.325 between pair 4 and
-pair 5** — 8 trials (T1r1–T3r2) ran on 323, the remaining 10 (T3r3, T4, T7, T8) on 325. "Identical
-build" therefore holds for Resolve + MCP + engine; the T4/T7/T8 tenancy-control walls carry a
-harness bump stacked on top, and T3 is internally split. `wave_driver.py` now writes `harness.json`
-at dispatch; future same-build repro waves should also disable CLI auto-update before launching.
+**Two corrections to "identical build", both backfilled 2026-11-13.** (1) **The MCP was not 5.2.2.**
+The record was written claiming 5.2.2 "same build as 11h", but the 5.2.7 npx sync had landed at
+**2026-11-12 15:41**, the day before the wave — verified from the install's `package.json` (5.2.7, files
+mtime 11-12 15:41) and the server-process start time. Every sealed trial spawns its own stdio server, so
+**all 18 trials and the operator perf/grading passes ran 5.2.7 code**: the row is now the first 5.2.7
+measurement, its API-truths list is renamed as first observations (they may be 5.2.7 behaviours, not
+5.2.2 reproductions), and the 13 ms probe reading belongs to 5.2.7. (2) **The harness flipped mid-wave:**
+wave h ran wholly on Claude Code **2.1.322**, while in `13i` the auto-updater flipped
+**2.1.323 → 2.1.325 between pair 4 and pair 5** — 8 trials (T1r1–T3r2) on 323, the remaining 10 (T3r3,
+T4, T7, T8) on 325, verified per-trial from the trial transcripts. Consequence: the 11h→13i deltas stack
+**MCP + harness + tenancy** changes; the tenancy result stands in direction, but its per-task magnitudes
+no longer isolate tenancy — the clean same-build tenancy numbers remain the 10g/11h-era ones. Record
+discipline tightened: verify builds from disk (`package.json`/mtime, per-trial transcript version fields,
+`harness.json` at dispatch — now written by `wave_driver.py`), never from session memory, and disable
+CLI auto-update before same-build repro waves.
 
 **18/18 verified, 18/18 honest — seventh consecutive clean wave (126/126 aggregate)**, second
 consecutive with zero cross-agent write incidents. The seal came back hard and was improved under
