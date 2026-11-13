@@ -1,0 +1,56 @@
+{"kind": "meta", "splash_model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S", "ready": true, "mem": "normal", "thermal": "nominal"}
+{"kind": "decode_w1", "wall_s": 1.963, "completion_tokens": 300, "prompt_tokens": 71, "pass": 1, "decode_batch_delta": 72, "engine_tok_s": 152.8}
+{"kind": "decode_w1", "wall_s": 1.796, "completion_tokens": 300, "prompt_tokens": 71, "pass": 2, "decode_batch_delta": 76, "engine_tok_s": 167.0}
+{"kind": "decode_w1", "wall_s": 2.022, "completion_tokens": 300, "prompt_tokens": 71, "pass": 3, "decode_batch_delta": 88, "engine_tok_s": 148.4}
+{"kind": "ttft", "wall_s": 0.355, "completion_tokens": 8, "prompt_tokens": 341, "pass": 1, "note": "cold"}
+{"kind": "ttft", "wall_s": 0.151, "completion_tokens": 8, "prompt_tokens": 341, "pass": 2, "note": "warm-prefix"}
+{"kind": "width", "width": 1, "round": 1, "wall_s": 0.441, "per_request": [{"wall_s": 0.437, "completion_tokens": 24, "prompt_tokens": 328}], "aggregate_tok_s": 54.48, "decode_batch_delta": 8, "admission_waiting_max_seen": 0}
+{"kind": "width", "width": 1, "round": 2, "wall_s": 0.209, "per_request": [{"wall_s": 0.209, "completion_tokens": 24, "prompt_tokens": 328}], "aggregate_tok_s": 114.79, "decode_batch_delta": 7, "admission_waiting_max_seen": 0}
+{"kind": "width", "width": 2, "round": 1, "wall_s": 0.35, "per_request": [{"wall_s": 0.329, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.35, "completion_tokens": 24, "prompt_tokens": 328}], "aggregate_tok_s": 137.16, "decode_batch_delta": 10, "admission_waiting_max_seen": 0}
+{"kind": "width", "width": 2, "round": 2, "wall_s": 0.304, "per_request": [{"wall_s": 0.304, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.303, "completion_tokens": 24, "prompt_tokens": 328}], "aggregate_tok_s": 158.0, "decode_batch_delta": 9, "admission_waiting_max_seen": 0}
+{"kind": "width", "width": 4, "round": 1, "wall_s": 0.453, "per_request": [{"wall_s": 0.453, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.386, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.453, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.452, "completion_tokens": 24, "prompt_tokens": 328}], "aggregate_tok_s": 211.74, "decode_batch_delta": 9, "admission_waiting_max_seen": 0}
+{"kind": "width", "width": 4, "round": 2, "wall_s": 0.405, "per_request": [{"wall_s": 0.405, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.405, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.373, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.404, "completion_tokens": 24, "prompt_tokens": 328}], "aggregate_tok_s": 237.03, "decode_batch_delta": 8, "admission_waiting_max_seen": 0}
+{"SUMMARY": {"decode_w1_med_tok_s": 152.8}}
+model: ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+out:   /tmp/splash-bench/ladder_kv.jsonl
+[ladder] w1 r1: 193.9 tok/s aggregate, per-stream 193.9, peak waiting 0
+[ladder] w1 r2: 216.4 tok/s aggregate, per-stream 216.4, peak waiting 0
+[ladder] width 1 baseline: 205.15 tok/s
+[ladder] w2 r1: 346.0 tok/s aggregate, per-stream 173.0, peak waiting 0
+[ladder] w2 r2: 322.9 tok/s aggregate, per-stream 161.5, peak waiting 0
+[ladder] width 2: median 334.45 tok/s (1.63x w1)
+[ladder] w3 r1: 408.9 tok/s aggregate, per-stream 136.3, peak waiting 0
+[ladder] w3 r2: 377.9 tok/s aggregate, per-stream 126.0, peak waiting 0
+[ladder] width 3: median 393.4 tok/s (1.918x w1)
+[ladder] w4 r1: 457.1 tok/s aggregate, per-stream 114.3, peak waiting 0
+[ladder] w4 r2: 471.5 tok/s aggregate, per-stream 117.9, peak waiting 0
+[ladder] width 4: median 464.3 tok/s (2.263x w1)
+[ladder] w6 r1: 421.8 tok/s aggregate, per-stream 70.3, peak waiting 2
+[ladder] w6 r2: 413.4 tok/s aggregate, per-stream 68.9, peak waiting 2
+[ladder] width 6: median 417.6 tok/s (2.036x w1)
+[ladder] w8 r1: 532.0 tok/s aggregate, per-stream 66.5, peak waiting 4
+[ladder] w8 r2: 513.3 tok/s aggregate, per-stream 64.2, peak waiting 4
+[ladder] width 8: median 522.65 tok/s (2.548x w1)
+[ladder] w12 r1: 506.5 tok/s aggregate, per-stream 42.2, peak waiting 8
+[ladder] w12 r2: 467.6 tok/s aggregate, per-stream 39.0, peak waiting 8
+[ladder] width 12: median 487.05 tok/s (2.374x w1)
+[ladder] w16 r1: 524.6 tok/s aggregate, per-stream 32.8, peak waiting 12
+[ladder] w16 r2: 486.8 tok/s aggregate, per-stream 30.4, peak waiting 12
+[ladder] width 16: median 505.70000000000005 tok/s (2.465x w1)
+[ladder] w24 r1: 490.9 tok/s aggregate, per-stream 20.5, peak waiting 12
+[ladder] w24 r2: 495.3 tok/s aggregate, per-stream 20.6, peak waiting 16
+[ladder] width 24: median 493.1 tok/s (2.404x w1)
+[ladder] w32 r1: 498.4 tok/s aggregate, per-stream 15.6, peak waiting 16
+[ladder] w32 r2: 502.5 tok/s aggregate, per-stream 15.7, peak waiting 16
+[ladder] width 32: median 500.45 tok/s (2.439x w1)
+[stage break] waiting for engine idle before KV stage
+[kv] calib: 300 lines = 14129 prompt tokens -> using 424 lines/request
+[kv] w2: 93394 tok total in 26.2s | susp_peak=0 susp_delta=0 waitmem_peak=0 wait_peak=0 pages_active_peak=1639 spill+0 demote+0
+[kv] w4: 186788 tok total in 52.0s | susp_peak=0 susp_delta=0 waitmem_peak=0 wait_peak=0 pages_active_peak=1461 spill+0 demote+0
+[kv] w6: 280182 tok total in 78.7s | susp_peak=0 susp_delta=0 waitmem_peak=0 wait_peak=0 pages_active_peak=1463 spill+0 demote+382
+[kv] w8: 373576 tok total in 104.0s | susp_peak=0 susp_delta=0 waitmem_peak=0 wait_peak=0 pages_active_peak=1639 spill+0 demote+0
+[kv] w10: 509370 tok total in 143.8s | susp_peak=0 susp_delta=0 waitmem_peak=1 wait_peak=1 pages_active_peak=1847 spill+0 demote+645
+[kv] w12: 611244 tok total in 171.5s | susp_peak=0 susp_delta=0 waitmem_peak=0 wait_peak=0 pages_active_peak=1847 spill+0 demote+97
+{"SUMMARY": {"quick": false, "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S", "width_ladder": {"medians_by_width": {"1": 205.15, "2": 334.45, "3": 393.4, "4": 464.3, "6": 417.6, "8": 522.65, "12": 487.05, "16": 505.70000000000005, "24": 493.1, "32": 500.45}, "stopped_at_width": null, "peak_width": 8, "peak_tok_s": 522.65, "collapse_width": null, "w1_baseline": 205.15}, "kv_pressure": {"rounds": 6, "max_total_tokens": 611244, "trip": null, "resident_kv_budget_tokens": 131072, "lifetime_final": {"resource_suspensions": 16, "priority_suspensions": 0, "capacity_failures": 0}}}}
+
+[exited with code 0]

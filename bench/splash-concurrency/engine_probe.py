@@ -2,11 +2,14 @@
 """Splash engine deterministic probe — 2026-11-06 baseline (Splash 1.6.0, schema 8).
 Adapted from archive/concurrency-scaling-test.md (draft, never run) for schema 8 + keyless :8000.
 Lighter context size (800-1000 tokens, not 32K) to spare the shared engine; noted in results."""
-import json, time, urllib.request, statistics as st
+import json, os, time, urllib.request, statistics as st
 
 BASE = "http://127.0.0.1:8000"
 MODEL = "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S"
-OUT = "/tmp/splash-bench-2026-11-06/engine_probe.jsonl"
+# /tmp gets wiped by macOS; create the dir on run (matches kv_pressure_v4.py / ladder_kv.py).
+# Set SPLASH_BENCH_OUT to redirect a re-run into results/<run-dir>/ instead of the baseline path.
+OUT = os.environ.get("SPLASH_BENCH_OUT", "/tmp/splash-bench-2026-11-06/engine_probe.jsonl")
+os.makedirs(os.path.dirname(OUT), exist_ok=True)
 
 def status():
     with urllib.request.urlopen(BASE + "/status", timeout=5) as r:
