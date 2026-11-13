@@ -63,6 +63,12 @@ agent hits them, but the operator hits them first here.
 - **Perf probes go before the wave, single-tenant**, with host load sampled first. The two
   withdrawn 4.19.3 passes were re-measured that way and came back 1191 ms warm against the
   withdrawn 1215 ms: the difference was tenancy, not the server.
+- **Engine-side failure mode (Splash 1.6.0+):** a request that crashes the serving engine twice
+  is quarantined — later identical payloads return `400 request_quarantined` instead of running.
+  Disclose it in the results header and discard the affected trial; do not re-send identical
+  bytes. Related cross-wave note: since 1.6.1 the engine defaults to INT8 activations on M5+,
+  so trial outputs are not bit-comparable with pre-1.6.1 waves — grading already rides on
+  read-backs, so this only affects number-to-number diffing across that boundary.
 
 ## 3. Run
 

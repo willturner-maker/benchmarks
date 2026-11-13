@@ -198,6 +198,18 @@ no-suspension baseline** (611k tokens ≈ 4.4× budget with zero suspensions; fi
 signal); and the 12-trial agentic table. Do **not** restart the engine mid-suite; note
 cache state in the results header.
 
+**Version caveats for 1.6.x reruns (added 2026-11-12):**
+- **INT8 by default on M5+ since 1.6.1** (`--activations auto`): decode numerics are **not
+  bit-comparable** with the 1.6.0 rows — compare medians and curve shapes, not hashes. For a
+  deterministic bf16 cross-version comparison, serve with `--activations bf16` and a fresh
+  `--cache-dir` (leaderboard footnote states the same for the 1.6.1 row).
+- **Request quarantine since 1.6.0:** a request that crashes the engine twice is quarantined —
+  the same payload then returns `400 request_quarantined`. Treat it as a disclosure condition
+  (one line in the results header + discard the affected trial), never retry identical bytes.
+- 1.6.1 streams Flash-Next PLE tables by default, freeing RAM for context/KV: expect resident-KV
+  and cold-TTFT numbers to move; one rerun sets the new baseline rather than assuming the
+  2026-11-10s numbers carry over.
+
 ## Re-run 2026-11-10s — same build, shape reproduces (raw: `bench/splash-concurrency/results/rerun-2026-11-10s/`)
 
 Conditions: Splash **1.6.0 again** (not an upgrade — this pass measures run-to-run reproducibility),
