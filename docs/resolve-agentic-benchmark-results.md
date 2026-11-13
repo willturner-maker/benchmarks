@@ -26,6 +26,7 @@ benchmark in the perf baseline (same day, same machine, MCP v4.18.5, Resolve Stu
 - [Addendum (g) — 2026-11-10g MCP 5.2.0](#addendum-g-2026-11-10g--first-pass-on-mcp-520-and-the-wave-that-caught-a-hole-in-our-own-pinning-protocol)
 - [Addendum (h) — 2026-11-11h MCP 5.2.2](#addendum-h-2026-11-11h--mcp-522-sixth-clean-wave)
 - [Addendum (i) — 2026-11-13i clean-window driver + build corrections](#addendum-i-2026-11-13i--clean-window-driver-tenancy-control-and-two-build-corrections)
+- [Addendum (j) — 2026-11-13 probe-flag closure sweep](#addendum-j-2026-11-13--probe-flag-closure-three-builds-side-by-side)
 
 ## Scorecard
 
@@ -788,3 +789,70 @@ in-engine after surveying six MCP actions — are in the record:
 
 - [`bench/resolve-agentic/results-2026-11-13i.json`](../bench/resolve-agentic/results-2026-11-13i.json)
 - [`bench/resolve-agentic/briefs-2026-11-13.md`](../bench/resolve-agentic/briefs-2026-11-13.md)
+
+---
+
+## Addendum (j): 2026-11-13 — probe-flag closure (three builds side by side)
+
+**The question** (leaderboard flag, opened by 06e and reopened by 13i): `probe_timeline_structure` on
+base geometry read 7 → 11 → 11 → 18 → 20 ms across 4.18.5 / 4.19.0 / 4.19.2 / 4.19.3 / 5.1.0, then came
+back **13 ms** on 5.2.7. Was the 4.19.3 step a server regression, or host state? Every published cell is
+a single median from a different day, so the historical numbers cannot separate the two.
+
+**The method.** One host state, one set of timelines, three MCP builds: the live install (5.2.7) plus
+4.19.3 and 5.1.0 fetched as npm tarballs into gitignored `results/…/builds/` and run from their own trees
+against the live venv — the live install is never touched. A scratch project held seven timelines:
+1 / 2 / 4 / 8 / 16 video items, a 4-item base (2 video + 2 audio, the published column's geometry), and
+one empty anchor. `bench/resolve-agentic/probe_build_sweep.py` (committed) speaks MCP over stdio the way
+the sealed trial servers do — one server process at a time, no contention — and calls
+`probe_timeline_structure` n=11 per cell in four context variants: **A** same-context (target current),
+**B** pinned while the current timeline sits elsewhere (the alternation path), **C** `track_types:["video"]`,
+**D** `include_clip_properties:true`. The timed channel is the server envelope's
+`_operation.duration_ms` — the same channel every published op column used — with client round-trip
+recorded alongside. 627 samples, zero error-path; host idle 87–90 % at each pass start.
+
+**Medians (ms, ± spread):**
+
+| items → | 1 | 2 | 4 (base) | 8 | 16 |
+|---|---|---|---|---|---|
+| **4.19.3** | 4±1 | 8±2 | **14.5±8** | 24±11 | 34±44 |
+| **5.1.0** | 4±2 | 7±3 | **13±2** | 26±4 | 49±3 |
+| **5.2.7** | 4±1 | 7±2 | **13±1** | 25±2 | 49±3 |
+
+**Verdicts.**
+1. **The flag closes as not a build regression.** At the published 4-item geometry, in one host state,
+   the builds sit at **14.5 / 13 / 13 ms**. The published 18–20 vs 13 spread lives in host/context state,
+   not in the server's code, and the historical cells were never build-attributable in the first place.
+2. **The column's hidden variable is item count, and it is linear.** Fits: `ms ≈ 3.0·items + 1` on
+   5.1.0/5.2.7; `ms ≈ 2.0·items + 5` on 4.19.3. The one genuine cross-build delta is 5.1.0 doubling the
+   *per-item* cost (2 → 3 ms/item) — invisible at 4 items, clear at 16 (34 → 49 ms). If probe cost ever
+   gets filed upstream, this curve is the finding, not the 18 ms cell.
+3. **Footnote ⁴ attribution corrected:** the pinned-alternation lifecycle is **not** a 5.2.0
+   introduction — variant B costs ~120 ms on all three builds (4.19.3 also shows a bimodal tail, p90
+   ≈1.1 s; 5.1.0/5.2.7 sit tight at 121–128 ms). The 5.2.0 perf-stage median just happened to sit on it.
+
+**New API-truth candidates.**
+- **Compound tools silently ignore selectors put at the top level of `arguments`.** Passing
+  `{"action": "probe_timeline_structure", "timeline_name": …}` instead of nesting under `params` produces
+  `success: true` and probes the **current** timeline with no warning — the envelope's `pinned` field is
+  the only tell. (Discovered the hard way; see deviation 1.)
+- `include_clip_properties` had **no measurable effect** (13 vs 13 ms at base, 48 vs 49 at 16) and the
+  key sets matched the default payload; recorded as no-measurable-effect, not proven no-op — payloads
+  were not diffed byte-for-byte.
+- The `track_types` filter saves real time at 4 items (13 → 7 ms) but **not** at 16 (49 → 48): the filter
+  trims payload construction, not the per-item walk.
+
+**Deviations (house rules: kept, not buried).**
+1. **Run 1 was invalid, and it is preserved** as `results/probe-flag-2026-11-13/sweep-run1-params-bug.jsonl`:
+   the driver put selectors at the top level (API truth above), so all 825 samples probed the *current*
+   timeline — every cell reported 4 items and ~8 ms, and the cross-build medians were identically 8.
+   Renamed variants (a `--variants "A,B,C"` string iterated characters, adding duplicate `,` cells)
+   rode along. Both fixed before run 2, whose numbers are the ones above.
+2. Old builds ran against the live venv's dependency set; import-compatible, and probe envelopes were
+   identical in shape across builds (`item_count`, `tracks`, `_operation.duration_ms`), so the timed
+   channel is the same code path in every row.
+3. Item counts for variant C cells are not recorded (filtered payload) — the curve is read from A cells.
+
+**Teardown.** Scratch project deleted (`leftover: null` verified); no render jobs were ever queued; the
+operator's working project is untouched. Raw sweep + both run records live in the gitignored
+`bench/resolve-agentic/results/probe-flag-2026-11-13/`; the driver and analyzer are committed.

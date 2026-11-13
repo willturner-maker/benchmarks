@@ -43,12 +43,14 @@ equals the best prior mark; 5.1.0's 3116 ms cold is the same host-state caveat.
 ² No agentic n=3 for 4.19.2: the bump was behaviour-free (upstream fix of the CLAP
 audio-embedding bug we filed, verified by direct probe the day it shipped).
 ³ The `probe` column is measured on **base geometry (4 items)**, and `probe_timeline_structure` is
-item-count sensitive on this build: 14–20 ms on 4 items, 4–7 ms on a 1-item variant. Comparisons
+item-count sensitive: quantified by the 2026-11-13 sweep as `ms ≈ 3.0·items + 1` on 5.1.0/5.2.7 and
+`ms ≈ 2.0·items + 5` on 4.19.3 (4 items → 13/13/14.5 ms; 8 → 25/26/24; 16 → 49/49/34). Comparisons
 across rows are only valid at the same item count.
-⁴ On 5.2.0 the probe column also picks up a **context-switch cost**: consecutive pinned calls that
-*alternate* timelines trigger a baseline_reset/restore lifecycle that costs 265–1113 ms, while the
-same-context reads run 10–30 ms (re-measured 14 ms mid-wave). The 268 ms cell is the
-alternation-included median from the perf stage and is **not comparable** to the 20 ms above it;
+⁴ The probe column can also pick up a **context-switch cost**: consecutive pinned calls that *alternate*
+timelines trigger a baseline_reset/restore lifecycle — 265–1113 ms measured in the 5.2.0 wave, and
+**~120 ms on every build tested in the 2026-11-13 sweep (4.19.3 / 5.1.0 / 5.2.7)**, so this is not a 5.2.0
+introduction; the 5.2.0 cell just happened to sit on it. Same-context reads run 10–30 ms. The 268 ms cell
+is the alternation-included median from the perf stage and is **not comparable** to the 20 ms above it;
 the like-for-like 5.2.0 figure is ~14–30 ms. Filed as an api_truth candidate, not yet upstream.
 
 **Withdrawn rows.** Two 4.19.3 passes carried the labels `2026-11-06c` (perf probe + targeted
@@ -65,9 +67,15 @@ details and per-task cost in
 [the results doc](resolve-agentic-benchmark-results.md). The 2026-11-06 runs' agents were
 served by the local model (Qwen3.8-Flash-Next IQ3_S via Splash 1.6.0), not a cloud API.
 
-**Regression worth watching:** `probe_timeline_structure` on base geometry went 7 → 11 → 11 → 18 → **20 ms**
-across 4.18.5 / 4.19.0 / 4.19.2 / 4.19.3 / 5.1.0 — the 4.19.3 step (7+ ms) is the one to file if it holds;
-the 5.1.0 step is +2 ms, inside run-to-run. `verify_output` sits at 47.5 ms (was 41), `prepare` 183 (was 174) —
+**Regression flag — CLOSED 2026-11-13 (side-by-side build sweep; addendum (j) in the results file):**
+the 7 → 11 → 11 → 18 → 20 ms trail across 4.18.5…5.1.0, and the 13 ms that reopened it, were never
+build-attributable. Run side by side against identical timelines in one host state (4.19.3 / 5.1.0 /
+5.2.7, n=11 per cell), the published **4-item base geometry measures 14.5 / 13 / 13 ms** — the step and
+its non-reproduction are both host/context state. What the column was hiding is a **cost law**: probe ms
+is item-count linear — `ms ≈ 3.0·items + 1` on 5.1.0/5.2.7, `ms ≈ 2.0·items + 5` on 4.19.3. The one real
+cross-build delta is 5.1.0's per-item cost doubling (2 → 3 ms/item), visible only at ≥8 items; at 4 items
+the builds agree within 1.5 ms. If probe cost is ever filed upstream, that curve is the finding, not the
+18 ms cell. `verify_output` sits at 47.5 ms (was 41), `prepare` 183 (was 174) —
 all op columns flat-to-slightly-up; render ms are flat, as expected for releases that never touch the render path.
 
 **5.1.0 row:** the server installed ahead of the stable channel (5.0.7) and reports `current_ahead`. The tool
@@ -119,7 +127,9 @@ made zero Resolve calls and zero model turns during it — the first agbench wit
 all**. The op cells re-open single-tenant (perf stage before the wave): warm 1192 ms is the best recorded
 and reproduces the published 1196 within 0.3 %; `set_current` 80 ms shows no alternation lifecycle while
 the perf stage stays on one timeline. The probe cell (13 ms, 4 items, same-context) shows the 4.19.3
-step-up (18–20 ms) **did not reproduce** on 5.2.7 — the flag stays open, not called fixed. The harness
+step-up (18–20 ms) **did not reproduce** on 5.2.7 — and the flag it left behind is now **closed**: the
+side-by-side build sweep the same day put 4.19.3 / 5.1.0 / 5.2.7 at 14.5 / 13 / 13 ms on the same 4-item
+geometry in one host state (addendum (j)). The harness
 also moved (Claude Code 2.1.322 in 11h; 2.1.323→2.1.325 flipped mid-13i between pairs 4 and 5) — see the
 record's deviations.
 
