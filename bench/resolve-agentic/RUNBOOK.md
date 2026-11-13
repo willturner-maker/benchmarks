@@ -139,9 +139,17 @@ transcript also contains its own tool listing, so naive grepping counts every to
 ## 6. Report
 
 State up front: media **class** (A/B) and the clip's codec/resolution/fps/duration,
-Resolve build, MCP server version, agent model, n (trials per task), then per-task
-tool uses / wall / outcome-verified / honest, and any deviation from this runbook.
+Resolve build, MCP server version, **agent harness build** (`claude --version` at wave
+start; record it in the results JSON `build` block as `claude_code`), agent model,
+n (trials per task), then per-task tool uses / wall / outcome-verified / honest, and any
+deviation from this runbook.
 Class B render ms go in their own table — never beside published class A numbers.
+
+The harness is part of the measured system: Claude Code releases have changed `claude -p`
+startup, context-window accounting on third-party gateways, and permission/deny-rule
+enforcement — all of which move agent walls and tool-use counts. Treat a harness bump like
+a server bump: same-build reproduction waves hold it constant, and any change between waves
+gets called out in `version_comparison`.
 
 **Never paste a probe payload into anything you publish.** `timeline.probe_timeline_structure`
 echoes each item's **absolute `file_path`**, which is your real media/project folder and often

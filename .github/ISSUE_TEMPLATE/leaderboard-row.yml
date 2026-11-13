@@ -52,6 +52,15 @@ body:
     validations:
       required: true
 
+  - type: input
+    id: agent_harness
+    attributes:
+      label: Agent harness build (Claude Code or a claude-compatible CLI)
+      description: "The CLI that ran the agents — harness releases change agent behaviour (headless startup, context accounting, deny-rule enforcement), so it travels with the stack"
+      placeholder: "Claude Code 2.1.325"
+    validations:
+      required: true
+
   - type: dropdown
     id: media_class
     attributes:

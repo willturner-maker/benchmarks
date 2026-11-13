@@ -123,6 +123,13 @@ def main():
     SESS.mkdir(parents=True, exist_ok=True)
     (OUT / "archived_briefs.md").write_text(json.dumps({"TL_BASE": TL_BASE,
         "frames": {"base_src": BASE_SRC, "insert_src": INS_SRC, "probe_src": PROB_SRC}}, indent=1))
+    # harness version is part of the measured system (RUNBOOK §6): claude -p startup,
+    # context accounting on third-party gateways, and deny-rule enforcement all move
+    # agent walls/uses across Claude Code releases.
+    harness = subprocess.run(["claude", "--version"], capture_output=True, text=True).stdout.strip()
+    (OUT / "harness.json").write_text(json.dumps(
+        {"claude_code": harness, "captured_at": time.strftime("%Y-%m-%dT%H:%M:%S%z")}, indent=1))
+    print(f"[{time.strftime('%H:%M:%S')}] agent harness: {harness}", flush=True)
     mcp_cfg = strict_mcp_config()
     B = briefs()
     # 9 concurrent pairs: (T1r1,T1r2)(T1r3,T2r1)(T2r2,T2r3)(T3r1,T3r2)(T3r3,T4r1)

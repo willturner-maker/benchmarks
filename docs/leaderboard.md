@@ -308,8 +308,8 @@ stack versions, n, and whether runs were single-tenant.
 4. Submit it through the
    **[Leaderboard row issue form](https://github.com/willturner-maker/benchmarks/issues/new?labels=leaderboard&template=leaderboard-row.yml)**
    — it asks for exactly what `suites.community_runs` needs (date, host, exact builds,
-   agent model and how it was served, media class plus the validator output, tenant
-   conditions, the numbers, and deviations). You don't have to know the JSON schema;
+   agent model and how it was served, agent harness build, media class plus the validator
+   output, tenant conditions, the numbers, and deviations). You don't have to know the JSON schema;
    the row gets added to `leaderboard/results.json` from your issue.
 
    The form ends in a four-item attestation — read-back-only grading, media class stated,
