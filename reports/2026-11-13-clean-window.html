@@ -59,6 +59,11 @@ code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid va
 .viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
 .legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2)}
 .legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.chartwrap{position:relative;margin-top:10px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:8px 10px;font:500 12px/1.5 var(--mono);box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+@media (prefers-reduced-motion:reduce){.tip{transition:none}}
 svg{width:100%;height:auto}
 svg text{font-family:var(--mono);fill:var(--fg-2)}
 .grid{stroke:var(--line);stroke-width:1}
@@ -125,32 +130,16 @@ svg text{font-family:var(--mono);fill:var(--fg-2)}
     admission peaks identical (2/4/8/12/12/12 from w6 on).</p>
     <div class="viz-root">
       <div class="vtitle">Width ladder — the three Splash 1.6.1 waves</div>
-      <div class="vsub">Aggregate tok/s medians, 512-token rounds · plateau scatter across waves; w1 keeps rising</div>
+      <div class="vsub">Aggregate tok/s medians, 512-token rounds · plateau scatter across waves; w1 keeps rising · hover the plot for values</div>
       <div class="legend">
         <span><i style="background:var(--s3)"></i>1.6.1 · 11-11h</span>
         <span><i style="background:var(--s2)"></i>1.6.1 · 11-12</span>
         <span><i style="background:var(--accent)"></i>1.6.1 · 11-13 clean</span>
       </div>
-      <svg viewBox="0 0 840 330" role="img" aria-label="Line chart of ladder medians by width for the three 1.6.1 waves">
-        <line class="grid" x1="70" y1="295" x2="800" y2="295"/><text x="40" y="299">100</text>
-        <line class="grid" x1="70" y1="239.4" x2="800" y2="239.4"/><text x="40" y="243">200</text>
-        <line class="grid" x1="70" y1="183.9" x2="800" y2="183.9"/><text x="40" y="188">300</text>
-        <line class="grid" x1="70" y1="128.3" x2="800" y2="128.3"/><text x="40" y="132">400</text>
-        <line class="grid" x1="70" y1="72.8" x2="800" y2="72.8"/><text x="40" y="77">500</text>
-        <line class="axis" x1="70" y1="45" x2="70" y2="295"/>
-        <polyline fill="none" stroke="var(--s3)" stroke-width="2" stroke-dasharray="5 4"
-          points="70.0,246.7 151.1,183.3 232.2,140.3 313.3,113.1 394.4,130.1 475.6,79.2 556.7,59.0 637.8,67.2 718.9,62.5 800.0,61.8"/>
-        <polyline fill="none" stroke="var(--s2)" stroke-width="2"
-          points="70.0,236.6 151.1,164.7 232.2,132.0 313.3,92.6 394.4,118.6 475.6,60.2 556.7,79.9 637.8,69.6 718.9,76.6 800.0,72.5"/>
-        <polyline fill="none" stroke="var(--accent)" stroke-width="2.5"
-          points="70.0,234.2 151.1,184.3 232.2,149.1 313.3,98.7 394.4,107.2 475.6,89.3 556.7,86.6 637.8,89.1 718.9,86.9 800.0,87.0"/>
-        <text x="70" y="312" text-anchor="middle">1</text><text x="151.1" y="312" text-anchor="middle">2</text>
-        <text x="232.2" y="312" text-anchor="middle">3</text><text x="313.3" y="312" text-anchor="middle">4</text>
-        <text x="394.4" y="312" text-anchor="middle">6</text><text x="475.6" y="312" text-anchor="middle">8</text>
-        <text x="556.7" y="312" text-anchor="middle">12</text><text x="637.8" y="312" text-anchor="middle">16</text>
-        <text x="718.9" y="312" text-anchor="middle">24</text><text x="800" y="312" text-anchor="middle">32</text>
-        <text x="435" y="328" text-anchor="middle">concurrency width → aggregate tok/s</text>
-      </svg>
+      <div class="chartwrap" id="cw">
+        <svg id="chart" viewBox="0 0 860 310" role="img" aria-label="Line chart of width-ladder aggregate tok/s medians by concurrency width for the three Splash 1.6.1 waves: 11-11h rises 186.9 to a 510-525 plateau, 11-12 rises 205.2 to 487-523, 11-13 clean rises 209.5 to 470-475"></svg>
+        <div class="tip" id="tip"></div>
+      </div>
     </div>
     <div class="kv">
       <div class="stat"><div class="v">4.66× · 0</div><div class="l">KV pressure: 611,244 prompt tokens vs the 131,072-token resident budget — fifth wave without a suspension (spill +0, demote +0, capacity_failures 0)</div></div>
@@ -195,3 +184,65 @@ svg text{font-family:var(--mono);fill:var(--fg-2)}
     <a href="2026-11-06-splash-engine.html">Splash 1.6.0 baseline</a>.
   </div>
 </div>
+
+<script>
+(function(){
+  const widths=[1,2,3,4,6,8,12,16,24,32];
+  const a=[186.9,301.0,378.5,427.5,396.9,488.4,524.8,510.0,518.5,519.8];
+  const b=[205.2,334.5,393.4,464.3,417.6,522.7,487.1,505.7,493.1,500.5];
+  const c=[209.5,299.2,362.6,453.3,438.1,470.2,475.2,470.7,474.5,474.4];
+  const svg=document.getElementById('chart'), tip=document.getElementById('tip');
+  const W=860,H=310,mL=46,mR=14,mT=14,mB=34;
+  const yMax=560, plotW=W-mL-mR, plotH=H-mT-mB;
+  const X=i=>mL+i*(plotW/(widths.length-1));
+  const Y=v=>mT+plotH-(v/yMax)*plotH;
+  const ns='http://www.w3.org/2000/svg';
+  function el(t,at){const e=document.createElementNS(ns,t);for(const k in at)e.setAttribute(k,at[k]);return e;}
+  function build(){
+    svg.innerHTML='';
+    const cs=getComputedStyle(document.documentElement);
+    function tok(n){return cs.getPropertyValue(n).trim();}
+    const mut=tok('--mut'), acc=tok('--accent'), s2=tok('--s2'), s3=tok('--s3'), panel=tok('--panel');
+    for(let v=100;v<=500;v+=100){
+      svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(v),y2:Y(v),class:'grid'}));
+      const t=el('text',{x:mL-8,y:Y(v)+4,'text-anchor':'end','font-size':'11'});t.textContent=v;svg.appendChild(t);
+    }
+    svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(0),y2:Y(0),class:'axis'}));
+    widths.forEach((w,i)=>{const t=el('text',{x:X(i),y:H-14,'text-anchor':'middle','font-size':'11'});t.textContent=w;svg.appendChild(t);});
+    const ax=el('text',{x:(mL+W-mR)/2,y:H-2,'text-anchor':'middle','font-size':'10',fill:mut});
+    ax.textContent='concurrency width → aggregate tok/s';svg.appendChild(ax);
+    [[a,s3,'5 4',2],[b,s2,null,2],[c,acc,null,2.5]].forEach(([d,col,dash,sw])=>{
+      const pts=d.map((v,i)=>X(i)+','+Y(v)).join(' ');
+      const at={points:pts,fill:'none',stroke:col,'stroke-width':sw,'stroke-linejoin':'round','stroke-linecap':'round'};
+      if(dash)at['stroke-dasharray']=dash;
+      svg.appendChild(el('polyline',at));
+      d.forEach((v,i)=>svg.appendChild(el('circle',{cx:X(i),cy:Y(v),r:3.5,fill:col,stroke:panel,'stroke-width':2})));
+    });
+    const la=el('text',{x:X(9)-6,y:Y(a[9])-8,'font-size':'11','text-anchor':'end',fill:s3});la.textContent='11-11h · 519.8';svg.appendChild(la);
+    const lc=el('text',{x:X(9)-6,y:Y(c[9])+16,'font-size':'11','text-anchor':'end',fill:acc});lc.textContent='11-13 clean · 474.4';svg.appendChild(lc);
+    const guide=el('line',{x1:0,x2:0,y1:mT,y2:mT+plotH,stroke:mut,'stroke-width':1,'stroke-dasharray':'3 3',opacity:0});
+    svg.appendChild(guide);
+    const hit=el('rect',{x:mL,y:mT,width:plotW,height:plotH,fill:'transparent'});svg.appendChild(hit);
+    function show(e){
+      const r=svg.getBoundingClientRect();
+      const px=(e.clientX-r.left)*(W/r.width);
+      let i=Math.round((px-mL)/(plotW/(widths.length-1)));
+      i=Math.max(0,Math.min(widths.length-1,i));
+      guide.setAttribute('x1',X(i));guide.setAttribute('x2',X(i));guide.setAttribute('opacity',1);
+      tip.style.opacity=1;
+      tip.innerHTML='width '+widths[i]+'<br>11-11h &nbsp;'+a[i].toFixed(1)+'<br>11-12 &nbsp;'+b[i].toFixed(1)+'<br>11-13 clean &nbsp;'+c[i].toFixed(1);
+      const lx=X(i)*(r.width/W), half=(r.width/2);
+      tip.style.left=(lx+(lx<half?12:-tip.offsetWidth-12))+'px';
+      const topY=Math.min(Y(a[i]),Y(b[i]),Y(c[i]));
+      tip.style.top=Math.max(0,topY*(r.height/H)-10)+'px';
+    }
+    hit.addEventListener('mousemove',show);
+    hit.addEventListener('mouseleave',()=>{tip.style.opacity=0;guide.setAttribute('opacity',0);});
+  }
+  build();
+  if(window.matchMedia){
+    const mq=window.matchMedia('(prefers-color-scheme: dark)');
+    (mq.addEventListener?mq.addEventListener('change',build):mq.addListener(build));
+  }
+})();
+</script>
