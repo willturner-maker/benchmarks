@@ -208,7 +208,15 @@ cache state in the results header.
   (one line in the results header + discard the affected trial), never retry identical bytes.
 - 1.6.1 streams Flash-Next PLE tables by default, freeing RAM for context/KV: expect resident-KV
   and cold-TTFT numbers to move; one rerun sets the new baseline rather than assuming the
-  2026-11-10s numbers carry over.
+  2026-11-10s numbers carry over. (Hardware gate per `splash serve --help`: INT8 activates only
+  where the GPU multiplies 8-bit twice as fast — M5 and later; pre-M5 hosts stay bf16 on the
+  same default, so this whole caveat is absent there. The documented ~¼ TTFT win is scoped to
+  MLX 4/5-bit weights; treat measured GGUF deltas as the empirical answer.)
+- **Determinism knob, new in the 1.6.1 help:** `--verify-rows {auto,all}` — `auto` uses a
+  decode-verify budget learned from earlier cycles; `all` verifies every row of each draft
+  block so a MoE model's greedy/seeded outputs **repeat exactly**, like a dense model's. Use
+  `--verify-rows all` (+ bf16 activations) when a rerun needs exact repeat runs instead of
+  medians; the published suites stay on `auto` and keep the median-compare rule.
 
 ## Re-run 2026-11-10s — same build, shape reproduces (raw: `bench/splash-concurrency/results/rerun-2026-11-10s/`)
 

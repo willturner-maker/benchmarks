@@ -68,7 +68,9 @@ agent hits them, but the operator hits them first here.
   Disclose it in the results header and discard the affected trial; do not re-send identical
   bytes. Related cross-wave note: since 1.6.1 the engine defaults to INT8 activations on M5+,
   so trial outputs are not bit-comparable with pre-1.6.1 waves — grading already rides on
-  read-backs, so this only affects number-to-number diffing across that boundary.
+  read-backs, so this only affects number-to-number diffing across that boundary. If a wave
+  ever needs exact repeat runs, serve the engine with `--activations bf16 --verify-rows all`
+  (MoE seeded outputs then repeat); see the version-caveats block in the Splash results doc.
 
 ## 3. Run
 
