@@ -102,7 +102,7 @@ body landed byte-identical to the draft (2447 / 2666 / 2567 chars), including li
 |---|---|---|
 | 7 | Compound tools silently drop selector params placed beside `action` → call binds to the CURRENT timeline | filed → [#372](https://github.com/samuelgursky/davinci-resolve-mcp/issues/372) — **fixed in 5.2.9, live-verified fixed on 5.2.10** |
 | 8 | `probe_timeline_structure` per-item cost roughly doubled in 5.1.0 (2 → 3 ms/item; 16 items 34 → 49 ms) | filed → [#371](https://github.com/samuelgursky/davinci-resolve-mcp/issues/371) — open; maintainer couldn't replicate; **regression claim WITHDRAWN** after his requested rerun (below) |
-| 9 | `clip_infos` `track_index` out of range (or a string) silently places on video track 1, reported `readback_verified` | filed → [#370](https://github.com/samuelgursky/davinci-resolve-mcp/issues/370) — **fixed in 5.2.9, live-verified fixed on 5.2.10**, one asymmetry to confirm |
+| 9 | `clip_infos` `track_index` out of range (or a string) silently places on video track 1, reported `readback_verified` | filed → [#370](https://github.com/samuelgursky/davinci-resolve-mcp/issues/370) — **fixed in 5.2.9, live-verified fixed on 5.2.10; the 99-track create-path asymmetry closed in 5.2.11, live-verified** |
 
 **Replies + 5.2.10 verification (2026-11-14).** Installed 5.2.10 via npm sync (5.2.9
 landed the #370/#372 fixes; 5.2.10 is #373 read-back gating, unrelated). Verified live
@@ -139,6 +139,20 @@ deleted after) re-confirmed #365 absolute mode honoured at the absolute frame, #
 `skipped_reason: source_timeline_unchanged` with no new archive sibling, #368 `TARGET_DIR_NOT_FOUND`,
 and the 5.2.10 #373 gates (`set_current_timecode` returns requested/before/actual/`verified: true`;
 `create_timeline_from_clips` returns the full read-back block with `certain: true`).
+
+**5.2.11 — the #370 follow-up, live-verified (2026-11-14).** Same-day release cites #370:
+"A typo'd track index no longer grows a new timeline… A new timeline now gets at most 32
+tracks of each type for its rows. A higher index is refused with `INVALID_TRACK_INDEX`
+before anything is created." Verified against headless 21.2.0.6 (scratch project created +
+deleted after; scripted server spawned from the on-disk 5.2.11 tree): `track_index: 99` and
+`33` on `create_timeline_from_clips` both refused with `INVALID_TRACK_INDEX` and a message
+naming the 32 cap ("nothing was created"); `32` succeeds and the probe reads back exactly 32
+video tracks with the item on the named track (filled `[32]`) — cap is exact, not off-by-one.
+The refusal carries the correct remediation (create → `add_track` → `append_to_timeline`),
+the same path my verification comment suggested. Append path unchanged: `track_index: 99` on
+the 32-track timeline still `TRACK_INDEX_OUT_OF_RANGE`. #370 fully closed from my side.
+Host note: a wedged headless Resolve answering `SCRIPTING_UNAVAILABLE` survived
+`pkill -x Resolve` — kill by PID, relaunch answers on the first try.
 
 Item 7 is the **narrowed** version of item 1: live on 5.2.8, `timeline(action="set_current", index=2)` at
 top level fails loudly (`'index' is required`), so the old draft's "same shape applies to `set_current`"
