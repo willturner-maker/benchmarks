@@ -100,9 +100,32 @@ body landed byte-identical to the draft (2447 / 2666 / 2567 chars), including li
 
 | # | Title (abridged) | Status |
 |---|---|---|
-| 7 | Compound tools silently drop selector params placed beside `action` → call binds to the CURRENT timeline | filed → [#372](https://github.com/samuelgursky/davinci-resolve-mcp/issues/372) |
-| 8 | `probe_timeline_structure` per-item cost roughly doubled in 5.1.0 (2 → 3 ms/item; 16 items 34 → 49 ms) | filed → [#371](https://github.com/samuelgursky/davinci-resolve-mcp/issues/371) |
-| 9 | `clip_infos` `track_index` out of range (or a string) silently places on video track 1, reported `readback_verified` | filed → [#370](https://github.com/samuelgursky/davinci-resolve-mcp/issues/370) |
+| 7 | Compound tools silently drop selector params placed beside `action` → call binds to the CURRENT timeline | filed → [#372](https://github.com/samuelgursky/davinci-resolve-mcp/issues/372) — **fixed in 5.2.9, live-verified fixed on 5.2.10** |
+| 8 | `probe_timeline_structure` per-item cost roughly doubled in 5.1.0 (2 → 3 ms/item; 16 items 34 → 49 ms) | filed → [#371](https://github.com/samuelgursky/davinci-resolve-mcp/issues/371) — open; maintainer couldn't replicate; **regression claim WITHDRAWN** after his requested rerun (below) |
+| 9 | `clip_infos` `track_index` out of range (or a string) silently places on video track 1, reported `readback_verified` | filed → [#370](https://github.com/samuelgursky/davinci-resolve-mcp/issues/370) — **fixed in 5.2.9, live-verified fixed on 5.2.10**, one asymmetry to confirm |
+
+**Replies + 5.2.10 verification (2026-11-14).** Installed 5.2.10 via npm sync (5.2.9
+landed the #370/#372 fixes; 5.2.10 is #373 read-back gating, unrelated). Verified live
+on 5.2.10 against headless Resolve 21.2.0.6 (test project created and deleted after;
+scripts and comment drafts in local scratch, out of git):
+`UNKNOWN_ARGUMENTS` refuses every beside-`action` shape tried, nothing runs, nested-
+`params` control pins correctly (#372 closed from my side). `INVALID_TRACK_INDEX` /
+`TRACK_INDEX_OUT_OF_RANGE` (naming the real track counts) / `INVALID_MEDIA_TYPE`, digit
+strings coerced, one bad row refuses the whole batch with nothing placed (#370). The
+asymmetry to confirm with Samuel: `create_timeline_from_clips` with `track_index: 99`
+on a not-yet-existing timeline **creates 99 video tracks** and places there (matches
+"adds the tracks the rows name") — refused only on the existing-timeline append path.
+For #371 he asked for (a) a rerun with the order reversed and (b) one filtered
+response. Done both (fresh 5.2.10 headless, strict reversed then forward passes,
+n=11/cell): fits **2.24** (reversed) vs **1.64** (forward) ms/item on the same
+instance — same 16-item cell medians 38 vs 29 (min 27 both) — so pass position moves
+the fit ~0.6 ms/item, and the fresh instance settles well below the 2.8–3.0 the 5.1.0–
+5.2.8 series measured on identical probe code. His host-state reading wins; the
+cross-build doubling is withdrawn, the matched-item-count rule stands. Bonus: the
+filtered-variant `item_count: null` footnote is now obsolete — 5.2.10 returns the
+count (66/66 were null on 5.2.8). Draft replies (all scrubbed of paths/camera names):
+`comment-371-rerun.md`, `comment-370-verify.md`, `comment-372-verify.md` in the local
+`agbench-528/` scratch. Benchmark-doc/leaderboard updates remain held until #371 closes.
 
 Item 7 is the **narrowed** version of item 1: live on 5.2.8, `timeline(action="set_current", index=2)` at
 top level fails loudly (`'index' is required`), so the old draft's "same shape applies to `set_current`"
