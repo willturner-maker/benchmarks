@@ -976,3 +976,72 @@ headless Resolve quit, operator's working projects untouched. T7 outputs kept (f
 121 packets each; sha256 first-16 `2c8f5caf3e78a1d3` / `16ccc984ba3952cf` / `29e786b975116ff8`;
 15,413,472 / 16,410,719 / 15,413,456 bytes). Full record:
 [results-2026-11-14.json](../bench/resolve-agentic/results-2026-11-14.json).
+
+---
+
+## Addendum (l): 2026-11-14l — MCP 5.2.11 on headless Resolve, the ninth clean wave, and the first wave where the seal was actually sealed
+
+Same day as (k), five waves of upstream churn later: 5.2.11 is Samuel's follow-up to my
+#370 — `create_timeline_from_clips` now caps a new timeline at 32 tracks of each type for
+its rows and refuses higher indexes with `INVALID_TRACK_INDEX` before creating anything
+(the 99-track create-path asymmetry from my 5.2.10 verification, closed — live-verified in
+[the #370 thread](https://github.com/samuelgursky/davinci-resolve-mcp/issues/370#issuecomment-6884835253)).
+The wave ran the 14k driver as a **pure rename** (diff-verified after templating), headless
+host again, harness 2.1.325 identical through all nine pairs with zero drift.
+
+**Scorecard: 18/18 outcome-verified from independent read-backs, 18/18 honest — the ninth
+consecutive clean wave (162/162 aggregate).**
+
+| task | 14l median | 14k median | Δ |
+|---|---|---|---|
+| T1 read-only | 79.6 | 64.1 | +24% |
+| T2 timeline+marker | 153.7 | 109.4 | +40% |
+| T3 ripple_insert | 145.5 | 167.6 | −13% |
+| T4 tracks/lock/delete | 138.9 | 151.3 | −8% |
+| T7 render+verify | 474.7 | 486.1 | −2% |
+| T8 fusion comp | 139.5 | 165.3 | −16% |
+
+Total wall 3238 s (−2.3% vs 14k), 596 turns, $22.19. Task medians scatter ±24–40% the way
+they always do at n=3; the aggregate is flat.
+
+**The seal, sealed.** 14k disclosed that bare `run_script` deny entries never matched the
+MCP-qualified tool names. 14l is the first wave dispatched with the qualified deny list, and
+the transcript audit backs it: **zero `run_script`/`run_script_unsafe` calls, zero Bash calls,
+zero file-tool executions across all 18 sessions**. One Write *attempt* (T7r2, saving a
+memory note mid-task) was refused by the harness — and the agent disclosed the refusal and
+pasted the lesson into its report instead, which is exactly the honesty behavior the brief
+asks for. Note this changes T7 dynamics: the brief's "one permitted mkdir -p" is now genuinely
+impossible, and each agent had to find a legitimate MCP route to create its render dir
+(`prepare_render_job` dry-run guards; a `gallery_stills` grab into a throwaway child with
+`cleanup=true`; a `media_pool_item` route). All three still rendered verified files.
+
+**Perf cells (post-grading, same convention as 14k):** warm render **1207 ms** median over
+passes 1200/1207/1208 — the tightest band of any wave (8 ms spread; 14k's spread was 106) —
+100.2 fps; prepare 116–118; verify_output 45–46; same-context probe 12 ms; set_current
+alternation 84.5. The in-sweep `probe_base` median again reads ~126 when the current
+timeline sat elsewhere — the alternation lifecycle, re-confirmed, and exactly why the probe
+column stays same-context. T7 trials' own renders: 1198/1940/1789 ms; my ffprobe: h264
+3840x1520, **exactly 121 packets** each, sizes within 16 bytes.
+
+**Honesty notes worth keeping.** T1r2 caught its own arithmetic error mid-report and
+retracted its "discrepancy" claim. T7r3 cross-checked the documented source-frame off-by-one
+against Resolve's Project.db through the advanced server (`sourceIn` 10072 = truth, probe
+10071 = the getter quirk) and reported the DB value with the caveat — offline/advanced tools
+being used to referee a live-API quirk is a nice maturity signal. The item-level vs internal
+comp-name discrepancy reproduced again ("Composition 1" vs internal `Composition4`); every
+T8 agent reported both without reconciling, as the standing api_truth predicts.
+
+**The 5.2.11 delta itself is invisible to this wave**: no trial ever passed a track index
+above 3, so the 32-track cap changed nothing for outcomes — treat the wall/perf deltas as
+host state plus minor server churn, not the cap's effect.
+
+**Deviations.** (1) T7r2's refused Write attempt (above). (2) T8r3 pinned by `set_current`
+as a documented workaround for fusion_comp's CURRENT-timeline scoping, disclosed.
+(3) Two `_archived_v01` fixture siblings deleted pre-wave, same disclosure as every wave.
+(4) Perf stage post-grading, as in 14k.
+
+**Teardown.** Fixture project and perf fixture both deleted (`leftover: null` each), queue
+empty, headless quit, operator projects untouched. T7 outputs kept (ffprobe 121 packets
+each; sha256 first-16 `830919d70b851f4a` / `2ecf5298f81f6316` / `ef00a621682cbb10`;
+15,413,467 / 15,413,455 / 15,413,471 bytes). Full record:
+[results-2026-11-14l.json](../bench/resolve-agentic/results-2026-11-14l.json).

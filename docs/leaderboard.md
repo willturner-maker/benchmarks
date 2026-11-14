@@ -32,6 +32,7 @@ macOS 27.2, render output and scratch on external volumes.
 | **2026-11-11h** | 21.2.0.6 | **5.2.2** | 3129 ms¹ | **1205 ms**⁵ | 100.4 | n/a⁵ | n/a | n/a | n/a³⁴ | **18/18** | 18/18 |
 | **2026-11-13i** | 21.2.0.6 | **5.2.7**⁶ | 1303 ms¹ | **1192 ms**⁶ | **101.5** | 155⁶ | 35 | 80 | 13³⁶ | **18/18** | 18/18 |
 | **2026-11-14k** | 21.2.0.6 **headless**⁷ | **5.2.10** | —⁷ | **1310 ms**⁷ | 92.4 | 116 | 44 | 83 | 11³⁷ | **18/18** | 18/18 |
+| **2026-11-14l** | 21.2.0.6 **headless**⁷ | **5.2.11** | —⁷ | **1207 ms**⁷ | **100.2** | 117 | 46 | 84.5 | 12³⁷ | **18/18** | 18/18 |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
@@ -200,6 +201,27 @@ and older waves are flagged unauditable rather than assumed clean. A harness gua
 belongs in the record: two T7 agents' `Bash` attempts were refused outright by the CLI's
 session-disable rule. See [the results file](../bench/resolve-agentic/results-2026-11-14.json) and
 [addendum (k)](resolve-agentic-benchmark-results.md).
+
+**2026-11-14l row:** the **ninth consecutive clean 18/18** (162/162 aggregate), on 5.2.11 — the
+build that closes my own #370 by capping `create_timeline_from_clips` at 32 tracks per type. That
+cap is **invisible to the agentic outcomes** (no trial passes a track index above 3), so the wave
+measures the same task set on a quieter instance rather than a behaviour change: warm 1207 ms with
+passes 1200/1207/1208 — an 8 ms spread, the tightest of any wave, and 100.2 fps back at the series
+plateau — against 14k's 106 ms spread the same afternoon on the same host and harness. The honest
+read is that the 1310 above it was the instance, not 5.2.10. What this row actually establishes is
+**the seal**: 14k disclosed that bare `run_script` deny entries never matched MCP-qualified tool
+names, and 14l is the first wave dispatched with the qualified list. The transcript audit of all 18
+sessions found **zero `run_script`/`run_script_unsafe` calls, zero `Bash`, zero file-tool
+executions**; the single exception is a T7 `Write` *attempt* (an agent trying to save a memory note
+mid-task) that the harness refused, which the agent then reported and worked around inside its own
+report. That also removes the brief's "one permitted `mkdir -p`" from reach, so all three T7 agents
+had to find an MCP-only route to their render directory — `prepare_render_job` guard-hunting, a
+`gallery_stills` grab-then-cleanup, and a `media_pool_item` route — and all three still produced
+verified 121-packet outputs. Best honesty note of the wave: a T7 agent resolved the documented
+source-frame off-by-one by reading the value out of Resolve's Project.db through the offline
+advanced server and reporting the DB number, a live quirk refereed by an independent tool. See
+[the results file](../bench/resolve-agentic/results-2026-11-14l.json) and
+[addendum (l)](resolve-agentic-benchmark-results.md).
 
 ## Splash engine — reference host
 
