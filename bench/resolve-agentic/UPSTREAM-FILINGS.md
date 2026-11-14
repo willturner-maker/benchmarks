@@ -24,12 +24,18 @@ almost the same payload, and the envelope field is the only cheap way to tell th
 silent top-level-args drop) is unaffected — that one produced `success: true` with the selector present
 *and* mis-nested, and the envelope then reported the wrong timeline.
 
+The withdrawal is posted on the issue with both the failing call and the 29 pinned calls quoted
+([comment](https://github.com/samuelgursky/davinci-resolve-mcp/issues/367#issuecomment-6871637178)), and
+#367 is closed **not planned** — no code change needed. One optional nicety was left with the maintainer:
+have `not found` name the timeline it searched. His reply also corrected a detail of my draft — there is
+no `get_clips_linked` tool on the granular server, so that path was never a candidate either.
+
 | # | Title (abridged) | Status |
 |---|---|---|
 | 1 | Compound tools silently drop top-level selectors → call binds to CURRENT timeline | **not filed** |
 | 2 | `probe_timeline_structure` per-item cost doubled in 5.1.0 (2→3 ms/item; 16 items 34→49 ms) | **not filed** |
 | 3 | `render.set_settings` silently accepts a non-existent `TargetDir` | filed → [#368](https://github.com/samuelgursky/davinci-resolve-mcp/issues/368) |
-| 4 | `timeline.get_clips_linked` ignores the `timeline_id` pin | **WITHDRAWN 2026-11-14** — my error, the pin works → [#367](https://github.com/samuelgursky/davinci-resolve-mcp/issues/367) |
+| 4 | `timeline.get_clips_linked` ignores the `timeline_id` pin | **WITHDRAWN + CLOSED (not planned) 2026-11-14** — my error, the pin works; evidence in [my comment](https://github.com/samuelgursky/davinci-resolve-mcp/issues/367#issuecomment-6871637178) → [#367](https://github.com/samuelgursky/davinci-resolve-mcp/issues/367) |
 | 5 | `timeline.duplicate` archives the SOURCE timeline | filed → [#366](https://github.com/samuelgursky/davinci-resolve-mcp/issues/366) |
 | 6 | Positioned rows silently ignore `record_frame_mode:"absolute"` | filed → [#365](https://github.com/samuelgursky/davinci-resolve-mcp/issues/365) |
 
