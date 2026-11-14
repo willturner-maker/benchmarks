@@ -807,6 +807,25 @@ What actually happened is a grading error worth keeping visible: an **unpinned**
 (`_operation.timeline`) was already in front of me. The runbook's grading section now says to read it
 before calling a pin broken, and the filed issue is being withdrawn.
 
+**Close-out (2026-11-14): the two 13i API truths and the 11h one are FIXED upstream.** Server synced to
+**5.2.8**, then each claim re-tested on live Resolve 21.2.0.6 in a scratch project (deleted afterwards),
+with a control per item so a passing check could not be an over-broad guard: `set_settings` with a bogus
+`TargetDir` now refuses as `TARGET_DIR_NOT_FOUND` / `retryable:false` while an existing directory still
+succeeds (#368); `duplicate` reports `archived:false, skipped_reason:"source_timeline_unchanged"` and
+grows `timeline.list` by exactly one entry with no `_archived_vNN` sibling, while the next `add_track`
+still archives with `archived_version:1` (#366); top-level `record_frame_mode:"absolute"` places at the
+raw frame — 86621, where the pre-fix agent hit landed at 173021 — and an absolute frame before the
+timeline start is refused with a clear frame-zero message (#365). Verification comments with the numbers
+are on each issue. One wording correction against my own #365 title: the dropped key was the **top-level**
+`record_frame_mode` beside `clip_infos`, not the per-row key (all 42 absolute-mode calls in the corpus used
+top level), which is exactly the placement the maintainer's fix addresses. Fixing #366 also repairs a
+grading probe: "no `_archived_vNN` sibling" is again positive proof that a read-only task changed nothing.
+The same verification run surfaced a **new** trap — in positioned `clip_infos` rows, a `track_index` of
+`0`, `5`, `99` or the string `"2"` on a three-video-track timeline silently lands the item on **video
+track 1** with `success:true` and `verification_status:readback_verified`; only in-range ints are honoured.
+Drafted upstream as link 9; full detail in
+[`bench/resolve-agentic/UPSTREAM-FILINGS.md`](../bench/resolve-agentic/UPSTREAM-FILINGS.md).
+
 ---
 
 ## Addendum (j): 2026-11-13 — probe-flag closure (three builds side by side)

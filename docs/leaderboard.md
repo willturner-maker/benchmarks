@@ -153,7 +153,11 @@ refusal designed the pattern. In-suite render ms (1445/1425/1447) were read by t
 first claimed: `render.set_settings` silently accepts a bogus `TargetDir` (only `add_job` refuses), and
 `timeline.duplicate` archives the **source** fixture — six `_base` archive siblings this wave where 11h
 had none. Both filed upstream 2026-11-13 (#368, #366; draft links and filing status tracked in
-`bench/resolve-agentic/UPSTREAM-FILINGS.md`).
+`bench/resolve-agentic/UPSTREAM-FILINGS.md`). **Both verified FIXED on 5.2.8** (live 21.2.0.6 re-test
+2026-11-14, one control each: an existing `TargetDir` still succeeds; `add_track` right after still
+archives) — and #365 from 11h too, at the raw absolute frame where the agent had landed ~2x off. The
+verification run also produced a new trap: an out-of-range or string `track_index` in a positioned
+`clip_infos` row silently places on **video track 1** and reports `readback_verified`.
 The third — "`get_clips_linked` is not pin-able" — is **WITHDRAWN 2026-11-14: the pin works.** The
 maintainer couldn't reproduce it (#367), so I audited the raw call log instead of defending it. Both
 `not found` results came from calls that passed **no pin at all** (`params` held only `clip_ids`), whose
