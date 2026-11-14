@@ -127,6 +127,19 @@ count (66/66 were null on 5.2.8). Draft replies (all scrubbed of paths/camera na
 `comment-371-rerun.md`, `comment-370-verify.md`, `comment-372-verify.md` in the local
 `agbench-528/` scratch. Benchmark-doc/leaderboard updates remain held until #371 closes.
 
+**All three comments POSTED 2026-11-14** (gh api, authenticated):
+#370 [#issuecomment-6881207842](https://github.com/samuelgursky/davinci-resolve-mcp/issues/370#issuecomment-6881207842)
+(verified fixed twice + 99-track asymmetry + bonus: refusals carry `remediation`/`state.track_counts`,
+rows omitting `track_index` now refused outright);
+#371 [#issuecomment-6881207997](https://github.com/samuelgursky/davinci-resolve-mcp/issues/371#issuecomment-6881207997)
+(strict-order rerun table + withdrawal + scrubbed filtered response — `item_count: 16`, no longer null);
+#372 [#issuecomment-6881208203](https://github.com/samuelgursky/davinci-resolve-mcp/issues/372#issuecomment-6881208203)
+(close-out from my side). Post-reconnect regression battery on the session server (project created +
+deleted after) re-confirmed #365 absolute mode honoured at the absolute frame, #366
+`skipped_reason: source_timeline_unchanged` with no new archive sibling, #368 `TARGET_DIR_NOT_FOUND`,
+and the 5.2.10 #373 gates (`set_current_timecode` returns requested/before/actual/`verified: true`;
+`create_timeline_from_clips` returns the full read-back block with `certain: true`).
+
 Item 7 is the **narrowed** version of item 1: live on 5.2.8, `timeline(action="set_current", index=2)` at
 top level fails loudly (`'index' is required`), so the old draft's "same shape applies to `set_current`"
 was wrong. The surviving claim: a key the action would read from `params` is ignored when placed beside
