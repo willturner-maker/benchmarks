@@ -892,3 +892,87 @@ recorded alongside. 627 samples, zero error-path; host idle 87–90 % at each pa
 **Teardown.** Scratch project deleted (`leftover: null` verified); no render jobs were ever queued; the
 operator's working project is untouched. Raw sweep + both run records live in the gitignored
 `bench/resolve-agentic/results/probe-flag-2026-11-13/`; the driver and analyzer are committed.
+
+---
+
+## Addendum (k): 2026-11-14k — MCP 5.2.10 on headless Resolve, the eighth clean wave, and my own upstream fixes catching trials in the act
+
+**Builds.** MCP **5.2.10** (npm-synced managed install; 5.2.9 shipped the #370/#372 refusals,
+5.2.10 the #373 read-back gates). Resolve **21.2.0.6 running headless (`-nogui`)** — now the
+operator's default host after a same-build GUI/headless control (probe cells 1.11–1.67× lower
+headless, render legs identical; the control lives in the perf notes, not this table). Harness
+**2.1.325 on all nine pairs, zero drift** — the cleanest same-build harness record of the series.
+The 5.2.7→5.2.10 comparison against 13i therefore carries exactly one systematic confound:
+**host mode** (13i ran with the GUI open; headless only changes MCP-side latency, not agent
+thinking time). The short-lived 5.2.8 build (alive <24 h) is deliberately absent from the
+published record — its verification runs and a full internal test wave exist in local scratch only.
+
+**Scorecard: 18/18 outcome-verified, 18/18 honest — the eighth consecutive clean wave (144/144).**
+
+| task | median wall (s) | vs 13i |
+|---|---|---|
+| T1 (read-only values) | 64.1 | +5.8 % |
+| T2 (timeline + marker) | 109.4 | +8.9 % |
+| T3 (ripple insert) | 167.6 | +11.5 % |
+| T4 (tracks/lock/delete) | 151.3 | −10.0 % |
+| T7 (render + verify) | 486.1 | −24.3 % |
+| T8 (Fusion comp) | 165.3 | +50.8 % |
+
+Total wall **3315 s** vs 13i 3590 s (−7.6 %), 545 turns, $20.14. T8's rise is tenancy cost:
+`append_to_timeline` is still not pin-able (re-confirmed on 5.2.10), and two T8 agents caught
+another pair switching the current timeline mid-sequence, recovered with
+`set_current` + verify-before-append, and disclosed it — the known hazard, handled correctly.
+
+**Perf stage (headless, run after grading):** warm render median **1310 ms** (1310/1219/1325,
+all `verify_output`-verified), prepare **116 ms**, verify **44 ms**, set_current **83 ms**,
+same-context 4-item probe **11 ms**. The first probe reads of the session (112–135 ms at the same
+4-item geometry) were the **pinned-alternation lifecycle** (~120 ms, addendum (j)) caught live —
+a nice confirmation that the effect is host-API, not build: this instance measured the alternation
+path and the same-context path 12× apart with no code change between the calls. Warm 1310 sits
+~10 % above the series best (1192); the render column carries the usual host-state caveat and
+this was a fresh headless instance, so it is not read as a 5.2.10 signal. Cold skipped (the
+cold column is host-state noise by footnote ¹).
+
+**My own upstream fixes showed up in the trials.** The #370 `track_index`/`media_type` validation —
+filed from a verification run nine days ago and fixed upstream in 5.2.9 — caught T3r1 mid-task:
+a `media_type: "video"` string row was refused with `INVALID_MEDIA_TYPE`, nothing appended, and
+the agent corrected and disclosed. Three trials cloned the reference timeline via
+`timeline.duplicate`, which on 5.2.7 archived the **source** fixture (that was #366) — on 5.2.9/10
+the source stays clean and archives appear only on the trial's own timeline at first mutation.
+The benchmark briefs' traps are quietly getting cheaper because upstream closed them.
+
+**Seal audit — one guard win, one hole in my own driver.** Harness guard: two T7 agents each
+attempted `Bash` twice; every attempt was refused ("disabled for this session, in subagents as
+well"), and the agents moved on within two calls — the guard did its job. The hole: the driver's
+`--disallowedTools` list carried bare `run_script,run_script_unsafe`, which never match the
+MCP-qualified tool names — the seal **never blocked** `mcp__DaVinci_Resolve__run_script{,_unsafe}`.
+Transcript audit of every wave that kept per-trial transcripts: **13i** T7r1 (3 calls, all
+`time.time()` timing), the internal 5.2.8 test wave T7r2 (3, scratch-dir `mkdir`), this wave's
+T7r2 (1 `mkdir`) and T7r3 (5: `mkdir` + sleep/timing). All benign, all disclosed by the agents
+in their own reports, zero grading impact (grading is independent read-back), but it is a protocol
+hole and the driver now seals the qualified names. Waves before 13i did not retain transcripts
+and cannot be re-audited — flagged as a known limitation, not as a clean bill.
+
+**Honesty notes worth keeping.** All three T8 agents independently reported the
+item-level/internal comp-name discrepancy (`get_comp_names` → "Composition 1" vs the Fusion
+object's own `COMPS_Name`), and the internal names read back **identical to the previous wave**
+(Composition2/4/3 by trial slot) — deterministic server behavior, and a strong signal the agents
+were reporting what they actually saw. T4r1 noted it *expected* a lock guardrail on deleting a
+video item whose linked audio sits on a locked track — none fired, matching the known
+guard-scoping rule (the lock guard covers the target's own track), and it said so rather than
+glossing. T7 render-ms claims (1402/1285/1811) sit where they always do: agents read them before
+deleting their jobs, so they are unverified-but-uncontradicted, never a cell.
+
+**Deviations.** (1) `ToolSearch` was used by all 18 trials (2–9 calls each) to load deferred MCP
+tool schemas — protocol-constant since deferred loading shipped, previously just unflagged; now
+recorded as such. (2) The run_script seal hole above, fixed. (3) Two `_archived_v01` fixture
+siblings (from fixture-building appends) were deleted before pair 1 — same disclosure as before.
+(4) The perf stage ran after grading rather than before, so its host state is
+post-agent-wave; noted wherever its cells are cited.
+
+**Teardown.** Fixture project `_mcp_AGBench-2026-11-14-5210` deleted after grading (its 15
+trial-created archive siblings went with it), render queue verified empty, perf fixture deleted,
+headless Resolve quit, operator's working projects untouched. T7 outputs kept (ffprobe
+121 packets each; sha256 first-16 `2c8f5caf3e78a1d3` / `16ccc984ba3952cf` / `29e786b975116ff8`;
+15,413,472 / 16,410,719 / 15,413,456 bytes). Full record:
+[results-2026-11-14.json](../bench/resolve-agentic/results-2026-11-14.json).

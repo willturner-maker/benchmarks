@@ -31,6 +31,7 @@ macOS 27.2, render output and scratch on external volumes.
 | **2026-11-10g** | 21.2.0.6 | **5.2.0** | 1700 ms¹ | **1296 ms** | 93.4 | 162 | 59 | 112 | 268³⁴ | **18/18** | 18/18 |
 | **2026-11-11h** | 21.2.0.6 | **5.2.2** | 3129 ms¹ | **1205 ms**⁵ | 100.4 | n/a⁵ | n/a | n/a | n/a³⁴ | **18/18** | 18/18 |
 | **2026-11-13i** | 21.2.0.6 | **5.2.7**⁶ | 1303 ms¹ | **1192 ms**⁶ | **101.5** | 155⁶ | 35 | 80 | 13³⁶ | **18/18** | 18/18 |
+| **2026-11-14k** | 21.2.0.6 **headless**⁷ | **5.2.10** | —⁷ | **1310 ms**⁷ | 92.4 | 116 | 44 | 83 | 11³⁷ | **18/18** | 18/18 |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
@@ -171,6 +172,34 @@ them with the current pointer elsewhere** (`restored_current` names it). Rule ad
 grading section: read `_operation.timeline` before concluding a pin was dropped — *unpinned* and
 *pinned-and-ignored* look identical in the payload and opposite in what they mean.
 See [the results file](../bench/resolve-agentic/results-2026-11-13i.json).
+
+⁷ **2026-11-14k — headless host row, with the caveat stated up front:** this is the first scored
+wave on **headless Resolve** (`-nogui`), the operator's new default after a same-build control
+(probe cells 1.11–1.67× lower headless, render legs identical — the confound only matters for op
+cells, not agent walls). The cold cell is skipped; warm 1310 ms (all passes verified) sits ~10 %
+above the series best on a fresh instance — host-state band, not read as a 5.2.10 signal. The
+11 ms probe cell is same-context; the same session's first probe reads (112–135 ms at the same
+4-item geometry) were the **pinned-alternation lifecycle** caught live, a clean confirmation of
+footnote ⁴: same build, same timeline, 12× apart purely by context. Harness 2.1.325 on all nine
+pairs, zero drift. The short-lived 5.2.8 build is deliberately absent from the record (<24 h
+lifetime; its verification artifacts stay in local scratch).
+
+**2026-11-14k row:** the **eighth consecutive clean 18/18** (144/144 aggregate), total wall −7.6 %
+vs 13i on the same harness build, and the flavor of the wave is *upstream fixes doing their job in
+the trials*: the #370 `media_type` validation refused a T3 agent's malformed row mid-task (clean
+refusal, corrected, disclosed), and three agents cloned the fixture with `timeline.duplicate` — a
+path that used to litter the **source** timeline with archives (#366) — now archive-clean. The
+tenancy hazard keeps paying rent: `append_to_timeline` is still not pin-able and two T8 agents
+caught another pair switching the current timeline mid-sequence (recovered, disclosed; T8's +50.8 %
+is largely that tax). The wave's one protocol finding is **against my own tooling**: the driver's
+disallow list carried bare `run_script` names that never match MCP-qualified tools, so the official
+server's `run_script` was silently callable — a transcript audit of every wave that kept
+transcripts (13i onward) found only benign uses (timing `time.time()`, scratch-dir `mkdir`), all
+voluntarily disclosed by the agents, zero grading impact; the driver now seals the qualified names
+and older waves are flagged unauditable rather than assumed clean. A harness guard win also
+belongs in the record: two T7 agents' `Bash` attempts were refused outright by the CLI's
+session-disable rule. See [the results file](../bench/resolve-agentic/results-2026-11-14.json) and
+[addendum (k)](resolve-agentic-benchmark-results.md).
 
 ## Splash engine — reference host
 
