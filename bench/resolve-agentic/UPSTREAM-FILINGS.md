@@ -101,7 +101,7 @@ body landed byte-identical to the draft (2447 / 2666 / 2567 chars), including li
 | # | Title (abridged) | Status |
 |---|---|---|
 | 7 | Compound tools silently drop selector params placed beside `action` → call binds to the CURRENT timeline | filed → [#372](https://github.com/samuelgursky/davinci-resolve-mcp/issues/372) — **fixed in 5.2.9, live-verified fixed on 5.2.10** |
-| 8 | `probe_timeline_structure` per-item cost roughly doubled in 5.1.0 (2 → 3 ms/item; 16 items 34 → 49 ms) | filed → [#371](https://github.com/samuelgursky/davinci-resolve-mcp/issues/371) — open; maintainer couldn't replicate; **regression claim WITHDRAWN** after his requested rerun (below) |
+| 8 | `probe_timeline_structure` per-item cost roughly doubled in 5.1.0 (2 → 3 ms/item; 16 items 34 → 49 ms) | filed → [#371](https://github.com/samuelgursky/davinci-resolve-mcp/issues/371) — **still open, nothing owed from my side**; maintainer couldn't replicate; **regression claim WITHDRAWN** after his requested rerun (below) |
 | 9 | `clip_infos` `track_index` out of range (or a string) silently places on video track 1, reported `readback_verified` | filed → [#370](https://github.com/samuelgursky/davinci-resolve-mcp/issues/370) — **fixed in 5.2.9, live-verified fixed on 5.2.10; the 99-track create-path asymmetry closed in 5.2.11, live-verified** |
 
 **Replies + 5.2.10 verification (2026-11-14).** Installed 5.2.10 via npm sync (5.2.9
@@ -153,6 +153,12 @@ the same path my verification comment suggested. Append path unchanged: `track_i
 the 32-track timeline still `TRACK_INDEX_OUT_OF_RANGE`. #370 fully closed from my side.
 Host note: a wedged headless Resolve answering `SCRIPTING_UNAVAILABLE` survived
 `pkill -x Resolve` — kill by PID, relaunch answers on the first try.
+Confirmation comment POSTED (#370
+[#issuecomment-6884835253](https://github.com/samuelgursky/davinci-resolve-mcp/issues/370#issuecomment-6884835253)):
+cap table (99/33 refused, 32 exact, append path unchanged), the `add_track` remediation
+nod, and the #372 guard catching a beside-`action` slip during the reconnect test.
+#371 checked same day: still open — 2 comments (Samuel's non-replication + my withdrawal),
+maintainer hasn't closed or replied since; nothing owed from my side unless he does.
 
 Item 7 is the **narrowed** version of item 1: live on 5.2.8, `timeline(action="set_current", index=2)` at
 top level fails loudly (`'index' is required`), so the old draft's "same shape applies to `set_current`"
