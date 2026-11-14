@@ -823,7 +823,7 @@ grading probe: "no `_archived_vNN` sibling" is again positive proof that a read-
 The same verification run surfaced a **new** trap — in positioned `clip_infos` rows, a `track_index` of
 `0`, `5`, `99` or the string `"2"` on a three-video-track timeline silently lands the item on **video
 track 1** with `success:true` and `verification_status:readback_verified`; only in-range ints are honoured.
-Drafted upstream as link 9; full detail in
+Filed upstream as [#370](https://github.com/samuelgursky/davinci-resolve-mcp/issues/370); full detail in
 [`bench/resolve-agentic/UPSTREAM-FILINGS.md`](../bench/resolve-agentic/UPSTREAM-FILINGS.md).
 
 ---
