@@ -1,4 +1,4 @@
-# Upstream filings — drafted 2026-11-13; four submitted (#365–#368), two still open
+# Upstream filings — drafted 2026-11-13: three stand, one withdrawn (#367), two still unfilled
 
 Drafted with the community server's own `resolve_control(action="report_issue")`, which prefills
 a GitHub issue on **samuelgursky/davinci-resolve-mcp** and files nothing itself. Open a link,
@@ -14,12 +14,22 @@ Status verified against GitHub on 2026-11-13 (`gh issue list`): four filed 2026-
 Every submitted body landed byte-identical to the draft (762 / 577 / 1417 / 608 chars). Items 1 and 2,
 the two flagged highest-value, are still unfiled.
 
+**Update 2026-11-14 — item 4 (#367) was my error and is being withdrawn.** The maintainer could not
+reproduce it, so I audited the raw call log: the pin works. Both `not found` results came from calls that
+passed no pin, against item ids belonging to three *other* timelines — a correct answer, and
+`_operation.timeline` had already named the timeline it searched. Same wave, live Resolve: 29 pinned
+`get_clips_linked` calls, all `pinned: true`, items resolved, 22 while the current pointer sat elsewhere.
+The lesson generalises past this action: an **unpinned** read and a **pinned-but-dropped** read produce
+almost the same payload, and the envelope field is the only cheap way to tell them apart. Item 1 (the
+silent top-level-args drop) is unaffected — that one produced `success: true` with the selector present
+*and* mis-nested, and the envelope then reported the wrong timeline.
+
 | # | Title (abridged) | Status |
 |---|---|---|
 | 1 | Compound tools silently drop top-level selectors → call binds to CURRENT timeline | **not filed** |
 | 2 | `probe_timeline_structure` per-item cost doubled in 5.1.0 (2→3 ms/item; 16 items 34→49 ms) | **not filed** |
 | 3 | `render.set_settings` silently accepts a non-existent `TargetDir` | filed → [#368](https://github.com/samuelgursky/davinci-resolve-mcp/issues/368) |
-| 4 | `timeline.get_clips_linked` ignores the `timeline_id` pin | filed → [#367](https://github.com/samuelgursky/davinci-resolve-mcp/issues/367) |
+| 4 | `timeline.get_clips_linked` ignores the `timeline_id` pin | **WITHDRAWN 2026-11-14** — my error, the pin works → [#367](https://github.com/samuelgursky/davinci-resolve-mcp/issues/367) |
 | 5 | `timeline.duplicate` archives the SOURCE timeline | filed → [#366](https://github.com/samuelgursky/davinci-resolve-mcp/issues/366) |
 | 6 | Positioned rows silently ignore `record_frame_mode:"absolute"` | filed → [#365](https://github.com/samuelgursky/davinci-resolve-mcp/issues/365) |
 
@@ -38,7 +48,7 @@ https://github.com/samuelgursky/davinci-resolve-mcp/issues/new?template=bug_repo
 3. `set_settings` bogus TargetDir — filed as #368:
 https://github.com/samuelgursky/davinci-resolve-mcp/issues/new?template=bug_report.md&labels=bug&title=render.set_settings%20silently%20accepts%20a%20non-existent%20TargetDir%20%28only%20add_job%20refuses%29&body=%23%23%23%20What%20happened%0A%0A**Observed:**%20%60render.set_settings%60%20accepts%20a%20%60TargetDir%60%20pointing%20at%20a%20directory%20that%20does%20not%20exist%0Aand%20returns%20success%3B%20the%20refusal%20only%20appears%20later%20at%20%60add_job%60%20%28or%20the%20job%20fails%20at%20start%29.%0A%0A**Repro:**%20%60prepare_render_job%60%20with%20a%20valid%20target%20dir%3B%20then%20%60set_settings%60%20with%20a%20bogus%20path.%0ASuccess.%20Then%20%60add_job%60%20-%3E%20refuses%20on%20the%20missing%20dir.%0A%0A**Expected:**%20the%20same%20validation%20at%20%60set_settings%60%20time%20%28%60prepare_render_job%60%27s%20%60dry_run%60%20is%20already%20a%0Acheap%20directory-existence%20oracle%20worth%20reusing%29%2C%20so%20the%20typo%20surfaces%20where%20it%20is%20made.%0A%0AMeasured%20on%20MCP%205.2.7%2C%20Resolve%20Studio%2021.2.0.6.
 
-4. `get_clips_linked` pin ignored — filed as #367:
+4. `get_clips_linked` pin ignored — filed as #367, **withdrawn 2026-11-14** (my grading error; do not re-file):
 https://github.com/samuelgursky/davinci-resolve-mcp/issues/new?template=bug_report.md&labels=bug&title=timeline.get_clips_linked%20ignores%20the%20timeline_id%20pin%20and%20resolves%20items%20on%20the%20CURRENT%20timeline&body=%23%23%23%20What%20happened%0A%0A%2A%2AObserved%3A%2A%2A%20%60timeline.get_clips_linked%60%20accepts%20%60timeline_id%60%20%2F%20%60timeline_name%60%20but%20resolves%20items%0Aagainst%20the%20%2A%2Acurrent%2A%2A%20timeline.%20Item%20IDs%20belonging%20to%20a%20different%20%28pinned%29%20timeline%20come%20back%20as%0Aper-item%20%22not%20found%22%20entries%20with%20no%20error%20and%20no%20%60ignored_params%60%20notice%20%E2%80%94%20same%20asymmetry%20already%0Anoted%20for%20%60fusion_comp%60.%0A%0A%2A%2ARepro%3A%2A%2A%20current%20timeline%20A%3B%20call%20%60get_clips_linked%60%20with%20%60timeline_id%3DB%60%20and%20item%20IDs%20from%20B.%0AResponse%3A%20items%20not%20found.%20Call%20the%20same%20with%20A%27s%20item%20IDs%20and%20it%20works%20%E2%80%94%20i.e.%20the%20pin%20was%20ignored.%0A%0A%2A%2AExpected%3A%2A%2A%20honour%20the%20pin%20%28the%20way%20%60probe_timeline_structure%60%20and%20%60timeline_item%2A%60%20do%2C%20reporting%0A%60pinned%3A%20true%60%29%2C%20or%20at%20minimum%20report%20%60ignored_params%3A%20%5B%22timeline_id%22%5D%60%20so%20a%20caller%20can%20tell.%0A%0A%2A%2AWhy%20it%20matters%3A%2A%2A%20in%20multi-agent%20sessions%20the%20current%20pointer%20moves%20between%20calls%2C%20so%20a%20pinned%20read%0Athat%20silently%20follows%20it%20returns%20the%20wrong%20timeline%27s%20linkage%20with%20no%20error%20signal.%0A%0AMeasured%20on%20MCP%205.2.7%2C%20Resolve%20Studio%2021.2.0.6.%0A%0A%23%23%23%20Environment%0A%0A%7C%20%7C%20%7C%0A%7C---%7C---%7C%0A%7C%20MCP%20server%20%7C%205.2.7%20%7C%0A%7C%20DaVinci%20Resolve%20%7C%20connected%2C%20version%20unreadable%20%7C%0A%7C%20Connection%20%7C%20local%20scripting%20%7C%0A%7C%20Resolve%20process%20%7C%20not%20running%20%7C%0A%7C%20OS%20%7C%20macOS%2027.2.1%20%28arm64%29%20%7C%0A%7C%20Python%20%7C%203.12.16%20%7C%0A%0A---%0A%3Csub%3EDrafted%20in%20chat%20with%20the%20davinci-resolve-mcp%20%60report_issue%60%20action.%20Local%20paths%2C%20the%20username%20and%20anything%20secret-shaped%20were%20redacted%20automatically.%3C%2Fsub%3E%0A%3C%21--%20filed-via%3A%20davinci-resolve-mcp%20report_issue%20--%3E
 
 5. `duplicate` archives the SOURCE — filed as #366:

@@ -783,15 +783,29 @@ recheck recorded as `harness_drift`).
 consecutive with zero cross-agent write incidents. The seal came back hard and was improved under
 classifier pressure: the strict MCP config is built at runtime into a tempfile **outside the
 (public) repo** and deleted on exit, so nothing credential-bearing ever lands in the tree. Three
-new API truths (get_clips_linked not pin-able #367; `set_settings` silently accepts a bogus `TargetDir`
-while only `add_job` refuses #368; `duplicate` archives the SOURCE timeline #366 — all three filed
-upstream 2026-11-13) plus the agent-side
+new API truths (`set_settings` silently accepts a bogus `TargetDir` while only `add_job` refuses #368;
+`duplicate` archives the SOURCE timeline #366 — both filed upstream 2026-11-13) plus the agent-side
 highlights — T1r2 discarding a contaminated identical-valued read, T3r3 catching the
 relative-vs-absolute `record_frame` trap in dry-run, T7r3 declaring packet counts unobtainable
 in-engine after surveying six MCP actions — are in the record:
 
 - [`bench/resolve-agentic/results-2026-11-13i.json`](../bench/resolve-agentic/results-2026-11-13i.json)
 - [`bench/resolve-agentic/briefs-2026-11-13.md`](../bench/resolve-agentic/briefs-2026-11-13.md)
+
+**Erratum (2026-11-14): one published 13i API truth is wrong — `get_clips_linked` *is* pin-able.**
+It went upstream as #367; the maintainer replied that he could not reproduce it, so I audited the raw
+call log rather than defending it, and he was right. The two `not found` results that produced the claim
+came from `get_clips_linked` calls that passed **no pin** (`params` carried `clip_ids` only), while the
+three ids in question came from three *different* timelines read moments earlier by pinned probes — the
+server searched the current timeline (a third trial's, named in `_operation.timeline`) and correctly
+answered `not found` per id, `status:"success"`. In the same wave on the same live host: **29 pinned
+`get_clips_linked` calls, every one `pinned: true` with items resolved, 22 of them while the current
+pointer sat elsewhere** — the envelope's `restored_current` names the timeline it switched back to. The
+`fusion_comp` asymmetry I compared it to was imported from a different tool and never tested here.
+What actually happened is a grading error worth keeping visible: an **unpinned** read and a
+**pinned-but-ignored** read produce near-identical payloads, and the field that distinguishes them
+(`_operation.timeline`) was already in front of me. The runbook's grading section now says to read it
+before calling a pin broken, and the filed issue is being withdrawn.
 
 ---
 

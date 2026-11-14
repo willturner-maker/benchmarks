@@ -148,14 +148,21 @@ cross-agent write incidents for a second running. The seal came back **hard**, u
 strict-MCP config (which carries server env) is built at runtime into a tempfile **outside the public repo**
 and deleted on exit — a session classifier rightly refused to persist credentials in the tree, and that
 refusal designed the pattern. In-suite render ms (1445/1425/1447) were read by the **agents** before grading
-(queue emptied per brief), so they sit in the record but not in a cell. Three new API truths — all
+(queue emptied per brief), so they sit in the record but not in a cell. Three candidate API truths — all
 **first observed on 5.2.7**, so they may be 5.2.7 behaviours rather than the 5.2.2 reproductions the record
-first claimed: `get_clips_linked` is not pin-able (answers `not found` against the CURRENT timeline),
-`render.set_settings` silently accepts a bogus `TargetDir` (only `add_job` refuses), and
+first claimed: `render.set_settings` silently accepts a bogus `TargetDir` (only `add_job` refuses), and
 `timeline.duplicate` archives the **source** fixture — six `_base` archive siblings this wave where 11h
-had none. All three filed upstream on 2026-11-13: `get_clips_linked` #367, `set_settings` TargetDir #368,
-`duplicate`-archives-the-source #366 (draft links and filing status tracked in
+had none. Both filed upstream 2026-11-13 (#368, #366; draft links and filing status tracked in
 `bench/resolve-agentic/UPSTREAM-FILINGS.md`).
+The third — "`get_clips_linked` is not pin-able" — is **WITHDRAWN 2026-11-14: the pin works.** The
+maintainer couldn't reproduce it (#367), so I audited the raw call log instead of defending it. Both
+`not found` results came from calls that passed **no pin at all** (`params` held only `clip_ids`), whose
+ids came from three *other* timelines read moments earlier — correct `not found`, and the envelope's
+`_operation.timeline` had already named the timeline it searched (a third trial's). Same wave, live
+Resolve 21.2.0.6: **29 pinned `get_clips_linked` calls, all `pinned: true` with items resolved, 22 of
+them with the current pointer elsewhere** (`restored_current` names it). Rule added to the runbook's
+grading section: read `_operation.timeline` before concluding a pin was dropped — *unpinned* and
+*pinned-and-ignored* look identical in the payload and opposite in what they mean.
 See [the results file](../bench/resolve-agentic/results-2026-11-13i.json).
 
 ## Splash engine — reference host
