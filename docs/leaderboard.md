@@ -113,7 +113,8 @@ vs the 5.2.0 wave (1484/1517/1729 → 1146/1077/1076 s) with leaner use counts a
 before. The wave ran under a **softer seal than published** (session classifier refused the off-disk move;
 `chmod go-rwx` fallback, disclosed in the briefs, results and deviations). Two new API truths, both loud
 enough to trip an unwary agent: positioned rows **silently ignore `record_frame_mode:"absolute"`** (items
-land at wrong frames with `success:true`), and the official in-app `run_script` sandbox **returns `None`
+land at wrong frames with `success:true`; filed upstream as #365, still present on 5.2.7), and the official
+in-app `run_script` sandbox **returns `None`
 for non-allowlisted API methods** — scripting-based grading is dead on arrival; grade from pinned read-backs.
 See [the results file](../bench/resolve-agentic/results-2026-11-11h.json); note its audit-errata history
 (review agents corrected three stat errors in the original record — commit `81d77cc`).
@@ -152,7 +153,9 @@ refusal designed the pattern. In-suite render ms (1445/1425/1447) were read by t
 first claimed: `get_clips_linked` is not pin-able (answers `not found` against the CURRENT timeline),
 `render.set_settings` silently accepts a bogus `TargetDir` (only `add_job` refuses), and
 `timeline.duplicate` archives the **source** fixture — six `_base` archive siblings this wave where 11h
-had none.
+had none. All three filed upstream on 2026-11-13: `get_clips_linked` #367, `set_settings` TargetDir #368,
+`duplicate`-archives-the-source #366 (draft links and filing status tracked in
+`bench/resolve-agentic/UPSTREAM-FILINGS.md`).
 See [the results file](../bench/resolve-agentic/results-2026-11-13i.json).
 
 ## Splash engine — reference host

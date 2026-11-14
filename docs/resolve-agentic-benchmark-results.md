@@ -774,15 +774,18 @@ T4, T7, T8) on 325, verified per-trial from the trial transcripts. Consequence: 
 **MCP + harness + tenancy** changes; the tenancy result stands in direction, but its per-task magnitudes
 no longer isolate tenancy — the clean same-build tenancy numbers remain the 10g/11h-era ones. Record
 discipline tightened: verify builds from disk (`package.json`/mtime, per-trial transcript version fields,
-`harness.json` at dispatch — now written by `wave_driver.py`), never from session memory, and disable
-CLI auto-update before same-build repro waves.
+`harness.json` at dispatch — now written by `wave_driver.py`), never from session memory. The
+"disable CLI auto-update" rule first written here was **reversed the same day by operator decision** —
+auto-update stays ON and the driver warns instead (`wave_driver.py --check-harness`, plus a per-pair
+recheck recorded as `harness_drift`).
 
 **18/18 verified, 18/18 honest — seventh consecutive clean wave (126/126 aggregate)**, second
 consecutive with zero cross-agent write incidents. The seal came back hard and was improved under
 classifier pressure: the strict MCP config is built at runtime into a tempfile **outside the
 (public) repo** and deleted on exit, so nothing credential-bearing ever lands in the tree. Three
-new API truths (get_clips_linked not pin-able; `set_settings` silently accepts a bogus `TargetDir`
-while only `add_job` refuses; `duplicate` archives the SOURCE timeline) plus the agent-side
+new API truths (get_clips_linked not pin-able #367; `set_settings` silently accepts a bogus `TargetDir`
+while only `add_job` refuses #368; `duplicate` archives the SOURCE timeline #366 — all three filed
+upstream 2026-11-13) plus the agent-side
 highlights — T1r2 discarding a contaminated identical-valued read, T3r3 catching the
 relative-vs-absolute `record_frame` trap in dry-run, T7r3 declaring packet counts unobtainable
 in-engine after surveying six MCP actions — are in the record:
