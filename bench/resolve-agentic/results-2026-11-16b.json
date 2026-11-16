@@ -120,6 +120,7 @@
   "The briefs are the same task texts adapted to the OpenCode tool surface (no mkdir-sanction sentence; no ToolSearch)."
  ],
  "teardown": "All 45 fixture timelines + `_archived_vNN` siblings deleted with the scratch project (`close` then `delete`, read-back: project gone); render queue verified empty (`list_jobs` = []); per-trial T7 render outputs kept on the external volume as evidence per RUNBOOK.",
+ "upstream_context": "One filing this wave, submitted same-day: #382 (enhancement) — mutating timeline actions (ripple_insert/delete_clips/set_clips_linked/append_to_timeline) ignore timeline pins and bind to current; body byte-identical to draft. The T3r1->T3r2 contamination chain is the motivating measurement. Mitigated meanwhile by owner-only-repair + final-re-read clauses now in all drivers' ground_rules (commit d9a6389). The 2026-11-14 batch (#376/#377/#378) still owes its live re-verification pass after the next MCP sync, #378 first.",
  "trials_provenance": "Per-trial raw records (brief-as-sent, sealed per-cwd config, events.json with token counts, final report) live in results/2026-11-16b-opencode-f1f2-wave/, untracked by design; sealed fixture truth is ground_truth-2026-11-16b.json (sha256 4345169b...), also untracked.",
  "trials": [
   {

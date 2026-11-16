@@ -293,7 +293,7 @@ Recorded but deliberately **not** candidates: `ripple_insert` treating a `confir
 `record_frame`-relative trap (documented, and dry-run-first keeps saving people); `action_help` having no
 entry for `ripple_insert`/`probe_timeline_structure` (a docs papercut, already implied by other filings).
 
-## Wave 2026-11-16b (OpenCode harness-swap) — one candidate, drafted same-day
+## Wave 2026-11-16b (OpenCode harness-swap) — one candidate, filed same-day
 
 17. **Mutating timeline actions ignore `timeline_id`/`timeline_name` pins and bind to the CURRENT
     timeline** (`ripple_insert`, `delete_clips`, `set_clips_linked`, `append_to_timeline`; the
@@ -302,11 +302,10 @@ entry for `ripple_insert`/`probe_timeline_structure` (a docs papercut, already i
     confirm-gated execute is enough for another client to move the pointer — measured in 16b:
     T3r1's gated insert landed on sibling timeline T3r2, and the repair cascade (owner correctly
     removed the stray; the stranger then deleted the owner's good insert) ended with a trial lost
-    on outcome **and** honesty. Drafted via `resolve_control.report_issue` on 5.2.11 / 21.2.0.6;
-    operator action is one click: open the prefilled link and press Submit.
-    [Prefilled issue](https://github.com/samuelgursky/davinci-resolve-mcp/issues/new?template=feature_request.md&labels=enhancement&title=Mutating%20timeline%20actions%20ignore%20timeline_id%2Ftimeline_name%20pins%20%E2%80%94%20they%20bind%20to%20the%20CURRENT%20timeline%20%28contamination%20risk%20under%20concurrent%20clients%29)
-    (body pre-filled only via the full `report_issue` URL in this session's record; the shortened
-    link above carries title + labels).
+    on outcome **and** honesty. **Filed same-day as
+    [#382](https://github.com/samuelgursky/davinci-resolve-mcp/issues/382)** (enhancement, on
+    5.2.11 / 21.2.0.6) — body verified byte-identical to the `report_issue` draft against the live
+    issue.
     Mitigated meanwhile in ALL drivers' `ground_rules` (owner-only repair; back-to-back
     `set_current`+mutation dispatch with response-timeline-block check; final-state claims only
     from a last-call full re-read) — see RUNBOOK §"Agent-side contamination clauses".
