@@ -316,6 +316,27 @@ Harness note: the runner's intended warm-up completion 404'd (Splash doesn't ser
 159→174→143 trend visible in `engine_probe.jsonl`). Future reruns should warm via the Messages
 route or just accept the probe trend.
 
+## Re-run 2026-11-16b — dirty window: operator tenancy + the first KV trip on record (raw: `bench/splash-concurrency/results/rerun-2026-11-16b/`)
+
+Ran the same day as the agentic 16/16b waves; engine not restarted, no TTFT probe stage. This
+wave is **published as raw with caveats, not as baseline material** — see the directory's
+`NOTES.md`.
+
+- **Ladder medians:** w1 **92.6** (lowest ever; its rounds ran before any external traffic —
+  instance state, unexplained) / w2 181.3 / w3 230.5 / w4 454.8 / w6 463.7 / w8 514.7 / w12
+  523.6 / w16 508.7 / w24 525.5 / w32 **540.5** (highest single width recorded). Stop rule
+  never fired; plateau w12–w32 mean 524.6 sits *above* 11-13's 473.7 while w1 sits far below —
+  opposite directions confirm instance state, not shape.
+- **Tenancy contamination:** three seal-probe `opencode run` calls (verifying the agentic wave's
+  permission syntax) hit the same engine mid-ladder (~widths 2–8 window); w2 round scatter
+  217.4 vs 145.2 is consistent with it. Operator-tenancy tax, reproduced in the wild.
+- **KV stage — first trip on record:** stopped at w10, 509,370 tokens = 3.89× the 131,072-token
+  resident budget: peak suspended 2, waiting_memory 2, pages_active 7238, lifetime
+  resource_suspensions +3, demote +1502. Prior waves held zero suspensions at 4.66×. The trip
+  is real (counters moved); whether the *threshold* shifted is not established — same-day engine
+  residency is a candidate factor. Clean-window (and ideally fresh-engine) rerun needed before
+  this reads as a finding either way.
+
 ## Cross-hardware — the same model on NVIDIA boxes (external data, 2026-11-13)
 
 **Not a leaderboard section.** Every non-host number below is someone else's measurement on

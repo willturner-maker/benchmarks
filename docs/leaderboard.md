@@ -39,6 +39,7 @@ macOS 27.2, render output and scratch on external volumes.
 | **2026-11-14k** | 21.2.0.6 **headless**⁷ | **5.2.10** | —⁷ | **1310 ms**⁷ | 92.4 | 116 | 44 | 83 | 11³⁷ | **18/18** | 18/18 |
 | **2026-11-14l** | 21.2.0.6 **headless**⁷ | **5.2.11** | —⁷ | **1207 ms**⁷ | **100.2** | 117 | 46 | 84.5 | 12³⁷ | **18/18** | 18/18 |
 | **2026-11-16** | 21.2.0.6 **headless**⁷ | **5.2.11** | —⁹ | —⁹ | —⁹ | —⁹ | —⁹ | —⁹ | —⁹ | **15/15 hard⁹** | 15/15⁹ |
+| **2026-11-16b** | 21.2.0.6 **GUI**¹⁰ | **5.2.11** | —¹⁰ | —¹⁰ | —¹⁰ | —¹⁰ | —¹⁰ | —¹⁰ | —¹⁰ | **14/15 hard¹⁰** | 14/15¹⁰ |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
@@ -213,6 +214,17 @@ that build's numbers. One caveat travels with the T7 wall inside the wave record
 dead-ended on a brief allowance the seal denied (a `mkdir` with `Bash` disallowed) and ran **+119 %** wall
 versus `14l` on identical builds — fixed in both drivers by pre-creating the render directories.
 
+¹⁰ **`2026-11-16b` is the first *harness swap*: same day, same 5.2.11 / 21.2.0.6 build pair, same
+armed F1/F2 fixture shape and sealed expectations — but the agent harness is OpenCode 1.19.5 driving
+one local GGUF model, not Claude Code.** Outcome columns stay comparable task-for-task (hard set
+14/15, smoke 6/6; the one hard-set loss is T3r2, whose final table contradicted the live read-back —
+the honesty fail too). The single-tenant perf stage again did not run, hence `—` cells; host was GUI
+with the project saved (prior wave headless). Wall/turn columns are a harness+model datapoint, not a
+build delta. Seal caveat inside the wave record: OpenCode 1.19.5 accepts string-shorthand tool
+permissions (`"bash": "deny"`) but does not enforce them — 2 of 585 tool events were non-MCP (`sleep`,
+`grep`); the object form (`{"*": "deny"}`) verified same-day and the driver is fixed. See
+[resolve-agentic wave record](resolve-agentic-benchmark-results.md).
+
 **2026-11-14k row:** the **sixth consecutive clean 18/18** (108/108 aggregate), total wall −7.6 %
 vs 13i on the same harness build, and the flavor of the wave is *upstream fixes doing their job in
 the trials*: the #370 `media_type` validation refused a T3 agent's malformed row mid-task (clean
@@ -260,6 +272,7 @@ advanced server and reporting the DB number, a live quirk refereed by an indepen
 | **2026-11-11h** | **Splash 1.6.1** (INT8 activations default on M5+) | same | 294 ms⁶ | 442 ms | **186.9 tok/s**⁷ | **510–525 tok/s**, widths 12→32 (**+39 %** vs 1.6.0 plateau) | **0** (but +645 disk demotions at w10) | **12/12** | 12/12 |
 | **2026-11-12** | **Splash 1.6.1** (assumed — version not exposed by `/status`; see ⁸) | same | **151 ms**⁶ | 355 ms | 205.2 tok/s⁷ | **487–506 tok/s**, widths 12→32 (peak back at w8: 522.7) | **0** at 4.66× — this instance's budget is 131,072 tok⁸ | n/a⁹ | n/a |
 | **2026-11-13** | **Splash 1.6.1** (`splash --version` confirms — the ⁸ assumption resolves) | same | 159 ms⁶ | **229 ms** | **209.5 tok/s**⁷ | **470–475 tok/s**, widths 8→32 (peak w12: 475.2)¹⁰ | **0** at 4.66× (budget 131,072 tok)⁸ | **12/12** | 12/12 |
+| 2026-11-16b (DIRTY window¹¹) | Splash 1.6.1 (assumed; not re-confirmed) | same | —¹¹ | —¹¹ | 92.6 tok/s¹¹ (lowest ever) | 508–540 (w12–32 mean 524.6), w32 **540.5** highest single width¹¹ | **TRIP at 3.89×** — w10, 509,370 tok, susp peak 2, first on record¹¹ | n/a¹¹ | n/a¹¹ |
 
 ¹ decode w1 is warmth-sensitive — the probe's own three passes trend (105→133→165 baseline,
 111→128→136 rerun); the column is the warmed value on the baseline row, the median on the rerun row.
@@ -310,6 +323,15 @@ reproduced on **all five waves**, with the memory path's secondary signals shift
 10, exactly the baseline's figure, 11-12 demoted at w6/10/12 with one pacing hold at w10, and the
 11-13 clean window ran middling-quiet: small waiting_memory holds at w4/6/10/12 but spill and
 demote deltas zero; suspensions and spills stayed zero everywhere).
+
+¹¹ **The 2026-11-16b splash row is a raw row, not baseline material.** It ran in a dirty window:
+the engine had served the day's 21-trial agentic wave (not restarted), three operator seal-probe
+calls hit it mid-ladder (tenancy tax, reproduced), w1 collapsed to 92.6 with no external traffic
+during its own rounds (instance state, unexplained), and the plateau went *up* at the same time —
+opposite directions, no shape claim. The KV stage's first trip on record (w10, 3.89× budget,
+suspension counters moved) is real but its threshold shift is unestablished pending a clean-window
+and fresh-engine rerun. Full caveats in the wave's
+[NOTES.md](../bench/splash-concurrency/results/rerun-2026-11-16b/NOTES.md).
 
 Cross-hardware context (DGX Spark / RTX Spark / RTX 5090 on the same resident model): the
 [comparison section](splash-engine-benchmark-results.md#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13).
@@ -365,6 +387,7 @@ OpenCV 5.1.x wheels (watched by a launchd agent; wheels land as `5.1.0.xxxx`).
 | 2026-11-11 run1 | 5.0.0.93 | **91 faces / 0.278 s** (PNG; 89 / 0.273 s H.264) | 0.90→57 · 0.75→85 · 0.60→89 · 0.50→91 · 0.45→94 · 0.30→98 | 10.99 ms/face⁸ | 1.488 / 1.491 / 1.486 s | `match()` mutates in-place ✓ · TF reader present · Caffe reader absent |
 | 2026-11-11 run2 (same build) | 5.0.0.93 | 91 / 0.302 s | counts **bit-identical** | 11.59 ms/face⁸ | not captured⁹ | all identical |
 | 2026-11-13 run3 (same build, clean window) | 5.0.0.93 (unchanged install)¹⁰ | 91 / **0.278 s** (PNG; 89 / 0.270 s H.264) | counts **bit-identical** (third time) | 10.34 ms/face⁸ | not captured⁹ | all identical |
+| 2026-11-16 run4 (same build) | 5.0.0.93 (unchanged install) | 91 / 0.283 s (PNG; 89 / 0.273 s H.264) | counts **bit-identical** (fourth time) | 10.90 ms/face⁸ | not captured⁹ | all identical |
 
 Run2 is a same-build rerun that calibrates the noise band before the upgrade: **every deterministic
 value reproduced** (48/48 detect counts, whole-frame 92, match-probe, cosine stats, surface markers,
@@ -374,6 +397,10 @@ The `match()` in-place-mutation marker flipping to false will be the first visib
 A third data point landed on 2026-11-13 (run3, from the clean-window driver, engine idle): every
 deterministic value bit-identical again, canonical timing back at run1's 0.278 s — the ×1.15 band
 holds, and run1 ≈ run3 is more evidence the run2 lift was machine state, not the harness.
+A fourth landed on 2026-11-16 (run4, alongside the harness-swap agentic wave, engine idle for the
+run): deterministic values bit-identical a fourth consecutive time (48/48 counts, whole-frame 92,
+cosine 0.1265/0.3121, match-probe, fixture hashes), canonical 0.283 s = ×1.018 vs run3 — the band
+holds a fourth pass; `import_cv2` 0.157 s (cold page cache) is process state, not OpenCV.
 
 ⁸ units normalized: run2's script emits `*_ms`-named keys holding seconds (erratum in
 [the README](../bench/visual-venv/README.md)); run3's 0.941 s ÷ 91 = 10.34 ms/face.

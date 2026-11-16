@@ -298,6 +298,18 @@ had actually landed the day before — the whole wave, including its perf stage,
 5.2.7. Sealed trials each spawn their own stdio server, so disk state at dispatch beats
 whatever version the operator's session connected to.
 
+**Harness swap: OpenCode (wave 2026-11-16b, driver `wave_driver_f1f2_opencode.py`).** The same
+seal has to be rebuilt per harness, and its syntax does not port: on opencode 1.19.5 (V1 config
+line, key `permission` — V2's `permissions` errors) **string-shorthand denials (`"bash": "deny"`)
+are accepted by the config parser but NOT enforced** — wave 16b leaked exactly one `bash` and one
+`grep` execution that way; the object form `"bash": {"*": "deny"}` verified same-day (tool absent
+from the session pool) and is what the driver writes. Two more OpenCode-specifics a Claude-shaped
+seal misses: a project config does NOT remove global MCP servers (re-declare each with
+`enabled: false`), and `--pure` skips plugins but keeps configured MCP servers — the right
+primitive for an MCP-only run. `opencode run --format json` yields per-step `step_finish` token
+counts (input/output/reasoning/cache) and per-step cost (0 on a local engine), so the token axis
+transfers; session transcripts come back with `opencode export <sessionID>`.
+
 **Never paste a probe payload into anything you publish.** `timeline.probe_timeline_structure`
 echoes each item's **absolute `file_path`**, which is your real media/project folder and often
 carries client, event or camera names. Describe the media by class ("the class-A clip") and use the

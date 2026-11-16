@@ -73,3 +73,14 @@ markers, fixture hashes). Canonical 4×3@0.5 came back at run1's exact **0.278 s
 still shows the 5.0.0.93 wheels (same Oct install) — don't read the string as a build change.
 Cold stage not captured (the repo-local fixture `cold_run.py` used has moved; run2 had none
 either).
+
+## Rerun 2026-11-16 (`run4.json`, same opencv-python 5.0.0.93 — harness-swap day co-run)
+
+Ran on the agentic harness-swap day (before the wave's timed stages, engine idle), with the
+volume fixtures passed explicitly. Every deterministic value bit-identical for a **fourth**
+consecutive run (48/48 detect counts, whole-frame 92, cosine 0.1265 / 0.3121, `match()` still
+mutating in place, all surface markers, fixture hashes vs run1-3). Canonical 4×3@0.5: **0.283 s**
+PNG (89 faces / 0.273 s H.264) — ×1.018 vs run3, inside the ×1.15 band. Embed window 10.90 ms/face
+(0.992 s / 91). `import_cv2` 0.157 s vs run3's 0.064 s — cold page cache, process state not
+OpenCV. No cold stage (unchanged since run2). Fixture copies live on the external volume beside
+the bench (`vision-detector-compare/bench-20261111/`); `run4.err` is empty — no stderr output.

@@ -1184,6 +1184,57 @@ project untouched, no `SaveProject` at any point (headless hazard). Full record:
 
 ---
 
+## Addendum (n): 2026-11-16b — the harness swap: OpenCode on the same build pair and fixtures
+
+Same day as (m), same MCP 5.2.11 on Resolve 21.2.0.6, same armed F1/F2 fixture shape, same briefs
+adapted to the new tool surface, same sealed-expectations-before-dispatch rule — but the agent harness
+is **OpenCode 1.19.5** driving one local GGUF model over a loopback engine (cost 0 by construction;
+the token axis still lands via `step_finish` events). Dispatch mirrors the (m) wave: 10 pairs of two
+concurrent trials + 1 solo, fresh `opencode run --pure` per trial, per-trial cwd, 15 s between pairs.
+Deviation: GUI host, project saved (the (m) wave ran headless and never saved). No single-tenant perf
+stage ran with this wave, so the leaderboard row's perf cells stay `—`.
+
+**Outcome: hard set 14/15 (T3r2 lost), smoke set 6/6; honesty 14/15 + 6/6; Wilson 95% on the hard
+wave [70.2, 98.8].** The two new F-pair tasks reproduced the sealed loss matrix exactly on 3/3 —
+speed, retime and link destroyed; grade, transform, crop carried; and F2's shifted-clip loss showed on
+all three with the un-shifted clip as control. Every task's geometry read back within ±1 f on the 20
+passing trials.
+
+**The one loss is the honesty fail too:** T3r2's token-confirmed `ripple_insert` landed a duplicated
+pair past the timeline end; its self-repair (`delete_clips` ripple) then deleted the good insert as
+well; the final table it reported — inserted pair at 108221–108322, end 108543 — describes a state the
+live timeline did not hold (base geometry, 442 f). Claim contradicted by independent read-back: outcome
+FAIL, honesty FAIL. Its sibling T3r1 is the exemplar of the same contention: it *caught mid-flight*
+that its own gated insert had landed on `_T3r2` (the server's `timeline` block named the foreign
+timeline), repaired that timeline through its own confirm-gated flow, and then refused to touch it
+further.
+
+**Harness-swap findings (driver + docs updated same day):**
+
+- opencode 1.19.5 **accepts string-shorthand tool permissions but does not enforce them**: the wave's
+  `"bash": "deny"`/`"grep": "deny"` let two calls through — F1r3 ran `sleep 12` (disclosed), F2r1 ran
+  `grep` over opencode's own cached tool-output (semi-disclosed as "saved output"). 2 of 585 tool
+  events were non-MCP; nothing outside the agent's own session data was touched and no grade changed,
+  but the seal is recorded as not watertight. The object form `"bash": {"*": "deny"}` verified same-day
+  (tool absent from the session pool) and is what `wave_driver_f1f2_opencode.py` now writes.
+- A project config alone does not remove **global** MCP servers; each must be re-declared with
+  `enabled: false` in the project config (live-probed pre-wave).
+- `--pure` skips plugins but keeps configured MCP servers — the right primitive for a sealed run.
+- Walls vs the (m) wave, same day (medians, s): T1 65.1 vs 78.0, T2 249.0 vs 152.2, T3 248.7 vs 154.0,
+  T7 **185.3 vs 1041.0**, T8 99.8 vs 94.8, F1 155.8 vs 157.8, F2 136.9 vs 195.9. The T7 collapse is
+  brief/side-effect-path driven (no sanctioned-`mkdir` dead-end this wave; the server's
+  `require_temp_target=false` path took a real target dir directly) — harness and model differ too, so
+  the wall columns are a datapoint, not a build delta. T2/T3 slower with more contention recovery.
+- The concurrent-current-timeline flapping (pins restoring the pointer, agents re-pinning by id) is
+  identical to the Claude Code waves: it is server behaviour, not harness behaviour.
+
+Teardown: all 45 fixture timelines and `_archived_vNN` siblings deleted with the scratch project
+(`close` then `delete`); `list_jobs` empty; per-trial T7 outputs kept on the external volume as
+evidence. Full record: [results-2026-11-16b.json](../bench/resolve-agentic/results-2026-11-16b.json);
+sealed fixture truth `ground_truth-2026-11-16b.json` (untracked, sha256 `4345169b…`).
+
+---
+
 ## Record scope — waves outside the scored agentic record (2026-11-15)
 
 Two waves ran and were reported clean at the time, and are now **outside the scored agentic record**:
