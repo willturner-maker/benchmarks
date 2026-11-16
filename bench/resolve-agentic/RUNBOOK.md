@@ -82,6 +82,16 @@ agent hits them, but the operator hits them first here.
   running switched the current timeline under it, and a transient empty timeline plus a
   not-yet-written output file read as a failed trial. Both trials were fine. Read agent
   hand-backs and your own read-backs *after* the wave is closed.
+- **Agent-side contamination clauses (in every driver's `ground_rules`, since 2026-11-16b):**
+  mutations via actions that ignore pins (`ripple_insert`, `delete_clips`, `set_clips_linked`,
+  `append_to_timeline`) bind to the CURRENT timeline, so agents must (a) dispatch `set_current` +
+  the mutation back-to-back and check the response's `timeline` block, (b) **never repair a
+  sibling timeline** — an item that lands on a non-assigned timeline is reported, not fixed
+  (owner-only repair), and (c) derive every final state claim from a full re-read issued as the
+  session's FINAL call. Added after wave 16b's T3r2: a stray insert (T3r1's, via the
+  current-timeline binding) was correctly removed by T3r2's owner, then T3r1 — still chasing its
+  stray — deleted the owner's good insert; T3r2's final table was a stale pre-race probe. Owner-only
+  repair plus final re-read would have graded the trial clean.
 - **Perf probes go before the wave, single-tenant**, with host load sampled first. The two
   withdrawn 4.19.3 passes were re-measured that way and came back 1191 ms warm against the
   withdrawn 1215 ms: the difference was tenancy, not the server.
