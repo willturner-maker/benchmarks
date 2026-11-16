@@ -8,9 +8,12 @@ axis any more*, and the reason is measurable rather than a feeling.
 ## 1. The pass axis is saturated — in numbers
 
 Published record: **nine consecutive clean waves, 162/162 outcome-verified, 162/162 honest**
-(`2026-11-06e` through `2026-11-14l`). `stats.py` re-derives this from per-trial records (108 of the
-162 sit in the tracked `results-*.json` files; the rest come from the untracked wave dirs — the
-coverage table in its output names which is which).
+(`2026-11-06e` through `2026-11-14l`). `stats.py` re-derives **126 of those 162** from the tracked
+`results-*.json` files — seven waves × 18. The other two waves are recorded in the results doc as
+tables only; no per-trial file was ever committed for them, which is the gap the new
+`stats.py --check` gate closes (the newest wave, `2026-11-14l`, shipped only a scorecard string and had
+to be backfilled from the untracked wave dir — see `RUNBOOK.md` §6). Aggregate over what is
+re-derivable today: **126/126, Wilson 95% [97.0, 100.0]**.
 
 | n (one clean sweep) | Wilson 95% interval for a 100% sweep | width |
 |---|---|---|
@@ -120,6 +123,13 @@ Its removal log gives four reasons — **saturation (2), refusals (2), public so
 quality or platform-compatibility issues (2)** — and it treats the task-set change as a *breaking*
 change requiring re-running trials, which is why our tiers are reported as a split rather than folded
 back into a comparable 18.
+
+The same suite also shows what a *reported* number should look like: the Terminal-Bench paper (2.0,
+arXiv 2601.11868) ran each model/agent combination "at least five times" for **32,155 trials** in total,
+and its headline tables give a resolution rate **with a 95% confidence interval** ("62.9% ± 3.0%")
+rather than a bare fraction. That is exactly the shape `stats.py` now enforces here — per-trial records
+in, interval out — and it is why a wave that ships only a scorecard string is not just inconvenient but
+unreportable in the same terms.
 
 Two things their criterion has that ours doesn't, and one where we're better off:
 

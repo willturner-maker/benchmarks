@@ -19,7 +19,10 @@ Wilson score interval (Wilson 1927), the standard binomial interval that behaves
   centre = (p_hat + z^2/2n) / (1 + z^2/n), half = z*sqrt(p_hat(1-p_hat)/n + z^2/4n^2) / (1 + z^2/n)
 with z = 1.96 for 95%.
 
-Usage:  python3 -I stats.py [--root .] [--json stats.json] [--task T7]
+Usage:
+  python3 -I stats.py [--root .] [--json stats.json] [--task T7] [--include-local]   report
+  python3 -I stats.py --check        publication gate: every published wave must ship
+                                     per-trial scalars (exit 1 if one cannot be re-derived)
 """
 import argparse
 import json
@@ -145,6 +148,64 @@ def load_wave_dir(path):
     return [], {"wave": label, "source": name, "kind": "local", "note": "no per-trial file"}
 
 
+# Keys that have no business appearing in a published trial record: they hold the agent's own
+# prose or a probe payload, which echoes real media paths and timeline names.
+FREE_TEXT_KEYS = ("result", "report", "reported", "note", "grader_readback", "transcript",
+                  "output", "stdout")
+
+
+def check(root):
+    """Publication gate: every published wave must ship per-trial scalars.
+
+    A wave that ships only a scorecard string ("18/18 outcome-verified") cannot be re-derived, so it
+    contributes nothing to intervals, spreads or detection power — and it cannot be audited later.
+    The newest wave (2026-11-14l) was in exactly that state when this check was written; its trials
+    were backfilled afterwards from the untracked wave dir. Exits non-zero on a wave that cannot be
+    re-derived. Free-text keys in a trial record are an advisory, not a failure (older waves predate
+    the scan), but each one names a field to eyeball for paths before publishing.
+    """
+    bad, advisories = [], []
+    paths = sorted(_glob(os.path.join(root, "results-*.json")))
+    for p in paths:
+        name = os.path.basename(p)
+        data = json.load(open(p))
+        tr = data.get("trials")
+        rows = list(tr.values()) if isinstance(tr, dict) else (tr or [])
+        rows = [r for r in rows if isinstance(r, dict)]
+        if not rows:
+            bad.append((name, "no per-trial records — only a summary/scorecard"))
+            continue
+        if not any(_pick(r, OK_KEYS) is not None for r in rows):
+            bad.append((name, f"{len(rows)} trial rows but none carries an ok/verified field"))
+        keys = set()
+        for r in rows:
+            keys |= set(r)
+        leaky = sorted(k for k in keys if k in FREE_TEXT_KEYS)
+        if leaky:
+            advisories.append((name, leaky))
+    print(f"per-trial check over {len(paths)} published wave records")
+    for p in paths:
+        data = json.load(open(p))
+        tr = data.get("trials")
+        rows = list(tr.values()) if isinstance(tr, dict) else (tr or [])
+        rows = [r for r in rows if isinstance(r, dict)]
+        okc = sum(1 for r in rows if _pick(r, OK_KEYS) is not None)
+        print(f"  {os.path.basename(p):30s} trials={len(rows):3d} with-ok={okc:3d}")
+    for name, why in advisories:
+        print(f"  ADVISORY {name}: free-text keys in trial records {why} — confirm no media paths "
+              f"before this file is published")
+    if bad:
+        print("\nFAIL — these waves cannot be re-derived:")
+        for name, why in bad:
+            print(f"  {name}: {why}")
+        print("\nFix: copy the per-trial scalars (task/ok/verified, turns, wall_s, cost_usd) out of the "
+              "wave's local wave_results.json into the published record. Never copy `result` — it holds "
+              "the agent's verbatim report.")
+        return 1
+    print("\nOK — every published wave ships re-derivable per-trial scalars")
+    return 0
+
+
 def wilson(k, n, z=Z95):
     if n == 0:
         return (0.0, 0.0)
@@ -247,7 +308,12 @@ def main():
     ap.add_argument("--task", help="restrict to one task id, e.g. T7")
     ap.add_argument("--include-local", action="store_true",
                     help="also read results/<wave>/ local dirs (untracked; numbers only)")
+    ap.add_argument("--check", action="store_true",
+                    help="publication gate: fail unless every published wave ships per-trial scalars")
     args = ap.parse_args()
+
+    if args.check:
+        sys.exit(check(args.root))
 
     records, coverage = [], []
     for p in sorted(_glob(os.path.join(args.root, "results-*.json"))):

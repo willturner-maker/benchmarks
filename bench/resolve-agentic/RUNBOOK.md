@@ -228,6 +228,25 @@ should be quoted beside any claim that a change moved something:
   beside the median or quote neither — single medians are how the two withdrawn 4.19.3 passes got
   read as a server finding when the difference was tenancy.
 
+**Ship per-trial scalars in the published record; `python3 -I stats.py --check` is a publication gate.**
+Every `results-<wave>.json` must carry a `trials` array with one row per trial: `trial`, `verified`
+(plus `honest` where honesty was graded), `turns`, `wall_s`, `cost_usd`. A wave that ships only a
+scorecard string cannot be re-derived — no interval, no spread, no audit after the fact, and it drops
+out of every cross-wave number. `2026-11-14l` was in exactly that state when this rule was written: the
+newest wave carried `18/18 outcome-verified` prose and nothing else, so the tracked files could
+re-derive only 108 of the 126 trials they describe. It was backfilled from the wave's local `wave_results.json`, with
+a `trials_provenance` key naming what was copied and what was **not** independently re-graded (per-trial
+`honest` there is a copy of the wave-level scorecard assertion, not a re-grade — say that out loud
+rather than letting it read as primary data).
+
+Copy **scalars only**. The local record's `result` field holds each agent's verbatim report, which
+echoes real timeline names and, through probe payloads, real media paths — that is why the wave dirs
+are untracked in the first place. `--check` fails a wave with no `trials` or with rows that carry no
+ok/verified field, and *advises* (does not fail) when a trial row has a free-text key, since older waves
+predate the scan: the standing advisory on `2026-11-06e` is already clean — its paths are the documented
+`/Volumes/YourMediaVolume/…` placeholder. Run the gate before the commit that publishes a wave, not
+after.
+
 The harness is part of the measured system: Claude Code releases have changed `claude -p`
 startup, context-window accounting on third-party gateways, and permission/deny-rule
 enforcement — all of which move agent walls and tool-use counts. Treat a harness bump like
