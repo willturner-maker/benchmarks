@@ -157,6 +157,20 @@ def run_trial(name, prompt, mcp_cfg):
         d = json.loads(p.stdout)
         rec.update({"result": (d.get("result") or "")[:4000], "num_turns": d.get("num_turns"),
                     "duration_ms": d.get("duration_ms"), "cost_usd": d.get("total_cost_usd")})
+        # Cost axis, never a correctness axis (RUNBOOK §6): `claude -p --output-format json` emits a
+        # usage block, and the cost of a trial is only interpretable next to it — two trials with the
+        # same wall differ by how much prompt the model re-read. Scalars only: the payload bodies echo
+        # real timeline and media paths. `usage: null` means the harness emitted no usage block, which
+        # is a build change worth seeing; a *missing key* means this driver predates the token stage,
+        # and usage_stats.py refuses to score either as zero.
+        usage = d.get("usage")
+        rec["usage"] = ({k: (usage.get(k) if isinstance(usage.get(k), int) else None)
+                         for k in ("input_tokens", "cache_creation_input_tokens",
+                                   "cache_read_input_tokens", "output_tokens")}
+                        if isinstance(usage, dict) else None)
+        rec["models"] = sorted((d.get("modelUsage") or {}).keys())
+        rec["permission_denials"] = len(d.get("permission_denials") or [])
+        rec["duration_api_ms"] = d.get("duration_api_ms")
     except Exception:
         rec["raw_stdout"] = p.stdout[:2000]; rec["raw_stderr"] = p.stderr[:500]
     (cwd / "result.json").write_text(json.dumps(rec, indent=1))

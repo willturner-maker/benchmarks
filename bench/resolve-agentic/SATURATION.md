@@ -47,6 +47,18 @@ records: T1 7/12/21, T2 11/26/37, T3 18/35/85, T4 28/40/60, T7 42/56/118, T8 17/
 why cost is reported per task and never folded into correctness — the two withdrawn 4.19.3 passes got
 read as a server finding precisely because someone compared medians.
 
+A third cost column is now available, and it ranks the tasks differently from turns. `usage_stats.py`
+reads the harness `cost_usd` per trial out of the local wave dirs; across the four local 18-trial waves
+the per-task medians are **T1 $0.26–0.51, T2 $0.64–0.97, T3 $0.98–1.50, T4 $0.71–1.00, T7 $2.62–3.82,
+T8 $0.59–0.96** — T7 (the render loop) costs 5–13× the read task, which turns-per-trial does not show,
+because T7's expense is waiting and re-probing rather than calling. Within-task spread runs 1.25–3.27×,
+so these are medians with a visible tail, quoted as ranges.
+**Token counts are n/a for every published wave**: the driver kept `cost_usd`/`turns` but dropped the
+harness `usage` block, so no token figure exists for the seven-wave record. That is a capture gap,
+reported as `n/a` by the script rather than back-filled with zeros; the driver now retains
+`usage`/`models`/`permission_denials`/`duration_api_ms`, so the token axis (prompt tokens, cache-read
+share, output tokens) starts with the next wave.
+
 **And the pass axis is about to be re-based, so read the n carefully.** Sealing the frontier pair
 (§4) moves the scoring set from three tasks to five: `hard set 5 × n=3 = 15 trials` per wave, and a
 clean 15-trial hard set carries a Wilson floor of **[79.6, 100]** — *worse* than the 18-trial figure

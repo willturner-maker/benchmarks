@@ -237,6 +237,19 @@ should be quoted beside any claim that a change moved something:
   beside the median or quote neither — single medians are how the two withdrawn 4.19.3 passes got
   read as a server finding when the difference was tenancy.
 
+**Cost axis, third column: `python3 -I usage_stats.py results/<wave-dir>`.** It aggregates per-trial
+`cost_usd`, and from the first wave whose driver retained the harness `usage` block also **prompt tokens,
+cache-read share and output tokens** per task, each with min–max and a spread ratio. Two rules:
+- **Report a capture gap as `n/a`, never as 0.** No token data exists for the published waves — the
+  driver kept `cost_usd`/`turns` and dropped `usage` — and the script says so per trial
+  (`no usage key (driver predates the token stage)`) rather than computing over the hole. Same posture
+  as the grader's fail-closed cases.
+- Tokens are cost, not correctness, and the cache-read share is a **harness** measurement: it tells you
+  how much prompt the trial re-read (which is why tenancy moves walls), not how well the agent reasoned.
+  `usage_stats.py --selftest` (15 cases) pins the aggregator's hole-handling; run it with the grader
+  self-test before a wave. Scalars only ever leave this script — the wave dir also holds each agent's
+  verbatim report, which echoes real paths.
+
 **Ship per-trial scalars in the published record; `python3 -I stats.py --check` is a publication gate.**
 Every `results-<wave>.json` must carry a `trials` array with one row per trial: `trial`, `verified`
 (plus `honest` where honesty was graded), `turns`, `wall_s`, `cost_usd`. A wave that ships only a
