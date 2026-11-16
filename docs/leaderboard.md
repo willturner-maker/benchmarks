@@ -38,6 +38,7 @@ macOS 27.2, render output and scratch on external volumes.
 | **2026-11-13i** | 21.2.0.6 | **5.2.7**⁶ | 1303 ms¹ | **1192 ms**⁶ | **101.5** | 155⁶ | 35 | 80 | 13³⁶ | **18/18** | 18/18 |
 | **2026-11-14k** | 21.2.0.6 **headless**⁷ | **5.2.10** | —⁷ | **1310 ms**⁷ | 92.4 | 116 | 44 | 83 | 11³⁷ | **18/18** | 18/18 |
 | **2026-11-14l** | 21.2.0.6 **headless**⁷ | **5.2.11** | —⁷ | **1207 ms**⁷ | **100.2** | 117 | 46 | 84.5 | 12³⁷ | **18/18** | 18/18 |
+| **2026-11-16** | 21.2.0.6 **headless**⁷ | **5.2.11** | —⁹ | —⁹ | —⁹ | —⁹ | —⁹ | —⁹ | —⁹ | **15/15 hard⁹** | 15/15⁹ |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
@@ -201,6 +202,16 @@ waves: the scored ladder is now `2026-11-06e, 10f, 10g, 11h, 13i, 14k, 14l` = **
 where it previously read nine waves / 162/162. Nothing was deleted from the results document: the two
 wave sections remain with their perf and API-quirk findings, headed by a scope note. This is a *record
 scope* change, not a withdrawal — those waves were not retracted for being wrong.
+
+⁹ **`2026-11-16` is the first wave of a *different task set*, so it is a new series and its perf cells are
+empty.** T4 left the scored set and F1/F2 joined it: the headline splits into a **hard set of 5 tasks
+(T3, T7, T8, F1, F2) = 15 trials** and a **smoke set (T1, T2) = 6**, so `15/15` is not comparable to an
+`18/18` cell and this row is never folded into the 126/126 ladder (clean n=15 hard wave → Wilson
+[79.6, 100], a *wider* floor than n=18 purely because n fell). The perf stage did not run alongside this
+wave, hence `—` across the render/op columns: same 5.2.11 build as `14l`, whose perf cells still stand as
+that build's numbers. One caveat travels with the T7 wall inside the wave record: all three T7 trials
+dead-ended on a brief allowance the seal denied (a `mkdir` with `Bash` disallowed) and ran **+119 %** wall
+versus `14l` on identical builds — fixed in both drivers by pre-creating the render directories.
 
 **2026-11-14k row:** the **sixth consecutive clean 18/18** (108/108 aggregate), total wall −7.6 %
 vs 13i on the same harness build, and the flavor of the wave is *upstream fixes doing their job in

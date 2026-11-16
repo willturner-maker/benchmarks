@@ -423,6 +423,48 @@
    ]
   },
   {
+   "task": "F1",
+   "case": "rearmed-comp-free-ok",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "F1",
+   "case": "bad-stale-expectation-comp-loss",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "expected loss of fusion_comp did not occur on this build \u2014 the fixture expectation is stale, re-arm the trap before grading"
+   ]
+  },
+  {
+   "task": "F1",
+   "case": "trap-comp-guard-left-no-geometry",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "geometry field source_start absent from the read-back \u2014 re-capture LIVE_SHAPE.md",
+    "geometry field source_end absent from the read-back \u2014 re-capture LIVE_SHAPE.md",
+    "geometry field record_start absent from the read-back \u2014 re-capture LIVE_SHAPE.md",
+    "geometry field record_end absent from the read-back \u2014 re-capture LIVE_SHAPE.md",
+    "geometry field duration absent from the read-back \u2014 re-capture LIVE_SHAPE.md"
+   ]
+  },
+  {
+   "task": "F1",
+   "case": "trap-unexpected-link-preservation",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "expected loss of link did not occur on this build \u2014 the fixture expectation is stale, re-arm the trap before grading"
+   ]
+  },
+  {
    "task": "F2",
    "case": "ok",
    "expected": "accept",

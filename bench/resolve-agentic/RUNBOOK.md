@@ -101,11 +101,17 @@ per wave — a brief you never wrote down can't be compared against the next wav
 run lost exactly that check), launch a fresh agent, record tool-use count and wall time from the
 harness, keep the agent's report verbatim.
 
-If you amend a brief mid-wave (T7 needed a one-command `mkdir` exception because the render tools
-refuse a `target_dir` that doesn't exist), apply the amendment **identically in every run of that
-task**, write it into the archived brief, and list it as a deviation. An amendment dispatched to
-some runs and not others breaks comparability; a `mkdir` of the output directory can't read prior
-findings, so it doesn't break the seal.
+If you amend a brief mid-wave, apply the amendment **identically in every run of that task**, write it
+into the archived brief, and list it as a deviation. An amendment dispatched to some runs and not others
+breaks comparability.
+
+**Do not brief an allowance the seal denies.** T7 used to carry a one-command `mkdir` exception (the
+render tools refuse a `target_dir` that doesn't exist) while the deny-list blocked `Bash` — the 2026-11-16
+wave proved what that costs: all three T7 trials tried the sanctioned `mkdir`, were refused, then improvised
+a directory through an MCP side effect (one of them a `dryRun=true` export that created the directory
+anyway), left stray files in the render dir, and ran **+119% wall / +29 turns** versus the same task on the
+same MCP and harness builds. Both drivers now pre-create `{RENDER_ROOT}/T7r{k}/` before dispatch and the
+brief says the directory exists. Cross-check every brief line against the deny-list before dispatch.
 
 ## 4. Grade — read-backs only
 
@@ -139,8 +145,11 @@ the *operator's* timeline instead of the agent's own, an absent output file, a `
 that returned success with zero comps, an archive sibling proving a read-only task mutated anyway.
 
 **Gate rule: a wave whose self-test fails is not publishable as verified.** Run it before dispatch,
-put the count (`54/54 grading cases behaved` since the F1/F2 seal, 2026-11-15) in the results header,
-and re-run it whenever the MCP build or the Resolve build moves — it costs a second.
+put the count (`58/58 grading cases behaved` since the 2026-11-16 F1 re-arm; it was 54/54 at the F1/F2
+seal) in the results header, and re-run it whenever the MCP build or the Resolve build moves — it costs
+a second. The four cases the re-arm added are the point of the exercise: they *reject the sealed
+expectation that turned out to be unmeasured* (a comp-loss claim) and *reject a refusal being scored as
+a geometry result*, which is how a stale fixture silently dooms a wave.
 
 `selftest/LIVE_SHAPE.md` records the payload shapes the probes actually return, captured from a
 scratch timeline on the wave host (2026-11-15). That capture is load-bearing: `timeline_markers.get_all`

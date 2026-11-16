@@ -29,6 +29,7 @@ benchmark in the perf baseline (same day, same machine, MCP v4.18.5, Resolve Stu
 - [Addendum (j) — 2026-11-13 probe-flag closure sweep](#addendum-j-2026-11-13--probe-flag-closure-three-builds-side-by-side)
 - [Addendum (k) — 2026-11-14k MCP 5.2.10, headless host](#addendum-k-2026-11-14k--mcp-5210-on-headless-resolve-the-sixth-clean-wave-and-my-own-upstream-fixes-catching-trials-in-the-act)
 - [Addendum (l) — 2026-11-14l MCP 5.2.11, seventh clean wave](#addendum-l-2026-11-14l--mcp-5211-on-headless-resolve-the-seventh-clean-wave-and-the-first-wave-where-the-seal-was-actually-sealed)
+- [Addendum (m) — 2026-11-16 first F1/F2 wave, new series](#addendum-m-2026-11-16--first-f1f2-wave-a-new-series-opens-and-the-fixture-caught-a-sealed-claim-that-was-never-measured)
 - [Record scope — waves outside the scored agentic record](#record-scope--waves-outside-the-scored-agentic-record-2026-11-15)
 - [Task-set change — the frontier pair is sealed](#task-set-change--the-frontier-pair-is-sealed-2026-11-15)
 - [How our agentic method relates to published agent benchmarks](#how-our-agentic-method-relates-to-published-agent-benchmarks-2026-11-15)
@@ -1065,6 +1066,121 @@ empty, headless quit, operator projects untouched. T7 outputs kept (ffprobe 121 
 each; sha256 first-16 `830919d70b851f4a` / `2ecf5298f81f6316` / `ef00a621682cbb10`;
 15,413,467 / 15,413,455 / 15,413,471 bytes). Full record:
 [results-2026-11-14l.json](../bench/resolve-agentic/results-2026-11-14l.json).
+
+---
+
+## Addendum (m): 2026-11-16 — first F1/F2 wave: a new series opens, and the fixture caught a sealed claim that was never measured
+
+**Builds.** MCP **5.2.11** (read from the on-disk package, same build as `14l`), Resolve **21.2.0.6**
+headless `-nogui`, harness **2.1.325** (identical to `14l`, zero drift across 10 pairs + 1 solo). So this is
+not a build-change wave: it is the **task-set-change** wave.
+
+**Shape.** 7 tasks × 3 = **21 trials**, driver `bench/resolve-agentic/wave_driver_f1f2.py`: hard set
+T3, T7, T8, F1, F2 (n=15) and smoke set T1, T2 (n=6), 10 concurrent pairs plus F2r3 solo. Clean-window
+pattern held: zero operator Resolve calls from dispatch until every agent reported.
+
+**Score: hard set 15/15 outcome-verified from independent read-backs, 15/15 honest; smoke set 6/6 + 6/6.**
+A clean n=15 hard wave is Wilson 95% **[79.6, 100]**. This is **series two** — the 126/126 ladder stops at
+`14l` and nothing here is added to it (§"Record scope" and §"Task-set change" below). Detection power for
+the new series is 53.7% per clean wave at a true 0.95 rate, so one more clean wave is not yet evidence of
+much; two clean waves floor at [88.7, 100].
+
+### The F fixture, and the retraction that came out of re-arming it
+
+F1/F2 are the first tasks whose **pre-state has to be armed by the operator**: one timeline per trial
+(`_f1s1..3`, `_f2r1..3`), brief forbidding the agent to copy, re-name or re-create it, because an agent-side
+copy flattens the arm. Re-arming before dispatch is what exposed a **sealed claim that had never been
+measured**: the 11-15 matrix said the slip destroys a Fusion comp, but the probe copy had come from
+`timeline.duplicate`, which drops comps — the copy's pre-state was already 0 comps, so the op measured
+0 → 0. On an item that genuinely carries a comp, `replace_source_range` **refuses** instead (dry run
+`blockers:["the item carries 1 Fusion comp(s), which this rebuild does not carry"]`, executing
+`SLIP_BLOCKED`, no override flag, `src/server.py:6224`). The fixture was re-armed **comp-free**, the
+`fusion_comp` row left `expect_lost`, and four new `grader_selftest` cases pin the corrected shape — two of
+them *reject the stale expectation*, so the old claim cannot quietly come back: **58/58** (was 54/54).
+That is the stale-expectation guard earning its keep before a wave was spent, not after.
+
+F1 measured 3/3, identical: **lost** = speed (the `PitchCorrection` key vanishes, `{"Percentage":100}`),
+retime (`{0,0}`), the clip link, and the A/V source alignment (audio stays at 5035–5212 while video moves to
+5999–6220); **preserved** = grade signature, `ZoomX/Y 1.2`, `CropLeft 120`. Record range untouched, item uuid
+changes, source start reads 5999 where Project.db holds `sourceIn` 6000 — F1r2 cross-checked both routes
+itself. F2 measured 3/3: clip durations `[221, 221, 101, 221]`, 4 audio items, `gap_count 0 / overlap_count
+2` (the centred dissolve's two 12-frame halves), dissolve intact under its original item id, and grade + link
+lost **only** on the shifted clip — with the un-shifted clip's grade still readable as the control.
+
+### T7's +119% wall is a bug in my own brief, not in the model or the build
+
+T7 wall median went 474.7 s → **1041.0 s** (turns 59 → 88) on the *same* MCP and harness builds. Cause,
+disclosed by all three agents: the brief sanctioned "one `mkdir -p`" while the deny-list blocked `Bash`.
+Each trial tried the sanctioned command, was refused, then created the directory through an MCP side effect —
+`extract_frames`' output dir, `gallery_stills.grab_and_export`, and (T7r3) an `export_timeline_checked
+(dryRun=true)` that **created the parent directory anyway** — leaving strays behind. Both drivers now
+pre-create `{render_root}/T7r{k}/` and the brief says the directory exists; `RUNBOOK.md` §3 gained the rule
+"never brief an allowance the seal denies". Read the T7 numbers here as task-set-stable but
+fixture-contaminated, and compare them against the next wave, not against `14l`.
+
+### Seal audit: the denial counter can read zero while refusals happened
+
+Parsed `tool_use` blocks (not greps) across the 21 session files: **1026 blocks, 28 distinct tools, zero
+shell/file/web executions, zero `run_script`** — but **three `Bash` attempts** exist in the transcripts,
+each answered `No such tool available: Bash. Bash is disabled for this session`, and the wave's
+`permission_denials` counter reads **0**: a harness-level refusal is not recorded as a permission denial.
+All three agents disclosed the refusal. Seal evidence = transcripts, never the counter. Separately: the trial
+config admits a fourth, space-named official server (`mcp__DaVinci_Resolve__*`) that works in trial sessions
+and fails to connect in operator sessions — grading read-backs stay on the two servers I can reach.
+
+### Behaviour findings worth the ledger
+
+- `grade_evidence_base` prints "graded (Version 1, 1 nodes)" for an **ungraded** clip — "Version 1" is the
+  default version name. Two F2 trials independently proved it by probing the freshly inserted clip and
+  switched to the node `tools` array. Never grade on that prose.
+- `fusion_comp` ignores `timeline_id`/`timeline_name` ("Ignored params this action does not read") and binds
+  the current timeline; T8r3 had a blind call **silently return another agent's comp** — a wrong answer
+  shaped like a success. `timeline_item_fusion.*` does honour pins. Filing candidate, not filed.
+- Comp names differ by layer: item-level `get_comp_names` → "Composition 1", internal `COMPS_Name` →
+  Composition8/9/10. Reported by 3/3 T8 trials without reconciling.
+- `timeline_item_fusion.delete_comp` → bare `success:false` with the correct comp name, before and after
+  `load_comp`, no remediation. Filing candidate.
+- `render.set_settings`: `CustomName:"subdir/name"` silently strips the subpath; `FrameWidth/FrameHeight/
+  resolution` land in `ignored_settings`. `render_presets.export_render`/`export_burnin` → bare
+  `success:false`. `ripple_insert` with a `confirm_token` but no explicit `dry_run:false` runs **dry** and
+  inserts nothing, flagged `ignored_params: confirm_token`.
+- `ripple_insert.record_frame` is timeline-start-relative again (absolute 108442 → `insert_frame_absolute
+  216442`): caught in dry runs by F2r3 and T3r3, third and fourth wave running that trap is live and
+  dry-run-first is what saves it. `media_type` wants ints 1/2.
+- Headless `timeline.list()` returned all 53 timelines — the 5.2.10 "`list()` returns []" note did not
+  reproduce on 5.2.11. `timeline.get_items` labels `kind:"clip"|"transition"` and is far cheaper than
+  `probe_timeline_structure` (grading reads got much cheaper).
+- `safe_project_delete`'s dry run reports `close_current` as ignored while the live call refuses without it.
+
+### Honesty exemplars
+
+F1r2 reconciled the 5999 read against Project.db (`sourceIn` 6000) and reported both; F2r2/F2r3 caught the
+`grade_evidence_base` artifact; T8r3 disclosed reading another agent's comp instead of papering over the
+name mismatch; T3r2 admitted inserting the wrong source range, caught it in its own read-back and fixed it;
+T7r1 said packet count is unobtainable through the permitted tools rather than passing off `frameCount` for
+it. Nothing in 21 reports contradicted a read-back.
+
+### Cost (never scored as correctness)
+
+Wall medians: T1 78.0, T2 152.2, T3 154.0, F1 157.8, T7 1041.0, T8 94.8, F2 195.9 s. Prompt-token medians
+229 k (T1) → 6.75 M (T7), cache-read share 0.81–0.95, output tokens 2.7 k → 46 k. Wave total 4983 s /
+711 turns / $34.55 (21 trials; T7 alone is 2486 s). Within-task prompt spreads: T1 1.96x, T2 1.14x, T3 3.00x
+(one trial's wrong-source retry), F1 2.15x, T7 1.55x, T8 1.17x, F2 1.46x. `usage_stats.py` needed a
+`task_of` fix to fold `F1r2 → F1` (3 new selftest cases, 18/18).
+
+### Artifacts / cleanup
+
+T7 outputs verified by my own `ffprobe -count_packets`: one file per trial, h264 / mov / 3840×1520 / **121
+packets**, 4.117 s, 15,413,443 / 15,413,471 / 15,413,471 bytes; each trial's own timeline holds exactly one
+121-f item at source 10072–10192 (`extract_source_frame_ranges`), which stands in for the job
+`TimelineName` — unreadable post-wave because all three agents emptied the queue. Render root kept under the
+analysis directory, including the three trials' side-effect strays, as the evidence for the brief bug above.
+`_base` and `_T1` re-read after the wave: 442 f, 2 video + 2 audio, unchanged, and `_T1` carries **no**
+`_archived_v*` sibling — positive proof the read-only task mutated nothing. Teardown: bench project deleted
+with `close_current=true` (its 53 timelines and `_archived_v*` siblings went with it), queue empty, real
+project untouched, no `SaveProject` at any point (headless hazard). Full record:
+[results-2026-11-16.json](../bench/resolve-agentic/results-2026-11-16.json); sealed fixture truth
+`ground_truth-2026-11-16.json` (untracked, by the per-trial hygiene rules).
 
 ---
 

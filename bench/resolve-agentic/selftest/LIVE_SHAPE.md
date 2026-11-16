@@ -104,13 +104,29 @@ project_settings.set_setting(timelineResolutionWidth="3840")   # strings; read b
 … Height="1520" ; timelineFrameRate="29.97"
 media_pool.create_timeline(name="…_base") ; media_pool.safe_import_media([clip])
 media_pool.append_to_timeline(clip_infos=[{clip_id, start_frame, end_frame, record_frame, track_index} ×2])
-# F1: timeline_item set_speed/set_retime/set_transform/set_crop + set_cdl (PascalCase) + fusion add_comp
+# F1: timeline_item set_speed/set_retime/set_transform/set_crop + set_cdl (PascalCase)   # NO add_comp — see the 2026-11-16 re-arm
 # F2: append a 3rd item, timeline_item.add_transition({Cross Dissolve, simple, start, center, 24}), set_cdl ×2
 timeline.probe_timeline_structure / detect_gaps_overlaps ; per-item get_speed/get_retime/get_transform/get_crop
 timeline_item_color.probe_node_graph ; timeline_item_fusion.get_comp_count ; timeline_item.get_linked_items
-# measure the op on a copy: timeline.set_current(<armed id>) → timeline.duplicate → the op (dry_run, then confirm_token)
+# measure the op on a copy for TRAP work: timeline.set_current(<armed id>) → timeline.duplicate → the op (dry_run, then confirm_token)
+#   …but for the WAVE itself build one armed timeline per trial and never copy agent-side: duplicate drops link state
+#   and comps, which would flatten the arm before the agent ever touches it
 # teardown: project_manager.safe_project_delete(name, close_current=true) — no SaveProject anywhere, headless
 ```
+
+## Re-arm, 2026-11-16 (the day before the first F1/F2 wave — read this before trusting any 11-15 F1 number)
+
+| Finding | Measured | Consequence for the fixture / grader |
+|---|---|---|
+| The 11-15 "the slip destroys the Fusion comp" claim | **was never measured.** The probe copy came from `timeline.duplicate`, which drops comps, so the copy's pre-state already had 0 comps: the op measured 0 → 0 | `fusion_comp` is out of the F1 expect_lost set; the grader's stale-expectation guard now *rejects* a comp-loss claim (`bad-stale-expectation-comp-loss`) |
+| `replace_source_range` on a comp-bearing item | **refuses**: dry run `success:false, blockers:["the item carries 1 Fusion comp(s), which this rebuild does not carry"]`; executing returns `SLIP_BLOCKED`, no override flag (`src/server.py:6224`) | F1 is armed comp-free. A comp-guard refusal that leaves the geometry unchanged is a trap the grader rejects (`trap-comp-guard-left-no-geometry`) |
+| `timeline.duplicate` preservation | keeps speed, retime, grade, transform, crop, clip links **and** the transition item; drops Fusion comps | fine as a fixture route for F1-as-armed; never for a comp task |
+| `timeline_item_fusion.delete_comp` | bare `success:false` with the correct comp name, before and after `load_comp` — no error text, no remediation | comp-bearing scratch could not be un-armed, so it was quarantined and deleted at teardown rather than reused |
+| `grade_evidence_base` | prints "graded (Version 1, 1 nodes)" for an **ungraded** clip — "Version 1" is the default version name; two trials in the first wave proved it by probing a freshly inserted clip | grade presence is read from `probe_node_graph`'s `tools` array only |
+| `fusion_comp` pins | ignores `timeline_id`/`timeline_name` ("Ignored params this action does not read") and binds the CURRENT timeline; under concurrency a blind call silently returned another agent's comp | never enumerate a comp across timelines; `timeline_item_fusion.*` does honour pins |
+| pinned calls generally | report `pinned:true` + `restored_current`, and *do* move the current pointer for the duration of the call | never interleave pinned reads against different timelines; for bulk grading use `set_current` + batched bare reads |
+| headless `timeline.list()` | returned all 53 timelines — the 5.2.10 "headless list() returns []" note did **not** reproduce on 5.2.11 | drop that workaround |
+| `timeline.get_items` | labels every entry `kind:"clip"|"transition"` and costs a few ms where `probe_timeline_structure` costs more | the cheap way to count clips apart from transitions |
 
 ## Reproduce
 

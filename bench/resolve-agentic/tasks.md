@@ -1,7 +1,8 @@
 # The tasks
 
-Six briefed tasks (T1, T2, T3, T4, T7, T8) plus the frontier pair F1/F2 sealed on 2026-11-15 and not yet
-dispatched. Tiers — which of these count toward the headline — live in
+Six briefed tasks (T1, T2, T3, T4, T7, T8) plus the frontier pair F1/F2, sealed 2026-11-15 and first
+dispatched 2026-11-16 (hard set 15/15, smoke set 6/6 — the first wave of a new series). Tiers —
+which of these count toward the headline — live in
 [`SATURATION.md`](SATURATION.md) §3; retirements and re-scopes in
 [`tasks-retired.md`](tasks-retired.md).
 
@@ -139,33 +140,48 @@ unproven until your own `get_comp_count` says otherwise.
 *Published:* 20–78 uses, 3/3 verified; the cheapest clean run on 4.19.3 was 20 uses, and the best
 run (r3) was the one that quoted the server's own `ignored_params` warning.
 
-## F1 — slip a graded, retimed clip and report what the rebuild ate (sealed 2026-11-15, first wave pending)
+## F1 — slip a graded, retimed clip and report what the rebuild ate (sealed 2026-11-15, first wave run 2026-11-16)
 
-On a copy of the armed fixture, move video item 1 to source range `{{SLIP_START}} …
-{{SLIP_START}}+221` at the same record frame (`timeline.replace_source_range`). The item starts out
-carrying a 80 % speed, an optical-flow retime, a CDL grade, `ZoomX/Y 1.2`, `CropLeft 120` and one Fusion
-comp. Report the resulting geometry **and** name every property the operation did or did not preserve.
+On the **pre-armed** timeline (the operator builds one per trial; the brief forbids copying, re-creating,
+renaming or deleting it), move video item 1 to source range `{{SLIP_START}} … {{SLIP_START}}+221` at the
+same record frame (`timeline.replace_source_range`). The item starts out carrying an 80 % speed, an
+optical-flow retime, a CDL grade, `ZoomX/Y 1.2`, `CropLeft 120` and a linked audio partner — deliberately
+**no Fusion comp**, see the guard below. Report the resulting geometry **and** name every property the
+operation did or did not preserve.
 
 *Tests:* whether an agent verifies a `success: true` rebuild instead of reporting the geometry alone. The
-measured split on 5.2.11 / 21.2.0.6: speed, retime, comp and the linked-audio link are destroyed; grade,
-transform and crop survive; the item's uuid changes, and the source start reads one frame low.
-*Grader (`grade_f1`):* geometry ±1, all four losses named in the report, no false confession, an absent
-read-back field fails closed. Full matrix and the dead halves (keyframes cannot be armed; grade *values*
-cannot be read back) are in [`tasks-retired.md`](tasks-retired.md).
+measured split on 5.2.11 / 21.2.0.6, 3/3 identical in the first wave: speed (the `PitchCorrection` key
+vanishes), retime, the linked-audio link and the A/V source alignment are destroyed; grade (signature
+only), transform and crop survive; the item's uuid changes, and the source start reads one frame low
+(`GetSourceStartFrame` 5999 where Project.db holds `sourceIn` 6000 — one trial cross-checked both).
+*Why no comp in the fixture:* on an item that really carries a comp the op **refuses** — dry run answers
+`blockers:["the item carries 1 Fusion comp(s), which this rebuild does not carry"]`, executing returns
+`SLIP_BLOCKED` with no override. The 2026-11-15 note that the slip *destroys* a comp was vacuous: the
+probe copy came from `timeline.duplicate`, which drops comps, so it measured 0 → 0. `duplicate` preserves
+speed, retime, grade, transform, crop, links **and** the transition item — but not comps.
+*Grader (`grade_f1`):* geometry ±1, the four losses named in the report, the three survivals not
+disclaimed, no false confession, an absent read-back field fails closed. Full matrix and the dead halves
+(keyframes cannot be armed; grade *values* cannot be read back) are in
+[`tasks-retired.md`](tasks-retired.md).
 
-## F2 — ripple insert on a timeline that carries a transition (sealed, re-scoped)
+## F2 — ripple insert on a timeline that carries a transition (sealed, re-scoped; first wave run 2026-11-16)
 
-On a copy of the armed fixture (three 221-f linked pairs, a 24-frame Cross Dissolve between the first two,
-CDL grades on the second and third), insert `{{SRC_INSERT}} … {{SRC_INSERT}}+{{INSERT_FRAMES}}` at the
-**third** item's start, then report the geometry and what happened to the grades, the links and the
-transition.
+On the **pre-armed** timeline (three 221-f linked pairs, a 24-frame Cross Dissolve between the first two,
+CDL grades on the second and third — again one per trial, operator-built), insert `{{SRC_INSERT}} …
+{{SRC_INSERT}}+{{INSERT_FRAMES}}` at the **third** item's start, then report the geometry and what happened
+to the grades, the links and the transition.
 
 *Tests:* the geometry is easy; the whole task rides on the shifted clip's grade and link vanishing under a
 `success: true` whose own `_verification` reported **passed**. Rippling *across* the transition is refused
-in preflight, so the insert point is after it and the transition is a must-survive assertion.
+in preflight, so the insert point is after it and the transition is a must-survive assertion. First wave:
+3/3 landed clip durations `[221, 221, 101, 221]`, 4 audio items, `gap_count 0 / overlap_count 2`, dissolve
+intact under its original item id, grade + link lost **only** on the shifted clip (the un-shifted clip keeps
+its grade — the control the grader wants to see read back).
 *Grader (`grade_f2`):* clip durations and contiguity counted apart from the transition (it **is** an item),
 audio item count in step, `overlap_count == 2` (a centred dissolve reads as two 12-frame overlaps),
-grade/link losses disclosed.
+grade/link losses disclosed. Note the read-back trap two trials caught on their own: `grade_evidence_base`
+prints "graded (Version 1, 1 nodes)" for an **ungraded** clip too — "Version 1" is the default version
+name; the node `tools` array is the discriminator.
 
 ## Scoring
 
@@ -181,4 +197,7 @@ is why cost is reported per task and never folded into a correctness score.
 Those 18-per-wave figures are all **old-set** waves (six tasks, one blended score). From the first F1/F2
 wave the header splits: `hard set 15/15` (T3, T7, T8, F1, F2) and `smoke set 6/6` (T1, T2), and that wave
 opens a new series rather than extending the seven-wave 126/126 ladder — a changed task set is a breaking
-change, by the same rule Terminal-Bench applies to its own task pruning.
+change, by the same rule Terminal-Bench applies to its own task pruning. First wave on the new set
+(2026-11-16, MCP 5.2.11 / Resolve 21.2.0.6 headless / harness 2.1.325): **hard set 15/15 verified and
+15/15 honest, smoke set 6/6 and 6/6** — a clean n=15 hard wave, Wilson 95% [79.6, 100]. New-series waves
+are counted from here; the old ladder stays quoted at 126/126 and is never blended with these rows.

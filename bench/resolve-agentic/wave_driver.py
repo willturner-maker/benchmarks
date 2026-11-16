@@ -104,10 +104,10 @@ def briefs():
                f"VIDEO item. If a guardrail refuses, follow the remediation the server names. Report the track names/counts/"
                f"lock states you read back and whether the item is gone.")
     def t7(k): return (f"On a NEW timeline named {TL_BASE}_T7r{k}, build one item from source frames {PROB_SRC}-{PROB_SRC+PROB_F} "
-               f"(end-exclusive, {PROB_F} frames, with its audio), then queue a QuickTime/H.264 render at 3840x1520 to a directory "
-               f"you create under {RENDER_ROOT}/T7r{k}/ (creating that one directory with one mkdir -p is permitted; no other "
-               f"shell/file use), start it, poll it, verify the rendered FILE (packet count, codecs, resolution) with Resolve MCP "
-               f"tools, and empty the render queue. Report the render ms and your verification numbers.")
+               f"(end-exclusive, {PROB_F} frames, with its audio), then queue a QuickTime/H.264 render at 3840x1520 into the "
+               f"directory {RENDER_ROOT}/T7r{k}/ — it already exists; create no files or directories yourself (no shell or file "
+               f"tools are available in this session), start it, poll it, verify the rendered FILE (packet count, codecs, "
+               f"resolution) with Resolve MCP tools, and empty the render queue. Report the render ms and your verification numbers.")
     def t8(k): return (f"On a NEW timeline named {TL_BASE}_T8r{k} with one item from the pool clip (any source range is fine), "
                f"attach a Fusion composition to that timeline item such that an independent read-back reports 1 comp for the item, "
                f"and name the nodes you can enumerate from that comp. Treat creation calls' success as unproven until your own "
@@ -244,6 +244,12 @@ def main():
         harness_preflight(write=False)
         return
     SESS.mkdir(parents=True, exist_ok=True)
+    # T7 target directories are pre-created operator-side: the seal denies Bash, so the old brief's
+    # "one mkdir -p is permitted" was unusable. Measured cost in the 2026-11-16 wave: all three T7
+    # trials dead-ended on it, improvised a directory through an MCP side effect (one of them a
+    # dry run that wrote anyway), left strays, and ran +119% wall / +29 turns vs the prior wave.
+    for k in (1, 2, 3):
+        pathlib.Path(RENDER_ROOT, f"T7r{k}").mkdir(parents=True, exist_ok=True)
     (OUT / "archived_briefs.md").write_text(json.dumps({"TL_BASE": TL_BASE,
         "frames": {"base_src": BASE_SRC, "insert_src": INS_SRC, "probe_src": PROB_SRC}}, indent=1))
     # harness version is part of the measured system (RUNBOOK §6): claude -p startup,

@@ -452,6 +452,33 @@ def cases():
               (f1_pre, {k: v for k, v in f1_post.items() if k != "comp_count"}, f1_claims, f1_spec),
               "reject"))
 
+    # --- F1 re-armed for the 2026-11-16 wave (fixture carries NO Fusion comp)
+    # Why the re-arm: on 5.2.11 an item that really carries a comp makes replace_source_range
+    # REFUSE (dry run success:false, blockers ["the item carries 1 Fusion comp(s)…"]; the executing
+    # path returns SLIP_BLOCKED, no override flag). The 2026-11-15 "comp destroyed" row was vacuous —
+    # the probe copy came from timeline.duplicate, which does not carry comps, so it measured 0 -> 0.
+    # Re-measured 2026-11-16 on a comp-free copy: speed/retime/link/audio-step lost, grade/transform/
+    # crop preserved (ground_truth-2026-11-16.json).
+    f1_pre_ra = {**f1_pre, "comp_count": 0, "linked_item_count": 1}
+    f1_post_ra = {**f1_post, "comp_count": 0, "linked_item_count": 0}
+    f1_spec_ra = {**f1_spec,
+                  "tracked": ("speed", "retime", "grade", "transform", "crop", "link", "audio_in_step"),
+                  "expect_lost": ["speed", "retime", "link", "audio_in_step"]}
+    f1_claims_ra = {k: v for k, v in f1_claims.items() if k != "fusion_comp"}
+    f1_claims_ra["link"] = "lost"
+    c.append(("F1", "rearmed-comp-free-ok", grade_f1, (f1_pre_ra, f1_post_ra, f1_claims_ra, f1_spec_ra),
+              "accept"))
+    c.append(("F1", "bad-stale-expectation-comp-loss", grade_f1,
+              (f1_pre_ra, f1_post_ra, f1_claims_ra,
+               {**f1_spec_ra, "expect_lost": f1_spec_ra["expect_lost"] + ["fusion_comp"]}), "reject"))
+    c.append(("F1", "trap-comp-guard-left-no-geometry", grade_f1,
+              (f1_pre_ra, {k: v for k, v in f1_post_ra.items()
+                           if k not in ("source_start", "source_end", "record_start", "record_end",
+                                        "duration")}, f1_claims_ra, f1_spec_ra), "reject"))
+    c.append(("F1", "trap-unexpected-link-preservation", grade_f1,
+              (f1_pre_ra, {**f1_post_ra, "linked_item_count": 1},
+               {**f1_claims_ra, "link": "preserved"}, f1_spec_ra), "reject"))
+
     # --- F2: ripple insert after a transition
     f2_items = [
         {"name": "clipA", "start": 108000, "end": 108221, "source_start": 5035,

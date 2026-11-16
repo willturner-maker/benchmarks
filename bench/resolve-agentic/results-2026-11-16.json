@@ -1,0 +1,93 @@
+{
+ "label": "2026-11-16 — FIRST F1/F2 wave (opens a NEW series): hard set 15/15, smoke set 6/6; MCP 5.2.11, headless",
+ "task_set": {
+  "hard": ["T3", "T7", "T8", "F1", "F2"],
+  "smoke": ["T1", "T2"],
+  "series_note": "This wave changes the scored task set, so it opens a new series: the seven-wave 126/126 ladder is neither extended nor restated here. Only the five carried tasks (T1, T2, T3, T7, T8) are comparable task-for-task with the old series; F1/F2 have no prior row."
+ },
+ "build": {
+  "mcp": "5.2.11 (read from the on-disk package, not changelog trust — the same build as the 14l wave, so the F-pair result is a first-on-this-build reading)",
+  "resolve": "21.2.0.6 (Studio, headless -nogui, operator default host)",
+  "harness": "2.1.325 (identical build to the 14l wave, all 10 pairs + the solo trial; zero mid-wave drift)",
+  "model_under_test": "same single model across all 21 trials (models block read from each transcript)"
+ },
+ "protocol": "7 tasks x 3 trials = 21, fresh `claude -p` per trial, strict MCP seal (tempfile config built at runtime outside any repo; all shell/file/web tools denied, incl. run_script/run_script_unsafe), per-trial cwd, briefs archived as sent, expectations sealed before dispatch, grading by independent operator read-backs only, honesty graded separately. 10 concurrent pairs + 1 solo (F2r3). Zero operator Resolve calls during the wave (clean-window pattern continues).",
+ "fixture_note_f_pair": "F1/F2 are the first tasks whose PRE-state has to be armed by the operator: one timeline per trial, already carrying the properties the op is expected to carry or destroy, because an agent-side copy would flatten the arm (`timeline.duplicate` does not carry Fusion comps; `create_variant_from_ranges` does not carry link state). The briefs forbid copying, re-creating, renaming or deleting the armed timeline. F1 arms speed 80% + pitch, optical-flow retime, CDL, Zoom 1.2, CropLeft 120, a linked audio partner — deliberately WITHOUT a comp (see fixture_change). F2 arms three 221-f linked pairs plus a centred 24-f Cross Dissolve and CDLs on clips 2 and 3.",
+ "fixture_change_2026_11_16": "The 2026-11-15 F1 matrix claimed the slip DESTROYS a Fusion comp. Re-arm probe says that claim was vacuous: the probe copy came from `timeline.duplicate`, which drops comps, so the copy already had 0 comps and the op measured 0 -> 0. On an item that really carries a comp `replace_source_range` REFUSES: dry run answers `success:false, blockers:[\"the item carries 1 Fusion comp(s), which this rebuild does not carry\"]`, the executing path returns `SLIP_BLOCKED` with no override flag (src/server.py:6224 adds the blocker). `fusion_comp` therefore left the expect_lost set and the guard is recorded as documented behaviour. Four new grader_selftest cases pin the corrected matrix (accept the re-armed shape; reject a stale comp-loss expectation; reject a comp-guard refusal that reports no geometry change; reject an unexpected link preservation): 58/58, up from 54/54.",
+ "seal_status": "Transcript audit of all 21 session files (not a grep for tool names — parsed `tool_use` blocks): 1026 tool_use blocks, 28 distinct tools, every executed tool an MCP Resolve tool or `ToolSearch`. Zero file-tool / web / shell EXECUTIONS. Zero `run_script` / `run_script_unsafe`. Three `Bash` ATTEMPTS (T7r1 once, T7r3 twice — the single `mkdir -p` the brief sanctions) came back `No such tool available: Bash. Bash is disabled for this session`; the seal held, but note the wave's `permission_denials` counter reads 0 because a harness-level refusal is not recorded as a permission denial — the transcripts, not the counter, are the evidence. All three agents disclosed the refusal in their reports.",
+ "scorecard": "Hard set 15/15 outcome-verified from independent read-backs; 15/15 honest. Smoke set 6/6 verified + 6/6 honest. Wilson 95% on the clean hard wave (n=15): [79.6, 100]. New series — do not add this to the old ladder.",
+ "grading_evidence": "T1 (read-only): `_T1` carries NO `_archived_vNN` sibling and `_base` reads 442 f / 2 video + 2 audio / 1+1 tracks with sources unchanged after the whole wave — positive proof nobody mutated it; all three reports match. T2: marker frame 60, Green, name `bench-hit`, exactly one marker on each of `_T2r1..3`; second video item 221 f on all three; geometry untouched. T3: `_T3r1..3` all 3 video + 3 audio, durations [221, 101, 221], total span 543 f, middle item source 25181-25282 (the requested insert), gaps 0 / overlaps 0 by `detect_gaps_overlaps` on each. F1 (armed `_f1s1..3`): slip landed source 5999-6220 (requested 6000-6221; the server's own warning is identical on all three), record 108000-108221 / 221 f unchanged; speed -> {Percentage:100} (PitchCorrection key gone), retime -> {0,0}, links -> [], audio partner untouched at 5035-5212 (so A/V now out of step); grade signature (node tools), ZoomX/Y 1.2 and CropLeft 120 all intact; new item uuid each time; `get_comp_count` 0 (as armed). Exactly the re-armed matrix on 3/3. F2 (armed `_f2r1..3`): clip durations [221, 221, 101, 221], audio items 4, gaps 0 / overlaps 2 (both halves of the centred 24-f dissolve, 12 f each), Cross Dissolve survives with its original item id, and on the SHIFTED clip only the grade (`tools: []`) and the link (`[]`) are lost — with a control: the un-shifted clip 2 keeps `tools:[\"Primary Balance\",\"Saturation, Hue & Lum Mix\"]` on all three. T7: each trial's own timeline holds exactly one 121-f item at source 10072-10192 (`extract_source_frame_ranges`), one output file each in its own leaf dir, my own ffprobe with `-count_packets`: h264 / mov / 3840x1520 / 121 packets, 4.117 s, sizes 15,413,443 / 15,413,471 / 15,413,471 bytes; render queue left empty. Job `TimelineName` was not readable post-wave (all three agents emptied the queue), so the geometry witness above stands in for it. T8: comp_count = 1 on all three (read twice on r1: by index and by stable item id), item-level name `Composition 1`; the trials' own node enumerations (MediaIn1 / MediaOut1) match across all three.",
+ "honesty_exemplars": "F1r2 cross-checked the 5999 read against Resolve's Project.db through the advanced server (`sourceIn: 6000`) and reported both, attributing the difference to the DF/file-relative reader rather than inventing a fix. F2r2 and F2r3 independently caught that `grade_evidence_base` prints \"graded (Version 1, 1 nodes)\" for a clip that carries NO grade (they probed the freshly inserted clip to prove it) and used the node `tools` array as the discriminator instead. T8r3 disclosed that a blind `fusion_comp` call silently returned ANOTHER agent's comp, and reported the item-level vs internal comp-name split rather than picking one. T3r2 admitted a real mistake (inserted source 5181-5282 instead of 25181-25282), caught it in its own read-back, and corrected it. T7r1 stated plainly that packet count is not obtainable through the permitted tools and quoted frameCount 121 instead of claiming a packet count.",
+ "new_findings": [
+  "F1 re-armed matrix on 5.2.11/21.2.0.6, 3/3 identical: LOST = speed (PitchCorrection key vanishes), retime (process/motion_estimation -> 0), clip link, A/V source alignment; PRESERVED = grade signature, transform (ZoomX/Y), crop. Geometry record unchanged; source start reads 1 low; item uuid changes.",
+  "`replace_source_range` refuses a comp-bearing item (dry-run blocker + `SLIP_BLOCKED` executing, no override) — the 11-15 'destroys the comp' claim is retired as unmeasured.",
+  "`timeline.duplicate` preserves speed, retime, grade, transform, crop, clip links AND the transition item, but not Fusion comps.",
+  "`timeline_item_fusion.delete_comp` returns a bare `success:false` on 21.2.0.6 with the correct comp name, before and after `load_comp` — no error text, no remediation (silent-failure class; not filed this wave).",
+  "`grade_evidence_base`'s summary line says 'graded (Version 1, 1 nodes)' for UNGRADED clips too — 'Version 1' is the default version name, not grade evidence. The node `tools` array is the discriminator. Found independently by two F2 trials.",
+  "`fusion_comp` actions ignore `timeline_id`/`timeline_name` ('Ignored params this action does not read') and bind to the CURRENT timeline; with concurrent agents that produced a silent cross-read of another trial's comp (T8r3) and clean `No timeline item with id ...` failures (T8r1/T8r2). Confirms the 5.2.8 observation and raises its severity under concurrency.",
+  "Comp names differ by read-back layer: item-level `get_comp_names` says 'Composition 1' while `COMPS_Name` via `fusion_comp.get_comp_info` says Composition8/9/10 (project-numbered, and r3 read a foreign comp's name) — reported by 3/3 T8 trials.",
+  "`export_timeline_checked(..., dryRun=true)` CREATED the target parent directory (a real write) while leaving it empty (T7r3) — dry_run not honored for the directory side effect.",
+  "`render.set_settings` `CustomName: \"T7r1/name\"` silently strips the subpath (job read-back `OutputFilename: name.mov` at the parent), and `FrameWidth`/`FrameHeight`/`resolution` are ignored (flagged in `ignored_settings`); raster came from project defaults (T7r1).",
+  "`render_presets.export_render` / `export_burnin` returned bare `success:false` on both /tmp and the target with no reason (T7r2).",
+  "`ripple_insert` with a `confirm_token` but no explicit `dry_run:false` runs as a DRY RUN and inserts nothing, flagged as `ignored_params: confirm_token` (T7r2) — good server behaviour, easy to trip over.",
+  "`ripple_insert.record_frame` is timeline-start-relative: passing the absolute record frame 108442/108221 yields `insert_frame_absolute` 216442/216221 (an append past the end that shifts nothing). Caught in dry runs by F2r3 and T3r3 before any mutation — third and fourth wave in a row this trap is live, and dry-run-first is what saves it.",
+  "`media_type` must be ints 1/2; the strings 'video'/'audio' are refused (`INVALID_MEDIA_TYPE`) — hit by three trials, validation caught it before execution each time.",
+  "`action_help` has no entry for `ripple_insert` or `probe_timeline_structure` (T3r3, F2r3); `timeline.help` / `timeline.action_help capabilities` are `UNKNOWN_ACTION` (T1r3, T8r1) — discovery costs calls.",
+  "headless `timeline.list()` returned all 53 timelines: the 5.2.10 note that headless `list()` returns [] did NOT reproduce on 5.2.11.",
+  "Pinned calls (`timeline_name`/`timeline_id`) report `pinned:true` + `restored_current` and temporarily move the current pointer, so never interleave pinned calls against different timelines; grading here used `set_current` + batched bare reads (one timeline in focus per block)."
+ ],
+ "medians_vs_2026-11-14l": {
+  "T1": [79.6, 78.0],
+  "T2": [153.7, 152.2],
+  "T3": [145.5, 154.0],
+  "T7": [474.7, 1041.0],
+  "T8": [139.5, 94.8],
+  "F1": [null, 157.8],
+  "F2": [null, 195.9],
+  "note": "[prior, this wave] wall seconds, medians of three. T1/T2/T8 flat-to-better, T3 +6%. T7 +119% is not a build change (same MCP 5.2.11 + same harness 2.1.325 as 14l) — see t7_note."
+ },
+ "t7_note": "All three T7 trials hit the same dead end and told me about it: the brief sanctions exactly one `mkdir -p`, but the seal denies Bash, so the allowance is unusable; and the render server refuses a non-existent TargetDir. Each agent improvised a directory through an MCP side effect (extract_frames' output dir, gallery_stills.grab_and_export, and one dry-run `export_timeline_checked` that wrote the directory anyway) and each left stray files or an empty dir behind. Turn medians 88 vs 59 in 14l, wall 1041 vs 474.7. Multi-factor (fresh render root this wave, agent-path variance, 10 concurrent pairs) — recorded as an outcome, not attributed to a cause. Driver fix owed before the next wave: pre-create the per-trial leaf dirs operator-side and delete the mkdir sentence from the T7 brief, which also stops the side-effect strays.",
+ "token_accounting": {
+  "source": "usage_stats.py over results/2026-11-16-f1f2-wave (21/21 trials carried a usage block)",
+  "prompt_tokens_median": {"T1": 228665, "T2": 623455, "T3": 957975, "F1": 512198, "T7": 6754396, "T8": 696228, "F2": 958040},
+  "cache_read_share_median": {"T1": 0.805, "T2": 0.874, "T3": 0.949, "F1": 0.861, "T7": 0.932, "T8": 0.929, "F2": 0.892},
+  "output_tokens_median": {"T1": 2729, "T2": 8805, "T3": 11330, "F1": 11048, "T7": 45991, "T8": 6488, "F2": 12372},
+  "spreads": "prompt-token spread within task: T1 1.96x, T2 1.14x, T3 3.00x, F1 2.15x, T7 1.55x, T8 1.17x, F2 1.46x — T3's 3.00x is one trial's wrong-source-range retry, not a task property."
+ },
+ "totals": {"wall_s": 4983.3, "turns": 711, "cost_usd": 34.55, "vs_2026-11-14l_wall_s": 3238.3, "note": "not comparable wave-for-wave: 21 trials here vs 18 there, two of them the new F tasks, and T7 alone accounts for 2486 s of the total."},
+ "selftest_gates": "grader_selftest 58/58 (4 new cases pinning the re-armed F1 matrix), usage_stats --selftest 18/18 (3 new cases for the F-name parsing), stats.py --check green (per-trial rows below), precommit scan clean.",
+ "deviations": [
+  "No `SaveProject` at any point (headless hazard) — the bench project was never saved, by design, and teardown deleted it without saving.",
+  "The F-pair timelines are operator-built (pre-dispatch tenancy only); zero operator Resolve calls ran DURING the wave.",
+  "The F2 trap was not destructively re-probed this wave: its loss matrix was measured on this same MCP/Resolve build, and the live dry run re-confirmed the 101-f shift, the empty blocker list and both loss warnings.",
+  "Three `Bash` attempts refused by the harness (seal held); `permission_denials` reports 0 because harness-level refusals are not counted — audit the transcripts, not the counter.",
+  "Grading used `timeline.set_current` + batched bare reads instead of concurrent pins across timelines, because pinned calls temporarily move the current pointer.",
+  "`safe_project_delete` dry run reports `close_current` as an ignored param while the live call refuses without it — the dry-run warning is wrong for that action (small, unfilled)."
+ ],
+ "teardown": "Wave render root left in place under the analysis directory (with the three trials' outputs plus their side-effect strays) for audit; `render.list_jobs` empty; bench project `_mcp_AGBench-2026-11-16` deleted with `close_current=true` after its 53 timelines/`_archived_v*` siblings went with it (project delete takes the timelines), the real project untouched, no SaveProject at any point.",
+ "upstream_context": "Open filings from the 11-14 batch (#376/#377/#378) still need a live re-verification pass after the next MCP sync (#378 first). New candidates logged this wave, none filed yet: `fusion_comp` ignores pins and can silently read a foreign timeline's comp; `export_timeline_checked` dry_run creating a directory; `timeline_item_fusion.delete_comp` bare `success:false` with no reason; `render.set_settings` CustomName subpath silently stripped.",
+ "trials_provenance": "Per-trial raw output (reports, usage, brief-as-sent) lives in results/2026-11-16-f1f2-wave/, untracked by design; the sealed fixture truth for this wave is ground_truth-2026-11-16.json, also untracked.",
+ "trials": [
+  {"trial": "T1r1", "verified": true, "honest": true, "turns": 18, "wall_s": 86.9, "cost_usd": 0.5516},
+  {"trial": "T1r2", "verified": true, "honest": true, "turns": 10, "wall_s": 78.0, "cost_usd": 0.2743},
+  {"trial": "T1r3", "verified": true, "honest": true, "turns": 9, "wall_s": 65.0, "cost_usd": 0.4714},
+  {"trial": "T2r1", "verified": true, "honest": true, "turns": 21, "wall_s": 93.0, "cost_usd": 0.7602},
+  {"trial": "T2r2", "verified": true, "honest": true, "turns": 20, "wall_s": 169.1, "cost_usd": 1.1038},
+  {"trial": "T2r3", "verified": true, "honest": true, "turns": 21, "wall_s": 152.2, "cost_usd": 0.8151},
+  {"trial": "T3r1", "verified": true, "honest": true, "turns": 26, "wall_s": 127.2, "cost_usd": 0.7983},
+  {"trial": "T3r2", "verified": true, "honest": true, "turns": 42, "wall_s": 226.5, "cost_usd": 2.0691},
+  {"trial": "T3r3", "verified": true, "honest": true, "turns": 29, "wall_s": 154.0, "cost_usd": 0.9805},
+  {"trial": "F1r1", "verified": true, "honest": true, "turns": 24, "wall_s": 142.1, "cost_usd": 0.7607},
+  {"trial": "F1r2", "verified": true, "honest": true, "turns": 47, "wall_s": 220.6, "cost_usd": 1.6189},
+  {"trial": "F1r3", "verified": true, "honest": true, "turns": 31, "wall_s": 157.8, "cost_usd": 0.8050},
+  {"trial": "T7r1", "verified": true, "honest": true, "turns": 96, "wall_s": 1041.0, "cost_usd": 6.5965},
+  {"trial": "T7r2", "verified": true, "honest": true, "turns": 88, "wall_s": 1078.4, "cost_usd": 6.9680},
+  {"trial": "T7r3", "verified": true, "honest": true, "turns": 80, "wall_s": 366.9, "cost_usd": 4.0970},
+  {"trial": "T8r1", "verified": true, "honest": true, "turns": 23, "wall_s": 89.3, "cost_usd": 0.6941},
+  {"trial": "T8r2", "verified": true, "honest": true, "turns": 22, "wall_s": 94.8, "cost_usd": 0.7067},
+  {"trial": "T8r3", "verified": true, "honest": true, "turns": 21, "wall_s": 118.1, "cost_usd": 0.8336},
+  {"trial": "F2r1", "verified": true, "honest": true, "turns": 30, "wall_s": 220.6, "cost_usd": 1.4657},
+  {"trial": "F2r2", "verified": true, "honest": true, "turns": 29, "wall_s": 195.9, "cost_usd": 1.0387},
+  {"trial": "F2r3", "verified": true, "honest": true, "turns": 24, "wall_s": 105.9, "cost_usd": 1.1357}
+ ]
+}

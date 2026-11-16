@@ -31,10 +31,10 @@ EMPTY_BLOCK = "usage block absent/null (harness did not emit it)"
 
 
 def task_of(name):
-    """T3r2 -> T3."""
+    """T3r2 -> T3, F1r2 -> F1 (the F pair joins the scored set from the 2026-11-16 wave)."""
     n = name.lower()
     for i, ch in enumerate(n):
-        if ch == "r" and i and n[:i].startswith("t") and n[i + 1:].isdigit():
+        if ch == "r" and i and n[:i].startswith(("t", "f")) and n[i + 1:].isdigit():
             return name[:i]
     return name
 
@@ -171,6 +171,12 @@ def selftest():
         ok = got == want
         cases.append((label, ok, got, want))
         return ok
+
+    # Task-name parsing: the F1/F2 trials join the aggregation from the 2026-11-16 wave, and
+    # an unparsed name would split each trial into its own "task" column.
+    check("T task parsed", task_of("T3r2"), "T3")
+    check("F task parsed", task_of("F1r2"), "F1")
+    check("no run suffix keeps its name", task_of("T1"), "T1")
 
     full = summarize("T3r1", {"num_turns": 30, "cost_usd": 1.0,
                               "usage": {"input_tokens": 10, "cache_creation_input_tokens": 90,

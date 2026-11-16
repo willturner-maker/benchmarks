@@ -3,4 +3,7 @@ __pycache__/
 *.pyc
 fixture.json
 ground_truth.json
+ground_truth-*.json
 fixture_f1f2*.json
+# Derived aggregates (stats.py --write output); the published records are results-<wave>.json.
+stats-*.json

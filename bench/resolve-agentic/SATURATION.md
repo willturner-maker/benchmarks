@@ -13,13 +13,20 @@ which is precisely what disqualifies the two earlier waves from the aggregate (�
 [97.0, 100.0]**. Before 2026-11-15 this read "nine waves, 162/162"; the two extra waves never shipped
 per-trial rows, so they were counts that nothing could check.
 
+That ladder is the **old task set** and stopped at seven waves. The **new series** opened `2026-11-16` with
+the F pair in the hard set: **hard 15/15 verified + 15/15 honest, smoke 6/6 + 6/6** (n=15 hard, Wilson 95%
+[79.6, 100.0]). The two series are never blended — different task sets, different detection power — and each
+is quoted with its own n.
+
 | n (one clean sweep) | Wilson 95% interval for a 100% sweep | width |
 |---|---|---|
-| 9 (hard set as it stands) | [70.1, 100.0] | 29.9 pts |
-| **18 (one published wave)** | **[82.4, 100.0]** | **17.6 pts** |
+| 9 (hard set, old series) | [70.1, 100.0] | 29.9 pts |
+| **15 (hard set, new series)** | **[79.6, 100.0]** | **20.4 pts** |
+| **18 (one published old-set wave)** | **[82.4, 100.0]** | **17.6 pts** |
 | 27 | [87.5, 100.0] | 12.5 pts |
-| 36 (two waves) | [90.4, 100.0] | 9.6 pts |
-| 54 (three waves) | [93.4, 100.0] | 6.6 pts |
+| 30 (two new-series waves) | [88.7, 100.0] | 11.3 pts |
+| 36 (two old-set waves) | [90.4, 100.0] | 9.6 pts |
+| 54 (three old-set waves) | [93.4, 100.0] | 6.6 pts |
 
 Detection power — the probability a wave *shows at least one failure* given the true per-trial pass
 rate:
@@ -63,9 +70,13 @@ share, output tokens) starts with the next wave.
 (§4) moves the scoring set from three tasks to five: `hard set 5 × n=3 = 15 trials` per wave, and a
 clean 15-trial hard set carries a Wilson floor of **[79.6, 100]** — *worse* than the 18-trial figure
 above, which is the arithmetic cost of changing the task list, not a regression. Detection power at
-n=15: 53.7% for a true 0.95 rate, 79.4% at 0.90, 91.3% at 0.85. So the first F1/F2 wave must be read as
-a **series opener** (new task set, new baseline), not as wave 8 of the 126/126 ladder — and if the new
-tasks turn out to pass 15/15 too, that is a *finding about the tasks*, not a continuation of the streak.
+n=15: 53.7% for a true 0.95 rate, 79.4% at 0.90, 91.3% at 0.85. So the first F1/F2 wave had to be read as
+a **series opener** (new task set, new baseline), not as wave 8 of the 126/126 ladder — and it came in
+**15/15 verified, 15/15 honest**. That is the branch this section anticipated: it is a *finding about the
+tasks* (both F traps are real — the ops do destroy state, and the agents did have to disclose it — but the
+frontier pair does not yet separate this model from its ceiling at n=3), not a continuation of the old
+streak. The next new-series wave is where a hard-set failure would first be visible at 53.7%-per-wave
+detection power; two clean waves would put the floor at [88.7, 100].
 
 ## 2. Trap liveness ledger (measured 2026-11-15, MCP 5.2.11 / Resolve 21.2.0.6, headless)
 
@@ -82,12 +93,15 @@ two linked video+audio items, deleted afterwards) and asked: **does the trap sti
 | T4 | `TRACK_LOCKED` blocks deleting the first *video* item | **inert as briefed** | video item whose linked audio sat on locked `audio:1` deleted with `success: true`; deleting the **audio** item directly → `TRACK_LOCKED` naming the track and the unlock call |
 | T7 | render comes out one frame short (end-exclusive) | consequence of the live end-exclusive row; **not re-measured** (no render run in this probe) | — |
 | T8 | `create_fusion_clip` phantom: success with 0 comps | **live** | `success: true`, then `get_comp_count` (pinned) → `count: 0` |
-| T8 | `fusion_comp` ignores `timeline_id`, binds the current timeline | live per the `2026-11-14l` wave record; not re-probed here | — |
-| F1 | `replace_source_range` rebuilds the item and drops part of its state | **live, and the split is now measured** | speed 80→100, retime 3/2→0/0, comp 1→0, linked audio left behind; grade tools, `ZoomX/Y 1.2` and `CropLeft 120` all survived |
+| T8 | `fusion_comp` ignores `timeline_id`, binds the current timeline | live in **two** waves now, and harsher: `2026-11-14l` saw clean `ITEM_NOT_FOUND` failures, `2026-11-16` (T8r3) had a blind `get_comp_info` **silently return another agent's comp** | "Ignored params this action does not read"; the wrong answer came back as a success |
+| F1 | `replace_source_range` rebuilds the item and drops part of its state | **live, measured 3/3 in the first wave (2026-11-16)** | speed 80→100 (`PitchCorrection` key vanishes), retime 3/2→0/0, linked audio left behind and A/V source alignment broken; grade tools, `ZoomX/Y 1.2` and `CropLeft 120` all survived; uuid changes, source start reads 5999 where Project.db holds `sourceIn` 6000 |
+| F1 | ~~the slip destroys the item's Fusion comp~~ | **retracted — it was never measured; the op refuses instead** | the 11-15 probe copy came from `timeline.duplicate`, which drops comps, so it measured 0→0. On a comp-bearing item: dry run `blockers:["the item carries 1 Fusion comp(s), which this rebuild does not carry"]`, executing `SLIP_BLOCKED`, no override flag (src/server.py:6224) |
 | F1 | a keyframed Inspector property as the thing that gets destroyed | **cannot be armed through MCP** | `timeline_item.add_keyframe` → `KEYFRAME_API_UNAVAILABLE` on 21.2.0.6 |
+| F1 | `timeline.duplicate` as a fixture route | **half-true, and it is what made the retraction necessary** | duplicate preserves speed, retime, grade, transform, crop, clip links **and** the transition item — but not Fusion comps |
 | F2 | `ripple_insert` across a transition silently destroys the transition | **dead — refused in preflight** | `RIPPLE_PLAN_BLOCKED: 1 later item(s) cannot be rebuilt (no pool media…)`, blocker names the `Cross Dissolve`, nothing mutated |
-| F2 | grade and link state destroyed on the **shifted** items | **live** | after an insert at 442: shifted clip's node tools `[]` (unshifted clip keeps them), `get_linked_items` → `[]`, while `_verification` reported **passed** and `success: true` |
-| F2 | authoring a transition through MCP at all | **live** | `timeline_item.add_transition` (Cross Dissolve / simple / center / 24) returned the created span 108209–108233 |
+| F2 | grade and link state destroyed on the **shifted** items | **live, 3/3 in the first wave** | after an insert at 442: shifted clip's node tools `[]` (unshifted clip keeps them), `get_linked_items` → `[]`, while `_verification` reported **passed** and `success: true` |
+| F2 | authoring a transition through MCP at all | **live** | `timeline_item.add_transition` (Cross Dissolve / simple / center / 24) returned the created span 108209–108233; and in the first wave the dissolve survived a ripple that shifted everything after it, keeping its item id |
+| F1/F2 | `grade_evidence_base` as grade evidence | **unreliable — do not grade on it** | prints "graded (Version 1, 1 nodes)" for an **ungraded** clip ("Version 1" is the default version name); the node `tools` array is the discriminator. Caught independently by two F2 trials in the first wave |
 
 **The mechanism worth naming: the server's own fixes are a saturation source.** Every upgrade that
 converts a silent success into a validated refusal deletes the puzzle a task was designed around —
@@ -112,7 +126,7 @@ two-call lookup, not a debugging exercise — worth remembering when designing f
 | T3 | **SCORING, brief amended** | Surviving difficulty: two-row discipline (video *and* audio), end-exclusive arithmetic, and a dry-run plan that under-signals the audio hole. The brief must stop implying the enum trap exists — it is now a validation error |
 | T7 | **SCORING** | Self-verification of the *file* vs the job's `Complete`, `TimelineName` binding the current timeline, queue discipline. Nothing here is done for the agent |
 | T8 | **SCORING** | The phantom still fires, and the selector-family asymmetry (`timeline_item_fusion` honours pins, `fusion_comp` does not) still bites |
-| F1 | **SCORING — sealed 2026-11-15, first dispatch pending** | Measured loss set (retime, speed, comp, linked audio) against a preserved set (grade, transform, crop) on one item, plus a changed item uuid and a ±1 source read. Graded on geometry *and* disclosure, with a stale-expectation guard that refuses to score if the build stops destroying things |
+| F1 | **SCORING — sealed 2026-11-15, first wave run 2026-11-16 (3/3 verified, 3/3 honest)** | Measured loss set (retime, speed, linked audio + A/V source alignment) against a preserved set (grade, transform, crop) on one item, plus a changed item uuid and a ±1 source read. The comp half is retired (the op refuses a comp-bearing item instead of eating it). Graded on geometry *and* disclosure, with a stale-expectation guard that refuses to score if the build stops destroying things — that guard is what caught the retraction before the wave shipped |
 | F2 | **SCORING — sealed, re-scoped** | Its headline (transition silently destroyed) is dead — the op refuses instead — so the loss axis is grade + link state on shifted items, with the transition promoted to a must-survive assertion and `overlap_count 2` promoted to a grader expectation |
 
 **Headroom rule going forward.** A wave's *scoring* set must consist of tasks whose trap was
@@ -206,6 +220,13 @@ under the per-trial rule they cannot be re-derived, intervalled, or audited. The
 | `2026-11-13i` | 5.2.7 | 126/126 | 90/90 (5th) |
 | `2026-11-14k` | 5.2.10 | 144/144 | 108/108 (6th) |
 | `2026-11-14l` | 5.2.11 | 162/162 | 126/126 (7th) |
+
+**New series — the ladder above stops here because the task set changed** (T4 out; F1, F2 in; the headline
+splits into a 15-trial hard set and a 6-trial smoke set). Its own running total, counted from zero:
+
+| Wave | Build | hard set | smoke set |
+|---|---|---|---|
+| `2026-11-16` | 5.2.11 / 21.2.0.6 headless / harness 2.1.325 | **15/15 verified, 15/15 honest** | 6/6, 6/6 |
 
 Three things about *how* this was done, because a record edit can hide evidence if it isn't done carefully:
 
