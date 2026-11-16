@@ -1,5 +1,6 @@
 # Upstream filings — batch 1 drafted 2026-11-13 (four filed, three verified fixed on 5.2.8, one withdrawn),
-batch 2 drafted **and filed** 2026-11-14 (#370 / #371 / #372), batch 3 drafted 2026-11-16 (links for #10–#12 ready to submit)
+batch 2 drafted **and filed** 2026-11-14 (#370 / #371 / #372),
+batch 3 drafted **and filed** 2026-11-16 — **#376** `ripple_insert`, **#377** `safe_set_project_settings`, **#378** `safe_set_cdl`
 
 Drafted with the community server's own `resolve_control(action="report_issue")`, which prefills
 a GitHub issue on **samuelgursky/davinci-resolve-mcp** and files nothing itself. Open a link,
@@ -186,7 +187,7 @@ https://github.com/samuelgursky/davinci-resolve-mcp/issues/new?template=bug_repo
 
 ---
 
-## Third batch — drafted 2026-11-16 (three links; nothing is filed until you press Submit)
+## Third batch — drafted and **filed** 2026-11-16 (#376 / #377 / #378)
 
 All three came out of the F1/F2 sealing run of 2026-11-15 (headless Resolve Studio 21.2.0.6, MCP
 **5.2.11**, scratch project `_mcp_AGBench-F1F2-1115`, deleted at teardown). Every payload and error
@@ -206,9 +207,9 @@ written as "one imported MOV" deliberately. Check anyway before submitting.
 
 | # | Title (abridged) | Status |
 |---|---|---|
-| 10 | `safe_set_cdl` normalized payload keeps the requested values in lowercase keys while the PascalCase keys Resolve reads hold identity defaults | drafted 2026-11-16 → link 10 |
-| 11 | `safe_set_project_settings` reports `write:false` for int-valued `timelineResolutionWidth/Height` with no reason (strings write fine) | drafted 2026-11-16 → link 11 |
-| 12 | `ripple_insert` labels a transition blocker "titles/generators", `code: UNSPECIFIED`, `retryable: true` vs error `false`, circular remediation | drafted 2026-11-16 → link 12 |
+| 10 | `safe_set_cdl` normalized payload keeps the requested values in lowercase keys while the PascalCase keys Resolve reads hold identity defaults | filed → [#378](https://github.com/samuelgursky/davinci-resolve-mcp/issues/378) |
+| 11 | `safe_set_project_settings` reports `write:false` for int-valued `timelineResolutionWidth/Height` with no reason (strings write fine) | filed → [#377](https://github.com/samuelgursky/davinci-resolve-mcp/issues/377) |
+| 12 | `ripple_insert` labels a transition blocker "titles/generators", `code: UNSPECIFIED`, `retryable: true` vs error `false`, circular remediation | filed → [#376](https://github.com/samuelgursky/davinci-resolve-mcp/issues/376) |
 
 A drafting gotcha worth keeping: `report_issue` accepts a `proposal` field and **does not render it**
 into a bug body — the template emits What happened / Steps / Expected / Actual / Failing call /
@@ -217,6 +218,17 @@ links below are the regenerated versions: fixes folded into `Expected` as a **Su
 paragraph, and the verbatim JSON passed as `error` (which the template fences) instead of `actual`
 (which it does not). Discarding the first three links was my call, not a redaction of anything real.
 
+**Submitted 2026-11-16 08:22:41 / 08:22:52 / 08:23:00Z, again in reverse tab order**, so the numbering
+runs opposite to this list: link 12 → **#376**, link 11 → **#377**, link 10 → **#378**. Every body landed
+**byte-identical** to the draft — verified by sha256 over the decoded `body=` query param against
+`gh issue view --json body` (one trailing newline stripped): 3885 / 2907 / 4960 chars. #378 is the longest
+prefill this ledger has filed and it survived intact, so the "eyeball the last line before Submit" caution
+in the drafting notes was worth having but cost nothing this time.
+
+**Follow-up owed, per the batch-1/2 pattern:** on the next community-server sync, re-test all three against
+live Resolve and post a verification comment either way (fixed → close-out from my side; unfixed → say so
+plainly). #378 is the one to re-test first: it is the only one that changes what a fixture recipe can do.
+The fourth finding from the same run stays unfiled and stays on the list.
 **Read 10 first.** It is not "Resolve rejected my CDL" — it is the server's own `normalized` block
 showing a CDL the caller never asked for going out on the wire (requested numbers in lowercase keys,
 `Slope "1.0 1.0 1.0"` etc. in the PascalCase keys the server's *own* api_truth entry names as the
