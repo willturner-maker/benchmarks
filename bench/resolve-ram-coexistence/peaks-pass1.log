@@ -1,0 +1,43 @@
+=== sampler start 2026-11-15 00:01:45 ===
+=== sampler start 2026-11-15 00:02:11 ===
+
+=== sampler start 2026-11-15 00:03:27 (interval 1.0s, 6.0s window) ===
+
+=== sampler start 2026-11-15 00:03:40 (interval 1.0s, 6.0s window) ===
+  phase -> smoke at t=0.0s
+  NEW PEAK resolve_fp = 1.20 GiB at t=0.0s phase=smoke (wire=60.7 inactive=11.7 free=9.58 engine=52.2)
+  NEW PEAK wire = 60.66 GiB at t=0.0s phase=smoke (wire=60.7 inactive=11.7 free=9.58 engine=52.2)
+  NEW PEAK compressor = 1.10 GiB at t=0.0s phase=smoke (wire=60.7 inactive=11.7 free=9.58 engine=52.2)
+  NEW PEAK swap = 0.01 GiB at t=0.0s phase=smoke (wire=60.7 inactive=11.7 free=9.58 engine=52.2)
+=== peaks: resolve_fp=1.20GiB@0s, wire=60.66GiB@0s, compressor=1.10GiB@0s, swap=0.01GiB@0s ===
+
+=== sampler start 2026-11-15 00:04:10 (interval 1.0s, 900.0s window) ===
+  phase -> smoke at t=0.0s
+  NEW PEAK resolve_fp = 1.20 GiB at t=0.0s phase=smoke (wire=60.7 inactive=11.7 free=9.55 engine=52.2)
+  NEW PEAK wire = 60.68 GiB at t=0.0s phase=smoke (wire=60.7 inactive=11.7 free=9.55 engine=52.2)
+  NEW PEAK compressor = 1.10 GiB at t=0.0s phase=smoke (wire=60.7 inactive=11.7 free=9.55 engine=52.2)
+  NEW PEAK swap = 0.01 GiB at t=0.0s phase=smoke (wire=60.7 inactive=11.7 free=9.55 engine=52.2)
+  phase -> baseline_resolve_down at t=1.0s
+  NEW PEAK wire = 60.73 GiB at t=3.0s phase=baseline_resolve_down (wire=60.7 inactive=11.6 free=9.93 engine=52.2)
+  NEW PEAK wire = 60.96 GiB at t=4.0s phase=baseline_resolve_down (wire=61.0 inactive=11.6 free=9.80 engine=52.2)
+  phase -> launch_headless at t=11.0s
+  NEW PEAK resolve_fp = 1.43 GiB at t=15.0s phase=launch_headless (wire=60.7 inactive=11.8 free=9.32 engine=52.2)
+  NEW PEAK wire = 60.99 GiB at t=19.1s phase=launch_headless (wire=61.0 inactive=11.7 free=9.19 engine=52.2)
+  phase -> project_load at t=20.1s
+  NEW PEAK resolve_fp = 2.14 GiB at t=20.1s phase=project_load (wire=62.0 inactive=11.8 free=7.86 engine=52.2)
+  NEW PEAK wire = 61.99 GiB at t=20.1s phase=project_load (wire=62.0 inactive=11.8 free=7.86 engine=52.2)
+  NEW PEAK resolve_fp = 2.54 GiB at t=21.1s phase=project_load (wire=61.9 inactive=11.8 free=7.85 engine=52.2)
+  phase -> build_probe_timeline at t=54.2s
+  NEW PEAK resolve_fp = 2.99 GiB at t=60.2s phase=build_probe_timeline (wire=64.0 inactive=12.0 free=5.50 engine=52.2)
+  NEW PEAK wire = 64.01 GiB at t=60.2s phase=build_probe_timeline (wire=64.0 inactive=12.0 free=5.50 engine=52.2)
+  NEW PEAK resolve_fp = 3.91 GiB at t=61.2s phase=build_probe_timeline (wire=63.4 inactive=12.1 free=5.65 engine=52.2)
+  phase -> render_setup at t=69.2s
+  phase -> render_h264_uhd at t=101.3s
+  NEW PEAK resolve_fp = 4.38 GiB at t=105.3s phase=render_h264_uhd (wire=62.0 inactive=13.3 free=4.73 engine=52.2)
+  NEW PEAK resolve_fp = 4.40 GiB at t=106.3s phase=render_h264_uhd (wire=61.8 inactive=13.5 free=4.58 engine=52.2)
+  NEW PEAK resolve_fp = 4.48 GiB at t=107.3s phase=render_h264_uhd (wire=62.2 inactive=13.5 free=4.21 engine=52.2)
+  NEW PEAK resolve_fp = 6.08 GiB at t=108.3s phase=render_h264_uhd (wire=64.7 inactive=13.6 free=1.52 engine=52.2)
+  NEW PEAK wire = 64.75 GiB at t=108.3s phase=render_h264_uhd (wire=64.7 inactive=13.6 free=1.52 engine=52.2)
+  NEW PEAK resolve_fp = 6.22 GiB at t=257.3s phase=render_h264_uhd (wire=63.4 inactive=14.2 free=2.26 engine=52.2)
+  phase -> render_h264_uhd_3000f at t=272.4s
+=== peaks: resolve_fp=6.22GiB@257s, wire=64.75GiB@108s, compressor=1.10GiB@0s, swap=0.01GiB@0s ===

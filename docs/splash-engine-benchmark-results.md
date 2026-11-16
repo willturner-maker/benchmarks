@@ -27,6 +27,7 @@ macOS 27.2.0. Engine args: working set 56 GiB, SSD cache cap 128 GiB, persistent
 - [Clean-window rerun 2026-11-13](#clean-window-rerun-2026-11-13-standalone-driver-raw-benchsplash-concurrencyresultsclean-2026-11-13)
 - [Baseline headline](#baseline-headline-for-the-next-versions-diff)
 - [Cross-hardware comparison](#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13)
+- [Co-tenancy — Resolve Studio on the same 96 GiB](#co-tenancy--resolve-studio-on-the-same-96-gib-measured-2026-11-15-raw-benchresolve-ram-coexistence)
 
 ## Layer 1 — engine probe (deterministic, run by the orchestrator, not the LLM)
 
@@ -395,3 +396,81 @@ RTX 5090: en.wiselychen.com Strata hands-on (IQ3_S 106.8 median) · r/LocalLLaMA
 (30.7) and llm-bench.io vLLM (43.4) · QEngine 2×5090 (504) ·
 suhailmohebi.com/notes/qwen3-8-flash-next-hardware-requirements/ (download sizes).
 Local measurement for the model-size framing: the IQ3_S snapshot, 51 GB + 27 GB shards.
+
+## Co-tenancy — Resolve Studio on the same 96 GiB (measured 2026-11-15) (raw: `bench/resolve-ram-coexistence/`)
+
+Every host row above assumes the engine has the machine roughly to itself. It doesn't: this box
+also runs DaVinci Resolve Studio, and the 56 GiB working set was chosen (2026-10-28/29) partly to
+leave Resolve room — a figure that had never been measured. So: is 56 GiB stingy (Resolve only
+wants a few GiB, so room to move up a quant) or generous (Resolve is the reason there is nothing
+to spare)? **Measured answer: generous — and the pool is already full.**
+
+Method (full notes in `bench/resolve-ram-coexistence/NOTES.md`): `/usr/bin/footprint` per pid at
+1 Hz over the whole `/Applications/DaVinci Resolve` process family (**phys_footprint**, the metric
+macOS pressures on) + `vm_stat` + `vm.swapusage`, phase-labelled, **2,138 samples** over three
+passes. Engine `--max-memory=56G`, resident footprint **52.15 GiB** for nearly every sample;
+Resolve **21.2 headless** (`-nogui`). Payload: one 3000-frame probe item from an 8.1K anamorphic
+source in a UHD 3840×2160 @ 29.97 project, rendered twice — H.264 2160p and ProRes 422 HQ — both
+ffprobe-verified at 3000 frames / 3840×2160.
+
+| phase | Resolve phys_fp max (GiB) | system wired max | free min | compressor max | engine phys_fp | samples |
+|---|---|---|---|---|---|---|
+| Resolve down (baseline) | — | 60.96 | 9.59 | 1.10 | 52.15 | 10 |
+| headless launch, idle | **1.43** | 60.99 | 9.18 | 1.10 | 52.15 | 9 |
+| project load | 2.54 | 61.99 | 7.85 | 1.10 | 52.15 | 34 |
+| build probe timeline | 3.91 | 64.01 | 5.50 | 1.10 | 52.15 | 15 |
+| H.264 2160p render — encode only, no decode (see caveat) | 6.22 | 64.75 | 1.22 | 1.10 | 52.15 | 170 |
+| H.264 2160p render, real 8.1K decode | 6.00 | 62.62 † | 2.62 † | 1.10 | 52.15 → 4.48 † | 1516 |
+| Resolve restart (clean slate) | 3.12 | 62.53 | 5.77 | 1.07 | 52.15 | 18 |
+| **ProRes 422 HQ render, real decode — overall peak** | **6.76** | **66.08** | **0.16** | **2.90** | 52.15 | 76 |
+| idle after render | 6.28 (held, not released) | 61.04 | 0.80 | 2.85 | 52.15 | 3 |
+| after quit | 0.02 | 61.62 → 57.93 | 0.44 → **19.59** | 2.85 → 1.96 | 52.15 | 254 |
+
+† that phase straddles the engine's idle-release un-wire (the `engine_phys_fp` column shows it), so
+its wired/free columns mix resident and un-wired states — the ProRes row is the clean coexistence
+measurement.
+
+**The ledger at the ProRes peak** (GiB): engine resident 52.15 · extra kernel/Metal wiring ~8 ·
+engine file-backed pages ~11.5 · Resolve at peak 6.76 · compressor 2.90 → **free 0.16**. Swap never
+engaged in any sample (0.01 GiB throughout), and reclaim on quit is complete: Resolve to 0.018,
+wired back to 57.93, free to **19.59** — higher than the 9.6 GiB it started at, because the
+compressor had also drained 0.9 GiB.
+
+**Findings.**
+- **Resolve is not the memory problem: ~6.8 GiB phys_footprint, ~+6 GiB wired**, at real UHD
+  decode+encode — far under the 30–40 GiB a UHD suite is usually credited with. (In headless the
+  `footprint` category table keeps `IOAccelerator (graphics)` at KB-level dirty, so the wired
+  delta, not the process category, is the GPU-inclusive figure.) The thing consuming 96 GiB is the
+  engine plus its mapped weights, ~72 GiB of resident-plus-file-backed before Resolve arrives.
+- **The pool is full, so the quant ladder has no rung available above IQ3_S.** Measured on-disk
+  sizes: IQ3_S **77.9 GiB** (current); `UD-Q3_K_XL` 83.3 GiB (+5.4); `UD-IQ4_XS` 87.3 GiB (+9.4);
+  `UD-Q4_K_XL` 103.6 GiB — already past the entire pool. Fitting the +9.4 would mean cutting the
+  Metal budget by about that much, straight back into the recorded 48 GiB failure (KV capped at
+  147k tokens, below the 262k window, pinned at 100 % and spilling) and the 2026-10-29 collision
+  (64 GiB engine + 8K render, 7.6 GB swap). We watched that boundary from the safe side: free hit
+  0.16 GiB and the compressor grew 1.07 → 2.90 GiB with swap still untouched.
+- **Co-residency costs the engine nothing measurable.** Through the render windows, single-stream
+  TTFT stayed 0.4–0.7 s and decode 40–165 tok/s; the two 40 s TTFT spikes line up with 140k+-token
+  prefills, not with the render. Caveat: single-stream session traffic, not the width ladder — this
+  says "no interference", it is not a ladder row.
+- **`--idle-release` (10 m default) is the real headroom lever, not a config knob.** After ~10 min
+  with no request the engine un-wires its weights: phys_footprint 52.15 → **4.48 GiB**, system free
+  3 → **57 GiB**, wired 60 → 4.3; it re-wires on the next request (`POST /v1/memory/release` forces
+  it). So a heavy Resolve session can have nearly the whole machine for the duration without
+  permanently shrinking the KV pool. It also means **any co-tenancy sample taken during an idle
+  engine window is measuring the wrong thing** — pass 2 here caught that by accident, which is why
+  the sampler logs the engine's footprint per row.
+- **Verdict: stay on IQ3_S.** No GiB to give, and no error budget to buy back — the agentic record
+  is 162/162 verified and the vision head-to-head had IQ3_S Flash 30/36 vs the 27B leg's 27/36.
+  A quant step up becomes a hardware question (192–256 GiB), not a recipe question.
+- **Decode warmth dominates the render wall, and therefore how long the memory plateau lasts:**
+  cold 8.1K decode ran ~2 fps (24 min for 3000 frames); the second pass over the same cached
+  region ran ~40 fps (~75 s). Same 3000 frames, same raster, ~20× the rate.
+
+**Caveats:** headless only (no GUI, no viewers), single video-only item, no grades/Fusion/temporal
+NR, 3840×2160 out — so 6.76 GiB is a **floor** for Resolve's appetite, not a worst case; GUI
+Resolve, Fusion-heavy comps, NR and 8K output all sit above it. The "encode only" row measured a
+job that spent its span on a 1.6 M-frame empty gap (a `create_variant_from_ranges` placement
+artifact — see the gotchas in NOTES.md), i.e. encode without decode, and is kept only because its
+peak matches the real-decode rows. Raw CSVs carry phase and engine-residency per row so any column
+here can be re-derived or discarded.
