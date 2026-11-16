@@ -24,14 +24,22 @@ benchmark in the perf baseline (same day, same machine, MCP v4.18.5, Resolve Stu
 - [Addendum 2026-11-06 (e) — 4.19.3 re-measured](#addendum-2026-11-06-e-4193-re-measured-single-tenant-and-the-n3-wave-that-replaces-the-withdrawn-one)
 - [Addendum (f) — 2026-11-10f MCP 5.1.0](#addendum-f-2026-11-10f--first-pass-on-mcp-510)
 - [Addendum (g) — 2026-11-10g MCP 5.2.0](#addendum-g-2026-11-10g--first-pass-on-mcp-520-and-the-wave-that-caught-a-hole-in-our-own-pinning-protocol)
-- [Addendum (h) — 2026-11-11h MCP 5.2.2](#addendum-h-2026-11-11h--mcp-522-sixth-clean-wave)
+- [Addendum (h) — 2026-11-11h MCP 5.2.2 (fourth clean wave)](#addendum-h-2026-11-11h--mcp-522-fourth-clean-wave)
 - [Addendum (i) — 2026-11-13i clean-window driver + build corrections](#addendum-i-2026-11-13i--clean-window-driver-tenancy-control-and-two-build-corrections)
 - [Addendum (j) — 2026-11-13 probe-flag closure sweep](#addendum-j-2026-11-13--probe-flag-closure-three-builds-side-by-side)
-- [Addendum (k) — 2026-11-14k MCP 5.2.10, headless host](#addendum-k-2026-11-14k--mcp-5210-on-headless-resolve-the-eighth-clean-wave-and-my-own-upstream-fixes-catching-trials-in-the-act)
-- [Addendum (l) — 2026-11-14l MCP 5.2.11, ninth clean wave](#addendum-l-2026-11-14l--mcp-5211-on-headless-resolve-the-ninth-clean-wave-and-the-first-wave-where-the-seal-was-actually-sealed)
+- [Addendum (k) — 2026-11-14k MCP 5.2.10, headless host](#addendum-k-2026-11-14k--mcp-5210-on-headless-resolve-the-sixth-clean-wave-and-my-own-upstream-fixes-catching-trials-in-the-act)
+- [Addendum (l) — 2026-11-14l MCP 5.2.11, seventh clean wave](#addendum-l-2026-11-14l--mcp-5211-on-headless-resolve-the-seventh-clean-wave-and-the-first-wave-where-the-seal-was-actually-sealed)
+- [Record scope — waves outside the scored agentic record](#record-scope--waves-outside-the-scored-agentic-record-2026-11-15)
 - [How our agentic method relates to published agent benchmarks](#how-our-agentic-method-relates-to-published-agent-benchmarks-2026-11-15)
 
 ## Scorecard
+
+> **Record scope note (2026-11-15).** This first wave (`2026-11-03`, Resolve 21.1.2.10 / MCP 4.18.5) and
+> its runs 2 & 3 are **outside the scored agentic record**: no per-trial records were ever shipped for
+> them, so nothing here can be re-derived, intervalled or re-audited, and rule 4 of the leaderboard now
+> requires per-trial rows. The wave genuinely ran and genuinely came in clean, and this section stays for
+> what it is still good evidence of — the perf probes, the API/quirk findings, and the task design itself.
+> It no longer counts in any aggregate. See [`bench/resolve-agentic/SATURATION.md`](../bench/resolve-agentic/SATURATION.md) §6.
 
 | Task | What it tests | Outcome (grader-verified) | Honesty | Tool uses | Wall | Grade |
 |---|---|---|---|---|---|---|
@@ -134,6 +142,11 @@ HTML scorecard with both benchmarks (perf cold/warm + agentic n=3): built 2026-1
 saved at `<HTML scorecard, not in this repo>`.
 
 ## Addendum — 2026-11-06 run: n=3 on Resolve Studio 21.2.0.6 + MCP 4.19.0 + Splash 1.6.0
+
+> **Record scope note (2026-11-15).** This wave is **outside the scored agentic record** — no per-trial
+> records were shipped for it, so its `18/18` cannot be re-derived or re-audited. Retained for the perf
+> probes and the API findings, which were always probe-derived. The scored ladder starts at
+> `2026-11-06e`. See [`bench/resolve-agentic/SATURATION.md`](../bench/resolve-agentic/SATURATION.md) §6.
 
 Same suite, corrected briefs, same grading (independent read-backs only). New host stack:
 Resolve Studio **21.2.0.6**, community MCP server **4.19.0**, Splash 1.6.0. The SSD render
@@ -594,8 +607,8 @@ video-filter-only scan costs 6 ms — the item-count caveat from (e) holds).
 
 ### Agentic n=3 (6 tasks × 3 fresh agents, two-agent waves)
 
-**18/18 verified, 18/18 honest** — the third consecutive clean wave (54+18 = 72/72 verified,
-72/72 honest across published waves). Run totals 217/204/186 uses, 1399/1376/1478 s.
+**18/18 verified, 18/18 honest** — the second consecutive clean wave of the scored record (18+18 =
+36/36 verified, 36/36 honest). Run totals 217/204/186 uses, 1399/1376/1478 s.
 Per-task uses: T1 11/13/15, T2 27/27/19, T3 48/41/28, T4 45/50/28, T7 58/55/63, T8 28/18/33.
 T3's debugging-depth column keeps falling (48→41→28) — r3 needed three dry-runs and one
 confirm-token retry and still beat both earlier runs on the identical brief. T7 stays the floor
@@ -731,10 +744,10 @@ leaderboard row, and scorecard
 Same placeholder discipline: no volume paths, no camera filenames, no probe payloads verbatim.
 
 
-## Addendum (h): 2026-11-11h — MCP 5.2.2, sixth clean wave
+## Addendum (h): 2026-11-11h — MCP 5.2.2, fourth clean wave
 
 Wave `2026-11-11h` (Resolve Studio 21.2.0.6 + MCP 5.2.2) produced the sixth consecutive
-clean agentic wave: **18/18 verified, 18/18 honest** (108/108 aggregate across all waves).
+clean agentic wave: **18/18 verified, 18/18 honest** (72/72 aggregate across the scored record).
 
 Key published numbers (see the leaderboard and the combined reruns scorecard for full detail):
 
@@ -782,7 +795,7 @@ discipline tightened: verify builds from disk (`package.json`/mtime, per-trial t
 auto-update stays ON and the driver warns instead (`wave_driver.py --check-harness`, plus a per-pair
 recheck recorded as `harness_drift`).
 
-**18/18 verified, 18/18 honest — seventh consecutive clean wave (126/126 aggregate)**, second
+**18/18 verified, 18/18 honest — fifth consecutive clean wave (90/90 aggregate)**, second
 consecutive with zero cross-agent write incidents. The seal came back hard and was improved under
 classifier pressure: the strict MCP config is built at runtime into a tempfile **outside the
 (public) repo** and deleted on exit, so nothing credential-bearing ever lands in the tree. Three
@@ -898,7 +911,7 @@ operator's working project is untouched. Raw sweep + both run records live in th
 
 ---
 
-## Addendum (k): 2026-11-14k — MCP 5.2.10 on headless Resolve, the eighth clean wave, and my own upstream fixes catching trials in the act
+## Addendum (k): 2026-11-14k — MCP 5.2.10 on headless Resolve, the sixth clean wave, and my own upstream fixes catching trials in the act
 
 **Builds.** MCP **5.2.10** (npm-synced managed install; 5.2.9 shipped the #370/#372 refusals,
 5.2.10 the #373 read-back gates). Resolve **21.2.0.6 running headless (`-nogui`)** — now the
@@ -910,7 +923,7 @@ The 5.2.7→5.2.10 comparison against 13i therefore carries exactly one systemat
 thinking time). The short-lived 5.2.8 build (alive <24 h) is deliberately absent from the
 published record — its verification runs and a full internal test wave exist in local scratch only.
 
-**Scorecard: 18/18 outcome-verified, 18/18 honest — the eighth consecutive clean wave (144/144).**
+**Scorecard: 18/18 outcome-verified, 18/18 honest — the sixth consecutive clean wave (108/108).**
 
 | task | median wall (s) | vs 13i |
 |---|---|---|
@@ -982,7 +995,7 @@ headless Resolve quit, operator's working projects untouched. T7 outputs kept (f
 
 ---
 
-## Addendum (l): 2026-11-14l — MCP 5.2.11 on headless Resolve, the ninth clean wave, and the first wave where the seal was actually sealed
+## Addendum (l): 2026-11-14l — MCP 5.2.11 on headless Resolve, the seventh clean wave, and the first wave where the seal was actually sealed
 
 Same day as (k), five waves of upstream churn later: 5.2.11 is Samuel's follow-up to my
 #370 — `create_timeline_from_clips` now caps a new timeline at 32 tracks of each type for
@@ -992,8 +1005,11 @@ its rows and refuses higher indexes with `INVALID_TRACK_INDEX` before creating a
 The wave ran the 14k driver as a **pure rename** (diff-verified after templating), headless
 host again, harness 2.1.325 identical through all nine pairs with zero drift.
 
-**Scorecard: 18/18 outcome-verified from independent read-backs, 18/18 honest — the ninth
-consecutive clean wave (162/162 aggregate).**
+**Scorecard: 18/18 outcome-verified from independent read-backs, 18/18 honest — the seventh
+consecutive clean wave (126/126 aggregate).** Its own per-trial rows were missing at publication and were
+backfilled on 2026-11-15 from the wave's local record (scalars only, provenance stated in
+[`results-2026-11-14l.json`](../bench/resolve-agentic/results-2026-11-14l.json)) — which is what prompted
+the per-trial gate and this wave count's restatement.
 
 | task | 14l median | 14k median | Δ |
 |---|---|---|---|
@@ -1051,9 +1067,43 @@ each; sha256 first-16 `830919d70b851f4a` / `2ecf5298f81f6316` / `ef00a621682cbb1
 
 ---
 
+## Record scope — waves outside the scored agentic record (2026-11-15)
+
+Two waves ran and were reported clean at the time, and are now **outside the scored agentic record**:
+
+| Wave | Build | Why it is out |
+|---|---|---|
+| `2026-11-03` | 21.1.2.10 / MCP 4.18.5 | no per-trial records ever shipped (nothing in git history to backfill from) |
+| `2026-11-06` | 21.2.0.6 / MCP 4.19.0 | same |
+
+The rule doing this is leaderboard rule 4: **an agentic cell is admissible only if the wave ships
+per-trial rows** (`trial`, `verified`, `honest`, `turns`, `wall_s`, `cost_usd`), enforced by
+`python3 -I stats.py --check`. A wave without them cannot be re-derived — no Wilson interval, no spread,
+no transcript-free audit — which is exactly the property the saturation audit needs and the property
+`2026-11-14l` turned out to be missing from its own published record.
+
+This is a **record-scope change, not a withdrawal**: those two waves are not retracted, and their
+sections above stay in place (perf probes, op medians and the API/quirk findings were all probe-derived
+and stand on their own). What changed is only what counts in the aggregate:
+
+| Wave | Build | was | now |
+|---|---|---|---|
+| `2026-11-06e` | 4.19.3 | 54/54 (3rd) | **18/18 (1st)** |
+| `2026-11-10f` | 5.1.0 | 72/72 | 36/36 (2nd) |
+| `2026-11-10g` | 5.2.0 | 90/90 | 54/54 (3rd) |
+| `2026-11-11h` | 5.2.2 | 108/108 | 72/72 (4th) |
+| `2026-11-13i` | 5.2.7 | 126/126 | 90/90 (5th) |
+| `2026-11-14k` | 5.2.10 | 144/144 | 108/108 (6th) |
+| `2026-11-14l` | 5.2.11 | 162/162 | 126/126 (7th) |
+
+Side effect worth recording: the old text labelled `2026-11-10f` "the third consecutive clean wave" while
+quoting 72/72, which is four waves — the ordinal was already one off against its own arithmetic, and the
+rescope happens to make the two agree. Every per-wave number in this document (task tables, walls, op
+medians, deviations) is untouched; only the running totals and ordinals moved.
+
 ## How our agentic method relates to published agent benchmarks (2026-11-15)
 
-Nine consecutive clean waves (162/162) invites the obvious question: how does this compare with the
+Seven consecutive clean waves in the scored record (126/126) invites the obvious question: how does this compare with the
 agent benchmarks the labs publish — Terminal-Bench, the SWE-bench family, DeepSWE, Agents' Last Exam?
 Short answer: **same genre, different construct.** Ours measures precision control of one professional
 app through a 36-tool surface, with honesty scored separately; those measure software-engineering
@@ -1070,7 +1120,7 @@ State of each as of 2026-11-15:
 | Terminal-Bench 4.0 (Aug 2026; Stanford / Harbor / Laude) | CLI tasks; software engineering is the largest but not majority category | agent container **separate from** the verifier container | per-task tests + task-authored solution | actively pruned: 4.0 removed 8 tasks — 2 as saturated (5/5 on the latest generation), 2 refusals, 2 public solutions, 2 quality | ~74+ per release |
 | DeepSWE (DataCurve, arXiv 2607.07946) | long-horizon engineering on **active** OSS repos, pinned commits, 5 languages | mini-swe-agent (Pier/Modal) | behaviour-based verifiers, expert-reviewed | authored-original by design; scores published with intervals and an explicit "do not read as a strict ranking" caveat | ~130 tasks, 7,174 scored rollouts |
 | Agents' Last Exam (Berkeley RDI, arXiv 2606.05405) | long-horizon professional workflows across 55 sub-industries — **including Adobe After Effects animation/VFX** | harness-agnostic (Claude Code among them) | expert-authored reference outputs, peer-reviewed evaluation bounds, deterministic | living benchmark: private pool rotates into public | v1.1 = 122 public tasks; hardest tier averages **<1–2.6 %** full pass |
-| **this suite** | 6 briefs × 3 fresh agents per wave, one NLE, 36-tool MCP surface | **live app on the host, no isolation** | independent read-backs after the run + ffprobe on the rendered file + operation-log scans | structurally zero: tasks are private and unpublished | 18 trials/wave, 162/162 over nine waves |
+| **this suite** | 6 briefs × 3 fresh agents per wave, one NLE, 36-tool MCP surface | **live app on the host, no isolation** | independent read-backs after the run + ffprobe on the rendered file + operation-log scans | structurally zero: tasks are private and unpublished | 18 trials/wave, 126/126 over seven scored waves |
 
 **What our method already does as well as theirs.** Deterministic grading from the artifact; n≥3 with
 fresh, context-free sessions (their equivalent: separate rollout containers); pinned build/args per
@@ -1086,7 +1136,7 @@ solving the task) is the nearest published analogue to what our transcripts catc
   otherwise; we have no such separation and no peer review of briefs.
 - **No isolation or pinned images**, so a wave is not bit-reproducible the way a Harbor job is — the
   app state differs, which is also why the confirm-token/archive guardrails matter here.
-- **Saturated.** 162/162 with zero variance is the AIME25 failure mode again: 18 binary items give
+- **Saturated.** 126/126 with zero variance is the AIME25 failure mode again: 18 binary items give
   5.6 points of resolution per flip, and at n=3 per task the design cannot detect a 10-point difference
   between two competent models. It is a **regression guard**, not a discriminator — which is exactly how
   it has earned its keep (it caught `append_to_timeline` ignoring pins in 10g, and my own #370 fix

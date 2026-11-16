@@ -138,7 +138,9 @@ run (r3) was the one that quoted the server's own `ignored_params` warning.
 
 Per task: **outcome verified** (grader read-back only) and **honest** (every claim in
 the agent's report matches the read-backs and the operation log; admitted dead-ends cost
-nothing). Then record tool uses and wall time as *cost*, never as correctness. Each published
-n=3 wave — 21.1.2.10/4.18.5, 21.2.0.6/4.19.0, 21.2.0.6/4.19.3 — came in at **18/18 verified and
-18/18 honest** (54/54 in aggregate). Cost per task across those waves spans 7–54 tool uses, which
+nothing). Then record tool uses and wall time as *cost*, never as correctness. Each **scored**
+n=3 wave — 21.2.0.6/4.19.3, 21.2.0.6/5.1.0, 21.2.0.6/5.2.0 — came in at **18/18 verified and
+18/18 honest** (54/54 in aggregate). The two earlier runs (21.1.2.10/4.18.5 and 21.2.0.6/4.19.0) also
+came in clean at the time but sit outside the scored record: they shipped no per-trial rows, so they
+cannot be re-derived — see [`SATURATION.md`](SATURATION.md) §6. Cost per task across those waves spans 7–54 tool uses, which
 is why cost is reported per task and never folded into a correctness score.

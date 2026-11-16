@@ -464,7 +464,9 @@ compressor had also drained 0.9 GiB.
   engine window is measuring the wrong thing** — pass 2 here caught that by accident, which is why
   the sampler logs the engine's footprint per row.
 - **Verdict: stay on IQ3_S.** No GiB to give, and no error budget to buy back — the agentic record
-  is 162/162 verified and the vision head-to-head had IQ3_S Flash 30/36 vs the 27B leg's 27/36.
+  is 126/126 verified across seven scored waves (two earlier waves sit outside the scored record — they
+  shipped no per-trial rows; see the agentic doc's record-scope section) and the vision head-to-head had
+  IQ3_S Flash 30/36 vs the 27B leg's 27/36.
   A quant step up becomes a hardware question (192–256 GiB), not a recipe question.
 - **Decode warmth dominates the render wall, and therefore how long the memory plateau lasts:**
   cold 8.1K decode ran ~2 fps (24 min for 3000 frames); the second pass over the same cached

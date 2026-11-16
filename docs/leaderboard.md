@@ -15,6 +15,11 @@ Version-to-version standings for the local AI/editing stack. Machine-readable so
 3. **Read-backs, not claims.** A row is admissible only if every value came from an
    independent probe — ffprobe on the output file, timeline item geometry, the server's
    operation log. Agent self-reports never enter a cell.
+4. **An agentic cell is admissible only if the wave ships per-trial records** (one row per
+   trial: `trial`, `verified`, `honest`, `turns`, `wall_s`, `cost_usd`). A wave that reports only
+   `18/18` as prose cannot be re-derived, intervalled or audited later, so it does not enter the
+   aggregate. Enforced by `python3 -I stats.py --check`. Two early waves (`2026-11-03`,
+   `2026-11-06`) were removed from the agentic record on 2026-11-15 under this rule — see footnote ⁸.
 
 ## Resolve MCP — class A media, reference host
 
@@ -23,8 +28,8 @@ macOS 27.2, render output and scratch on external volumes.
 
 | Date | Resolve | MCP | cold render | warm median | warm fps | prepare | verify | set_current | probe | agentic outcomes | honest |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-11-03 | 21.1.2.10 | 4.18.5 | 3436 ms | 1414 ms | ~85 | 243 | 61 | 127 | 7 | **18/18** | 18/18 |
-| 2026-11-06 | 21.2.0.6 | 4.19.0 | 3090 ms | 1296 ms | 93.4 | 126 | 39 | 98 | 11 | **18/18** | 18/18 |
+| 2026-11-03 | 21.1.2.10 | 4.18.5 | 3436 ms | 1414 ms | ~85 | 243 | 61 | 127 | 7 | n/a⁸ | n/a⁸ |
+| 2026-11-06 | 21.2.0.6 | 4.19.0 | 3090 ms | 1296 ms | 93.4 | 126 | 39 | 98 | 11 | n/a⁸ | n/a⁸ |
 | 2026-11-06b | 21.2.0.6 | 4.19.2 | 1668 ms¹ | **1196 ms** | 101 | 162 | 50 | 97 | 11 | n/a² | n/a |
 | **2026-11-06e** | 21.2.0.6 | **4.19.3** | 1670 ms | **1191 ms** | **101.6** | 174 | 41 | 109.5 | 18³ | **18/18** | 18/18 |
 | **2026-11-10f** | 21.2.0.6 | **5.1.0** | 3116 ms¹ | **1198 ms** | 101.0 | 183 | 47.5 | 112 | 20³ | **18/18** | 18/18 |
@@ -85,11 +90,11 @@ surface moved (`append_to_timeline` now lives on `media_pool`) and the wave coll
 notes in [the results file](../bench/resolve-agentic/results-2026-11-10f.json) — three distinct
 `record_frame` semantics, the `FormatWidth/Height` vs `ResolutionWidth/Height` render-key trap, a
 gate-broken `render.get_settings`, and a now-loud `set_property("Linked")` refusal. Agentic is the third
-consecutive clean 18/18 wave (four waves, 72/72 verified + honest aggregate).
+consecutive clean 18/18 wave (two waves in the scored record, 36/36 verified + honest aggregate).
 
 **5.2.0 row:** warm 1296 ms sits at the 4.19.0 mark, inside the host-state spread; op medians flat except the
-probe cell, which footnote ⁴ explains. The agentic wave is the **fifth consecutive 18/18** verified + honest
-(90/90 aggregate) — and the most interesting yet for tenancy safety, because it *caught a hole in our own
+probe cell, which footnote ⁴ explains. The agentic wave is the **third consecutive 18/18** verified + honest
+in the scored record (54/54 aggregate) — and the most interesting yet for tenancy safety, because it *caught a hole in our own
 protocol*: `append_to_timeline` accepts no timeline pin and silently ignores an extra `timeline_id`, so under
 two-agent waves it follows whatever timeline is **current**. In round 3 the two T3/T4 agents each planted real
 items on the other's timeline; both detected the cross-writes (one via the server's own drift notice), reversed
@@ -136,7 +141,7 @@ geometry in one host state (addendum (j)). The harness
 also moved (Claude Code 2.1.322 in 11h; 2.1.323→2.1.325 flipped mid-13i between pairs 4 and 5) — see the
 record's deviations.
 
-**2026-11-13i row:** the **seventh consecutive clean 18/18** (126/126 aggregate), and the split verdict is the
+**2026-11-13i row:** the **fifth consecutive clean 18/18** (90/90 aggregate), and the split verdict is the
 point: with tenancy removed, the placeholder-free tasks ran faster than 11h (T3 walls −27…−48 %,
 T4 −25…−41 %, T2 r1 −42 %), while all three T7 runs went 1.5–2.5× **slower** — the briefs' published
 (caveat after the fact: the 11h→13i deltas stack **three** changes — MCP 5.2.2→5.2.7, harness
@@ -185,7 +190,17 @@ footnote ⁴: same build, same timeline, 12× apart purely by context. Harness 2
 pairs, zero drift. The short-lived 5.2.8 build is deliberately absent from the record (<24 h
 lifetime; its verification artifacts stay in local scratch).
 
-**2026-11-14k row:** the **eighth consecutive clean 18/18** (144/144 aggregate), total wall −7.6 %
+⁸ **`2026-11-03` and `2026-11-06` are outside the agentic record** (scope change dated 2026-11-15). Both
+waves really ran and both came in 18/18 verified + honest at the time, but neither ever shipped per-trial
+records — no `trials` array existed in git history for them, so they cannot be re-derived, intervalled or
+re-audited, which rule 4 requires. Their render and op-median columns stand (those were always
+probe-derived); only the agentic cells are vacated, and every aggregate downstream shifts down by two
+waves: the scored ladder is now `2026-11-06e, 10f, 10g, 11h, 13i, 14k, 14l` = **seven waves, 126/126**
+where it previously read nine waves / 162/162. Nothing was deleted from the results document: the two
+wave sections remain with their perf and API-quirk findings, headed by a scope note. This is a *record
+scope* change, not a withdrawal — those waves were not retracted for being wrong.
+
+**2026-11-14k row:** the **sixth consecutive clean 18/18** (108/108 aggregate), total wall −7.6 %
 vs 13i on the same harness build, and the flavor of the wave is *upstream fixes doing their job in
 the trials*: the #370 `media_type` validation refused a T3 agent's malformed row mid-task (clean
 refusal, corrected, disclosed), and three agents cloned the fixture with `timeline.duplicate` — a
@@ -202,7 +217,7 @@ belongs in the record: two T7 agents' `Bash` attempts were refused outright by t
 session-disable rule. See [the results file](../bench/resolve-agentic/results-2026-11-14.json) and
 [addendum (k)](resolve-agentic-benchmark-results.md).
 
-**2026-11-14l row:** the **ninth consecutive clean 18/18** (162/162 aggregate), on 5.2.11 — the
+**2026-11-14l row:** the **seventh consecutive clean 18/18** (126/126 aggregate), on 5.2.11 — the
 build that closes my own #370 by capping `create_timeline_from_clips` at 32 tracks per type. That
 cap is **invisible to the agentic outcomes** (no trial passes a track index above 3), so the wave
 measures the same task set on a quieter instance rather than a behaviour change: warm 1207 ms with
@@ -368,15 +383,15 @@ view them rendered through Pages (links), or open the files after a clone. Newes
 
 | Report | What's in it |
 |---|---|
-| [**Clean-window suites 2026-11-13**](https://willturner-maker.github.io/benchmarks/reports/2026-11-13-clean-window.html) (`reports/2026-11-13-clean-window.html`) | All three live suites re-run from standalone drivers with the operator session idle (zero engine tenancy): agentic wave `13i` (18/18, seventh clean wave, single-tenant warm render 1192 ms best, tenancy-control result incl. the T7 placeholder lesson), Splash 1.6.1 clean rerun (w1 209.5 best, plateau-scatter-vs-instance-state finding, three-wave ladder chart, KV 0 suspensions at 4.66×), visual-venv run3 (bit-identical third time). The 2026-11-12 wave has no scorecard of its own — its rows and notes are in the tables and doc addenda above |
-| [**Benchmark reruns, all four suites**](https://willturner-maker.github.io/benchmarks/reports/2026-11-11-reruns.html) (`reports/2026-11-11-reruns.html`) | The 2026-11-11 day: MCP 5.2.2 agentic wave h (18/18, sixth clean wave, walls −23…−38 %), Splash 1.6.1 engine rerun (+39 % plateau, peak moves to width 12, KV secondary signals shift), agentic suite 12/12, OpenCV same-build rerun (bit-identical, ×1.11 band) — plus the ladder comparison chart and every review-audit correction |
+| [**Clean-window suites 2026-11-13**](https://willturner-maker.github.io/benchmarks/reports/2026-11-13-clean-window.html) (`reports/2026-11-13-clean-window.html`) | All three live suites re-run from standalone drivers with the operator session idle (zero engine tenancy): agentic wave `13i` (18/18, fifth clean wave of the scored ladder, single-tenant warm render 1192 ms best, tenancy-control result incl. the T7 placeholder lesson), Splash 1.6.1 clean rerun (w1 209.5 best, plateau-scatter-vs-instance-state finding, three-wave ladder chart, KV 0 suspensions at 4.66×), visual-venv run3 (bit-identical third time). The 2026-11-12 wave has no scorecard of its own — its rows and notes are in the tables and doc addenda above |
+| [**Benchmark reruns, all four suites**](https://willturner-maker.github.io/benchmarks/reports/2026-11-11-reruns.html) (`reports/2026-11-11-reruns.html`) | The 2026-11-11 day: MCP 5.2.2 agentic wave h (18/18, fourth clean wave of the scored ladder, walls −23…−38 %), Splash 1.6.1 engine rerun (+39 % plateau, peak moves to width 12, KV secondary signals shift), agentic suite 12/12, OpenCV same-build rerun (bit-identical, ×1.11 band) — plus the ladder comparison chart and every review-audit correction |
 | [Resolve MCP 21.2.0.6 · MCP 5.2.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-10g-resolve-21-2-mcp-520.html) (`reports/2026-11-10g-resolve-21-2-mcp-520.html`) | Fifth straight 18/18; the append-pinning tenancy catch (agents' cross-writes caught, reversed, disclosed), ripple's plan-only default, probe alternation cost, upstream #207 live |
 | [Splash engine 1.6.0 rerun](https://willturner-maker.github.io/benchmarks/reports/2026-11-10s-splash-160-rerun.html) (`reports/2026-11-10s-splash-160-rerun.html`) | Same-build re-measure: shape-by-shape ladder diff (peak 4, dip 0.87×, ~2 % spread band), quieter KV memory path, agentic 12/12; now carries the concurrency-scaling bar ladder |
 | [Resolve MCP 21.2.0.6 · MCP 5.1.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-10f-resolve-21-2-mcp-510.html) (`reports/2026-11-10f-resolve-21-2-mcp-510.html`) | First 5.1.0 pass: 18/18, the `record_frame` semantics trio, append moved to `media_pool`, other v5 deltas |
 | [Resolve MCP 21.2.0.6 · MCP 4.19.3](https://willturner-maker.github.io/benchmarks/reports/2026-11-06e-resolve-21-2-mcp-4193.html) (`reports/2026-11-06e-resolve-21-2-mcp-4193.html`) | The replacement pass after two withdrawals: single-tenant probe first, tenancy tax measured, method-honesty section |
 | [Splash engine 1.6.0 baseline](https://willturner-maker.github.io/benchmarks/reports/2026-11-06-splash-engine.html) (`reports/2026-11-06-splash-engine.html`) | Engine probe, the width-ladder plateau and its concurrency-scaling figure, KV-pressure chase for a first suspension that never came |
-| [Resolve MCP 21.2.0.6 · MCP 4.19.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-06-resolve-21-2.html) (`reports/2026-11-06-resolve-21-2.html`) | The 21.2 debut: render probes, op medians, n=3 agentic |
-| [Resolve MCP 21.1.2.10 · MCP 4.18.5](https://willturner-maker.github.io/benchmarks/reports/2026-11-03-resolve-21-1-2.html) (`reports/2026-11-03-resolve-21-1-2.html`) | The baseline: cold/warm render probes, agentic n=3, two-tier concurrency sweep |
+| [Resolve MCP 21.2.0.6 · MCP 4.19.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-06-resolve-21-2.html) (`reports/2026-11-06-resolve-21-2.html`) | The 21.2 debut: render probes, op medians, n=3 agentic (outside the scored agentic record — no per-trial records, see footnote ⁸) |
+| [Resolve MCP 21.1.2.10 · MCP 4.18.5](https://willturner-maker.github.io/benchmarks/reports/2026-11-03-resolve-21-1-2.html) (`reports/2026-11-03-resolve-21-1-2.html`) | The baseline: cold/warm render probes, agentic n=3 (outside the scored agentic record — no per-trial records, see footnote ⁸), two-tier concurrency sweep |
 
 ## Community runs — your numbers
 

@@ -7,13 +7,11 @@ axis any more*, and the reason is measurable rather than a feeling.
 
 ## 1. The pass axis is saturated — in numbers
 
-Published record: **nine consecutive clean waves, 162/162 outcome-verified, 162/162 honest**
-(`2026-11-06e` through `2026-11-14l`). `stats.py` re-derives **126 of those 162** from the tracked
-`results-*.json` files — seven waves × 18. The other two waves are recorded in the results doc as
-tables only; no per-trial file was ever committed for them, which is the gap the new
-`stats.py --check` gate closes (the newest wave, `2026-11-14l`, shipped only a scorecard string and had
-to be backfilled from the untracked wave dir — see `RUNBOOK.md` §6). Aggregate over what is
-re-derivable today: **126/126, Wilson 95% [97.0, 100.0]**.
+Published record as scored: **seven consecutive clean waves, 126/126 outcome-verified, 126/126 honest**
+(`2026-11-06e` through `2026-11-14l`), every trial of it re-derivable from tracked per-trial records —
+which is precisely what disqualifies the two earlier waves from the aggregate (§6). **126/126, Wilson 95%
+[97.0, 100.0]**. Before 2026-11-15 this read "nine waves, 162/162"; the two extra waves never shipped
+per-trial rows, so they were counts that nothing could check.
 
 | n (one clean sweep) | Wilson 95% interval for a 100% sweep | width |
 |---|---|---|
@@ -147,7 +145,36 @@ Two things their criterion has that ours doesn't, and one where we're better off
   solved; we can re-arm a trap directly and get a verdict in minutes without dispatching an agent. Use
   it before spending a wave.
 
-## 6. Ground truth is per-fixture-build — and one file was corrupt
+## 6. Record scope — the two waves removed from the aggregate (2026-11-15)
+
+`2026-11-03` (21.1.2.10 / MCP 4.18.5) and `2026-11-06` (21.2.0.6 / MCP 4.19.0) ran, came in clean, and are
+**no longer counted**. They shipped no per-trial rows and nothing in git history can backfill them, so
+under the per-trial rule they cannot be re-derived, intervalled, or audited. The ladder is now:
+
+| Wave | Build | old running total | new |
+|---|---|---|---|
+| `2026-11-06e` | 4.19.3 | 54/54 | **18/18 (1st scored wave)** |
+| `2026-11-10f` | 5.1.0 | 72/72 | 36/36 (2nd) |
+| `2026-11-10g` | 5.2.0 | 90/90 | 54/54 (3rd) |
+| `2026-11-11h` | 5.2.2 | 108/108 | 72/72 (4th) |
+| `2026-11-13i` | 5.2.7 | 126/126 | 90/90 (5th) |
+| `2026-11-14k` | 5.2.10 | 144/144 | 108/108 (6th) |
+| `2026-11-14l` | 5.2.11 | 162/162 | 126/126 (7th) |
+
+Three things about *how* this was done, because a record edit can hide evidence if it isn't done carefully:
+
+- **Nothing was deleted.** Both wave sections stay in the results doc, each headed by a scope note, and
+  the leaderboard keeps both rows with only the agentic/honest cells vacated (`n/a⁸`). Their perf columns
+  and API-quirk findings were always probe-derived and still stand; `2026-11-03` is also the perf baseline
+  other docs diff against. Deleting the rows would have destroyed measurements that were never in question.
+- **It is a scope change, not a withdrawal.** Withdrawn waves in this record (4.19.3's `06c`/`06d`) are
+  labelled withdrawn because they were retracted for being *unmeasurable*. These two are not retracted —
+  they are outside what we can now check.
+- **The rescope fixed a bug it didn't look for.** The old text called `2026-11-10f` "the third consecutive
+  clean wave" while quoting 72/72, which is four waves: the ordinal was already one off against its own
+  arithmetic. Recomputing every running total made that visible.
+
+## 7. Ground truth is per-fixture-build — and one file was corrupt
 
 The sealing rule (`sha256 ground_truth.json`, committed before dispatch) immediately paid for itself:
 the on-disk `ground_truth.json` from the 2026-11-13 fixture **did not parse** — two missing braces, one
