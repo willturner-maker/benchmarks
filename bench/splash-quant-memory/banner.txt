@@ -1,0 +1,13 @@
+# engine startup printout (splash.err.log) + launch args, 2026-11-15 run, Splash 1.6.1
+Sat Nov 14 23:51:43 2026     /opt/homebrew/Cellar/splash/1.6.1/libexec/python/bin/python3 -u -P -m server.server ~/Library/Application Support/Splash/models/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S --model ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S --binary /opt/homebrew/Cellar/splash/1.6.1/libexec/engine/splash --port 8000 --serve-record ~/Library/Application Support/Splash/runtime/serve-8000.json --max-memory=60129542144 --max-cache-disk=274877906944 --persistent-cache --default-reasoning-effort=xhigh --thinking-token-budget=16384
+Sat Nov 14 23:51:45 2026     /opt/homebrew/Cellar/splash/1.6.1/libexec/engine/splash serve-native ~/Library/Application Support/Splash/models/.resolved/f073087d1dff7edaf96fe2f5ee568630feced771f7d81c0484351ebe0eabc260 auto 60129542144 274877906944 --persistent-cache on
+
+23:51:47 Weights loaded in 1.79 s.
+23:51:50 Weights loaded again in 2.46 s.
+23:51:50 Decode cycles verify the rows the verify budget chooses (--verify-rows auto, as ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S is a MoE target): greedy and seeded outputs can differ from run to run.
+23:51:50 SSD cache: up to 256.0 GiB of persistent files in ~/Library/Caches/Splash/prefix-cache/fec7ee277c92974804ebc627b031a836 beside 13.4 GiB of other caches there (its quota, while its volume has room beyond the 10.0 GiB it keeps free); KV pages of 416 KiB and states of 113 MiB, a state's write staging through 113 MiB of the memory plan; --max-cache-disk 0 turns it off.
+23:51:50 Table per_layer_token_embd.weight streams from its file: 27465 MiB stay on the SSD; row cache of 2097152 rows in 237 MiB, the most --ple-memory auto takes: the rows of every id a 128K-token prompt stages; 32 readers.
+23:51:50 Routed experts stream from their files: 23034 slots for 24576 experts (93%) in 46143 MiB, a store of 46874 MiB in 7 chunks, all that --expert-memory auto leaves it beside the floors and the KV kept resident; it gives none back, its floor, 46874 MiB, 100% of its slots, being all of it.
+23:51:50 Kernel policy for GPU family 10 with 64 cores.
+23:51:50 Long requests keep their KV on the SSD cache: 262144 tokens of context (bound: model; window 262144, resident 131065, spilled 262144, disk 262144); hot block cache 390 MiB (floor 390 MiB); history staging in 1 buffers; SSD room for active KV 256.0 GiB.
+23:51:50 Persistent cache ~/Library/Caches/Splash/prefix-cache/fec7ee277c92974804ebc627b031a836: took back 1082 restore points over 77574 KV blocks (154050 MiB); left 0 copies behind.

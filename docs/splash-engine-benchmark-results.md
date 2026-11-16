@@ -28,6 +28,7 @@ macOS 27.2.0. Engine args: working set 56 GiB, SSD cache cap 128 GiB, persistent
 - [Baseline headline](#baseline-headline-for-the-next-versions-diff)
 - [Cross-hardware comparison](#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13)
 - [Co-tenancy — Resolve Studio on the same 96 GiB](#co-tenancy--resolve-studio-on-the-same-96-gib-measured-2026-11-15-raw-benchresolve-ram-coexistence)
+- [Quant memory accounting](#quant-memory-accounting--what-bpw-actually-scopes-and-what-a-quant-costs-in-ram-measured-2026-11-15-raw-benchsplash-quant-memory)
 
 ## Layer 1 — engine probe (deterministic, run by the orchestrator, not the LLM)
 
@@ -395,7 +396,9 @@ RTX 5090: en.wiselychen.com Strata hands-on (IQ3_S 106.8 median) · r/LocalLLaMA
 "Qwen-3.8-Flash-Next on 1× RTX 5090" (TG 50 / PP 2300; MTP 45→90) · r/LocalLLM unsloth-GGUF 5090
 (30.7) and llm-bench.io vLLM (43.4) · QEngine 2×5090 (504) ·
 suhailmohebi.com/notes/qwen3-8-flash-next-hardware-requirements/ (download sizes).
-Local measurement for the model-size framing: the IQ3_S snapshot, 51 GB + 27 GB shards.
+Local measurement for the model-size framing: the IQ3_S snapshot, 51 + 27 **GiB** shards (51.05 GiB
+of transformer weights + 26.82 GiB n-gram lookup table = 77.87 GiB = 83.6 GB decimal — and see
+*Quant memory accounting* below for which of those two shards is actually resident).
 
 ## Co-tenancy — Resolve Studio on the same 96 GiB (measured 2026-11-15) (raw: `bench/resolve-ram-coexistence/`)
 
@@ -474,3 +477,120 @@ job that spent its span on a 1.6 M-frame empty gap (a `create_variant_from_range
 artifact — see the gotchas in NOTES.md), i.e. encode without decode, and is kept only because its
 peak matches the real-decode rows. Raw CSVs carry phase and engine-residency per row so any column
 here can be re-derived or discarded.
+
+## Quant memory accounting — what bpw actually scopes, and what a quant costs in RAM (measured 2026-11-15) (raw: `bench/splash-quant-memory/`)
+
+The ladder in the section above ranks quant builds by **total download**, which is the wrong axis for
+this checkpoint: it ships transformer weights and the n-gram lookup table as two shards, and **only the
+first is ever resident**. This section fixes the units, re-states the ladder on the resident axis, and
+asks the follow-on question — would more RAM buy throughput at all.
+
+### What bpw scopes here (and what it does not)
+
+The model card states the bit-width column *"is the average over the transformer weights, which is what
+the search controls"* — not bits per parameter of the download. Shard 2 is not transformer weights: it
+is the n-gram lookup table (`per_layer_token_embd.weight`), held at **IQ4_NL / fixed 4.5 bpw** and
+*"excluded from the search"*, which is why its size is identical in every row. And RCO *"assigns one
+quantization type per tensor"*, with *"95 % of the searchable weights … in the experts"*, which *"sit
+at a much lower bit-width than the dense path"* — so 3.5 bpw is a **budget average over an unequal
+allocation**, not "every weight coded in 3.5 bits".
+
+Card ladder (BF16 is the quality reference, not a purchasable option on this box):
+
+| variant | bpw | total GB | shard 1 weights GB | shard 2 table GB | AIME25 | GPQA-D | LCB v6 | task avg |
+|---|---|---|---|---|---|---|---|---|
+| BF16 base | 16.00 | 354 | — | — | 100.00 | 91.92 | 87.43 | 93.12 |
+| GSQ-RCO Q2_0 | 2.40 | 66.4 | 37.6 | 28.8 | 96.67 | 89.39 | 81.14 | 89.07 |
+| GSQ-RCO IQ2_XS | 2.50 | 68.0 | 39.2 | 28.8 | 96.67 | 87.37 | 83.43 | 89.16 |
+| GSQ-RCO IQ3_XXS | 3.00 | 75.8 | 47.0 | 28.8 | 100.00 | 91.41 | 86.29 | 92.57 |
+| **GSQ-RCO IQ3_S** (what runs here) | **3.50** | **83.6** | **54.8** | **28.8** | **100.00** | **92.93** | **86.86** | **93.26** |
+
+The three score columns, since they get quoted a lot: **AIME25** = all 30 problems of the 2025 American
+Invitational Mathematics Examination, integer answers 000–999, scored exact-match (olympiad-style multi-step
+math, no partial credit, so it is a pass/fail-heavy reasoning probe). **GPQA-Diamond** = 198 graduate-level
+four-option science questions (bio/chem/phys) written and validated by domain experts, selected so experts
+get them right and at most one in three non-experts does even with web access — the "Google-proof" idea;
+PhD experts themselves score ~65–70 %. **LCB v6** = LiveCodeBench release 6, 1,055 competitive-programming
+problems from LeetCode/AtCoder/Codeforces dated May 2023–Apr 2025, scored pass@1, whose whole design is
+contamination control by problem release date. Two properties matter for how we use these numbers, and both
+cut against taking them at face value: **AIME25 is saturated here** — 100.00 for the base model *and* for
+IQ3_S and IQ3_XXS, so that column carries no discriminating information at this quality level — and
+**the contamination protection is dated**: the newest v6 problem is from April 2025, so for a 2025/2026-era
+checkpoint the "fresh window" argument no longer holds. Treat these as a pre-screen for a quant decision,
+never as the decision.
+
+- **3.5 bpw is not "nearly 4-bit".** Levels go as 2^bits: 3.5 bits ≈ **11.3 levels** vs **16** at 4 bits —
+  41 % fewer, about 3 dB of quantization SNR. What *is* close to 4 bits is the byte average of the whole
+  download: 83.6 GB over 176,943,899,520 params = **3.78 bits/param**, pulled up by the 4.5-bpw table.
+- **The repo tops out at IQ3_S on purpose** — Q2_0 → IQ2_XS → IQ3_XXS → IQ3_S, no 4-bit build — because
+  IQ3_S already lands **above** the BF16 row (93.26 vs 93.12 task avg). There is no quality headroom above
+  it on these axes to buy with RAM.
+- Arithmetic cross-check against the local blobs: shard 1 54,817,524,224 B ÷ 3.5 bpw ⇒ 125.2 B transformer
+  params; shard 2 28,800,138,432 B ÷ 4.5 bpw ⇒ 51.2 B table entries; sum ≈ 176.4 B vs the 176,943,899,520
+  in the config. The card's numbers and the files on disk agree.
+
+### What a quant actually costs in RAM (the engine prints its own ledger)
+
+`banner.txt` — Splash's startup lines for this exact snapshot; read the banner rather than re-deriving
+these from file sizes:
+
+| allocation | size | resident |
+|---|---|---|
+| routed-expert store: **23,034 slots for 24,576 experts (93 %)** | **46,874 MiB** | yes — a floor that "neither grows nor gives memory back" |
+| non-expert transformer weights | ~4.5 GiB (residual) | yes |
+| draft model (DFlash2) | 1.12 GiB | yes |
+| KV hot block cache (131,065 tokens resident, 262,144 spilled) | 390 MiB | yes |
+| **PLE n-gram row cache: 2,097,152 rows** | **237 MiB** | yes |
+| recurrent-state write staging | 113 MiB | yes |
+| n-gram table, remainder of the 27,465 MiB | 26.6 GiB | **no — SSD** |
+| non-resident experts (1,542 of them, 2.035 MiB per slot) | ~3.06 GiB | **no — SSD** |
+
+The resident rows sum to **52.2 GiB**, which is the independently measured `footprint` of 52.15 GiB from
+the co-tenancy run (`footprint` prints it as `56 GB` decimal, with 55 GB sitting in the
+`IOAccelerator (graphics)` category — that is the Metal allocation, not a GPU side-channel). Nothing here
+is mmap'd: `vmmap --summary` on the engine shows **no MAPPED FILE section at all**, so the GGUFs are read
+positionally through held fds, not mapped into the address space.
+
+### The SSD traffic is experts, not the n-gram table
+
+`decode-probe.log`: one 900-token generation (59-token prompt, `reasoning_effort=low`, temp 0) moved
+**~1.28 GB/s** of device traffic averaged over the five decode seconds of `iostat`, against a near-zero
+idle floor — i.e. **~5.7 MB of device traffic per output token**. The n-gram table explains a fraction of
+a percent of it: 16 ids per token × ~118 B/row ≈ **1.9 KB/token**, i.e. 0.36 MB/s at 190 tok/s. The rest
+is routed-expert misses: the 7 % that don't fit the store cost **1,542 × 2.035 MiB = 3.06 GiB** of extra
+RAM to eliminate, and `--expert-memory auto` sizes itself off `--max-memory`, so raising the cap is what
+would grow it.
+
+**Would that buy throughput? No evidence that it would.** Repeat runs of the identical request:
+160.2 / 190.2 / 244.6 tok/s, and a different set an hour earlier 170.3 / 157.5 / 149.3 — a **149–245 tok/s
+spread band at fixed configuration**, so nothing under ~25 % is measurable at n=1 (the engine itself warns
+of run-to-run variance: `--verify-rows auto` on a MoE target means *"greedy and seeded outputs can differ
+from run to run"*), and those fetches go through **32 readers** overlapping the compute. So raising
+`--max-memory` to 58–60 GiB in order to raise `--ple-memory` is a bad trade twice over: the wrong structure
+(PLE ≈ 0.03 % of the traffic, and `auto` already caches *"the rows of every id a 128K-token prompt stages"*
+— the longest request that day was 92,813 input tokens), and RAM that would come out of the **file-backed
+cache already serving those same pages at memory speed** (dd: 4 GiB of the n-gram shard in 0.21 s =
+**20.6 GB/s**, which is the unified-memory page cache, not NVMe). Against the co-tenancy row — Resolve
+arriving into **0.16 GiB** of free space at 52.15 GiB resident — a 60 GiB cap is only safe on days Resolve
+stays off. `--ple-memory off` (load the whole table) would need 26.8 GiB resident: arithmetically out.
+
+### The ladder, re-stated on the resident axis
+
+Subtract the constant 26.82 GiB table from the totals quoted above: IQ3_S **51.05 GiB**, `UD-Q3_K_XL`
+**56.5 GiB** (⇒ ~3.9 implied bpw), `UD-IQ4_XS` **60.5 GiB** (⇒ ~4.15). The resident deltas (+5.4 / +9.4
+GiB) equal the download deltas because the table is identical across all three — the one thing the
+total-download comparison got right by construction. The co-tenancy verdict stands, now on the correct
+axis: **+9.4 GiB of resident weights has nowhere to go next to Resolve, and buys nothing on the card's own
+task average.**
+
+**Caveats:** single session, no engine restart — the `--expert-memory` question is *scoped*, not A/B'd
+(restarting ends the served session, so the A/B is left as a recipe: `MAX_MEMORY=60G` **plus** an explicit
+`--expert-memory 50G`, then confirm `24576 experts (100 %)` in the banner and re-probe at n≥5 against the
+149–245 band). `iostat` does not split reads from writes, so 1.28 GB/s is an upper bound on the streaming
+read cost, not a pure read figure. `vm_stat`'s "wired down" moved 6.6 → 63.0 GB between two samples with
+the engine's `footprint` unchanged — wired-vs-pageable state of the Metal buffers is not a stable metric
+without phase labels. The implied bpw for the third-party builds assumes they carry the same 26.82 GiB
+table; that was not verified against their files. Probe cost: ~3,600 output tokens on the live engine, and
+one exploratory sparse-read probe that mis-computed its seeks and pushed ~918 GB **read-only** through the
+page cache (disclosed in `NOTES.md`; it churned the file cache, which is part of why the dd number is so
+high).

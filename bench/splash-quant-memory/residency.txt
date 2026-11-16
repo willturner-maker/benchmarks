@@ -1,0 +1,94 @@
+# resident accounting, pid 72880 (engine), taken 2026-11-15 ~22:2x local
+## /usr/bin/footprint -p 72880
+======================================================================
+splash [72880]: 64-bit    Footprint: 56 GB (16384 bytes per page)
+======================================================================
+
+  Dirty      Clean  Reclaimable    Regions    Category
+    ---        ---          ---        ---    ---
+  55 GB        0 B          0 B       2346    IOAccelerator (graphics)
+ 569 MB        0 B          0 B         57    Malloc Large
+ 311 MB        0 B          0 B        119    Malloc Small
+ 249 MB        0 B          0 B         19    Owned physical footprint (unmapped) (graphics)
+5192 KB        0 B          0 B          1    page table
+3696 KB        0 B          0 B         15    Malloc Metadata
+ 720 KB        0 B          0 B         85    Stack
+ 446 KB        0 B          0 B        338    __DATA_DIRTY
+ 400 KB        0 B          0 B          9    IOAccelerator
+ 256 KB        0 B          0 B          1    Malloc Tiny
+ 218 KB        0 B          0 B        302    __DATA
+ 208 KB        0 B          0 B         15    Untagged
+ 148 KB        0 B          0 B       1129    unused dyld shared cache area
+ 112 KB        0 B          0 B          4    Malloc Nano
+  96 KB        0 B          0 B          1    Deferred Reclaim
+  80 KB        0 B          0 B          5    IOKit
+  48 KB        0 B          0 B          4    __TPRO_CONST
+  36 KB        0 B          0 B          1    __OBJC_RW
+  32 KB        0 B          0 B          1    Activity Tracing
+  24 KB        0 B          0 B        140    __AUTH
+  24 KB      48 KB          0 B        331    __DATA_CONST
+  16 KB        0 B          0 B          1    OS Alloc Once
+    0 B    2496 KB          0 B        397    __TEXT
+    0 B     640 KB          0 B          8    mapped file
+    0 B     144 KB          0 B          2    __LINKEDIT
+    0 B        0 B          0 B          1    __CTF
+    0 B        0 B          0 B        333    __AUTH_CONST
+    0 B        0 B          0 B          1    __FONT_DATA
+    0 B        0 B          0 B          1    IOSurface
+    0 B        0 B          0 B          1    __OBJC_RO
+    ---        ---          ---        ---    ---
+  56 GB    3328 KB          0 B       5670    TOTAL
+
+Auxiliary data:
+    phys_footprint: 56 GB
+    phys_footprint_peak: 56 GB
+
+
+## open GGUF files held by the engine (fd, size bytes, fd offset)
+
+## vm_stat before probe burst
+Mach Virtual Memory Statistics: (page size of 16384 bytes)
+Pages free:                                    65910.
+Pages active:                                1082241.
+Pages inactive:                              1107076.
+Pages speculative:                              1059.
+Pages throttled:                                   0.
+Pages wired down:                            3866098.
+Pages purgeable:                                6276.
+"Translation faults":                      323109646.
+Pages copy-on-write:                         9481042.
+Pages zero filled:                         482921139.
+Pages reactivated:                           2582735.
+Pages purged:                                2085193.
+File-backed pages:                           1567601.
+Anonymous pages:                              622775.
+Pages stored in compressor:                   275596.
+Pages occupied by compressor:                 112542.
+Decompressions:                               477317.
+Compressions:                                1297364.
+Pageins:                                    59185313.
+Pageouts:                                       1143.
+Swapins:                                         200.
+Swapouts:                                        448.
+Pages tagged:                                 145075.
+Pages tagged resident:                        105749.
+Pages tagged compressed:                       39326.
+Pages tag-storage:                            196608.
+Pages tag-storage holding tags:                 5385.
+Pages tag-storage free:                         8995.
+Pages tag-storage non-tag pageable:           180945.
+Pages tag-storage non-tag wired:                  41.
+Bytes of compressed tags:                    5385920.
+Tagged compressions:                           88748.
+Tagged decompressions:                         40281.
+
+## engine cache dir contents (SSD side, KV/state only)
+total 437785216
+drwx------@ 8 <user>  staff           256 Nov 14 23:52 .
+drwx------@ 3 <user>  staff            96 Nov 14 23:57 ..
+-rw-------@ 1 <user>  staff      80669440 Nov 15 22:38 kv.records
+-rw-------@ 1 <user>  staff   59656503296 Nov 15 22:38 kv.slots
+-rw-------@ 1 <user>  staff             0 Nov 14 23:51 lock
+-rw-------@ 1 <user>  staff             0 Nov 14 23:51 serving
+-rw-------@ 1 <user>  staff         97984 Nov 15 22:38 state.records
+-rw-------@ 1 <user>  staff  174208057344 Nov 15 22:38 state.slots

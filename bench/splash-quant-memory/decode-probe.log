@@ -1,0 +1,64 @@
+# decode probe: short prompt, 900 tokens out, reasoning_effort=low, temperature 0
+## iostat -d -w 1 -c 14 (request fired at ~t=3s)
+              disk0               disk6               disk8 
+    KB/t  tps  MB/s     KB/t  tps  MB/s     KB/t  tps  MB/s 
+   74.36 1537 111.63    48.28    2  0.11    53.34    1  0.05 
+    4.00    2  0.01     0.00    0  0.00     0.00    0  0.00 
+   33.36 5229 170.38     0.00    0  0.00     0.00    0  0.00 
+   25.18  131  3.23     0.00    0  0.00     0.00    0  0.00 
+  361.88 2721 961.56     0.00    0  0.00     0.00    0  0.00 
+  290.88 1865 529.67     0.00    0  0.00     0.00    0  0.00 
+  351.13 3605 1236.29     0.00    0  0.00     0.00    0  0.00 
+  352.65 4751 1636.17     0.00    0  0.00     0.00    0  0.00 
+in-window request: 900 tok in 4.86s = 185.3 tok/s  usage={'prompt_tokens': 59, 'completion_tokens': 900, 'total_tokens': 959, 'prompt_tokens_details': {'cached_tokens': 32}, 'completion_tokens_details': {'reasoning_tokens': 900}}
+  350.65 5970 2044.36     0.00    0  0.00     0.00    0  0.00 
+    4.00    2  0.01     0.00    0  0.00     0.00    0  0.00 
+  823.95  163 131.10     0.00    0  0.00     0.00    0  0.00 
+    4.00    1  0.00     0.00    0  0.00     0.00    0  0.00 
+    4.00    1  0.00     0.00    0  0.00     0.00    0  0.00 
+    4.00    1  0.00     0.00    0  0.00     0.00    0  0.00 
+
+## repeat-request stability (same prompt, 3 runs, 2 s apart)
+run 1: 900 tok in 5.62s = 160.2 tok/s
+run 2: 900 tok in 4.73s = 190.2 tok/s
+run 3: 900 tok in 3.68s = 244.6 tok/s
+
+## sequential read of the n-gram shard, 4 GiB from a 12 GiB offset
+NOTE: served from the unified-memory file cache (13.9 GB/s) — that IS the finding; no sudo purge was available to force a cold device read.
+4294967296 bytes transferred in 0.208460 secs (20603316205 bytes/sec)
+
+## vm_stat after
+Mach Virtual Memory Statistics: (page size of 16384 bytes)
+Pages free:                                    63643.
+Pages active:                                1102797.
+Pages inactive:                              1110175.
+Pages speculative:                                51.
+Pages throttled:                                   0.
+Pages wired down:                            3845771.
+Pages purgeable:                               19505.
+"Translation faults":                      323202465.
+Pages copy-on-write:                         9483571.
+Pages zero filled:                         483046254.
+Pages reactivated:                           2583234.
+Pages purged:                                2085837.
+File-backed pages:                           1577076.
+Anonymous pages:                              635947.
+Pages stored in compressor:                   275441.
+Pages occupied by compressor:                 112489.
+Decompressions:                               477522.
+Compressions:                                1297417.
+Pageins:                                    59198191.
+Pageouts:                                       1143.
+Swapins:                                         200.
+Swapouts:                                        448.
+Pages tagged:                                 144955.
+Pages tagged resident:                        105716.
+Pages tagged compressed:                       39239.
+Pages tag-storage:                            196608.
+Pages tag-storage holding tags:                 5384.
+Pages tag-storage free:                         8987.
+Pages tag-storage non-tag pageable:           180953.
+Pages tag-storage non-tag wired:                  41.
+Bytes of compressed tags:                    5370688.
+Tagged compressions:                           88748.
+Tagged decompressions:                         40368.
