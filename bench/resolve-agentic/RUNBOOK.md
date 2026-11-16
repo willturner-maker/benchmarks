@@ -56,6 +56,13 @@ agent hits them, but the operator hits them first here.
   carries real media paths), so the public record carries the **hash**, and a reader can then check
   that two waves graded the same expectations. Re-hash after any legitimate fixture change and say
   in the record what changed.
+  **`json.load` the file as part of sealing, and check its tree, not just its bytes.** The 2026-11-13
+  ground-truth file on disk had two missing braces; it parsed only after repair, and one of the
+  mis-placed closers had silently re-parented `markers` and `_meta` inside `tracks`. A grader reading
+  `g["markers"]` would have hit a `KeyError` (fail closed — the good direction) or graded the wrong tree.
+  And a ground-truth file is scoped to **one fixture build**: teardown deletes the scratch project, so
+  every wave re-captures and re-hashes. Reusing an older file grades against timelines that no longer
+  exist.
 - Optional two-agent waves (as published) to also measure current-timeline flapping and
   contention recovery; then expect render ms to inflate (a 7285 ms T7 render ran alongside
   another agent's Fusion work — a contention datapoint, not throughput). Three trials on the
@@ -190,6 +197,18 @@ start; record it in the results JSON `build` block as `claude_code`), agent mode
 n (trials per task), then per-task tool uses / wall / outcome-verified / honest, and any
 deviation from this runbook.
 Class B render ms go in their own table — never beside published class A numbers.
+
+**Report the scoring set and the smoke set separately — no blended `18/18`.** Since 2026-11-15 the six
+tasks are split into tiers by whether their trap is still live
+([`SATURATION.md`](SATURATION.md) §3, archive in [`tasks-retired.md`](tasks-retired.md)): SCORING
+(T3, T7, T8), SMOKE (T1 canary, T2), RETIRED (T4 as briefed). A wave header reads
+`hard set 9/9, smoke set 9/9` — blending them is what made nine clean waves look like nine findings.
+The headroom rule: a task counts as SCORING only if its trap was re-armed successfully within the last
+three MCP builds or it has failed in the last ten waves; otherwise demote it, with the probe evidence in
+`tasks-retired.md`. Trap re-arming is cheap (about four minutes headless) and it is the only defence
+against the real saturation source: **every server fix that turns a silent success into a loud refusal
+deletes the puzzle a task was built on** — T3's `media_type: 0` audio hole and T2's `AddMarker`
+duration both died that way between 4.19.3 and 5.2.11.
 
 Then report the **statistics, not just the counts**: `python3 -I stats.py --include-local`
 re-derives every wave from its per-trial records (whitelisted scalar keys only — it never prints
