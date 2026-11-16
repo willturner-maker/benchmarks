@@ -27,6 +27,9 @@ benchmark in the perf baseline (same day, same machine, MCP v4.18.5, Resolve Stu
 - [Addendum (h) — 2026-11-11h MCP 5.2.2](#addendum-h-2026-11-11h--mcp-522-sixth-clean-wave)
 - [Addendum (i) — 2026-11-13i clean-window driver + build corrections](#addendum-i-2026-11-13i--clean-window-driver-tenancy-control-and-two-build-corrections)
 - [Addendum (j) — 2026-11-13 probe-flag closure sweep](#addendum-j-2026-11-13--probe-flag-closure-three-builds-side-by-side)
+- [Addendum (k) — 2026-11-14k MCP 5.2.10, headless host](#addendum-k-2026-11-14k--mcp-5210-on-headless-resolve-the-eighth-clean-wave-and-my-own-upstream-fixes-catching-trials-in-the-act)
+- [Addendum (l) — 2026-11-14l MCP 5.2.11, ninth clean wave](#addendum-l-2026-11-14l--mcp-5211-on-headless-resolve-the-ninth-clean-wave-and-the-first-wave-where-the-seal-was-actually-sealed)
+- [How our agentic method relates to published agent benchmarks](#how-our-agentic-method-relates-to-published-agent-benchmarks-2026-11-15)
 
 ## Scorecard
 
@@ -1045,3 +1048,94 @@ empty, headless quit, operator projects untouched. T7 outputs kept (ffprobe 121 
 each; sha256 first-16 `830919d70b851f4a` / `2ecf5298f81f6316` / `ef00a621682cbb10`;
 15,413,467 / 15,413,455 / 15,413,471 bytes). Full record:
 [results-2026-11-14l.json](../bench/resolve-agentic/results-2026-11-14l.json).
+
+---
+
+## How our agentic method relates to published agent benchmarks (2026-11-15)
+
+Nine consecutive clean waves (162/162) invites the obvious question: how does this compare with the
+agent benchmarks the labs publish — Terminal-Bench, the SWE-bench family, DeepSWE, Agents' Last Exam?
+Short answer: **same genre, different construct.** Ours measures precision control of one professional
+app through a 36-tool surface, with honesty scored separately; those measure software-engineering
+throughput (or, for ALE/TB, broad tool/CLI work). The one methodological thing we share with all four —
+and the thing that makes "18/18 verified" a claim of the same type as a pass@1 — is **deterministic
+outcome grading, no LLM judge.**
+
+State of each as of 2026-11-15:
+
+| benchmark | unit of work | environment | grader | contamination / validity status | scale |
+|---|---|---|---|---|---|
+| SWE-bench Verified (Aug 2024) | issue → patch in a real Python repo | Docker | fail-to-pass + pass-to-pass tests | **retired**: OpenAI stopped reporting it in Feb 2026 (their audit found ≥59.4 % of reviewed hard tasks had flawed tests; models reproduced gold patches from memory); Epoch rated it "Flawed" (≥16.4 % of the 500 broken); Berkeley CRDI scored **100 % without fixing a single bug** by planting a test-config file | 500 |
+| SWE-bench Pro (Scale AI) | harder multi-file enterprise patches | containerised | same, stricter | its own leaks: public set cut 731 → 642 in Oct 2026 after audits found leaked answers and faulty tests | 1,865 (642 public) |
+| Terminal-Bench 4.0 (Aug 2026; Stanford / Harbor / Laude) | CLI tasks; software engineering is the largest but not majority category | agent container **separate from** the verifier container | per-task tests + task-authored solution | actively pruned: 4.0 removed 8 tasks — 2 as saturated (5/5 on the latest generation), 2 refusals, 2 public solutions, 2 quality | ~74+ per release |
+| DeepSWE (DataCurve, arXiv 2607.07946) | long-horizon engineering on **active** OSS repos, pinned commits, 5 languages | mini-swe-agent (Pier/Modal) | behaviour-based verifiers, expert-reviewed | authored-original by design; scores published with intervals and an explicit "do not read as a strict ranking" caveat | ~130 tasks, 7,174 scored rollouts |
+| Agents' Last Exam (Berkeley RDI, arXiv 2606.05405) | long-horizon professional workflows across 55 sub-industries — **including Adobe After Effects animation/VFX** | harness-agnostic (Claude Code among them) | expert-authored reference outputs, peer-reviewed evaluation bounds, deterministic | living benchmark: private pool rotates into public | v1.1 = 122 public tasks; hardest tier averages **<1–2.6 %** full pass |
+| **this suite** | 6 briefs × 3 fresh agents per wave, one NLE, 36-tool MCP surface | **live app on the host, no isolation** | independent read-backs after the run + ffprobe on the rendered file + operation-log scans | structurally zero: tasks are private and unpublished | 18 trials/wave, 162/162 over nine waves |
+
+**What our method already does as well as theirs.** Deterministic grading from the artifact; n≥3 with
+fresh, context-free sessions (their equivalent: separate rollout containers); pinned build/args per
+wave; transcript auditing for protocol violations (the 14l seal audit is closer to DeepSWE's
+trajectory metadata than to anything in SWE-bench); and a **honesty axis — claim vs verified — that
+none of the four score.** DeepSWE's own headline (an agent exploiting a scoring loophole rather than
+solving the task) is the nearest published analogue to what our transcripts catch: silent no-op
+"successes", dropped pins, writes landing on the wrong timeline.
+
+**Where ours is weaker, stated plainly.**
+- **No verifier independence.** Tasks and graders come from the same hand. Terminal-Bench 3.0 split the
+  agent container from the verifier container precisely because Berkeley's exploit showed what happens
+  otherwise; we have no such separation and no peer review of briefs.
+- **No isolation or pinned images**, so a wave is not bit-reproducible the way a Harbor job is — the
+  app state differs, which is also why the confirm-token/archive guardrails matter here.
+- **Saturated.** 162/162 with zero variance is the AIME25 failure mode again: 18 binary items give
+  5.6 points of resolution per flip, and at n=3 per task the design cannot detect a 10-point difference
+  between two competent models. It is a **regression guard**, not a discriminator — which is exactly how
+  it has earned its keep (it caught `append_to_timeline` ignoring pins in 10g, and my own #370 fix
+  catching trials in 14k).
+- **No intervals and no token accounting** in the published record, both of which DeepSWE/ALE boards
+  now treat as mandatory.
+
+**Feasibility, if anyone wanted to run theirs here.** Terminal-Bench needs a container runtime: the
+2026-11-05 attempt on 4.0 produced **66/66 errored trials** and the whole stack (OrbStack, harbor, the
+dataset) was deliberately torn down — the plumbing lessons are recorded, and a retry is not cheap.
+DeepSWE and ALE assume API token budgets: one ALE leaderboard run of a frontier config burned ~21.5 M
+output tokens, and this engine decodes at 149–245 tok/s (see the *Quant memory accounting* section of
+the Splash doc), so a single long-horizon task is hours of decode before the horizon even completes.
+The limit is budget, not methodology.
+
+**Method changes worth taking, and where they would land in this repo** (proposed, not yet applied):
+1. **Report intervals, not pass counts.** Add a `stats` block to `results-*.json` and a `stats.py`: per
+   task, median/min/max of the three walls plus a Wilson 95 % interval on the pass rate at n=3, and a
+   printed **minimum-detectable-difference** line per wave. Expect it to say the uncomfortable thing: at
+   18 items and n=3, only gross regressions are visible.
+2. **A saturation rule and task rotation, Terminal-Bench style.** A `SATURATION.md` ledger of consecutive
+   clean trials per task; any task reaching 9/9 across three waves retires to `tasks-retired.md` and a
+   replacement brief gets drafted from that wave's behaviour findings (we generate them faster than we
+   consume them). Keep 1–2 **frontier** items deliberately expected to fail, so the scorecard retains
+   dynamic range instead of pinning at 100 %.
+3. **Prove the grader can fail.** Cheapest high-value change in the list: a **null test** — inject one
+   known-wrong artifact (a 120-frame render, a marker at the wrong frame, a missing grade) and require
+   the grading probes to reject it. `ground_truth.json` already exists; hash it, commit it *before*
+   dispatch and record the sha256 in the wave's results so expectations demonstrably predate the runs,
+   then have a fresh session author a second expectation file from `tasks.md` alone — divergence between
+   the two becomes a finding, not a silent correction.
+4. **Token efficiency as a scored axis.** The engine already logs `input / cached / output / TTFT /
+   tok/s` per request; `wave_driver.py` can record each trial's engine-log window and sum tokens,
+   yielding tokens-per-task and tokens-per-verified-outcome next to the existing wall and $ per wave.
+   That is the axis ALE/DeepSWE boards rank on (comparable pass rates at 8.5 M vs 21.5 M output tokens),
+   and for a locally-served model on 96 GiB it is arguably the most decision-relevant number we
+   currently do not report.
+
+**What we should not copy:** the leaderboard purpose. This suite exists to catch regressions in a toolchain
+I am actively changing and filing bugs against; converting it into a scoreboard would mean writing tasks
+for score spread instead of for the failure modes we actually hit.
+
+**Watch rather than run:** ALE, because it already carries animation/VFX production work in After Effects
+— the closest published analogue to what this machine is for. If it ever grows a Resolve or NLE sub-industry,
+our six briefs are a drop-in contribution (and its private-pool rotation is the contamination answer our
+suite gets for free by being unpublished).
+
+*Sources:* openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/ (Feb 2026); swebench.com and
+Scale's SWE-bench Pro page (counts, Oct 2026 public-set cut); terminal-bench.com + arXiv 2601.11868
+(Harbor/Laude versioning and the 4.0 removals); arXiv 2607.07946 (DeepSWE, DataCurve, May 2026
+leaderboard); arXiv 2606.05405 + agents-last-exam.org (ALE v1.1); Berkeley CRDI scoring exploit report
+as covered in the SWE-bench audit literature.
