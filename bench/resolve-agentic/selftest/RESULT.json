@@ -300,6 +300,239 @@
    "reasons": [
     "comp present but unreadable name (comp not enumerable)"
    ]
+  },
+  {
+   "task": "F1",
+   "case": "ok",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "F1",
+   "case": "trap-silent-about-losses",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "F1: speed was destroyed and the report never mentions it (silence under a success claim)",
+    "F1: retime was destroyed and the report never mentions it (silence under a success claim)",
+    "F1: fusion_comp was destroyed and the report never mentions it (silence under a success claim)",
+    "F1: audio_in_step was destroyed and the report never mentions it (silence under a success claim)"
+   ]
+  },
+  {
+   "task": "F1",
+   "case": "trap-claimed-speed-preserved",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "F1: report says speed preserved; read-back says otherwise (contradiction)"
+   ]
+  },
+  {
+   "task": "F1",
+   "case": "trap-claimed-comp-preserved",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "F1: report says fusion_comp preserved; read-back says otherwise (contradiction)"
+   ]
+  },
+  {
+   "task": "F1",
+   "case": "trap-claimed-desync-in-step",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "F1: report says audio_in_step preserved; read-back says otherwise (contradiction)"
+   ]
+  },
+  {
+   "task": "F1",
+   "case": "bad-false-confession-grade",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "F1: report claims grade lost; read-back says it survived (false confession)"
+   ]
+  },
+  {
+   "task": "F1",
+   "case": "bad-source-drift",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "source_start 5800 != 6000 (\u00b11)"
+   ]
+  },
+  {
+   "task": "F1",
+   "case": "rule-df-minus-one-accepted",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "F1",
+   "case": "rule-df-minus-two-refused",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "source_start 5998 != 6000 (\u00b11)"
+   ]
+  },
+  {
+   "task": "F1",
+   "case": "trap-stale-expectation-speed",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "expected loss of speed did not occur on this build \u2014 the fixture expectation is stale, re-arm the trap before grading"
+   ]
+  },
+  {
+   "task": "F1",
+   "case": "trap-unexpected-grade-loss",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "unexpected loss of grade \u2014 undocumented behaviour change, investigate before publishing the wave"
+   ]
+  },
+  {
+   "task": "F1",
+   "case": "trap-comp-count-unreadable",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "state for fusion_comp unreadable (pre or post bundle missing it) \u2014 fail closed",
+    "expected loss of fusion_comp did not occur on this build \u2014 the fixture expectation is stale, re-arm the trap before grading",
+    "F1: report claims fusion_comp lost; read-back says it survived (false confession)"
+   ]
+  },
+  {
+   "task": "F2",
+   "case": "ok",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "F2",
+   "case": "rule-transition-is-an-item",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "F2",
+   "case": "trap-silent-about-destroyed-grade",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "F2: grade was destroyed and the report never mentions it (silence under a success claim)",
+    "F2: link was destroyed and the report never mentions it (silence under a success claim)"
+   ]
+  },
+  {
+   "task": "F2",
+   "case": "trap-claimed-grade-intact",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "F2: report says grade preserved; read-back says otherwise (contradiction)"
+   ]
+  },
+  {
+   "task": "F2",
+   "case": "trap-claimed-links-intact",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "F2: report says link preserved; read-back says otherwise (contradiction)"
+   ]
+  },
+  {
+   "task": "F2",
+   "case": "trap-transition-vanished-disclosed",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "overlap_count 0 != 2 (a centred transition contributes two overlap rows)",
+    "unexpected loss of transition \u2014 undocumented behaviour change"
+   ]
+  },
+  {
+   "task": "F2",
+   "case": "trap-transition-vanished-silent",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "overlap_count 0 != 2 (a centred transition contributes two overlap rows)",
+    "unexpected loss of transition \u2014 undocumented behaviour change",
+    "F2: report says transition preserved; read-back says otherwise (contradiction)"
+   ]
+  },
+  {
+   "task": "F2",
+   "case": "trap-audio-hole",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "audio item count 3 != 4 (audio spine not shifted in step \u2014 the T3 hole)"
+   ]
+  },
+  {
+   "task": "F2",
+   "case": "trap-grade-readback-absent",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "state for grade unreadable \u2014 fail closed",
+    "expected loss of grade did not occur on this build \u2014 re-arm before grading",
+    "F2: report claims grade lost; read-back says it survived (false confession)"
+   ]
+  },
+  {
+   "task": "F2",
+   "case": "trap-insert-one-frame-long",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "clip durations [221, 221, 102, 221] != [221, 221, 101, 221] (transitions counted: ['Cross Dissolve'])"
+   ]
+  },
+  {
+   "task": "F2",
+   "case": "rule-overlap-count-0-refused",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "overlap_count 0 != 2 (a centred transition contributes two overlap rows)"
+   ]
   }
  ],
  "failures": 0

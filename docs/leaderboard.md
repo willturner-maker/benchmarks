@@ -69,8 +69,10 @@ footnote. The labels stay in [`leaderboard/results.json`](../leaderboard/results
 ran single-tenant *before* the agent wave (host load sampled first) and the agentic n=3 ran after it,
 so nothing could contend with the timing. Read that row, not the withdrawn ones.
 
-Agentic column = six tasks × three fresh sealed agents, graded only from read-backs;
-details and per-task cost in
+Agentic column = six tasks × three fresh sealed agents, graded only from read-backs (**old set** — the
+task list was tiered and extended on 2026-11-15, so the first wave dispatching the sealed frontier pair
+F1/F2 reports `hard set 15/15` + `smoke set 6/6` and opens a new series rather than extending this
+ladder); details and per-task cost in
 [the results doc](resolve-agentic-benchmark-results.md). The 2026-11-06 runs' agents were
 served by the local model (Qwen3.8-Flash-Next IQ3_S via Splash 1.6.0), not a cloud API.
 

@@ -30,6 +30,7 @@ benchmark in the perf baseline (same day, same machine, MCP v4.18.5, Resolve Stu
 - [Addendum (k) — 2026-11-14k MCP 5.2.10, headless host](#addendum-k-2026-11-14k--mcp-5210-on-headless-resolve-the-sixth-clean-wave-and-my-own-upstream-fixes-catching-trials-in-the-act)
 - [Addendum (l) — 2026-11-14l MCP 5.2.11, seventh clean wave](#addendum-l-2026-11-14l--mcp-5211-on-headless-resolve-the-seventh-clean-wave-and-the-first-wave-where-the-seal-was-actually-sealed)
 - [Record scope — waves outside the scored agentic record](#record-scope--waves-outside-the-scored-agentic-record-2026-11-15)
+- [Task-set change — the frontier pair is sealed](#task-set-change--the-frontier-pair-is-sealed-2026-11-15)
 - [How our agentic method relates to published agent benchmarks](#how-our-agentic-method-relates-to-published-agent-benchmarks-2026-11-15)
 
 ## Scorecard
@@ -1100,6 +1101,30 @@ Side effect worth recording: the old text labelled `2026-11-10f` "the third cons
 quoting 72/72, which is four waves — the ordinal was already one off against its own arithmetic, and the
 rescope happens to make the two agree. Every per-wave number in this document (task tables, walls, op
 medians, deviations) is untouched; only the running totals and ordinals moved.
+
+## Task-set change — the frontier pair is sealed (2026-11-15)
+
+The saturation audit (`bench/resolve-agentic/SATURATION.md`) found the pass axis saturated and two of the
+six tasks' traps already dead on 5.2.11, so the set was tiered and extended rather than padded. Two new
+tasks were **sealed** the way every wave is sealed — fixture built headless, ground truth captured through
+the MCP probes, `json.load`-ed and hashed (`sha256 b85951aee996…`, file untracked), every claimed trap
+re-armed on the wave build, and grading predicates + null cases written **before** dispatch
+(**54/54 cases behave**, 23 of them silent-success `trap-*`):
+
+- **F1** — slip a graded, retimed, comp-carrying clip with `replace_source_range`. Measured: speed, retime,
+  comp and the linked-audio link are destroyed; grade, transform and crop survive; the item uuid changes;
+  the source start reads one frame low. Graded on geometry **and** disclosure.
+- **F2** — ripple insert on a timeline carrying a transition and grades. The draft's trap (a silently
+  destroyed transition) turned out to be **refused in preflight** before it ever shipped, so the task was
+  re-scoped: the insert sits after the transition, and the measured silent losses are the shifted clip's
+  **grade and link state** — under an operation whose own `_verification` reported *passed*.
+
+Two consequences for how the next wave is reported, both stated up front: the scoring set is now five
+tasks, so a header reads **`hard set 15/15` + `smoke set 6/6`** instead of a blended 18; and a wave on a
+changed task set **opens a new series** — the seven-wave 126/126 ladder above stays as published and is
+not extended by it. A clean 15-trial hard set carries a Wilson floor of [79.6, 100], i.e. a *lower* floor
+than an 18-trial old-set wave, purely because n fell; if the harder tasks pass anyway, that is a finding
+about the tasks, not a continuation of the streak.
 
 ## How our agentic method relates to published agent benchmarks (2026-11-15)
 

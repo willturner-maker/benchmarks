@@ -47,6 +47,14 @@ records: T1 7/12/21, T2 11/26/37, T3 18/35/85, T4 28/40/60, T7 42/56/118, T8 17/
 why cost is reported per task and never folded into correctness — the two withdrawn 4.19.3 passes got
 read as a server finding precisely because someone compared medians.
 
+**And the pass axis is about to be re-based, so read the n carefully.** Sealing the frontier pair
+(§4) moves the scoring set from three tasks to five: `hard set 5 × n=3 = 15 trials` per wave, and a
+clean 15-trial hard set carries a Wilson floor of **[79.6, 100]** — *worse* than the 18-trial figure
+above, which is the arithmetic cost of changing the task list, not a regression. Detection power at
+n=15: 53.7% for a true 0.95 rate, 79.4% at 0.90, 91.3% at 0.85. So the first F1/F2 wave must be read as
+a **series opener** (new task set, new baseline), not as wave 8 of the 126/126 ladder — and if the new
+tasks turn out to pass 15/15 too, that is a *finding about the tasks*, not a continuation of the streak.
+
 ## 2. Trap liveness ledger (measured 2026-11-15, MCP 5.2.11 / Resolve 21.2.0.6, headless)
 
 A task is only as hard as the trap it is built on. Six tasks were built on six trap mechanisms;
@@ -63,6 +71,11 @@ two linked video+audio items, deleted afterwards) and asked: **does the trap sti
 | T7 | render comes out one frame short (end-exclusive) | consequence of the live end-exclusive row; **not re-measured** (no render run in this probe) | — |
 | T8 | `create_fusion_clip` phantom: success with 0 comps | **live** | `success: true`, then `get_comp_count` (pinned) → `count: 0` |
 | T8 | `fusion_comp` ignores `timeline_id`, binds the current timeline | live per the `2026-11-14l` wave record; not re-probed here | — |
+| F1 | `replace_source_range` rebuilds the item and drops part of its state | **live, and the split is now measured** | speed 80→100, retime 3/2→0/0, comp 1→0, linked audio left behind; grade tools, `ZoomX/Y 1.2` and `CropLeft 120` all survived |
+| F1 | a keyframed Inspector property as the thing that gets destroyed | **cannot be armed through MCP** | `timeline_item.add_keyframe` → `KEYFRAME_API_UNAVAILABLE` on 21.2.0.6 |
+| F2 | `ripple_insert` across a transition silently destroys the transition | **dead — refused in preflight** | `RIPPLE_PLAN_BLOCKED: 1 later item(s) cannot be rebuilt (no pool media…)`, blocker names the `Cross Dissolve`, nothing mutated |
+| F2 | grade and link state destroyed on the **shifted** items | **live** | after an insert at 442: shifted clip's node tools `[]` (unshifted clip keeps them), `get_linked_items` → `[]`, while `_verification` reported **passed** and `success: true` |
+| F2 | authoring a transition through MCP at all | **live** | `timeline_item.add_transition` (Cross Dissolve / simple / center / 24) returned the created span 108209–108233 |
 
 **The mechanism worth naming: the server's own fixes are a saturation source.** Every upgrade that
 converts a silent success into a validated refusal deletes the puzzle a task was designed around —
@@ -87,27 +100,48 @@ two-call lookup, not a debugging exercise — worth remembering when designing f
 | T3 | **SCORING, brief amended** | Surviving difficulty: two-row discipline (video *and* audio), end-exclusive arithmetic, and a dry-run plan that under-signals the audio hole. The brief must stop implying the enum trap exists — it is now a validation error |
 | T7 | **SCORING** | Self-verification of the *file* vs the job's `Complete`, `TimelineName` binding the current timeline, queue discipline. Nothing here is done for the agent |
 | T8 | **SCORING** | The phantom still fires, and the selector-family asymmetry (`timeline_item_fusion` honours pins, `fusion_comp` does not) still bites |
+| F1 | **SCORING — sealed 2026-11-15, first dispatch pending** | Measured loss set (retime, speed, comp, linked audio) against a preserved set (grade, transform, crop) on one item, plus a changed item uuid and a ±1 source read. Graded on geometry *and* disclosure, with a stale-expectation guard that refuses to score if the build stops destroying things |
+| F2 | **SCORING — sealed, re-scoped** | Its headline (transition silently destroyed) is dead — the op refuses instead — so the loss axis is grade + link state on shifted items, with the transition promoted to a must-survive assertion and `overlap_count 2` promoted to a grader expectation |
 
 **Headroom rule going forward.** A wave's *scoring* set must consist of tasks whose trap was
 confirmed live within the last three MCP builds **or** that have failed at least once in the last ten
 waves. A task that meets neither is demoted to smoke at the next wave, with the evidence recorded in
-`tasks-retired.md`. Report the two sets separately: `hard set 3 tasks × n=3 = 9/9` plus
-`smoke set 3 tasks × n=3 = 9/9` — never a blended 18/18 again, because the blend is what made nine
-clean waves look like nine findings.
+`tasks-retired.md`. Report the two sets separately: after sealing, **`hard set 5 tasks × n=3 = 15/15`
+plus `smoke set 2 tasks × n=3 = 6/6`** — never a blended figure, because the blend is what made seven
+clean waves look like seven findings. (The earlier draft of this rule said "smoke set 3 tasks = 9/9",
+which double-counted the retired T4; the tiers are 5 scoring + 2 smoke, and the numbers now say so.)
 
-## 4. What replaces them (drafted, not yet sealed)
+## 4. What replaces them — sealed 2026-11-15
 
-Retiring T4 and demoting T2 leaves the hard set at three tasks. Two frontier briefs are drafted in
-`tasks-retired.md` §"Replacement candidates"; neither is sealed because sealing needs a fresh fixture
-and a hashed ground truth, and the fixture projects are deleted at teardown (see below). Both were
-chosen for the same property the current suite has lost: **the tool returns success and the world is
-unchanged, with no error text to lean on.**
+Retiring T4 and demoting T2 left the hard set at three tasks, so two frontier briefs were drafted and
+have now been **sealed**: fixture built headless, ground truth captured through the MCP probes and
+`json.load`-ed, `sha256 b85951aee996…` (file `fixture_f1f2_ground_truth.json`, untracked), every claimed
+trap re-armed on the wave build, and predicates + null cases added to `grader_selftest.py` **before** any
+dispatch — 54/54 cases behave, 23 of them `trap-*`. Full specs and the measured matrices are in
+[`tasks-retired.md`](tasks-retired.md) §"Replacement candidates — SEALED".
 
-One caveat, stated up front so the difficulty source is not oversold: the server's own tool text
-already names what these operations fail to preserve. So they test **verification and disclosure under
-a `success` return**, not discovery of an undocumented defect. That is the axis we actually care about
-(accepting `success` is the failure mode this whole suite exists to catch), but it is not a puzzle, and
-the grading has to reflect that the geometry half will mostly be got right.
+What the sealing probe actually changed, task by task:
+
+- **F1 lost a limb and gained a spine.** "Inspector keyframes" cannot be armed through MCP at all
+  (`KEYFRAME_API_UNAVAILABLE`), and grade *values* cannot be read back through MCP either
+  (`GetToolsInNode` gives presence/signature; `ExportLUT` is gated to the Color page). What survives is a
+  clean four-vs-three split on one item — retime, speed and comp destroyed; grade, transform and crop
+  preserved — plus a changed item uuid, a deliberate audio desync, and a ±1 source read.
+- **F2 lost its headline trap and was re-scoped before it ever shipped.** Rippling *across* a transition is
+  refused in preflight, not silently destructive, so F2's loss axis moved to grade + link state on shifted
+  items and the transition became a must-survive assertion. Had it shipped as drafted, every trial would
+  have hit a refusal and the task would have measured error-handling instead of preservation.
+- **Both now have a stale-expectation guard in the grader**: if a build stops destroying an expected
+  property, `grade_f1`/`grade_f2` refuse to score the trial and say why. A server fix that flattens one of
+  these traps should demote the task the next time it is re-armed, not quietly turn it into a pass.
+
+One caveat, stated up front so the difficulty source is not oversold: the server's own dry-run/plan
+payload already prints the non-preserved sets (`carried` / `not_carried`, ripple's `warnings`). So these
+tasks test **verification and disclosure under a `success` return**, not discovery of an undocumented
+defect. That is the axis this suite exists for — accepting `success` is the failure mode — but it is not a
+puzzle, and the grading reflects that the geometry half will mostly be got right. What separates trials is
+whether the report names the damage: F2's insert came back with `_verification: passed` and
+`success: true` while the shifted clip's grade and link were gone.
 
 ## 5. Precedent, and where our criterion is weaker
 

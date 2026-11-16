@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 fixture.json
 ground_truth.json
+fixture_f1f2*.json

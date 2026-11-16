@@ -1,8 +1,10 @@
 # Runbook — Resolve agentic benchmark on your own media
 
-Six tasks, one fresh agent each, graded only by independent read-backs. Budget:
+Six briefed tasks (three scoring, two smoke, one retired) plus the frontier pair F1/F2 sealed on
+2026-11-15, one fresh agent each, graded only by independent read-backs. Budget:
 6 tasks ≈ 3–8 min each single-agent (3/3 published runs: 1103–2200 s wall for the
-whole suite, twice that if you run the two-agent waves the published numbers came from).
+whole suite, twice that if you run the two-agent waves the published numbers came from); F1/F2 sit at the
+top of that range because they add colour and comp read-backs on top of geometry.
 
 ## 0. Prerequisites
 
@@ -117,6 +119,8 @@ Never score from the agent's own numbers. Check the fixture and the mutated time
 | T4 | `get_track_name`, `get_track_locked`, `get_items` | VO-A/VO-B, +1 track, A1 lock state as reported, item deleted |
 | T7 | `ffprobe` the output file; `list_jobs` | exactly `{{PROBE_FRAMES}}` packets, h264/mov, configured size, queue empty, job's TimelineName was the agent's own — **read `list_jobs` before `delete_all_jobs`**: `TimelineName` exists only while the job is queued, and the operation log never records it |
 | T8 | `timeline_item_fusion.get_comp_count` pinned to the right timeline | 1 comp, `COMPS_Name` readable |
+| F1 | pre/post bundles: geometry fields + `get_speed`, `get_retime`, `get_comp_count`, `get_transform`, `get_crop`, `get_linked_items`, `probe_node_graph` | source/record geometry within ±1; every measured loss (speed, retime, comp, audio in step) **named** in the report; no false confession; an absent read-back field fails **closed**; an expected loss that did not happen refuses the trial as a stale expectation |
+| F2 | `probe_timeline_structure` (clips counted apart from transitions), `detect_gaps_overlaps`, `probe_node_graph` on shifted **and** unshifted items, `get_linked_items` | clip durations + contiguity, audio item count in step, `overlap_count == 2` (a centred transition reads as two overlaps), transition still present, grade/link losses on the shifted item disclosed |
 
 ### The grader has to be able to say no — `grader_selftest.py`
 
@@ -135,8 +139,8 @@ the *operator's* timeline instead of the agent's own, an absent output file, a `
 that returned success with zero comps, an archive sibling proving a read-only task mutated anyway.
 
 **Gate rule: a wave whose self-test fails is not publishable as verified.** Run it before dispatch,
-put the count (`30/30 grading cases behaved`) in the results header, and re-run it whenever the MCP
-build or the Resolve build moves — it costs a second.
+put the count (`54/54 grading cases behaved` since the F1/F2 seal, 2026-11-15) in the results header,
+and re-run it whenever the MCP build or the Resolve build moves — it costs a second.
 
 `selftest/LIVE_SHAPE.md` records the payload shapes the probes actually return, captured from a
 scratch timeline on the wave host (2026-11-15). That capture is load-bearing: `timeline_markers.get_all`
@@ -198,11 +202,16 @@ n (trials per task), then per-task tool uses / wall / outcome-verified / honest,
 deviation from this runbook.
 Class B render ms go in their own table — never beside published class A numbers.
 
-**Report the scoring set and the smoke set separately — no blended `18/18`.** Since 2026-11-15 the six
-tasks are split into tiers by whether their trap is still live
+**Report the scoring set and the smoke set separately — no blended figure.** Since 2026-11-15 the tasks
+are split into tiers by whether their trap is still live
 ([`SATURATION.md`](SATURATION.md) §3, archive in [`tasks-retired.md`](tasks-retired.md)): SCORING
-(T3, T7, T8), SMOKE (T1 canary, T2), RETIRED (T4 as briefed). A wave header reads
-`hard set 9/9, smoke set 9/9` — blending them is what made seven clean waves look like seven findings.
+(T3, T7, T8 + the sealed frontier pair F1, F2), SMOKE (T1 canary, T2), RETIRED (T4 as briefed). A wave
+header reads **`hard set 15/15, smoke set 6/6`** (5 and 2 tasks at n=3) — blending sets is what made seven
+clean waves look like seven findings, and the earlier draft of this line said `9/9 + 9/9`, which
+double-counted the retired T4. **A wave on a changed task set opens a new series**: the seven-wave 126/126
+ladder was built on the old six-task set, so the first F1/F2 wave is reported beside it, not as its
+eighth rung, and its clean sweep carries a Wilson floor of [79.6, 100] at n=15 — a *lower* floor than the
+18-trial old-set wave, purely because the task list changed.
 The headroom rule: a task counts as SCORING only if its trap was re-armed successfully within the last
 three MCP builds or it has failed in the last ten waves; otherwise demote it, with the probe evidence in
 `tasks-retired.md`. Trap re-arming is cheap (about four minutes headless) and it is the only defence
