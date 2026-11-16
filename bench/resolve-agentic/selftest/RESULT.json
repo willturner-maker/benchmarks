@@ -1,0 +1,306 @@
+{
+ "cases": [
+  {
+   "task": "T1",
+   "case": "ok",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "T1",
+   "case": "bad-off-by-one",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "source_start: reported 5036 != ground truth 5035"
+   ]
+  },
+  {
+   "task": "T1",
+   "case": "trap-mutation-sibling",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "mutation detected: archive sibling(s) ['selftest_base_archived_v01'] appeared during the trial"
+   ]
+  },
+  {
+   "task": "T1",
+   "case": "bad-missing-field",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "missing field audio_items"
+   ]
+  },
+  {
+   "task": "T2",
+   "case": "ok",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "T2",
+   "case": "bad-wrong-frame",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "no marker matching {60, Green, bench-hit}; saw [{'frame': 61, 'color': 'Green', 'name': 'bench-hit'}]"
+   ]
+  },
+  {
+   "task": "T2",
+   "case": "bad-wrong-colour",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "no marker matching {60, Green, bench-hit}; saw [{'frame': 60, 'color': 'Blue', 'name': 'bench-hit'}]"
+   ]
+  },
+  {
+   "task": "T2",
+   "case": "bad-wrong-name",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "no marker matching {60, Green, bench-hit}; saw [{'frame': 60, 'color': 'Green', 'name': 'hit'}]"
+   ]
+  },
+  {
+   "task": "T2",
+   "case": "trap-no-marker",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "no marker matching {60, Green, bench-hit}; saw []"
+   ]
+  },
+  {
+   "task": "T2",
+   "case": "rule-colour-case-insensitive",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "T2",
+   "case": "bad-duration-drift",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "item durations [222] != [221]"
+   ]
+  },
+  {
+   "task": "T2",
+   "case": "rule-live-shape-dict-keyed",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "T2",
+   "case": "trap-live-shape-frame-in-key-only",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "no marker matching {60, Green, bench-hit}; saw [{'frame': 61, 'color': 'Green', 'name': 'bench-hit'}]"
+   ]
+  },
+  {
+   "task": "T2",
+   "case": "trap-live-shape-frame-key-dropped",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "marker payload shape unreadable: 1 entries, no frame key or frame-string key \u2014 re-capture selftest/LIVE_SHAPE.md",
+    "no marker matching {60, Green, bench-hit}; saw [{'frame': -1, 'color': 'Green', 'name': 'bench-hit'}]"
+   ]
+  },
+  {
+   "task": "T2",
+   "case": "rule-upstream-float-frame-key",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "T3",
+   "case": "ok",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "T3",
+   "case": "bad-middle-102",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "durations [221, 102, 221] != [221, 101, 221]",
+    "total 544 != 543"
+   ]
+  },
+  {
+   "task": "T3",
+   "case": "bad-gap-left",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "1 gap(s): [{'start': 108221, 'end': 108231}]"
+   ]
+  },
+  {
+   "task": "T3",
+   "case": "bad-overlap",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "1 overlap(s): [{'start': 108200, 'end': 108210}]"
+   ]
+  },
+  {
+   "task": "T3",
+   "case": "trap-two-items-not-three",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "durations [221, 101] != [221, 101, 221]",
+    "total 322 != 543"
+   ]
+  },
+  {
+   "task": "T7",
+   "case": "ok",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "T7",
+   "case": "bad-120-frames",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "packet count 120 != 121 (a collapsed or partial render)"
+   ]
+  },
+  {
+   "task": "T7",
+   "case": "bad-collapsed-render",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "packet count 3 != 121 (a collapsed or partial render)",
+    "duration ratio 0.02 (near-empty render)"
+   ]
+  },
+  {
+   "task": "T7",
+   "case": "bad-wrong-raster",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "raster 1920x760 != 3840x1520"
+   ]
+  },
+  {
+   "task": "T7",
+   "case": "bad-wrong-codec",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "codec 'prores' != 'h264'"
+   ]
+  },
+  {
+   "task": "T7",
+   "case": "trap-file-absent",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "packet count 0 != 121 (a collapsed or partial render)",
+    "output file absent",
+    "duration ratio 0.0 (near-empty render)"
+   ]
+  },
+  {
+   "task": "T7",
+   "case": "bad-job-left-queued",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "render queue not empty: [{'Id': 'j1'}]"
+   ]
+  },
+  {
+   "task": "T7",
+   "case": "trap-rendered-the-operators-timeline",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "job's TimelineName 'Master 4k' != the agent's own 'agbench_T7_r1'"
+   ]
+  },
+  {
+   "task": "T8",
+   "case": "ok",
+   "expected": "accept",
+   "grader_said": "accept",
+   "behaved": true,
+   "reasons": []
+  },
+  {
+   "task": "T8",
+   "case": "trap-create-said-success-no-comp",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "comp count 0 != 1",
+    "agent claimed a comp exists, but the read-back shows none (silent-success trap)"
+   ]
+  },
+  {
+   "task": "T8",
+   "case": "bad-unenumerable",
+   "expected": "reject",
+   "grader_said": "reject",
+   "behaved": true,
+   "reasons": [
+    "comp present but unreadable name (comp not enumerable)"
+   ]
+  }
+ ],
+ "failures": 0
+}

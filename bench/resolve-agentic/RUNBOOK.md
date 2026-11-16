@@ -48,6 +48,14 @@ agent hits them, but the operator hits them first here.
   read `tasks.md` (which names the traps), you are measuring recall-assisted behaviour —
   say so, or move it out of reach.
 - Per-trial working directory, isolated from other trials' fixtures.
+- **Seal the expectations before dispatch, not after.** Commit `ground_truth.json` (and the task
+  briefs) first, then record `sha256 ground_truth.json` in the wave's `wave_results.json` under a
+  `sealing` key. Grading here is deterministic against that file, so a ground truth that can be
+  edited mid-wave is steerable toward whatever the agent happened to do — which is the one way to
+  turn outcome-verified grading into a self-fulfilling score. The file itself stays untracked (it
+  carries real media paths), so the public record carries the **hash**, and a reader can then check
+  that two waves graded the same expectations. Re-hash after any legitimate fixture change and say
+  in the record what changed.
 - Optional two-agent waves (as published) to also measure current-timeline flapping and
   contention recovery; then expect render ms to inflate (a 7285 ms T7 render ran alongside
   another agent's Fusion work — a contention datapoint, not throughput). Three trials on the
@@ -103,6 +111,34 @@ Never score from the agent's own numbers. Check the fixture and the mutated time
 | T7 | `ffprobe` the output file; `list_jobs` | exactly `{{PROBE_FRAMES}}` packets, h264/mov, configured size, queue empty, job's TimelineName was the agent's own — **read `list_jobs` before `delete_all_jobs`**: `TimelineName` exists only while the job is queued, and the operation log never records it |
 | T8 | `timeline_item_fusion.get_comp_count` pinned to the right timeline | 1 comp, `COMPS_Name` readable |
 
+### The grader has to be able to say no — `grader_selftest.py`
+
+A wave reported as *n/n outcome-verified* is worth publishing only if each grading probe is **capable
+of failing**. Nothing inside a clean wave demonstrates that: a predicate written against a field the
+probe no longer emits scores 18/18 while reading nothing at all. So the null tests are a gate, not a
+nicety:
+
+    python3 -I grader_selftest.py          # exit 0 required before a wave is dispatched
+
+Cases are labelled `ok` (must accept), `bad-*` (must reject an injected wrong value), `trap-*` (must
+reject a **silent success** — the tool returned `success:true` and the artifact is not there), or
+`rule-*` (pins a deliberately lenient or strict decision so it is a documented rule rather than an
+accident). The `trap-*` cases are what earns the word "verified": a 120-packet render, a render of
+the *operator's* timeline instead of the agent's own, an absent output file, a `create_fusion_clip`
+that returned success with zero comps, an archive sibling proving a read-only task mutated anyway.
+
+**Gate rule: a wave whose self-test fails is not publishable as verified.** Run it before dispatch,
+put the count (`30/30 grading cases behaved`) in the results header, and re-run it whenever the MCP
+build or the Resolve build moves — it costs a second.
+
+`selftest/LIVE_SHAPE.md` records the payload shapes the probes actually return, captured from a
+scratch timeline on the wave host (2026-11-15). That capture is load-bearing: `timeline_markers.get_all`
+returns a **dict keyed by the frame id** (upstream documents the key as a float, e.g. `96.0`) whose
+entries carry no `frame` field, so a predicate that iterates a list and compares `m["frame"]` reads
+`-1` for every marker. `timeline.create_timeline` also fails with "No current timeline" in a freshly
+created empty project — seed scratch timelines with `media_pool.create_timeline` then
+`timeline.set_current(id=…)`. Shapes are the grader's input contract; runbook prose is not.
+
 Two grading aids worth knowing: the server's operation log records mutating ops only and carries
 **no params and no timeline names** (useful for ordering and counts, never for "which timeline"),
 while the **absence** of a `<name>_archived_vNN` sibling is *positive proof* nothing ever mutated
@@ -154,6 +190,24 @@ start; record it in the results JSON `build` block as `claude_code`), agent mode
 n (trials per task), then per-task tool uses / wall / outcome-verified / honest, and any
 deviation from this runbook.
 Class B render ms go in their own table — never beside published class A numbers.
+
+Then report the **statistics, not just the counts**: `python3 -I stats.py --include-local`
+re-derives every wave from its per-trial records (whitelisted scalar keys only — it never prints
+grader notes or probe payloads, which carry real media paths) and prints per-task n / passes /
+median-min-max wall / spread, per-wave pass rate with a **Wilson 95% interval**, the cross-wave
+aggregate, and the design's **detection power**. Two numbers out of that output are load-bearing and
+should be quoted beside any claim that a change moved something:
+
+- A clean 18-trial wave's pass rate carries a Wilson interval of **[82.4, 100.0]**. "18/18" is a
+  point estimate whose floor is 18 points down, so it does not license "the new build made the model
+  better" — it licenses "no failure was observed in 18 trials".
+- Detection power at n=18: a true per-trial rate of 0.90 shows at least one failure with **85%**
+  probability, 0.95 with **60%**. A **5-point regression is a coin flip at n=18**; a claimed
+  regression or improvement that small needs a second wave, and `stats.py` prints the n that would
+  settle it.
+- Per-task wall spread across the published record runs **167–408%** (max/min − 1). Quote the spread
+  beside the median or quote neither — single medians are how the two withdrawn 4.19.3 passes got
+  read as a server finding when the difference was tenancy.
 
 The harness is part of the measured system: Claude Code releases have changed `claude -p`
 startup, context-window accounting on third-party gateways, and permission/deny-rule
