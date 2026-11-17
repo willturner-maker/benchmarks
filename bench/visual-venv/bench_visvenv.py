@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Visual venv baseline bench — pre-OpenCV-5.1.0 snapshot (run: venv python -I bench_visvenv.py --out run1.json).
+"""Visual venv baseline bench — pre-OpenCV-5.1.0 snapshot (run: venv python -I bench_visvenv.py --out run1.json;
+--label overrides the record label, which defaults to visvenv-<run date> so a JSON self-identifies).
 Measures on fixed fixtures: import cost, model init, YuNet tiled detect (counts x thresholds x grids),
 SFace alignCrop embed ms/face, cosine pair stats, the 5.0.0.93 match()-in-place behaviour probe, and API
 surface presence relevant to the 5.1.0 changelog (classic DNN/TensorFlow reader removal, logging move)."""
@@ -10,6 +11,9 @@ t_import = time.perf_counter() - t_import0
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--out", required=True)
+ap.add_argument("--label", default=f"visvenv-{time.strftime('%Y-%m-%d')}",
+                help="record label; defaults to the run date so a JSON self-identifies "
+                     "which run it is (run1-run4 keep the labels they were written with)")
 ap.add_argument("--png", default=os.path.join(os.path.dirname(__file__), "fixture_f240.png"))
 ap.add_argument("--mp4", default=os.path.join(os.path.dirname(__file__), "fixture_f240_h264.mp4"))
 ap.add_argument("--models", default=os.path.expanduser("~/resolve-vision-models"))
@@ -74,7 +78,8 @@ png = cv2.imread(args.png)          # 8-bit BGR like face_probe
 cap = cv2.VideoCapture(args.mp4)
 ok, mp4 = cap.read(); cap.release()
 
-out = {"label": "visvenv-baseline-2026-11-11",
+out = {"label": args.label,
+       "measured_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
        "env": {"python": sys.version.split()[0], "cv2": cv2.__version__, "numpy": np.__version__,
                "platform": " ".join(__import__("platform").uname()[:4])},
        "fixtures": {"png": {"path_sha256": sha(args.png), "shape": list(png.shape)},

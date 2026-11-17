@@ -84,3 +84,21 @@ PNG (89 faces / 0.273 s H.264) — ×1.018 vs run3, inside the ×1.15 band. Embe
 (0.992 s / 91). `import_cv2` 0.157 s vs run3's 0.064 s — cold page cache, process state not
 OpenCV. No cold stage (unchanged since run2). Fixture copies live on the external volume beside
 the bench (`vision-detector-compare/bench-20261111/`); `run4.err` is empty — no stderr output.
+
+## Tooling change 2026-11-16: records self-identify
+
+`bench_visvenv.py` used to stamp every output with the hardcoded label
+`visvenv-baseline-2026-11-11`, so `run4.json` arrived carrying run1's label and a record's date
+was recoverable only from git. The label now defaults to `visvenv-<run date>` (override with
+`--label`), and every record gains `measured_at` (local ISO-8601 with offset).
+
+- **run1-run4 are not rewritten** — published records keep the labels they were written with,
+  the same rule as never moving a tag. Expect `label` and `measured_at` to be the only key-set
+  difference when a new run is diffed against them.
+- Verified by an **unrecorded** re-run that evening (scratch output, then deleted): 48/48 detect
+  counts, whole-frame raw 92, cosine stats, the `match()` in-place probe, surface markers and
+  fixture hashes all bit-identical to run4; only timings moved (`det_s` 0.276 → 0.282, ×1.02;
+  embed total 0.992 → 0.969 s), inside the ×1.15 ceiling. A fifth consecutive determinism pass —
+  but kept out of the record set, because it exercised the tooling rather than measuring the stack.
+- Still open on purpose: the `*_ms`-keys-hold-seconds mislabeling noted under the run2 section.
+  Renaming those keys breaks cross-run diffs, so it waits for the post-5.1.x rerun.
