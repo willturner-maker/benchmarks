@@ -29,6 +29,7 @@ macOS 27.2.0. Engine args: working set 56 GiB, SSD cache cap 128 GiB, persistent
 - [Cross-hardware comparison](#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13)
 - [Co-tenancy — Resolve Studio on the same 96 GiB](#co-tenancy--resolve-studio-on-the-same-96-gib-measured-2026-11-15-raw-benchresolve-ram-coexistence)
 - [Quant memory accounting](#quant-memory-accounting--what-bpw-actually-scopes-and-what-a-quant-costs-in-ram-measured-2026-11-15-raw-benchsplash-quant-memory)
+- [Re-run 2026-11-17 — Splash 1.7.0](#re-run-2026-11-17--splash-170-three-passes-warm-gate-raw-benchsplash-concurrencyresultssplash-170-2026-11-17)
 
 ## Layer 1 — engine probe (deterministic, run by the orchestrator, not the LLM)
 
@@ -617,3 +618,75 @@ table; that was not verified against their files. Probe cost: ~3,600 output toke
 one exploratory sparse-read probe that mis-computed its seeks and pushed ~918 GB **read-only** through the
 page cache (disclosed in `NOTES.md`; it churned the file cache, which is part of why the dd number is so
 high).
+
+## Re-run 2026-11-17 — Splash 1.7.0, three passes + warm gate (raw: `bench/splash-concurrency/results/splash-1.7.0-2026-11-17/`)
+
+Splash **1.7.0**, installed the same day upstream shipped it (17 Nov 12:42 UTC), version-confirmed by
+`splash --version` **and** by the live process path `/opt/homebrew/Cellar/splash/1.7.0/libexec/…`. Status
+schema still 8. Engine args here: 56 GiB working set, **SSD cache cap 256 GiB** (the 128 GiB quoted in the
+baseline header is no longer what this host runs), persistent cache on, `--default-reasoning-effort=xhigh`,
+`--thinking-token-budget=16384`, and **defaults everywhere the release added a knob** (`--verify-rows auto`,
+`--cached-states` default INT8, no `--activations` override).
+
+**Why three passes: the upgrade cleared the prefix cache, and the log says so.** Startup line:
+`Persistent cache …/c1cb917d…: took back 0 restore points over 0 KV blocks (0 MiB); left 0 copies behind.`
+Same cache-dir hash (weights untouched), zero state restored — the release note's "persistent caches from
+1.6.x start cold once". The suite was therefore run three times on one engine instance (never restarted),
+pass 1 as warm-up, and the warmth gate was called from `/status`, not by feel:
+
+| | before p1 | after p1 | after p2 | after p3 |
+|---|---|---|---|---|
+| `hit_rate` | 0.8750 | 0.9661 | 0.9826 | **0.9883** |
+| `hits` / `cold_misses` | 14 / 2 | 285 / 10 | 565 / 10 | **846 / 10** |
+| `kv_disk_hit_tokens` | 0 | 0 | 2,124,640 | **4,253,728** |
+| `disk.read_bytes` | 0 | 0 | 27.8 GB | **55.8 GB** |
+
+The decisive line is **`cold_misses` frozen at 10 from pass 1 onward**: every prompt the suite submits is
+cached, so a fourth pass could teach the cache nothing. A methodology note worth keeping: I first set
+"disk hits > 0" as a warmth test, then nearly wrote it off as unreachable because the 4,095-page RAM ring
+held everything — wrong, eviction arrived mid-pass 2 and the SSD tier then served 2.1 M tokens. Disk hits
+are reachable inside a run, just not in the first one.
+
+### Headline vs the best 1.6.1 row (2026-11-13 clean window)
+
+| metric | 1.6.1 (11-13) | **1.7.0 (11-17, 3 passes)** | delta |
+|---|---|---|---|
+| ladder w1 | 209.5 | **219.8** (233.2 / 219.8 / 207.5) | +4.9 % |
+| plateau w8–32 | 470–475 (mean 473.7) | **479–494** (pooled median 481.6; means 483.2 / 484.3 / 476.8) | +1.7 % |
+| aggregate peak | w12 475.2 | **w4 526.5** | peak moved back to w4 |
+| w6 dip vs w4 | 0.97× | **0.785–0.855×** | dip returned |
+| TTFT warm | 159 ms | **110–118 ms** | −26 % (best ever on this host) |
+| TTFT cold | 229 ms | **291 ms** (pass 1 only — see caveat) | +27 % |
+| probe decode w1 | 159.3/173.6/143.3 | **170.4** (8 rows, one outlier excluded) | +9 % |
+| resident KV budget | 131,072 tok | **155,648 tok** | +18.8 % (INT8 cached states) |
+| KV at 611k tok | 0 suspensions, demote +1,124 blocks | **0 suspensions, demote +11 total, 0 spill** | demote path near-dormant |
+| prefill (611,244 tok, uncached) | 170.5–171.5 s | **172.6 s** | unchanged → gains are decode-side |
+
+### Caveats that belong on this row, not in a footnote somewhere else
+
+1. **Cold TTFT is valid in pass 1 only.** Passes 2–3 re-submit an already-cached prompt, so their
+   "cold" rows (122 / 138 ms) are warm hits with a cold label. The honest cold figure is 291 ms.
+2. **One excluded-with-a-name outlier:** pass 3's first decode row, **82.6 tok/s** — the same tenancy
+   transient shape as 11-11h's 81.6/80.7. It stays in the JSONL; pooled n=9 median 166.5, n=8 median 170.4.
+3. **Tenancy is not clean-window.** The operator's OpenCode session is served by the same engine and took
+   turns during the passes. Per the 11-13 finding, the tax falls on latency cells (w1, TTFT) rather than
+   saturated-decode aggregates, so the plateau stands and the latency cells carry a modest tax. A strictly
+   clean 1.7.0 row still needs the detached-driver treatment.
+4. **Not bit-comparable** with 1.6.x rows: `--verify-rows auto` is stated at startup as letting greedy and
+   seeded output differ run-to-run, on top of 1.7.0's INT8 cached states and 1.6.1's INT8 activations.
+   A reproducible row wants `--verify-rows all` with a fresh `--cache-dir`.
+5. **w1's direction is unresolved.** It fell monotonically across the three passes while the plateau held
+   — this suite's noisiest cell (12.4 % spread; history includes a 92.6 tok/s w1 with a *higher* plateau).
+
+### Extra probe: cross-session prefix reuse (answers the workflow README's cache claim)
+
+`usage.prompt_tokens_details.cached_tokens` read back on a ~9.7k-token shared-prefix stand-in for a fresh
+agent session's system+tools block: cold **32 / 9,683 (0.33 %)** → repeat **9,664 (99.80 %)**, 111 ms →
+*different session, same prefix + new tail* **9,664 (99.73 %)**, 125 ms. Cross-session reuse is intact on
+1.7.0 and lands at page granularity (9,664 = 75.5 × 128-token pages); uncached prefill ran at
+**3,611 tok/s**. Scope stated: this verifies the mechanism at 9.7k tokens — the "20–45k cached tokens per
+fresh agent session" figure is the real OpenCode prefix and still needs the agentic driver to re-measure.
+
+Full per-pass tables (ladder medians with spread, probe rows, KV gauge peaks and counter deltas, the six
+`/status` snapshots) are in
+[`bench/splash-concurrency/results/splash-1.7.0-2026-11-17/NOTES.md`](../bench/splash-concurrency/results/splash-1.7.0-2026-11-17/NOTES.md).

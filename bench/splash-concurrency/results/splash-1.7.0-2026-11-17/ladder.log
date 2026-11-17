@@ -1,0 +1,41 @@
+model: ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+out:   ~/benchmarks/bench/splash-concurrency/results/splash-1.7.0-2026-11-17/ladder_kv.jsonl
+[ladder] w1 r1: 204.6 tok/s aggregate, per-stream 204.6, peak waiting 0
+[ladder] w1 r2: 235.1 tok/s aggregate, per-stream 235.1, peak waiting 0
+[ladder] width 1 baseline: 219.85 tok/s
+[ladder] w2 r1: 332.3 tok/s aggregate, per-stream 166.1, peak waiting 0
+[ladder] w2 r2: 291.6 tok/s aggregate, per-stream 145.8, peak waiting 0
+[ladder] width 2: median 311.95000000000005 tok/s (1.419x w1)
+[ladder] w3 r1: 455.1 tok/s aggregate, per-stream 151.7, peak waiting 0
+[ladder] w3 r2: 403.7 tok/s aggregate, per-stream 134.6, peak waiting 0
+[ladder] width 3: median 429.4 tok/s (1.953x w1)
+[ladder] w4 r1: 554.2 tok/s aggregate, per-stream 138.5, peak waiting 0
+[ladder] w4 r2: 542.0 tok/s aggregate, per-stream 135.5, peak waiting 0
+[ladder] width 4: median 548.1 tok/s (2.493x w1)
+[ladder] w6 r1: 441.2 tok/s aggregate, per-stream 73.5, peak waiting 2
+[ladder] w6 r2: 419.5 tok/s aggregate, per-stream 69.9, peak waiting 2
+[ladder] width 6: median 430.35 tok/s (1.957x w1)
+[ladder] w8 r1: 477.9 tok/s aggregate, per-stream 59.7, peak waiting 4
+[ladder] w8 r2: 494.5 tok/s aggregate, per-stream 61.8, peak waiting 4
+[ladder] width 8: median 486.2 tok/s (2.212x w1)
+[ladder] w12 r1: 486.8 tok/s aggregate, per-stream 40.6, peak waiting 8
+[ladder] w12 r2: 501.7 tok/s aggregate, per-stream 41.8, peak waiting 8
+[ladder] width 12: median 494.25 tok/s (2.248x w1)
+[ladder] w16 r1: 483.7 tok/s aggregate, per-stream 30.2, peak waiting 12
+[ladder] w16 r2: 479.5 tok/s aggregate, per-stream 30.0, peak waiting 12
+[ladder] width 16: median 481.6 tok/s (2.191x w1)
+[ladder] w24 r1: 476.7 tok/s aggregate, per-stream 19.9, peak waiting 16
+[ladder] w24 r2: 481.7 tok/s aggregate, per-stream 20.1, peak waiting 16
+[ladder] width 24: median 479.2 tok/s (2.18x w1)
+[ladder] w32 r1: 490.7 tok/s aggregate, per-stream 15.3, peak waiting 16
+[ladder] w32 r2: 470.0 tok/s aggregate, per-stream 14.7, peak waiting 16
+[ladder] width 32: median 480.35 tok/s (2.185x w1)
+[stage break] waiting for engine idle before KV stage
+[kv] calib: 300 lines = 14129 prompt tokens -> using 424 lines/request
+[kv] w2: 93394 tok total in 0.3s | susp_peak=0 susp_delta=0 waitmem_peak=0 wait_peak=0 pages_active_peak=0 spill+0 demote+0
+[kv] w4: 186788 tok total in 0.6s | susp_peak=0 susp_delta=0 waitmem_peak=0 wait_peak=0 pages_active_peak=2919 spill+0 demote+1
+[kv] w6: 280182 tok total in 0.9s | susp_peak=0 susp_delta=0 waitmem_peak=1 wait_peak=1 pages_active_peak=2919 spill+0 demote+0
+[kv] w8: 373576 tok total in 1.1s | susp_peak=0 susp_delta=0 waitmem_peak=1 wait_peak=1 pages_active_peak=2919 spill+0 demote+0
+[kv] w10: 509370 tok total in 1.8s | susp_peak=0 susp_delta=0 waitmem_peak=1 wait_peak=1 pages_active_peak=3184 spill+0 demote+10
+[kv] w12: 611244 tok total in 2.1s | susp_peak=0 susp_delta=0 waitmem_peak=1 wait_peak=1 pages_active_peak=3185 spill+0 demote+0
+{"SUMMARY": {"quick": false, "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S", "width_ladder": {"medians_by_width": {"1": 219.85, "2": 311.95000000000005, "3": 429.4, "4": 548.1, "6": 430.35, "8": 486.2, "12": 494.25, "16": 481.6, "24": 479.2, "32": 480.35}, "stopped_at_width": null, "peak_width": 4, "peak_tok_s": 548.1, "collapse_width": null, "w1_baseline": 219.85}, "kv_pressure": {"rounds": 6, "max_total_tokens": 611244, "trip": null, "resident_kv_budget_tokens": 155648, "lifetime_final": {"resource_suspensions": 0, "priority_suspensions": 0, "capacity_failures": 0}}}}

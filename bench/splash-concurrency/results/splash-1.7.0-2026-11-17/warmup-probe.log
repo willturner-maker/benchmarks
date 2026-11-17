@@ -1,0 +1,13 @@
+{"kind": "meta", "splash_model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S", "ready": true, "mem": "normal", "thermal": "nominal"}
+{"kind": "decode_w1", "wall_s": 2.014, "completion_tokens": 300, "prompt_tokens": 71, "pass": 1, "decode_batch_delta": 74, "engine_tok_s": 149.0}
+{"kind": "decode_w1", "wall_s": 1.583, "completion_tokens": 300, "prompt_tokens": 71, "pass": 2, "decode_batch_delta": 69, "engine_tok_s": 189.5}
+{"kind": "decode_w1", "wall_s": 1.802, "completion_tokens": 300, "prompt_tokens": 71, "pass": 3, "decode_batch_delta": 82, "engine_tok_s": 166.5}
+{"kind": "ttft", "wall_s": 0.291, "completion_tokens": 8, "prompt_tokens": 341, "pass": 1, "note": "cold"}
+{"kind": "ttft", "wall_s": 0.11, "completion_tokens": 8, "prompt_tokens": 341, "pass": 2, "note": "warm-prefix"}
+{"kind": "width", "width": 1, "round": 1, "wall_s": 0.393, "per_request": [{"wall_s": 0.387, "completion_tokens": 24, "prompt_tokens": 328}], "aggregate_tok_s": 61.11, "decode_batch_delta": 7, "admission_waiting_max_seen": 0}
+{"kind": "width", "width": 1, "round": 2, "wall_s": 0.192, "per_request": [{"wall_s": 0.191, "completion_tokens": 24, "prompt_tokens": 328}], "aggregate_tok_s": 125.17, "decode_batch_delta": 7, "admission_waiting_max_seen": 0}
+{"kind": "width", "width": 2, "round": 1, "wall_s": 0.267, "per_request": [{"wall_s": 0.267, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.246, "completion_tokens": 24, "prompt_tokens": 328}], "aggregate_tok_s": 179.68, "decode_batch_delta": 8, "admission_waiting_max_seen": 0}
+{"kind": "width", "width": 2, "round": 2, "wall_s": 0.26, "per_request": [{"wall_s": 0.24, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.26, "completion_tokens": 24, "prompt_tokens": 328}], "aggregate_tok_s": 184.32, "decode_batch_delta": 8, "admission_waiting_max_seen": 0}
+{"kind": "width", "width": 4, "round": 1, "wall_s": 0.492, "per_request": [{"wall_s": 0.427, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.401, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.491, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.427, "completion_tokens": 24, "prompt_tokens": 328}], "aggregate_tok_s": 195.14, "decode_batch_delta": 13, "admission_waiting_max_seen": 0}
+{"kind": "width", "width": 4, "round": 2, "wall_s": 0.366, "per_request": [{"wall_s": 0.344, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.344, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.365, "completion_tokens": 24, "prompt_tokens": 328}, {"wall_s": 0.365, "completion_tokens": 24, "prompt_tokens": 328}], "aggregate_tok_s": 262.48, "decode_batch_delta": 10, "admission_waiting_max_seen": 0}
+{"SUMMARY": {"decode_w1_med_tok_s": 166.5}}

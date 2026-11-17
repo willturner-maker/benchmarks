@@ -273,6 +273,7 @@ advanced server and reporting the DB number, a live quirk refereed by an indepen
 | **2026-11-12** | **Splash 1.6.1** (assumed — version not exposed by `/status`; see ⁸) | same | **151 ms**⁶ | 355 ms | 205.2 tok/s⁷ | **487–506 tok/s**, widths 12→32 (peak back at w8: 522.7) | **0** at 4.66× — this instance's budget is 131,072 tok⁸ | n/a⁹ | n/a |
 | **2026-11-13** | **Splash 1.6.1** (`splash --version` confirms — the ⁸ assumption resolves) | same | 159 ms⁶ | **229 ms** | **209.5 tok/s**⁷ | **470–475 tok/s**, widths 8→32 (peak w12: 475.2)¹⁰ | **0** at 4.66× (budget 131,072 tok)⁸ | **12/12** | 12/12 |
 | 2026-11-16b (DIRTY window¹¹) | Splash 1.6.1 (assumed; not re-confirmed) | same | —¹¹ | —¹¹ | 92.6 tok/s¹¹ (lowest ever) | 508–540 (w12–32 mean 524.6), w32 **540.5** highest single width¹¹ | **TRIP at 3.89×** — w10, 509,370 tok, susp peak 2, first on record¹¹ | n/a¹¹ | n/a¹¹ |
+| **2026-11-17** | **Splash 1.7.0** (same-day install; confirmed by `splash --version` **and** the live `/opt/homebrew/Cellar/splash/1.7.0/…` process path; the upgrade cleared the prefix cache — see ¹²) | same | **110–118 ms**¹² (best ever) | 291 ms¹² (pass 1 only) | **219.8 tok/s**¹² (3-pass median) | **479–494 tok/s**, widths 8→32, pooled median **481.6**; aggregate peak back at **w4 526.5**¹² | **0** at 3.93× (budget 155,648 tok, +18.8 %) — demote **+11** total, spill 0, quietest memory path on record¹² | not run¹² | n/a |
 
 ¹ decode w1 is warmth-sensitive — the probe's own three passes trend (105→133→165 baseline,
 111→128→136 rerun); the column is the warmed value on the baseline row, the median on the rerun row.
@@ -318,11 +319,13 @@ saturated-decode aggregates.
 Rerun in one pass: `python3 -I bench/splash-concurrency/ladder_kv.py` (width ladder + KV-pressure
 probe, one combined summary). The plateau is a wall, not a cliff; the KV probe's negative
 result (no suspension at 611,244 prompt tokens) is a finding, not a missing number — and it
-reproduced on **all five waves**, with the memory path's secondary signals shifting wave to wave
-(the 11-10s rerun ran quietest; the 1.6.1 waves ran hottest — 11-11h demoted 645 blocks at width
-10, exactly the baseline's figure, 11-12 demoted at w6/10/12 with one pacing hold at w10, and the
-11-13 clean window ran middling-quiet: small waiting_memory holds at w4/6/10/12 but spill and
-demote deltas zero; suspensions and spills stayed zero everywhere).
+reproduced on **all six waves**, with the memory path's secondary signals shifting wave to wave
+(the 11-10s rerun ran quietest among the 1.6.x waves; the 1.6.1 waves ran hottest — 11-11h demoted
+645 blocks at width 10, exactly the baseline's figure, 11-12 demoted at w6/10/12 with one pacing hold
+at w10, and the 11-13 clean window ran middling-quiet: small waiting_memory holds at w4/6/10/12 but
+spill and demote deltas zero; suspensions and spills stayed zero everywhere). The 1.7.0 wave then set
+the quietest path on record — demote **+11 blocks total**, spill 0, zero suspensions at 3.93× a resident
+budget that itself grew to **155,648 tokens** (INT8 cached states, +18.8 % on 1.6.1's 131,072).
 
 ¹¹ **The 2026-11-16b splash row is a raw row, not baseline material.** It ran in a dirty window:
 the engine had served the day's 21-trial agentic wave (not restarted), three operator seal-probe
@@ -332,6 +335,28 @@ opposite directions, no shape claim. The KV stage's first trip on record (w10, 3
 suspension counters moved) is real but its threshold shift is unestablished pending a clean-window
 and fresh-engine rerun. Full caveats in the wave's
 [NOTES.md](../bench/splash-concurrency/results/rerun-2026-11-16b/NOTES.md).
+
+¹² **2026-11-17 Splash 1.7.0 wave — three passes on one engine instance, with the warmth gate on the
+record** ([NOTES.md](../bench/splash-concurrency/results/splash-1.7.0-2026-11-17/NOTES.md)). 1.7.0 shipped
+the day of the run and its upgrade **cold-started the persistent prefix cache** — startup log: `took back 0
+restore points over 0 KV blocks (0 MiB); left 0 copies behind`, same cache-dir hash so weights were
+untouched. Hence three passes (pass 1 = warm-up), warmth called from `/status` rather than by feel:
+`hit_rate` 0.8750 → 0.9883, SSD reads 0 → 55.8 GB, `kv_disk_hit_tokens` 0 → 4.25 M, and the decisive line —
+**`cold_misses` frozen at 10 from pass 1 onward**, so a fourth pass could teach the cache nothing. Plateau
+means 483.2 → 484.3 → 476.8 (+0.2 %, −1.5 %: settled). Caveats carried on the row: **(a)** probe "cold"
+TTFT is valid in pass 1 only — passes 2–3 resubmit an already-cached prompt (their 122/138 ms are warm hits
+wearing a cold label), so cold 291 ms is the figure; **(b)** pass 3's first decode row **82.6 tok/s** is a
+tenancy transient, kept in the JSONL and excluded from the 8-row median 170.4 (pooled n=9 median 166.5);
+**(c)** tenancy was **not** clean-window — the operator's OpenCode session is served by the same engine and
+took turns during the passes, so per the 11-13 finding the tax sits on the latency cells (w1, TTFT), and a
+strictly clean 1.7.0 pass is still owed; **(d)** `--verify-rows auto` is active (stated at startup: greedy
+and seeded output may differ run to run), so this row is **not bit-comparable** with the 1.6.x rows — a
+reproducible row needs `--verify-rows all` on a fresh cache dir; **(e)** w1 fell across the three passes
+(233.2 → 219.8 → 207.5) while the plateau held — 12.4 % spread, direction unresolved; **(f)** KV-stage wall
+times are cache-state dependent and not comparable across passes (w12: 172.6 s uncached in pass 1 → 2.0 s
+cached) — only pass 1 measures prefill, and its 611,244 tok in 172.6 s matches 1.6.x's 170.5–171.5 s, so
+**prefill is unchanged and the 1.7.0 gain is decode-side**. Agentic not run: `driver2.py` is Claude-Code-era
+and the harness moved to OpenCode, so that column stays `not run` until the driver is ported.
 
 Cross-hardware context (DGX Spark / RTX Spark / RTX 5090 on the same resident model): the
 [comparison section](splash-engine-benchmark-results.md#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13).
@@ -345,18 +370,26 @@ Same host, same model (Qwen3.8-Flash-Next IQ3_S, 262k ctx), same spec: 512-token
 rounds per width, median shown. Comparable across rows only because the harness is identical;
 1.6.1's INT8 default means numerics are not bit-comparable with the 1.6.0 rows.
 
-| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | 1.6.1 (11-11h) | 1.6.1 (11-12) | **1.6.1 (11-13 clean)** |
-|---|---|---|---|---|---|
-| 1 | 147.6 | 151.5 | 186.9 | 205.2 | **209.5** |
-| 2 | 259.1 | 250.7 | 301.0 | 334.5 | 299.2 |
-| 3 | 306.1 | 290.9 | 378.5 | 393.4 | 362.6 |
-| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 | 464.3 | 453.3 |
-| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) | 417.6 (0.90×) | 438.1 (0.97×) |
-| 8 | 373.9 | 368.7 | 488.4 | **522.7** ← peak | 470.2 |
-| 12 | 375.7 | 367.7 | **524.8** ← peak | 487.1 | **475.2** ← peak |
-| 16 | 371.9 | 369.1 | 510.0 | 505.7 | 470.7 |
-| 24 | 382.9 | 368.8 | 518.5 | 493.1 | 474.5 |
-| 32 | 371.7 | 365.5 | 519.8 | 500.5 | 474.4 |
+| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | 1.6.1 (11-11h) | 1.6.1 (11-12) | 1.6.1 (11-13 clean) | **1.7.0 (11-17, 3-pass median)**¹² |
+|---|---|---|---|---|---|---|
+| 1 | 147.6 | 151.5 | 186.9 | 205.2 | 209.5 | **219.8** ← new best (spread 12.4 %) |
+| 2 | 259.1 | 250.7 | 301.0 | 334.5 | 299.2 | 320.9 |
+| 3 | 306.1 | 290.9 | 378.5 | 393.4 | 362.6 | **405.5** |
+| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 | 464.3 | 453.3 | **526.5** ← peak |
+| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) | 417.6 (0.90×) | 438.1 (0.97×) | 430.4 (0.82×) |
+| 8 | 373.9 | 368.7 | 488.4 | **522.7** ← peak | 470.2 | 485.3 |
+| 12 | 375.7 | 367.7 | **524.8** ← peak | 487.1 | **475.2** ← peak | 494.2 |
+| 16 | 371.9 | 369.1 | 510.0 | 505.7 | 470.7 | 481.6 |
+| 24 | 382.9 | 368.8 | 518.5 | 493.1 | 474.5 | 479.2 |
+| 32 | 371.7 | 365.5 | 519.8 | 500.5 | 474.4 | 479.2 |
+
+The 1.7.0 column is a **median of three full passes** (per-pass values and spread in that wave's
+`NOTES.md`), because the 1.7.0 upgrade cold-started the prefix cache — a single pass there is not a
+comparable cell. Plateau w8–32: 479–494, pooled median 481.6, means 483.2 / 484.3 / 476.8 (+0.2 %,
+−1.5 %: warm and settled). Against the 1.6.1 clean-window column: plateau **+1.7 %**, w1 **+4.9 %**, with
+the shape moving **back to a width-4 peak** and the w6 dip deepening to 0.82× (1.6.1 clean window 0.97×,
+1.6.0 0.87×) — two build generations moved that dip in opposite directions, so read it as
+shape-sensitive rather than a regression signal.
 
 The 1.6.1 plateau is **+39.2 %** mean (per-width +32.5…+42.7 %), but read the shape with it: the
 peak moves from width 4 to width 12, the w6 dip gets shallower, and w1 itself rose +23.4 % —
