@@ -398,7 +398,9 @@ paid ~3× median reasoning tokens (10,538 vs 3,609) and ~40% wall for zero score
 tax was sloppiness (50 rejected mangled tool-name attempts vs 3) rather than wrong outcomes. See
 [addendum (o)](resolve-agentic-benchmark-results.md#addendum-o-2026-11-17g--the-suite-wide-effort-ab-xhigh-vs-medium-on-42-sealed-sessions)
 — includes an operator design flaw (two-project fixture race) that confounded two medium-arm cells and
-is recorded, not hidden.
+is recorded, not hidden. **Operator decision (same day): the daily default moved `xhigh` → `medium`**,
+with `start.sh --xhigh` as the one-launch way back; this repo records the decision, it does not score
+its own config change, and the row's 21/21-era evidence stays labelled as earned at xhigh.
 **(c) Agentic, first scored row on the OpenCode harness** (`driver_opencode.py`, seal via per-session
 config + permissions + policies; same S1–S4 semantics as driver2). Pass-2 tally: **verified 11/12,
 honest 10/12** on the daily config — S1/S2/S3 3/3 verified+honest each, S4 3/3 verified minus one

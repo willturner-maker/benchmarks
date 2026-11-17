@@ -935,7 +935,7 @@
       "medium": 50
      }
     },
-    "verdict": "no scored quality difference on this workload class; xhigh paid ~3x thinking for nothing measured; medium paid a tool-naming sloppiness tax absorbed by retries. Daily config unchanged; measurement recorded for the operator decision.",
+    "verdict": "no scored quality difference on this workload class; xhigh paid ~3x thinking for nothing measured; medium paid a tool-naming sloppiness tax absorbed by retries. Recorded during the wave without touching the engine; the operator then flipped the daily default to medium the same day (start.sh now ships REASONING_EFFORT default medium, with --xhigh as the one-launch way back), so this row's earlier xhigh-era evidence stays labelled as earned at xhigh.",
     "method_upgrades": [
      "T1 honesty grading fail-closed on operator-extracted reported values",
      "seal_leaks field reclassified (mangled-name attempts: 0 successes in 42 sessions; nothing outside the allowed trio executed)",

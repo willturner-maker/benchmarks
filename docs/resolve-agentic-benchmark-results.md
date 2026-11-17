@@ -1282,6 +1282,16 @@ premium bought *nothing measurable* in scored outcomes. Recorded verbatim in
 (xhigh stays the config default until the operator decides) is a preference, not a measurement —
 the measurement is now on the table.
 
+**Decision taken the same day:** the operator moved the daily default to **`medium`**. `start.sh`
+now ships `REASONING_EFFORT="${REASONING_EFFORT:-medium}"`, with `start.sh --xhigh` (also `--high` /
+`--low` / `--effort=<value>`) as the one-launch way back to deep thinking, so the config stays one
+line in one file. Nothing about this wave's measurement changes: both arms stay 16/18, the caveats
+below stay on the record, and this repo does not score its own knob change — the daily config is
+re-proven from the engine's startup banner, which now prints `effort absent → medium` where it
+printed `→ xhigh`. One mechanism worth stating plainly, since it was an open question in the wave
+design: **OpenCode sends no `reasoning_effort` field**, so the engine default is exactly what the
+harness gets — which is why the arms needed proxy injection rather than harness config.
+
 Full record: `bench/resolve-agentic/results/2026-11-17g-effort-ab-wave/` (42 session dirs,
 `audit_by_session.json`, claims files, `grading_{gx,gm}.json`, VALIDITY.md; tree gitignored per
 the hygiene rule), drivers `wave_driver_effort_ab.py` + `build_fixture_effort_ab.py`, proxies and

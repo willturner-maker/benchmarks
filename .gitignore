@@ -18,3 +18,7 @@ bench/resolve-agentic/prestate-*.json
 bench/effort-ab-*/proxy-audit*.jsonl
 bench/effort-ab-*/fixture-build-*.jsonl
 bench/effort-ab-*/probe-sessions/
+bench/effort-ab-*/grading-precheck*.jsonl
+bench/effort-ab-*/t8-probe.jsonl
+bench/effort-ab-*/teardown.jsonl
+bench/effort-ab-*/proxy-80*.out
