@@ -269,18 +269,38 @@ def main():
                   rows(clip_id, BASE_SRC, SEG, START)
                 + rows(clip_id, BASE_SRC + SEG, SEG, START + SEG)
                 + rows(clip_id, BASE_SRC + 2 * SEG, SEG, START + 2 * SEG)}))[:220])
-        print("add_transition:", str(c.tool("timeline_item", "add_transition",
-              {"track_type": "video", "track_index": 1, "item_index": 0, "timeline_name": f2,
-               "options": {"type": "Cross Dissolve", "category": "simple", "position": "end",
-                           "alignment": "center", "duration": 24}}))[:400])
+        # VALIDITY 2026-11-17g flaw 4 FIX: CDLs go on the clean 3-item timeline FIRST.
+        # With add_transition first, item indices shift and the "third clip" CDL landed on
+        # the transition. Order now: grade -> transition -> verify. Arming verifies or aborts.
         for idx in (1, 2):
             print(f"f2 cdl item{idx}:", str(c.tool("timeline_item_color", "safe_set_cdl", {
                   "track_type": "video", "track_index": 1, "item_index": idx, "timeline_name": f2,
                   "cdl": {"NodeIndex": 1, "Slope": [1.05, 1.0, 1.0], "Offset": [0.02, 0.0, 0.0],
                           "Power": [1.0, 1.0, 1.0], "Saturation": 1.2}}))[:200])
+        print("add_transition:", str(c.tool("timeline_item", "add_transition",
+              {"track_type": "video", "track_index": 1, "item_index": 0, "timeline_name": f2,
+               "options": {"type": "Cross Dissolve", "category": "simple", "position": "end",
+                           "alignment": "center", "duration": 24}}))[:400])
         print("f2 link:", str(link_pairs(f2))[:200])
-        print("f2 probe:", str(c.tool("timeline", "probe_timeline_structure",
-              {"timeline_name": f2, "include_clip_properties": True}))[:500])
+        # Arming verification (fail loud, never arm a wrong pre-state again):
+        #  - exactly one transition of 24 f on the item0/item1 cut
+        #  - grade tools present on the two later clips, absent on the graded-transition-adjacent one
+        pv = c.tool("timeline", "probe_timeline_structure",
+                    {"timeline_name": f2, "include_clip_properties": True})
+        trans = [t for t in (pv.get("transitions") or []) if (t.get("duration") or 0) > 0]
+        graded = []
+        for pos in (1, 2):
+            ng = c.tool("timeline_item_color", "probe_node_graph",
+                        {"track_type": "video", "track_index": 1, "item_index": pos,
+                         "timeline_name": f2, "max_nodes": 8})
+            tools = [t for n in (ng.get("nodes") or []) for t in (n.get("tools") or [])]
+            graded.append(bool(tools))
+        ok = len(trans) == 1 and all(graded)
+        print(f"f2 ARM CHECK: transitions={len(trans)} graded[1,2]={graded} -> {'OK' if ok else 'ABORT'}")
+        if not ok:
+            print("!! f2 pre-state does not match spec — fix arming before any wave uses this project")
+            c.close(); return 1
+        print("f2 probe:", str(pv)[:500])
 
     if want("duplicate"):
         for src, dsts in (("_f1m", [f"{TLB}_f1s{k}" for k in (1, 2, 3)]),
