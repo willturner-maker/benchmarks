@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Splash Concurrency Bench — Nov 12 2026 wave</title>
+<style>
+  :root {
+    color-scheme: light;
+    --plane: #f9f9f7;
+    --surface-1: #fcfcfb;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --muted: #898781;
+    --gridline: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --series-4: #eda100;
+    --delta-good: #006300;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --plane: #0d0d0d;
+      --surface-1: #1a1a19;
+      --text-primary: #f0efec;
+      --text-secondary: #c3c2b7;
+      --muted: #898781;
+      --gridline: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --series-4: #c98500;
+      --delta-good: #0ca30c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--plane); color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 24px 16px 64px; }
+  header h1 { font-size: 24px; font-weight: 650; margin: 0 0 4px; }
+  header .sub { color: var(--text-secondary); font-size: 14px; margin: 0; }
+  header .sub code { font-size: 12.5px; }
+
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 22px 0 8px; }
+  .tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .tile .label { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 4px; }
+  .tile .value { font-size: 26px; font-weight: 650; letter-spacing: -0.01em; }
+  .tile.hero .value { font-size: 46px; font-weight: 700; }
+  .tile .delta { font-size: 12.5px; margin-top: 3px; color: var(--text-secondary); }
+  .tile .delta.good { color: var(--delta-good); }
+  .tile .note { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+  section { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 20px 20px 14px; margin-top: 18px; }
+  section h2 { font-size: 16.5px; font-weight: 650; margin: 0 0 2px; }
+  section .sub { color: var(--text-secondary); font-size: 13px; margin: 0 0 12px; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin: 4px 0 10px; font-size: 13px; color: var(--text-secondary); }
+  .legend .key { display: inline-flex; align-items: center; gap: 7px; }
+  .legend .key svg { display: block; }
+
+  .chart-box { position: relative; }
+  svg.chart { width: 100%; height: auto; display: block; }
+  .tooltip {
+    position: absolute; pointer-events: none; display: none; z-index: 5;
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px 10px; font-size: 12.5px; box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+    min-width: 150px;
+  }
+  .tooltip .tt-head { font-weight: 650; margin-bottom: 5px; color: var(--text-primary); }
+  .tooltip .tt-row { display: flex; align-items: center; gap: 7px; color: var(--text-secondary); }
+  .tooltip .tt-row b { color: var(--text-primary); font-variant-numeric: tabular-nums; margin-left: auto; padding-left: 12px; }
+  .tt-row .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+
+  details { margin-top: 10px; overflow-x: auto; }
+  details summary { cursor: pointer; font-size: 13px; color: var(--text-secondary); }
+  .table-scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 13px; margin-top: 10px; }
+  th, td { text-align: right; padding: 6px 10px; border-bottom: 1px solid var(--gridline); font-variant-numeric: tabular-nums; }
+  th:first-child, td:first-child { text-align: left; }
+  thead th { color: var(--text-secondary); font-weight: 600; }
+  td { color: var(--text-primary); }
+
+  .callout { border-left: 3px solid var(--series-1); background: var(--plane); border-radius: 6px; padding: 10px 14px; font-size: 13.5px; color: var(--text-secondary); margin: 12px 0 2px; }
+  .callout b { color: var(--text-primary); }
+  footer { margin-top: 26px; font-size: 12.5px; color: var(--muted); }
+  footer code { font-size: 12px; }
+  @media (max-width: 560px) { .tile.hero .value { font-size: 36px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Splash Concurrency Bench — Nov 12 2026 wave</h1>
+  <p class="sub">Engine <code>127.0.0.1:8000</code> · model <code>ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S</code> ·
+  four waves, identical prompts and rounds: <b>Nov 6</b> baseline (Splash 1.6.0) · <b>Nov 10</b> (1.6.0 rerun) · <b>Nov 11</b> (1.6.1) · <b>Nov 12</b> (this wave; version unrecorded, schema 8 — assumed 1.6.1).</p>
+</header>
+
+<div class="kpis">
+  <div class="tile hero">
+    <div class="label">Peak aggregate throughput (tok/s)</div>
+    <div class="value">522.7</div>
+    <div class="note">at width 8 · Nov 11 peak was 524.8 at w12 — plateau −4.2%, within instance scatter</div>
+  </div>
+  <div class="tile">
+    <div class="label">Width-1 serial decode</div>
+    <div class="value">205.2</div>
+    <div class="delta good">+9.8% vs Nov 11 · best w1 of any wave</div>
+  </div>
+  <div class="tile">
+    <div class="label">Plateau w12–w32 (mean)</div>
+    <div class="value">496.6</div>
+    <div class="delta">−4.2% vs Nov 11 (518.3), band 487–506</div>
+  </div>
+  <div class="tile">
+    <div class="label">KV ceiling held</div>
+    <div class="value">611K</div>
+    <div class="note">tokens with zero suspensions = 4.66× the 131,072-token budget</div>
+  </div>
+  <div class="tile">
+    <div class="label">Warm-prefix TTFT</div>
+    <div class="value">151 ms</div>
+    <div class="delta good">−49% vs Nov 11 — regression flag resolved</div>
+  </div>
+</div>
+
+<section>
+  <h2>Stage 1 — width ladder, aggregate tok/s (2-round medians, 512-token outputs)</h2>
+  <p class="sub">Same prompt at every width; stop rule (median &lt; 1.10× w1) never fired in any wave — min post-w1 ratio this wave 1.63×. w6 dip ratio 0.90× of w4 (Nov 11: 0.93×, 1.6.0: 0.87×).</p>
+  <div class="legend" id="ladder-legend"></div>
+  <div class="chart-box" id="ladder-box"><div class="tooltip" id="ladder-tt"></div></div>
+  <details>
+    <summary>Show data table</summary>
+    <table id="ladder-table"><thead><tr></tr></thead><tbody></tbody></table>
+  </details>
+</section>
+
+<section>
+  <h2>Stage 2 — KV pressure, <code>disk.kv_demotions</code> delta per round</h2>
+  <p class="sub">Unique ~20k-token prompts, widths 2→12; identical token totals every wave (93,394 → 611,244) and near-identical walls (w12: 170.5–171.5 s). Zero <code>admission.suspended</code> in every round of every wave — the demote counter is where the waves differ.</p>
+  <div class="legend" id="kv-legend"></div>
+  <div class="chart-box" id="kv-box"><div class="tooltip" id="kv-tt"></div></div>
+  <details>
+    <summary>Show data table (all rounds)</summary>
+    <table id="kv-table"><thead><tr></tr></thead><tbody></tbody></table>
+  </details>
+</section>
+
+<section>
+  <h2>Engine probe — single-stream decode &amp; TTFT</h2>
+  <p class="sub">3 × 300-token decode passes, then a 1k-prompt TTFT pair (cold vs warm-prefix). The Nov 11 decode rows were contention-contaminated (marked there); this wave ran clean, walls flat (1.96/1.80/2.02 s).</p>
+  <div class="table-scroll"><table style="min-width:620px">
+    <thead><tr><th>Wave</th><th>decode pass 1</th><th>pass 2</th><th>pass 3</th><th>median tok/s</th><th>TTFT cold</th><th>TTFT warm</th></tr></thead>
+    <tbody>
+      <tr><td>Nov 6 (1.6.0)</td><td>105.4</td><td>132.7</td><td>165.3</td><td>132.7</td><td>380 ms</td><td>201 ms</td></tr>
+      <tr><td>Nov 10 (1.6.0)</td><td>111.4</td><td>128.0</td><td>135.9</td><td>128.0</td><td>430 ms</td><td>174 ms</td></tr>
+      <tr><td>Nov 11 (1.6.1)</td><td>81.6†</td><td>80.7†</td><td>149.6</td><td>—†</td><td>442 ms</td><td>294 ms†</td></tr>
+      <tr><td>Nov 12 (this wave)</td><td>152.8</td><td>167.0</td><td>148.4</td><td>152.8</td><td>355 ms</td><td>151 ms</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><b>Warm-TTFT flag resolved.</b> The 1.6.1 wave left an open question: warm TTFT 294 ms vs 174 ms looked like a regression with no ladder corroboration. This wave logs 151 ms with the strongest w1 of any wave (205.2) — the 294 ms was contention, not a regression. † Nov 11 probe ran under external engine traffic (09:17–09:20); its decode median is unreliable, its ladder rows are not.</div>
+</section>
+
+<section>
+  <h2>Reading the wave honestly</h2>
+  <p class="sub" style="margin-bottom:6px">
+  · <b>Plateau shift is scatter, not a claimed shape change.</b> Peak moved back to w8 (522.7) from w12 (524.8) and the plateau mean sits ~4% lower — inside the instance-to-instance variation the Nov 10 all-zeros-vs-demotes lesson warned about.<br>
+  · <b>Demote path engaged wider:</b> this wave demoted at w6/w10/w12 (+382/+645/+97) vs w10-only on Nov 11, and one <code>waiting_memory</code> hold at w10 (same width as Nov 11; 1.6.0 held at w12). Suspension stop-rule never fired anywhere.<br>
+  · <b>Single-tenant caveat:</b> the bench engine also served this session's Claude traffic during the run. All per-round suspension deltas were 0 (the lifetime counter's 16 pre-date the wave), so stage numbers hold — but strict single-tenant hygiene was technically broken.<br>
+  · <b>Resident KV budget is instance-variable:</b> 131,072 reported now vs 139,264 in the baseline doc.</p>
+</section>
+
+<footer>
+  Raw data: <code>~/benchmarks/bench/splash-concurrency/results/rerun-2026-11-12/</code> (engine_probe.jsonl, ladder_kv.jsonl, combined_stdout.txt, NOTES.md) · earlier waves in sibling dirs · git <code>bff3643</code>, <code>6d390dd</code>. Palette validated light+dark (CVD-safe order); aqua/yellow sit below 3:1 on light surface — the data tables above are the relief layer.
+</footer>
+</div>
+
+<script>
+const WAVES = [
+  {name: "Nov 6 · 1.6.0",  varName: "--series-1"},
+  {name: "Nov 10 · 1.6.0", varName: "--series-2"},
+  {name: "Nov 11 · 1.6.1", varName: "--series-3"},
+  {name: "Nov 12 · latest",varName: "--series-4"},
+];
+const WIDTHS = [1,2,3,4,6,8,12,16,24,32];
+const LADDER = [
+  [147.6,259.1,306.1,377.7,330.4,373.9,375.6,371.9,382.9,371.7],
+  [151.4,250.7,290.9,369.7,322.4,368.6,367.6,369.1,368.8,365.5],
+  [186.9,301.0,378.5,427.5,396.9,488.4,524.8,510.0,518.5,519.8],
+  [205.2,334.4,393.4,464.3,417.6,522.6,487.1,505.7,493.1,500.4],
+];
+const KVW = [2,4,6,8,10,12];
+const DEMOTE = [
+  [0,0,0,308,645,97],
+  [0,0,0,0,0,0],
+  [0,0,0,0,645,0],
+  [0,0,382,0,645,97],
+];
+const KVDET = [ // [tokens_total, wall_s, susp_peak, waitmem_peak] per width per wave
+  [[93394,25.9,0,0],[186788,51.9,0,0],[280182,77.6,0,0],[373576,104.4,0,0],[509370,142.9,0,0],[611244,170.9,0,0]],
+  [[93394,26.1,0,0],[186788,52.2,0,0],[280182,78.0,0,0],[373576,104.2,0,0],[509370,142.3,0,0],[611244,171.1,0,0]],
+  [[93394,26.0,0,0],[186788,52.0,0,0],[280182,78.0,0,0],[373576,104.0,0,0],[509370,143.3,0,1],[611244,170.5,0,0]],
+  [[93394,26.2,0,0],[186788,52.0,0,0],[280182,78.7,0,0],[373576,104.0,0,0],[509370,143.8,0,1],[611244,171.5,0,0]],
+];
+const NS = "http://www.w3.org/2000/svg";
+const fmt = n => n.toLocaleString("en-US", {maximumFractionDigits: 1});
+
+function el(name, attrs, parent) {
+  const n = document.createElementNS(NS, name);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function dot(color, size) {
+  return `<span class="dot" style="background:var(${color})"></span>`;
+}
+function buildLegend(boxId) {
+  const box = document.getElementById(boxId);
+  box.innerHTML = WAVES.map(w =>
+    `<span class="key"><svg width="26" height="10"><line x1="1" y1="5" x2="25" y2="5" stroke="var(${w.varName})" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="5" r="4.5" fill="var(${w.varName})" stroke="var(--surface-1)" stroke-width="2"/></svg>${w.name}</span>`
+  ).join("");
+}
+function showTip(tip, box, evt, head, rows) {
+  tip.innerHTML = `<div class="tt-head">${head}</div>` + rows.map(r =>
+    `<div class="tt-row"><span class="dot" style="background:var(${r.c})"></span>${r.n}<b>${r.v}</b></div>`).join("");
+  tip.style.display = "block";
+  const bw = box.clientWidth, tw = tip.offsetWidth;
+  let x = evt.offsetX + 14; if (x + tw > bw) x = evt.offsetX - tw - 14;
+  tip.style.left = Math.max(0, x) + "px";
+  tip.style.top = Math.max(0, evt.offsetY - 10) + "px";
+}
+
+/* ---------------- ladder line chart ---------------- */
+(function () {
+  const box = document.getElementById("ladder-box"), tip = document.getElementById("ladder-tt");
+  const W = 920, H = 430, m = {l: 56, r: 18, t: 26, b: 44};
+  const pw = W - m.l - m.r, ph = H - m.t - m.b, vmax = 600;
+  const svg = el("svg", {class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img",
+    "aria-label": "Aggregate throughput versus concurrency width, four benchmark waves. Latest wave rises from 205 at width 1 to a 522.7 peak at width 8, plateauing near 500; both 1.6.0 waves plateau near 370."}, box);
+  const X = i => m.l + i / (WIDTHS.length - 1) * pw;
+  const Y = v => m.t + ph * (1 - v / vmax);
+  for (const t of [0,200,400,600]) {
+    el("line", {x1: m.l, x2: W - m.r, y1: Y(t), y2: Y(t), stroke: t === 0 ? "var(--baseline)" : "var(--gridline)", "stroke-width": 1}, svg);
+    const lab = el("text", {x: m.l - 8, y: Y(t) + 4, "text-anchor": "end", "font-size": 11, fill: "var(--muted)"}, svg);
+    lab.textContent = t.toLocaleString();
+  }
+  WIDTHS.forEach((w, i) => {
+    const lab = el("text", {x: X(i), y: m.t + ph + 18, "text-anchor": "middle", "font-size": 11.5, fill: "var(--muted)"}, svg);
+    lab.textContent = w;
+  });
+  const ax = el("text", {x: m.l, y: 14, "font-size": 11.5, fill: "var(--muted)"}, svg);
+  ax.textContent = "aggregate tok/s";
+  const wx = el("text", {x: m.l, y: H - 4, "text-anchor": "start", "font-size": 11.5, fill: "var(--muted)"}, svg);
+  wx.textContent = "concurrency width";
+
+  const hair = el("line", {"stroke-width": 1, stroke: "var(--baseline)", style: "display:none"}, svg);
+  LADDER.forEach((series, s) => {
+    el("path", {d: series.map((v, i) => `${i ? "L" : "M"}${X(i)},${Y(v)}`).join(" "),
+      fill: "none", stroke: `var(${WAVES[s].varName})`, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round"}, svg);
+  });
+  LADDER.forEach((series, s) => {
+    series.forEach((v, i) => el("circle", {cx: X(i), cy: Y(v), r: 4.5, fill: `var(${WAVES[s].varName})`, stroke: "var(--surface-1)", "stroke-width": 2}, svg));
+  });
+  // selective direct labels — the story series only (extremes)
+  [[0, "205.2", "start"], [5, "522.7", "middle"]].forEach(([i, txt, anc]) => {
+    const t = el("text", {x: X(i) + (anc === "start" ? 10 : 0), y: Y(LADDER[3][i]) - 12, "text-anchor": anc, "font-size": 12.5, "font-weight": 600, fill: "var(--text-secondary)"}, svg);
+    t.textContent = txt;
+  });
+  function nearest(evt) {
+    const r = svg.getBoundingClientRect(), scale = W / r.width;
+    const x = (evt.clientX - r.left) * scale;
+    let i = Math.round((x - m.l) / (pw / (WIDTHS.length - 1)));
+    return Math.max(0, Math.min(WIDTHS.length - 1, i));
+  }
+  box.addEventListener("pointermove", evt => {
+    if (evt.target.closest("details")) return;
+    const i = nearest(evt);
+    hair.setAttribute("x1", X(i)); hair.setAttribute("x2", X(i));
+    hair.setAttribute("y1", m.t); hair.setAttribute("y2", m.t + ph);
+    hair.style.display = "";
+    showTip(tip, box, evt, `width ${WIDTHS[i]}`, WAVES.map((w, s) =>
+      ({c: w.varName, n: w.name, v: fmt(LADDER[s][i])})));
+  });
+  box.addEventListener("pointerleave", () => { tip.style.display = "none"; hair.style.display = "none"; });
+
+  const tbl = document.getElementById("ladder-table");
+  tbl.querySelector("thead tr").innerHTML = "<th>width</th>" + WAVES.map(w => `<th>${w.name}</th>`).join("");
+  tbl.querySelector("tbody").innerHTML = WIDTHS.map((wd, i) =>
+    `<tr><td>${wd}</td>` + LADDER.map(s => `<td>${fmt(s[i])}</td>`).join("") + "</tr>").join("");
+  buildLegend("ladder-legend");
+})();
+
+/* ---------------- KV demote columns ---------------- */
+(function () {
+  const box = document.getElementById("kv-box"), tip = document.getElementById("kv-tt");
+  const W = 920, H = 360, m = {l: 64, r: 18, t: 22, b: 44};
+  const pw = W - m.l - m.r, ph = H - m.t - m.b, vmax = 700;
+  const svg = el("svg", {class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img",
+    "aria-label": "kv_demotions counter delta per round, four waves. Latest wave is the only one demoting at width 6; all waves demote at width 10; 1.6.0 baseline also demotes at 8 and 12; Nov 10 wave never demotes."}, box);
+  const Y = v => m.t + ph * (1 - v / vmax);
+  for (const t of [0,200,400,600]) {
+    el("line", {x1: m.l, x2: W - m.r, y1: Y(t), y2: Y(t), stroke: t === 0 ? "var(--baseline)" : "var(--gridline)", "stroke-width": 1}, svg);
+    const lab = el("text", {x: m.l - 8, y: Y(t) + 4, "text-anchor": "end", "font-size": 11, fill: "var(--muted)"}, svg);
+    lab.textContent = t.toLocaleString();
+  }
+  const slot = pw / KVW.length, bw = 20, gap = 2;
+  const groupX = gi => m.l + slot * gi + slot / 2;
+  KVW.forEach((wd, gi) => {
+    const lab = el("text", {x: groupX(gi), y: m.t + ph + 18, "text-anchor": "middle", "font-size": 11.5, fill: "var(--muted)"}, svg);
+    lab.textContent = "w" + wd;
+    const x0 = groupX(gi) - (WAVES.length * bw + (WAVES.length - 1) * gap) / 2;
+    WAVES.forEach((wv, s) => {
+      const v = DEMOTE[s][gi];
+      if (v === 0) return; // a zero draws nothing
+      const x = x0 + s * (bw + gap);
+      const path = el("path", {d: `M${x},${Y(0)} L${x},${Y(v) + 4} Q${x},${Y(v)} ${x + 4},${Y(v)} L${x + bw - 4},${Y(v)} Q${x + bw},${Y(v)} ${x + bw},${Y(v) + 4} L${x + bw},${Y(0)} Z`,
+        fill: `var(${wv.varName})`}, svg);
+      const det = KVDET[s][gi];
+      path.addEventListener("pointerenter", evt => showTip(tip, box, evt, `w${wd} · ${wv.name}`,
+        [{c: wv.varName, n: "kv_demotions", v: "+" + v},
+         {c: "--baseline", n: "round tokens", v: det[0].toLocaleString()},
+         {c: "--baseline", n: "wall", v: det[1] + " s"},
+         {c: "--baseline", n: "susp / waitmem", v: det[2] + " / " + det[3]}]));
+      path.addEventListener("pointerleave", () => tip.style.display = "none");
+    });
+  });
+  const ax = el("text", {x: m.l, y: 13, "font-size": 11.5, fill: "var(--muted)"}, svg);
+  ax.textContent = "kv_demotions delta";
+  const z = el("text", {x: m.l, y: H - 4, "text-anchor": "start", "font-size": 11.5, fill: "var(--muted)"}, svg);
+  z.textContent = "hover a bar for the round · zero bars draw nothing";
+
+  const tbl = document.getElementById("kv-table");
+  tbl.querySelector("thead tr").innerHTML = "<th>width</th>" + WAVES.map(w => `<th>${w.name}</th>`).join("");
+  tbl.querySelector("tbody").innerHTML = KVW.map((wd, gi) =>
+    `<tr><td>w${wd}</td>` + WAVES.map((wv, s) => {
+      const d = KVDET[s][gi];
+      return `<td title="tokens ${d[0].toLocaleString()}, wall ${d[1]} s">+${DEMOTE[s][gi]} dem · susp ${d[2]} · wmem ${d[3]}</td>`;
+    }).join("") + "</tr>").join("");
+  buildLegend("kv-legend");
+})();
+</script>
+</body>
+</html>

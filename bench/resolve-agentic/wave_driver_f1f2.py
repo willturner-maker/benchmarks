@@ -27,7 +27,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 RESULTS_ROOT = REPO / "bench" / "resolve-agentic" / "results"
 DEFAULT_TL_BASE = "_mcp_AGBench-YYYY-MM-DD"
 DEFAULT_OUT = REPO / "bench" / "resolve-agentic" / "results" / "YYYY-MM-DD-f1f2-wave"
-DEFAULT_RENDER_ROOT = "/Volumes/YourVolume/resolve-audio-analysis/agbench_YYYY-MM-DD"
+DEFAULT_RENDER_ROOT = "/Volumes/YourVolume/local.AI/resolve-audio-analysis/agbench_YYYY-MM-DD"
 MODEL = "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S"
 
 # Fixture-derived frame numbers (from the wave's untracked ground_truth-<date>.json; the

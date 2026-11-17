@@ -26,9 +26,9 @@ RUN = REPO / "bench" / "splash-concurrency" / "results" / "clean-2026-11-13"
 SPLASH_DIR = REPO / "bench" / "splash-concurrency"
 VIS_DIR = REPO / "bench" / "visual-venv"
 VIS_PY = pathlib.Path(os.environ.get("VIS_VENV_PY", str(pathlib.Path.home() / "resolve-vision-venv312" / "bin" / "python")))
-# Reruns on this host: export VIS_FIXTURES="/Volumes/<your-volume>/vision-detector-compare/bench-20261111"
+# Reruns on this host: export VIS_FIXTURES="/Volumes/<your-volume>/local.AI/vision-detector-compare/bench-20261111"
 # (the 2026-11-11 visual-venv bench fixtures — fixture_f240.png + fixture_f240_h264.mp4).
-VIS_FIXTURES = pathlib.Path(os.environ.get("VIS_FIXTURES", "/Volumes/YourVolume/vision-detector-compare/bench-20261111"))
+VIS_FIXTURES = pathlib.Path(os.environ.get("VIS_FIXTURES", "/Volumes/YourVolume/local.AI/vision-detector-compare/bench-20261111"))
 VIS_MODELS = pathlib.Path(os.environ.get("VIS_MODELS", str(pathlib.Path.home() / "resolve-vision-models")))
 ENG = "http://127.0.0.1:8000"
 
