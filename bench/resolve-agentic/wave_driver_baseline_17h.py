@@ -142,8 +142,13 @@ def main():
     ap.add_argument("--out", default=str(OUT), help="wave output dir (smoke runs go elsewhere)")
     ap.add_argument("--render-root", default=None,
                     help="real render volume for this wave (overrides env/placeholder)")
+    # 17h adds --keep-agents: with tenancy disclosed (the operator session runs alongside),
+    # hiding the operator's global AGENTS.md for hours only starves the operator, while the
+    # TRIAL sessions were already proven seal-clean (smoke: 0 leaks, project untouched).
+    ap.add_argument("--keep-agents", action="store_true",
+                    help="do not hide the operator's global AGENTS.md (tenancy-disclosed waves only)")
     a = ap.parse_args()
-    global RENDER
+    global RENDER, SNAPS
     if a.render_root:
         RENDER = a.render_root
 
@@ -156,6 +161,7 @@ def main():
                  "Pass --render-root <real volume path> (the volume must already exist); "
                  "refusing to create a placeholder on the root volume.")
     out = pathlib.Path(a.out)
+    SNAPS = out / "snapshots"   # module SNAPS is bound to the default OUT; follow --out
     sess = out / "sessions"
     sess.mkdir(parents=True, exist_ok=True)
     SNAPS.mkdir(parents=True, exist_ok=True)
@@ -164,6 +170,8 @@ def main():
     (out / "archived_briefs.md").write_text(json.dumps({
         "wave": "baseline-2026-11-17h", "single_project": TL, "render_root": RENDER,
         "effort": "daily (no proxy; engine default; OpenCode sends none)",
+        "agents_hidden": not a.keep_agents,
+        "tenancy": "disclosed — operator session shares the engine alongside this wave",
         "frames": {"base_src": v2.BASE_SRC, "insert_src": v2.INS_SRC, "insert_frames": v2.INS_F,
                    "probe_src": v2.PROB_SRC, "probe_frames": v2.PROB_F, "slip_src": v2.SLIP_SRC},
     }, indent=1))
@@ -174,7 +182,10 @@ def main():
     mc = Client(out / "snapshot-mcp-calls.jsonl")   # one stdio session for all snapshots
 
     hidden = pathlib.Path(str(v2.GLOBAL_AGENTS) + ".bench-hidden")
-    if v2.GLOBAL_AGENTS.exists():
+    if a.keep_agents:
+        print("--keep-agents: operator global AGENTS.md left in place (tenancy disclosed)",
+              flush=True)
+    elif v2.GLOBAL_AGENTS.exists():
         v2.GLOBAL_AGENTS.rename(hidden)
     elif hidden.exists():
         print("!! global AGENTS.md already renamed away by an earlier aborted run; "
@@ -224,7 +235,9 @@ def main():
         print(f"WAVE DONE — {out}", flush=True)
     finally:
         mc.close()
-        if hidden.exists():
+        # Restore only OUR copy, and only if nothing else occupies the real path (a --keep-agents
+        # run over a leftover .bench-hidden from an aborted earlier wave must not clobber state).
+        if hidden.exists() and not v2.GLOBAL_AGENTS.exists():
             hidden.rename(v2.GLOBAL_AGENTS)
             print("global AGENTS.md restored", flush=True)
 
