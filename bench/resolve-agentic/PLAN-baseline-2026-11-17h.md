@@ -38,9 +38,17 @@ F2 grade dimension become measurable again); 18/18 stops being the working denom
 
 ## Pre-wave checklist (all before any session is armed)
 
-- [ ] Builder run (UNRECORDED probe first): f2 ARM CHECK prints OK.
-- [ ] prestate + ground truth sealed for `…17h`; shape matches 16f adapters where briefs unchanged.
-- [ ] grader_selftest 58/58 (or current count) green.
+- [x] Builder run (UNRECORDED probe first, 2026-11-17): ARM CHECK fired its first catch —
+      against ITSELF: v1 of the check probed pre-shift indices (1,2) and a probe key that
+      does not exist, and ABORTed an arming that verification then proved CORRECT
+      (template + all 3 copies: exactly one 24-f transition row, graded clips at post-shift
+      indices 2 and 3 — the docstring's own "items 2 and 3"). Check fixed; state kept.
+      Lesson: an arming check must encode the POST-operation layout, not the intent-time one.
+- [x] prestate + ground truth sealed for `…17h` — exactly the 10 armed timelines. Required
+      cleanup the probe exposed: MCP auto-versioning left six `<tl>_archived_vNN` copies in
+      the project (17g's sealed gt never had them); deleted, and the gt stage now excludes
+      `_archived_` names and reports them at build time instead of letting an agent meet them.
+- [x] grader_selftest green: 58/58 (2026-11-17, current count).
 - [x] T8 snapshot hook present in the driver and unit-checked against a known comp (arm a
       throwaway comp, snapshot it, delete it — the hook must see exactly it). DONE 2026-11-17.
 - [ ] harness.json captured (opencode build, engine banner line, MCP versions).
@@ -56,9 +64,8 @@ F2 grade dimension become measurable again); 18/18 stops being the working denom
 - T8 measures agent behavior at session end; post-hoc Resolve behavior (comp eviction under
   churn) is recorded as a product finding every time it appears.
 
-Status: **built, hook unit-verified; not run.** Builder fix landed; driver
-`wave_driver_baseline_17h.py` landed — single-arm sequential loop, snapshot hook live-tested
-2026-11-17 on throwaway project `_mcp_17h_snaptest` (armed one clip + one comp: snapshot saw
-`comp_count 1 / 'Composition 1'`; project deleted clean afterward). Remaining pre-wave:
-builder probe run (unrecorded, ARM CHECK), prestate + gt sealing, grader_selftest green,
-then the wave itself when a window is chosen.
+Status: **all pre-wave checklist items done (2026-11-17). Wave not yet run** — one decision
+open: tenancy (alongside an operator session, disclosed, as the published 17g was; or
+tenancy-free detached like the 11-13/16 co-runs) and the start. Recommended first move at
+wave time: one `--smoke T1r1` session to a scratch `--out` to prove the driver end-to-end
+(snapshot writes, seal audit, summary lines) before arming the 21.

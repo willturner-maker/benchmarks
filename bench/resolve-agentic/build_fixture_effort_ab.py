@@ -137,14 +137,17 @@ def main():
     ap.add_argument("--stage", default="all", help="settings|project|base|f1|f2|duplicate|gt|all")
     ap.add_argument("--tl-base", default=None, help="defaults to --project")
     ap.add_argument("--fresh", action="store_true", help="delete the project first if present")
+    ap.add_argument("--logdir", default=str(LOGDIR),
+                    help="build-log dir (17h+ waves: results/<wave>/, ignored by results/.gitignore)")
     a = ap.parse_args()
     TLB = a.tl_base or a.project
     want = lambda s: a.stage in ("all", s)
     if not os.path.exists(MEDIA_PATH):   # unmounted volume must fail here, not mid-arm
         print("!! fixture media path unreachable (volume unmounted?) — see fixture.json; aborting")
         return 1
-    LOGDIR.mkdir(parents=True, exist_ok=True)
-    c = Client(LOGDIR / f"fixture-build-{a.project}.jsonl")
+    logdir = pathlib.Path(a.logdir)
+    logdir.mkdir(parents=True, exist_ok=True)
+    c = Client(logdir / f"fixture-build-{a.project}.jsonl")
 
     if want("settings"):
         c.tool("project_manager", "load", {"name": a.project})
@@ -294,21 +297,26 @@ def main():
                "options": {"type": "Cross Dissolve", "category": "simple", "position": "end",
                            "alignment": "center", "duration": 24}}))[:400])
         print("f2 link:", str(link_pairs(f2))[:200])
-        # Arming verification (fail loud, never arm a wrong pre-state again):
-        #  - exactly one transition of 24 f on the item0/item1 cut
-        #  - grade tools present on the two later clips, absent on the graded-transition-adjacent one
+        # Arming verification (fail loud, never arm a wrong pre-state again).
+        # POST-transition row layout is the spec (docstring "grade on items 2 and 3"):
+        # get_items rows -> [clip0, transition(24f), clip1, clip2]; graded rows are 2 and 3.
+        # (First version of this check probed pre-shift indices and a probe key that does
+        # not exist — ABORTed on a CORRECT arm; the 17h probe run caught it.)
         pv = c.tool("timeline", "probe_timeline_structure",
                     {"timeline_name": f2, "include_clip_properties": True})
-        trans = [t for t in (pv.get("transitions") or []) if (t.get("duration") or 0) > 0]
+        rows2 = c.tool("timeline", "get_items", {"track_type": "video", "track_index": 1,
+                                                 "timeline_name": f2}).get("items", [])
+        trans = [r for r in rows2 if (r.get("kind") or r.get("type") or "").lower() == "transition"
+                 and (r.get("end", 0) - r.get("start", 0)) == 24]
         graded = []
-        for pos in (1, 2):
+        for pos in (2, 3):
             ng = c.tool("timeline_item_color", "probe_node_graph",
                         {"track_type": "video", "track_index": 1, "item_index": pos,
                          "timeline_name": f2, "max_nodes": 8})
             tools = [t for n in (ng.get("nodes") or []) for t in (n.get("tools") or [])]
             graded.append(bool(tools))
         ok = len(trans) == 1 and all(graded)
-        print(f"f2 ARM CHECK: transitions={len(trans)} graded[1,2]={graded} -> {'OK' if ok else 'ABORT'}")
+        print(f"f2 ARM CHECK: transitions={len(trans)} graded[2,3]={graded} -> {'OK' if ok else 'ABORT'}")
         if not ok:
             print("!! f2 pre-state does not match spec — fix arming before any wave uses this project")
             c.close(); return 1
@@ -368,8 +376,16 @@ def main():
                          "start_frame": START,
                          "geometry_convention": "END-EXCLUSIVE (probe semantics); DF reads 1 low",
                          "media": "class A (fixture.json)"}, "timelines": {}}
+        # MCP auto-versioning can leave <tl>_archived_vNN copies in the project (seen in the
+        # 17h probe run; the 17g sealed gt has exactly the 10 armed timelines). They are NOT
+        # part of the pre-state: excluded from gt here, and the builder reports them so a
+        # stray copy is visible at build time, not discovered by an agent mid-wave.
+        archived = [n for n in names if "_archived_" in n]
+        if archived:
+            print(f"note: {len(archived)} MCP-archived version timelines present (excluded from gt): "
+                  + ", ".join(n.replace(TLB, "") for n in archived))
         for n, tid in sorted(names.items()):
-            if not n.startswith(TLB):
+            if not n.startswith(TLB) or "_archived_" in n:
                 continue
             pv = c.tool("timeline", "probe_timeline_structure",
                         {"timeline_id": tid, "include_clip_properties": True})
