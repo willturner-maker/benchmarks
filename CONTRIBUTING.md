@@ -65,6 +65,16 @@ bash tools/precommit-scan.sh --install
 This refuses commits that contain local paths, camera filenames, credential-shaped
 strings, or other deny terms. Run `--all` to audit the tree.
 
+## Release tags
+
+Tags here are **dated record snapshots**, not semver — waves are records, not software.
+Convention: tag the commit that publishes a wave's distilled record
+(`results-<wave>.json` + findings + rationale docs) using the wave label as the tag
+(`2026-11-16f`), and let the release notes say what the snapshot pins: seal verdict,
+headline results, and any decision of record (e.g. the 16f tag also pins Claude Code's
+removal from the rotation). Tags are never moved after publication; a corrected record
+gets a new dated tag, same as a corrected wave does.
+
 ## Style notes
 
 - Prefer dated wave directories under `bench/<suite>/results/<wave>/` rather than
