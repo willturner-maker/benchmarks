@@ -20,7 +20,7 @@ def strip_items(pr):
         out.append(it)
     return out
 
-def main(proj):
+def main(proj, label="2026-11-17g effort A/B"):
     gt = json.load(open(HERE / f"ground_truth-{proj}.json"))
     pre = json.load(open(HERE / f"prestate-{proj}.json"))
     tls = gt["timelines"]
@@ -64,7 +64,7 @@ def main(proj):
     f2 = {"timeline": f"{proj}_f2m", "trials": {f"f2r{k}": {"timeline": f"{proj}_f2r{k}"} for k in (1, 2, 3)},
           "pre_state": {"video_items_including_transition": items}}
 
-    out = {"_meta": {"project": proj, "wave": "2026-11-17g effort A/B",
+    out = {"_meta": {"project": proj, "wave": label,
                      "derived_from": [f"ground_truth-{proj}.json", f"prestate-{proj}.json"],
                      "geometry_convention": "END-EXCLUSIVE (probe semantics); DF reads 1 low",
                      "media": "class A (fixture.json)"},
@@ -74,5 +74,13 @@ def main(proj):
     print("wrote", dst, "| T1 dur:", T1["duration_frames"], "| f2 items:", len(items))
 
 if __name__ == "__main__":
-    for proj in sys.argv[1:]:
-        main(proj)
+    # usage: build_gt16f.py PROJ [PROJ...] [--label="wave name"]
+    label = "2026-11-17g effort A/B"
+    projs = []
+    for a in sys.argv[1:]:
+        if a.startswith("--label"):
+            label = a.split("=", 1)[1] if "=" in a else label
+        else:
+            projs.append(a)
+    for proj in projs:
+        main(proj, label)
