@@ -41,8 +41,8 @@ F2 grade dimension become measurable again); 18/18 stops being the working denom
 - [ ] Builder run (UNRECORDED probe first): f2 ARM CHECK prints OK.
 - [ ] prestate + ground truth sealed for `…17h`; shape matches 16f adapters where briefs unchanged.
 - [ ] grader_selftest 58/58 (or current count) green.
-- [ ] T8 snapshot hook present in the driver and unit-checked against a known comp (arm a
-      throwaway comp, snapshot it, delete it — the hook must see exactly it).
+- [x] T8 snapshot hook present in the driver and unit-checked against a known comp (arm a
+      throwaway comp, snapshot it, delete it — the hook must see exactly it). DONE 2026-11-17.
 - [ ] harness.json captured (opencode build, engine banner line, MCP versions).
 
 ## Known residual risks (disclosed in advance, not discovered after)
@@ -56,4 +56,9 @@ F2 grade dimension become measurable again); 18/18 stops being the working denom
 - T8 measures agent behavior at session end; post-hoc Resolve behavior (comp eviction under
   churn) is recorded as a product finding every time it appears.
 
-Status: **planned, not run.** Builder fix landed; driver T8-snapshot hook is the remaining build item.
+Status: **built, hook unit-verified; not run.** Builder fix landed; driver
+`wave_driver_baseline_17h.py` landed — single-arm sequential loop, snapshot hook live-tested
+2026-11-17 on throwaway project `_mcp_17h_snaptest` (armed one clip + one comp: snapshot saw
+`comp_count 1 / 'Composition 1'`; project deleted clean afterward). Remaining pre-wave:
+builder probe run (unrecorded, ARM CHECK), prestate + gt sealing, grader_selftest green,
+then the wave itself when a window is chosen.
