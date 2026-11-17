@@ -1,0 +1,1 @@
+Fetch http://127.0.0.1:8000/status exactly once (curl). Report three lines: kv_hit_tokens: <exact>, kv_disk_hit_tokens: <exact>, disk_share_percent: <kv_disk_hit_tokens / (kv_hit_tokens + kv_disk_hit_tokens) * 100 rounded to 2 decimal places>. Show no work, just the three lines.

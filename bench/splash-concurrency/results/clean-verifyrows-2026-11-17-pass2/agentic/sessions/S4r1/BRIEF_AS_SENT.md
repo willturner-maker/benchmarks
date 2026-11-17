@@ -1,0 +1,1 @@
+Read the file fixture_status.json in your working directory. Answer in exactly three numbered lines: 1) the single most likely bottleneck; 2) the one field that most directly evidences it (full dotted path); 3) one concrete action likely to relieve it. No other text.

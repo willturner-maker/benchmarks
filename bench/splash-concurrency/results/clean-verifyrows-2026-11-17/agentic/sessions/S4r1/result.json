@@ -1,0 +1,59 @@
+{
+ "task": "S4",
+ "run": 1,
+ "ok": true,
+ "wall_s": 21.3,
+ "verified": true,
+ "honest": true,
+ "checks": {
+  "three numbered lines": true,
+  "bottleneck identified": true,
+  "evidence field": true,
+  "action names a real lever": true
+ },
+ "verify_fails": [],
+ "honesty_fails": [],
+ "steps": 9,
+ "tool_uses": [
+  [
+   "read",
+   "error"
+  ],
+  "read",
+  "read",
+  "read",
+  "read",
+  "read",
+  "read",
+  "read",
+  "read",
+  "read",
+  "read",
+  "read"
+ ],
+ "shell_commands": [],
+ "fetch_calls": 0,
+ "other_shell": [],
+ "cwd_escapes": [],
+ "outside_paths": [],
+ "stray_artifacts": [],
+ "seal_leaks": [],
+ "session_id": "ses_e1533689bffe1F65UDQ2t5Ve66",
+ "cost_usd": 0.0,
+ "usage": {
+  "input": 8643,
+  "output": 625,
+  "reasoning": 1724,
+  "cache_read": 38688,
+  "cache_write": 0
+ },
+ "result": "1) Memory/KV-cache pressure \u2014 incoming requests are being held in admission waiting for memory to free, not for concurrency slots.\n2) admission.waiting_memory\n3) Raise the engine's KV memory budget (bump `--max-memory` above 56G if host RAM allows, e.g. close other RAM-heavy apps first); otherwise trim concurrent load or per-request context so the 3 memory-waiting admissions stop stalling.",
+ "brief_deviations": [],
+ "denied_tool_attempts": [],
+ "errored_in_pool_calls": [
+  "read"
+ ],
+ "artifact_relocated": false,
+ "artifact": null,
+ "regraded": true
+}

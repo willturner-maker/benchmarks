@@ -1,0 +1,1 @@
+Fetch http://127.0.0.1:8000/status exactly once (curl). Then report, one per line, EXACTLY these six lines: schema_version: <value> / model_name: <memory_plan.model.model_name> / max_context: <maximum_context_tokens> / active_sum: <admission.waiting + scheduler.queued + scheduler.decoding> / cache_hits: <cache.hits> / cold_misses: <cache.cold_misses>. Values only, no prose.

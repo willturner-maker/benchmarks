@@ -1,0 +1,10 @@
+{
+  "schema_version": 8,
+  "ready": true,
+  "memory_pressure": "high",
+  "thermal_state": "nominal",
+  "admission": {"waiting": 3, "waiting_memory": 3, "waiting_concurrency": 0, "held_behind_refusal": 0, "restoring": 0, "suspended": 2, "draining": false, "oldest_wait_ms": 12000},
+  "cache": {"hits": 4210, "cold_misses": 30, "kv_hit_tokens": 190000000, "kv_disk_hit_tokens": 88000000},
+  "scheduler": {"queued": 3, "waiting_resources": 3, "prefilling": 0, "decoding": 1, "decode_batches_by_width": {"b1": 81000, "b2": 19000, "b3": 400, "b4": 0}},
+  "metrics": {"ttft_ms": {"p50": 4200, "p95": 26000}, "decode_gap_ms": {"p50": 66, "p95": 520}}
+}

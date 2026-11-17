@@ -1,0 +1,237 @@
+{
+ "started": "2026-11-17T10:14:34-0800",
+ "purpose": "Splash 1.7.0 clean-window pass under --verify-rows all, plus determinism A/B and the OpenCode agentic suite",
+ "operator_tenancy": "detached runner; operator session made zero engine turns during timed stages (enforced by the settle delay below and the operator not interacting)",
+ "finished": "2026-11-17T10:42:14-0800",
+ "stages": [
+  {
+   "snapshot_before": {
+    "ts": "2026-11-17T10:16:04-0800",
+    "ready": true,
+    "hit_rate": 0.9898063201,
+    "hits": 971,
+    "cold_misses": 10,
+    "kv_disk_hit_tokens": 4370656,
+    "pages_cache": 6062
+   }
+  },
+  {
+   "determinism_daily": {
+    "tag": "verify-rows-auto",
+    "n": 5,
+    "distinct_outputs": 1,
+    "hashes": [
+     "e3b0c44298fc1c14"
+    ],
+    "bit_reproducible": true,
+    "completion_tokens": [
+     160,
+     160,
+     160,
+     160,
+     160
+    ],
+    "tok_s_each": [
+     190.2,
+     242.1,
+     243.5,
+     242.8,
+     243.9
+    ],
+    "median_tok_s": 242.8,
+    "min_wall_s": 0.656,
+    "max_wall_s": 0.841
+   }
+  },
+  {
+   "snapshot_after": {
+    "ts": "2026-11-17T10:16:07-0800",
+    "ready": true,
+    "hit_rate": 0.9898580122,
+    "hits": 976,
+    "cold_misses": 10,
+    "kv_disk_hit_tokens": 4370656,
+    "pages_cache": 6045
+   }
+  },
+  {
+   "restart_verify": {
+    "tag": "verifyall",
+    "ready_in_s": 0.0,
+    "args": [
+     "serve",
+     "--model",
+     "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+     "--port",
+     "8000",
+     "--max-cache-disk",
+     "256G",
+     "--max-memory",
+     "56G",
+     "--expert-memory",
+     "auto",
+     "--default-reasoning-effort",
+     "xhigh",
+     "--thinking-token-budget",
+     "16384",
+     "--persistent-cache",
+     "--verify-rows",
+     "all"
+    ],
+    "ps": "/opt/homebrew/Cellar/splash/1.7.0/libexec/engine/splash serve-native ~/Library/Application Support/Splash/models/.resolved/f073087d1dff7edaf96fe2f5ee568630feced771f7d81c0484351ebe0eabc260 auto 60129542144 274877906944 --persistent-cache on --relaunch-context 262144"
+   }
+  },
+  {
+   "cache_after_restart": {
+    "ts": "2026-11-17T10:17:11-0800",
+    "ready": true,
+    "hit_rate": 0,
+    "hits": 0,
+    "cold_misses": 0,
+    "kv_disk_hit_tokens": 0,
+    "pages_cache": 0
+   }
+  },
+  {
+   "stage": "warm-engine_probe",
+   "rc": 0,
+   "wall_s": 90.8,
+   "cmd": [
+    "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "-I",
+    "~/benchmarks/bench/splash-concurrency/engine_probe.py"
+   ]
+  },
+  {
+   "stage": "warm-ladder_kv",
+   "rc": 0,
+   "wall_s": 483.9,
+   "cmd": [
+    "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "-I",
+    "~/benchmarks/bench/splash-concurrency/ladder_kv.py",
+    "--out",
+    "~/benchmarks/bench/splash-concurrency/results/clean-verifyrows-2026-11-17/warm-ladder_kv.jsonl"
+   ]
+  },
+  {
+   "snapshot_before_scored": {
+    "ts": "2026-11-17T10:26:45-0800",
+    "ready": true,
+    "hit_rate": 1,
+    "hits": 278,
+    "cold_misses": 0,
+    "kv_disk_hit_tokens": 2066944,
+    "pages_cache": 4095
+   }
+  },
+  {
+   "stage": "engine_probe",
+   "rc": 0,
+   "wall_s": 88.0,
+   "cmd": [
+    "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "-I",
+    "~/benchmarks/bench/splash-concurrency/engine_probe.py"
+   ]
+  },
+  {
+   "stage": "ladder_kv",
+   "rc": 0,
+   "wall_s": 480.6,
+   "cmd": [
+    "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "-I",
+    "~/benchmarks/bench/splash-concurrency/ladder_kv.py",
+    "--out",
+    "~/benchmarks/bench/splash-concurrency/results/clean-verifyrows-2026-11-17/ladder_kv.jsonl"
+   ]
+  },
+  {
+   "snapshot_after_scored": {
+    "ts": "2026-11-17T10:36:14-0800",
+    "ready": true,
+    "hit_rate": 1,
+    "hits": 556,
+    "cold_misses": 0,
+    "kv_disk_hit_tokens": 4133856,
+    "pages_cache": 4095
+   }
+  },
+  {
+   "determinism_verifyall": {
+    "tag": "verify-rows-all",
+    "n": 5,
+    "distinct_outputs": 1,
+    "hashes": [
+     "e3b0c44298fc1c14"
+    ],
+    "bit_reproducible": true,
+    "completion_tokens": [
+     160,
+     160,
+     160,
+     160,
+     160
+    ],
+    "tok_s_each": [
+     208.1,
+     243.5,
+     243.5,
+     245.0,
+     238.5
+    ],
+    "median_tok_s": 243.5,
+    "min_wall_s": 0.653,
+    "max_wall_s": 0.769
+   }
+  },
+  {
+   "stage": "agentic",
+   "rc": 0,
+   "wall_s": 293.3,
+   "cmd": [
+    "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "-I",
+    "~/benchmarks/bench/splash-concurrency/driver_opencode.py",
+    "--trials",
+    "3",
+    "--out",
+    "~/benchmarks/bench/splash-concurrency/results/clean-verifyrows-2026-11-17/agentic"
+   ]
+  },
+  {
+   "agentic_tally": {
+    "n": 12,
+    "verified": 9,
+    "honest": 6
+   }
+  },
+  {
+   "restart_daily": {
+    "tag": "daily-restore",
+    "ready_in_s": 0.0,
+    "args": [
+     "serve",
+     "--model",
+     "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+     "--port",
+     "8000",
+     "--max-cache-disk",
+     "256G",
+     "--max-memory",
+     "56G",
+     "--expert-memory",
+     "auto",
+     "--default-reasoning-effort",
+     "xhigh",
+     "--thinking-token-budget",
+     "16384",
+     "--persistent-cache"
+    ],
+    "ps": "/opt/homebrew/Cellar/splash/1.7.0/libexec/engine/splash serve-native ~/Library/Application Support/Splash/models/.resolved/f073087d1dff7edaf96fe2f5ee568630feced771f7d81c0484351ebe0eabc260 auto 60129542144 274877906944 --persistent-cache on --relaunch-context 262144"
+   }
+  }
+ ],
+ "daily_config_restored": true
+}

@@ -1,0 +1,14 @@
+{
+ "opencode": "opencode v2.3.0",
+ "splash": "Splash 1.7.0",
+ "model": "splash/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+ "engine_ready": true,
+ "schema_version": 8,
+ "cache_state_at_start": {
+  "hit_rate": 0.9896800826,
+  "hits": 959,
+  "cold_misses": 10,
+  "kv_disk_hit_tokens": 4370112
+ },
+ "seal": "OPENCODE_CONFIG + permissions + policies; no MCP; execute denied; global AGENTS.md renamed away"
+}

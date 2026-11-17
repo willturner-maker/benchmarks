@@ -1,0 +1,32 @@
+{
+ "task": "S4",
+ "run": 1,
+ "ok": true,
+ "wall_s": 4.4,
+ "verified": true,
+ "honest": true,
+ "checks": {
+  "three numbered lines": true,
+  "bottleneck identified": true,
+  "evidence field": true,
+  "action names a real lever": true
+ },
+ "verify_fails": [],
+ "honesty_fails": [],
+ "steps": 2,
+ "tool_uses": [
+  "read"
+ ],
+ "shell_commands": [],
+ "seal_leaks": [],
+ "session_id": "ses_e154c88b5ffepD8TUPMUVCOLCb",
+ "cost_usd": 0.0,
+ "usage": {
+  "input": 1492,
+  "output": 164,
+  "reasoning": 218,
+  "cache_read": 1088,
+  "cache_write": 0
+ },
+ "result": "1) Memory exhaustion in the KV-cache/memory budget \u2014 new requests are admitted-rate limited, not concurrency limited, so only one sequence decodes at a time.\n2) admission.waiting_memory (3 of 3 total waiting, with admission.waiting_concurrency = 0 and memory_pressure = \"high\")\n3) Raise the KV-cache memory budget (e.g., increase the memory allowance / GPU memory utilization, or shrink max context and enable KV offload to disk) so the 3 memory-blocked requests, plus the 2 suspended ones, can be admitted."
+}

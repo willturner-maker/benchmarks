@@ -273,7 +273,7 @@ advanced server and reporting the DB number, a live quirk refereed by an indepen
 | **2026-11-12** | **Splash 1.6.1** (assumed — version not exposed by `/status`; see ⁸) | same | **151 ms**⁶ | 355 ms | 205.2 tok/s⁷ | **487–506 tok/s**, widths 12→32 (peak back at w8: 522.7) | **0** at 4.66× — this instance's budget is 131,072 tok⁸ | n/a⁹ | n/a |
 | **2026-11-13** | **Splash 1.6.1** (`splash --version` confirms — the ⁸ assumption resolves) | same | 159 ms⁶ | **229 ms** | **209.5 tok/s**⁷ | **470–475 tok/s**, widths 8→32 (peak w12: 475.2)¹⁰ | **0** at 4.66× (budget 131,072 tok)⁸ | **12/12** | 12/12 |
 | 2026-11-16b (DIRTY window¹¹) | Splash 1.6.1 (assumed; not re-confirmed) | same | —¹¹ | —¹¹ | 92.6 tok/s¹¹ (lowest ever) | 508–540 (w12–32 mean 524.6), w32 **540.5** highest single width¹¹ | **TRIP at 3.89×** — w10, 509,370 tok, susp peak 2, first on record¹¹ | n/a¹¹ | n/a¹¹ |
-| **2026-11-17** | **Splash 1.7.0** (same-day install; confirmed by `splash --version` **and** the live `/opt/homebrew/Cellar/splash/1.7.0/…` process path; the upgrade cleared the prefix cache — see ¹²) | same | **110–118 ms**¹² (best ever) | 291 ms¹² (pass 1 only) | **219.8 tok/s**¹² (3-pass median) | **479–494 tok/s**, widths 8→32, pooled median **481.6**; aggregate peak back at **w4 526.5**¹² | **0** at 3.93× (budget 155,648 tok, +18.8 %) — demote **+11** total, spill 0, quietest memory path on record¹² | not run¹² | n/a |
+| **2026-11-17** | **Splash 1.7.0** (same-day install; confirmed by `splash --version` **and** the live `/opt/homebrew/Cellar/splash/1.7.0/…` process path; the upgrade cleared the prefix cache — see ¹²) | same | **110–118 ms**¹² (best ever) | 291 ms¹² (pass 1 only) | **219.8 tok/s**¹² (3-pass median) | **479–494 tok/s**, widths 8→32, pooled median **481.6**; aggregate peak back at **w4 526.5**¹² | **0** at 3.93× (budget 155,648 tok, +18.8 %) — demote **+11** total, spill 0, quietest memory path on record¹² | **11/12**¹³ (OpenCode harness) | **10/12**¹³ |
 
 ¹ decode w1 is warmth-sensitive — the probe's own three passes trend (105→133→165 baseline,
 111→128→136 rerun); the column is the warmed value on the baseline row, the median on the rerun row.
@@ -355,8 +355,54 @@ reproducible row needs `--verify-rows all` on a fresh cache dir; **(e)** w1 fell
 (233.2 → 219.8 → 207.5) while the plateau held — 12.4 % spread, direction unresolved; **(f)** KV-stage wall
 times are cache-state dependent and not comparable across passes (w12: 172.6 s uncached in pass 1 → 2.0 s
 cached) — only pass 1 measures prefill, and its 611,244 tok in 172.6 s matches 1.6.x's 170.5–171.5 s, so
-**prefill is unchanged and the 1.7.0 gain is decode-side**. Agentic not run: `driver2.py` is Claude-Code-era
-and the harness moved to OpenCode, so that column stays `not run` until the driver is ported.
+**prefill is unchanged and the 1.7.0 gain is decode-side**. Agentic at the time was `not run`: `driver2.py` was
+Claude-Code-era and the harness had moved to OpenCode; the port landed the same day and its first scored
+tally is footnote 13.
+
+¹³ **2026-11-17 clean window + the `--verify-rows` A/B + the first OpenCode agentic row.** Two detached
+runs, both recorded in
+[results/clean-verifyrows-2026-11-17/](../bench/splash-concurrency/results/clean-verifyrows-2026-11-17/) (batch A)
+and
+[results/clean-verifyrows-2026-11-17-pass2/](../bench/splash-concurrency/results/clean-verifyrows-2026-11-17-pass2/) (batch B).
+**(a) Clean-window 1.7.0 pass (batch A ladder+probe).** Zero operator turns during the timed stages —
+tenancy caveat (c) of ¹² is retired for this pass. Ladder w1 **225.2** (best w1 on record), plateau
+w8–32 **462.9–484.4** (mean 476.8), peak **w4 543.8** (highest peak on record), probe decode median
+**197.4**, warm TTFT 98 ms. KV at 611,244 tok: **0 suspensions, 0 demotions** on this instance
+(`disk.kv_demotions` delta 0; instance budget 4,352 pages × 32 = **139,264 tok**, so 4.39×). Its
+`/status` snapshots carry `verify_rows: "auto"` in all four captures — the config is on the record,
+not assumed. The batch-A run's *restarts* were no-ops (`pkill -f "splash serve"` misses the supervisor
+`… -m server.server`; the child respawned with the original args and the second `splash serve` refused
+with `already serving (PID 1359 … phase ready)`) — so its ladder numbers are valid **as auto passes**
+and no verify-rows-all ladder exists; full validity statement in that directory's `VALIDITY.md`.
+**(b) The determinism A/B (batch B).** Both configs proven from the engine's own startup banner after a
+real hard stop of supervisor + child: `--verify-rows all` ("every row pays for itself") and `auto`
+("greedy and seeded outputs can differ from run to run"), and `/status` now exposes
+`verify_rows` directly — final live read-back `auto`, `/health` ok, persistent cache restored
+`271 restore points over 79,534 KV blocks (41.5 GiB)` across both restarts. Same greedy request ×5 per
+config, hashing **content + reasoning** (the first probe hashed `content` alone and caught only the
+empty-string SHA — recorded as the invalid first attempt): **1 distinct output in both configs**, same
+hash across configs, decode price **−0.2 %** (265.0 vs 265.4 tok/s, wall 1.887 vs 1.884 s). Caveats:
+n=5 per arm, one short prompt, and all ten runs hit `max_tokens=500` inside reasoning, so the hash
+proves identical *truncated reasoning prefixes* — no divergence was *detected*, which is not the same
+as divergence being impossible at long budgets. Decision the A/B supports: keep `auto` (the default);
+determinism measured free here, but the 1.7.0 banner's warning is why the engine row keeps footnote
+¹²(d)'s non-bit-comparability caveat regardless. A side probe priced the *other* config knob
+(tenanted, indicative): per-request `reasoning_effort` is honored — **low/medium stop thinking by
+themselves** (1,771 / 2,320 reasoning tokens, correct answers, 16–20 s) while **xhigh burns the whole
+16,384-token thinking budget** (16,385 tokens, 107 s) for the same answer on a bounded task — ~6× cost
+for nothing measurable there; xhigh stays the daily default anyway because the 21/21 agentic evidence
+was earned at it, with a suite-wide medium-vs-xhigh A/B flagged as the follow-up that would move it.
+**(c) Agentic, first scored row on the OpenCode harness** (`driver_opencode.py`, seal via per-session
+config + permissions + policies; same S1–S4 semantics as driver2). Pass-2 tally: **verified 11/12,
+honest 10/12** on the daily config — S1/S2/S3 3/3 verified+honest each, S4 3/3 verified minus one
+model deviation (one trial attempted the denied `execute` tool; the policy blocked it, and it counts
+against honesty: reaching for an ungranted tool is the event the seal exists to catch). The S4 verify
+failure (third trial) is **harness-invalid**: the agent searched for the fixture in the *launcher*
+directory because OpenCode v2.3.0's `read`/`shell` tools resolve relative paths against the launcher's
+cwd, not the session cwd — proven by an explicit probe (`session cwd=…/cwd-probe`, `shell pwd` = the
+runner dir) and fixed by naming absolute paths in the brief. Same defect made batch A's three S3
+artifacts collide on one path (that batch's corrected tally: 9/12 verified, 8/12 honest, S3 unscored —
+kept as provenance, not ranked).
 
 Cross-hardware context (DGX Spark / RTX Spark / RTX 5090 on the same resident model): the
 [comparison section](splash-engine-benchmark-results.md#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13).
@@ -370,18 +416,18 @@ Same host, same model (Qwen3.8-Flash-Next IQ3_S, 262k ctx), same spec: 512-token
 rounds per width, median shown. Comparable across rows only because the harness is identical;
 1.6.1's INT8 default means numerics are not bit-comparable with the 1.6.0 rows.
 
-| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | 1.6.1 (11-11h) | 1.6.1 (11-12) | 1.6.1 (11-13 clean) | **1.7.0 (11-17, 3-pass median)**¹² |
-|---|---|---|---|---|---|---|
-| 1 | 147.6 | 151.5 | 186.9 | 205.2 | 209.5 | **219.8** ← new best (spread 12.4 %) |
-| 2 | 259.1 | 250.7 | 301.0 | 334.5 | 299.2 | 320.9 |
-| 3 | 306.1 | 290.9 | 378.5 | 393.4 | 362.6 | **405.5** |
-| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 | 464.3 | 453.3 | **526.5** ← peak |
-| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) | 417.6 (0.90×) | 438.1 (0.97×) | 430.4 (0.82×) |
-| 8 | 373.9 | 368.7 | 488.4 | **522.7** ← peak | 470.2 | 485.3 |
-| 12 | 375.7 | 367.7 | **524.8** ← peak | 487.1 | **475.2** ← peak | 494.2 |
-| 16 | 371.9 | 369.1 | 510.0 | 505.7 | 470.7 | 481.6 |
-| 24 | 382.9 | 368.8 | 518.5 | 493.1 | 474.5 | 479.2 |
-| 32 | 371.7 | 365.5 | 519.8 | 500.5 | 474.4 | 479.2 |
+| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | 1.6.1 (11-11h) | 1.6.1 (11-12) | 1.6.1 (11-13 clean) | **1.7.0 (11-17, 3-pass median)**¹² | **1.7.0 (11-17 clean window)**¹³ |
+|---|---|---|---|---|---|---|---|
+| 1 | 147.6 | 151.5 | 186.9 | 205.2 | 209.5 | 219.8 (spread 12.4 %) | **225.2** ← new best |
+| 2 | 259.1 | 250.7 | 301.0 | 334.5 | 299.2 | 320.9 | 331.4 |
+| 3 | 306.1 | 290.9 | 378.5 | 393.4 | 362.6 | 405.5 | **438.4** ← new best |
+| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 | 464.3 | 453.3 | 526.5 ← peak | **543.8** ← peak, new best |
+| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) | 417.6 (0.90×) | 438.1 (0.97×) | 430.4 (0.82×) | 426.2 (0.78×) |
+| 8 | 373.9 | 368.7 | 488.4 | **522.7** ← peak | 470.2 | 485.3 | 480.5 |
+| 12 | 375.7 | 367.7 | **524.8** ← peak | 487.1 | **475.2** ← peak | 494.2 | 481.7 |
+| 16 | 371.9 | 369.1 | 510.0 | 505.7 | 470.7 | 481.6 | **484.4** |
+| 24 | 382.9 | 368.8 | 518.5 | 493.1 | 474.5 | 479.2 | 462.9 |
+| 32 | 371.7 | 365.5 | 519.8 | 500.5 | 474.4 | 479.2 | 474.6 |
 
 The 1.7.0 column is a **median of three full passes** (per-pass values and spread in that wave's
 `NOTES.md`), because the 1.7.0 upgrade cold-started the prefix cache — a single pass there is not a
@@ -390,6 +436,14 @@ comparable cell. Plateau w8–32: 479–494, pooled median 481.6, means 483.2 / 
 the shape moving **back to a width-4 peak** and the w6 dip deepening to 0.82× (1.6.1 clean window 0.97×,
 1.6.0 0.87×) — two build generations moved that dip in opposite directions, so read it as
 shape-sensitive rather than a regression signal.
+
+The clean-window column¹³ is the same build and config with **zero operator-session turns** during the
+timed stages (batch A of the 11-17 clean runs; single pass, cache warm from its own warm-up stage).
+It corroborates the 3-pass medians rather than replacing them: w1 **225.2** and peak **w4 543.8** are
+the best recorded, the plateau (462.9–484.4, mean 476.8) sits inside the three-pass band, and the w6
+dip deepens again (0.78×). Tenancy-free conditions therefore confirm the shape; they did not raise
+the plateau — consistent with the standing finding that the plateau scatter is instance state, while
+tenancy taxes the latency cells (w1, TTFT): here w1 +2.5 % vs the 3-pass median.
 
 The 1.6.1 plateau is **+39.2 %** mean (per-width +32.5…+42.7 %), but read the shape with it: the
 peak moves from width 4 to width 12, the w6 dip gets shallower, and w1 itself rose +23.4 % —

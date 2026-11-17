@@ -1,0 +1,70 @@
+{
+ "probe": {
+  "tag": "verify-rows-all",
+  "n": 5,
+  "distinct_outputs": 1,
+  "hashes": [
+   "e3b0c44298fc1c14"
+  ],
+  "bit_reproducible": true,
+  "completion_tokens": [
+   160,
+   160,
+   160,
+   160,
+   160
+  ],
+  "tok_s_each": [
+   208.1,
+   243.5,
+   243.5,
+   245.0,
+   238.5
+  ],
+  "median_tok_s": 243.5,
+  "min_wall_s": 0.653,
+  "max_wall_s": 0.769
+ },
+ "rows": [
+  {
+   "wall_s": 0.769,
+   "completion_tokens": 160,
+   "prompt_tokens": 84,
+   "cached_tokens": 32,
+   "sha256": "e3b0c44298fc1c14",
+   "text_head": ""
+  },
+  {
+   "wall_s": 0.657,
+   "completion_tokens": 160,
+   "prompt_tokens": 84,
+   "cached_tokens": 64,
+   "sha256": "e3b0c44298fc1c14",
+   "text_head": ""
+  },
+  {
+   "wall_s": 0.657,
+   "completion_tokens": 160,
+   "prompt_tokens": 84,
+   "cached_tokens": 64,
+   "sha256": "e3b0c44298fc1c14",
+   "text_head": ""
+  },
+  {
+   "wall_s": 0.653,
+   "completion_tokens": 160,
+   "prompt_tokens": 84,
+   "cached_tokens": 64,
+   "sha256": "e3b0c44298fc1c14",
+   "text_head": ""
+  },
+  {
+   "wall_s": 0.671,
+   "completion_tokens": 160,
+   "prompt_tokens": 84,
+   "cached_tokens": 64,
+   "sha256": "e3b0c44298fc1c14",
+   "text_head": ""
+  }
+ ]
+}

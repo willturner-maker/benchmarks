@@ -1,0 +1,2 @@
+Fetch http://127.0.0.1:8000/status exactly once (curl). Write the file ~/benchmarks/bench/splash-concurrency/results/clean-verifyrows-2026-11-17-pass2/agentic/sessions/S3r3/out.json containing EXACTLY this JSON object (no other keys, valid JSON): {"schema_version": <value>, "memory_pressure": <value>, "admission": <the whole admission object>, "queued": <scheduler.queued>, "decoding": <scheduler.decoding>, "derived": <queued + decoding>}. After writing, reply DONE.
+Write the file at exactly that absolute path.

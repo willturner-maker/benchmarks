@@ -1,0 +1,85 @@
+{
+ "valid": false,
+ "budget": 8000,
+ "caveat": "operator session shares the engine; tenanted probe, indicative not clean-window. low/medium arms: 1,771 / 2,320 reasoning tokens to `stop` with ANSWER=450 (probe #1, budget 3000)",
+ "rows": {
+  "xhigh": {
+   "mean_wall_s": 53.45,
+   "reasoning_tokens": [
+    8000,
+    8000
+   ],
+   "finish": [
+    "length",
+    "length"
+   ],
+   "answers": [
+    null,
+    null
+   ],
+   "runs": [
+    {
+     "effort": "xhigh",
+     "wall_s": 52.46,
+     "completion_tokens": 8000,
+     "reasoning_tokens": 8000,
+     "finish": "length",
+     "answer": null
+    },
+    {
+     "effort": "xhigh",
+     "wall_s": 54.43,
+     "completion_tokens": 8000,
+     "reasoning_tokens": 8000,
+     "finish": "length",
+     "answer": null
+    }
+   ],
+   "vs_xhigh_percent": 0.0
+  },
+  "server-default": {
+   "mean_wall_s": 53.34,
+   "reasoning_tokens": [
+    8000,
+    8000
+   ],
+   "finish": [
+    "length",
+    "length"
+   ],
+   "answers": [
+    null,
+    null
+   ],
+   "runs": [
+    {
+     "effort": null,
+     "wall_s": 53.5,
+     "completion_tokens": 8000,
+     "reasoning_tokens": 8000,
+     "finish": "length",
+     "answer": null
+    },
+    {
+     "effort": null,
+     "wall_s": 53.18,
+     "completion_tokens": 8000,
+     "reasoning_tokens": 8000,
+     "finish": "length",
+     "answer": null
+    }
+   ],
+   "vs_xhigh_percent": -0.2
+  }
+ },
+ "xhigh_full_budget": {
+  "wall_s": 107.3,
+  "completion_tokens": 16394,
+  "reasoning_tokens": 16385,
+  "finish": "stop",
+  "answer": "450",
+  "note": "single run, tenanted"
+ },
+ "summary": "reasoning_effort IS honored per request: low stopped thinking at 1,771 reasoning tokens and medium at 2,320, both finish=stop with the correct ANSWER=450 (16.4 s / 20.1 s walls, budget 3000, one stopped run each). xhigh and server-default never finished under 8,000 reasoning tokens; at the full 16,384-token daily thinking budget xhigh finished once (finish=stop, 16,385 reasoning tokens, 107 s) with the SAME ANSWER=450. On this bounded arithmetic task the effort ladder costs ~6x for the same answer.",
+ "decision": "daily config keeps xhigh: the resolve-agentic 21/21 evidence was earned at xhigh and this is one bounded task (n=1 per stopped cell); switching the default silently would trade suite-proven behaviour for a single-task saving. Flagged for a dedicated agentic-suite A/B (medium vs xhigh, 6 briefs x 3)."
+}

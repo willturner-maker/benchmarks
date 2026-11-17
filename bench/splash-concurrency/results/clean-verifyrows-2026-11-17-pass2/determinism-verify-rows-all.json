@@ -1,0 +1,85 @@
+{
+ "probe": {
+  "tag": "verify-rows-all",
+  "n": 5,
+  "blank_responses": 0,
+  "distinct_outputs": 1,
+  "hashes": [
+   "def54f50d6ea6d25"
+  ],
+  "bit_reproducible": true,
+  "completion_tokens": [
+   500,
+   500,
+   500,
+   500,
+   500
+  ],
+  "reasoning_tokens": [
+   500,
+   500,
+   500,
+   500,
+   500
+  ],
+  "median_tok_s": 265.4,
+  "median_wall_s": 1.884
+ },
+ "rows": [
+  {
+   "wall_s": 3.942,
+   "completion_tokens": 500,
+   "reasoning_tokens": 500,
+   "cached_tokens": 32,
+   "content_len": 0,
+   "reasoning_len": 890,
+   "sha256": "def54f50d6ea6d25",
+   "content_head": "",
+   "finish": "length"
+  },
+  {
+   "wall_s": 1.924,
+   "completion_tokens": 500,
+   "reasoning_tokens": 500,
+   "cached_tokens": 64,
+   "content_len": 0,
+   "reasoning_len": 890,
+   "sha256": "def54f50d6ea6d25",
+   "content_head": "",
+   "finish": "length"
+  },
+  {
+   "wall_s": 1.884,
+   "completion_tokens": 500,
+   "reasoning_tokens": 500,
+   "cached_tokens": 64,
+   "content_len": 0,
+   "reasoning_len": 890,
+   "sha256": "def54f50d6ea6d25",
+   "content_head": "",
+   "finish": "length"
+  },
+  {
+   "wall_s": 1.879,
+   "completion_tokens": 500,
+   "reasoning_tokens": 500,
+   "cached_tokens": 64,
+   "content_len": 0,
+   "reasoning_len": 890,
+   "sha256": "def54f50d6ea6d25",
+   "content_head": "",
+   "finish": "length"
+  },
+  {
+   "wall_s": 1.879,
+   "completion_tokens": 500,
+   "reasoning_tokens": 500,
+   "cached_tokens": 64,
+   "content_len": 0,
+   "reasoning_len": 890,
+   "sha256": "def54f50d6ea6d25",
+   "content_head": "",
+   "finish": "length"
+  }
+ ]
+}

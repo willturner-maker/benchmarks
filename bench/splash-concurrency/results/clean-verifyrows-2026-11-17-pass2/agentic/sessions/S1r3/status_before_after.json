@@ -1,0 +1,49 @@
+{
+ "before_ts": 1794941619.387771,
+ "before": {
+  "schema_version": 8,
+  "model_name": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+  "max_context": 262144,
+  "cache_hits": 41,
+  "cold_misses": 0,
+  "kv_hit_tokens": 144032,
+  "kv_disk_hit_tokens": 736,
+  "memory_pressure": "normal",
+  "queued": 0,
+  "decoding": 0,
+  "waiting": 0,
+  "admission": {
+   "waiting": 0,
+   "waiting_memory": 0,
+   "waiting_concurrency": 0,
+   "held_behind_refusal": 0,
+   "restoring": 0,
+   "suspended": 0,
+   "draining": false,
+   "oldest_wait_ms": 0
+  }
+ },
+ "after": {
+  "schema_version": 8,
+  "model_name": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+  "max_context": 262144,
+  "cache_hits": 44,
+  "cold_misses": 0,
+  "kv_hit_tokens": 147232,
+  "kv_disk_hit_tokens": 832,
+  "memory_pressure": "normal",
+  "queued": 0,
+  "decoding": 0,
+  "waiting": 0,
+  "admission": {
+   "waiting": 0,
+   "waiting_memory": 0,
+   "waiting_concurrency": 0,
+   "held_behind_refusal": 0,
+   "restoring": 0,
+   "suspended": 0,
+   "draining": false,
+   "oldest_wait_ms": 0
+  }
+ }
+}

@@ -1,0 +1,13 @@
+{
+ "determinism_A_B": {
+  "verify_rows_auto": {
+   "distinct_outputs": 1,
+   "median_tok_s": 242.8
+  },
+  "verify_rows_all": {
+   "distinct_outputs": 1,
+   "median_tok_s": 243.5
+  },
+  "decode_price_of_determinism_percent": 0.3
+ }
+}

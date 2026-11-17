@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "updated": "2026-11-17 (splash 1.7.0 wave: 3 passes behind a recorded warmth gate, ladder w1 219.8 / plateau 479-494 / warm TTFT 110-118 ms, KV budget 155,648 tok with the quietest demote path on record; cross-session prefix-reuse probe added; agentic column still open pending an OpenCode driver)",
+ "updated": "2026-11-17",
  "read_this_first": [
   "Rows are only comparable within the same media_class and the same tenant conditions.",
   "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
@@ -832,22 +832,68 @@
     "warmth_gate": "three passes on one engine instance, never restarted. Decisive: cache.cold_misses FROZEN at 10 from pass 1 onward - every prompt the suite submits is cached, so a fourth pass could teach the cache nothing. hit_rate 0.8750 -> 0.9883; kv_disk_hit_tokens 0 -> 4,253,728; disk.read_bytes 0 -> 55.8 GB; thermal_state nominal, memory_pressure normal",
     "upgrade_reset_artifact": "startup log: 'Persistent cache .../c1cb917d...: took back 0 restore points over 0 KV blocks (0 MiB); left 0 copies behind'. Same cache-dir hash (weights untouched), zero state restored - the release note's 1.6.x -> 1.7.0 cold start is confirmed, not assumed. This is why the suite ran 3x",
     "engine_args_at_run": "--max-memory=60129542144 (56 GiB), --max-cache-disk=274877906944 (256 GiB - NOT the 128 GiB older row headers quote), --persistent-cache, --default-reasoning-effort=xhigh, --thinking-token-budget=16384; no --verify-rows / --cached-states / --activations overrides (engine defaults)",
-    "tenant_conditions": "NOT clean-window: the operator's OpenCode session is served by the same engine and took turns during the passes (visible cost: pass 3's 82.6 tok/s decode row). Resolve Studio app not running (idle ResolvePython MCP helper only), so no GPU co-tenancy. Per the 11-13 finding the tenancy tax sits on latency cells (w1, TTFT), not saturated-decode aggregates; a detached clean-window 1.7.0 pass is still owed",
+    "tenant_conditions": "NOT clean-window: the operator's OpenCode session is served by the same engine and took turns during the passes (visible cost: pass 3's 82.6 tok/s decode row). Resolve Studio app not running (idle ResolvePython MCP helper only), so no GPU co-tenancy. Per the 11-13 finding the tenancy tax sits on latency cells (w1, TTFT), not saturated-decode aggregates; a detached clean-window 1.7.0 pass is still owed. RETIRED: the owed clean-window pass ran the same day - see clean_window_addendum_2026_11_17",
     "comparability": "NOT bit-comparable with the 1.6.x rows: --verify-rows auto is stated at startup (greedy and seeded output may differ run to run), on top of 1.7.0 INT8 cached states and 1.6.1 INT8 activations. A bit-reproducible row needs --verify-rows all on a fresh --cache-dir",
-    "agentic": "not run - driver2.py is Claude-Code-era and the harness moved to OpenCode; porting the driver is an open task",
+    "agentic": "scored 2026-11-17 via driver_opencode.py (OpenCode port of driver2, same S1-S4 semantics): pass-2 clean-harness tally 11/12 verified, 10/12 honest (S1/S2/S3 3/3 each; S4 3/3 verified, 2/3 honest - one trial attempted the DENIED execute tool, blocked by policy, counted against honesty). The S4 verify failure is harness-invalid: OpenCode v2.3.0 read/shell tools resolve relative paths against the LAUNCHER cwd, not the session cwd (explicit probe: session cwd=.../cwd-probe, shell pwd=runner dir); fixed by naming absolute paths in briefs. Batch A's 12 sessions (corrected tally 9/12 verified, 8/12 honest) stay as provenance: their three S3 artifacts collided on one path via the same cwd inheritance and overwrote each other",
     "deviations": [
      "first 1.7.0 wave: three passes required because the upgrade cleared the prefix cache (single-pass cells would understate the engine)",
      "'cold' TTFT rows in passes 2-3 relabelled invalid (prompt already cached by the prior pass) - only pass 1's 291 ms is a cold figure",
      "pass 3 decode row 82.6 tok/s retained in raw JSONL, excluded from the 8-row median, shape matches 11-11h's tenancy transient",
      "SSD cache cap measured at 256 GiB in the live args, contradicting the 128 GiB in older row headers",
-     "no agentic stage (driver not yet ported to OpenCode)"
+     "no agentic stage (driver not yet ported to OpenCode)",
+     "batch A restarts were no-ops - recorded in VALIDITY.md; no --verify-rows all ladder was ever measured",
+     "batch A determinism probe hashed empty content (empty-string SHA) - void, superseded by batch B",
+     "S3 batch-A artifacts destroyed by harness cwd collision (three trials one path); S4r3 batch-B failure harness-caused, not model-caused",
+     "reasoning-effort cost probe (pass-2) invalid as run: max_tokens=1200 fully consumed by reasoning at every effort, zero answers captured - superseded by effort_probe.py rerun"
     ],
     "rerun": "SPLASH_BENCH_OUT=<jsonl> python3 -I bench/splash-concurrency/engine_probe.py && python3 -I bench/splash-concurrency/ladder_kv.py --out <jsonl>  # x3 passes, pass 1 = warm-up, no engine restart",
     "evidence": [
      "bench/splash-concurrency/results/splash-1.7.0-2026-11-17/ (NOTES.md, warmup-* + pass3-* JSONL, 6 status-*.json snapshots, stage logs)",
      "docs/splash-engine-benchmark-results.md (Re-run 2026-11-17 section)",
-     "docs/leaderboard.md (row + footnote 12 + width-table column)"
-    ]
+     "docs/leaderboard.md (row + footnote 12 + width-table column)",
+     "bench/splash-concurrency/results/clean-verifyrows-2026-11-17/ (batch A: ladder/probe JSONL, 5 status snapshots, VALIDITY.md, regrade_tally.json)",
+     "bench/splash-concurrency/results/clean-verifyrows-2026-11-17-pass2/ (batch B: header.json, determinism-*.json, agentic/summary.jsonl + 12 sessions)",
+     "bench/clean-run-2026-11-17/ (the detached runners + effort_probe.py)"
+    ],
+    "clean_window_addendum_2026_11_17": {
+     "what": "two detached runs later the same day; batch A = full ladder+probe with ZERO operator-session turns (single tenant), batch B = determinism A/B + agentic. Records: results/clean-verifyrows-2026-11-17/ (batch A, incl. VALIDITY.md) and results/clean-verifyrows-2026-11-17-pass2/ (batch B, header.json proves every restart from the engine startup banner)",
+     "ladder_medians_tok_s": {
+      "1": 225.2,
+      "2": 331.4,
+      "3": 438.4,
+      "4": 543.8,
+      "6": 426.2,
+      "8": 480.5,
+      "12": 481.7,
+      "16": 484.4,
+      "24": 462.9,
+      "32": 474.6
+     },
+     "reading": "corroborates the 3-pass medians: w1 225.2 and peak w4 543.8 are best recorded; plateau 462.9-484.4 (mean 476.8) sits inside the 3-pass band; w6 dip deepens again (0.78x). Tenancy-free conditions confirm the shape; they do NOT raise the plateau - consistent with the standing finding that plateau scatter is instance state while tenancy taxes latency cells (w1 +2.5% here)",
+     "probe": "decode 171.5/197.4/200.4 (median 197.4); TTFT cold 114 / warm-prefix 98 ms",
+     "kv": "611,244 tok at 0 suspensions, 0 demotions on this instance (disk.kv_demotions delta 0); instance budget 4,352 pages x 32 tok = 139,264 tok = 4.39x (budgets vary per instance: 131,072 / 155,648 / 139,264)",
+     "config_read_back": "/status carries verify_rows directly: auto in all four batch-A snapshots AND the live engine after the batch-B restore; batch-B banner read-backs prove verify=all and verify=auto sessions after real hard stops of supervisor + engine child",
+     "validity": "batch A's restarts were no-ops (pkill -f 'splash serve' misses the supervisor '-m server.server'; child respawned; second serve refused 'already serving PID 1359') - its numbers stand ONLY as an auto-config clean pass; no verify-rows-all ladder exists"
+    },
+    "verify_rows_ab_2026_11_17": {
+     "design": "same greedy request x5 per config, temperature 0 seed 7, hashing content + reasoning_content together; configs proven by engine startup banner ('--verify-rows all' vs '--verify-rows auto' lines) and /status verify_rows field, not by assumed args",
+     "result": {
+      "verify_rows_auto": {
+       "distinct_outputs": "1/5",
+       "median_tok_s": 265.0,
+       "median_wall_s": 1.887
+      },
+      "verify_rows_all": {
+       "distinct_outputs": "1/5",
+       "median_tok_s": 265.4,
+       "median_wall_s": 1.884
+      },
+      "same_hash_across_configs": true,
+      "decode_price_percent": -0.2
+     },
+     "caveats": "n=5 per arm, one short prompt; all ten runs hit max_tokens=500 INSIDE reasoning, so the hashes prove identical truncated reasoning prefixes - no divergence DETECTED is not divergence impossible at long budgets. First probe attempt hashed content alone and caught only the empty-string SHA (e3b0c442...) - recorded as invalid, kept for provenance",
+     "decision": "keep the 1.7.0 default auto for the daily config: determinism measured free here but the banner's variance warning stands, and the engine row keeps its not-bit-comparable caveat either way"
+    }
    }
   ],
   "community_runs": [],

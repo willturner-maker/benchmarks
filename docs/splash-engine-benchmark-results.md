@@ -690,3 +690,63 @@ fresh agent session" figure is the real OpenCode prefix and still needs the agen
 Full per-pass tables (ladder medians with spread, probe rows, KV gauge peaks and counter deltas, the six
 `/status` snapshots) are in
 [`bench/splash-concurrency/results/splash-1.7.0-2026-11-17/NOTES.md`](../bench/splash-concurrency/results/splash-1.7.0-2026-11-17/NOTES.md).
+
+## Same day, later: the clean-window pass, the `--verify-rows` A/B, and the first OpenCode agentic row
+
+Two detached runners (raw:
+[`bench/clean-run-2026-11-17/`](../bench/clean-run-2026-11-17/) writing into
+[`results/clean-verifyrows-2026-11-17/`](../bench/splash-concurrency/results/clean-verifyrows-2026-11-17/)
+and `…/clean-verifyrows-2026-11-17-pass2/`). This closes the two caveats the three-pass wave left open:
+tenancy and the missing agentic column.
+
+**The clean-window 1.7.0 pass** (batch A ladder + probe, zero operator turns): ladder w1 **225.2**
+(best recorded), plateau w8–32 **462.9–484.4** (mean 476.8), peak **w4 543.8** (best recorded), probe
+decode median **197.4**, warm TTFT 98 ms; KV 611,244 tok with **0 suspensions and 0 demotions** on an
+instance budget of 4,352 × 32 = **139,264 tok** (budgets vary per instance: 131,072 / 155,648 /
+139,264 — the ×-multiple in the row tables is instance-relative). The config is on the record rather
+than assumed: `/status` carries a **`verify_rows`** field and it reads `auto` in all four snapshots
+and on the live engine. Reading: the tenancy-free pass **confirms the shape** (w4 peak, deep w6 dip
+at 0.78×) and nudges the latency cells (w1 +2.5 % vs the 3-pass median), but does **not** lift the
+plateau — again consistent with plateau scatter being instance state.
+
+**Batch A's two self-inflicted wounds, kept on the record** (full statement in that directory's
+`VALIDITY.md`): its restarts were **no-ops** — `pkill -f "splash serve"` misses the supervisor
+(`… -m server.server`), the engine child respawned with the original args, and the follow-up
+`splash serve` refused with `already serving (PID 1359 … phase ready)` — so its numbers are valid as
+an **auto**-config clean pass and there is still no `--verify-rows all` ladder. And its determinism
+probe hashed `message.content` only, which came back empty at a 16k thinking budget: ten identical
+`e3b0c442…` hashes — the SHA-256 of the empty string. A vacuous "bit-reproducible" result caught only
+by reading the payload, exactly the class of thing the read-back-only rule exists to catch.
+
+**The determinism A/B** (batch B, hard stops proven from the engine's own startup banner, both modes
+read back from `/status`): the same greedy request ×5 per config, hashing **content + reasoning
+together**: `auto` **1 distinct/5** (265.0 tok/s, 1.887 s median), `all` **1 distinct/5** (265.4 tok/s,
+1.884 s), same hash across configs — the measured decode price of determinism is **−0.2 %, i.e. free
+within noise**, at n=5 on one short prompt. Honest limit: all ten runs hit `max_tokens=500` inside
+reasoning, so the hashes certify *identical truncated reasoning prefixes*; "no divergence detected"
+≠ "divergence impossible at long budgets". Decision it supports: keep the 1.7.0 default (`auto`) for
+the daily config — determinism costs nothing measurable here, but nothing is gained by paying the
+banner's per-row verification either, and the 1.7.0 rows keep their not-bit-comparable caveat either way.
+
+**Side probe — the price of `--default-reasoning-effort xhigh`** (`reasoning-effort-cost-corrected.json`,
+tenanted, so indicative): the effort knob is honored per request (`reasoning_effort` in the chat body).
+On a bounded Resolve-arithmetic task, **low** stopped thinking at **1,771** reasoning tokens and
+**medium** at **2,320** (both `finish=stop`, both with the correct `ANSWER=450`, walls 16.4 s / 20.1 s);
+**xhigh** and the server default never finished under 8,000 reasoning tokens, and at the full 16,384-token
+daily thinking budget xhigh ran **16,385 reasoning tokens / 107 s to the same correct answer** (n=1). On
+this task class the top effort costs ~6× for nothing. Decision recorded anyway: **the daily config keeps
+xhigh**, because the resolve-agentic 21/21 evidence was earned there and one bounded task (n=1 per stopped
+cell) is not grounds to move a default — flagged as a proper follow-up: an agentic-suite A/B of
+`medium` vs `xhigh` across the six briefs.
+
+**The agentic column, first OpenCode score: 11/12 verified, 10/12 honest.** `driver_opencode.py`
+ports driver2's S1–S4 with the same seal approach (per-session config + permissions + policies,
+global config file renamed aside and restored after). One real model deviation: an S4 trial
+attempted the **denied `execute` tool**; the policy blocked it, and it counts against honesty —
+reaching for an ungranted tool is precisely the event the seal exists to catch. Everything else that
+*looked* like a model failure was the harness: **OpenCode v2.3.0's `read`/`shell` tools resolve
+relative paths against the launcher's cwd, not the session cwd** (probe: a session created in
+`…/cwd-probe` runs `pwd` and prints the runner's directory). That single fact explains batch A's
+three S3 artifacts overwriting each other at one path and batch B's S4 verify failure; briefs now
+name absolute paths. Batch A's corrected offline re-grade (9/12 verified, 8/12 honest, S3 unscored)
+stays in the results tree as provenance, unranked.

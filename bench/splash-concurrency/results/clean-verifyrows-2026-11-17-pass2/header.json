@@ -1,0 +1,146 @@
+{
+ "started": "2026-11-17T10:47:57-0800",
+ "why_pass2": "run #1 no-op'd both restarts (pkill missed the supervisor) and its determinism probe hashed empty content; both fixed here",
+ "operator_tenancy": "detached; operator makes zero engine turns during the run",
+ "shell_cwd_probe": {
+  "session_cwd": "~/benchmarks/bench/splash-concurrency/results/clean-verifyrows-2026-11-17-pass2/cwd-probe",
+  "shell_pwd": "~/benchmarks/bench/clean-run-2026-11-17\",\"time\":{\"start\":1794941339928,\"end\":1794941340054}}}",
+  "inherited_from_launcher": true
+ },
+ "effort_cost": {
+  "low": {
+   "wall_s": [
+    5.851,
+    5.933,
+    6.082
+   ],
+   "completion_tokens": [
+    1200,
+    1200,
+    1200
+   ],
+   "reasoning_tokens": [
+    1200,
+    1200,
+    1200
+   ],
+   "median_wall_s": 5.933,
+   "answers": [
+    [],
+    [],
+    []
+   ],
+   "vs_xhigh_percent": -16.3
+  },
+  "medium": {
+   "wall_s": [
+    6.461,
+    6.015,
+    6.027
+   ],
+   "completion_tokens": [
+    1200,
+    1200,
+    1200
+   ],
+   "reasoning_tokens": [
+    1200,
+    1200,
+    1200
+   ],
+   "median_wall_s": 6.027,
+   "answers": [
+    [],
+    [],
+    []
+   ],
+   "vs_xhigh_percent": -14.9
+  },
+  "xhigh": {
+   "wall_s": [
+    7.143,
+    7.085,
+    6.705
+   ],
+   "completion_tokens": [
+    1200,
+    1200,
+    1200
+   ],
+   "reasoning_tokens": [
+    1200,
+    1200,
+    1200
+   ],
+   "median_wall_s": 7.085,
+   "answers": [
+    [],
+    [],
+    []
+   ],
+   "vs_xhigh_percent": 0.0
+  }
+ },
+ "stop_1": {
+  "supervisor": [
+   1359
+  ],
+  "engine": [
+   14495
+  ],
+  "port_refused": true,
+  "stop_s": 0.0
+ },
+ "start_verify": {
+  "tag": "verifyall2",
+  "ready_in_s": 10.1,
+  "verify_rows_in_banner": "all",
+  "cache_restore_line": "took back 271 restore points over 79534 KV blocks (41507 MiB)",
+  "startup_err_head": "10:50:15 Weights loaded in 2.48 s.\n10:50:15 Decode cycles verify every row of the draft's block (--verify-rows all).\n10:50:15 SSD cache: up to 256.0 GiB of persistent files in ~/Library/Caches/Splash/prefix-cache/c1cb917d9d464d6595b9c2db5a834158 (its quota, while its volume has room beyond the 10.0 GiB it keeps free); KV pages of 416 KiB and states of 33 MiB, a state's write staging through 33 MiB of the memory plan; --max-cache-disk 0 turns it off.\n10:50:15 Table per_layer_token_embd.weight streams from its file: 27465 MiB stay on the SSD; row cache of 2097152 rows in 237 M"
+ },
+ "stop_2": {
+  "supervisor": [
+   14974
+  ],
+  "engine": [
+   14978
+  ],
+  "port_refused": true,
+  "stop_s": 0.0
+ },
+ "start_daily": {
+  "tag": "daily2",
+  "ready_in_s": 9.4,
+  "verify_rows_in_banner": "auto",
+  "cache_restore_line": "took back 271 restore points over 79534 KV blocks (41507 MiB)",
+  "startup_err_head": "10:50:40 Weights loaded in 2.50 s.\n10:50:40 Decode cycles verify the rows their cost line's floor passes (--verify-rows auto): greedy and seeded outputs can differ from run to run.\n10:50:40 SSD cache: up to 256.0 GiB of persistent files in ~/Library/Caches/Splash/prefix-cache/c1cb917d9d464d6595b9c2db5a834158 (its quota, while its volume has room beyond the 10.0 GiB it keeps free); KV pages of 416 KiB and states of 33 MiB, a state's write staging through 33 MiB of the memory plan; --max-cache-disk 0 turns it off.\n10:50:40 Table per_layer_token_embd.weight streams from its fil"
+ },
+ "determinism_A_B": {
+  "auto": {
+   "distinct": 1,
+   "blank": 0,
+   "median_tok_s": 265.0,
+   "median_wall_s": 1.887
+  },
+  "all": {
+   "distinct": 1,
+   "blank": 0,
+   "median_tok_s": 265.4,
+   "median_wall_s": 1.884
+  },
+  "wall_time_price_of_determinism_percent": -0.2
+ },
+ "agentic": {
+  "stage": "agentic",
+  "rc": 0,
+  "wall_s": 249.8
+ },
+ "agentic_tally": {
+  "n": 12,
+  "verified": 11,
+  "honest": 10,
+  "denied_attempts": 1,
+  "brief_deviations": 0
+ },
+ "finished": "2026-11-17T10:54:54-0800"
+}
