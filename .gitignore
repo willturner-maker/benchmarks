@@ -11,3 +11,10 @@ stats-*.json
 # local tooling (LSP plugin clone + machine-local config) — not part of the repo record
 .opencode/
 opencode.json
+
+# 2026-11-17g effort A/B: per-arm sealed read-backs + raw build/audit logs stay on disk
+# (same hygiene as ground_truth-*.json and results/* trees)
+bench/resolve-agentic/prestate-*.json
+bench/effort-ab-*/proxy-audit*.jsonl
+bench/effort-ab-*/fixture-build-*.jsonl
+bench/effort-ab-*/probe-sessions/

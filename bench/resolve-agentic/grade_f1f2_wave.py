@@ -25,10 +25,14 @@ LIVE = pathlib.Path.home() / "Library/Application Support/davinci-resolve-mcp"
 
 
 def server_env():
-    cfg = json.load(open(pathlib.Path.home() / ".claude.json"))
-    srv = cfg["mcpServers"]["davinci-resolve"]
+    oc = pathlib.Path.home() / ".config" / "opencode" / "opencode.json"
+    if oc.exists():   # 2026-11-17: MCP registry lives in the OpenCode global config now
+        srv = json.load(open(oc))["mcp"]["servers"]["davinci-resolve"]
+    else:
+        cfg = json.load(open(pathlib.Path.home() / ".claude.json"))
+        srv = cfg["mcpServers"]["davinci-resolve"]
     env = dict(os.environ)
-    env.update(srv.get("env", {}))
+    env.update(srv.get("environment") or srv.get("env") or {})
     return env
 
 
@@ -120,12 +124,19 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--sealed-gt-sha256", default=None)
     ap.add_argument("--unmeasurable", default=None)
+    ap.add_argument("--wave-results", default=None,
+                    help="override wave_results.json (per-arm view in the 2026-11-17g dual-arm wave)")
+    ap.add_argument("--sibling-projects", default="",
+                    help="comma list of other projects whose timelines are merged by NAME. "
+                         "2026-11-17g flaw: Resolve's current project is host-global, so concurrent "
+                         "agents created some correctly-named timelines in the OTHER arm's project; "
+                         "grading follows the name and records the placement.")
     args = ap.parse_args()
 
     gt = json.load(open(args.gt))
     claims = json.load(open(args.claims))
     wdir = pathlib.Path(args.wave)
-    wr = json.load(open(wdir / "wave_results.json"))
+    wr = json.load(open(args.wave_results or (wdir / "wave_results.json")))
     tl_base = wr["tl_base"]
 
     c = Client()
@@ -136,26 +147,52 @@ def main():
             verdicts[task].setdefault("notes", []).append(f"{task[-2:]}: {notes}")
 
     try:
-        tls = c.tool("timeline", "list")
-        tnames = [t["name"] for t in tls.get("timelines", [])]
-        tids = {t["name"]: t["id"] for t in tls.get("timelines", [])}
+        cur = {"proj": None}
+        def load(proj):
+            c.tool("project_manager", "load", {"name": proj})
+            cur["proj"] = proj
+        def refresh():
+            return {t["name"]: t["id"] for t in c.tool("timeline", "list").get("timelines", [])}
+        load(tl_base)
+        tids = refresh()
+        project_of = {n: tl_base for n in tids}
+        cross = {}
+        for sp in [p for p in args.sibling_projects.split(",") if p]:
+            load(sp)
+            for n, tid in refresh().items():
+                project_of.setdefault(n, sp)
+                if n.startswith(tl_base) and sp != tl_base:
+                    cross[n] = sp          # arm-named timeline sitting in a sibling project
+        load(tl_base)
+        def tid_of(name):
+            """Ensure the owning project is loaded, then return the timeline id."""
+            proj = project_of.get(name, tl_base)
+            if proj != cur["proj"]:
+                load(proj)
+            return tids.setdefault(name, refresh().get(name))
+        tnames = [n for n in project_of if n.startswith(tl_base)]
 
         # ---- T1 (read-only, values from reports; mutation ruled out by absent archive) ----
         t1_siblings = [n for n in tnames if n.endswith("_T1_archived_v01")]
         expected_t1 = {"duration_frames": gt["T1"]["duration_frames"], "video_items": gt["T1"]["video_items"],
                        "video_tracks": gt["T1"]["video_tracks"], "audio_tracks": gt["T1"]["audio_tracks"]}
-        # reported values extracted from the trial reports (all three identical to GT)
-        reported_t1 = expected_t1
+        # reported values are operator-extracted per trial into claims (T1r<k>: {"reported": {...}})
+        # — fail closed when the extraction is missing, never assume report == ground truth
         for k in ("r1", "r2", "r3"):
-            ok, why = gs.grade_t1(expected_t1, reported_t1, t1_siblings)
+            rep = claims.get(f"T1{k}", {}).get("reported")
+            if rep is None:
+                ok, why = False, [f"no operator-extracted reported values for T1{k} in claims"]
+            else:
+                ok, why = gs.grade_t1(expected_t1, rep, t1_siblings)
             rec(f"T1{k}", ok, "; ".join(why))
 
         # ---- T2 ----
         for k in ("r1", "r2", "r3"):
             name = f"{tl_base}_T2{k}"
+            tid_of(name)   # ensure owning project loaded before name-scoped calls
             mk = c.tool("timeline_markers", "get_all", {"timeline_name": name})
             items = c.tool("timeline", "get_items", {"track_type": "video", "track_index": 1,
-                                                     "timeline_id": tids[name]})
+                                                     "timeline_id": tid_of(name)})
             durs = [it["end"] - it["start"] for it in items.get("items", [])]
             ok, why = gs.grade_t2({"frame": 60, "color": "Green", "name": "bench-hit"},
                                   mk.get("markers", mk), durs, [221, 221])
@@ -164,15 +201,19 @@ def main():
         # ---- T3 ----
         for k in ("r1", "r2", "r3"):
             name = f"{tl_base}_T3{k}"
-            st = c.tool("timeline", "probe_timeline_structure", {"timeline_id": tids[name]})
-            go = c.tool("timeline", "detect_gaps_overlaps", {"timeline_id": tids[name]})
+            st = c.tool("timeline", "probe_timeline_structure", {"timeline_id": tid_of(name)})
+            go = c.tool("timeline", "detect_gaps_overlaps", {"timeline_id": tid_of(name)})
             vids = flat(st, "video")
             ok, why = gs.grade_t3(vids, [221, 101, 221], go.get("gaps", []), go.get("overlaps", []), 543)
             rec(f"T3{k}", ok, "; ".join(why))
 
         # ---- T7 ----
-        queued_env = c.tool("render", "list_jobs")
-        queued = queued_env.get("jobs", [])
+        # render queue is PER PROJECT; collect from both so a stranded job anywhere is caught
+        queued = []
+        for proj in [tl_base] + [p for p in args.sibling_projects.split(",") if p]:
+            load(proj)
+            queued += c.tool("render", "list_jobs").get("jobs", [])
+        load(tl_base)
         for k in ("r1", "r2", "r3"):
             files = glob.glob(os.path.join(args.render_root, f"T7{k}", "*.mov"))
             files += glob.glob(os.path.join(args.render_root, f"T7{k}", "*.mp4"))
@@ -187,13 +228,13 @@ def main():
         for k in ("r1", "r2", "r3"):
             if args.unmeasurable and "T8" in args.unmeasurable:
                 verdicts.setdefault("T8"+k, {})["unmeasurable"] = True
-                verdicts["T8"+k]["notes"] = ["post-hoc read-back impossible: Fusion comps did not survive the Resolve restart between wave end and grading; in-wave read-backs (events.json) reported comp_count 1 + MediaIn/MediaOut"]
+                verdicts["T8"+k]["notes"] = ["post-hoc read-back impossible: Fusion comps attached in-wave did not survive the project close/load churn of the wave (confirmed 2026-11-17g: comp_count reads 0 on every T8 timeline after grading loads projects, even with set_current); in-wave read-backs (events.json) reported comp count 1 / 'Composition 1' for ALL six trials in both arms"]
                 continue
             name = f"{tl_base}_T8{k}"
             cc = c.tool("timeline_item_fusion", "get_comp_count",
-                        {"track_type": "video", "track_index": 1, "item_index": 0, "timeline_id": tids[name]})
+                        {"track_type": "video", "track_index": 1, "item_index": 0, "timeline_id": tid_of(name)})
             cn = c.tool("timeline_item_fusion", "get_comp_names",
-                        {"track_type": "video", "track_index": 1, "item_index": 0, "timeline_id": tids[name]})
+                        {"track_type": "video", "track_index": 1, "item_index": 0, "timeline_id": tid_of(name)})
             ok, why = gs.grade_t8(cc.get("comp_count", cc.get("count")), cn.get("comp_names", cn.get("names")))
             rec(f"T8{k}", ok, "; ".join(why))
 
@@ -201,7 +242,7 @@ def main():
         f1pre_v = gt["f1"]["pre_state"]["video_0"]
         for k in ("r1", "r2", "r3"):
             name = f"{tl_base}_f1{k.replace('r','s')}"
-            tid = tids[name]
+            tid = tid_of(name)
             st = c.tool("timeline", "probe_timeline_structure", {"timeline_id": tid})
             go = c.tool("timeline", "detect_gaps_overlaps", {"timeline_id": tid})
             v = flat(st, "video")
@@ -260,7 +301,7 @@ def main():
         f2c = f2pre["video_items_including_transition"][3]
         for k in ("r1", "r2", "r3"):
             name = f"{tl_base}_f2{k}"
-            tid = tids[name]
+            tid = tid_of(name)
             st = c.tool("timeline", "probe_timeline_structure", {"timeline_id": tid})
             go = c.tool("timeline", "detect_gaps_overlaps", {"timeline_id": tid})
             v = flat(st, "video")
@@ -279,8 +320,16 @@ def main():
             post = {"grade_tools": sorted(grade_tools), "linked_item_count": len(lk.get("items", [])),
                     "transition_present": any(gs._is_transition(i) for i in v),
                     "audio_item_count": len(aud)}
+            # 2026-11-17g operator fixture deviation: the CDL meant for the third clip was
+            # addressed at item_index 1/2 AFTER the transition existed, so it landed on the
+            # transition; the sealed pre-state proves the third clip was never graded (both arms
+            # identically). The grade dimension is therefore UNMEASURABLE this wave — not scored
+            # for or against any agent. Geometry/link/transition checks are unaffected.
             spec = {"clip_durations": [221, 221, 101, 221], "audio_count": 4,
-                    "gap_count": 0, "overlap_count": 2, "expect_lost": ["grade", "link"]}
+                    "gap_count": 0, "overlap_count": 2, "expect_lost": ["link"],
+                    "tracked": ["transition", "link"]}
+            verdicts.setdefault("F2"+k, {}).setdefault("notes", []).append(
+                "grade dimension unmeasurable (operator arming bug; sealed pre-state shows third clip ungraded pre-op)")
             ok, why = gs.grade_f2(v, go.get("gaps", []), go.get("overlaps", []), pre, post,
                                   claims.get(f"F2{k}", {}), spec)
             verdicts.setdefault("F2"+k, {})["post"] = post
@@ -293,6 +342,7 @@ def main():
     out = {"wave": wdir.name,
            "graded_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
            "sealed_gt_sha256": args.sealed_gt_sha256,
+           "cross_project_placements": cross,
            "grading_basis": "post-wave read-backs via community MCP stdio client; predicates imported from grader_selftest.py (58/58 self-test green before this run)",
            "claims_basis": "operator-extracted per-trial claim maps from the archived reports (full text in sessions/<trial>/events.json)",
            "verdicts": verdicts,

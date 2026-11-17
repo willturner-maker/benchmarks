@@ -30,6 +30,8 @@ benchmark in the perf baseline (same day, same machine, MCP v4.18.5, Resolve Stu
 - [Addendum (k) — 2026-11-14k MCP 5.2.10, headless host](#addendum-k-2026-11-14k--mcp-5210-on-headless-resolve-the-sixth-clean-wave-and-my-own-upstream-fixes-catching-trials-in-the-act)
 - [Addendum (l) — 2026-11-14l MCP 5.2.11, seventh clean wave](#addendum-l-2026-11-14l--mcp-5211-on-headless-resolve-the-seventh-clean-wave-and-the-first-wave-where-the-seal-was-actually-sealed)
 - [Addendum (m) — 2026-11-16 first F1/F2 wave, new series](#addendum-m-2026-11-16--first-f1f2-wave-a-new-series-opens-and-the-fixture-caught-a-sealed-claim-that-was-never-measured)
+- [Addendum (n) — 2026-11-16b harness swap](#addendum-n-2026-11-16b--the-harness-swap-opencode-on-the-same-build-pair-and-fixtures)
+- [Addendum (o) — 2026-11-17g suite-wide effort A/B](#addendum-o-2026-11-17g--the-suite-wide-effort-ab-xhigh-vs-medium-on-42-sealed-sessions)
 - [Record scope — waves outside the scored agentic record](#record-scope--waves-outside-the-scored-agentic-record-2026-11-15)
 - [Task-set change — the frontier pair is sealed](#task-set-change--the-frontier-pair-is-sealed-2026-11-15)
 - [How our agentic method relates to published agent benchmarks](#how-our-agentic-method-relates-to-published-agent-benchmarks-2026-11-15)
@@ -1232,6 +1234,58 @@ Teardown: all 45 fixture timelines and `_archived_vNN` siblings deleted with the
 (`close` then `delete`); `list_jobs` empty; per-trial T7 outputs kept on the external volume as
 evidence. Full record: [results-2026-11-16b.json](../bench/resolve-agentic/results-2026-11-16b.json);
 sealed fixture truth `ground_truth-2026-11-16b.json` (untracked, sha256 `4345169b…`).
+
+---
+
+## Addendum (o): 2026-11-17g — the suite-wide effort A/B: xhigh vs medium on 42 sealed sessions
+
+The side probe in the splash ladder footnote left one knob priced only on toy tasks: per-request
+`reasoning_effort`. This wave priced it on the real suite. Mechanism (probe-proven first): OpenCode
+sends **no** `reasoning_effort` field at all, so the arms run through logging proxies — :8010
+passthrough (engine default xhigh) and :8011 injecting `reasoning_effort:"medium"` — **no engine
+restarts**, and the proxy audit proves the injection per request, per session (port-based
+attribution survives the concurrent windows; 0 unproven sessions across all 42).
+
+**Result: identical scored outcome, very different bills.** Both arms land **16/18 measured**:
+median reasoning tokens 10,538 (xhigh) vs 3,609 (medium) — total 216k vs 100k; median wall 168 s vs
+121 s; output tokens nearly equal (101k vs 97k). Where medium pays instead: **50 mangled tool-name
+attempts vs 3** (harness-rejected, retried away — see the census below), and it spends *more* turns
+(median 22 vs 17): less thinking, more trial-and-error. The failures are not the same cells:
+xhigh lost T3r3 (audio missed the insert — a genuine agent failure); medium lost F1r3 and F2r1 to
+an **operator design flaw** (two scratch projects + concurrent agents racing Resolve's
+host-global current project — both gm agents concluded their timeline "does not exist" and worked
+the *other arm's copy*). Disclosed in full in the wave's VALIDITY.md; a next wave with one project
+and arm-suffixed names removes the confound.
+
+**Three method upgrades shipped with this wave:**
+1. T1 honesty grading is no longer hardcoded: the grader fails closed without operator-extracted
+   per-trial reported values (the 16f driver had `reported = expected` inline).
+2. The `seal_leaks` field was audited and reclassified: errored tool events log as `(name,"error")`
+   tuples and mangled name variants (hyphen/underscore) get logged as attempts — census across all
+   42 sessions shows **zero successes** for any non-canonical name, i.e. nothing outside the
+   allowed MCP trio ever executed. The field's noise existed in 16f too; the manual 0/745 claim
+   stands, now with a machine-readable reclassification (`seal_audit_reclass.json`).
+3. T8's post-hoc failure mode is pinned better than 16f's "restart" theory: all six sessions read
+   comp count 1 in-wave; post-wave every T8 timeline reads 0 **without any Resolve restart** —
+   attached Fusion comps do not survive project close/load churn. Unmeasurable both arms, in-wave
+   evidence recorded; it likely also voids the direction of the 16f T8 note.
+
+Also on the record: my F2 fixture arming had an index bug (CDL meant for the third clip was
+addressed after the transition existed, landing on the transition), so the third clip was never
+graded in either arm — the grade dimension is declared **unmeasurable** rather than scored, and
+two agents caught the discrepancy in their own baseline reads before I did. That is the suite
+working as designed: the sealed pre-state, not the brief's prose, decides what can be claimed.
+
+**Decision it feeds:** for this workload class (agentic tool-mutation suites), xhigh's ~3× thinking
+premium bought *nothing measurable* in scored outcomes. Recorded verbatim in
+[results-2026-11-17g.json](../bench/resolve-agentic/results-2026-11-17g.json); the daily-engine call
+(xhigh stays the config default until the operator decides) is a preference, not a measurement —
+the measurement is now on the table.
+
+Full record: `bench/resolve-agentic/results/2026-11-17g-effort-ab-wave/` (42 session dirs,
+`audit_by_session.json`, claims files, `grading_{gx,gm}.json`, VALIDITY.md; tree gitignored per
+the hygiene rule), drivers `wave_driver_effort_ab.py` + `build_fixture_effort_ab.py`, proxies and
+arm probe in `bench/effort-ab-2026-11-17/`.
 
 ---
 

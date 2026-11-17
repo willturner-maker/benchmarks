@@ -1,0 +1,46 @@
+{
+ "runs": {
+  "direct_reasoning": 18,
+  "proxy_passthrough_reasoning": 17,
+  "proxy_medium_reasoning": 20
+ },
+ "audit_lines": [
+  {
+   "ts": "11:26:28",
+   "path": "/v1/chat/completions",
+   "method": "POST",
+   "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+   "effort_in_body": null,
+   "effort_injected": null,
+   "max_tokens": null,
+   "msgs": 2,
+   "status": 200,
+   "len": 6064
+  },
+  {
+   "ts": "11:26:28",
+   "path": "/v1/chat/completions",
+   "method": "POST",
+   "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+   "effort_in_body": null,
+   "effort_injected": null,
+   "max_tokens": null,
+   "msgs": 2,
+   "status": 200,
+   "len": 37044
+  },
+  {
+   "ts": "11:26:29",
+   "path": "/v1/chat/completions",
+   "method": "POST",
+   "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+   "effort_in_body": null,
+   "effort_injected": "medium",
+   "max_tokens": null,
+   "msgs": 2,
+   "status": 200,
+   "len": 6826
+  }
+ ],
+ "conclusion_partial": "read the audit: if OpenCode sends no effort natively, the proxy injection is the arm mechanism"
+}

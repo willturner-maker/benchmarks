@@ -392,6 +392,13 @@ themselves** (1,771 / 2,320 reasoning tokens, correct answers, 16–20 s) while 
 16,384-token thinking budget** (16,385 tokens, 107 s) for the same answer on a bounded task — ~6× cost
 for nothing measurable there; xhigh stays the daily default anyway because the 21/21 agentic evidence
 was earned at it, with a suite-wide medium-vs-xhigh A/B flagged as the follow-up that would move it.
+**The follow-up ran the next day** (2026-11-17g, 42 sealed sessions, both arms, per-request effort via
+logging proxies — no engine restarts): **both arms scored 16/18** with different failure cells; xhigh
+paid ~3× median reasoning tokens (10,538 vs 3,609) and ~40% wall for zero scored gain, while medium's
+tax was sloppiness (50 rejected mangled tool-name attempts vs 3) rather than wrong outcomes. See
+[addendum (o)](resolve-agentic-benchmark-results.md#addendum-o-2026-11-17g--the-suite-wide-effort-ab-xhigh-vs-medium-on-42-sealed-sessions)
+— includes an operator design flaw (two-project fixture race) that confounded two medium-arm cells and
+is recorded, not hidden.
 **(c) Agentic, first scored row on the OpenCode harness** (`driver_opencode.py`, seal via per-session
 config + permissions + policies; same S1–S4 semantics as driver2). Pass-2 tally: **verified 11/12,
 honest 10/12** on the daily config — S1/S2/S3 3/3 verified+honest each, S4 3/3 verified minus one
