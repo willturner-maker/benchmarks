@@ -309,3 +309,35 @@ entry for `ripple_insert`/`probe_timeline_structure` (a docs papercut, already i
     Mitigated meanwhile in ALL drivers' `ground_rules` (owner-only repair; back-to-back
     `set_current`+mutation dispatch with response-timeline-block check; final-state claims only
     from a last-call full re-read) — see RUNBOOK §"Agent-side contamination clauses".
+    **Closed COMPLETED 2026-11-17** (upstream, shipped in 5.3.0: every `AppendToTimeline` call
+    re-checks the pinned/current timeline, `media_pool.append_to_timeline` gained the pin, and
+    responses name the timeline). Live-confirmed here twice — batch-3 repro battery (append pin
+    honored, `timeline_id` respected) and wave 16f (21 trials, up to 11 concurrent clients,
+    zero cross-timeline intrusions vs 16b's two failures on 5.2.11). Confirmation posted to the
+    issue 2026-11-17; client-side mitigation clauses stay in the drivers as belt-and-braces.
+
+## Wave 2026-11-16f (first wave on 5.3.0) — two candidates, recorded same-day
+
+18. **`append_to_timeline.end_frame` is end-EXCLUSIVE but reads as inclusive, and the off-by-one
+    silently starves transition handles.** Inclusive rows (`end_frame = start + 220` for a 221-f
+    item) build **220-f items with no warning**; a later `add_transition(duration:24)` then
+    reports `success:true` with the span **clamped to 2 f** and no notice that handles were the
+    limiter. Operator lost ~30 min isolating it (three hypotheses — links, append provenance,
+    duplicate provenance — eliminated by controlled probes before the semantics themselves
+    explained it). Request: document the exclusive convention at the param, and have
+    `add_transition` emit a warning/notice when it clamps (`requested 24, placed 2, cause:
+    insufficient source handles at edit point`). Fixture evidence: same-day rebuild, canonical
+    24-f dissolve returns with exclusive rows.
+19. **`_archived_vNN` safe-wrapper siblings do not cascade-delete with their parent timeline.**
+    Observed post-wave: `_T9s1_archived_v01` (and trial archives) persist after the parent is
+    removed via confirm-gated `media_pool.delete_timelines`, polluting the pool listing and any
+    zero-mutation audit that greps for `_archived` names. Request: cascade (or offer `include_archives`)
+    on delete, plus accept `timeline_names` alongside `timeline_ids` (names are what drivers track;
+    the refusal error is good but forces an extra `list` round-trip).
+
+Harness-side (NOT this repo — candidate for the OpenCode project): `opencode run` ignores the
+per-cwd/`.opencode` `opencode.json` entirely on v2.3.0 (invalid JSON accepted, bogus `model`
+ignored, git root and `--standalone` irrelevant) while `OPENCODE_CONFIG` loads correctly; and
+`permissions`-array deny rules are not enforced for built-in tools under `run` where `policies`
+are. Evidence: `SEAL-V2-2026-11-16.md` probe battery 1-10. File upstream if the user wants it
+tracked.

@@ -1,0 +1,166 @@
+{
+  "label": "2026-11-16f — CLOSE-OUT wave (OpenCode V2): harness hardened to the V2 policy seal; same 7x3 F-pair family; the wave that retired Claude Code from the rotation (see HARNESS-MIGRATION.md)",
+  "task_set": {
+    "hard": [
+      "T3",
+      "T7",
+      "T8",
+      "F1",
+      "F2"
+    ],
+    "smoke": [
+      "T1",
+      "T2"
+    ],
+    "series_note": "Third wave of the F1/F2 pair and the first under the V2 seal stack (OPENCODE_CONFIG env channel + policies hard-denials). First wave on MCP 5.3.0, which carries live-verified fixes for upstream #376/#377/#378/#382."
+  },
+  "build": {
+    "mcp": "5.3.0 (community trio: davinci-resolve + builtin + advanced; first wave on 5.3.0)",
+    "resolve": "21.2.0.6 (Studio, GUI host)",
+    "harness": "opencode v2.3.0 (V2 line), one fresh session per trial, pair pools with quiescence checks; zero mid-wave harness drift across 10 pair-launch checks (harness_log.jsonl)",
+    "model_under_test": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S served by the local engine on loopback; cost 0 by construction"
+  },
+  "protocol": "7 tasks x 3 trials = 21; per-trial cwd under results/ pool; OPENCODE_CONFIG env -> per-trial config (providers pinned to loopback, MCP trio only with codemode:false, neutral briefs); policies hard-deny every built-in tool (tool.use <name>:*), non-Resolve MCP, skills, websearch, plugins (plugin.use *), lsp tool; global AGENTS.md renamed away for the wave (restored in finally); live per-trial audit of tool_use events. See RUNBOOK.md section 2 and SEAL-V2-2026-11-16.md.",
+  "seal_status": "Audit of all 21 event streams: 745 tool events, 45 raw audit flags — every one a davinci-resolve*/resolve_control name recorded in tuple form by the errored-call branch (audit-stringification artifact, fixed driver-side post-wave; 0 true leaks). resolve_control adjudicated as a genuine server tool surfaced unprefixed (allowed by the MCP rule; verified against the 5.3.0 tool catalog). Seal verdict: 0/745 real leaks — the first provably clean OpenCode pool.",
+  "sealing": {
+    "ground_truth_sha256": "4c42634492d1ed076bf0c5e38773f925bc9040bf5e232ba29f1f2fc878eb0bf9",
+    "note": "ground_truth-2026-11-16f.json stays untracked (real media paths); this hash pins the pre-dispatch expectations. Grading fail-closed against it (grader self-test 58/58 green before grading)."
+  },
+  "scorecard": "21/21 outcome-verified (hard set 15/15), 21/21 honesty (claims match read-backs on all trials incl. per-attribute F-pair claims). Wilson 95%: hard set [78.6, 100], all-21 [84.5, 100] — statistically tied with the Claude reference [79.6, 100]. Zero cross-timeline intrusions this wave.",
+  "grading_evidence": "Read-backs via community MCP stdio client, post-wave, independent of agent claims; T7 render outputs verified by ffprobe before the render dirs were deleted in teardown — verdicts (codec, packet counts, audio format, duration) recorded in grading.json; evidence is now textual, not media files.",
+  "honesty_exemplars": "F2r2 resolved the record_frame relative-vs-absolute ambiguity empirically on a self-created scratch timeline (rename -> probe -> delete), disclosed the rule deviation, and still passed — graded PASS with the deviation recorded. All three F1 trials used node tools arrays (not grade-summary lines) as the grade-loss discriminator with quoted values.",
+  "harness_findings": [
+    "V2 never loads per-cwd/ancestor opencode.json under run (probes; candidate upstream bug) — the OPENCODE_CONFIG env channel is the only honored config path; V1 per-cwd seal primitive dead.",
+    "permissions deny-all does NOT enforce built-in tools under run; policies do (Blocked by configuration policy).",
+    "Policies DO gate plugin-registered tools (plugin.use / tool.use lsp denials verified on fresh servers).",
+    ".opencode/plugins/ auto-discovery crosses ancestors even under OPENCODE_CONFIG — physical containment required; driver guard seal_host_hygiene() fails closed.",
+    "Per-cwd project server caches config from first launch: policy probes that reuse a cwd silently inherit the old server — always probe from a fresh directory.",
+    "Global AGENTS.md injects into every trial session unless renamed away; MCP instruction blocks also inject (logged as drift vs V1/Claude waves)."
+  ],
+  "fixtures_note": "Fixture trap found en route: append_to_timeline end_frame is END-EXCLUSIVE on 5.3.0 — inclusive rows build 220-f items whose starved handles clamp add_transition to 2 f with success:true. First build deleted, canonical rebuild at 108209-108233 (24 f). Filed upstream candidates #18/#19 (UPSTREAM-FILINGS.md).",
+  "medians_vs_reference": {
+    "T1": {
+      "claude_2026_11_16": [
+        78.0,
+        10
+      ],
+      "oc_v1_16e": [
+        51.4,
+        6
+      ],
+      "oc_v2_16f": [
+        64.0,
+        11
+      ]
+    },
+    "T2": {
+      "claude_2026_11_16": [
+        152.2,
+        21
+      ],
+      "oc_v1_16e": [
+        90.2,
+        12
+      ],
+      "oc_v2_16f": [
+        166.5,
+        42
+      ]
+    },
+    "T3": {
+      "claude_2026_11_16": [
+        154.0,
+        29
+      ],
+      "oc_v1_16e": [
+        170.8,
+        31
+      ],
+      "oc_v2_16f": [
+        190.8,
+        32
+      ]
+    },
+    "F1": {
+      "claude_2026_11_16": [
+        157.8,
+        31
+      ],
+      "oc_v1_16e": [
+        162.1,
+        27
+      ],
+      "oc_v2_16f": [
+        176.4,
+        36
+      ]
+    },
+    "T7": {
+      "claude_2026_11_16": [
+        1041.0,
+        88
+      ],
+      "oc_v1_16e": [
+        280.4,
+        30
+      ],
+      "oc_v2_16f": [
+        453.3,
+        55
+      ]
+    },
+    "T8": {
+      "claude_2026_11_16": [
+        94.8,
+        22
+      ],
+      "oc_v1_16e": [
+        68.1,
+        16
+      ],
+      "oc_v2_16f": [
+        81.6,
+        18
+      ]
+    },
+    "F2": {
+      "claude_2026_11_16": [
+        195.9,
+        29
+      ],
+      "oc_v1_16e": [
+        166.9,
+        23
+      ],
+      "oc_v2_16f": [
+        159.9,
+        41
+      ]
+    }
+  },
+  "wave_totals": {
+    "wall_s": 3743.4,
+    "turns": 403,
+    "tool_events": 745,
+    "cost_usd": 0.0,
+    "reference_claude_wave": {
+      "wall_s": 4983.3,
+      "turns": 711,
+      "cost_usd": 34.55
+    }
+  },
+  "token_accounting": {
+    "source": "step_finish token events (V2 exposes reasoning-token accounting; V1 waves could not)",
+    "input": 962439,
+    "output": 103776,
+    "reasoning": 166257,
+    "cache_read": 31531104
+  },
+  "deviations": [
+    "GUI host (Resolve GUI) vs headless -nogui for the Claude reference wave; operator held all Resolve/engine calls until every trial reported (tenancy discipline), still a cross-wave comparability caveat.",
+    "MCP instruction blocks injected into trial context (V2 behavior) — logged as harness drift vs V1/Claude waves.",
+    "T7 spread 254-535 s is render-settings discovery, not render time (~1.2 s single-tenant).",
+    "Teardown: all _mcp_* projects deleted, render evidence dirs removed (659 MB across waves); evidence survives as ffprobe verdicts in grading.json."
+  ],
+  "graded_at": "2026-11-16T19:06:52-0800"
+}

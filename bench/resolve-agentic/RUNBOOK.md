@@ -58,6 +58,31 @@ agent hits them, but the operator hits them first here.
   carries real media paths), so the public record carries the **hash**, and a reader can then check
   that two waves graded the same expectations. Re-hash after any legitimate fixture change and say
   in the record what changed.
+
+### Harness-specific seal (OpenCode V2, since wave 2026-11-16f)
+
+The per-cwd config primitive that sealed the V1-era waves is **dead under V2**: `opencode run`
+never loads a per-cwd or ancestor `opencode.json` (live-probed, candidate upstream bug). What
+seals now (all four layers, each verified by the 10-probe battery in `SEAL-V2-2026-11-16.md`):
+
+1. **`OPENCODE_CONFIG=<per-trial config>` env channel** — the only config channel run-mode honors.
+   Providers pinned to the loopback engine, MCP trio with `codemode:false`, per-trial briefs/AGENTS.md.
+2. **`policies` hard-denials** — the enforcing layer (a bare `permissions` deny-all is NOT enforced
+   for built-in tools). Deny each built-in as `tool.use <name>:*`, non-Resolve MCP via `mcp.use *`,
+   skills via `skill.use *`, plugins via `plugin.use *` (plugin-registered tools ARE policy-gateable —
+   verified; the LSP plugin lives at `~/tools/...` referenced only from project configs, which run-mode
+   never loads, and `wave_driver_f1f2_opencode_v2.py:seal_host_hygiene()` fails closed if any
+   `.opencode/plugins/` dir appears in the home/repo tree — auto-discovery DOES cross ancestors).
+3. **Global context renamed away** — global `AGENTS.md` injects into every trial (venv paths, bench
+   notes = leaked hints); move it aside for the wave, restore in `finally`. MCP servers' instruction
+   blocks also inject; log that as harness drift vs V1/Claude-era waves.
+4. **Live per-trial seal audit** — every `tool_use` event must match a KEEP MCP server prefix;
+   misses print immediately and land in `wave_results.json` (`seal_leaks`). 16f: 745 events, 0 leaks.
+
+Probe hygiene: `opencode run` **attaches to a per-cwd project server that caches config from first
+launch** — re-running the same cwd with a different `OPENCODE_CONFIG` silently inherits the old
+server. Seal probes must use a fresh directory, or the reading is invalid (this retracted one
+interim finding during the 16f build-out).
   **`json.load` the file as part of sealing, and check its tree, not just its bytes.** The 2026-11-13
   ground-truth file on disk had two missing braces; it parsed only after repair, and one of the
   mis-placed closers had silently re-parented `markers` and `_meta` inside `tracks`. A grader reading

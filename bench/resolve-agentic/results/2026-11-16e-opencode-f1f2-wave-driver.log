@@ -1,0 +1,14 @@
+[14:59:06] agent harness: opencode 1.19.5
+  same opencode build as wave 2026-11-16d-opencode-f1f2-wave.
+[14:59:06] pair T1r1+T1r2
+[15:00:37] pair T1r3+T2r1
+[15:02:31] pair T2r2+T2r3
+[15:04:17] pair T3r1+T3r2
+[15:08:33] pair T3r3+F1r1
+[15:11:39] pair F1r2+F1r3
+[15:14:54] pair T7r1+T7r2
+[15:20:34] pair T7r3+T8r1
+[15:23:13] pair T8r2+T8r3
+[15:24:49] pair F2r1+F2r2
+[15:28:47] solo F2r3
+WAVE DONE — results/2026-11-16e-opencode-f1f2-wave

@@ -41,13 +41,17 @@ CONTEXT_TOKENS = 262144
 # global server is re-declared disabled: a project config alone does not remove global
 # servers from the merged tool pool — verified by live probe 2026-11-16.
 KEEP = ("davinci-resolve-builtin", "davinci-resolve", "davinci-resolve-advanced")
-# Object form {"*": "deny"} is REQUIRED on opencode 1.19.5: the string shorthand
-# "deny" is accepted by the config parser but NOT enforced — the 2026-11-16b wave
-# leaked exactly that way (F1r3 ran `bash sleep 12`, F2r1 ran `grep`); the object
-# form was verified by live probe the same day (tool absent from the session pool).
-PERMS = {k: {"*": "deny"} for k in ("read", "edit", "glob", "grep", "list", "bash", "task",
-                                    "webfetch", "websearch", "external_directory", "question",
-                                    "skill", "todowrite")}
+# Permission shape on opencode 1.19.5 (V1 `permission` key; schema at opencode.ai/config.json):
+# pattern-capable tools (bash/read/edit/glob/grep/list/task/external_directory/skill/lsp) take the
+# object form {"*": "deny"}; the string shorthand "deny" parsed on 16b but was NOT enforced (wave
+# 16b leaked: F1r3 ran `bash sleep 12`, F2r1 ran `grep`). String-only tools (todowrite/question/
+# webfetch/websearch/doom_loop) REJECT the object form — an invalid config makes `opencode run`
+# exit in ~0.3 s (16c first attempt: all 21 trials died with "Expected PermissionActionConfig,
+# got {"*":"deny"} permission.todowrite"; the earlier "object form verified" probe had been
+# misread). Mixed form below is the seal; re-probe per-wave via SEAL PROBE below.
+PERMS = {**{k: {"*": "deny"} for k in ("read", "edit", "glob", "grep", "list", "bash", "task",
+                                          "external_directory", "skill")},
+         **{k: "deny" for k in ("webfetch", "websearch", "question", "todowrite")}}
 
 def strict_servers():
     cfg = json.load(open(pathlib.Path.home() / ".config" / "opencode" / "opencode.json"))
