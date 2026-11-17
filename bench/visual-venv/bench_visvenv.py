@@ -121,9 +121,11 @@ iupper = np.triu_indices(len(V), 1)
 pair = S[iupper]
 if not feats:
     json.dump(out, open(args.out, "w"), indent=1); print("no crops in embed pass; partial", args.out); sys.exit(0)
-out["embed"] = {"crops": ncrops, "feat_ms_total": round(feat_ms, 3),
-                "ms_per_face": round(feat_ms / ncrops, 3) if ncrops else None,
-                "det_ms_same_pass": round(det_ms, 3),
+# 2026-11-17 (post-5.1.x rerun): keys renamed as the run2/run4 errata promised —
+# feat_s_total / det_s_same_pass hold seconds, ms_per_face now truly ms.
+out["embed"] = {"crops": ncrops, "feat_s_total": round(feat_ms, 3),
+                "ms_per_face": round(feat_ms / ncrops * 1000, 2) if ncrops else None,
+                "det_s_same_pass": round(det_ms, 3),
                 "embedding_norm_median": round(float(np.median(norms)), 3)}
 out["cosine"] = {"pairs": int(pair.size), "median": round(float(np.median(pair)), 4),
                  "p95": round(float(np.percentile(pair, 95)), 4),

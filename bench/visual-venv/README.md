@@ -102,3 +102,39 @@ was recoverable only from git. The label now defaults to `visvenv-<run date>` (o
   but kept out of the record set, because it exercised the tooling rather than measuring the stack.
 - Still open on purpose: the `*_ms`-keys-hold-seconds mislabeling noted under the run2 section.
   Renaming those keys breaks cross-run diffs, so it waits for the post-5.1.x rerun.
+
+## Rerun 2026-11-17 (`run5.json`, opencv-python/-contrib **5.1.0.95** — the upgrade run)
+
+The 5.1.0.95 macOS arm64 wheel hit PyPI 17:40 UTC on 2026-11-17; both opencv packages
+were upgraded together (`--only-binary :all:`) and the import chain re-verified before this
+run (README's open key erratum shipped with it: `feat_s_total` / `det_s_same_pass` /
+`ms_per_face` are now honestly labelled — run5 is the first record using them; normalize
+when diffing against run1–4). numpy 2.5.4 → 2.5.5 alongside. Fixtures re-resolved from the
+external volume copy; SHA-256s match run1–run4 bit-for-bit. Engine idle (serve up, no
+generation), outside the clean-window protocol — timings carry machine-state risk, but every
+observed move is a *speed-up*, far outside the ×1.15 drift band.
+
+- **Performance (the headline):** median **×0.853 across all 48 detect rows** vs run4.
+  Canonical 4×3@0.5: 0.278 / 0.278 / 0.283 (run1/3/4) → **0.227 s (×0.80)**. Grid cost:
+  2×2 0.208→0.135 (×0.65) · 4×3 ×0.80 · 4×4 ×0.88 · 8×4 ×0.99 — the win concentrates in the
+  per-create/init overhead, least in the large grids. `import_cv2` 0.157→0.036 s (below
+  run1's warm 0.063 even), YuNet create 0.013→0.005 s, SFace create 0.034→0.030 s.
+  Embed window 0.992→0.933 s (10.90→10.25 ms/face, still an upper bound).
+- **Cold stage (first recorded since run1):** `cold_run.py` ×3 → **1.361 / 1.368 / 1.377 s**
+  (spread 16 ms), raw=91 — vs run1's 1.49 s (≈×0.92); page cache was warm, engine idle.
+- **Determinism:** all 24 PNG detect rows, whole-frame (92), cosine (0.1265/0.3121) and SFace
+  norm median (10.341) **bit-identical** — the detector is unchanged on identical pixels.
+- **9 of 48 mp4_h264 rows shift by ±1 face** (raw and merged move together; PNG rows untouched).
+  Attribution proven, not assumed: the same fixture **decodes to different pixels** under
+  5.1.0.95 — first-frame sha256 `6716af2b…`/sum 5 441 800 265 (isolated 5.0.0.93 wheel) vs
+  `a2bebe5f…`/sum 5 437 720 989 (5.1.0.95). It is the bundled **FFmpeg 9.0.2** decode, not the
+  detector. Any future H.264 face counts are decoder-version-dependent records.
+- **Behavioural markers vs the README's expectations:**
+  1. `readNetFromTensorflow` → **absent** (as predicted; Caffe stayed absent, ONNX/YN/SF present).
+  2. **`match()` in-place normalisation NOT fixed on 5.1.0.95** — norms 9.821/12.40 → 1.00/1.00
+     reproduce bit-identically. The "fixed upstream in 5.1.0" expectation did not ship in the
+     wheel; the vision code must keep copying vectors before `match()`.
+  3. New stderr on every `FaceDetectorYN/FaceRecognizerSF.create()`:
+     `[ WARN] setPreferableTarget Targets are not supported by the new graph engine for now` —
+     96 lines in `run5.err` (run4.err was empty). Harmless but noisy for stderr-capturing
+     pipelines; silence via `cv2.utils.logging.setLogLevel`.
