@@ -25,7 +25,16 @@ import argparse, json, os, pathlib, subprocess, time
 
 HERE = pathlib.Path(__file__).resolve().parent
 BENCH = HERE.parent                                    # bench/
-FIX = json.load(open(HERE / "fixture.json"))
+# fixture.json is UNTRACKED by design (it names the real media); the committed template is
+# fixture.example.json. Fail with directions instead of a bare FileNotFoundError — this also
+# fires when the module is only imported for Client (the 17h driver does), so the message
+# must explain why an import failed.
+FIX_PATH = HERE / "fixture.json"
+if not FIX_PATH.exists():
+    raise SystemExit("fixture.json missing (untracked by design — it names the real media).\n"
+                     "  Build it: python3 check_media.py /path/to/clip.mov --out fixture.json\n"
+                     "  Template: fixture.example.json (class A = timings comparable, B = outcomes only)")
+FIX = json.load(open(FIX_PATH))
 MEDIA_PATH, MEDIA_NAME = FIX["media_path"], FIX["clip_name"]
 D = FIX["derived"]
 TL_W, TL_H, FPS = FIX["timeline"]["width"], FIX["timeline"]["height"], FIX["timeline"]["fps"]
@@ -131,6 +140,9 @@ def main():
     a = ap.parse_args()
     TLB = a.tl_base or a.project
     want = lambda s: a.stage in ("all", s)
+    if not os.path.exists(MEDIA_PATH):   # unmounted volume must fail here, not mid-arm
+        print("!! fixture media path unreachable (volume unmounted?) — see fixture.json; aborting")
+        return 1
     LOGDIR.mkdir(parents=True, exist_ok=True)
     c = Client(LOGDIR / f"fixture-build-{a.project}.jsonl")
 

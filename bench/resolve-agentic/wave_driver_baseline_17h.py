@@ -148,6 +148,13 @@ def main():
         RENDER = a.render_root
 
     v2.seal_host_hygiene()
+    # Refuse a placeholder/unmounted render root BEFORE any mkdir(parents=True): on macOS
+    # /Volumes is writable, so a forgotten --render-root would silently create junk dirs.
+    vol = pathlib.Path(*pathlib.Path(RENDER).parts[:2])   # /Volumes/<name>
+    if "YourVolume" in RENDER or not vol.exists():
+        sys.exit(f"render root unusable: {RENDER}\n"
+                 "Pass --render-root <real volume path> (the volume must already exist); "
+                 "refusing to create a placeholder on the root volume.")
     out = pathlib.Path(a.out)
     sess = out / "sessions"
     sess.mkdir(parents=True, exist_ok=True)
