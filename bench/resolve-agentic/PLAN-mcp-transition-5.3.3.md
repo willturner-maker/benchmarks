@@ -1,5 +1,38 @@
 # PLAN — harness transitions before Tier 3: MCP 5.3.1 → 5.3.3, opencode 2.3.0 → 2.3.1
 
+## Transition executed — 2026-11-18 (later): MCP 5.3.3 → 5.3.4 (user-flagged, cheap-diff path)
+
+- **Instrument sealed first**: `mcp_fingerprint.py` v1 (the 5.3.1→5.3.3 pair was captured with
+  ad-hoc greps whose method was never committed — the METHOD is now pinned: sha256 anchors on
+  `src/server.py`, the vendor tree and the advanced-server executable tree, regex-pinned counts).
+- **Pre-sync fingerprint** (`mcp-fingerprint-pre5.3.4.json`): installed tree byte-identical to the
+  pinned post-5.3.3 record (server.py sha `73d706f3…`) — the Python half was exactly the last
+  benched state (Tier 3/4 ran on it).
+- **Sync**: `npx -y davinci-resolve-mcp@latest sync` → 5.3.4 (marker `updatedAt` 22:53 UTC).
+- **Post-fingerprint diff**: exactly TWO fields moved — `package_version`, and `server_py_sha256`
+  (`73d706f3…` → `1d061c96…`). The release notes claimed "documentation only"; the changed hash
+  demanded the diff rather than the claim: **full-tree audit against the v5.3.3 tag
+  (byte-identical to the pinned 5.3.3 record) shows the ENTIRE executable delta is the `VERSION`
+  string in `src/server.py` plus the same in `src/granular/common.py`** (4 diff lines total).
+  `bin/` and `resolve-advanced/` identical; the tool-name set (256 FastMCP defs), action-branch
+  counts (788), vendor tree hash and executable tree hash all unmoved.
+- **Skill-docs containment check**: `SKILL.md`/house-style content appears nowhere in
+  `src/server.py` — the new conventions never enter the agent tool surface, so trial contexts
+  are unaffected.
+- **Trap re-arm: NOT run, with the evidence-based reason recorded** (this is the transition
+  protocol's own escape clause, used on proof rather than on the release notes): every byte that
+  could change trap physics — `server.py`, the granular handlers, `bin/`, the vendor codecs — is
+  identical modulo two version strings. The F2/F1/F3 fork physics ran their last live probe on
+  the byte-identical 5.3.3 tree the same day.
+- **In-memory caveat**: both server processes (started 14:38 local, pre-sync) still run 5.3.3
+  code; 5.3.4 binds at the next MCP reconnect/launch. Provenance: waves from the next dispatch
+  on record MCP **5.3.4**; Tier 3 (`18k`) and Tier 4 (`18l`) stay labelled **5.3.3**.
+- Evidence: `mcp-fingerprint-{pre,post}5.3.4.json`; instrument `mcp_fingerprint.py` (reusable for
+  every future move).
+
+---
+
+
 ## Transition executed — 2026-11-18, all steps green
 
 - **Install**: `npx -y davinci-resolve-mcp@latest sync` → **5.3.3** (python `server.py` sha
