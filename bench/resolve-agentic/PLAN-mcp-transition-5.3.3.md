@@ -1,4 +1,33 @@
-# PLAN — community MCP transition 5.3.1 → 5.3.3 (probe before Tier 3)
+# PLAN — harness transitions before Tier 3: MCP 5.3.1 → 5.3.3, opencode 2.3.0 → 2.3.1
+
+## Addendum (2026-11-18): opencode 2.3.1 (user-flagged, https://github.com/anomalyco/opencode/releases/tag/v2.3.1)
+
+Same rule as the MCP update: **no install mid-probe** — the Tier 2 probe launches `opencode run`
+sessions continuously, and the harness binary is part of what those sessions measure. All published
+17h/17g waves ran on **2.3.0** (binary sha256
+`9f3147cae4ca323827d3ca39451b0d3431b2906e79a08e9b09d1eb34bb703f52`, 223 583 968 bytes).
+Read of the release notes against this bench:
+
+- **Seal hazard (the one that matters):** 2.3.1 re-enables `CLAUDE.md` fallback — a directory with
+  no `AGENTS.md` reads `CLAUDE.md`, and a missing **global** `AGENTS.md` falls back to
+  `~/.claude/CLAUDE.md`. Our probe/wave protocol *deliberately hides* the global `AGENTS.md`
+  (rename to `.bench-hidden`) during runs — on 2.3.1 that rename would activate the fallback.
+  Checked 2026-11-18: `~/.claude/CLAUDE.md` and every bench-dir `CLAUDE.md` **do not exist**, so
+  today it is latent. Any future wave on 2.3.1 must extend `seal_host_hygiene()` to fail closed if
+  `~/.claude/CLAUDE.md` or any `CLAUDE.md` in the tree exists while AGENTS.md is hidden.
+- **Nothing about tool-name lookup changed** — no alias/suggestion mechanism appears in the notes,
+  so the Tier 2 premise (fix must be prompt-side) holds on 2.3.1 too. Worth a 1-call confirmation
+  after install (type a mangled name, check the error text is unchanged).
+- Background compaction is now on by default. Trials are short, but a future wave should set
+  `compaction.background: false` in the trial config to keep behaviour comparable to the 2.3.0 records.
+- Removed config keys (`shell_timeout_background`, `experimental.background_compaction`) are absent
+  from `trial_config()`, verified — configs keep loading regardless. Shell-timeout-to-background is
+  a behavior change only for trials that use the shell tool, which ground rules forbid.
+- Decision: install after Tier 2 closes (same window as the MCP sync), confirm the two probes above,
+  and record the new binary sha in the next wave's provenance. Tier 1's ceiling stays labelled 2.3.0.
+
+---
+
 
 Trigger: user-flagged release https://github.com/samuelgursky/davinci-resolve-mcp/releases/tag/v5.3.3
 (installed: **5.3.1**). Sequencing: **after** the Tier 2 naming probe finishes — the probe measures
