@@ -1353,6 +1353,46 @@ drivers `wave_driver_baseline_17h.py`, `probe_mangle_driver.py`, `wave_driver_ti
 
 ---
 
+## Addendum (q): 2026-11-18l — Tier 4 frontier-only: the F3 preservation fork, and the discovery that the safe path is invisible
+
+SATURATION's headroom rule priced next: the pass axis on the legacy seven is spent, so Tier 4
+dispatched scoring compute **only** at a new brief — F3, whose mechanism Tier 3 discovered for free
+(F2r2): the same ripple insert has two legal execution paths with opposite physics. The same-day
+mechanism probe (`probe_f3_mechanism.py`) pinned the fork before any agent ran: community
+`ripple_insert` and `move_clips` **both rebuild shifted items** (move_clips is implemented as
+duplicate+delete; the server's restore pass deliberately excludes grades/transitions/links), while
+the built-in bridge (`TimelineItem.SetPosition` — reposition, no rebuild) preserves ids, CDLs
+byte-for-byte, and links. Crucially, **no help or error text names the alternative path** — the
+warnings print the damage, not the exit — so the brief measures judgment under a printed warning,
+which is exactly SATURATION §5's bar.
+
+**Sealed before dispatch:** `grade_f3` + 11 selftest cases (69/69), null cases that refuse to score
+an un-armed fixture, and a pre-dispatch arming capture (F3 ARM CHECK 6/6).
+
+**Result (n=6, split-reported, never blended):** geometry 6/6 exact, honesty 6/6 — and the headline
+split: **0 preserved native, 6 destroyed-then-repaired, 0 honesty failures.** Every agent ran the
+destructive community path, read the warning, verified the damage in read-backs, repaired grade and
+link, and disclosed — two of them explicitly refusing to overclaim numeric CDL equality the public
+API cannot prove. The probe-proven preserving path was never taken as the mutation path (one trial
+used the bridge — only to verify). So: verification discipline is at ceiling; path discovery is at
+zero. The sealed 3-class matrix had no cell for repair; the fourth class was derived from read-back
+evidence (the shifted item's unique id changed), never by relabeling behavior.
+
+Two operator findings, both caught by sealed evidence: `media_pool.delete_timelines` on build
+archives **contaminated the first fixture** (pool 5→14 clips, `duplicate` broke) — fixture rebuilt,
+archives now handled by the Tier 3 census exemption, with a standing rule against that call; and the
+builder's first `--f3-reps` cut missed the duplicate stage — caught by the sealed ground-truth file
+(f3 count 0), the Tier 3 tripwire lesson working as designed. The built-in `run_script` serializer
+pitfall (result trees with API objects crash the harness **after** mutations run) reproduced inside
+one trial after the operator hit it twice during probing — left as agent-visible friction, untouched.
+
+Full records: `bench/resolve-agentic/results/tier4-2026-11-18l{,-smoke}/` (gitignored trees;
+distilled `results-tier4-2026-11-18l.json` tracked), probe `probe-f3-2026-11-18l.json`, plan
+`PLAN-tier4-2026-11-18l.md`, instruments `wave_driver_tier4_18l.py`, `capture_f3_prestate.py`,
+`grade_tier4_18l.py`, `grader_selftest.grade_f3`.
+
+---
+
 ## Record scope — waves outside the scored agentic record (2026-11-15)
 
 Two waves ran and were reported clean at the time, and are now **outside the scored agentic record**:
