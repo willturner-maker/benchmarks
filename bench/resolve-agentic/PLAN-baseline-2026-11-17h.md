@@ -15,14 +15,17 @@ F2 grade dimension become measurable again); 18/18 stops being the working denom
    trial-suffixed names (`_f1s1..3`, `_f2r1..3`, per-brief T naming), which already exist.
 2. **F2 arming order fixed + verified** — CDLs land on the clean 3-item timeline BEFORE the
    transition exists; the builder now runs an ARM CHECK (exactly one 24-f transition, grade
-   tools on items 1 and 2) and **aborts** rather than arming a wrong pre-state (flaw 4).
-   The F2 grade dimension returns to scoring; spec reverts from `tracked: [transition, link]`.
-3. **T8 in-trial snapshot grading** — the comp-persistence mechanism is proven (attached comps
-   don't survive project close/load churn), so the grader may not be the last reader: after
-   each T8r* session ends, the driver takes an immediate stdio-MCP read-back of the timeline's
-   comp list and grades THAT. The post-wave read-back is still recorded — it is now
-   product-behavior data (measuring Resolve, not the agent) and is disclosed alongside, never
-   deciding the cell.
+   tools on the POST-transition rows 2 and 3) and **aborts** rather than arming a wrong pre-state
+   (flaw 4). The F2 grade dimension returns to scoring. *Measured 2026-11-17 (pass 1): a ripple
+   insert destroys the shifted clip's grade in 3/3 trials, alongside the link — so the F2 spec
+   for future waves becomes `expect_lost: ["link", "grade"]`, not grade-survives.*
+3. **T8 in-trial snapshot grading** — after each T8r* session ends, the driver takes an immediate
+   stdio-MCP read-back of the timeline's comp list and grades THAT; the post-wave read-back is
+   still recorded as product-behavior data and never decides the cell. *(The mechanism claim has
+   since been softened: 17g saw all six trials' comps read 1 in-wave and 0 afterwards, but 17h
+   pass 1 saw 3/3 still read 1 post-wave, through both creation paths. Survival across project
+   churn is NOT deterministic — which is exactly why the snapshot, not a later read, is the
+   grade.)*
 
 ## Wave shape
 
@@ -64,8 +67,14 @@ F2 grade dimension become measurable again); 18/18 stops being the working denom
 - T8 measures agent behavior at session end; post-hoc Resolve behavior (comp eviction under
   churn) is recorded as a product finding every time it appears.
 
-Status: **all pre-wave checklist items done (2026-11-17). Wave not yet run** — one decision
-open: tenancy (alongside an operator session, disclosed, as the published 17g was; or
-tenancy-free detached like the 11-13/16 co-runs) and the start. Recommended first move at
-wave time: one `--smoke T1r1` session to a scratch `--out` to prove the driver end-to-end
-(snapshot writes, seal audit, summary lines) before arming the 21.
+Status: **pass 1 measured 2026-11-17: 20/21** (`results/baseline-2026-11-17h/README.md` has the
+record, findings and reproduce commands). Its one miss is a genuine agent failure (T2r1: nine
+hyphen-mangled tool-name attempts, zero completed calls, honest report of doing nothing).
+**Deviation, disclosed in that record:** pass 1 used the `--keep-agents` flag added the same day,
+which left the operator's global `AGENTS.md` in every trial's context — probe 9 (2026-11-16f) had
+already proven both the global and per-cwd `AGENTS.md` get injected, so the flag was a protocol
+error. Fingerprint scan: zero uptake across 21 transcripts, but presence is proven.
+**Pass 2** (`results/baseline-2026-11-17h2`, project `_mcp_AGBench-2026-11-17h2`) re-runs all 21
+with the operator `AGENTS.md` hidden and is the comparable/ceiling pass; the pair also measures
+the operator-context effect. Two rules the pair produced: F2 `expect_lost: ["link","grade"]`, and
+T8 comp survival is non-deterministic (snapshot-graded, never post-wave-read graded).
