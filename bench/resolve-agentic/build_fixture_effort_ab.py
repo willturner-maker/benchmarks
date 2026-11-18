@@ -138,6 +138,9 @@ def main():
     ap.add_argument("--reps", type=int, default=3,
                     help="number of F-trial copies per template (_f1s1..N / _f2r1..N); "
                          "Tier 3 two-arm waves pass 6. Default 3 = every published wave.")
+    ap.add_argument("--f3-reps", type=int, default=0,
+                    help="Tier 4: also duplicate the ARM-CHECKED _f2m template into _f3r1..N "
+                         "(F3 preservation-fork briefs start from the identical armed pre-state).")
     ap.add_argument("--tl-base", default=None, help="defaults to --project")
     ap.add_argument("--fresh", action="store_true", help="delete the project first if present")
     ap.add_argument("--logdir", default=str(LOGDIR),
@@ -326,8 +329,11 @@ def main():
         print("f2 probe:", str(pv)[:500])
 
     if want("duplicate"):
-        for src, dsts in (("_f1m", [f"{TLB}_f1s{k}" for k in range(1, a.reps + 1)]),
-                          ("_f2m", [f"{TLB}_f2r{k}" for k in range(1, a.reps + 1)])):
+        pairs = [("_f1m", [f"{TLB}_f1s{k}" for k in range(1, a.reps + 1)]),
+                 ("_f2m", [f"{TLB}_f2r{k}" for k in range(1, a.reps + 1)])]
+        if a.f3_reps:
+            pairs.append(("_f2m", [f"{TLB}_f3r{k}" for k in range(1, a.f3_reps + 1)]))
+        for src, dsts in pairs:
             for dst in dsts:
                 pin(TLB + src)          # timeline.duplicate duplicates the CURRENT timeline
                 print("dup", src, "->", dst, ":", str(c.tool("timeline", "duplicate",
@@ -340,7 +346,8 @@ def main():
         out = {}
         for tl in [TLB + sfx for sfx in
                    ("_f1m",) + tuple(f"_f1s{k}" for k in range(1, a.reps + 1))
-                   + ("_f2m",) + tuple(f"_f2r{k}" for k in range(1, a.reps + 1))]:
+                   + ("_f2m",) + tuple(f"_f2r{k}" for k in range(1, a.reps + 1))
+                   + tuple(f"_f3r{k}" for k in range(1, a.f3_reps + 1))]:
             ids = {t["name"]: t["id"] for t in c.tool("timeline", "list").get("timelines", [])}
             if tl not in ids:
                 continue
