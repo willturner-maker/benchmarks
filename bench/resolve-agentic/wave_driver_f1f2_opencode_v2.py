@@ -80,10 +80,23 @@ def seal_host_hygiene():
     """Fail-closed: the LSP plugin (~/tools/opencode-v2-lsp-support) is project-scoped via
     opencode.json, which `opencode run` never loads — but an .opencode/plugins/ clone in
     any ancestor IS auto-discovered by run-mode (live-probed 2026-11-16) and would leak an
-    lsp tool into every trial. No .opencode/ dirs may exist in the repo tree during a wave."""
+    lsp tool into every trial. No .opencode/ dirs may exist in the repo tree during a wave.
+
+    CLAUDE.md gate (added 2026-11-18, opencode 2.3.1): 2.3.1 re-enabled CLAUDE.md fallback —
+    a directory with no AGENTS.md reads CLAUDE.md, and a missing GLOBAL AGENTS.md falls back to
+    ~/.claude/CLAUDE.md (fallback confirmed active on 2.3.1 by live probe: a planted CLAUDE.md
+    marker was answered in a run with no AGENTS.md). Waves/probes deliberately hide the global
+    AGENTS.md during the run, which activates exactly that fallback. No CLAUDE.md may exist
+    where a hidden-AGENTS run could pick it up."""
     for p in (REPO / ".opencode", pathlib.Path.home() / ".opencode"):
         if (p / "plugins").exists():
             raise SystemExit(f"seal hazard: plugin auto-discovery dir present: {p}")
+    if (pathlib.Path.home() / ".claude" / "CLAUDE.md").exists():
+        raise SystemExit("seal hazard: ~/.claude/CLAUDE.md present — global AGENTS.md hiding "
+                         "would fall back to it on opencode >= 2.3.1")
+    stray = sorted(pathlib.Path(REPO).rglob("CLAUDE.md"))
+    if stray:
+        raise SystemExit(f"seal hazard: CLAUDE.md in the repo tree: {stray[:5]}")
 
 def strict_servers():
     cfg = json.load(open(pathlib.Path.home() / ".config" / "opencode" / "opencode.json"))

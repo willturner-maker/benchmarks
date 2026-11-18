@@ -1,0 +1,26 @@
+{
+ "captured_at": "2026-11-17T17:23:31-0800",
+ "package_version": "5.3.3",
+ "server_py_sha256": "73d706f3309d2af07b741cd40969d2322f34c38f0b76cc72b8670812b10248cd",
+ "server_py_lines": 36542,
+ "registered_tool_names": 341,
+ "action_branches": 662,
+ "dropframe_mentions": 17,
+ "starttc_mentions": 30,
+ "extractOFXTools_present": false,
+ "range_error_guards": 19,
+ "node_advanced_server": {
+  "captured_at": "2026-11-17T17:23:52-0800",
+  "top_package_version": "5.3.3",
+  "advanced_vendor": {
+   "drx_codec_files": 21,
+   "drp_format_files": 46,
+   "drt_format_files": 8,
+   "vendor_tree_hash": "797b5aaa30a7aaac461b2a45c7ff801888850d9126d95a691f0c55d47a9a9423",
+   "extractOFXTools_present": true,
+   "range_error_sites": 35,
+   "drp_drt_starttc_sites": 7,
+   "dropframe_guards": 22
+  }
+ }
+}
