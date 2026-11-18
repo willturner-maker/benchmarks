@@ -338,8 +338,9 @@ def main():
         """probe carries geometry but NOT speed/retime/grade/transform/crop — those are separate
         read-backs (the 16f ground_truth pre_state was assembled the same way)."""
         out = {}
-        for tl in [TLB + sfx for sfx in ("_f1m", "_f1s1", "_f1s2", "_f1s3",
-                                         "_f2m", "_f2r1", "_f2r2", "_f2r3")]:
+        for tl in [TLB + sfx for sfx in
+                   ("_f1m",) + tuple(f"_f1s{k}" for k in range(1, a.reps + 1))
+                   + ("_f2m",) + tuple(f"_f2r{k}" for k in range(1, a.reps + 1))]:
             ids = {t["name"]: t["id"] for t in c.tool("timeline", "list").get("timelines", [])}
             if tl not in ids:
                 continue

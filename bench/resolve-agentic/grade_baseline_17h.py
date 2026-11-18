@@ -58,6 +58,9 @@ def main():
                          "'timelines' map) — used only for the stray-timeline check; the -16f adapter "
                          "carries grading values, not the census")
     ap.add_argument("--sealed-gt-sha256", default=None)
+    ap.add_argument("--prewave-census", default=None,
+                    help="snapshot json taken before the first trial; archive siblings present "
+                         "there are operator build artifacts and exempt from the T1 mutation check")
     ap.add_argument("--reps", default="r1,r2,r3",
                     help="reps to score; Tier 3 two-arm wave passes r1..r6 (arms read from "
                          "the wave summary). Default = the published 3-rep behaviour.")
@@ -112,13 +115,17 @@ def main():
         c.tool("project_manager", "load", {"name": tl_base})
         tids = {t["name"]: t["id"] for t in c.tool("timeline", "list").get("timelines", [])}
         census = json.load(open(args.sealed_gt))["timelines"] if args.sealed_gt else {}
+        prewave = set()
+        if args.prewave_census:   # snapshot taken BEFORE any trial (fixture-census evidence);
+            # archive siblings already present there are operator build artifacts, not trial
+            # mutations (the 18k wave surfaced this: builder left _archived_v01 copies behind;
+            # published waves deleted them pre-dispatch, this one didn't - disclosed in README).
+            prewave = set(json.load(open(args.prewave_census)).get("timelines_present", []))
         now = sorted(n for n in tids if n.startswith(tl_base))
         # post-wave census is compared to the SEALED pre-wave one: expected additions are the
         # trial-created timelines; MCP auto-archive copies are reported, not flagged; anything
         # else is a stray worth investigating before the record is published.
-        expected_extra = {f"{tl_base}_{t}" for t in
-                          ("T2r1", "T2r2", "T2r3", "T3r1", "T3r2", "T3r3",
-                           "T7r1", "T7r2", "T7r3", "T8r1", "T8r2", "T8r3")}
+        expected_extra = {f"{tl_base}_{b}{k}" for b in ("T2", "T3", "T7", "T8") for k in REPS}
         archived = [n for n in now if "_archived_" in n]
         unexplained = sorted(n for n in now
                              if n not in census and n not in expected_extra and "_archived_" not in n)
@@ -126,11 +133,12 @@ def main():
         stray = {"post_wave_count": len(now), "sealed_count": len(census),
                  "expected_trial_created_present": sorted(n for n in now if n in expected_extra),
                  "mcp_archived_copies": archived, "unexplained_additions": unexplained,
+                 "prewave_sibling_exemptions": sorted(n for n in archived if n in prewave),
                  "sealed_timelines_now_absent": missing}
         tnames = sorted(n for n in tids if n.startswith(tl_base))
 
         # ---- T1 (read-only report vs sealed gt; mutation ruled out by absent archive) ----
-        t1_siblings = [n for n in tnames if n.endswith("_T1_archived_v01")]
+        t1_siblings = [n for n in tnames if n.endswith("_T1_archived_v01") and n not in prewave]
         expected_t1 = {k: gt["T1"][k] for k in
                        ("duration_frames", "video_items", "video_tracks", "audio_tracks")}
         for k in REPS:

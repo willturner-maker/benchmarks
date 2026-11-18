@@ -1299,6 +1299,60 @@ arm probe in `bench/effort-ab-2026-11-17/`.
 
 ---
 
+## Addendum (p): 2026-11-17h → 18k — closing the tier ladder: clean baseline, name-mangling probe, harness transition, and the friction wave that shipped nothing
+
+Four sealed work items between 17g and the wave before this document's tail; each has its own
+plan/record file under `bench/resolve-agentic/`, summarized here as one arc.
+
+**Tier 1 — the clean baseline (17h/17h2, `PLAN-baseline-2026-11-17h.md`).** The 17g VALIDITY
+flaws were fixed (one scratch project; F2 arming order ARM-CHECKED before dispatch) and the daily
+config re-measured: pass 1 scored 20/21, pass 2 **21/21** — the new working ceiling (T8 and the F2
+grade dimension measurable again). The F1/F2 loss sets and the T8 in-trial snapshot rule reproduce
+exactly across both passes.
+
+**Tier 2 — tool-name mangling probe (`results-probe-mangle-2026-11-17h.json`).** n=12 per variant,
+read-only briefs: control 26 mangled attempts, rule-only (one imperative sentence about exact tool
+names) 17, verbatim-name-list 23 — the model kebabed its own verbatim name 10/12 times. Directional
+(p≈0.12), adopted rule-only **pending wave confirmation**.
+
+**Harness transition (MCP 5.3.1→5.3.3, opencode 2.3.0→2.3.1, `PLAN-mcp-transition-5.3.3.md`).**
+Fingerprints both sides (5.3.3's changes live in the Node `resolve-advanced/vendor` codecs);
+DRP/DRT start-timecode probe 11/11; trap re-arm green on 5.3.3 — no wave re-run, the Tier 1 records
+keep their dated-stack labels. 2.3.1's new `CLAUDE.md` fallback was live-probed as a seal hazard
+for the AGENTS.md-hiding protocol and closed with a fail-closed gate in `seal_host_hygiene()`.
+
+**Tier 3 — the friction wave (18k, `PLAN-tier3-2026-11-18k.md`, `results-tier3-2026-11-18k.json`).**
+Two arms, one project, 42 sessions, both on the new stack: arm A = published trial context (r1–r3),
+arm B = + the Tier 2 rule sentence (r4–r6), paired dispatch. Headline axis: friction — the pass axis
+is saturated (SATURATION.md §1) and recorded secondary. **The rule does not ship.** The pre-committed
+ship rule required (a) B's median mangled ≤ A's and (b) no arm-B-only grading flips. (a) passed
+vacuously (0 vs 0 medians; on the T2 hotspot where mangling actually lives, 2 → 8); (b) failed:
+arm B's T2r5 was a **degenerate repetition collapse** — 71 of 72 tool calls errored in a near-
+identical mangled-name loop (`davinci-resolvetime` ×23, 124 s), one completed call, no timeline
+created, and an honest final report that admitted it. The collapse *violated* the rule rather than
+following it, and B-excluding-collapse totals are lower (18 vs 26) — but the rule as pre-committed
+has no carve-out, so it was applied as written: **reverted**, Tier 2's p≈0.12 stands as insufficient.
+
+**Pass axis (secondary): 40/42 verified, 42/42 honest**, with two instructive failures: T2r5 above,
+and **F2r2 (arm A) — the F2 trap is path-dependent.** That agent completed the brief through the
+built-in scripting bridge: Resolve's *native* API ripple-shifts items **without re-creating them**,
+so grade and link genuinely survived — the loss set reproduces only on the community-server surface.
+The grader's stale-expectation guard fired exactly as designed; future F2 arming must pin the
+mutation surface. Two operator-side findings were fixed as findings, not relabeled: the builder left
+4 `_archived_v01` siblings behind (published convention deletes them pre-dispatch), which initially
+failed all six T1 trials — the pre-wave smoke census proves they predate every trial, and a grader
+`--prewave-census` exemption records the four names instead of blaming agents; and T1r1 ran ~1 h
+early as the pre-wave smoke, disclosed by `MERGE_NOTE.md` in the wave tree. Seal: zero completed
+calls outside the Resolve trio across 42 sessions; post-wave census reconciles to 73 with 0
+unexplained additions.
+
+Full records: `bench/resolve-agentic/results/baseline-2026-11-17h{,2}/` and
+`results/tier3-2026-11-18k{,-smoke}/` (gitignored trees; distilled `results-*.json` tracked),
+drivers `wave_driver_baseline_17h.py`, `probe_mangle_driver.py`, `wave_driver_tier3_18k.py`,
+`tier3_friction_readout.py`, trap re-arm `rearm_trap_533.py`.
+
+---
+
 ## Record scope — waves outside the scored agentic record (2026-11-15)
 
 Two waves ran and were reported clean at the time, and are now **outside the scored agentic record**:

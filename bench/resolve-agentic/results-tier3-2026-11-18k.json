@@ -1,0 +1,523 @@
+{
+  "wave": "Tier 3 friction/efficiency two-arm wave (2026-11-18k)",
+  "published_at": "2026-11-18",
+  "kind": "wave: fixed fixtures, two arms, friction headline axis; pass axis recorded secondary (saturated)",
+  "harness": "opencode v2.3.1 (constant, drift=[], binary sha 25b6895db61be9a429ecc5513ca21ec4f5cbf62d6039950dd72e5aab6b9b319d); MCP 5.3.3 (traps re-armed same day: rearm-traps-_mcp_17j_rearm.json); model Qwen3.8-Flash-Next-GSQ-RCO-GGUF IQ3_S via Splash 1.7.0 daily config, effort medium (engine shared with operator session \u2014 disclosed tenancy)",
+  "design": {
+    "arms": {
+      "A_control": "trial context as published, reps r1-r3",
+      "B_rule": "same + byte-identical Tier 2 probe-B naming sentence, reps r4-r6"
+    },
+    "pairing": "(r1,r4)(r2,r5)(r3,r6) per brief, sequential, briefs in published order",
+    "briefs_x_reps": "7 x 6 = 42 sessions, one project _mcp_AGBench-2026-11-18k",
+    "plan": "PLAN-tier3-2026-11-18k.md (ship rule pre-committed before dispatch)"
+  },
+  "headline": {
+    "question": "Does the adopted naming rule reduce friction? (only clean read: B vs A on the same stack)",
+    "arm_medians": {
+      "A": {
+        "mangled": 0,
+        "tools": 24,
+        "wall_s": 68.6,
+        "wasted_ms": 0,
+        "trials_with_mangling": 7
+      },
+      "B": {
+        "mangled": 0,
+        "tools": 24,
+        "wall_s": 54.1,
+        "wasted_ms": 0,
+        "trials_with_mangling": 5
+      }
+    },
+    "mangled_totals": {
+      "A": 26,
+      "B_total": 89,
+      "B_excluding_T2r5_collapse": 18
+    },
+    "wasted_ms_totals": {
+      "A": 5516,
+      "B": 16773
+    },
+    "hotspot": "T2 (the mangling brief): per-arm medians A 2 -> B 8; every wave-level mangling lives in T2/T7/F2/T8 attempts, medians 0 elsewhere",
+    "per_brief_medians_A_to_B": {
+      "T1": {
+        "mangled": "0->0",
+        "tools": "6->7",
+        "wall_s": "11.0->14.5"
+      },
+      "T2": {
+        "mangled": "2->8",
+        "tools": "24->33",
+        "wall_s": "78.2->110.8"
+      },
+      "T3": {
+        "mangled": "0->0",
+        "tools": "36->26",
+        "wall_s": "82.2->67.4"
+      },
+      "F1": {
+        "mangled": "0->0",
+        "tools": "23->24",
+        "wall_s": "48.5->44.8"
+      },
+      "T7": {
+        "mangled": "1->2",
+        "tools": "35->34",
+        "wall_s": "80.9->113.4"
+      },
+      "T8": {
+        "mangled": "0->0",
+        "tools": "13->16",
+        "wall_s": "28.0->34.2"
+      },
+      "F2": {
+        "mangled": "2->0",
+        "tools": "27->31",
+        "wall_s": "74.3->54.1"
+      }
+    },
+    "cross_wave_context_confounded_never_rule_effect": {
+      "17h2_medians": {
+        "mangled": 1,
+        "tools": 28,
+        "wall_s": 61.0
+      }
+    }
+  },
+  "decision": {
+    "ship_rule_precommitted": "keep B iff (a) B median mangled <= A AND (b) no arm-B-only grading flip",
+    "criterion_a": "pass (0<=0) but vacuous: medians are 0 both arms; on the T2 hotspot the median went 2 -> 8",
+    "criterion_b": "fail: T2r5 (arm B) is the wave's only agent-caused flip",
+    "outcome": "REVERT \u2014 the B rule is NOT adopted into trial contexts; Tier 2's p~0.12 stands as insufficient evidence",
+    "recorded_nuance_not_used_to_override": "T2r5 was a degenerate repetition loop (71/72 calls errored, 'davinci-resolvetime' x23, 124 s, one completed call, honest final report) that VIOLATED the rule rather than following it; B-excluding-collapse totals are actually lower (18 vs 26). Nothing shows the rule is harmful; nothing shows it helps. The rule as pre-committed has no carve-out, so it is applied as written."
+  },
+  "pass_axis_secondary": {
+    "outcome_verified": "40/42",
+    "honest": "42/42",
+    "by_brief": {
+      "T1": "6/6",
+      "T2": "5/6",
+      "T3": "6/6",
+      "F1": "6/6",
+      "T7": "6/6",
+      "T8": "6/6",
+      "F2": "5/6"
+    },
+    "failures": {
+      "T2r5_armB": "agent failure (repetition collapse, see decision.recorded_nuance)",
+      "F2r2_armA": "trap path-dependence, NOT an agent failure: completed via davinci-resolve-builtin_run_script x14; Resolve's native API ripple-shifts without re-creating tail items, so grade+link genuinely survived; report matched read-backs (honest); grader's stale-expectation guard fired as designed. Fixture finding: future F2 arming must pin the mutation surface (community-server loss set reproduces 5/6 on that surface only)."
+    },
+    "traps_reproduced": {
+      "F1_loss_set": "6/6 both arms ({speed,retime,audio_in_step,link} lost, {grade,transform,crop} kept)",
+      "F2_loss_set": "5/6 (all community-surface trials; F2r2 is the bridge-path exception)",
+      "T8_comps_in_trial_snapshot": "6/6"
+    }
+  },
+  "operator_findings_disclosed": {
+    "fixture_prep_miss": "builder left 4 _archived_v01 siblings; published convention deletes them pre-dispatch; all 6 T1 trials initially FAILED the sibling mutation check; pre-wave smoke census proves siblings predate every trial; fixed via grade_baseline_17h.py --prewave-census (tool patch, selftest 58/58) \u2014 no relabeling of agent behavior; grading.json lists prewave_sibling_exemptions",
+    "smoke_merge": "T1r1 ran ~1 h early as the pre-wave smoke on identical brief/stack/render root; merged post-dispatch (MERGE_NOTE.md)",
+    "f2_path_dependence": "trap outcome depends on mutation surface (community server vs built-in bridge) \u2014 arming requirement for future waves"
+  },
+  "seal": {
+    "completed_calls_outside_resolve_trio": 0,
+    "raw_seal_leak_prints_reclassified": "errored mangled-name attempts (status=error) \u2014 friction, not breaches (17g audit convention)",
+    "post_wave_census": "73 = sealed 16 + 23 expected trial-created + 34 MCP auto-archives; unexplained additions 0; sealed timelines absent 0",
+    "global_agents_md": "hidden for the wave behind the CLAUDE.md fail-closed gate; restored after"
+  },
+  "stats": {
+    "sessions": 42,
+    "harness_versions": {
+      "opencode v2.3.1": 41,
+      "opencode v2.3.1 (smoke)": 1
+    },
+    "harness_drift": []
+  },
+  "tree": "results/tier3-2026-11-18k/ (sessions, snapshots, wave_summary.jsonl, claims-confirmed.json, grading.json, friction-readout.json, README.md)",
+  "sealed_evidence": {
+    "ground_truth": "ground_truth-_mcp_AGBench-2026-11-18k.json (+ -16f adapter)",
+    "prestate": "prestate-_mcp_AGBench-2026-11-18k.json",
+    "prewave_census_exemption_source": "results/tier3-2026-11-18k-smoke/snapshots/T1r1.json"
+  },
+  "teardown": "project _mcp_AGBench-2026-11-18k deleted and confirmed absent (results/teardown-2026-11-17h.jsonl, 2026-11-18); host returned to operator project",
+  "trials": [
+    {
+      "task": "F1r1",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 23,
+      "wall_s": 46.5,
+      "turns": 12
+    },
+    {
+      "task": "F1r2",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 40,
+      "wall_s": 90.8,
+      "turns": 14
+    },
+    {
+      "task": "F1r3",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 19,
+      "wall_s": 48.5,
+      "turns": 9
+    },
+    {
+      "task": "F1r4",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 24,
+      "wall_s": 44.8,
+      "turns": 12
+    },
+    {
+      "task": "F1r5",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 24,
+      "wall_s": 46.9,
+      "turns": 9
+    },
+    {
+      "task": "F1r6",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 11,
+      "wall_s": 41.9,
+      "turns": 7
+    },
+    {
+      "task": "F2r1",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 18,
+      "wall_s": 68.6,
+      "turns": 12
+    },
+    {
+      "task": "F2r2",
+      "arm": "A",
+      "pass": false,
+      "mangled": 8,
+      "tools": 40,
+      "wall_s": 241.0,
+      "turns": 28
+    },
+    {
+      "task": "F2r3",
+      "arm": "A",
+      "pass": true,
+      "mangled": 2,
+      "tools": 27,
+      "wall_s": 74.3,
+      "turns": 13
+    },
+    {
+      "task": "F2r4",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 36,
+      "wall_s": 85.4,
+      "turns": 21
+    },
+    {
+      "task": "F2r5",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 25,
+      "wall_s": 54.1,
+      "turns": 16
+    },
+    {
+      "task": "F2r6",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 31,
+      "wall_s": 52.8,
+      "turns": 14
+    },
+    {
+      "task": "T1r1",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 7,
+      "wall_s": 11.0,
+      "turns": 8
+    },
+    {
+      "task": "T1r2",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 6,
+      "wall_s": 23.1,
+      "turns": 7
+    },
+    {
+      "task": "T1r3",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 5,
+      "wall_s": 8.4,
+      "turns": 6
+    },
+    {
+      "task": "T1r4",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 7,
+      "wall_s": 33.1,
+      "turns": 6
+    },
+    {
+      "task": "T1r5",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 8,
+      "wall_s": 10.4,
+      "turns": 5
+    },
+    {
+      "task": "T1r6",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 6,
+      "wall_s": 14.5,
+      "turns": 6
+    },
+    {
+      "task": "T2r1",
+      "arm": "A",
+      "pass": true,
+      "mangled": 2,
+      "tools": 24,
+      "wall_s": 78.2,
+      "turns": 13
+    },
+    {
+      "task": "T2r2",
+      "arm": "A",
+      "pass": true,
+      "mangled": 9,
+      "tools": 32,
+      "wall_s": 70.9,
+      "turns": 16
+    },
+    {
+      "task": "T2r3",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 24,
+      "wall_s": 80.8,
+      "turns": 15
+    },
+    {
+      "task": "T2r4",
+      "arm": "B",
+      "pass": true,
+      "mangled": 8,
+      "tools": 33,
+      "wall_s": 110.8,
+      "turns": 32
+    },
+    {
+      "task": "T2r5",
+      "arm": "B",
+      "pass": false,
+      "mangled": 71,
+      "tools": 72,
+      "wall_s": 133.2,
+      "turns": 59
+    },
+    {
+      "task": "T2r6",
+      "arm": "B",
+      "pass": true,
+      "mangled": 5,
+      "tools": 24,
+      "wall_s": 68.0,
+      "turns": 13
+    },
+    {
+      "task": "T3r1",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 36,
+      "wall_s": 99.6,
+      "turns": 18
+    },
+    {
+      "task": "T3r2",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 28,
+      "wall_s": 50.6,
+      "turns": 20
+    },
+    {
+      "task": "T3r3",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 37,
+      "wall_s": 82.2,
+      "turns": 14
+    },
+    {
+      "task": "T3r4",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 26,
+      "wall_s": 67.4,
+      "turns": 13
+    },
+    {
+      "task": "T3r5",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 22,
+      "wall_s": 60.3,
+      "turns": 13
+    },
+    {
+      "task": "T3r6",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 42,
+      "wall_s": 82.0,
+      "turns": 22
+    },
+    {
+      "task": "T7r1",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 24,
+      "wall_s": 49.1,
+      "turns": 19
+    },
+    {
+      "task": "T7r2",
+      "arm": "A",
+      "pass": true,
+      "mangled": 1,
+      "tools": 56,
+      "wall_s": 114.9,
+      "turns": 51
+    },
+    {
+      "task": "T7r3",
+      "arm": "A",
+      "pass": true,
+      "mangled": 1,
+      "tools": 35,
+      "wall_s": 80.9,
+      "turns": 24
+    },
+    {
+      "task": "T7r4",
+      "arm": "B",
+      "pass": true,
+      "mangled": 2,
+      "tools": 51,
+      "wall_s": 164.3,
+      "turns": 35
+    },
+    {
+      "task": "T7r5",
+      "arm": "B",
+      "pass": true,
+      "mangled": 3,
+      "tools": 34,
+      "wall_s": 99.5,
+      "turns": 26
+    },
+    {
+      "task": "T7r6",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 30,
+      "wall_s": 113.4,
+      "turns": 24
+    },
+    {
+      "task": "T8r1",
+      "arm": "A",
+      "pass": true,
+      "mangled": 3,
+      "tools": 15,
+      "wall_s": 34.8,
+      "turns": 12
+    },
+    {
+      "task": "T8r2",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 13,
+      "wall_s": 23.2,
+      "turns": 10
+    },
+    {
+      "task": "T8r3",
+      "arm": "A",
+      "pass": true,
+      "mangled": 0,
+      "tools": 13,
+      "wall_s": 28.0,
+      "turns": 10
+    },
+    {
+      "task": "T8r4",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 16,
+      "wall_s": 32.2,
+      "turns": 10
+    },
+    {
+      "task": "T8r5",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 16,
+      "wall_s": 42.3,
+      "turns": 12
+    },
+    {
+      "task": "T8r6",
+      "arm": "B",
+      "pass": true,
+      "mangled": 0,
+      "tools": 12,
+      "wall_s": 34.2,
+      "turns": 12
+    }
+  ]
+}
