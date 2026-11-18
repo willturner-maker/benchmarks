@@ -135,6 +135,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--project", required=True)
     ap.add_argument("--stage", default="all", help="settings|project|base|f1|f2|duplicate|gt|all")
+    ap.add_argument("--reps", type=int, default=3,
+                    help="number of F-trial copies per template (_f1s1..N / _f2r1..N); "
+                         "Tier 3 two-arm waves pass 6. Default 3 = every published wave.")
     ap.add_argument("--tl-base", default=None, help="defaults to --project")
     ap.add_argument("--fresh", action="store_true", help="delete the project first if present")
     ap.add_argument("--logdir", default=str(LOGDIR),
@@ -323,8 +326,8 @@ def main():
         print("f2 probe:", str(pv)[:500])
 
     if want("duplicate"):
-        for src, dsts in (("_f1m", [f"{TLB}_f1s{k}" for k in (1, 2, 3)]),
-                          ("_f2m", [f"{TLB}_f2r{k}" for k in (1, 2, 3)])):
+        for src, dsts in (("_f1m", [f"{TLB}_f1s{k}" for k in range(1, a.reps + 1)]),
+                          ("_f2m", [f"{TLB}_f2r{k}" for k in range(1, a.reps + 1)])):
             for dst in dsts:
                 pin(TLB + src)          # timeline.duplicate duplicates the CURRENT timeline
                 print("dup", src, "->", dst, ":", str(c.tool("timeline", "duplicate",

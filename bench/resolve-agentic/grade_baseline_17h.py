@@ -24,6 +24,8 @@ Usage:
 """
 import argparse, glob, json, os, pathlib, sys, time
 
+REPS = ("r1", "r2", "r3")   # module default; --reps overrides (Tier 3: r1..r6)
+
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import grader_selftest as gs
@@ -56,7 +58,12 @@ def main():
                          "'timelines' map) — used only for the stray-timeline check; the -16f adapter "
                          "carries grading values, not the census")
     ap.add_argument("--sealed-gt-sha256", default=None)
+    ap.add_argument("--reps", default="r1,r2,r3",
+                    help="reps to score; Tier 3 two-arm wave passes r1..r6 (arms read from "
+                         "the wave summary). Default = the published 3-rep behaviour.")
     args = ap.parse_args()
+    global REPS
+    REPS = tuple(x.strip() for x in args.reps.split(",") if x.strip())
 
     gt = json.load(open(args.gt))
     claims = json.load(open(args.claims))
@@ -126,7 +133,7 @@ def main():
         t1_siblings = [n for n in tnames if n.endswith("_T1_archived_v01")]
         expected_t1 = {k: gt["T1"][k] for k in
                        ("duration_frames", "video_items", "video_tracks", "audio_tracks")}
-        for k in ("r1", "r2", "r3"):
+        for k in REPS:
             rep = claims.get(f"T1{k}", {}).get("reported")
             if rep is None:
                 ok, why = False, [f"no operator-extracted reported values for T1{k} in claims"]
@@ -136,7 +143,7 @@ def main():
             rec(f"T1{k}", ok, "; ".join(why))
 
         # ---- T2 marker ----
-        for k in ("r1", "r2", "r3"):
+        for k in REPS:
             name = f"{tl_base}_T2{k}"
             tid = tids.get(name)
             if tid is None:
@@ -157,7 +164,7 @@ def main():
             rec(f"T2{k}", ok, "; ".join(why))
 
         # ---- T3 ripple insert ----
-        for k in ("r1", "r2", "r3"):
+        for k in REPS:
             name = f"{tl_base}_T3{k}"
             tid = tids.get(name)
             if tid is None:
@@ -174,7 +181,7 @@ def main():
 
         # ---- T7 render loop ----
         queued = c.tool("render", "list_jobs").get("jobs", [])
-        for k in ("r1", "r2", "r3"):
+        for k in REPS:
             files = (glob.glob(os.path.join(args.render_root, f"T7{k}", "*.mov")) +
                      glob.glob(os.path.join(args.render_root, f"T7{k}", "*.mp4")))
             fp = gw.ffprobe_render(files[0] if files else None)
@@ -188,7 +195,7 @@ def main():
 
         # ---- T8 — GRADED FROM THE IN-TRIAL SNAPSHOT (flaw 3) ----
         post_wave_comps = {}
-        for k in ("r1", "r2", "r3"):
+        for k in REPS:
             task = f"T8{k}"
             name = f"{tl_base}_T8{k}"
             s = placement(task, "T")
@@ -224,7 +231,7 @@ def main():
 
         # ---- F1 slip with replace_source_range ----
         f1pre_v = gt["f1"]["pre_state"]["video_0"]
-        for k in ("r1", "r2", "r3"):
+        for k in REPS:
             name = f"{tl_base}_f1{k.replace('r','s')}"
             tid = tids.get(name)
             if tid is None:
@@ -291,7 +298,7 @@ def main():
         f2pre = gt["f2"]["pre_state"]
         f2c = f2pre["video_items_including_transition"][3]
         f2_measure = {}
-        for k in ("r1", "r2", "r3"):
+        for k in REPS:
             task = f"F2{k}"
             name = f"{tl_base}_f2{k}"
             tid = tids.get(name)
