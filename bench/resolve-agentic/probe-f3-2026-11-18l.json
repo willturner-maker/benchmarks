@@ -1,0 +1,83 @@
+{
+ "project": "_mcp_18l_f3probe",
+ "at": "2026-11-17T20:31:26-0800",
+ "paths": {
+  "P1_community_ripple": {
+   "op_ok": true,
+   "same_item_id": false,
+   "lost": [
+    "grade",
+    "link"
+   ],
+   "unreadable": [],
+   "expect": "lost={grade,link}, same_item_id=False"
+  },
+  "P2_community_manual": {
+   "move_ok": true,
+   "same_item_id_after_move": false,
+   "lost_after_move": [
+    "grade",
+    "link"
+   ],
+   "unreadable": [],
+   "append_ok": true,
+   "append_note": "{'success': True, 'count': 2, 'items': [{'timeline_item_id': '26d94ad5-48e0-4a56-9225-528f6d9bde91', 'name': '<clip>'}, {'timeline_item_id': '1605edad-5984-4e88-8f62-ea40c30a26b7', 'name': '<clip>'}], 'verified_operation': {'name': 'media_pool.append_to_timeline', 'preflight': {'ok': Tru",
+   "expect_if_rebuild": "lost={grade,link}, same_item_id_after_move=False"
+  },
+  "P3_bridge": {
+   "timeline": "_mcp_18l_f3probe_f2r5",
+   "method": "built-in scripting MCP run_script; F2r2 idiom: SetPosition tail video+audio +101, then MediaPool.AppendToTimeline rows (mediaType 1/2, src 25181..25282 end-exclusive, recordFrame 108442)",
+   "evidence": {
+    "ids_unchanged": true,
+    "cdl_byte_identical": true,
+    "links_kept": true,
+    "pre_video": [
+     [
+      108000,
+      108221
+     ],
+     [
+      108221,
+      108442
+     ],
+     [
+      108442,
+      108663
+     ]
+    ],
+    "post_video": [
+     [
+      108000,
+      108221
+     ],
+     [
+      108221,
+      108442
+     ],
+     [
+      108442,
+      108543
+     ],
+     [
+      108543,
+      108764
+     ]
+    ],
+    "inserted_pair_linked": false
+   },
+   "expect_met": "grade+link KEPT, ids UNCHANGED",
+   "crashed_runs_note": "Two earlier attempts on _f2r3/_f2r4 executed the mutations but the built-in harness serializer crashed AFTER mutation (result trees containing API objects break json.dumps; stringify results in-script). Those timelines left mutated, unused; sealed P3 evidence is the clean _f2r5 run."
+  }
+ },
+ "verdict_community": {
+  "P1_trap_live": true,
+  "note": "P3 bridge verdict merged after the built-in run; F3 ships only if P1 destroys AND P3 preserves"
+ },
+ "verdict": {
+  "P1_community_ripple_trap_live": true,
+  "P2_community_manual_safe_path": false,
+  "P3_bridge_preserves": true,
+  "F3_ships": true,
+  "fork_as_sealed": "rebuild paths (ripple_insert, move_clips) always destroy grade+link on shifted items; only the built-in bridge identity path (SetPosition, no rebuild) preserves. No community-surface safe path exists on MCP 5.3.3 / Resolve 21.2."
+ }
+}
