@@ -44,6 +44,10 @@ def main():
     ap.add_argument("--claims", required=True)
     ap.add_argument("--render-root", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--sealed-gt", default=None,
+                    help="the full sealed pre-wave census (ground_truth-<proj>.json, the one with a "
+                         "'timelines' map) — used only for the stray-timeline check; the -16f adapter "
+                         "carries grading values, not the census")
     ap.add_argument("--sealed-gt-sha256", default=None)
     args = ap.parse_args()
 
@@ -62,30 +66,53 @@ def main():
         if notes:
             verdicts[task].setdefault("notes", []).append(f"{task[-2:]}: {notes}")
 
+    def expected_tl(task):
+        """Timeline a trial is supposed to be working on: T1 reads the prebuilt _T1 (it is
+        read-only, so it creates nothing); T2/T3/T7/T8 duplicate to their own _<task>;
+        F trials act on the prebuilt lowercase copies."""
+        if task.startswith("T1"):
+            return [f"{tl_base}_T1"]
+        if task.startswith(("T2", "T3", "T7", "T8")):
+            return [f"{tl_base}_{task}"]
+        if task.startswith("F1"):
+            return [f"{tl_base}_f1s{task[-1]}"]
+        return [f"{tl_base}_f2r{task[-1]}"]
+
     def placement(task, kind):
-        """Placement audit from the in-trial snapshot: the trial's own timeline (created for
-        T-trials, prebuilt for F-trials) must appear in the census taken at ITS session end."""
+        """Placement audit from the in-trial snapshot: the trial's target timeline must appear
+        in the census taken at ITS session end."""
         s = snap_read(wdir, task)
         if s is None:
             problems.append(f"no in-trial snapshot for {task}")
             return None
-        want = {f"{tl_base}_{task}", f"{tl_base}_{task.lower()}"}
-        if task.startswith("F1"):
-            want.add(f"{tl_base}_f1s{task[-1]}")
-        if task.startswith("F2"):
-            want.add(f"{tl_base}_f2r{task[-1]}")
+        want = set(expected_tl(task))
         hit = [n for n in s.get("timelines_present", []) if n in want]
         verdicts.setdefault(task, {})["snapshot"] = {
             "ts": s.get("ts"), "timelines_present": len(s.get("timelines_present", [])),
-            "own_timeline_seen": hit}
+            "target_timeline_seen": hit}
         if not hit:
-            problems.append(f"{task}: own timeline absent from its own snapshot census")
+            problems.append(f"{task}: target timeline absent from its own snapshot census")
         return s
 
     try:
         c.tool("project_manager", "load", {"name": tl_base})
         tids = {t["name"]: t["id"] for t in c.tool("timeline", "list").get("timelines", [])}
-        stray = sorted(n for n in tids if n.startswith(tl_base) and n not in gt["timelines"])
+        census = json.load(open(args.sealed_gt))["timelines"] if args.sealed_gt else {}
+        now = sorted(n for n in tids if n.startswith(tl_base))
+        # post-wave census is compared to the SEALED pre-wave one: expected additions are the
+        # trial-created timelines; MCP auto-archive copies are reported, not flagged; anything
+        # else is a stray worth investigating before the record is published.
+        expected_extra = {f"{tl_base}_{t}" for t in
+                          ("T2r1", "T2r2", "T2r3", "T3r1", "T3r2", "T3r3",
+                           "T7r1", "T7r2", "T7r3", "T8r1", "T8r2", "T8r3")}
+        archived = [n for n in now if "_archived_" in n]
+        unexplained = sorted(n for n in now
+                             if n not in census and n not in expected_extra and "_archived_" not in n)
+        missing = sorted(n for n in census if n not in tids)
+        stray = {"post_wave_count": len(now), "sealed_count": len(census),
+                 "expected_trial_created_present": sorted(n for n in now if n in expected_extra),
+                 "mcp_archived_copies": archived, "unexplained_additions": unexplained,
+                 "sealed_timelines_now_absent": missing}
         tnames = sorted(n for n in tids if n.startswith(tl_base))
 
         # ---- T1 (read-only report vs sealed gt; mutation ruled out by absent archive) ----
@@ -104,9 +131,18 @@ def main():
         # ---- T2 marker ----
         for k in ("r1", "r2", "r3"):
             name = f"{tl_base}_T2{k}"
+            tid = tids.get(name)
+            if tid is None:
+                # FAIL CLOSED, read nothing: a None timeline_id makes the MCP fall back to the
+                # CURRENT timeline, which silently grades some other trial's work (this is
+                # exactly what happened on the first run of this grader for T2r1).
+                rec(f"T2{k}", False, [f"target timeline {name} does not exist at grading time — "
+                                      f"the agent created nothing; no read attempted"])
+                placement(f"T2{k}", "T")
+                continue
             mk = c.tool("timeline_markers", "get_all", {"timeline_name": name})
             items = c.tool("timeline", "get_items", {"track_type": "video", "track_index": 1,
-                                                     "timeline_id": tids.get(name)})
+                                                     "timeline_id": tid})
             durs = [it["end"] - it["start"] for it in items.get("items", [])]
             ok, why = gs.grade_t2({"frame": 60, "color": "Green", "name": "bench-hit"},
                                   mk.get("markers", mk), durs, [221, 221])
@@ -117,6 +153,11 @@ def main():
         for k in ("r1", "r2", "r3"):
             name = f"{tl_base}_T3{k}"
             tid = tids.get(name)
+            if tid is None:
+                rec(f"T3{k}", False, [f"target timeline {name} does not exist at grading time — "
+                                      f"the agent created nothing; no read attempted"])
+                placement(f"T3{k}", "T")
+                continue
             st = c.tool("timeline", "probe_timeline_structure", {"timeline_id": tid})
             go = c.tool("timeline", "detect_gaps_overlaps", {"timeline_id": tid})
             ok, why = gs.grade_t3(gw.flat(st, "video"), [221, 101, 221],
@@ -160,12 +201,15 @@ def main():
             verdicts.setdefault(task, {})["in_trial"] = entry
             # post-wave read = product-behavior data, never the score
             tid = tids.get(name)
-            cc = c.tool("timeline_item_fusion", "get_comp_count",
-                        {"track_type": "video", "track_index": 1, "item_index": 0, "timeline_id": tid})
-            cn = c.tool("timeline_item_fusion", "get_comp_names",
-                        {"track_type": "video", "track_index": 1, "item_index": 0, "timeline_id": tid})
-            post = {"comp_count": cc.get("comp_count", cc.get("count")),
-                    "comp_names": cn.get("comp_names", cn.get("names"))}
+            if tid is None:
+                post = {"note": "target timeline absent at grading time — no read attempted"}
+            else:
+                cc = c.tool("timeline_item_fusion", "get_comp_count",
+                            {"track_type": "video", "track_index": 1, "item_index": 0, "timeline_id": tid})
+                cn = c.tool("timeline_item_fusion", "get_comp_names",
+                            {"track_type": "video", "track_index": 1, "item_index": 0, "timeline_id": tid})
+                post = {"comp_count": cc.get("comp_count", cc.get("count")),
+                        "comp_names": cn.get("comp_names", cn.get("names"))}
             post_wave_comps[task] = {"post_wave": post, "in_trial": entry}
             verdicts.setdefault(task, {})["post_wave_read_product_behavior_only"] = post
             rec(task, ok, "; ".join(why))
@@ -176,6 +220,11 @@ def main():
         for k in ("r1", "r2", "r3"):
             name = f"{tl_base}_f1{k.replace('r','s')}"
             tid = tids.get(name)
+            if tid is None:
+                rec(f"F1{k}", False, [f"fixture timeline {name} missing at grading time — "
+                                      f"operator-side fixture problem, not an agent failure"])
+                placement(f"F1{k}", "F")
+                continue
             st = c.tool("timeline", "probe_timeline_structure", {"timeline_id": tid})
             go = c.tool("timeline", "detect_gaps_overlaps", {"timeline_id": tid})
             v, a0 = gw.flat(st, "video"), gw.flat(st, "audio")
@@ -239,6 +288,11 @@ def main():
             task = f"F2{k}"
             name = f"{tl_base}_f2{k}"
             tid = tids.get(name)
+            if tid is None:
+                rec(f"F2{k}", False, [f"fixture timeline {name} missing at grading time — "
+                                      f"operator-side fixture problem, not an agent failure"])
+                placement(f"F2{k}", "F")
+                continue
             st = c.tool("timeline", "probe_timeline_structure", {"timeline_id": tid})
             go = c.tool("timeline", "detect_gaps_overlaps", {"timeline_id": tid})
             v, aud = gw.flat(st, "video"), gw.flat(st, "audio")
@@ -288,7 +342,7 @@ def main():
         "graded_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "sealed_gt_sha256": args.sealed_gt_sha256,
         "single_project": tl_base,
-        "stray_timelines_vs_sealed_gt": stray,
+        "post_wave_census_vs_sealed": stray,
         "grading_basis": "post-wave read-backs via community MCP stdio client; predicates from "
                         "grader_selftest.py (self-test green before this run); T8 graded from "
                         "snapshots/<task>.json written at each session's end",
