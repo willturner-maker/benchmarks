@@ -67,14 +67,12 @@ F2 grade dimension become measurable again); 18/18 stops being the working denom
 - T8 measures agent behavior at session end; post-hoc Resolve behavior (comp eviction under
   churn) is recorded as a product finding every time it appears.
 
-Status: **pass 1 measured 2026-11-17: 20/21** (`results/baseline-2026-11-17h/README.md` has the
-record, findings and reproduce commands). Its one miss is a genuine agent failure (T2r1: nine
-hyphen-mangled tool-name attempts, zero completed calls, honest report of doing nothing).
-**Deviation, disclosed in that record:** pass 1 used the `--keep-agents` flag added the same day,
-which left the operator's global `AGENTS.md` in every trial's context — probe 9 (2026-11-16f) had
-already proven both the global and per-cwd `AGENTS.md` get injected, so the flag was a protocol
-error. Fingerprint scan: zero uptake across 21 transcripts, but presence is proven.
-**Pass 2** (`results/baseline-2026-11-17h2`, project `_mcp_AGBench-2026-11-17h2`) re-runs all 21
-with the operator `AGENTS.md` hidden and is the comparable/ceiling pass; the pair also measures
-the operator-context effect. Two rules the pair produced: F2 `expect_lost: ["link","grade"]`, and
-T8 comp survival is non-deterministic (snapshot-graded, never post-wave-read graded).
+Status: **CLOSED 2026-11-17 — ceiling established at 21/21** (pass 2, `results/baseline-2026-11-17h2`,
+operator `AGENTS.md` hidden). Pass 1 finished 20/21 with a disclosed context deviation; its one
+miss was a genuine agent failure (T2r1: nine hyphen-mangled tool-name attempts, zero completed
+calls, honest report of doing nothing). Published record: `results-baseline-2026-11-17h.json`.
+F1/F2 loss sets and the T8 in-trial result reproduced identically across the pair (grade+link lost
+6/6; comps 1 at snapshot and 1 post-wave 6/6), so the six cells 17g could not score are explained
+by the arming fix + snapshot rule rather than run-to-run luck. Two rules the pair produced:
+F2 `expect_lost: ["link","grade"]`, and T8 comp survival is non-deterministic (snapshot-graded,
+never post-wave-read graded).
