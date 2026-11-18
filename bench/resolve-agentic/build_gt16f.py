@@ -20,7 +20,7 @@ def strip_items(pr):
         out.append(it)
     return out
 
-def main(proj, label="2026-11-17g effort A/B"):
+def main(proj, label="2026-11-17g effort A/B", reps=(1, 2, 3)):
     gt = json.load(open(HERE / f"ground_truth-{proj}.json"))
     pre = json.load(open(HERE / f"prestate-{proj}.json"))
     tls = gt["timelines"]
@@ -38,7 +38,7 @@ def main(proj, label="2026-11-17g effort A/B"):
 
     f1v = strip_items(p("_f1s1"))[0]
     f1pre = next(i for i in pre[f"{proj}_f1s1"] if i["item_index"] == 0)
-    f1 = {"timeline": f"{proj}_f1m", "trials": {f"f1s{k}": {"timeline": f"{proj}_f1s{k}"} for k in (1, 2, 3)},
+    f1 = {"timeline": f"{proj}_f1m", "trials": {f"f1s{k}": {"timeline": f"{proj}_f1s{k}"} for k in reps},
           "pre_state": {"video_0": {
               "source_start": f1v["source_start"], "source_end_exclusive": f1v["source_end"],
               "record": [f1v["start"], f1v["end"]], "duration": f1v["end"] - f1v["start"],
@@ -61,7 +61,7 @@ def main(proj, label="2026-11-17g effort A/B"):
         else:
             ent["name"] = it.get("name")
         items.append(ent)
-    f2 = {"timeline": f"{proj}_f2m", "trials": {f"f2r{k}": {"timeline": f"{proj}_f2r{k}"} for k in (1, 2, 3)},
+    f2 = {"timeline": f"{proj}_f2m", "trials": {f"f2r{k}": {"timeline": f"{proj}_f2r{k}"} for k in reps},
           "pre_state": {"video_items_including_transition": items}}
 
     out = {"_meta": {"project": proj, "wave": label,
@@ -74,13 +74,16 @@ def main(proj, label="2026-11-17g effort A/B"):
     print("wrote", dst, "| T1 dur:", T1["duration_frames"], "| f2 items:", len(items))
 
 if __name__ == "__main__":
-    # usage: build_gt16f.py PROJ [PROJ...] [--label="wave name"]
+    # usage: build_gt16f.py PROJ [PROJ...] [--label="wave name"] [--reps=6]
     label = "2026-11-17g effort A/B"
+    reps = (1, 2, 3)
     projs = []
     for a in sys.argv[1:]:
         if a.startswith("--label"):
             label = a.split("=", 1)[1] if "=" in a else label
+        elif a.startswith("--reps="):
+            reps = tuple(range(1, int(a.split("=", 1)[1]) + 1))
         else:
             projs.append(a)
     for proj in projs:
-        main(proj, label)
+        main(proj, label, reps)
