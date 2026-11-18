@@ -135,6 +135,7 @@ def engine_config_proof(out):
 
 
 def main():
+    global RENDER, SNAPS, TL
     import argparse
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--smoke", default=None, help="run ONE trial, e.g. --smoke T1r1, then stop")
@@ -151,7 +152,6 @@ def main():
                     help="project/timeline base for this pass (a repeat pass uses a second "
                          "fixture project so the first pass's post-state stays readable)")
     a = ap.parse_args()
-    global RENDER, SNAPS, TL
     if a.render_root:
         RENDER = a.render_root
     TL = a.tl_base
