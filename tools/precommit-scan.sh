@@ -128,6 +128,29 @@ for f in "${paths[@]+"${paths[@]}"}"; do
   else scan_text "$f" "$(git show ":$f" 2>/dev/null)" 1; fi
 done
 
+# --- syntax gate (added 2026-11-17) ---------------------------------------------------
+# Why: a wave driver with a SyntaxError was committed and pushed while the scan reported
+# "clean" — privacy rules and Python validity are orthogonal, and a broken driver is the
+# kind of thing a benchmark record depends on. ast.parse (not import), so staged code never
+# executes; costs well under a second per file. Skipped under --all (HEAD audit).
+if [[ "${1:-}" != "--all" ]]; then
+  syn=0
+  for f in "${paths[@]+"${paths[@]}"}"; do
+    case "$f" in *.py) ;; *) continue ;; esac
+    if ! msg=$(git show ":$f" 2>/dev/null | python3 -c 'import ast,sys
+try:
+    ast.parse(sys.stdin.read())
+except SyntaxError as e:
+    print(f"  syntax: {sys.argv[1]}: {e.msg} (line {e.lineno})"); sys.exit(1)' "$f" 2>&1); then
+      printf '%s\n' "$msg"; syn=$((syn + 1))
+    fi
+  done
+  if (( syn )); then
+    printf '\nBLOCKED: %s staged Python file(s) do not parse.\n' "$syn"
+    exit 1
+  fi
+fi
+
 if (( findings )); then
   cat <<EOF
 
