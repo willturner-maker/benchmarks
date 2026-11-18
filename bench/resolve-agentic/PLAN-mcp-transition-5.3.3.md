@@ -1,5 +1,38 @@
 # PLAN — harness transitions before Tier 3: MCP 5.3.1 → 5.3.3, opencode 2.3.0 → 2.3.1
 
+## Transition executed — 2026-11-18, all steps green
+
+- **Install**: `npx -y davinci-resolve-mcp@latest sync` → **5.3.3** (python `server.py` sha
+  `73d706f3…`; registry unchanged at 341 tools / 662 action branches — correct, because 5.3.2/5.3.3
+  live in the **Node advanced-server vendor codecs** (`drx-codec` extractOFXTools present; 35
+  RangeError sites in `drp-format`/`drt-format`). The pre/post fingerprints cover both halves.
+  `opencode upgrade` → **2.3.1** (binary sha `25b6895d…`).
+- **opencode confirmations**: mangled-name error text byte-identical (Tier 2 premise holds);
+  `CLAUDE.md` fallback live-probed ACTIVE; `seal_host_hygiene()` now fails closed on
+  `~/.claude/CLAUDE.md` or any repo-tree `CLAUDE.md` while AGENTS.md is hidden.
+- **Trap re-arm** (`rearm_trap_533.py`, fresh fixture `_mcp_17j_rearm`, direct MCP calls replaying
+  the published 17h transcripts' exact params, n=3 per trap):
+  F1 `replace_source_range` lost = {speed, retime, audio_in_step, link} **3/3 identical**, grade/
+  transform/crop survive, source read-back 5999→6220 (the documented DF-off-by-one, inside the
+  ±1 tolerance); F2 `ripple_insert` lost = {grade, link} **3/3 identical**; T8 comp_count 1; T2
+  markers still frame-keyed dict with the pinned payload keys. **No fixture re-arm event.**
+  Instrument lesson: `get_items` rows carry no source ranges — geometry must come from
+  `probe_timeline_structure` (the channel every published grader already used); deriving
+  `audio_in_step` from get_items rows silently degenerates to `None==None`.
+- **5.3.3's own change** (`probe_drptime_533.cjs`, 11/11): StartFrame/StartTC agree at 29.97 DF
+  (108000 → `01:00:00;00`-mode label `01:00:03;18`, matching an independent SMPTE 12M calc and
+  round-tripping); label-only `01:00:00;00` → frame 107892; `;` at 24 fps raises (DF only at
+  29.97/59.94); malformed/out-of-range/skipped-DF labels raise `RangeError` instead of writing a
+  wrong start. One probe case was fixed, not the module: `00:00:00;15` is a VALID DF label
+  (12M skips ;00/;01 at non-tenth minutes only).
+- **Decision (step 5)**: all expectations hold → dated entry here, **no wave re-run**. The 17h
+  21/21 and 20/21 records stay labelled MCP 5.3.1 / opencode 2.3.0; from the next wave on,
+  provenance records MCP 5.3.3 / opencode 2.3.1 (+ Tier 2's adopted B-rule trial context).
+- Teardown: `_mcp_17j_rearm` deleted (logged); evidence = `rearm-traps-_mcp_17j_rearm.json`.
+
+---
+
+
 ## Addendum (2026-11-18): opencode 2.3.1 (user-flagged, https://github.com/anomalyco/opencode/releases/tag/v2.3.1)
 
 Same rule as the MCP update: **no install mid-probe** — the Tier 2 probe launches `opencode run`
