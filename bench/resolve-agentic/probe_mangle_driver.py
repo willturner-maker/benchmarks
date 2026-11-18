@@ -72,13 +72,16 @@ def run_probe(variant, rep, out):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--reps", type=int, default=4)
+    ap.add_argument("--start-rep", type=int, default=1,
+                    help="first rep number (extend an existing probe without clobbering earlier reps; "
+                         "the summary always re-scans the whole out dir, so it covers every rep)")
     ap.add_argument("--out", default=str(HERE / "results" / "probe-mangle-2026-11-17h"))
     a = ap.parse_args()
     out = pathlib.Path(a.out)
     (out / "sessions").mkdir(parents=True, exist_ok=True)
     v2.seal_host_hygiene()
     # interleave variants across reps so a warm/cold engine cannot favour one arm
-    order = [(v, r) for r in range(1, a.reps + 1) for v in VARIANTS]
+    order = [(v, r) for r in range(a.start_rep, a.start_rep + a.reps) for v in VARIANTS]
     hidden = pathlib.Path(str(v2.GLOBAL_AGENTS) + ".bench-hidden")
     if v2.GLOBAL_AGENTS.exists():
         v2.GLOBAL_AGENTS.rename(hidden)
@@ -124,8 +127,8 @@ def main():
         "brief": BRIEF, "variants": {k: VARIANTS[k] for k in VARIANTS},
         "sessions": rows, "per_trial": per, "summary": summary,
         "tenancy": "operator session shared the engine throughout; probe, not a wave",
-        "caveat": f"n={a.reps} per variant: a small sample, meant to size the effect before any "
-                  "real wave adopts a variant"}, indent=1))
+        "caveat": f"n={len(per) // len(VARIANTS)} per variant in this out dir: sizing sample, not a "
+                  "published effect; meant to decide whether a real wave adopts a variant"}, indent=1))
     print("wrote", out / "probe-summary.json")
 
 
