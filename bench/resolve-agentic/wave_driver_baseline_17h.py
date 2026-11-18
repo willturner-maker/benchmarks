@@ -147,10 +147,14 @@ def main():
     # TRIAL sessions were already proven seal-clean (smoke: 0 leaks, project untouched).
     ap.add_argument("--keep-agents", action="store_true",
                     help="do not hide the operator's global AGENTS.md (tenancy-disclosed waves only)")
+    ap.add_argument("--tl-base", default=TL,
+                    help="project/timeline base for this pass (a repeat pass uses a second "
+                         "fixture project so the first pass's post-state stays readable)")
     a = ap.parse_args()
-    global RENDER, SNAPS
+    global RENDER, SNAPS, TL
     if a.render_root:
         RENDER = a.render_root
+    TL = a.tl_base
 
     v2.seal_host_hygiene()
     # Refuse a placeholder/unmounted render root BEFORE any mkdir(parents=True): on macOS
@@ -168,7 +172,7 @@ def main():
     for k in (1, 2, 3):
         pathlib.Path(RENDER, f"T7r{k}").mkdir(parents=True, exist_ok=True)
     (out / "archived_briefs.md").write_text(json.dumps({
-        "wave": "baseline-2026-11-17h", "single_project": TL, "render_root": RENDER,
+        "wave": out.name, "single_project": TL, "render_root": RENDER,
         "effort": "daily (no proxy; engine default; OpenCode sends none)",
         "agents_hidden": not a.keep_agents,
         "tenancy": "disclosed — operator session shares the engine alongside this wave",
