@@ -1,0 +1,122 @@
+{
+ "probe": "MCP tool-name guidance (Tier 2 sizing probe)",
+ "published_at": "2026-11-18",
+ "harness": "opencode v2.3.0; MCP 5.3.1; model Qwen3.8-Flash-Next-GSQ-RCO-GGUF IQ3_S via Splash 1.7.0 (engine shared with operator session \u2014 disclosed tenancy)",
+ "kind": "probe, not a wave: read-only briefs, no ground truth, no grading",
+ "n_per_variant": 12,
+ "variants": {
+  "A_control": {
+   "attempts_total": 26,
+   "attempts_median": 2.0,
+   "trials_with_attempts": 9,
+   "never_recovered": 0,
+   "harness_ms_wasted": 4616,
+   "wall_median_s": 13.8,
+   "name_patterns": {
+    "hyphen-joined builtin/advanced + action": 3,
+    "right shape, separator/missing action": 16,
+    "other kebab": 2
+   },
+   "top_wrong_names": [
+    [
+     "davinci-resolve-project_manager",
+     7
+    ],
+    [
+     "davinci-resolve-builtin-get_resolve_status",
+     2
+    ],
+    [
+     "davinci-resolve-project_manager_load",
+     2
+    ],
+    [
+     "davinci-resolve-resolve_control",
+     2
+    ],
+    [
+     "davinci-resolve-project_manager_list",
+     1
+    ]
+   ]
+  },
+  "B_rule": {
+   "attempts_total": 17,
+   "attempts_median": 1.0,
+   "trials_with_attempts": 8,
+   "never_recovered": 0,
+   "harness_ms_wasted": 2482,
+   "wall_median_s": 12.4,
+   "name_patterns": {
+    "right shape, separator/missing action": 11
+   },
+   "top_wrong_names": [
+    [
+     "davinci-resolve-project_manager",
+     7
+    ],
+    [
+     "davinci-resolve-project_manager_snapshot",
+     2
+    ],
+    [
+     "davinci-resolve-project_manager_get_current",
+     1
+    ],
+    [
+     "davinci-resolve-project_manager_list",
+     1
+    ]
+   ]
+  },
+  "C_rule_names": {
+   "attempts_total": 23,
+   "attempts_median": 1.0,
+   "trials_with_attempts": 10,
+   "never_recovered": 0,
+   "harness_ms_wasted": 4699,
+   "wall_median_s": 12.5,
+   "name_patterns": {
+    "right shape, separator/missing action": 12,
+    "hyphen-joined builtin/advanced + action": 2,
+    "other kebab": 4,
+    "colon separator": 1
+   },
+   "top_wrong_names": [
+    [
+     "davinci-resolve-project_manager",
+     10
+    ],
+    [
+     "davinci-resolve-builtin-get_resolve_status",
+     1
+    ],
+    [
+     "davinci-resolve-knowledge",
+     1
+    ],
+    [
+     "davinci-resolve-project-manager",
+     1
+    ],
+    [
+     "davinci-resolve-project_manager_snapshot",
+     1
+    ]
+   ]
+  }
+ },
+ "stats": {
+  "A_minus_B_attempts_per_trial": 0.75,
+  "A_minus_B_one_sided_p": 0.12,
+  "note": "permutation test 200k; directional, not significant at n=12; pattern-class elimination is the clearer effect"
+ },
+ "headline": "C handed the exact name davinci-resolve_project_manager typed davinci-resolve-project_manager 10/12 sessions: name lists are not adopted verbatim; the rule sentence removes the builtin/advanced-join and colon/kebab classes (A: 5, C: 7 -> B: 0) and halves median attempts",
+ "decision": {
+  "adopt": "B (rule sentence only) in trial AGENTS.md from Tier 3 on, disclosed as a trial-context change; Tier 1 records stay sealed on the no-guidance context",
+  "reject": "C (exact-name list): not adopted verbatim and rots across MCP versions",
+  "cannot_speak_to": "whole-trial collapse (T2r1-class): 0 never-recovered in 36 read-only trials"
+ },
+ "tree": "results/probe-mangle-2026-11-17h (36 sessions; README + probe-summary.json + probe-analysis.json on disk)",
+ "teardown": "probe project _mcp_17i_nameprobe deleted 2026-11-18 (results/teardown-2026-11-17h.jsonl)"
+}
