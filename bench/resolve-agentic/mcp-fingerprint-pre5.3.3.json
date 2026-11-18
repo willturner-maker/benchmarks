@@ -1,0 +1,12 @@
+{
+ "captured_at": "2026-11-17T17:08:44-0800",
+ "package_version": "5.3.1",
+ "server_py_sha256": "362e6a80944b9817013292e1956569a7686c761c4d5c727d6834a0b8b3af810d",
+ "server_py_lines": 36542,
+ "registered_tool_names": 341,
+ "action_branches": 662,
+ "dropframe_mentions": 17,
+ "starttc_mentions": 30,
+ "extractOFXTools_present": false,
+ "range_error_guards": 19
+}

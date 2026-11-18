@@ -8,6 +8,7 @@
     "engine": "Splash 1.7.0 local, daily config — supervisor arg line + startup banner captured in each pass's engine_config.json (config on disk is not proof)",
     "reasoning_effort": "engine default; OpenCode sends none (no proxy in either pass — the 17g A/B is closed)",
     "resolve": "DaVinci Resolve Studio 21.2, headless via the community MCP server",
+    "community_mcp_server": "5.3.1 — src/server.py sha256 362e6a80944b9817013292e1956569a7686c761c4d5c727d6834a0b8b3af810d, 341 registered tool names, 662 action branches (fingerprint: bench/resolve-agentic/mcp-fingerprint-pre5.3.3.json)",
     "mcp_surface_allowed": ["davinci-resolve", "davinci-resolve-builtin", "davinci-resolve-advanced"]
   },
   "passes": {
@@ -56,5 +57,17 @@
   ],
   "protocol": "grading from independent read-backs only (predicates from grader_selftest.py, 58/58 green immediately before each grading); T8 graded from the driver's in-trial snapshot at each session's end, post-wave comp reads kept as product-behavior data; claims maps operator-extracted from archived transcripts (regex drafts reviewed and discarded, never fed to the grader); missing claims fail closed; graders fail closed when the target timeline is absent (a None timeline_id silently reads the CURRENT timeline — caught mid-wave).",
   "evidence": "bench/resolve-agentic/results/baseline-2026-11-17h/ (README.md = pass-1 record incl. findings and reproduce commands) and results/baseline-2026-11-17h2/ (README.md = pass-2 record); both trees gitignored by the wave-hygiene rule, published records are results-<wave>.json; plan and errata: bench/resolve-agentic/PLAN-baseline-2026-11-17h.md",
+  "record_amendments": [
+    {
+      "at": "2026-11-17 (later same day)",
+      "change": "ADDED build.community_mcp_server (5.3.1 + server.py sha256 + tool/action counts). No verdict, score or claim was altered.",
+      "why": "the user flagged MCP v5.3.3; comparing waves across MCP versions is meaningless without the server version, and this record did not carry it. Grading predicates are pinned to loss sets measured on MCP 5.2.11 / Resolve 21.2.0.6, while both 17h passes ran on 5.3.1 — the F1/F2/T2/T8 expectations did reproduce on 5.3.1 in 6/6 trials, and PLAN-mcp-transition-5.3.3.md re-measures them on 5.3.3 before Tier 3."
+    },
+    {
+      "at": "2026-11-17 (later same day)",
+      "change": "Resolve scratch projects for both passes deleted after publication (results/teardown-2026-11-17h.jsonl); evidence trees and sealed ground-truth files retained.",
+      "why": "operator requested teardown; recorded so the record states what can and cannot be re-read live."
+    }
+  ],
   "graded_at": "2026-11-17"
 }
