@@ -30,6 +30,13 @@ import grader_selftest as gs
 import grade_f1f2_wave as gw            # reuse the MCP stdio Client + flat()/rnd()/ffprobe_render()
 
 
+# F2 loss expectation, MEASURED by 2026-11-17h pass 1 (first correctly armed fixture): the shifted
+# clip's grade is destroyed by the ripple insert in 3/3 trials, alongside the link. Pass 1 itself
+# was graded with expect_lost ["link"] (the pre-measurement expectation) and the strict variant
+# recorded the grade loss as the re-arm signal — that record is not edited. Future waves:
+F2_EXPECT_LOST_MEASURED = ["link", "grade"]
+
+
 def snap_read(wdir, task):
     p = pathlib.Path(wdir) / "snapshots" / f"{task}.json"
     if not p.exists():

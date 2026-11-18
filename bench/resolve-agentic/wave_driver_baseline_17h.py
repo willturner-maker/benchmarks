@@ -143,11 +143,17 @@ def main():
     ap.add_argument("--out", default=str(OUT), help="wave output dir (smoke runs go elsewhere)")
     ap.add_argument("--render-root", default=None,
                     help="real render volume for this wave (overrides env/placeholder)")
-    # 17h adds --keep-agents: with tenancy disclosed (the operator session runs alongside),
-    # hiding the operator's global AGENTS.md for hours only starves the operator, while the
-    # TRIAL sessions were already proven seal-clean (smoke: 0 leaks, project untouched).
+    # 17h added --keep-agents. MEASURED CONSEQUENCE (same day, pass 1): it was a protocol error.
+    # Seal probe 9 (2026-11-16f) proves BOTH the operator's global AGENTS.md and the per-cwd one
+    # are injected into trial sessions, so leaving the global file in place puts operator context
+    # (venv paths, bench layout, package state) into every trial. The trials' own AGENTS.md tells
+    # them to ignore environment notes, and a fingerprint scan of 21 transcripts found zero
+    # uptake — but presence is proven, so a wave run with this flag is a DISCLOSED DEVIATION and
+    # must be paired with a pass that hides it (results/baseline-2026-11-17h = the deviation pass,
+    # …-17h2 = the clean pass). Default (flag absent) hides the file, as every published wave did.
     ap.add_argument("--keep-agents", action="store_true",
-                    help="do not hide the operator's global AGENTS.md (tenancy-disclosed waves only)")
+                    help="leave the operator's global AGENTS.md in place (a disclosed DEVIATION: "
+                         "probe 9 shows it is injected into trial contexts — pair with a clean pass)")
     ap.add_argument("--tl-base", default=TL,
                     help="project/timeline base for this pass (a repeat pass uses a second "
                          "fixture project so the first pass's post-state stays readable)")
