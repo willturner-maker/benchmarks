@@ -337,6 +337,8 @@ advanced server and reporting the DB number, a live quirk refereed by an indepen
 | 2026-11-16b (DIRTY window¹¹) | Splash 1.6.1 (assumed; not re-confirmed) | same | —¹¹ | —¹¹ | 92.6 tok/s¹¹ (lowest ever) | 508–540 (w12–32 mean 524.6), w32 **540.5** highest single width¹¹ | **TRIP at 3.89×** — w10, 509,370 tok, susp peak 2, first on record¹¹ | n/a¹¹ | n/a¹¹ |
 | **2026-11-17** | **Splash 1.7.0** (same-day install; confirmed by `splash --version` **and** the live `/opt/homebrew/Cellar/splash/1.7.0/…` process path; the upgrade cleared the prefix cache — see ¹²) | same | **110–118 ms**¹² (best ever) | 291 ms¹² (pass 1 only) | **219.8 tok/s**¹² (3-pass median) | **479–494 tok/s**, widths 8→32, pooled median **481.6**; aggregate peak back at **w4 526.5**¹² | **0** at 3.93× (budget 155,648 tok, +18.8 %) — demote **+11** total, spill 0, quietest memory path on record¹² | **11/12**¹³ (OpenCode harness) | **10/12**¹³ |
 | **2026-11-18** (all-suites day) | Splash 1.7.0 (confirmed via live process path) | same | — (no probe stage) | — | **283.95 tok/s** — best w1 on record (+29 % vs 17-day) | **692–699 tok/s**, widths 8→32, peak w16 **698.6**; w6 dip reproduces (0.90× of w4); whole ladder ×1.4 of 17-day while SHAPE holds — instance state, not a version move | **0** at 3.93× (612,180 tok vs 155,648 budget; per-round suspension deltas 0; spill+0 demote+0 — quietest path on record; lifetime counter 43 pre-dates the stage) | — (no agentic stage this run) | — |
+| **2026-11-19-ext** (diagnostic)¹⁹ | Splash 1.7.0 — same instance as 11-18, **not restarted**, and **no `--queue-size` flag**, so the default **32** governed | same | — (no probe stage) | — | 294.35 tok/s (rounds 281.6 / 307.1) | **693.65–701.5**, widths 8→32, peak w16 701.15; w6 dip **0.884×** of w4; stop rule never fired | **CENSORED, then diagnosed**: no trip through w32 (**1,632,480 tok = 10.49× budget**), then the stage died at **w40 on HTTP 503** — and the ceiling proved to be a **request count (32)**, not KV¹⁹ | — | — |
+| **2026-11-19b** (STACK MOVE: `--queue-size 64`)²⁰ | Splash 1.7.0, **restarted for the wave** so the flag could bind; `--queue-size=64` + `--thinking-token-budget=32768` read from the **live supervisor**, not the file on disk²⁰ | same | — (no probe; stage-0 gate on the ladder primitive: 272.0 / 282.1 / 309.6 tok/s, spread 1.138 → **soft**)²⁰ | — | **307.1 tok/s** ← **best w1 on record**²⁰ | **647.55–700.65**, widths 8→32; **aggregate peak w4 724.6 = highest on record**; w6 dip **0.846×** (reproduces, shallower each generation); stop rule never fired²⁰ | **NO TRIP at 17.04×** — **2,652,720 tok with 48 concurrent 55k-token requests, 0 refusals**, 0 suspensions, 0 spill, 0 demote, `capacity_failures` 0; and **`admission.waiting` / `waiting_memory` / `waiting_concurrency` all peaked at 0 at every width** — the wait moved to the scheduler prefill queue²⁰ | — | — |
 
 ¹ decode w1 is warmth-sensitive — the probe's own three passes trend (105→133→165 baseline,
 111→128→136 rerun); the column is the warmed value on the baseline row, the median on the rerun row.
@@ -380,7 +382,14 @@ state, not tenancy; the tenancy tax lives in latency-bound suites (agentic walls
 saturated-decode aggregates.
 
 Rerun in one pass: `python3 -I bench/splash-concurrency/ladder_kv.py` (width ladder + KV-pressure
-probe, one combined summary). The plateau is a wall, not a cliff; the KV probe's negative
+probe, one combined summary) — the **sealed** entry point, widths ≤32, kept unchanged so every row
+stays reproducible. For work past 32 in flight use `kv_bracket_2026-11-19b.py`: it refuses to start
+unless every probe width sits below the engine's live `--queue-size`, records refusals as data instead
+of raising, runs prompts in a fresh seed namespace, and marks any round whose `prefill_rows` delta
+doesn't track prompt tokens as `cache_served`. Its stop rule is the revised one — **refusal,
+`admission.suspended`, a lifetime suspension delta, `kv_demotions_refused` delta, or
+`capacity_failures` delta** — because the pre-19b rule ("wait for a suspension event") watches a gauge
+this stack does not move. The plateau is a wall, not a cliff; the KV probe's negative
 result (no suspension at 611,244 prompt tokens) is a finding, not a missing number — and it
 reproduced on **all six waves**, with the memory path's secondary signals shifting wave to wave
 (the 11-10s rerun ran quietest among the 1.6.x waves; the 1.6.1 waves ran hottest — 11-11h demoted
@@ -476,6 +485,71 @@ runner dir) and fixed by naming absolute paths in the brief. Same defect made ba
 artifacts collide on one path (that batch's corrected tally: 9/12 verified, 8/12 honest, S3 unscored —
 kept as provenance, not ranked).
 
+¹⁹ **`2026-11-19-ext` is published as a diagnostic row: its ladder is valid, its KV stage is not a
+result — the diagnosis is the result.** The ladder reproduces 11-18 on the same instance (w1 294.35
+inside the 260.6 / 307.3 band, peak w4 697.5, w6 dip 0.884×, admission peaks identical, `suspended` 0
+everywhere). The KV stage then **died at w40 on HTTP 503** (`frontend request capacity is exhausted` /
+`frontend_overloaded`): the sealed `chat()` raises on non-2xx, so the driver lost its SUMMARY — a
+harness flaw, fixed in 19b by recording refusals as data. The fresh rounds that *did* complete reached
+**1,632,480 tokens = 10.49× the 155,648-token budget** (w16–w32) with `kv.pages_active` pinned at
+1,654 pages (52,928 tok) and **spill +0 / demote +0 / suspension deltas 0 on every round** — which
+killed the standing stop rule as an instrument: **this stack answers KV pressure with spill and disk
+demotion, not suspension**, so a rule waiting for a suspension event watches a gauge the build does
+not move. A tiny-prompt follow-up (so token volume cannot matter) pinned the boundary exactly: **w32
+admitted, w33 refused instantly**, `waiting_concurrency=0`, `held_behind_refusal=0` — refused, never
+queued. That is the documented `--queue-size` default of 32, so the trip point that looked like a KV
+ceiling was a **request-count ceiling**. Two further disclosures on this row: its stage-0 warmth gate
+is **invalid as a certification** (a prose prompt read 77.3 / 88.6 / 116.7 tok/s, spread 1.51 "cold",
+while the ladder's own w1 measured 294.4 minutes later), and the w2 / w12 "stitch controls" were
+**byte-identical to the 11-18 prompts**, so `--persistent-cache` served them from disk — 93,530 tok in
+0.4 s and 612,180 tok in 1.5 s with `prefill_rows` moving only 26 and 84. Those two cells prove the
+cache works and measure **zero** pressure; only w16–w32 are fresh. Raw and RECORD in
+[results/splash-1.7.0-2026-11-19-ext/](../bench/splash-concurrency/results/splash-1.7.0-2026-11-19-ext/).
+
+²⁰ **`2026-11-19b` — the queue-size stack move, and the wave that ran past the wall.** `start.sh` now
+passes `--queue-size 64` (resolve-ai-workflow `81a9235`); the flag binds only at launch, so this wave
+**restarted the engine** (11:34 local) and every pin is read from the live supervisor. Two stack moves
+land together (queue-size 64 + thinking budget 32768), and the second is inert for both stages here:
+ladder outputs are pinned at 512 tokens and KV outputs at 8, so no request can reach a thinking cap —
+the comparable-throughput check is the ladder itself. **The ladder came back better, not perturbed**:
+w1 **307.1** (best on record, prior 283.95), **peak w4 724.6** (highest aggregate on record), plateau
+w8–32 647.55–700.65, w6 dip 0.846×, stop rule never fired. Caveats carried on the row: the stage-0
+gate is **soft** (272.0 / 282.1 / 309.6, spread 1.138), two cells carry labelled round scatter (**w2**
+350.8 / 483.1 = 1.377×, **w12** 689.6 / 605.5 = 1.139×), and the run was **not clean-window** — the
+operator's session, served by this same engine, took turns during it, so the best-w1 cell carries the
+latency-cell tax and a detached single-tenant re-run of stage 1 is owed.
+
+**What the KV stage actually found.** Widths 12 → 33 → 36 → 40 → 44 → **48** (capped at 48 to leave 16
+lanes of slack under 64, so a refusal would mean the engine's limit rather than our own saturation):
+**2,652,720 prompt tokens = 17.04× the resident budget, all 48 requests admitted, zero refusals.** The
+revised stop rule (refusal, `admission.suspended`, a lifetime suspension delta, `kv_demotions_refused`
+delta, `capacity_failures` delta) never fired — suspensions 0, spill 0, demote 0, `capacity_failures`
+0, `pages_active` pinned at 1,920 pages = **61,440 tok (39.5 % of budget)** on all six rounds,
+governor headroom minimum 207.8 MB. **The surprise is that the queueing regime is invisible at the
+admission gate**: `admission.waiting`, `waiting_memory`, `waiting_concurrency` and
+`held_behind_refusal` all peaked at **0 in every round** — past 32 in flight the engine admits requests
+into lanes and the wait relocates to the **scheduler prefill queue**, which is visible in the ladder's
+own `peak_queued` (8 / 8 / 16 at w12 / w24 / w32). So the cost of width is paid as **wall time at flat
+prefill**: 189.5 s at w12 → **760.1 s at w48**, with prefill at **3,485.4–3,499.1 tok/s (±0.2 %)**
+across the whole span — the same flat line 19-ext measured at 3,513.7–3,520.7 below the wall, and the
+mechanism is `memory_plan.budget.maximum_batch_width = 4` (session decode batches b1 4,375 / b2 278 /
+b3 244 / **b4 3,434**). Reading `admission.*` alone would report an idle engine at w48. Two provenance
+notes: the engine restart zeroed every lifetime counter, which makes these per-round deltas the
+cleanest in the series but breaks cross-row comparison of the lifetime column (11-18 began at 43,
+19-ext at 45); and lifetime `disk.kv_demotions` 421 / `refused` 5 at run end while **every KV round's
+delta was 0** — those came from the gate/ladder/calibration legs, attributed by delta rather than by
+the lifetime read. The cache confound is closed and *proven* closed: all six rounds in a fresh seed
+namespace with `scheduler.prefill_rows` delta **equal to** prompt tokens exactly, round by round.
+Raw, gate rows, supervisor pins and RECORD in
+[results/splash-1.7.0-2026-11-19b/](../bench/splash-concurrency/results/splash-1.7.0-2026-11-19b/).
+
+**Where the KV question goes next.** Tripping KV by summed volume is now bounded out for this
+instrument: at 17.04× the governor still reports no work, and the only failure mode past that is the
+request-count flag. The live question is **depth, not volume** — `context_bounds` puts resident at
+155,633 against a 262,144 window, and the open probe is a single context walking toward the resident
+line **while held across turns**, which is what real agent sessions do and no wave in this series has
+measured directly.
+
 Cross-hardware context (DGX Spark / RTX Spark / RTX 5090 on the same resident model): the
 [comparison section](splash-engine-benchmark-results.md#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13).
 Those numbers are external, n≈1 and fail rules 2–3, so they deliberately do **not** appear as
@@ -488,18 +562,26 @@ Same host, same model (Qwen3.8-Flash-Next IQ3_S, 262k ctx), same spec: 512-token
 rounds per width, median shown. Comparable across rows only because the harness is identical;
 1.6.1's INT8 default means numerics are not bit-comparable with the 1.6.0 rows.
 
-| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | 1.6.1 (11-11h) | 1.6.1 (11-12) | 1.6.1 (11-13 clean) | **1.7.0 (11-17, 3-pass median)**¹² | **1.7.0 (11-17 clean window)**¹³ |
-|---|---|---|---|---|---|---|---|
-| 1 | 147.6 | 151.5 | 186.9 | 205.2 | 209.5 | 219.8 (spread 12.4 %) | **225.2** ← new best |
-| 2 | 259.1 | 250.7 | 301.0 | 334.5 | 299.2 | 320.9 | 331.4 |
-| 3 | 306.1 | 290.9 | 378.5 | 393.4 | 362.6 | 405.5 | **438.4** ← new best |
-| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 | 464.3 | 453.3 | 526.5 ← peak | **543.8** ← peak, new best |
-| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) | 417.6 (0.90×) | 438.1 (0.97×) | 430.4 (0.82×) | 426.2 (0.78×) |
-| 8 | 373.9 | 368.7 | 488.4 | **522.7** ← peak | 470.2 | 485.3 | 480.5 |
-| 12 | 375.7 | 367.7 | **524.8** ← peak | 487.1 | **475.2** ← peak | 494.2 | 481.7 |
-| 16 | 371.9 | 369.1 | 510.0 | 505.7 | 470.7 | 481.6 | **484.4** |
-| 24 | 382.9 | 368.8 | 518.5 | 493.1 | 474.5 | 479.2 | 462.9 |
-| 32 | 371.7 | 365.5 | 519.8 | 500.5 | 474.4 | 479.2 | 474.6 |
+| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | 1.6.1 (11-11h) | 1.6.1 (11-12) | 1.6.1 (11-13 clean) | **1.7.0 (11-17, 3-pass median)**¹² | **1.7.0 (11-17 clean window)**¹³ | 1.7.0 (11-18) | 1.7.0 (11-19 ext)¹⁹ | **1.7.0 (11-19b, queue-size 64)**²⁰ |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 147.6 | 151.5 | 186.9 | 205.2 | 209.5 | 219.8 (spread 12.4 %) | 225.2 ← new best at the date | 283.95 | 294.35 | **307.1** ← best on record |
+| 2 | 259.1 | 250.7 | 301.0 | 334.5 | 299.2 | 320.9 | 331.4 | 480.85 | 485.3 | 416.95 (spread 1.377×) |
+| 3 | 306.1 | 290.9 | 378.5 | 393.4 | 362.6 | 405.5 | **438.4** ← new best | 593.05 | 585.6 | 581.25 |
+| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 | 464.3 | 453.3 | 526.5 ← peak | 543.8 ← peak, new best at the date | 677.6 | 697.5 | **724.6** ← peak, best on record |
+| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) | 417.6 (0.90×) | 438.1 (0.97×) | 430.4 (0.82×) | 426.2 (0.78×) | 612.3 (0.904×) | 617.0 (0.884×) | 613.3 (0.846×) |
+| 8 | 373.9 | 368.7 | 488.4 | **522.7** ← peak | 470.2 | 485.3 | 480.5 | 697.4 | 693.65 | 698.9 |
+| 12 | 375.7 | 367.7 | **524.8** ← peak | 487.1 | **475.2** ← peak | 494.2 | 481.7 | 698.0 | 696.9 | 647.55 (spread 1.139×) |
+| 16 | 371.9 | 369.1 | 510.0 | 505.7 | 470.7 | 481.6 | **484.4** | 698.6 ← peak | 701.15 ← peak | 700.65 |
+| 24 | 382.9 | 368.8 | 518.5 | 493.1 | 474.5 | 479.2 | 462.9 | 694.45 | 695.2 | 698.0 |
+| 32 | 371.7 | 365.5 | 519.8 | 500.5 | 474.4 | 479.2 | 474.6 | 692.5 | 701.5 | 699.5 |
+
+**Marker note (added 2026-11-19, so the columns don't quietly mislead).** The three new right-hand
+columns were missing from this table until now, which left its "← new best" markers reading as current
+when 11-18 had already beaten them. Older cells are kept **as written on their date**; two markers are
+relabelled "at the date" because they are no longer the record, and the current bests are w1 **307.1**
+and peak **w4 724.6**, both 19b. The 1.7.0 era sits in two clearly separated bands — **~460–545**
+(11-17 waves) then **~610–725** (11-18 onward) — a ×1.4 instance shift with the shape intact, already
+recorded on the 11-18 row as instance state rather than a version move.
 
 The 1.7.0 column is a **median of three full passes** (per-pass values and spread in that wave's
 `NOTES.md`), because the 1.7.0 upgrade cold-started the prefix cache — a single pass there is not a

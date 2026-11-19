@@ -1,12 +1,13 @@
 {
   "schema": 1,
-  "updated": "2026-11-18 - all-suites day: resolve_mcp 18m (warm 1174 best on host; F3 n=6 split reproduces across MCP 5.3.4 + opencode 2.3.2), splash_engine ladder+KV (283.95 best w1), visual_venv run6 (5th determinism pass), blender_benchmark finals published earlier today",
+  "updated": "2026-11-19 - splash_engine: queue-size 64 stack move (19b) - 48 in flight, zero refusals, 17.04x KV budget, no trip; the 32-request wall was the --queue-size default, not KV. 19-ext kept as the diagnostic row (ladder valid, KV censored-then-diagnosed).",
   "read_this_first": [
     "Rows are only comparable within the same media_class and the same tenant conditions.",
     "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
     "Render ms are single-tenant; two-agent waves inflate them (a 7285 ms T7 render ran alongside another agent's Fusion work).",
     "Every number here came from an independent read-back (ffprobe / item geometry / server operation log), never from the agent's report.",
-    "probe_timeline_structure ms is item-count linear (~3 ms/item on 5.1.0+, ~2 ms/item on 4.19.3): probe cells compare only at matched item counts \u2014 every published cell uses the 4-item base geometry (2026-11-13 addendum (j))."
+    "probe_timeline_structure ms is item-count linear (~3 ms/item on 5.1.0+, ~2 ms/item on 4.19.3): probe cells compare only at matched item counts \u2014 every published cell uses the 4-item base geometry (2026-11-13 addendum (j)).",
+    "KV rows are not comparable across the 2026-11-19b boundary: waves before it ran under the splash default --queue-size 32 (request 33 refused instantly with frontend_overloaded), 19b onward runs --queue-size 64. And no wave in this series has tripped KV by summed volume - the governor answers with spill/demote, and suspension is a held-context mechanism."
   ],
   "host_reference": {
     "cpu": "Apple M5 Ultra, 64-core GPU",
@@ -1107,6 +1108,78 @@
         "tenant_conditions": "operator session attached but idle during both stages (no completions issued mid-stage); NOT a fully sealed clean window like 2026-11-13",
         "engine_args_at_run": "--max-memory=60129542144 --persistent-cache --default-reasoning-effort=medium --thinking-token-budget=16384",
         "evidence": "bench/splash-concurrency/results/splash-1.7.0-2026-11-18/ladder_kv.jsonl (+ stderr alongside)"
+      },
+      {
+        "date": "2026-11-19-ext (diagnostic row: ladder valid, KV censored then diagnosed)",
+        "engine": "Splash 1.7.0 - same instance as the 2026-11-18 row, NOT restarted; no --queue-size flag, so the splash default of 32 governed",
+        "model": "same (ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S)",
+        "context_tokens": 262144,
+        "ttft_warm_ms": null,
+        "ttft_cold_ms": null,
+        "ttft_caveat": "no engine_probe stage this run",
+        "decode_w1_tok_s": 294.35,
+        "decode_w1_source": "ladder width-1 median (rounds 281.6/307.1, spread 1.091); reproduces 11-18's 283.95 best-w1 band on the same instance",
+        "decode_plateau_tok_s": [
+          693.65,
+          701.5
+        ],
+        "plateau_widths": "w8-32 medians 693.65-701.5, peak w16 701.15; w6 dip 617.0 = 0.884x of w4 (697.5); stop rule never fired; admission waiting peaks 0/0/0/0/2/4/8/12/12/12 identical to every prior wave; suspended 0",
+        "ladder_medians_tok_s": {
+          "1": 294.35,
+          "2": 485.3,
+          "3": 585.6,
+          "4": 697.5,
+          "6": 617.0,
+          "8": 693.65,
+          "12": 696.9,
+          "16": 701.15,
+          "24": 695.2,
+          "32": 701.5
+        },
+        "kv_capacity_tokens": 155648,
+        "kv_pressure_probe": "CENSORED, then diagnosed - the row's value IS the diagnosis. Stage died at w40 on HTTP 503 'frontend request capacity is exhausted / frontend_overloaded' (sealed chat() raises on non-2xx, so the driver lost its SUMMARY). Same-day tiny-prompt follow-up pinned the boundary exactly: w32 admitted, w33 refused instantly, waiting_concurrency=0 and held_behind_refusal=0 - refused, never queued - i.e. the documented --queue-size default of 32, NOT KV pressure. Inside the admitted range the fresh rounds reached 1,632,480 tokens = 10.49x the resident budget (w16..w32) with pages_active pinned at 1,654 pages (52,928 tok), spill +0, demote +0, suspension deltas 0 every round: this stack answers KV pressure with spill/demote and never suspends, so the standing stop rule was watching a gauge the build does not move.",
+        "kv_wall_caveat": "the w2/w12 'stitch controls' were byte-identical to the 11-18 prompts (deterministic generator) and were served from the persistent disk cache: 93,530 tok in 0.4 s and 612,180 tok in 1.5 s with scheduler.prefill_rows moving only 26 and 84. Those two rows prove the cache works and measure no pressure at all; only w16..w32 are fresh.",
+        "agentic": "none (concurrency instrument only)",
+        "deviations": "driver ladder_kv_ext_2026-11-19.py (eafc9c1), superseded same day by kv_bracket_2026-11-19b.py (6f97678). Stage-0 warmth gate INVALID as a certification: prose prompt read 77.3/88.6/116.7 tok/s (spread 1.51, gate 'cold') while the ladder's own w1 measured 294.4 minutes later - gate fixed in 19b to reuse LADDER_PROMPT @512. Lifetime resource_suspensions 45 at stage start and 45 at end (pre-existing).",
+        "tenant_conditions": "operator session attached, no completions issued during the timed rounds; NOT a sealed clean window",
+        "engine_args_at_run": "--max-memory=60129542144 --max-cache-disk=274877906944 --persistent-cache --default-reasoning-effort=medium --thinking-token-budget=16384  (no --queue-size: default 32 governed)",
+        "evidence": "bench/splash-concurrency/results/splash-1.7.0-2026-11-19-ext/ (ladder_kv.jsonl, warmth_gate.jsonl, run.log, run.err traceback, RECORD.md)"
+      },
+      {
+        "date": "2026-11-19b (STACK MOVE: --queue-size 64; KV run past the old 32-request wall)",
+        "engine": "Splash 1.7.0, RESTARTED 11:34 local for this wave so the flag could bind; queue-size 64 and thinking-token-budget 32768 proven from the live supervisor args, not from the file on disk",
+        "model": "same (ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S)",
+        "context_tokens": 262144,
+        "ttft_warm_ms": null,
+        "ttft_cold_ms": null,
+        "ttft_caveat": "no engine_probe stage; stage-0 gate uses the ladder primitive instead",
+        "decode_w1_tok_s": 307.1,
+        "decode_w1_source": "ladder width-1 median (rounds 305.4/308.8, spread 1.011) - best w1 on record (prior 283.95 at 11-18, +8.2%). Stage-0 gate on the same primitive: 272.0/282.1/309.6, spread 1.138, gate 'soft' (not a clean pass)",
+        "decode_plateau_tok_s": [
+          647.55,
+          700.65
+        ],
+        "plateau_widths": "w8-32 medians 647.55-700.65; aggregate peak w4 724.6 = highest peak on record; w6 dip 613.3 = 0.846x of w4 (reproduces, shallower each generation); stop rule never fired. Labelled round scatter: w2 350.8/483.1 (1.377x), w12 689.6/605.5 (1.139x). Admission waiting peaks 0/0/0/0/2/4/9/12/12/12; suspended 0",
+        "ladder_medians_tok_s": {
+          "1": 307.1,
+          "2": 416.95,
+          "3": 581.25,
+          "4": 724.6,
+          "6": 613.3,
+          "8": 698.9,
+          "12": 647.55,
+          "16": 700.65,
+          "24": 698.0,
+          "32": 699.5
+        },
+        "kv_capacity_tokens": 155648,
+        "kv_pressure_probe": "NO TRIP at 2,652,720 prompt tokens = 17.04x the resident budget, with 48 concurrent 55,265-token requests admitted and ZERO refusals (widths 12/33/36/40/44/48, deliberately capped at 48 to leave 16 lanes of slack under queue-size 64). Revised stop rule (refusal / admission.suspended>0 / suspension-counter delta / kv_demotions_refused delta / capacity_failures delta) never fired: suspension deltas 0, spill +0, demote +0, capacity_failures 0 on every round; pages_active pinned at 1,920 pages = 61,440 tok (39.5% of budget) on all six; governor headroom minimum 207.8 MB. HEADLINE: past 32 in flight the engine does NOT queue at the admission gate - admission.waiting, waiting_memory, waiting_concurrency and held_behind_refusal all peaked at 0 in every round. The wait relocates to the scheduler prefill queue and is paid as wall time (189.5 s at w12 -> 760.1 s at w48) at flat prefill 3,485.4-3,499.1 tok/s (+-0.2%), mechanism memory_plan.budget.maximum_batch_width = 4 (session decode batches b1 4,375 / b2 278 / b3 244 / b4 3,434).",
+        "kv_wall_caveat": "Engine restarted for this wave, so every lifetime counter began at 0 - the cleanest per-round deltas in the series, but the lifetime column is NOT comparable across rows (11-18 started at 43, 19-ext at 45). At run end lifetime disk.kv_demotions = 421 with refused = 5 while every KV-round delta was 0: those came from the gate/ladder/calibration legs, attributed by delta rather than by the lifetime read.",
+        "agentic": "none (concurrency instrument only)",
+        "deviations": "Cache confound closed and proven: all six KV rounds used a fresh seed namespace (900000 + width*100 + i) and scheduler.prefill_rows delta EQUALLED prompt tokens exactly on every round; cache_served_rounds = []. Refusals recorded rather than raised, so no SUMMARY loss. Warmth gate 'soft' (1.138) rather than a clean pass - disclosed, and the ladder that follows sits inside that band. Driver kv_bracket_2026-11-19b.py (6f97678 + 5b37d51).",
+        "tenant_conditions": "NOT clean-window: the operator's OpenCode session is served by this same engine and took turns during the run, including inside the KV rounds. Per the 11-13 finding the tax falls on latency cells rather than saturated-decode aggregates, so the best-w1 cell carries this caveat and a detached single-tenant re-run of stage 1 is owed.",
+        "engine_args_at_run": "--max-memory=60129542144 --max-cache-disk=274877906944 --persistent-cache --default-reasoning-effort=medium --thinking-token-budget=32768 --queue-size=64",
+        "evidence": "bench/splash-concurrency/results/splash-1.7.0-2026-11-19b/ (ladder_kv.jsonl, warmth_gate.jsonl, engine_config.json, run.log, RECORD.md)"
       }
     ],
     "community_runs": [

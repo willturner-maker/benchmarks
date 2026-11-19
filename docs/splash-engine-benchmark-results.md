@@ -30,6 +30,7 @@ macOS 27.2.0. Engine args: working set 56 GiB, SSD cache cap 128 GiB, persistent
 - [Co-tenancy — Resolve Studio on the same 96 GiB](#co-tenancy--resolve-studio-on-the-same-96-gib-measured-2026-11-15-raw-benchresolve-ram-coexistence)
 - [Quant memory accounting](#quant-memory-accounting--what-bpw-actually-scopes-and-what-a-quant-costs-in-ram-measured-2026-11-15-raw-benchsplash-quant-memory)
 - [Re-run 2026-11-17 — Splash 1.7.0](#re-run-2026-11-17--splash-170-three-passes-warm-gate-raw-benchsplash-concurrencyresultssplash-170-2026-11-17)
+- [Re-run 2026-11-19 — the 32-request wall, then the queueing regime](#re-run-2026-11-19--the-32-request-wall-then-the-queueing-regime-raw-benchsplash-concurrencyresultssplash-170-2026-11-19-ext-and--2026-11-19b)
 
 ## Layer 1 — engine probe (deterministic, run by the orchestrator, not the LLM)
 
@@ -717,6 +718,128 @@ an **auto**-config clean pass and there is still no `--verify-rows all` ladder. 
 probe hashed `message.content` only, which came back empty at a 16k thinking budget: ten identical
 `e3b0c442…` hashes — the SHA-256 of the empty string. A vacuous "bit-reproducible" result caught only
 by reading the payload, exactly the class of thing the read-back-only rule exists to catch.
+
+## Re-run 2026-11-19 — the 32-request wall, then the queueing regime (raw: `bench/splash-concurrency/results/splash-1.7.0-2026-11-19-ext` and `-2026-11-19b`)
+
+**Stack move under test:** `--queue-size 64`, added to the host's `start.sh` (resolve-ai-workflow
+`81a9235`). It joins the 2026-11-19 thinking-budget raise 16,384 → **32,768** in the same launch, and
+that second move is **inert for both stages of this suite**: ladder completions are pinned at 512
+tokens and KV completions at 8, so no request can reach a thinking cap. Flags bind at launch only, so
+19b **restarted the engine** (11:34 local) and read every pin from the live supervisor
+(`pgrep -f -fl server.server`) rather than from disk — a supervisor that has been running since before
+an edit still runs the old values.
+
+Two waves, read as one story: **19-ext** found the boundary by accident and diagnosed it; **19b** is
+the instrument rebuilt to run past it. Full detail in each directory's `RECORD.md`.
+
+### 19-ext — ladder valid, KV censored, and the censoring is the finding
+
+Engine: Splash 1.7.0, **the same instance as the 2026-11-18 wave, not restarted**, no `--queue-size`
+flag, so the documented default of **32** governed.
+
+| width | 1 | 2 | 3 | 4 | 6 | 8 | 12 | 16 | 24 | 32 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| median tok/s | 294.35 | 485.3 | 585.6 | 697.5 | 617.0 | 693.65 | 696.9 | 701.15 | 695.2 | 701.5 |
+
+The ladder reproduces 11-18 (w1 inside the 260.6 / 307.3 band, w6 dip 0.884× of w4, admission peaks
+0/0/0/0/2/4/8/12/12/12, `suspended` 0 everywhere). The KV stage then **died at w40 on HTTP 503**
+(`frontend request capacity is exhausted` / `frontend_overloaded`) because the sealed `chat()` raises
+on non-2xx — and the driver lost its SUMMARY.
+
+Four things came out of it:
+
+1. **The trip point is a request count, not a memory state.** A tiny-prompt probe (so token volume
+   cannot matter) pinned it: **w32 admitted, w33 refused instantly**, `waiting_concurrency=0` and
+   `held_behind_refusal=0` — refused, never queued. `splash serve --help`: `--queue-size REQUESTS …
+   requests admitted at once, running or waiting; more get 503 (default: 32)`.
+2. **This stack answers KV pressure with spill and disk demotion, never suspension.** Inside the
+   admitted range, `kv.pages_active` sat pinned at **1,654 pages (52,928 tok)** across every fresh
+   round w16→w32 while lifetime `kv_spill.spill_moves` reached 28,138 and `disk.kv_demotions` 4,390
+   (41 refused). Any stop rule that waits for a suspension event is watching the wrong gauge — the
+   standing rule was retired.
+3. **Beyond w12, width buys nothing:** prefill flat at **3,513.7–3,520.7 tok/s (±0.2 %)**; the
+   mechanism is visible in `/status` as `memory_plan.budget.maximum_batch_width = 4`.
+4. **Cross-run prompt reuse is free, so controls must be fresh-seeded.** The w2 / w12 stitch controls
+   were byte-identical to the 11-18 prompts (deterministic generator) and `--persistent-cache` served
+   them from disk: **93,530 tok in 0.4 s and 612,180 tok in 1.5 s** with `prefill_rows` moving only 26
+   and 84 — proof the cache works and **zero** measurement of pressure.
+
+Censorship status: the stage reached **1,632,480 prompt tokens = 10.49× budget** before the refusal
+killed it, so 11-18's "no trip at 3.93×" was doubly censored — the width cap (12) sat below the real
+ceiling, and the real ceiling is an admission refusal rather than a suspension.
+
+### 19b — queue-size 64, run to 48 in flight
+
+Engine restarted, so **every lifetime counter began at zero** (`resource_suspensions` 0,
+`priority_suspensions` 0, `capacity_failures` 0, `kv_demotions_refused` 0, `spill_moves` 0): the
+per-round deltas are the cleanest in the series, and the **lifetime column stops being comparable
+across rows** (11-18 began at 43, 19-ext at 45).
+
+**Stage 0, the fixed gate.** The 19-ext gate probed a prose paragraph (77.3 / 88.6 / 116.7 tok/s,
+spread 1.51 "cold") while the ladder's own w1 read 294.4 minutes later — it certified nothing. 19b's
+gate reuses `LADDER_PROMPT` @512: **272.0 / 282.1 / 309.6 tok/s, spread 1.138 → "soft"** (pass ≤1.10,
+soft ≤1.20). Not a clean pass, and stated as such; the ladder that follows lands inside it.
+
+**Stage 1, the sealed ladder — the stack move did not perturb the curve.**
+
+| width | 1 | 2 | 3 | 4 | 6 | 8 | 12 | 16 | 24 | 32 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| median tok/s | **307.1** | 416.95 | 581.25 | **724.6** | 613.3 | 698.9 | 647.55 | 700.65 | 698.0 | 699.5 |
+| round spread | 1.011 | **1.377** | 1.020 | 1.045 | 1.000 | 1.014 | **1.139** | 1.019 | 1.003 | 1.001 |
+
+w1 **307.1** is the best width-1 on record (prior 283.95) and **w4 724.6** the highest aggregate peak
+on record; w6 dip 0.846× of w4 continues the trend of shallower dips across build generations; stop
+rule never fired. Two cells carry labelled scatter rather than smoothing: w2 (350.8 / 483.1) and w12
+(689.6 / 605.5) — both stay far above w1, so neither threatens the shape.
+
+**Stage 2, KV in the queueing regime** (calibration 300 lines = 14,087 tok → 425 lines/request ≈
+55,265 tok each; widths capped at 48 to leave 16 lanes of slack under 64, so a refusal would mean the
+engine's limit, not our own saturation):
+
+| width | prompt tokens | × budget | wall (s) | ok / refused | prefill_rows Δ | pages_active peak | susp / wait_mem | spill Δ / demote Δ |
+|---|---|---|---|---|---|---|---|---|
+| 12 | 663,180 | 4.26× | 189.5 | 12 / **0** | 663,180 | 1,920 | 0 / 0 | 0 / 0 |
+| 33 | 1,823,745 | 11.72× | 522.2 | 33 / **0** | 1,823,745 | 1,920 | 0 / 0 | 0 / 0 |
+| 36 | 1,989,540 | 12.78× | 570.5 | 36 / **0** | 1,989,540 | 1,920 | 0 / 0 | 0 / 0 |
+| 40 | 2,210,600 | 14.20× | 633.2 | 40 / **0** | 2,210,600 | 1,920 | 0 / 0 | 0 / 0 |
+| 44 | 2,431,660 | 15.62× | 697.7 | 44 / **0** | 2,431,660 | 1,920 | 0 / 0 | 0 / 0 |
+| 48 | 2,652,720 | **17.04×** | 760.1 | 48 / **0** | 2,652,720 | 1,920 | 0 / 0 | 0 / 0 |
+
+`prefill_rows` delta **equalled** prompt tokens on every round and `cache_served_rounds = []` — the
+confound is closed, and shown closed. Findings:
+
+1. **The flag was the whole wall.** 48 concurrent 55k-token requests, all admitted, zero refusals —
+   where 19-ext refused at 33.
+2. **The queueing regime is invisible at the admission gate, which is the surprise.** The prediction
+   was that past 32, `admission.waiting` / `waiting_memory` would finally have something to measure.
+   Every one of the six rounds peaked at **0** for `waiting`, `waiting_memory`, `waiting_concurrency`
+   and `held_behind_refusal`: requests are admitted into lanes and wait inside the **scheduler prefill
+   queue** — a queue that demonstrably exists (`peak_queued` 8 / 8 / 16 at w12 / w24 / w32 in stage 1).
+   A monitor reading `admission.*` would call the engine idle at w48.
+3. **Width past 32 costs wall time, at prefill parity:** 189.5 s → **760.1 s**, with prefill flat at
+   **3,485.4–3,499.1 tok/s (±0.2 %)** from w12 to w48 — the same line 19-ext measured below the wall.
+   Corroborated by the session's own decode batches: b1 4,375 / b2 278 / b3 244 / **b4 3,434**.
+4. **KV residency is still untouched at 17.04× the budget.** `pages_active` pinned at **1,920 pages =
+   61,440 tok (39.5 % of budget)** on all six rounds (it stepped up from 1,654 pages once in-flight
+   passed 32, then stopped moving), spill 0, demote 0, suspensions 0, minimum governor headroom
+   207.8 MB. The 11-06 conclusion survives its widest test: fire-and-forget long-context volume does
+   not trip this stack's KV.
+5. **Signals outside the stage are attributed by delta.** At run end lifetime `disk.kv_demotions` =
+   421 with `refused` = 5, while every KV round's delta for both was 0 — those came from the
+   gate/ladder/calibration legs. This is why the stop rule reads per-round deltas: a lifetime counter
+   that drifts outside the stage (11-18: 43 before the stage began) must not be read as a trip.
+
+**Caveats on this row.** (a) Gate "soft", not a clean pass. (b) **Not a clean window** — the operator's
+OpenCode session is served by this same engine and took turns during the run, including inside the KV
+rounds; per the 11-13 finding that tax lands on latency cells, so the best-w1 cell carries it and a
+detached single-tenant re-run of stage 1 is owed. (c) The restart makes lifetime reads non-comparable
+with earlier waves. (d) `--verify-rows auto` still applies: not bit-comparable with the 1.6.x rows.
+
+**What this instrument can no longer answer.** Tripping KV by summed volume is bounded out — at 17×
+the governor reports no work, and the only failure mode beyond that is the request-count flag. The live
+question is **depth, not volume**: `context_bounds` puts resident at **155,633** against a 262,144
+window, and the open probe is one context walking toward the resident line **while held across turns**
+— what real agent sessions do, and what no wave here has yet measured directly.
 
 **The determinism A/B** (batch B, hard stops proven from the engine's own startup banner, both modes
 read back from `/status`): the same greedy request ×5 per config, hashing **content + reasoning

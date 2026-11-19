@@ -49,6 +49,17 @@
 
   <h2>Scorecards</h2>
   <ul>
+    <li><a class="card" href="reports/2026-11-19-splash-queue-size.html">
+      <span class="name">The KV ceiling was never KV — it was a request count of 32</span><span class="tag">Splash 1.7.0 · stack move: --queue-size 64</span>
+      <div class="sub">A KV run died at width 40 on <b>HTTP 503</b>; a tiny-prompt probe pinned it exactly
+        (<b>w32 admitted, w33 refused instantly</b>, never queued) — the documented <code>--queue-size</code>
+        default. Stack move + rebuilt driver, then the wave that ran past the wall: <b>48 concurrent 55k-token
+        requests, zero refusals</b>, <b>2,652,720 tok = 17.04× the KV budget</b> with suspensions / spill /
+        demote all zero — and the surprise: <b><code>admission.*</code> stayed 0 at every width</b>, the wait
+        moved to the scheduler prefill queue (wall 189.5 s → 760.1 s at flat prefill 3,485–3,499 tok/s).
+        Ladder came back with a record w1 (<b>307.1</b>) and record peak (<b>w4 724.6</b>); three instrument
+        flaws from the morning wave disclosed and fixed (refusal-kills-summary, cache-served controls,
+        stop rule watching a gauge this build never moves).</div></a></li>
     <li><a class="card" href="reports/2026-11-18-all-suites-day.html">
       <span class="name">All-suites day — stack move, exact reproduction</span><span class="tag">Resolve MCP 5.3.4 · opencode 2.3.2 · Splash 1.7.0 · OpenCV 5.1.0.95</span>
       <div class="sub">Freshness check first (all current, zero updates), then every live suite re-run:

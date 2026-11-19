@@ -1,0 +1,321 @@
+<title>Splash queue-size 64 — engine waves 2026-11-19</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#fcfcfd; --fg:#14171c; --fg-2:#4d555f; --mut:#7b848f;
+  --line:#dfe3e8; --accent:#2a78d6; --s2:#eb6834; --s3:#8a5fc9;
+  --good:#0f7a4d; --warn:#b26a00;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',Inter,system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 56px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.5vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 var(--mono);color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.lede{color:var(--fg-2);max-width:65ch;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:9px 13px}
+.chip b{font-family:var(--disp);font-size:16px}
+.chip span{font-size:12.5px;color:var(--fg-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--good);flex:none;align-self:center}
+.dot.warn{background:var(--warn)}
+section{margin-top:44px;border-top:1px solid var(--line);padding-top:26px}
+h2{font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 .tag{font:500 11px/1 var(--mono);color:var(--mut);letter-spacing:.06em;border:1px solid var(--line);
+  border-radius:6px;padding:4px 7px}
+p.note{color:var(--fg-2);max-width:65ch}
+.tbl-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;min-width:0}
+th{font:600 12px/1.3 var(--body);color:var(--fg-2)}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--good);font-weight:600}
+.warn{color:var(--warn);font-weight:600}
+.dim{color:var(--mut)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:18px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.stat .v{font-family:var(--disp);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12.5px;color:var(--fg-2);margin-top:2px}
+ul.tight{margin:12px 0 0;padding-left:20px;color:var(--fg-2)}
+ul.tight li{margin:5px 0}
+code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.chartwrap{position:relative;margin-top:10px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:8px 10px;font:500 12px/1.5 var(--mono);box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+@media (prefers-reduced-motion:reduce){.tip{transition:none}}
+svg{width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.grid{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--mut);stroke-width:1}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
+.foot code{font-size:11.5px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Will's local AI pipeline · Splash engine · queue-size 64 day</div>
+  <h1>The KV ceiling was never KV — it was a request count of 32</h1>
+  <p class="lede">A KV-pressure run died at width 40 with <code>HTTP 503</code>. A ten-minute probe with
+  tiny prompts pinned why: <b>request 33 is refused instantly</b>, memory gauges untouched, body
+  <code>frontend_overloaded</code> — the documented <code>--queue-size</code> default. So the morning
+  shipped a stack move (<code>--queue-size 64</code>) and a rebuilt driver, and the afternoon wave ran
+  the KV stage <b>past the wall</b>: 48 concurrent 55k-token requests, all admitted, none refused, and
+  <b>17.04× the resident KV budget with nothing tripping</b>.</p>
+
+  <div class="chips">
+    <div class="chip"><span class="dot"></span><b>48 in flight</b><span>zero refusals — the old wall was 32 and it was a flag, not the engine</span></div>
+    <div class="chip"><span class="dot"></span><b>2,652,720 tok</b><span>17.04× the 155,648-token KV budget · suspensions 0, spill 0, demote 0</span></div>
+    <div class="chip"><span class="dot warn"></span><b>admission.* = 0</b><span>at every width past 32 — the wait moved to the scheduler prefill queue</span></div>
+    <div class="chip"><span class="dot"></span><b>307.1 tok/s</b><span>ladder w1 — best on record (and w4 724.6, the highest peak)</span></div>
+  </div>
+
+  <section>
+    <h2>1 · The width ladder — the stack move did not perturb it <span class="tag">sealed spec, 512-token rounds</span></h2>
+    <div class="viz-root">
+      <div class="vtitle">Aggregate tok/s medians, widths 1→32</div>
+      <div class="vsub">Two instance bands: the 11-17 waves at ~460–545, 11-18 onward at ~610–725. Shape holds every time — width-4 peak, width-6 dip, no collapse by 32, stop rule never fired · hover for values</div>
+      <div class="legend">
+        <span><i style="background:var(--s3)"></i>1.7.0 · 11-17 clean window</span>
+        <span><i style="background:var(--mut)"></i>1.7.0 · 11-18</span>
+        <span><i style="background:var(--s2)"></i>1.7.0 · 11-19 ext (queue 32)</span>
+        <span><i style="background:var(--accent)"></i>1.7.0 · 11-19b (queue 64)</span>
+      </div>
+      <div class="chartwrap" id="cw">
+        <svg id="chart" viewBox="0 0 860 320" role="img" aria-label="Line chart of width-ladder aggregate tok/s medians for four Splash 1.7.0 waves: the 11-17 clean-window column rises 225 to a 460-485 plateau peaking at 543.8; the 11-18, 11-19-ext and 11-19b columns all sit far higher, rising 284-307 to plateaus of 692-701 with peaks 677 to 724.6 at width 4; every column dips at width 6 and never collapses by width 32"></svg>
+        <div class="tip" id="tip"></div>
+      </div>
+    </div>
+    <div class="kv">
+      <div class="stat"><div class="v">724.6</div><div class="l">19b aggregate peak at width 4 — highest recorded on this host; w1 307.1 also a record</div></div>
+      <div class="stat"><div class="v">0.846×</div><div class="l">the width-6 dip against width 4 — it reproduces in every wave and keeps getting shallower</div></div>
+      <div class="stat"><div class="v">1.377× / 1.139×</div><div class="l">round-level scatter kept as labels at w2 and w12, not smoothed into the median</div></div>
+    </div>
+    <p class="note">Gate first, always: 19b's stage-0 gate reuses the ladder's own prompt at 512 tokens and
+    read <b>272.0 / 282.1 / 309.6 tok/s</b> — spread 1.138, verdict <b>"soft"</b>, not a clean pass, and
+    published as such. The morning wave's gate used a prose paragraph and read 77–117 tok/s ("cold")
+    while the ladder's own w1 measured 294.4 minutes later, which is why it certified nothing.</p>
+  </section>
+
+  <section>
+    <h2>2 · Past the wall — KV volume to 17× budget <span class="tag">queue-size 64</span></h2>
+    <div class="viz-root">
+      <div class="vtitle">Unique prompt tokens per KV round, by concurrency width</div>
+      <div class="vsub">Grey bars: the morning run (queue-size 32) — it ends at w32 because w40 was refused outright. Blue bars: the afternoon run, same instrument rebuilt, widths past the wall · hover for values</div>
+      <div class="legend">
+        <span><i style="background:var(--s2)"></i>11-19 ext · fresh rounds, queue 32</span>
+        <span><i style="background:var(--accent)"></i>11-19b · fresh rounds, queue 64</span>
+      </div>
+      <div class="chartwrap" id="kw">
+        <svg id="kchart" viewBox="0 0 860 300" role="img" aria-label="Bar chart of unique prompt tokens per KV round: 663 thousand at width 12, then 816 thousand to 1.63 million at widths 16 to 32 in the morning run, then 1.82 million to 2.65 million at widths 33 to 48 in the afternoon run. No round spilled or suspended; the morning run reached 10.49 times the KV budget before being refused at width 40, and the afternoon run reached 17.04 times with zero refusals"></svg>
+        <div class="tip" id="ktip"></div>
+      </div>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>width</th><th class="num">prompt tokens</th><th class="num">× budget</th><th class="num">wall (s)</th><th class="num">ok / refused</th><th class="num">prefill_rows Δ</th><th class="num">pages_active</th><th class="num">susp / wait_mem</th><th class="num">spill / demote</th></tr></thead>
+        <tbody>
+          <tr><td>12</td><td class="num">663,180</td><td class="num">4.26×</td><td class="num">189.5</td><td class="num ok">12 / 0</td><td class="num">663,180</td><td class="num">1,920</td><td class="num">0 / 0</td><td class="num">0 / 0</td></tr>
+          <tr><td>33</td><td class="num">1,823,745</td><td class="num">11.72×</td><td class="num">522.2</td><td class="num ok">33 / 0</td><td class="num">1,823,745</td><td class="num">1,920</td><td class="num">0 / 0</td><td class="num">0 / 0</td></tr>
+          <tr><td>36</td><td class="num">1,989,540</td><td class="num">12.78×</td><td class="num">570.5</td><td class="num ok">36 / 0</td><td class="num">1,989,540</td><td class="num">1,920</td><td class="num">0 / 0</td><td class="num">0 / 0</td></tr>
+          <tr><td>40</td><td class="num">2,210,600</td><td class="num">14.20×</td><td class="num">633.2</td><td class="num ok">40 / 0</td><td class="num">2,210,600</td><td class="num">1,920</td><td class="num">0 / 0</td><td class="num">0 / 0</td></tr>
+          <tr><td>44</td><td class="num">2,431,660</td><td class="num">15.62×</td><td class="num">697.7</td><td class="num ok">44 / 0</td><td class="num">2,431,660</td><td class="num">1,920</td><td class="num">0 / 0</td><td class="num">0 / 0</td></tr>
+          <tr><td>48</td><td class="num">2,652,720</td><td class="num">17.04×</td><td class="num">760.1</td><td class="num ok">48 / 0</td><td class="num">2,652,720</td><td class="num">1,920</td><td class="num">0 / 0</td><td class="num">0 / 0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="tight">
+      <li><b>The flag was the whole wall.</b> 48 concurrent ~55k-token requests, all admitted, zero refusals — where the same instrument refused at 33. Widths were deliberately capped at 48 to leave 16 lanes of slack under 64, so a refusal would have meant the engine's limit rather than our own saturation.</li>
+      <li><b>The surprise: queueing is invisible at the admission gate.</b> The prediction was that past 32, <code>admission.waiting</code> and <code>waiting_memory</code> would finally measure something. They peaked at <b>0 in every single round</b> — as did <code>waiting_concurrency</code> and <code>held_behind_refusal</code>. Requests are admitted into lanes and the wait relocates to the <b>scheduler's prefill queue</b>, which the ladder's own <code>peak_queued</code> (8 / 8 / 16 at w12 / w24 / w32) proves exists. A monitor reading <code>admission.*</code> would call this engine idle at width 48.</li>
+      <li><b>Width past 32 is paid for in wall time, at flat prefill:</b> 189.5 s → <b>760.1 s</b>, with prefill pinned at <b>3,485.4–3,499.1 tok/s (±0.2 %)</b> — the same line the morning run measured below the wall (3,513.7–3,520.7). Mechanism: <code>maximum_batch_width = 4</code>, corroborated by the session's decode batches (b1 4,375 / b2 278 / b3 244 / <b>b4 3,434</b>).</li>
+      <li><b>KV residency untouched at 17×:</b> <code>pages_active</code> pinned at <b>1,920 pages = 61,440 tokens (39.5 % of budget)</b> on all six rounds — it stepped up once from 1,654 pages when in-flight passed 32, then stopped moving, while summed contexts went to 2.65 M tokens. Governor headroom never below 207.8 MB.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3 · How the wall was found — three flaws in the morning instrument, all fixed <span class="tag">11-19 ext → 11-19b</span></h2>
+    <ul class="tight">
+      <li><b>A refusal killed the run and its summary.</b> The sealed <code>chat()</code> raises on non-2xx, so w40's 503 ended the driver mid-stage and the SUMMARY was lost. 19b wraps every request and records the refusal (code + body) as the round's outcome.</li>
+      <li><b>Cross-run prompt reuse made two "controls" measure nothing.</b> The generator is deterministic, so the w2 / w12 stitch controls were byte-identical to the 11-18 prompts and <code>--persistent-cache</code> served them from disk: <b>93,530 tok in 0.4 s</b> and <b>612,180 tok in 1.5 s</b>, with <code>prefill_rows</code> moving only 26 and 84. Those rows prove the cache works. 19b seeds a fresh namespace and marks any round <code>cache_served</code> unless <code>prefill_rows</code> tracks prompt tokens — here it <b>equalled</b> prompt tokens on every round, so all six are real pressure.</li>
+      <li><b>The stop rule watched a gauge this build does not move.</b> "Wait for a suspension event" is useless when the answer to KV pressure is spill and disk demotion: the morning run sat at 1,654 active pages while lifetime spill moves reached 28,138 and disk demotions 4,390 (41 refused). 19b's rule is <b>refusal / <code>admission.suspended</code> / suspension-counter delta / <code>kv_demotions_refused</code> delta / <code>capacity_failures</code> delta</b>.</li>
+      <li><b>Gate validity.</b> A gate must use the same primitive as the baseline it certifies — the morning's prose-prompt gate read "cold" while the ladder was fine.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>4 · Caveats and what this instrument can no longer answer</h2>
+    <ul class="tight">
+      <li><b>Not a clean window.</b> The operator's session is served by this same engine and took turns during the run, including inside the KV rounds. Per the standing 11-13 finding the tax lands on latency cells, so "best w1 on record" carries it and a detached single-tenant re-run of the ladder is owed.</li>
+      <li><b>The restart broke the lifetime-counter column.</b> Flags bind at launch, so the engine restarted and every lifetime counter began at 0 — the cleanest per-round deltas in the series, but 11-18 began at 43 and 19-ext at 45, so lifetime reads stop being comparable across rows. Related: at run end lifetime <code>disk.kv_demotions</code> read 421 with 5 refused, while <b>every KV round's delta was 0</b> — those came from the gate/ladder legs, attributed by delta rather than by the lifetime read.</li>
+      <li><b>Both stack moves landed in one launch</b> (queue-size 64 + thinking budget 16,384 → 32,768). The second is inert for this suite — ladder outputs are pinned at 512 tokens and KV outputs at 8 — but the ladder is the comparable-throughput check that proves it, and it came back better, not perturbed.</li>
+      <li><b>Summed-volume KV is bounded out.</b> At 17× the governor still reports no work, and the only failure mode beyond that is a request-count flag. The live question is <b>depth, not volume</b>: <code>context_bounds</code> puts resident at 155,633 against a 262,144 window, and the open probe is one context walking toward the resident line <i>while held across turns</i> — what real agent sessions do, and what no wave here has measured directly.</li>
+    </ul>
+  </section>
+
+  <div class="foot">
+    Evidence: <code>bench/splash-concurrency/results/splash-1.7.0-2026-11-19b/RECORD.md</code> (+
+    <code>ladder_kv.jsonl</code>, <code>warmth_gate.jsonl</code>, <code>engine_config.json</code> with the
+    supervisor pins) · <code>results/splash-1.7.0-2026-11-19-ext/RECORD.md</code> (incl. the w40 traceback).
+    Drivers: <code>bench/splash-concurrency/kv_bracket_2026-11-19b.py</code> (6f97678 + 5b37d51),
+    <code>ladder_kv_ext_2026-11-19.py</code> (eafc9c1), sealed entry point <code>ladder_kv.py</code>.
+    Stack move: resolve-ai-workflow <code>81a9235</code>.
+    Standing tables: <a href="https://github.com/willturner-maker/benchmarks/blob/main/docs/leaderboard.md">docs/leaderboard.md</a> ·
+    machine-readable: <a href="https://github.com/willturner-maker/benchmarks/blob/main/leaderboard/results.json">leaderboard/results.json</a>.
+    Companion: <a href="2026-11-17-splash-1-7-0.html">Splash 1.7.0 (11-17)</a> ·
+    Previous: <a href="2026-11-18-all-suites-day.html">all-suites day</a>.
+  </div>
+</div>
+
+<script>
+(function(){
+  const widths=[1,2,3,4,6,8,12,16,24,32];
+  const a=[225.2,331.4,438.4,543.8,426.2,480.5,481.7,484.4,462.9,474.6];
+  const b=[283.95,480.85,593.05,677.6,612.3,697.4,698.0,698.6,694.45,692.5];
+  const c=[294.35,485.3,585.6,697.5,617.0,693.65,696.9,701.15,695.2,701.5];
+  const d=[307.1,416.95,581.25,724.6,613.3,698.9,647.55,700.65,698.0,699.5];
+  const svg=document.getElementById('chart'), tip=document.getElementById('tip');
+  const W=860,H=320,mL=48,mR=14,mT=14,mB=34;
+  const yMax=780, plotW=W-mL-mR, plotH=H-mT-mB;
+  const X=i=>mL+i*(plotW/(widths.length-1));
+  const Y=v=>mT+plotH-(v/yMax)*plotH;
+  const ns='http://www.w3.org/2000/svg';
+  function el(t,at){const e=document.createElementNS(ns,t);for(const k in at)e.setAttribute(k,at[k]);return e;}
+  function build(){
+    svg.innerHTML='';
+    const cs=getComputedStyle(document.documentElement);
+    function tok(n){return cs.getPropertyValue(n).trim();}
+    const mut=tok('--mut'), acc=tok('--accent'), s2=tok('--s2'), s3=tok('--s3'), panel=tok('--panel');
+    for(let v=100;v<=700;v+=100){
+      svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(v),y2:Y(v),class:'grid'}));
+      const t=el('text',{x:mL-8,y:Y(v)+4,'text-anchor':'end','font-size':'11'});t.textContent=v;svg.appendChild(t);
+    }
+    svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(0),y2:Y(0),class:'axis'}));
+    widths.forEach((w,i)=>{const t=el('text',{x:X(i),y:H-14,'text-anchor':'middle','font-size':'11'});t.textContent=w;svg.appendChild(t);});
+    const ax=el('text',{x:(mL+W-mR)/2,y:H-2,'text-anchor':'middle','font-size':'10',fill:mut});
+    ax.textContent='concurrency width → aggregate tok/s';svg.appendChild(ax);
+    [[a,s3,'5 4',2],[b,mut,'2 4',2],[c,s2,null,2.2],[d,acc,null,2.6]].forEach(([arr,col,dash,sw])=>{
+      const pts=arr.map((v,i)=>X(i)+','+Y(v)).join(' ');
+      const at={points:pts,fill:'none',stroke:col,'stroke-width':sw,'stroke-linejoin':'round','stroke-linecap':'round'};
+      if(dash)at['stroke-dasharray']=dash;
+      svg.appendChild(el('polyline',at));
+      arr.forEach((v,i)=>svg.appendChild(el('circle',{cx:X(i),cy:Y(v),r:3.2,fill:col,stroke:panel,'stroke-width':2})));
+    });
+    const lb=el('text',{x:X(3)+8,y:Y(d[3])-10,'font-size':'11','text-anchor':'start',fill:acc});
+    lb.textContent='19b · 724.6 peak (queue 64)';svg.appendChild(lb);
+    const lc=el('text',{x:X(3)+8,y:Y(a[3])+18,'font-size':'11','text-anchor':'start',fill:s3});
+    lc.textContent='11-17 clean · 543.8';svg.appendChild(lc);
+    const guide=el('line',{x1:0,x2:0,y1:mT,y2:mT+plotH,stroke:mut,'stroke-width':1,'stroke-dasharray':'3 3',opacity:0});
+    svg.appendChild(guide);
+    const hit=el('rect',{x:mL,y:mT,width:plotW,height:plotH,fill:'transparent'});svg.appendChild(hit);
+    function show(e){
+      const r=svg.getBoundingClientRect();
+      const px=(e.clientX-r.left)*(W/r.width);
+      let i=Math.round((px-mL)/(plotW/(widths.length-1)));
+      i=Math.max(0,Math.min(widths.length-1,i));
+      guide.setAttribute('x1',X(i));guide.setAttribute('x2',X(i));guide.setAttribute('opacity',1);
+      tip.style.opacity=1;
+      tip.innerHTML='width '+widths[i]+'<br>11-17 clean &nbsp;'+a[i].toFixed(1)+'<br>11-18 &nbsp;'+b[i].toFixed(1)+'<br>19-ext &nbsp;'+c[i].toFixed(1)+'<br>19b &nbsp;'+d[i].toFixed(1);
+      const lx=X(i)*(r.width/W), half=(r.width/2);
+      tip.style.left=(lx+(lx<half?12:-tip.offsetWidth-12))+'px';
+      const topY=Math.min(Y(a[i]),Y(b[i]),Y(c[i]),Y(d[i]));
+      tip.style.top=Math.max(0,topY*(r.height/H)-10)+'px';
+    }
+    hit.addEventListener('mousemove',show);
+    hit.addEventListener('mouseleave',()=>{tip.style.opacity=0;guide.setAttribute('opacity',0);});
+  }
+  build();
+  if(window.matchMedia){
+    const mq=window.matchMedia('(prefers-color-scheme: dark)');
+    (mq.addEventListener?mq.addEventListener('change',build):mq.addListener(build));
+  }
+})();
+
+(function(){
+  const rows=[
+    {w:12, tok:663180, mult:'4.26', post:false},
+    {w:16, tok:816240, mult:'5.24', post:false},
+    {w:20, tok:1020300, mult:'6.55', post:false},
+    {w:24, tok:1224360, mult:'7.87', post:false},
+    {w:28, tok:1428420, mult:'9.18', post:false},
+    {w:32, tok:1632480, mult:'10.49', post:false},
+    {w:33, tok:1823745, mult:'11.72', post:true},
+    {w:36, tok:1989540, mult:'12.78', post:true},
+    {w:40, tok:2210600, mult:'14.20', post:true},
+    {w:44, tok:2431660, mult:'15.62', post:true},
+    {w:48, tok:2652720, mult:'17.04', post:true}
+  ];
+  const svg=document.getElementById('kchart'), tip=document.getElementById('ktip');
+  if(!svg) return;
+  const W=860,H=300,mL=64,mR=14,mT=16,mB=40;
+  const yMax=2800000, plotW=W-mL-mR, plotH=H-mT-mB;
+  const bw=plotW/rows.length;
+  const X=i=>mL+i*bw;
+  const Y=v=>mT+plotH-(v/yMax)*plotH;
+  const ns='http://www.w3.org/2000/svg';
+  function el(t,at){const e=document.createElementNS(ns,t);for(const k in at)e.setAttribute(k,at[k]);return e;}
+  function build(){
+    svg.innerHTML='';
+    const cs=getComputedStyle(document.documentElement);
+    function tok(n){return cs.getPropertyValue(n).trim();}
+    const mut=tok('--mut'), acc=tok('--accent'), s2=tok('--s2'), line=tok('--line'), warn=tok('--warn');
+    for(let v=500000;v<=2500000;v+=500000){
+      svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(v),y2:Y(v),class:'grid'}));
+      const t=el('text',{x:mL-8,y:Y(v)+4,'text-anchor':'end','font-size':'11'});t.textContent=(v/1e6).toFixed(1)+'M';svg.appendChild(t);
+    }
+    svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(0),y2:Y(0),class:'axis'}));
+    rows.forEach((r,i)=>{
+      const col=r.post?acc:s2;
+      svg.appendChild(el('rect',{x:X(i)+3,y:Y(r.tok),width:bw-6,height:plotH-(Y(r.tok)-mT),fill:col,opacity:r.post?0.95:0.8,rx:2}));
+      const t=el('text',{x:X(i)+bw/2,y:H-18,'text-anchor':'middle','font-size':'11'});t.textContent=r.w;svg.appendChild(t);
+    });
+    const ax=el('text',{x:(mL+W-mR)/2,y:H-3,'text-anchor':'middle','font-size':'10',fill:mut});
+    ax.textContent='KV width → unique prompt tokens in the round';svg.appendChild(ax);
+    const wallX=X(6)-3;
+    svg.appendChild(el('line',{x1:wallX,x2:wallX,y1:mT,y2:mT+plotH,stroke:warn,'stroke-width':1.5,'stroke-dasharray':'5 4'}));
+    const wt=el('text',{x:wallX+6,y:mT+12,'font-size':'11',fill:warn});
+    wt.textContent='the 32-request wall (queue-size)';svg.appendChild(wt);
+    const hit=el('rect',{x:mL,y:mT,width:plotW,height:plotH,fill:'transparent'});svg.appendChild(hit);
+    function show(e){
+      const r=svg.getBoundingClientRect();
+      const px=(e.clientX-r.left)*(W/r.width);
+      let i=Math.floor((px-mL)/bw);
+      i=Math.max(0,Math.min(rows.length-1,i));
+      const d0=rows[i];
+      tip.style.opacity=1;
+      tip.innerHTML='width '+d0.w+'<br>'+d0.tok.toLocaleString()+' tok<br>'+d0.mult+'× KV budget<br>'+(d0.post?'queue-size 64':'queue-size 32');
+      const lx=X(i)*(r.width/W), half=(r.width/2);
+      tip.style.left=(lx+(lx<half?bw*(r.width/W)+6:-tip.offsetWidth-6))+'px';
+      tip.style.top=Math.max(0,Y(d0.tok)*(r.height/H)-10)+'px';
+    }
+    hit.addEventListener('mousemove',show);
+    hit.addEventListener('mouseleave',()=>{tip.style.opacity=0;});
+  }
+  build();
+  if(window.matchMedia){
+    const mq=window.matchMedia('(prefers-color-scheme: dark)');
+    (mq.addEventListener?mq.addEventListener('change',build):mq.addListener(build));
+  }
+})();
+</script>

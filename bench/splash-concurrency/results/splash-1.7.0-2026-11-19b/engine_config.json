@@ -1,0 +1,53 @@
+{
+ "run": "splash-1.7.0-2026-11-19b",
+ "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+ "supervisor": {
+  "raw_present": true,
+  "pins": {
+   "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+   "binary": "/opt/homebrew/Cellar/splash/1.7.0/libexec/engine/splash",
+   "port": "8000",
+   "serve-record": "~/Library/Application",
+   "max-memory": "60129542144",
+   "max-cache-disk": "274877906944",
+   "persistent-cache": true,
+   "default-reasoning-effort": "medium",
+   "thinking-token-budget": "32768",
+   "queue-size": "64"
+  },
+  "queue_size": 64,
+  "queue_size_explicit": true
+ },
+ "kv_widths": [
+  12,
+  33,
+  36,
+  40,
+  44,
+  48
+ ],
+ "seed_namespace": 900000,
+ "kv_target_tokens": 20000,
+ "sealed_ladder_widths": [
+  1,
+  2,
+  3,
+  4,
+  6,
+  8,
+  12,
+  16,
+  24,
+  32
+ ],
+ "status_kv_budget_tokens": 155648,
+ "maximum_batch_width": 4,
+ "lifetime_at_start": {
+  "resource_suspensions": 0,
+  "priority_suspensions": 0,
+  "capacity_failures": 0,
+  "kv_demotions_refused": 0,
+  "spill_moves": 0
+ },
+ "notes": "queue-size 64 stack move; refusals recorded not raised; prompts in a fresh seed namespace and each round validated against cache-served prefill"
+}
