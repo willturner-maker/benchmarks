@@ -1,0 +1,10 @@
+{
+  "generator": "Meshy via MCP-for-Blender Premium (mcp-for-blender 2.3.1, generation_source=PREMIUM)",
+  "date": "2026-11-18",
+  "meshy_job": "meshy:prm:538bc6df-187b-4e8b-8ba2-a14b6c0995b9",
+  "prompt": "collectible figurine of a pretty young woman with long brown hair in a long red dress, sitting cross-legged on the floor with hands on her knees, full body including legs and feet, single character sculpture on nothing, no furniture, no table, no chair, no laptop, plain background",
+  "quality": "high",
+  "note": "Generator ignored no-furniture prompts on all three attempts (two earlier jobs discarded: they varied only in junk detail); kept the woman+table composite and adapted the bench scene around it (skip procedural table/laptop; keep lamp, add emissive screen plane). 1.10M faces single material; table top measured at local z~0.75.",
+  "license": "MCP-for-Blender Premium plan output",
+  "sha256": "e17343ac01e76f8f9813a5ec7d1b0432fe78df2a8dd2e3a0d73412d4f3257453"
+}

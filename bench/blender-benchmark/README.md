@@ -29,7 +29,9 @@ the lit lamp, and the glowing screen in the actual output.
    (soft). Exit code is part of the record.
 
 ```bash
-python3 run_bench.py --sweep 64,128,256 [--tag NAME]
+python3 run_bench.py --sweep 64,128,256 [--tag NAME] [--no-fixture]
+# fixture/woman_red_dress.glb is auto-used when present; --no-fixture forces
+# the procedural stand-in (separate score series)
 # results/<date>[-tag]/{run.json, environment.json, frame_*spp.png, verify.json}
 # results/latest → newest run
 ```
@@ -38,22 +40,36 @@ python3 run_bench.py --sweep 64,128,256 [--tag NAME]
 
 | Run | Fixture | GPU | score (samples/min, Σ) | verify |
 |---|---|---|---|---|
-| `2026-11-18-standin` | procedural stand-in | M5 Ultra, METAL, 1 dev | **7,589** | 5/5 PASS (soft face: none — mannequin profile) |
+| `2026-11-18-standin` | procedural stand-in (6.6k verts) | M5 Ultra, METAL, 1 dev | **7,589** | 5/5 PASS (soft face: none — mannequin profile) |
+| `2026-11-18-generated` | Meshy Premium fixture (606k verts, 2K PBR) | same | **5,213** | 5/5 PASS after verifier calibration v2 (soft face: none — hair covers face at this angle) |
 
-Rough per-config wall (Blender incl. ~0.5 s startup): 64 spp 2.2 s,
-128 spp 3.2 s, 256 spp 4.5 s. The scene is deliberately light on geometry
-(~6.6k verts stand-in); the generated fixture (below) will raise it and the
-score will move — **fixture class is part of the run identity**, so
-stand-in and fixture scores are separate series, never compared.
+Fixture class is part of the run identity: the −31 % gap is the geometry
+cost (91× the vertices), not a regression — the two columns are separate
+series. Per-config walls (generated, incl. ~0.5 s startup): 64 spp 3.3 s,
+128 spp 4.7 s, 256 spp 6.4 s.
 
-## Fixture provenance policy
+`run.json` for the generated run carries a `sync_note`: the first verify
+pass scored 3/5 on these exact frames; the verifier was then calibrated
+(screen core blows out to near-white → accept blue-cast lit clusters;
+generated skin sits in shadow → V>70, proximity 0.35) and re-run on the
+sealed frames. Frames were never re-rendered or altered.
 
-- The suite ships a procedural stand-in so it always runs, free and offline.
-- A **generated fixture** (Meshy via Blender MCP `generate_3d`, seated woman,
-  red dress) was the intended exact-fit subject: free-tier key pending
-  enrollment (2026-11-18). When it lands: store as
-  `fixture/woman_red_dress.glb`, record generator/prompt/date/license next to
-  it; the builder swaps it in automatically.
+## Fixture provenance (fixture/PROVENANCE.json)
+
+Generated via **Meshy through MCP-for-Blender Premium** (no API keys; the
+plan was specifically enrolled for this). Activation gotcha: entering the
+license key is not enough — Preferences must also flip `generation_source`
+to `PREMIUM` **and** a per-generator use-toggle must be on, or the server
+still answers "no generator enabled".
+
+Three generations, all `quality: high`: two discarded (they baked in a
+table+laptop with clipped legs despite "no furniture" — the premium
+backend keeps a scene prior), the third ("collectible figurine… sitting
+cross-legged… no furniture") finally came back subject-only: a woman in a
+red dress cross-legged, 1.10M faces, origin at floor. The bench scene
+keeps its own low table/laptop/lamp staged around her (table lowered to
+0.50 m so a floor-sitting figure reads true). GLB export is git-ignored;
+its SHA-256 is recorded in `run.json` + provenance.
 - Library roulette was tried and rejected on this date: Sketchfab
   `Red Dress Female` (vrcityphoto, 913k faces) is a photo scan of **two
   figures on a cobblestone patch** — wrong subject, and its bake/hierarchy
@@ -79,5 +95,11 @@ possible. Do not mix numbers across the two.
   camera and use the camera view when inspecting fixtures.
 - mediapipe 1.2 has no legacy `solutions` API — the verifier uses
   OpenCV's bundled Haar cascade for the soft face check.
+- SAFE_MODE inside `execute_blender_code` blocks `open()`, `datetime`,
+  `hashlib` — export via Blender operators only, do hashing/provenance
+  host-side.
+- `look(mode="angles")` backdrop is viewport shading, not geometry — a
+  full-frame gray plane in those previews is NOT a generated table;
+  measure banded bounding boxes on the mesh before assuming furniture.
 - Blender 5.3 still warns `Material.use_nodes` is deprecated (removal in
   6.0) — silence is fine today, schedule the node-graph update.

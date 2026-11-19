@@ -68,13 +68,15 @@ def cycles_devices():
     return {"type": "CPU", "name": "cpu", "count": 1}
 
 
-def ensure_scene(run_dir):
+def ensure_scene(run_dir, composite=False, no_fixture=False):
     blend = HERE / "woman_red_dress.blend"
     fixture = HERE / "fixture" / "woman_red_dress.glb"
     cmd = [BLENDER, "-b", "--factory-startup", "--python", str(HERE / "build_scene.py"),
            "--", "--out", str(HERE)]
-    if fixture.exists():
+    if fixture.exists() and not no_fixture:
         cmd += ["--fixture", str(fixture)]
+        if composite:
+            cmd += ["--composite"]
     t0 = time.perf_counter()
     r = sh(cmd)
     ok = "SCENE_OK" in r.stdout
@@ -129,6 +131,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tag", default=None)
     ap.add_argument("--sweep", default="64,128,256")
+    ap.add_argument("--composite", action="store_true",
+                    help="fixture GLB includes table+furniture; scene stages only lamp/screen assist")
+    ap.add_argument("--no-fixture", action="store_true",
+                    help="force the procedural stand-in even when a fixture GLB exists")
     args = ap.parse_args()
 
     date = dt.date.today().isoformat()
@@ -149,7 +155,7 @@ def main():
     }
     (run_dir / "environment.json").write_text(json.dumps(env, indent=2))
 
-    scene = ensure_scene(run_dir)
+    scene = ensure_scene(run_dir, args.composite)
     if not scene["ok"]:
         print(json.dumps({"error": "scene build failed", "stderr_tail":
                           (scene["scene_line"] or "")[-500:]}, indent=2))

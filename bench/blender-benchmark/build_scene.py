@@ -22,6 +22,9 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--out", required=True)
 ap.add_argument("--fixture", default=None,
                 help="path to a woman-in-red-dress GLB; replaces the procedural stand-in")
+ap.add_argument("--composite", action="store_true",
+                help="fixture already contains woman+table; skip procedural furniture, "
+                     "add only lamp + emissive-screen assist on the fixture's table")
 py_args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 opts = ap.parse_args(py_args)
 
@@ -178,23 +181,89 @@ def main():
     primitive("sphere", "lamp_bulb", bulb,
               location=(lamp_x - 0.17, lamp_y - 0.02, top_z + 0.355), scale=0.035)
 
+    # ── Fixture path: generated composite (woman+table) ────────────────
+    if opts.composite:
+        TOP_Z = 0.79  # measured tabletop height of the fixture model
+        for nm in (["dress_skirt", "dress_bodice", "neck", "head", "eye_L", "eye_R",
+                    "hair", "upper_arm_L", "upper_arm_R", "forearm_L", "forearm_R",
+                    "thigh_L", "thigh_R", "shin_L", "shin_R", "stool", "table_top",
+                    "table_leg_0", "table_leg_1", "table_leg_2", "table_leg_3",
+                    "laptop_base", "laptop_screen", "laptop_display"]):
+            o = S.objects.get(nm)
+            if o:
+                bpy.data.objects.remove(o, do_unlink=True)
+        bpy.ops.import_scene.gltf(filepath=opts.fixture)
+        # lamp staged on the fixture's table, right side
+        lamp_x, lamp_y = 0.42, -0.30
+        primitive("cyl", "lamp_base", metal, location=(lamp_x, lamp_y, TOP_Z + 0.02),
+                  scale=(0.14, 0.14, 0.03))
+        primitive("cyl", "lamp_post", metal, location=(lamp_x, lamp_y, TOP_Z + 0.20),
+                  scale=(0.015, 0.015, 0.36))
+        primitive("cyl", "lamp_arm", metal,
+                  location=(lamp_x - 0.08, lamp_y - 0.02, TOP_Z + 0.38),
+                  rotation=(0, math.radians(65), 0), scale=(0.015, 0.015, 0.18))
+        cone = primitive("cone", "lamp_shade", shade,
+                         location=(lamp_x - 0.17, lamp_y - 0.02, TOP_Z + 0.40),
+                         rotation=(0, math.radians(15), 0), scale=(0.16, 0.16, 0.14))
+        smooth(cone)
+        primitive("sphere", "lamp_bulb", bulb,
+                  location=(lamp_x - 0.17, lamp_y - 0.02, TOP_Z + 0.355), scale=0.035)
+        # assist: slim laptop with emissive display staged on the same table
+        primitive("cube", "laptop_base", plastic, location=(0.05, -0.15, TOP_Z + 0.012),
+                  scale=(0.33, 0.23, 0.016))
+        primitive("cube", "laptop_screen", plastic,
+                  location=(0.05, -0.04, TOP_Z + 0.15), rotation=(math.radians(-105), 0, 0),
+                  scale=(0.33, 0.22, 0.012))
+        primitive("cube", "laptop_display", screen,
+                  location=(0.05, -0.047, TOP_Z + 0.15), rotation=(math.radians(-105), 0, 0),
+                  scale=(0.30, 0.19, 0.004))
+
     # ── Optional generated fixture replaces the procedural stand-in ────
-    if opts.fixture:
+    elif opts.fixture:
+        # fixture is a cross-legged seated figure (origin at floor, faces -Y).
+        # She replaces the stand-in AND the stool; the scene keeps its table
+        # lowered to low-table height so the seated geometry reads true.
         standins = {"dress_skirt", "dress_bodice", "neck", "head", "eye_L", "eye_R",
                     "hair", "upper_arm_L", "upper_arm_R", "forearm_L", "forearm_R",
-                    "thigh_L", "thigh_R", "shin_L", "shin_R"}
+                    "thigh_L", "thigh_R", "shin_L", "shin_R", "stool"}
         for nm in standins:
             o = S.objects.get(nm)
             if o:
                 bpy.data.objects.remove(o, do_unlink=True)
+        # low table: 0.50 top instead of 0.74
+        tt = S.objects.get("table_top")
+        if tt:
+            tt.location = (0, 0.52, 0.50)
+            tt.scale = (1.10, 0.55, 0.05)
+            for i, (lx, ly) in enumerate([(-0.50, 0.30), (0.50, 0.30),
+                                          (-0.50, 0.73), (0.50, 0.73)]):
+                leg = S.objects.get(f"table_leg_{i}")
+                if leg:
+                    leg.location = (lx, ly, 0.25)
+                    leg.scale = (0.05, 0.05, 0.50)
+            lb = S.objects.get("laptop_base")
+            if lb:
+                lb.location = (0, 0.46, 0.522)
+            ls = S.objects.get("laptop_screen")
+            if ls:
+                ls.location = (0, 0.57, 0.66)
+            lp = S.objects.get("laptop_display")
+            if lp:
+                lp.location = (0, 0.563, 0.66)
+            lamp_map = {"lamp_base": (0.42, 0.70, 0.52), "lamp_post": (0.42, 0.70, 0.70),
+                        "lamp_arm": (0.34, 0.68, 0.88), "lamp_shade": (0.25, 0.68, 0.83),
+                        "lamp_bulb": (0.25, 0.68, 0.785)}
+            for nm, loc in lamp_map.items():
+                o2 = S.objects.get(nm)
+                if o2:
+                    o2.location = loc
+        import mathutils as _mu
         existing_before = {o.name for o in S.objects}
         existing_meshes_before = {o.name for o in S.objects if o.type == "MESH"}
         bpy.ops.import_scene.gltf(filepath=opts.fixture)
-        imported = [o for o in S.objects
-                    if o.name not in existing_before and o.name not in standins]
-        fix_roots = [o for o in imported if o.parent is None or o.parent.name not in
-                     {x.name for x in imported}]
-        import mathutils as _mu
+        imported = [o for o in S.objects if o.name not in existing_before]
+        fix_roots = [o for o in imported if o.parent is None or
+                     o.parent.name not in {x.name for x in imported}]
         pts = []
         for o in S.objects:
             if o.type == "MESH" and o.name not in existing_meshes_before:
@@ -204,9 +273,10 @@ def main():
         if pts:
             xs = [v.x for v in pts]; ys = [v.y for v in pts]; zs = [v.z for v in pts]
             h = max(zs) - min(zs)
-            scale = 1.08 / h if h > 0 else 1.0
+            scale = 1.15 / h if h > 0 else 1.0
             for root_obj in fix_roots:
                 root_obj.scale = (scale, scale, scale)
+                root_obj.rotation_euler = (0, 0, math.radians(180))  # face +Y, toward table
             bpy.context.view_layer.update()
             pts2 = []
             for o in S.objects:
@@ -215,8 +285,9 @@ def main():
                     for c in ev.bound_box:
                         pts2.append(ev.matrix_world @ _mu.Vector(c))
             xs = [v.x for v in pts2]; ys = [v.y for v in pts2]; zs = [v.z for v in pts2]
-            dx, dy = -(min(xs) + max(xs)) / 2, 0.02 - min(ys)
-            dz = seat_h + 0.02 - min(zs)
+            dx = -(min(xs) + max(xs)) / 2
+            dy = 0.05 - (min(ys) + max(ys)) / 2
+            dz = -min(zs)
             for root_obj in fix_roots:
                 root_obj.location = (root_obj.location.x + dx,
                                      root_obj.location.y + dy,
@@ -245,8 +316,12 @@ def main():
     cam_data.lens = 40
     cam = bpy.data.objects.new("Camera", cam_data)
     S.collection.objects.link(cam)
-    cam.location = (2.30, 0.60, 1.45)
-    target = Vector((-0.05, 0.40, 0.75))
+    if opts.composite:
+        cam.location = (1.70, -1.15, 1.50)
+        target = Vector((0.0, 0.15, 0.95))
+    else:
+        cam.location = (2.30, 0.60, 1.45)
+        target = Vector((-0.05, 0.40, 0.75))
     d = (target - cam.location).normalized()
     cam.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
     S.camera = cam

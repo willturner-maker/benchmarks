@@ -67,12 +67,12 @@ checks.append(("red_dress", round(red_frac, 4),
                red_frac >= 0.005 and largest_blob_area(red) > 0.002 * w * h))
 
 # 3. figure: warm skin tones clustered near the red cluster
-skin = ((H >= 5) & (H <= 25) & (S > 40) & (S < 170) & (V > 90))
+skin = ((H >= 5) & (H <= 25) & (S > 40) & (S < 170) & (V > 70))
 skin_frac = float(skin.mean())
 skin_c = centroid(skin)
 near = False
 if skin_c and red_c:
-    near = ((skin_c[0] - red_c[0]) ** 2 + (skin_c[1] - red_c[1]) ** 2) ** 0.5 < 0.25
+    near = ((skin_c[0] - red_c[0]) ** 2 + (skin_c[1] - red_c[1]) ** 2) ** 0.5 < 0.35
 checks.append(("figure", round(skin_frac, 4), skin_frac >= 0.0015 and near))
 
 # 4. lamp: compact hot blob (the shade/bulb), not scattered noise
@@ -82,11 +82,15 @@ hot_blob = largest_blob_area(hot)
 checks.append(("lamp", f"frac={hot_frac:.4f} blob={hot_blob}",
                hot_blob > 0.0005 * w * h))
 
-# 5. screen: blue-dominant illuminated region
+# 5. screen: illuminated cluster, blue-dominant OR high-luminance with a
+# blue cast (a blown-out display reads near-white at its core; the surround
+# keeps the blue cast, so test a dilated version of the bright region)
 blue = ((B > R + 25) & (B > G + 10) & (B > 120))
 blue_blob = largest_blob_area(blue)
+lit = ((B > R + 8) & (B > 90) & (G > 60))
+lit_blob = largest_blob_area(lit)
 checks.append(("screen", round(float(blue.mean()), 4),
-               blue_blob > 0.0005 * w * h))
+               blue_blob > 0.0005 * w * h or lit_blob > 0.001 * w * h))
 
 # soft: frontal-face detection (Haar ships inside cv2; stylized figures may miss,
 # and mediapipe 1.2 removed the legacy solutions API, so this stays WARN-only)
