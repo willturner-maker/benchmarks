@@ -20,14 +20,15 @@ unified memory, macOS 27.2.0.
 | Machine-readable results schema | [`docs/schema.md`](docs/schema.md) |
 | Community runs (class B / other hosts) | [`docs/leaderboard.md#community-runs--your-numbers`](docs/leaderboard.md#community-runs--your-numbers) |
 | Self-contained HTML scorecards (GitHub Pages) | [index.html](https://willturner-maker.github.io/benchmarks/) or the `reports/` directory |
-| Latest combined results | [Clean-window suites, 2026-11-13](https://willturner-maker.github.io/benchmarks/reports/2026-11-13-clean-window.html) |
+| Newest wave | [Splash `--queue-size 64` — the KV ceiling was a request count, 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-queue-size.html) |
+| Latest combined (multi-suite) results | [All-suites day, 2026-11-18](https://willturner-maker.github.io/benchmarks/reports/2026-11-18-all-suites-day.html) |
 
 ## Suites
 
 | Suite | Doc | Scripts / raw data | Latest standing |
 |---|---|---|---|
 | DaVinci Resolve MCP | [`docs/resolve-agentic-benchmark-results.md`](docs/resolve-agentic-benchmark-results.md) | **[`bench/resolve-agentic/`](bench/resolve-agentic/)** — briefs, runbook, `wave_driver.py`, and `check_media.py` so you can run it on **your own footage** | 21.2.0.6 + MCP **5.2.7** (wave `2026-11-13i` — first 5.2.7 wave, standalone driver; the record initially mislabeled it 5.2.2, corrected with provenance): **18/18 verified, 18/18 honest — fifth consecutive clean wave of the scored ladder, 90/90 aggregate**; zero operator tenancy during the wave — placeholder-free task walls −25…−48 % vs `11h`, though that delta stacks MCP + harness bumps (multi-factor, see leaderboard note ⁶); single-tenant warm render **1192 ms** (best recorded) |
-| Splash engine + Qwen | [`docs/splash-engine-benchmark-results.md`](docs/splash-engine-benchmark-results.md) | `bench/splash-concurrency/` — single entry point `ladder_kv.py` (width ladder + KV-pressure probe in one run); full clean-window driver at `bench/clean-run-2026-11-13/` | Splash 1.6.1 (clean-window rerun 2026-11-13, true single-tenant): ladder w1 **209.5 tok/s** (best), TTFT 159 warm / **229 cold**; plateau 470–475 — the LOWEST of the 1.6.1 waves despite zero contention, so plateau level is engine-instance state, not tenancy; KV never suspends at **4.66×** budget; agentic suite 12/12 + 12/12 |
+| Splash engine + Qwen | [`docs/splash-engine-benchmark-results.md`](docs/splash-engine-benchmark-results.md) | `bench/splash-concurrency/` — sealed entry point `ladder_kv.py` (width ladder + KV-pressure probe in one run, widths ≤32); `kv_bracket_2026-11-19b.py` for work past the concurrency cap (queue-size guard, refusals-as-data, fresh seed namespace, `cache_served` validation); full clean-window driver at `bench/clean-run-2026-11-13/` | Splash **1.7.0** on the **`--queue-size 64`** stack (wave `2026-11-19b`): ladder w1 **307.1 tok/s** and aggregate peak **w4 724.6** — both best on record — plateau ~692–701 across w8→32, w6 dip 0.846× reproduces, stop rule never fired. **KV never trips by summed volume: 17.04× the 155,648-token budget with 48 concurrent 55k-token requests and zero refusals**; the ceiling that looked like KV at w40 was the `--queue-size` **default of 32** (fixed 2026-11-19, and KV rows are not comparable across that boundary). Past 32 in flight the wait is invisible at admission (`admission.*` peak 0) and lands in the scheduler prefill queue: prefill flat at **3,485–3,499 tok/s**, `maximum_batch_width = 4`. Earlier rows (1.6.0 / 1.6.1 / the 11-13 true-single-tenant pass at w1 209.5, TTFT 159/229) stay in the leaderboard table |
 | Visual venv (OpenCV) | [`bench/visual-venv/README.md`](bench/visual-venv/README.md) | `bench/visual-venv/` — bench script, cold-run probe, run1/run2 JSON (**fixtures withheld**: real face frames; hashes in the JSONs) | opencv-python 5.0.0.93: every deterministic value **bit-identical across three runs** (run3 co-ran in the 2026-11-13 clean window; canonical 4×3@0.5 = 91 faces / 0.278 s); uniform ~11 % timing drift band (×1.15 ceiling for the future 5.1.x diff); watched for 5.1.x wheels by a launchd agent |
 
 (Superseded drafts live in [`archive/`](archive/) — including the never-run 2026-09
@@ -47,6 +48,12 @@ before a row can be ranked.
 The scorecards themselves are self-contained HTML (no external assets, no build step) and
 render on Pages:
 
+- [Splash engine · `--queue-size 64` — the KV ceiling was a request count — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-queue-size.html)
+- [All-suites day — Resolve MCP 5.3.4 · opencode 2.3.2 · Splash 1.7.0 · OpenCV 5.1.0.95 — 2026-11-18](https://willturner-maker.github.io/benchmarks/reports/2026-11-18-all-suites-day.html)
+- [Blender benchmark finals — 2026-11-18](https://willturner-maker.github.io/benchmarks/reports/2026-11-18-blender-benchmark.html)
+- [Splash engine 1.7.0 — three passes + clean-window batches — 2026-11-17](https://willturner-maker.github.io/benchmarks/reports/2026-11-17-splash-1-7-0.html)
+- [Agentic frontier (F-series) — 2026-11-16](https://willturner-maker.github.io/benchmarks/reports/2026-11-16-agentic-frontier.html)
+- [Splash concurrency + KV pressure — 2026-11-12](https://willturner-maker.github.io/benchmarks/reports/2026-11-12-splash-concurrency.html)
 - [Clean-window suites, all three live suites — 2026-11-13](https://willturner-maker.github.io/benchmarks/reports/2026-11-13-clean-window.html)
 - [Benchmark reruns, all four suites — 2026-11-11](https://willturner-maker.github.io/benchmarks/reports/2026-11-11-reruns.html)
 - [Resolve MCP · MCP 5.2.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-10g-resolve-21-2-mcp-520.html)
