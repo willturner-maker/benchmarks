@@ -66,6 +66,10 @@ pass scored 3/5 on these exact frames; the verifier was then calibrated
 generated skin sits in shadow → V>70, proximity 0.35) and re-run on the
 sealed frames. Frames were never re-rendered or altered.
 
+**Series final: `lit6`** (operator-approved, 2026-11-18). Any future
+layout change starts a new row; the lit6 frame + run.json are the
+reference for this fixture class on this hardware.
+
 ## Face-on layout (the `lit` series)
 
 Operator review of the first fixture frames: the woman read as facing away
