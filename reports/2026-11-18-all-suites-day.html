@@ -55,6 +55,20 @@ td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
 ul.tight{margin:12px 0 0;padding-left:20px;color:var(--fg-2)}
 ul.tight li{margin:5px 0}
 code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.chartwrap{position:relative;margin-top:10px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:8px 10px;font:500 12px/1.5 var(--mono);box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+@media (prefers-reduced-motion:reduce){.tip{transition:none}}
+svg{width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.grid{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--mut);stroke-width:1}
 .foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
 .foot code{font-size:11.5px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -129,6 +143,20 @@ a{color:var(--accent)}
 
   <section>
     <h2>2 · Splash engine — width ladder + KV pressure <span class="tag">1.7.0 · instance-state day</span></h2>
+    <div class="viz-root">
+      <div class="vtitle">Aggregate tok/s medians by concurrency width — every ladder wave on this host</div>
+      <div class="vsub">today's wave shifts the whole curve up again (w1 283.95, plateau ~698) while the shape holds — dip at width 6, peak at 16, no collapse by 32, stop rule never fired · hover for values</div>
+      <div class="legend">
+        <span><i style="background:var(--s3)"></i>1.6.1 · 11-13 clean</span>
+        <span><i style="background:var(--accent)"></i>1.7.0 · 11-17 3-pass median</span>
+        <span><i style="background:var(--mut)"></i>1.7.0 · 11-17 clean window</span>
+        <span><i style="background:var(--good)"></i>1.7.0 · 11-18 all-suites (this run)</span>
+      </div>
+      <div class="chartwrap" id="cw">
+        <svg id="chart" viewBox="0 0 860 310" role="img" aria-label="Line chart of width-ladder aggregate tok/s medians across four waves: 1.6.1 clean rises 209.5 to a 470-475 plateau; 1.7.0 11-17 rises 219.8 to 479-494 with peak 526.5 at width 4; 1.7.0 11-17 clean rises 225.2 to peak 543.8 at width 4; 1.7.0 11-18 rises 284.0 to a 692-699 plateau with peak 698.6 at width 16"></svg>
+        <div class="tip" id="tip"></div>
+      </div>
+    </div>
     <div class="kv">
       <div class="stat"><div class="v">283.95</div><div class="l">tok/s width-1 median — best on record (+29 % vs 17-day)</div></div>
       <div class="stat"><div class="v">698.6</div><div class="l">tok/s plateau peak (w16) — whole ladder ×1.4 of 17-day</div></div>
@@ -187,3 +215,69 @@ a{color:var(--accent)}
     Grading from independent read-backs only; tenancy disclosed per row.
   </div>
 </div>
+<script>
+(function(){
+  const widths=[1,2,3,4,6,8,12,16,24,32];
+  const a=[209.5,299.2,362.6,453.3,438.1,470.2,475.2,470.7,474.5,474.4];
+  const b=[219.8,320.9,405.5,526.5,430.4,485.3,494.2,481.6,479.2,479.2];
+  const c=[225.2,331.4,438.4,543.8,426.2,480.5,481.7,484.4,462.9,474.6];
+  const d=[284.0,480.9,593.1,677.6,612.3,697.4,698.0,698.6,694.5,692.5];
+  const svg=document.getElementById('chart'), tip=document.getElementById('tip');
+  const W=860,H=310,mL=46,mR=14,mT=14,mB=34;
+  const yMax=760, plotW=W-mL-mR, plotH=H-mT-mB;
+  const X=i=>mL+i*(plotW/(widths.length-1));
+  const Y=v=>mT+plotH-(v/yMax)*plotH;
+  const ns='http://www.w3.org/2000/svg';
+  function el(t,at){const e=document.createElementNS(ns,t);for(const k in at)e.setAttribute(k,at[k]);return e;}
+  function build(){
+    svg.innerHTML='';
+    const cs=getComputedStyle(document.documentElement);
+    function tok(n){return cs.getPropertyValue(n).trim();}
+    const mut=tok('--mut'), acc=tok('--accent'), s2=tok('--s2'), s3=tok('--s3'),
+          good=tok('--good'), panel=tok('--panel');
+    for(let v=100;v<=700;v+=100){
+      svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(v),y2:Y(v),class:'grid'}));
+      const t=el('text',{x:mL-8,y:Y(v)+4,'text-anchor':'end','font-size':'11'});t.textContent=v;svg.appendChild(t);
+    }
+    svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(0),y2:Y(0),class:'axis'}));
+    widths.forEach((w,i)=>{const t=el('text',{x:X(i),y:H-14,'text-anchor':'middle','font-size':'11'});t.textContent=w;svg.appendChild(t);});
+    const ax=el('text',{x:(mL+W-mR)/2,y:H-2,'text-anchor':'middle','font-size':'10',fill:mut});
+    ax.textContent='concurrency width \u2192 aggregate tok/s';svg.appendChild(ax);
+    [[a,s3,'5 4',2],[b,acc,null,2],[c,mut,null,2],[d,good,null,2.8]].forEach(([arr,col,dash,sw])=>{
+      const pts=arr.map((v,i)=>X(i)+','+Y(v)).join(' ');
+      const at={points:pts,fill:'none',stroke:col,'stroke-width':sw,'stroke-linejoin':'round','stroke-linecap':'round'};
+      if(dash)at['stroke-dasharray']=dash;
+      svg.appendChild(el('polyline',at));
+      arr.forEach((v,i)=>svg.appendChild(el('circle',{cx:X(i),cy:Y(v),r:3.5,fill:col,stroke:panel,'stroke-width':2})));
+    });
+    const lb=el('text',{x:X(7),y:Y(d[7])-10,'font-size':'11','text-anchor':'middle',fill:good});
+    lb.textContent='11-18 \u00b7 698.6 peak';svg.appendChild(lb);
+    const lc=el('text',{x:X(3)+10,y:Y(c[3])+16,'font-size':'11','text-anchor':'start',fill:mut});
+    lc.textContent='11-17 clean \u00b7 543.8';svg.appendChild(lc);
+    const guide=el('line',{x1:0,x2:0,y1:mT,y2:mT+plotH,stroke:mut,'stroke-width':1,'stroke-dasharray':'3 3',opacity:0});
+    svg.appendChild(guide);
+    const hit=el('rect',{x:mL,y:mT,width:plotW,height:plotH,fill:'transparent'});svg.appendChild(hit);
+    function show(e){
+      const r=svg.getBoundingClientRect();
+      const px=(e.clientX-r.left)*(W/r.width);
+      let i=Math.round((px-mL)/(plotW/(widths.length-1)));
+      i=Math.max(0,Math.min(widths.length-1,i));
+      guide.setAttribute('x1',X(i));guide.setAttribute('x2',X(i));guide.setAttribute('opacity',1);
+      tip.style.opacity=1;
+      tip.innerHTML='width '+widths[i]+'<br>1.6.1 11-13 &nbsp;'+a[i].toFixed(1)+'<br>1.7.0 11-17 &nbsp;'+b[i].toFixed(1)+
+                    '<br>1.7.0 clean &nbsp;'+c[i].toFixed(1)+'<br>1.7.0 11-18 &nbsp;'+d[i].toFixed(1);
+      const lx=X(i)*(r.width/W), half=(r.width/2);
+      tip.style.left=(lx+(lx<half?12:-tip.offsetWidth-12))+'px';
+      const topY=Math.min(Y(a[i]),Y(b[i]),Y(c[i]),Y(d[i]));
+      tip.style.top=Math.max(0,topY*(r.height/H)-10)+'px';
+    }
+    hit.addEventListener('mousemove',show);
+    hit.addEventListener('mouseleave',()=>{tip.style.opacity=0;guide.setAttribute('opacity',0);});
+  }
+  build();
+  if(window.matchMedia){
+    const mq=window.matchMedia('(prefers-color-scheme: dark)');
+    (mq.addEventListener?mq.addEventListener('change',build):mq.addListener(build));
+  }
+})();
+</script>
