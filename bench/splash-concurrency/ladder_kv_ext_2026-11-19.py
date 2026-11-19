@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 """Splash bench — extension run 2026-11-19: bracket the KV trip point above w12.
 
+SUPERSEDED by kv_bracket_2026-11-19b.py, kept as the instrument that produced the records this
+conclusion rests on. Three flaws it exposed are fixed there: prompts reused across runs come back
+from the persistent prefix cache (its w2/w12 controls cost 0.4 s and 1.5 s), refusals raise and kill
+the run (it died on HTTP 503 at w40, losing its SUMMARY), and its warmth gate used a prompt other
+than the ladder's, so it certified nothing. Its 503 turned out to be the --queue-size default of 32,
+not KV pressure - see results/splash-1.7.0-2026-11-19-ext/ and the 19b docstring.
+
 Why: the 2026-11-18 ladder+KV run stopped at the standing driver's top KV width
 (w12 = 612,180 prompt tokens = 3.93x the 155,648-token resident KV budget) with
 admission.suspended = 0 and the LIFETIME suspension counters unmoved. So "no trip"
