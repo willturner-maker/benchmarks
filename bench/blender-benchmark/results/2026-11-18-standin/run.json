@@ -1,0 +1,99 @@
+{
+  "suite": "blender-benchmark",
+  "run": "2026-11-18-standin",
+  "environment": {
+    "date": "2026-11-18",
+    "blender": "5.3.0",
+    "blender_bin": "/Applications/Blender.app/Contents/MacOS/Blender",
+    "gpu": {
+      "type": "METAL",
+      "name": "Apple M5 Ultra (GPU - 64 cores)",
+      "count": 1
+    },
+    "os": "macOS 27.2.1",
+    "machine": "arm64",
+    "resolution": [
+      1920,
+      1080
+    ],
+    "denoising": false,
+    "startup_overhead_seconds": 0.53
+  },
+  "scene": {
+    "ok": true,
+    "seconds": 0.6,
+    "fixture_used": null,
+    "fixture_sha256": null,
+    "blend": "~/benchmarks/bench/blender-benchmark/woman_red_dress.blend",
+    "blend_sha256": "e36f1d588c0cd0b3c3a17dd29307ce5205992587c9fc7f8b098ce3d519d4fd76",
+    "scene_line": "SCENE_OK objects=31 verts=6618 emissive=screen,bulb saved=~/benchmarks/bench/blender-benchmark/woman_red_dress.blend"
+  },
+  "renders": [
+    {
+      "spp": 64,
+      "wall_seconds": 2.22,
+      "blender_reported_seconds": null,
+      "frame": "frame_64spp.png",
+      "ok": true,
+      "samples_per_minute": 1729.7
+    },
+    {
+      "spp": 128,
+      "wall_seconds": 3.2,
+      "blender_reported_seconds": null,
+      "frame": "frame_128spp.png",
+      "ok": true,
+      "samples_per_minute": 2400.0
+    },
+    {
+      "spp": 256,
+      "wall_seconds": 4.44,
+      "blender_reported_seconds": null,
+      "frame": "frame_256spp.png",
+      "ok": true,
+      "samples_per_minute": 3459.5
+    }
+  ],
+  "score_samples_per_minute_total": 7589.2,
+  "verify": {
+    "frame": "frame_256spp.png",
+    "resolution": [
+      1920,
+      1080
+    ],
+    "checks": [
+      {
+        "name": "rendered",
+        "value": 0.9171,
+        "pass": true
+      },
+      {
+        "name": "red_dress",
+        "value": 0.023,
+        "pass": true
+      },
+      {
+        "name": "figure",
+        "value": 0.0345,
+        "pass": true
+      },
+      {
+        "name": "lamp",
+        "value": "frac=0.0046 blob=5212",
+        "pass": true
+      },
+      {
+        "name": "screen",
+        "value": 0.0009,
+        "pass": true
+      }
+    ],
+    "soft": {
+      "face": false,
+      "face_boxes": 0
+    },
+    "PASS": true,
+    "score": "5/5",
+    "brief": "a pretty woman in a red dress sitting at a table with a computer and a lamp"
+  }
+}

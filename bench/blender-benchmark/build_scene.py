@@ -412,7 +412,8 @@ def main():
 
     bpy.ops.wm.save_as_mainfile(filepath=f"{opts.out}/woman_red_dress.blend")
     verts = sum(len(o.data.vertices) for o in S.objects if o.type == "MESH")
-    print(f"SCENE_OK objects={len(S.objects)} verts={verts} "
+    fixture_tag = "glb" if opts.fixture else "none"
+    print(f"SCENE_OK objects={len(S.objects)} verts={verts} fixture={fixture_tag} "
           f"emissive={'screen' if screen else ''},bulb saved={opts.out}/woman_red_dress.blend")
 
 

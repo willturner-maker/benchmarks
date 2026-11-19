@@ -1,0 +1,186 @@
+<title>Blender Benchmark 2026-11-18</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#fcfcfd; --fg:#14171c; --fg-2:#4d555f; --mut:#7b848f;
+  --line:#dfe3e8; --accent:#2a78d6; --s2:#eb6834; --s3:#8a5fc9;
+  --good:#0f7a4d; --warn:#b26a00;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',Inter,system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 56px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.5vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 var(--mono);color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.lede{color:var(--fg-2);max-width:65ch;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:9px 13px}
+.chip b{font-family:var(--disp);font-size:16px}
+.chip span{font-size:12.5px;color:var(--fg-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--good);flex:none;align-self:center}
+section{margin-top:44px;border-top:1px solid var(--line);padding-top:26px}
+h2{font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 .tag{font:500 11px/1 var(--mono);color:var(--mut);letter-spacing:.06em;border:1px solid var(--line);
+  border-radius:6px;padding:4px 7px}
+p.note{color:var(--fg-2);max-width:65ch}
+.tbl-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;min-width:0}
+th{font:600 12px/1.3 var(--body);color:var(--fg-2)}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--good);font-weight:600}
+.bad{color:var(--warn);font-weight:600}
+.dim{color:var(--mut)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:18px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.stat .v{font-family:var(--disp);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12.5px;color:var(--fg-2);margin-top:2px}
+ul.tight{margin:12px 0 0;padding-left:20px;color:var(--fg-2)}
+ul.tight li{margin:5px 0}
+code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+svg{width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.grid{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--mut);stroke-width:1}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
+.foot code{font-size:11.5px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Will's local AI pipeline · new suite debut</div>
+  <h1>Blender Benchmark — Fixture-Class Debut</h1>
+  <p class="lede">A new suite measuring <b>Cycles render throughput on a custom scene</b> — the brief
+  being “a pretty woman in a red dress sitting at a table with a computer and a lamp.” The official
+  Blender Benchmark Launcher has no supported custom-scene path, so this harness reproduces its
+  <b>samples-per-minute</b> metric directly: fixed 1080p scene, METAL device, denoising off, a
+  64/128/256 spp sweep, every result graded by independent pixel read-backs. The woman herself is a
+  <b>generated fixture</b> (Meshy via MCP-for-Blender Premium), and fixture class is part of the run
+  identity — stand-in and generated scores are separate series, never compared.</p>
+
+  <div class="chips">
+    <div class="chip"><span class="dot"></span><b>7,581</b><span>stand-in series final (samples/min Σ) — 0.1 % from the earlier same-day seal</span></div>
+    <div class="chip"><span class="dot"></span><b>4,413</b><span>generated-fixture series final (606,829 verts, 91× the stand-in)</span></div>
+    <div class="chip"><span class="dot"></span><b>5/5</b><span>pixel read-backs per run: rendered · red dress · figure · lamp · screen</span></div>
+    <div class="chip"><span class="dot"></span><b>5.3.0</b><span>Blender at series final = newest release (verified against download.blender.org)</span></div>
+  </div>
+
+  <section>
+    <h2>1 · Series finals <span class="tag">2026-11-18 · Blender 5.3.0 · M5 Ultra METAL</span></h2>
+    <div class="tbl-scroll"><table>
+      <tr><th>Series</th><th>Fixture</th><th class="num">64 spp</th><th class="num">128 spp</th><th class="num">256 spp</th><th class="num">Score Σ</th><th>Verify</th></tr>
+      <tr><td><b>generated</b></td><td>Meshy Premium GLB, 606,829 verts, 2K PBR, SHA <code>e17343ac…</code></td>
+          <td class="num">1,035 spm · 3.71 s</td><td class="num">1,409 spm · 5.45 s</td><td class="num">1,969 spm · 7.80 s</td>
+          <td class="num"><b>4,413</b></td><td class="ok">5/5 ✓</td></tr>
+      <tr><td><b>stand-in</b></td><td>procedural mannequin scene, 6,618 verts</td>
+          <td class="num">1,738 spm · 2.21 s</td><td class="num">2,408 spm · 3.19 s</td><td class="num">3,436 spm · 4.47 s</td>
+          <td class="num"><b>7,581</b></td><td class="ok">5/5 ✓</td></tr>
+    </table></div>
+    <p class="note">The −42 % gap between the series is <b>geometry cost</b> (91× the vertices), not a
+    regression — the classes answer different questions and are ranked apart by rule. Per-config walls
+    include ~0.5 s of headless Blender startup.</p>
+    <div class="viz-root">
+      <div class="vtitle">Samples per minute by spp setting</div>
+      <div class="vsub">higher is faster; the two fixture classes are separate series</div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>generated (606.8k verts)</span><span><i style="background:var(--s2)"></i>stand-in (6.6k verts)</span></div>
+      <svg viewBox="0 0 720 240" role="img" aria-label="Bar chart of samples per minute at 64, 128, 256 spp for the two series">
+        <line class="axis" x1="60" y1="200" x2="700" y2="200"/>
+        <g class="grid"><line x1="60" y1="60" x2="700" y2="60"/><line x1="60" y1="130" x2="700" y2="130"/></g>
+        <text x="52" y="64" text-anchor="end" font-size="11">3500</text>
+        <text x="52" y="134" text-anchor="end" font-size="11">1750</text>
+        <text x="52" y="204" text-anchor="end" font-size="11">0</text>
+        <!-- bars: h = spm/3500*140 -->
+        <rect x="90"  y="158.6" width="40" height="41.4" fill="var(--accent)"/><rect x="136"  y="130.5" width="40" height="69.5" fill="var(--s2)"/>
+        <rect x="300" y="143.6" width="40" height="56.4" fill="var(--accent)"/><rect x="346" y="103.7" width="40" height="96.3" fill="var(--s2)"/>
+        <rect x="510" y="121.2" width="40" height="78.8" fill="var(--accent)"/><rect x="556" y="62.6"  width="40" height="137.4" fill="var(--s2)"/>
+        <text x="133" y="218" text-anchor="middle" font-size="11">64 spp</text>
+        <text x="343" y="218" text-anchor="middle" font-size="11">128 spp</text>
+        <text x="553" y="218" text-anchor="middle" font-size="11">256 spp</text>
+      </svg>
+    </div>
+  </section>
+
+  <section>
+    <h2>2 · Fixture provenance <span class="tag">Meshy · MCP-for-Blender Premium</span></h2>
+    <p class="note">The woman is a <b>generated</b> asset: MCP-for-Blender's Premium pipeline (a plan
+    license — no BYOK generator keys). Three high-quality generations: two were <b>discarded</b> because
+    the backend baked a table+laptop into the subject despite explicit “no furniture” prompts; the third
+    (“collectible figurine… sitting cross-legged… no furniture”) came back subject-only — red dress,
+    cross-legged, 1.10M faces, origin at floor. The bench scene re-scales, grounds and orients it, and
+    keeps its own procedural low table, hinged laptop and architect lamp staged around her. The 38 MB GLB
+    stays out of git (SHA-256 pinned into every run record); full prompt/job/license details live in
+    <code>fixture/PROVENANCE.json</code>. Premium props were tried too (table, lamp) and rejected —
+    untextured block/cone output — so the generated asset is the woman only.</p>
+  </section>
+
+  <section>
+    <h2>3 · Generated-series layout history <span class="tag">every revision priced</span></h2>
+    <div class="tbl-scroll"><table>
+      <tr><th>Run</th><th>What changed</th><th class="num">Score Σ</th><th>Δ</th></tr>
+      <tr><td>2026-11-18-generated</td><td>first fixture seating, side camera</td><td class="num">5,213</td><td class="dim">—</td></tr>
+      <tr><td>lit</td><td>face-on layout: she faces the laptop; screen emission 6→14 as key, area key 60→18 W</td><td class="num">5,270</td><td class="num">+1.1 %</td></tr>
+      <tr><td>lit2</td><td>lamp elbow joint; display flush on panel; laptop yawed −42°</td><td class="num">5,345</td><td class="num">+1.4 %</td></tr>
+      <tr><td>lit3</td><td>laptop rebuilt as a real hinged assembly (panel edge computed onto base back edge)</td><td class="num">4,478</td><td class="bad">−16 %</td></tr>
+      <tr><td>lit4</td><td>shade hung from arm end (cone half-height is 0.5 × scale_z)</td><td class="num">4,492</td><td class="num">+0.3 %</td></tr>
+      <tr><td>lit5</td><td>12 mm shade clearance under the holder pin</td><td class="num">4,511</td><td class="num">+0.4 %</td></tr>
+      <tr><td>lit6 · series final</td><td>lamp fully onto the tabletop</td><td class="num">4,371</td><td class="num">−3.1 %</td></tr>
+      <tr><td><b>final (published)</b></td><td>operator-approved scene re-run</td><td class="num"><b>4,413</b></td><td class="num">+1.0 %</td></tr>
+    </table></div>
+    <p class="note">The lit3 −16 % is the instructive cell: identical geometry, but the re-hinged display
+    faces the camera at grazing angle, so each sample integrates more emissive contribution — in this
+    metric <b>lighting composition costs samples/min too</b>, and every layout move is priced per row
+    rather than hidden.</p>
+  </section>
+
+  <section>
+    <h2>4 · A voided run <span class="tag">integrity read-back earned its keep</span></h2>
+    <p class="note">The first <code>--no-fixture</code> final sealed at 4,167 — and its own
+    <code>scene_line</code> confessed: <b>606,829 verts on a run that should have had 6,618</b>. The flag
+    was parsed but never propagated to the scene build, and the recorder stamped the fixture SHA whenever
+    the GLB merely existed. The run was <b>voided and deleted</b>. The pipeline hardened the same day: the
+    builder prints <code>fixture=glb|none</code> in <code>SCENE_OK</code>, <code>run_bench</code> aborts on
+    any mismatch with intent, and records carry an explicit <code>fixture_class</code> field. The re-run
+    stand-in landed 7,581 vs 7,589 from earlier the same day — <b>0.1 %</b> reproducibility on the
+    procedural class.</p>
+  </section>
+
+  <section>
+    <h2>5 · Software state at publication</h2>
+    <ul class="tight">
+      <li>Blender <b>5.3.0</b> (build 2026-11-10) — newest on download.blender.org (5.3 is the latest series; no 5.3.1 exists).</li>
+      <li>Verifier stack: OpenCV <b>5.1.0.95</b> (opencv + contrib, = latest on PyPI at check time), mediapipe 1.2.3, numpy 2.5.5.</li>
+      <li>MCP-for-Blender pinned <b>2.3.1</b> by policy (pinned server + drifted addon is the known break; protocol 16=16 at series close).</li>
+      <li>Host: Apple M5 Ultra (64-core GPU), 96 GiB, macOS 27.2.1, single-tenant runs.</li>
+    </ul>
+  </section>
+
+  <div class="foot">
+    Reproduce: <code>python3 bench/blender-benchmark/run_bench.py --tag NAME [--no-fixture]</code>
+    (fixture GLB auto-used when present; records land in <code>results/&lt;date&gt;-tag/</code>).
+    Suite doctrine and gotchas: <code>bench/blender-benchmark/README.md</code>. Machine rows:
+    <code>leaderboard/results.json → suites.blender_benchmark</code>. Never mix these numbers with
+    official Blender Benchmark scores.
+  </div>
+</div>

@@ -70,6 +70,35 @@ sealed frames. Frames were never re-rendered or altered.
 layout change starts a new row; the lit6 frame + run.json are the
 reference for this fixture class on this hardware.
 
+## Full-suite finals (2026-11-18, published run)
+
+| Series | Fixture | score (samples/min, Σ) | verify |
+|---|---|---|---|
+| `2026-11-18-final-standin` | procedural (6,618 verts) | **7,581** | 5/5 PASS |
+| `2026-11-18-final` | generated GLB `e17343ac…` (606,829 verts) | **4,413** | 5/5 PASS |
+
+Stand-in reproducibility holds: 7,581 vs 7,589 earlier the same day
+(0.1 %). The `final` generated run matches the lit6 series (4,371; +1 %
+noise).
+
+**Bug caught by the read-back (same day):** the first `final-standin`
+attempt recorded `fixture_used: yes` on a `--no-fixture` run — the flag
+was parsed but never passed to `ensure_scene`, and the recorder wrote the
+fixture path whenever the GLB merely *existed*. That run (score 4,167)
+was **voided and deleted**. Fixes: flag propagation, recorder keys off
+actual use (plus new `fixture_class` field), and the builder now prints
+`fixture=glb|none` in `SCENE_OK`, which `run_bench` cross-checks against
+intent — a mismatch aborts the run instead of sealing a mislabeled
+record. The tell was the sealed `scene_line` itself: 606,829 verts on a
+supposed 6.6k-vert run.
+
+**Public-commit hygiene:** sealed JSONs (`run.json`, `verify.json`,
+`environment.json`) are committed for audit with absolute paths anonymized
+to `~/` (a precommit-scan catch on publication day); numeric values, hashes
+and read-backs are untouched. Rendered frames stay out of git entirely —
+they are multi-MB and Blender embeds the render filepath in the PNG
+metadata; the frame SHA-256s live in the JSONs.
+
 ## Face-on layout (the `lit` series)
 
 Operator review of the first fixture frames: the woman read as facing away

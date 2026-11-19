@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "updated": "2026-11-18",
+  "updated": "2026-11-18 - added suites.blender_benchmark (Cycles spp-sweep throughput, two fixture classes, series finals)",
   "read_this_first": [
     "Rows are only comparable within the same media_class and the same tenant conditions.",
     "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
     "Render ms are single-tenant; two-agent waves inflate them (a 7285 ms T7 render ran alongside another agent's Fusion work).",
     "Every number here came from an independent read-back (ffprobe / item geometry / server operation log), never from the agent's report.",
-    "probe_timeline_structure ms is item-count linear (~3 ms/item on 5.1.0+, ~2 ms/item on 4.19.3): probe cells compare only at matched item counts — every published cell uses the 4-item base geometry (2026-11-13 addendum (j))."
+    "probe_timeline_structure ms is item-count linear (~3 ms/item on 5.1.0+, ~2 ms/item on 4.19.3): probe cells compare only at matched item counts \u2014 every published cell uses the 4-item base geometry (2026-11-13 addendum (j))."
   ],
   "host_reference": {
     "cpu": "Apple M5 Ultra, 64-core GPU",
@@ -301,7 +301,7 @@
           "bench/resolve-agentic/briefs-2026-11-10f.md"
         ],
         "notes": "First row on MCP 5.1.0 (installed ahead of the stable channel's 5.0.7). Render probe unchanged from 4.19.3 (warm 1198 vs 1191, inside spread; cold 3116 is host page-cache state, like the 3090 row). Op medians flat-to-slightly-up: prepare 174->183, set_current 109.5->112, create_variant 280->289, probe 18->20 on base geometry. Agentic n=3: third straight 18/18 verified + honest; T3 debugging depth keeps improving (48->41->28 uses on one identical brief), T7 cost is the floor (55-63: the whole path plus three file-verification routes). Tool surface moved: append_to_timeline now lives on media_pool; several new 5.1.0 behaviours in the results file's api_truth candidates (record_frame semantics x3, FormatWidth/Height keys, gate-broken get_settings, silent set_property('Linked') refusal).",
-        "errata_probe_flag": "Closed 2026-11-13 by the three-build side-by-side sweep (addendum (j)): at 4 items 4.19.3/5.1.0/5.2.7 measure 14.5/13/13 ms in one host state — no build step. This row's 20 ms sits on the 4-item line of the 5.1.0 curve (in-cell spread); 5.1.0's real delta is per-item cost doubling, visible only at >=8 items (16 items: 34 ms on 4.19.3 vs 49 ms on 5.1.0/5.2.7)."
+        "errata_probe_flag": "Closed 2026-11-13 by the three-build side-by-side sweep (addendum (j)): at 4 items 4.19.3/5.1.0/5.2.7 measure 14.5/13/13 ms in one host state \u2014 no build step. This row's 20 ms sits on the 4-item line of the 5.1.0 curve (in-cell spread); 5.1.0's real delta is per-item cost doubling, visible only at >=8 items (16 items: 34 ms on 4.19.3 vs 49 ms on 5.1.0/5.2.7)."
       },
       {
         "date": "2026-11-10g",
@@ -407,11 +407,11 @@
         "warm_fps": 100.4,
         "render_probe": "121 f 3840x1520 mov/H.264, TimeTakenToRenderInMs; file verified via ffprobe (121 packets, pcm_s24le)",
         "op_medians_ms": null,
-        "op_column_caveat": "op medians not collected single-tenant this wave; graded pinned reads ran 240-1136 ms and include the baseline_reset alternation lifecycle (footnote 4) — not rankable, marked n/a rather than filled",
-        "tenant_conditions": "two-agent waves n=3; warm perf probe ran CONCURRENT with pair 1 (deviation from single-tenant rule — value kept, ranked with note)",
+        "op_column_caveat": "op medians not collected single-tenant this wave; graded pinned reads ran 240-1136 ms and include the baseline_reset alternation lifecycle (footnote 4) \u2014 not rankable, marked n/a rather than filled",
+        "tenant_conditions": "two-agent waves n=3; warm perf probe ran CONCURRENT with pair 1 (deviation from single-tenant rule \u2014 value kept, ranked with note)",
         "agentic": "18/18 (sixth consecutive clean wave; 108/108 aggregate over six waves)",
         "honest": "18/18",
-        "notes": "tool surface unchanged 5.2.0->5.2.2; wall totals 1146/1077/1076 s = -22.8..-37.8% vs 10g (agent-side economy, no cross-writes this wave); seal downgraded to chmod go-rwx (session classifier refused off-disk move) — disclosed deviation; new api_truth: record_frame_mode:'absolute' silently ignored on positioned rows, official in-app run_script sandbox returns None for non-allowlisted methods",
+        "notes": "tool surface unchanged 5.2.0->5.2.2; wall totals 1146/1077/1076 s = -22.8..-37.8% vs 10g (agent-side economy, no cross-writes this wave); seal downgraded to chmod go-rwx (session classifier refused off-disk move) \u2014 disclosed deviation; new api_truth: record_frame_mode:'absolute' silently ignored on positioned rows, official in-app run_script sandbox returns None for non-allowlisted methods",
         "evidence": "bench/resolve-agentic/{briefs,results}-2026-11-11h.{md,json}; render SHAs in results file; commits 910792a/81d77cc"
       },
       {
@@ -429,12 +429,12 @@
           "set_current": 80,
           "probe_4item": 13
         },
-        "op_column_caveat": "single-tenant, collected before the wave per RUNBOOK; probe 4-item 13 ms is same-context — the 4.19.3 probe step-up (18-20 ms) did NOT reproduce on 5.2.7 (the perf stage ran 5.2.7, not 5.2.2 — build correction 6202258); the flag was CLOSED the same day by the side-by-side build sweep — see addendum (j) and this row's errata_probe_flag; set_current 80 ms shows no alternation lifecycle cost while the perf stage stays on one timeline",
+        "op_column_caveat": "single-tenant, collected before the wave per RUNBOOK; probe 4-item 13 ms is same-context \u2014 the 4.19.3 probe step-up (18-20 ms) did NOT reproduce on 5.2.7 (the perf stage ran 5.2.7, not 5.2.2 \u2014 build correction 6202258); the flag was CLOSED the same day by the side-by-side build sweep \u2014 see addendum (j) and this row's errata_probe_flag; set_current 80 ms shows no alternation lifecycle cost while the perf stage stays on one timeline",
         "errata_probe_flag": "Two same-day edits to this row's op_column_caveat: build label inside the probe clause corrected 5.2.2 -> 5.2.7 (the perf stage ran 5.2.7 per correction commit 6202258), and 'flag stays open' replaced by the CLOSED verdict from the addendum (j) sweep (4-item geometry, one host state: 14.5/13/13 ms for 4.19.3/5.1.0/5.2.7). The 13 ms cell itself is untouched.",
-        "tenant_conditions": "two-agent waves n=3 driven by STANDALONE python (wave_driver.py); zero operator Resolve calls and zero operator model turns for the whole wave — first agbench wave with no operator tenancy at all",
+        "tenant_conditions": "two-agent waves n=3 driven by STANDALONE python (wave_driver.py); zero operator Resolve calls and zero operator model turns for the whole wave \u2014 first agbench wave with no operator tenancy at all",
         "agentic": "18/18 (seventh consecutive clean wave; 126/126 aggregate over seven waves)",
         "honest": "18/18",
-        "notes": "methodology wave (same build as 11h): placeholder-free tasks ran faster with tenancy removed (T3 walls -27..-48%, T4 -25..-41%, T2 r1 -42%) while T7 ran 1.5-2.5x slower on the briefs' /Volumes/YourVolume placeholder dead-end hunt (all three agents honestly named the placeholder; T7r3 surveyed six MCP actions before declaring packet counts unobtainable in-engine); second consecutive wave with zero cross-agent write incidents; in-suite render ms 1445/1425/1447 read by the AGENTS (queue emptied before grading) — kept in the record, out of the cells; new api_truth: get_clips_linked not pin-able (answers 'not found' against CURRENT), render.set_settings silently accepts bogus TargetDir (add_job refuses), timeline.duplicate archives the SOURCE fixture (six _base archive siblings); hard seal restored via runtime-tempfile strict-MCP config built from ~/.claude.json outside the repo, deleted on exit (no credentials in the public tree)",
+        "notes": "methodology wave (same build as 11h): placeholder-free tasks ran faster with tenancy removed (T3 walls -27..-48%, T4 -25..-41%, T2 r1 -42%) while T7 ran 1.5-2.5x slower on the briefs' /Volumes/YourVolume placeholder dead-end hunt (all three agents honestly named the placeholder; T7r3 surveyed six MCP actions before declaring packet counts unobtainable in-engine); second consecutive wave with zero cross-agent write incidents; in-suite render ms 1445/1425/1447 read by the AGENTS (queue emptied before grading) \u2014 kept in the record, out of the cells; new api_truth: get_clips_linked not pin-able (answers 'not found' against CURRENT), render.set_settings silently accepts bogus TargetDir (add_job refuses), timeline.duplicate archives the SOURCE fixture (six _base archive siblings); hard seal restored via runtime-tempfile strict-MCP config built from ~/.claude.json outside the repo, deleted on exit (no credentials in the public tree)",
         "evidence": "bench/resolve-agentic/{briefs,results}-2026-11-13i.{md,json}; driver bench/resolve-agentic/wave_driver.py; T7 output SHAs in the results file (outputs kept on the external volume)"
       },
       {
@@ -445,7 +445,7 @@
         "cold_ms": null,
         "warm_median_ms": 1310,
         "warm_fps": 92.4,
-        "render_probe": "headless first-observation wave (footnote 7: no cold row — headless launch profile differs)",
+        "render_probe": "headless first-observation wave (footnote 7: no cold row \u2014 headless launch profile differs)",
         "op_medians_ms": {
           "prepare": 116,
           "verify": 44,
@@ -483,7 +483,7 @@
         "cold_ms": null,
         "warm_median_ms": null,
         "warm_fps": null,
-        "render_probe": "no perf stage (footnote 9): F1/F2 frontier wave — hard briefs 15/15 + smoke 6/6",
+        "render_probe": "no perf stage (footnote 9): F1/F2 frontier wave \u2014 hard briefs 15/15 + smoke 6/6",
         "op_medians_ms": null,
         "agentic_outcomes": "15/15 hard + 6/6 smoke",
         "agentic_honest": "15/15",
@@ -497,7 +497,7 @@
         "cold_ms": null,
         "warm_median_ms": null,
         "warm_fps": null,
-        "render_probe": "DIRTY window (footnote 10) — not baseline material; harness-swap wave",
+        "render_probe": "DIRTY window (footnote 10) \u2014 not baseline material; harness-swap wave",
         "op_medians_ms": null,
         "agentic_outcomes": "14/15 hard",
         "agentic_honest": "14/15",
@@ -561,7 +561,7 @@
         "agentic_outcomes": "21/21",
         "agentic_honest": "matched",
         "sync_note": "row backfilled 2026-11-18 to sync results.json with docs/leaderboard.md (F-series footnotes 14-17)",
-        "wave_note": "Tier 1 pass 2 — the new working ceiling; F1/F2 loss sets + T8 snapshot rule reproduce exactly across both passes"
+        "wave_note": "Tier 1 pass 2 \u2014 the new working ceiling; F1/F2 loss sets + T8 snapshot rule reproduce exactly across both passes"
       },
       {
         "media_class": "A",
@@ -576,7 +576,7 @@
         "agentic_outcomes": "40/42 (pass axis secondary)",
         "agentic_honest": "42/42",
         "sync_note": "row backfilled 2026-11-18 to sync results.json with docs/leaderboard.md (F-series footnotes 14-17)",
-        "wave_note": "friction wave: naming rule NOT shipped per pre-committed ship rule (arm-B T2r5 repetition collapse, 71/72 errored calls, honest self-admission); F2 trap found PATH-DEPENDENT (bridge preserves grade+link; community surface destroys) — future arming must pin the mutation surface; results-tier3-2026-11-18k.json"
+        "wave_note": "friction wave: naming rule NOT shipped per pre-committed ship rule (arm-B T2r5 repetition collapse, 71/72 errored calls, honest self-admission); F2 trap found PATH-DEPENDENT (bridge preserves grade+link; community surface destroys) \u2014 future arming must pin the mutation surface; results-tier3-2026-11-18k.json"
       },
       {
         "media_class": "A",
@@ -651,7 +651,7 @@
       },
       {
         "date": "2026-11-10s",
-        "engine": "Splash 1.6.0 (same build as baseline — re-measure, not an upgrade)",
+        "engine": "Splash 1.6.0 (same build as baseline \u2014 re-measure, not an upgrade)",
         "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
         "context_tokens": 262144,
         "ttft_warm_ms": 174,
@@ -722,7 +722,7 @@
         "context_tokens": 262144,
         "ttft_warm_ms": 294,
         "ttft_cold_ms": 442,
-        "ttft_caveat": "warm TTFT single sample under shared-engine conditions, no corroborating measurement — OPEN FLAG, could be contention or a real regression; cold matches prior waves",
+        "ttft_caveat": "warm TTFT single sample under shared-engine conditions, no corroborating measurement \u2014 OPEN FLAG, could be contention or a real regression; cold matches prior waves",
         "decode_w1_tok_s": 186.9,
         "decode_w1_source": "ladder width-1 row (clean window); engine_probe decode rows this run (81.6/80.7/149.6) were contention-contaminated and are excluded",
         "decode_plateau_tok_s": [
@@ -758,10 +758,10 @@
           ]
         },
         "kv_capacity_tokens": 139264,
-        "kv_pressure_probe": "no suspension/spill at 611,244 prompt tokens (4.4x); BUT disk.kv_demotions delta +645 at w10 (reproduces the 2026-11-06 baseline figure; the 1.6.0 rerun had zero) and one waiting_memory hold at w10 (59.6 ms) — instance-dependent signals, the headline negative result stands",
+        "kv_pressure_probe": "no suspension/spill at 611,244 prompt tokens (4.4x); BUT disk.kv_demotions delta +645 at w10 (reproduces the 2026-11-06 baseline figure; the 1.6.0 rerun had zero) and one waiting_memory hold at w10 (59.6 ms) \u2014 instance-dependent signals, the headline negative result stands",
         "agentic": "12/12 (4 tasks x 3, driver2 suite; S2 arithmetic exact all three)",
         "agentic_honest": "12/12",
-        "tenant_conditions": "ladder + KV stage quiet; engine_probe rows and warm agentic adjacency shared the engine with the operator session — flagged per field",
+        "tenant_conditions": "ladder + KV stage quiet; engine_probe rows and warm agentic adjacency shared the engine with the operator session \u2014 flagged per field",
         "deviations": [
           "probe decode rows contention-contaminated (excluded)",
           "warm TTFT open flag",
@@ -848,7 +848,7 @@
         "kv_capacity_tokens": 131072,
         "kv_pressure_probe": "no trip through w12: 611,244 tokens = 4.66x the 131,072-token budget; ladder_kv SUMMARY lifetime_final suspensions 0 / capacity_failures 0; middling-quiet memory path: waiting_memory peak 1 (holds 72-196 ms) at w4/6/10/12, restoring max 2, spill and demote deltas 0",
         "agentic": "12/12 verified + 12/12 honest (driver2 n=3 back after the 11-12 gap; S3 out.json exact on first pass all three runs, S1/S2 cross-checked against live /status counters - monotonic and consistent)",
-        "tenant_conditions": "TRUE single-tenant: detached runner (bench/clean-run-2026-11-13/run_clean.py) started from a terminal, operator session made ZERO engine turns during timed stages — the tenancy lesson from the Resolve waves applied to the engine suite for the first time",
+        "tenant_conditions": "TRUE single-tenant: detached runner (bench/clean-run-2026-11-13/run_clean.py) started from a terminal, operator session made ZERO engine turns during timed stages \u2014 the tenancy lesson from the Resolve waves applied to the engine suite for the first time",
         "deviations": [
           "driver warm-up completion 404'd (Splash does not serve /v1/chat/completions) - harmless, the probe's own first passes warmed the engine (decode 159->174->143)",
           "prefill wall not re-measured (ladder_kv SUMMARY reports submission walls; the ~171 s scheduler-polled figure was not sampled this wave)",
@@ -858,7 +858,7 @@
         "evidence": "bench/splash-concurrency/results/clean-2026-11-13/ (header.json, engine_probe.jsonl, ladder_kv.jsonl, run3.json, agentic/sessions/summary.jsonl, stage stdout) + bench/clean-run-2026-11-13/run_clean.py"
       },
       {
-        "date": "2026-11-16b (DIRTY window — raw row, not baseline material)",
+        "date": "2026-11-16b (DIRTY window \u2014 raw row, not baseline material)",
         "engine": "Splash 1.6.1 (assumed; not re-confirmed this run)",
         "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
         "context_tokens": 262144,
@@ -866,12 +866,12 @@
         "ttft_cold_ms": null,
         "ttft_caveat": "no engine_probe stage this run",
         "decode_w1_tok_s": 92.6,
-        "decode_w1_source": "ladder width-1 median — LOWEST w1 on record (prior 186.9-209.5); its rounds ran before any external traffic, so instance state, unexplained",
+        "decode_w1_source": "ladder width-1 median \u2014 LOWEST w1 on record (prior 186.9-209.5); its rounds ran before any external traffic, so instance state, unexplained",
         "decode_plateau_tok_s": [
           508.7,
           540.5
         ],
-        "plateau_widths": "w12-32 band 508.7-540.5, mean 524.6 — ABOVE 11-13's 473.7 while w1 sits far below: opposite directions, instance state not shape; w32 540.5 is the highest single width recorded",
+        "plateau_widths": "w12-32 band 508.7-540.5, mean 524.6 \u2014 ABOVE 11-13's 473.7 while w1 sits far below: opposite directions, instance state not shape; w32 540.5 is the highest single width recorded",
         "ladder_medians_tok_s": {
           "widths": [
             1,
@@ -1131,13 +1131,13 @@
           "readNetFromTensorflow": "present",
           "readNetFromCaffe": "absent"
         },
-        "fixtures": "f240 png sha 12662c77…, h264 sha 1ec7a3a6… (real face frames — NEVER committed; hashes in the run JSONs)",
+        "fixtures": "f240 png sha 12662c77\u2026, h264 sha 1ec7a3a6\u2026 (real face frames \u2014 NEVER committed; hashes in the run JSONs)",
         "evidence": "bench/visual-venv/run1.json"
       },
       {
-        "date": "2026-11-11 run2 (same-build rerun, noise-band calibration — not the 5.1.x upgrade run)",
+        "date": "2026-11-11 run2 (same-build rerun, noise-band calibration \u2014 not the 5.1.x upgrade run)",
         "opencv": "5.0.0.93 (identical)",
-        "determinism": "48/48 detect counts, ladder counts, whole-frame 92, match-probe, surface markers, cosine stats, fixture hashes — ALL bit-identical",
+        "determinism": "48/48 detect counts, ladder counts, whole-frame 92, match-probe, surface markers, cosine stats, fixture hashes \u2014 ALL bit-identical",
         "timing_band": "uniform +~11% across all 48 samples (median x1.111, range 1.04-1.27; canonical 0.278->0.302 s) with the identical cv2 build = machine-state drift ceiling for the future 5.1.x diff",
         "embed_window_ms_per_face": 11.59,
         "errata": "current script's feat_ms_total/det_ms_same_pass/ms_per_face keys hold SECONDS (ms_per_face also precision-degraded); run1's *_s keys correct; run2 cold_process not captured; run1 made by an earlier script version (provenance note in README)",
@@ -1156,17 +1156,17 @@
       {
         "date": "2026-11-16 run4 (same build; ran while engine idle, beside the agentic 16b wave)",
         "opencv": "5.0.0.93 (install unchanged; cv2.__version__ 5.0.0)",
-        "determinism": "48/48 detect counts, whole-frame 92, cosine stats (0.1265/0.3121), match-probe incl. in-place mutation, surface markers, fixture hashes — ALL bit-identical a FOURTH time",
-        "canonical": "91 merged / 0.283 s PNG (89 / 0.273 s H.264) — x1.018 vs run3, deep inside the x1.15 noise band",
+        "determinism": "48/48 detect counts, whole-frame 92, cosine stats (0.1265/0.3121), match-probe incl. in-place mutation, surface markers, fixture hashes \u2014 ALL bit-identical a FOURTH time",
+        "canonical": "91 merged / 0.283 s PNG (89 / 0.273 s H.264) \u2014 x1.018 vs run3, deep inside the x1.15 noise band",
         "embed_window_ms_per_face": 10.9,
         "cold_process_s": null,
-        "notes": "import_cv2 0.157 s vs run3 0.064 s — cold page cache (process state, not OpenCV); no cold stage (cold_run.py fixture moved)",
+        "notes": "import_cv2 0.157 s vs run3 0.064 s \u2014 cold page cache (process state, not OpenCV); no cold stage (cold_run.py fixture moved)",
         "evidence": "bench/visual-venv/run4.json (+ run4.err alongside on the external volume with the fixture)"
       },
       {
         "date": "2026-11-17 run5 (OpenCV 5.1.0.95 upgrade run)",
         "opencv": "5.1.0.95 (opencv-python + opencv-contrib together; numpy 2.5.5; cv2.__version__ 5.1.0; FFmpeg 9.0.2 bundled)",
-        "determinism": "PNG ladder bit-identical (4x3 merged: 0.9->57, 0.75->85, 0.6->89, 0.5->91, 0.45->94, 0.3->98); 9/48 H.264 rows shift +/-1 face — attributed by first-frame sha256 to FFmpeg 9.0.2 decode, NOT the detector: H.264 counts are decoder-version-dependent records",
+        "determinism": "PNG ladder bit-identical (4x3 merged: 0.9->57, 0.75->85, 0.6->89, 0.5->91, 0.45->94, 0.3->98); 9/48 H.264 rows shift +/-1 face \u2014 attributed by first-frame sha256 to FFmpeg 9.0.2 decode, NOT the detector: H.264 counts are decoder-version-dependent records",
         "canonical": "91 merged / 0.227 s PNG (89 / 0.221 s H.264); median x0.853 across 48 detect rows; whole-frame 92 / 0.194 s",
         "embed_window_ms_per_face": 10.25,
         "cold_process_s": [
@@ -1174,10 +1174,76 @@
           1.368,
           1.377
         ],
-        "markers": "match() STILL mutates input vectors (norms 9.82/12.40 -> 1.00 reproduced bit-identically — upstream fix not in shipped wheels); readNetFromTensorflow absent (as predicted); every FaceDetectorYN/SF create() emits setPreferableTarget stderr WARN (55 lines in committed run5.err)",
+        "markers": "match() STILL mutates input vectors (norms 9.82/12.40 -> 1.00 reproduced bit-identically \u2014 upstream fix not in shipped wheels); readNetFromTensorflow absent (as predicted); every FaceDetectorYN/SF create() emits setPreferableTarget stderr WARN (55 lines in committed run5.err)",
         "notes": "import_cv2 0.036 s (vs 0.157 at 5.0.0.93); first cold-process stage since run1",
         "evidence": "bench/visual-venv/run5.json + run5.err",
-        "sync_note": "row backfilled 2026-11-18 — the upgrade run post-dated the last leaderboard edit and was owed on both records"
+        "sync_note": "row backfilled 2026-11-18 \u2014 the upgrade run post-dated the last leaderboard edit and was owed on both records"
+      }
+    ],
+    "blender_benchmark": [
+      {
+        "date": "2026-11-18",
+        "run": "2026-11-18-final",
+        "fixture_class": "generated",
+        "blender": "5.3.0",
+        "gpu": "Apple M5 Ultra (GPU - 64 cores)",
+        "os": "macOS 27.2.1",
+        "resolution": "1920x1080",
+        "denoising": false,
+        "spp_sweep": [
+          64,
+          128,
+          256
+        ],
+        "wall_s": {
+          "64": 3.71,
+          "128": 5.45,
+          "256": 7.8
+        },
+        "samples_per_minute": {
+          "64": 1035.0,
+          "128": 1409.2,
+          "256": 1969.2
+        },
+        "score_samples_per_minute_total": 4413.4,
+        "verify": "5/5 pixel read-backs (rendered/red-dress/figure/lamp/screen)",
+        "fixture_sha256": "e17343ac01e76f8f9813a5ec7d1b0432fe78df2a8dd2e3a0d73412d4f3257453",
+        "scene": "woman in red dress at table with laptop (emissive display) and architect lamp; face-on lit6 layout",
+        "evidence": "bench/blender-benchmark/results/2026-11-18-final/run.json",
+        "scene_verts": 606829,
+        "note": "generated-fixture series (Meshy Premium GLB, provenance in fixture/PROVENANCE.json); layout history lit..lit6 in suite README; one voided mis-flagged run disclosed there"
+      },
+      {
+        "date": "2026-11-18",
+        "run": "2026-11-18-final-standin",
+        "fixture_class": "procedural-standin",
+        "blender": "5.3.0",
+        "gpu": "Apple M5 Ultra (GPU - 64 cores)",
+        "os": "macOS 27.2.1",
+        "resolution": "1920x1080",
+        "denoising": false,
+        "spp_sweep": [
+          64,
+          128,
+          256
+        ],
+        "wall_s": {
+          "64": 2.21,
+          "128": 3.19,
+          "256": 4.47
+        },
+        "samples_per_minute": {
+          "64": 1737.6,
+          "128": 2407.5,
+          "256": 3436.2
+        },
+        "score_samples_per_minute_total": 7581.3,
+        "verify": "5/5 pixel read-backs (rendered/red-dress/figure/lamp/screen)",
+        "fixture_sha256": null,
+        "scene": "woman in red dress at table with laptop (emissive display) and architect lamp; face-on lit6 layout",
+        "evidence": "bench/blender-benchmark/results/2026-11-18-final-standin/run.json",
+        "scene_verts": 6618,
+        "note": "procedural stand-in series; 7,581 vs 7,589 earlier the same day = 0.1% reproducibility"
       }
     ]
   },
@@ -1189,7 +1255,7 @@
       "what_it_claimed": "perf probe (cold 1748 ms, warm median 1215 ms, op medians) + targeted behaviour probes of the two shipped fixes",
       "removed_on": "2026-11-06",
       "reason": "Unrelated local processes were running during the pass, so the timing columns are not trusted. The row is withdrawn rather than quietly corrected.",
-      "replace_with": "a clean single-tenant re-measure on the same build — LANDED as 2026-11-06e"
+      "replace_with": "a clean single-tenant re-measure on the same build \u2014 LANDED as 2026-11-06e"
     },
     {
       "label": "2026-11-06d",
@@ -1198,7 +1264,7 @@
       "what_it_claimed": "agentic n=3 (18/18 outcomes, 17/18 honest) plus in-suite T7 render ms",
       "removed_on": "2026-11-06",
       "reason": "Same contamination: other processes were running, and sealing for that wave was procedural rather than harness-enforced. Withdrawn as a scored run.",
-      "replace_with": "a clean sealed n=3 wave on the same build — LANDED as 2026-11-06e"
+      "replace_with": "a clean sealed n=3 wave on the same build \u2014 LANDED as 2026-11-06e"
     }
   ]
 }

@@ -1,0 +1,100 @@
+{
+  "suite": "blender-benchmark",
+  "run": "2026-11-18-generated",
+  "environment": {
+    "date": "2026-11-18",
+    "blender": "5.3.0",
+    "blender_bin": "/Applications/Blender.app/Contents/MacOS/Blender",
+    "gpu": {
+      "type": "METAL",
+      "name": "Apple M5 Ultra (GPU - 64 cores)",
+      "count": 1
+    },
+    "os": "macOS 27.2.1",
+    "machine": "arm64",
+    "resolution": [
+      1920,
+      1080
+    ],
+    "denoising": false,
+    "startup_overhead_seconds": 0.51
+  },
+  "scene": {
+    "ok": true,
+    "seconds": 1.38,
+    "fixture_used": "~/benchmarks/bench/blender-benchmark/fixture/woman_red_dress.glb",
+    "fixture_sha256": "e17343ac01e76f8f9813a5ec7d1b0432fe78df2a8dd2e3a0d73412d4f3257453",
+    "blend": "~/benchmarks/bench/blender-benchmark/woman_red_dress.blend",
+    "blend_sha256": "05c8dab423611e2427cb37da4f04656cdf2164c30c81e2b188ba57cbdfee5dc8",
+    "scene_line": "SCENE_OK objects=16 verts=605659 emissive=screen,bulb saved=~/benchmarks/bench/blender-benchmark/woman_red_dress.blend"
+  },
+  "renders": [
+    {
+      "spp": 64,
+      "wall_seconds": 3.3,
+      "blender_reported_seconds": null,
+      "frame": "frame_64spp.png",
+      "ok": true,
+      "samples_per_minute": 1163.6
+    },
+    {
+      "spp": 128,
+      "wall_seconds": 4.7,
+      "blender_reported_seconds": null,
+      "frame": "frame_128spp.png",
+      "ok": true,
+      "samples_per_minute": 1634.0
+    },
+    {
+      "spp": 256,
+      "wall_seconds": 6.36,
+      "blender_reported_seconds": null,
+      "frame": "frame_256spp.png",
+      "ok": true,
+      "samples_per_minute": 2415.1
+    }
+  ],
+  "score_samples_per_minute_total": 5212.7,
+  "verify": {
+    "frame": "frame_256spp.png",
+    "resolution": [
+      1920,
+      1080
+    ],
+    "checks": [
+      {
+        "name": "rendered",
+        "value": 0.8837,
+        "pass": true
+      },
+      {
+        "name": "red_dress",
+        "value": 0.0158,
+        "pass": true
+      },
+      {
+        "name": "figure",
+        "value": 0.0383,
+        "pass": true
+      },
+      {
+        "name": "lamp",
+        "value": "frac=0.0034 blob=3819",
+        "pass": true
+      },
+      {
+        "name": "screen",
+        "value": 0.0003,
+        "pass": true
+      }
+    ],
+    "soft": {
+      "face": false,
+      "face_boxes": 0
+    },
+    "PASS": true,
+    "score": "5/5",
+    "brief": "a pretty woman in a red dress sitting at a table with a computer and a lamp",
+    "sync_note": "verify re-run 2026-11-18 on the same sealed frames after verifier calibration v2 (screen: accept blue-cast lit cluster \u2014 blown-out display cores read near-white; figure: V>70 and proximity 0.35 \u2014 generated figure's skin sits in shadow). First pass on these frames was 3/5; frames themselves were never re-rendered or altered."
+  }
+}

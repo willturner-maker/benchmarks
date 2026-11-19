@@ -77,15 +77,24 @@ def ensure_scene(run_dir, composite=False, no_fixture=False):
         cmd += ["--fixture", str(fixture)]
         if composite:
             cmd += ["--composite"]
+    used = fixture.exists() and not no_fixture
     t0 = time.perf_counter()
     r = sh(cmd)
     ok = "SCENE_OK" in r.stdout
     line = next((l for l in r.stdout.splitlines() if "SCENE_OK" in l), "")
+    # integrity check: the builder's own fixture marker must match intent,
+    # or the run is inadmissible (a mis-flagged build silently changes the
+    # fixture class, and fixture class is part of the run identity)
+    built_with = "fixture=glb" in line
+    if built_with != used:
+        raise SystemExit(f"SCENE BUILD MISMATCH: requested fixture="
+                         f"{'glb' if used else 'none'}, builder reported: {line}")
     return {
         "ok": ok,
         "seconds": round(time.perf_counter() - t0, 2),
-        "fixture_used": str(fixture) if fixture.exists() else None,
-        "fixture_sha256": sha(fixture) if fixture.exists() else None,
+        "fixture_class": "generated" if used else "procedural-standin",
+        "fixture_used": str(fixture) if used else None,
+        "fixture_sha256": sha(fixture) if used else None,
         "blend": str(blend),
         "blend_sha256": sha(blend) if blend.exists() else None,
         "scene_line": line,
@@ -153,9 +162,14 @@ def main():
         "denoising": False,
         "startup_overhead_seconds": startup_overhead(),
     }
-    (run_dir / "environment.json").write_text(json.dumps(env, indent=2))
+    def write_json(path, obj):
+        # public-commit hygiene: absolute home paths in records become "~"
+        Path(path).write_text(json.dumps(obj, indent=2)
+                              .replace(str(Path.home()), "~"))
 
-    scene = ensure_scene(run_dir, args.composite)
+    write_json(run_dir / "environment.json", env)
+
+    scene = ensure_scene(run_dir, args.composite, args.no_fixture)
     if not scene["ok"]:
         print(json.dumps({"error": "scene build failed", "stderr_tail":
                           (scene["scene_line"] or "")[-500:]}, indent=2))
@@ -196,7 +210,7 @@ def main():
     else:
         result["verify"] = {"skipped": "vision venv missing"}
 
-    (run_dir / "run.json").write_text(json.dumps(result, indent=2))
+    write_json(run_dir / "run.json", result)
     latest = HERE / "results" / "latest"
     if latest.is_symlink() or latest.exists():
         latest.unlink()

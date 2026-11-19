@@ -556,6 +556,35 @@ Fixtures are real face frames and are **never committed** — SHA-256s live in t
 Rerun: `~/resolve-vision-venv312/bin/python -I bench/visual-venv/bench_visvenv.py --out runN.json`
 (+ `--models <dir with the two opencv_zoo ONNX files>`).
 
+## Blender benchmark — Cycles render throughput, reference host
+
+The official Blender Benchmark Launcher (3.3.0) has **no supported custom-scene path**, so this
+suite reproduces its samples-per-minute metric on a fixed custom scene: a woman in a red dress at
+a table with an open laptop (emissive display) and an architect desk lamp, rendered 1080p with
+Cycles METAL, denoising off, at 64/128/256 spp. **These numbers never mix with official
+Blender Benchmark scores** — different scene, different driver. Fixture class is part of the run
+identity: the procedural stand-in and the generated Meshy-Premium GLB (SHA-256 `e17343ac…`,
+provenance in `fixture/PROVENANCE.json`) are separate series, never compared.
+
+| Date | Blender | Fixture class | Scene verts | spp walls (64/128/256) | Score (samples/min, Σ) | Verify |
+|---|---|---|---|---|---|---|
+| **2026-11-18 final** | 5.3.0 | generated GLB (606,829 verts, 2K PBR) | 606,829 | 3.71 / 5.45 / 7.80 s | **4,413** | 5/5 pixel read-backs |
+| **2026-11-18 final** | 5.3.0 | procedural stand-in | 6,618 | 2.21 / 3.19 / 4.47 s | **7,581** | 5/5 pixel read-backs |
+
+Stand-in reproducibility: 7,581 vs 7,589 sealed earlier the same day (**0.1 %**). The generated
+series carries a documented layout-revision history (`lit` → `lit6`, each row with its reason) —
+the −42 % stand-in→generated gap is geometry cost (91× verts), and lighting composition moves the
+score too (grazing emissive display ≈ −16 %; disclosed per row). Grading is independent pixel
+read-backs (rendered / red dress / figure / lamp / screen) via the visual venv, never agent
+self-report.
+
+**Voided run disclosed:** the first stand-in final (4,167) was mis-flagged — `--no-fixture` parsed
+but never reached the scene build, so it sealed a fixture-class scene under a stand-in label. The
+sealed `scene_line` (606,829 verts on a "6.6k" run) exposed it; the run was deleted and the
+pipeline hardened (builder prints `fixture=glb|none`, `run_bench` aborts on mismatch). Full
+history: [`bench/blender-benchmark/README.md`](../bench/blender-benchmark/README.md).
+Rerun: `python3 bench/blender-benchmark/run_bench.py --tag NAME [--no-fixture]`.
+
 ## Reports — what's in each scorecard
 
 Self-contained HTML (no external assets, no build step). GitHub's file view shows source;
@@ -563,6 +592,7 @@ view them rendered through Pages (links), or open the files after a clone. Newes
 
 | Report | What's in it |
 |---|---|
+| [**Blender benchmark — fixture-class debut**](https://willturner-maker.github.io/benchmarks/reports/2026-11-18-blender-benchmark.html) (`reports/2026-11-18-blender-benchmark.html`) | New suite debut: Cycles samples-per-minute on a custom scene (official Launcher has no custom-scene path — numbers never mix with official scores); series finals stand-in 7,581 (0.1 % same-day repro) vs generated-fixture 4,413 (Meshy Premium GLB, SHA-pinned, separate series by rule); lit→lit6 layout revisions priced per row incl. the −16 % lighting-composition cost; the voided mis-flagged run the `scene_line` read-back caught |
 | [**Agentic frontier — F-series**](https://willturner-maker.github.io/benchmarks/reports/2026-11-16-agentic-frontier.html) (`reports/2026-11-16-agentic-frontier.html`) | The series-two arc, waves `16` → `18l`: F1/F2/F3 product-physics briefs with the sealed loss matrix, the harness swap and the watertight V2 seal (16f 21/21 + 21/21, 745 events zero leaks), the 42-session effort A/B priced on the real suite (16/18 both arms, xhigh pays 3×), the friction wave whose rule shipped nothing, and Tier 4's discovery that the safe ripple path is invisible (0 preserved-native / 6 honest repairs) |
 | [**Splash 1.7.0**](https://willturner-maker.github.io/benchmarks/reports/2026-11-17-splash-1-7-0.html) (`reports/2026-11-17-splash-1-7-0.html`) | Engine upgrade day: three-pass wave (warm TTFT 110–118 ms best ever, w1 219.8, plateau 479–494, peak 526.5; KV budget +18.8 %, zero suspensions at 3.93×), batch A's silent no-op restart (supervisor kill lesson), batch B's determinism pricing (−0.2 %) and the first OpenCode agentic row (11/12 + 10/12); three-wave ladder chart |
 | [**Clean-window suites 2026-11-13**](https://willturner-maker.github.io/benchmarks/reports/2026-11-13-clean-window.html) (`reports/2026-11-13-clean-window.html`) | All three live suites re-run from standalone drivers with the operator session idle (zero engine tenancy): agentic wave `13i` (18/18, fifth clean wave of the scored ladder, single-tenant warm render 1192 ms best, tenancy-control result incl. the T7 placeholder lesson), Splash 1.6.1 clean rerun (w1 209.5 best, plateau-scatter-vs-instance-state finding, three-wave ladder chart, KV 0 suspensions at 4.66×), visual-venv run3 (bit-identical third time) |

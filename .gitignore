@@ -28,5 +28,6 @@ bench/blender-benchmark/woman_red_dress.blend
 bench/blender-benchmark/woman_red_dress.blend1
 bench/blender-benchmark/test_comp.png*
 bench/blender-benchmark/prop_test.png*
-bench/blender-benchmark/results/
+bench/blender-benchmark/results/*/frame_*.png
+bench/blender-benchmark/results/*/latest-frame.png
 bench/blender-benchmark/fixture/*.glb

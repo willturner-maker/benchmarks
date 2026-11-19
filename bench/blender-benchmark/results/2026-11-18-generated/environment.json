@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-18",
+  "blender": "5.3.0",
+  "blender_bin": "/Applications/Blender.app/Contents/MacOS/Blender",
+  "gpu": {
+    "type": "METAL",
+    "name": "Apple M5 Ultra (GPU - 64 cores)",
+    "count": 1
+  },
+  "os": "macOS 27.2.1",
+  "machine": "arm64",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "denoising": false,
+  "startup_overhead_seconds": 0.51
+}

@@ -11,7 +11,7 @@ Machine-readable source of truth for standings. Human view is
 | `updated` | Free-text note of the last change. |
 | `read_this_first` | Array of short rules that must be understood before comparing rows. |
 | `host_reference` | The fixed reference host used for all published class-A / Splash rows. |
-| `suites` | Object containing the four suite arrays (see below). |
+| `suites` | Object containing the suite arrays (see below). |
 | `withdrawn` | Optional array of rows that were published then removed (with reason). |
 
 ## Suite arrays
@@ -19,6 +19,9 @@ Machine-readable source of truth for standings. Human view is
 - `suites.resolve_mcp` — Resolve MCP rows (class A unless noted).
 - `suites.splash_engine` — Splash engine rows (width-ladder + agentic summary).
 - `suites.visual_venv` — OpenCV / visual venv rows.
+- `suites.blender_benchmark` — Cycles render-throughput rows (samples/min on the custom scene;
+  `fixture_class` — `generated` vs `procedural-standin` — is part of row identity, never compare
+  across classes; numbers are NOT comparable to official Blender Benchmark scores).
 - `suites.community_runs` — rows from other hosts/media classes that accompany the reference tables (reserved; no rows yet).
 
 Each row is an object. Common fields:

@@ -1,0 +1,41 @@
+{
+  "frame": "frame_256spp.png",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "checks": [
+    {
+      "name": "rendered",
+      "value": 0.9162,
+      "pass": true
+    },
+    {
+      "name": "red_dress",
+      "value": 0.0134,
+      "pass": true
+    },
+    {
+      "name": "figure",
+      "value": 0.0923,
+      "pass": true
+    },
+    {
+      "name": "lamp",
+      "value": "frac=0.0214 blob=25139",
+      "pass": true
+    },
+    {
+      "name": "screen",
+      "value": 0.0127,
+      "pass": true
+    }
+  ],
+  "soft": {
+    "face": false,
+    "face_boxes": 0
+  },
+  "PASS": true,
+  "score": "5/5",
+  "brief": "a pretty woman in a red dress sitting at a table with a computer and a lamp"
+}
