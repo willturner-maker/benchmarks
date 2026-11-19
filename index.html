@@ -49,6 +49,17 @@
 
   <h2>Scorecards</h2>
   <ul>
+    <li><a class="card" href="reports/2026-11-19-tool-loop-gate.html">
+      <span class="name">The model stops using tools — it just doesn't stop early</span><span class="tag">new suite · tool-loop gate · upstream-pinned</span>
+      <div class="sub">First run of the only suite here another machine can reproduce with <b>no container, VM,
+        GPU toolchain or footage</b> — any OpenAI-compatible endpoint that returns <code>message.tool_calls</code>.
+        Upstream <code>hermes_loop_gate.py</code> unmodified at commit <code>6dc6f0e</code>. 6 passes / 120 task-runs:
+        <b>14–15 of 20</b>, <b>0 parse failures</b>, <b>3 cap hits</b> — the opposite profile to the upstream
+        reference row (7/20, mean 5.7 tools, 7 HIT_CAP). Two of four persistent failures are <b>grader shape</b>
+        (a correct refusal scored as over-work; a task solved in one command scored as a wrong tool). The
+        confound we measured instead of smoothing: <b>91 of 301 calls got the scripted world's stub reply</b>,
+        and <b>temperature 0 does not pin agent behavior</b> — 14/20 traces bit-identical across four greedy
+        passes while one task escalated 7 → 16 → 20 → 20 calls.</div></a></li>
     <li><a class="card" href="reports/2026-11-19-splash-queue-size.html">
       <span class="name">The KV ceiling was never KV — it was a request count of 32</span><span class="tag">Splash 1.7.0 · stack move: --queue-size 64</span>
       <div class="sub">A KV run died at width 40 on <b>HTTP 503</b>; a tiny-prompt probe pinned it exactly

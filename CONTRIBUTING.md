@@ -45,6 +45,33 @@ python3 -I bench/splash-concurrency/ladder_kv.py --out my-run.jsonl
 
 See `docs/splash-engine-benchmark-results.md` for interpretation notes.
 
+### Tool-loop gate — the suite that runs on **your** hardware
+
+The instrument is third-party and must stay unmodified, so clone it outside this repo and pin the commit:
+
+```bash
+git clone https://github.com/vcruz305/hermes-agentic-bench ~/hermes-agentic-bench
+cd ~/hermes-agentic-bench && git checkout 6dc6f0e           # the commit our rows are comparable to
+uv venv --python 3.12 .venv
+uv pip install --python .venv/bin/python -r requirements.txt  # httpx only
+```
+
+Then, from this repo (point it at any OpenAI-compatible endpoint that returns `message.tool_calls`):
+
+```bash
+GATE_BASE=http://127.0.0.1:8000/v1 MODEL='your-model-id' \
+  bench/tool-loop-gate/run_gate.sh bench/tool-loop-gate/results/2026-MM-DDa defaults greedy greedy greedy
+python3 bench/tool-loop-gate/summarize.py bench/tool-loop-gate/results/2026-MM-DDa
+```
+
+A community row must state: host, engine, model + quant, **upstream commit**, **sampling axis**
+(`defaults` = 0.6/0.95/64, `greedy` = 0/1/1 — never averaged together), **pass count** (≥2 default,
+4 greedy: this gate's variance is real), the **stub-response rate** `summarize.py` prints, and the
+**grader-shape split** (how many failures were call-count/tool-choice criteria rather than wrong
+behavior). No footage, no container, no GPU toolchain — which is why these rows land in the community
+table with those fields present. Do **not** run `hermes_native_battery.py` without reading upstream's
+warning that its file toolset cannot be sandboxed.
+
 ### Visual venv
 
 ```bash

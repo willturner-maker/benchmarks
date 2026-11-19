@@ -12,6 +12,7 @@ agent’s self-report.
 | **Splash** | Local LLM inference engine (brew package). Serves GGUF models (currently Qwen3.8-Flash-Next IQ3_S) over an OpenAI-compatible HTTP API on `127.0.0.1:8000`. Manages KV cache, concurrency, and admission. | Decode throughput (tok/s), TTFT, concurrency scaling (width ladder), KV-pressure behaviour, agentic task success when Splash is the backend. |
 | **DaVinci Resolve Studio + MCP** | Resolve itself plus a Model Context Protocol server that exposes timeline, media-pool, render, and Fusion operations as tools an LLM can call. | Agentic task outcome & honesty (six sealed tasks × three agents), render latency (cold/warm), server-side operation medians, concurrency effects. |
 | **Visual venv** | Isolated Python 3.12 environment (`~/resolve-vision-venv312`) with OpenCV (+contrib) used for face detection, embedding, and related vision work that feeds Resolve workflows. | Import/init timing, YuNet detection ladder, SFace embed speed, API surface changes, determinism across runs. |
+| **Tool-loop gate** | Third-party, commit-pinned, **unmodified** contract tests from [`vcruz305/hermes-agentic-bench`](https://github.com/vcruz305/hermes-agentic-bench) (`hermes_loop_gate.py`) driven by our own runner. 20 tasks against scripted tools over an OpenAI-compatible endpoint — no containers, no fixtures, nothing host-specific. | Tool-call contract survival (parse failures), loop hygiene (call counts, duplicate calls, hitting the turn cap), and whether the model **stops and answers**. The suite a community run can reproduce on any machine. |
 
 ## Why these benchmarks exist
 
@@ -19,6 +20,7 @@ agent’s self-report.
 - Agentic work is graded only from ground-truth probes after the run. This catches both functional regressions and “the model claimed success but the timeline is unchanged” failures.
 - Concurrency and KV behaviour on Apple Silicon unified memory are non-obvious; the width-ladder and KV-pressure probes quantify the practical headroom.
 - The visual venv is watched for wheel updates; the suite exists so a 5.1.x change in face-detection behaviour or timing can be measured against a known baseline.
+- The Resolve and Splash suites are host-bound (our footage, our engine state). The tool-loop gate exists because an outside machine can run the identical instrument and produce a comparable agentic number — which is what turns a personal leaderboard into a benchmark.
 
 ## How the pieces interact
 

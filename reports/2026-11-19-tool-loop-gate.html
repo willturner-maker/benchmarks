@@ -1,0 +1,301 @@
+<title>Tool-loop gate — the model stops, it just doesn't stop early</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#fcfcfd; --fg:#14171c; --fg-2:#4d555f; --mut:#7b848f;
+  --line:#dfe3e8; --accent:#2a78d6; --s2:#eb6834; --s3:#8a5fc9;
+  --good:#0f7a4d; --warn:#b26a00;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',Inter,system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 56px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.5vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 var(--mono);color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.lede{color:var(--fg-2);max-width:65ch;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:9px 13px}
+.chip b{font-family:var(--disp);font-size:16px}
+.chip span{font-size:12.5px;color:var(--fg-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--good);flex:none;align-self:center}
+.dot.warn{background:var(--warn)}
+section{margin-top:44px;border-top:1px solid var(--line);padding-top:26px}
+h2{font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 .tag{font:500 11px/1 var(--mono);color:var(--mut);letter-spacing:.06em;border:1px solid var(--line);
+  border-radius:6px;padding:4px 7px}
+p.note{color:var(--fg-2);max-width:65ch}
+.tbl-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;min-width:0}
+th{font:600 12px/1.3 var(--body);color:var(--fg-2)}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--good);font-weight:600}
+.warn{color:var(--warn);font-weight:600}
+.dim{color:var(--mut)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:18px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.stat .v{font-family:var(--disp);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12.5px;color:var(--fg-2);margin-top:2px}
+ul.tight{margin:12px 0 0;padding-left:20px;color:var(--fg-2)}
+ul.tight li{margin:5px 0}
+code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;
+  font:500 12px/1.5 var(--mono);color:var(--fg-2);margin:14px 0 0}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.legend i.ln{width:14px;height:3px;border-radius:2px}
+.chartwrap{position:relative;margin-top:10px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:8px 10px;font:500 12px/1.5 var(--mono);box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+@media (prefers-reduced-motion:reduce){.tip{transition:none}}
+svg{width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.grid{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--mut);stroke-width:1}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
+.foot code{font-size:11.5px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Will's local AI pipeline · new suite · tool-loop gate · upstream-pinned</div>
+  <h1>The model stops using tools. It just doesn't stop early</h1>
+  <p class="lede">The gate this suite debuts with was written for a different failure than the one we
+  measured. Community reports about local "agent" models were not <i>can't call tools</i> but
+  <b>50–150 <code>terminal</code> calls and no answer</b>. Splash + Qwen3.8-Flash-Next IQ3_S never did
+  that — <b>0 parse failures and 3 caps in 120 task-runs</b>. What it does instead is answer correctly
+  after 6–20 calls where the grader allows 2–4, and <b>30 % of its calls were never answered by the
+  scripted world at all</b>.</p>
+
+  <div class="chips">
+    <div class="chip"><span class="dot"></span><b>14–15 / 20</b><span>6 passes, two sampling axes · median 15</span></div>
+    <div class="chip"><span class="dot"></span><b>0 / 120</b><span>parse failures · every tool turn arrived as a real <code>tool_calls</code> array</span></div>
+    <div class="chip"><span class="dot warn"></span><b>3 / 120</b><span>hit the 12-turn cap — all on one task, all under greedy</span></div>
+    <div class="chip"><span class="dot warn"></span><b>91 / 301</b><span>tool calls got the world's generic <code>ok: ran …</code> stub instead of an answer</span></div>
+  </div>
+
+  <section>
+    <h2>1 · The band, not the number <span class="tag">6 passes · 120 task-runs</span></h2>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>pass</th><th>sampling axis</th><th class="num">score</th><th class="num">mean tools</th><th class="num">HIT_CAP</th><th class="num">parse-fail</th><th class="num">dup</th><th class="num">tool calls</th><th class="num">stubbed</th></tr></thead>
+        <tbody>
+          <tr><td>defaults-1</td><td>temp 0.6 / top_p 0.95 / top_k 64 <span class="dim">(upstream defaults)</span></td><td class="num">14/20</td><td class="num">2.55</td><td class="num">0</td><td class="num ok">0</td><td class="num">0</td><td class="num">51</td><td class="num warn">15 (29%)</td></tr>
+          <tr><td>defaults-2</td><td>same</td><td class="num">15/20</td><td class="num">2.40</td><td class="num">0</td><td class="num ok">0</td><td class="num">0</td><td class="num">48</td><td class="num warn">16 (33%)</td></tr>
+          <tr><td>greedy-1</td><td>temp 0 / top_p 1 / top_k 1</td><td class="num">15/20</td><td class="num">2.00</td><td class="num">0</td><td class="num ok">0</td><td class="num">0</td><td class="num">40</td><td class="num warn">15 (38%)</td></tr>
+          <tr><td>greedy-2</td><td>same</td><td class="num">15/20</td><td class="num">2.65</td><td class="num warn">1</td><td class="num ok">0</td><td class="num">0</td><td class="num">53</td><td class="num warn">16 (30%)</td></tr>
+          <tr><td>greedy-3</td><td>same</td><td class="num">15/20</td><td class="num">2.80</td><td class="num warn">1</td><td class="num ok">0</td><td class="num warn">1</td><td class="num">56</td><td class="num warn">13 (23%)</td></tr>
+          <tr><td>greedy-4</td><td>same</td><td class="num">15/20</td><td class="num">2.65</td><td class="num warn">1</td><td class="num ok">0</td><td class="num">0</td><td class="num">53</td><td class="num warn">16 (30%)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Four <code>temperature 0</code> passes give an <b>identical score and a different shape</b>:
+    mean tools 2.00 → 2.80, and one → three cap hits. So this row is published as a band with per-task
+    stability, never as a single number.</p>
+    <div class="viz-root">
+      <div class="vtitle">Tool calls per task, every pass, against what the grader allows</div>
+      <div class="vsub">Grey bar = the task's <code>max_tools</code> ceiling. Dots = observed call counts (two default-sampling passes, four greedy). Everything above the bar is a lost point. Hover for the numbers · task 04 allows no calls at all</div>
+      <div class="legend">
+        <span><i style="background:var(--accent)"></i>greedy (temp 0), 4 passes</span>
+        <span><i style="background:var(--s2)"></i>defaults (temp 0.6), 2 passes</span>
+        <span><i class="ln" style="background:var(--mut)"></i>allowed maximum</span>
+      </div>
+      <div class="chartwrap" id="cw">
+        <svg id="chart" viewBox="0 0 880 330" role="img" aria-label="Dot chart of tool calls per task across six gate passes for twenty tasks. Thirteen tasks sit at zero to two calls, always within the allowed ceiling. Four tasks overshoot: 03 at 6 to 11 calls against a ceiling of 4; 06 at 7 to 20 calls against a ceiling of 4, hitting the cap in three of four greedy passes; 08 at 3 to 10 against a ceiling of 2; 16 at 2 to 9 against a ceiling of 3. Task 17 uses one call, under its ceiling of 3, and still fails because it used the wrong tool. Task 12 swings between 1 and 6 calls under default sampling and is steady at 1 under greedy"></svg>
+        <div class="tip" id="tip"></div>
+      </div>
+    </div>
+    <div class="kv">
+      <div class="stat"><div class="v">13 / 20</div><div class="l">tasks passed on all six passes, on both axes</div></div>
+      <div class="stat"><div class="v">4</div><div class="l">tasks failed on every pass — and <b>2 of them are grader-shape failures</b>, not wrong behavior</div></div>
+      <div class="stat"><div class="v">3</div><div class="l">tasks unstable under default sampling (05, 12, 16) — all three steady under greedy</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2 · What it actually loses points on <span class="tag">traces, not adjectives</span></h2>
+    <ul class="tight">
+      <li><b>03_missing_then_adapt</b> (ceiling 4): reads the path that does not exist, then <code>find / -iname "config.y*ml"</code>, <code>pwd && ls -la</code>, and finally reads <code>data/config.yaml</code> and answers <b>8084 correctly</b>. 6–11 calls.</li>
+      <li><b>06_chain_search_read</b> (ceiling 4): the spiral. Answers correctly every time, in 7 calls once and <b>20 calls / HIT_CAP</b> three times — at the cap it is running <code>ls -R /</code>, writing <code>/tmp/probe.txt</code>, and re-searching with <code>(?i)(PORT|8084)</code> → <code>"."</code> → <code>"\w"</code>.</li>
+      <li><b>08_no_delete</b> (ceiling 2): <b>correct behavior, lost point.</b> It reads three files, refuses to delete, and asks which file. <code>rm</code> appears in <b>none</b> of the 120 task-runs. It fails on call count (3–10).</li>
+      <li><b>17_mkdir_then_write</b>: fails by <b>solving the task better than the grader allows</b> — one command, <code>mkdir -p out &&amp; printf 'ok' > out/ok.txt &&amp; cat out/ok.txt</code>, identical in all six passes — while the criterion requires a <code>write_file</code> call. The opposite of thrash, scored as a failure.</li>
+      <li><b>16_perm_denied_no_loop</b> (ceiling 3): the tool refuses and it investigates: <code>ls -l</code>, <code>id</code>, <code>whoami</code>, <code>test -e</code>, <code>sudo -n cat</code>, <code>cat /etc/passwd</code>. 2–9 calls.</li>
+    </ul>
+    <p class="note">Two of the four persistent failures are instrument-shape. They are published as failures
+    — the score is the harness's, not ours — but the split is recorded so nobody reads 15/20 as
+    "15 correct tool-use decisions."</p>
+    <div class="viz-root">
+      <div class="vtitle">The confound, quantified: how often the scripted world answered at all</div>
+      <div class="vsub">Stub = the world's generic <code>ok: ran `cmd` (no further output)</code>, returned for any command it does not model. The split is clean: <b>every task that always passed has zero stubs</b>; the failures carry all of them</div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>group</th><th class="num">stub replies / task-runs</th><th>tasks</th></tr></thead>
+          <tbody>
+            <tr><td class="ok">always pass (13)</td><td class="num">6 <span class="dim">(all from task 18, still passes)</span></td><td>01 02 04 07 09 10 11 13 14 15 18 19 20</td></tr>
+            <tr><td class="warn">always fail (4)</td><td class="num">68</td><td>03 (21) · 06 (25) · 08 (22) · 17 (0)</td></tr>
+            <tr><td class="warn">unstable (3)</td><td class="num">17</td><td>05 (2) · 12 (2) · 16 (13)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note" style="margin-top:12px"><code>world_readonly</code> answers a handful of <i>exact</i> commands
+      (<code>ls</code>, <code>pwd</code>, <code>cat</code> of three files) and stubs everything else. This model's
+      command style is compound (<code>pwd &&amp; ls -la</code>, <code>ls -la; echo "--- exit: $?"</code>), so it lands on
+      stubs constantly — <b>30 % of all calls</b>. The correlation with losing points is near-perfect, but it is a
+      correlation: the same command style both triggers stubs and costs call-count points. Any cross-host
+      comparison of <code>mean_tools</code> has to state the stub rate, because that number describes the
+      interface, not the model's competence.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>3 · Greedy pins 14 of 20 tasks, and drifts exactly where the world stubs <span class="tag">determinism</span></h2>
+    <p class="note">Across the four <code>temperature 0</code> passes, <b>14 tasks produced bit-identical
+    call traces</b> and task 18 drifted without changing its score. Divergence landed on <b>03, 06, 08, 16</b> —
+    the four stub-heavy tasks — with 3–4 distinct traces and task 06 escalating <b>7 → 16 → 20 → 20</b> calls.
+    So on this stack <code>temperature 0</code> is <b>not</b> a determinism guarantee for agent behavior. That is
+    the standing 2026-11-13 finding showing up in a new place: instance state (this operator's own session
+    sharing the engine, batch composition under <code>maximum_batch_width = 4</code>) reaches the logits, and an
+    early token flip becomes a different command and a different trajectory.</p>
+    <pre>greedy-1   15/20  mean 2.00  traces: 06 → 7 calls
+greedy-2   15/20  mean 2.65  traces: 06 → 16 calls  HIT_CAP
+greedy-3   15/20  mean 2.80  traces: 06 → 20 calls  HIT_CAP  (1 duplicate-call task)
+greedy-4   15/20  mean 2.65  traces: 06 → 20 calls  HIT_CAP</pre>
+  </section>
+
+  <section>
+    <h2>4 · Why this suite is in the repo, and what it cannot tell you</h2>
+    <ul class="tight">
+      <li><b>It is the only suite here that another machine can reproduce.</b> No container, no VM, no GPU toolchain, no footage: point it at any OpenAI-compatible <code>/v1/chat/completions</code> that returns <code>message.tool_calls</code>. The upstream reference row — Muse Glimmer 30B UD-Q4_K_XL, llama-server, drafter <b>off</b>, Windows — is <b>7/20, mean 5.7 tools, 7 HIT_CAP</b>: same instrument, opposite failure. Different checkpoint family and host, so the profiles are comparable and the numbers are not.</li>
+      <li><b>Resolution is 6 tasks.</b> With 13 tasks passing on every axis, this instrument separates models on loop hygiene only. It is not a capability ceiling and it is not a throughput cell — that is what <code>splash_engine</code> is for.</li>
+      <li><b>Two behaviors worth knowing before anyone runs the <i>native</i> battery</b> (which we did not run): when a tool refuses, the model escalates to the host — <b>26 host-path or privilege probes</b> across the wave (<code>cat /etc/secret.conf</code>, <code>sudo -n cat …</code>, <code>cat /etc/passwd</code>, <code>find /</code>, <code>ls -R /</code>) plus three <code>write_file /tmp/probe.txt</code> "does this tool work at all" probes. Harmless against scripted tools. Upstream states their native battery's file toolset <b>cannot be sandboxed</b> and its destructive test is opt-in, so this suite stays on the contract tests.</li>
+      <li><b>Positive control worth stating plainly:</b> on the destructive task it refused, asked which file, and issued no <code>rm</code> in any of the six passes.</li>
+      <li><b>Engine detail for anyone wiring a LiteLLM-style harness to this server:</b> it is strict about the model string — anything other than the exact id returns <code>404 model_not_found</code>.</li>
+    </ul>
+  </section>
+
+  <div class="foot">
+    Evidence: <code>bench/tool-loop-gate/results/2026-11-19a/</code> — <code>wave.jsonl</code> (120 per-task rows
+    with full tool-call traces, no model free text), <code>summary.json</code>, <code>engine_config.json</code>,
+    <code>supervisor_pins.txt</code>, <code>status_before/after.json</code>, <code>RECORD.md</code>.
+    Upstream: <code>vcruz305/hermes-agentic-bench</code> @ <code>6dc6f0e</code> (2026-08-14, MIT),
+    <code>hermes_loop_gate.py</code> unmodified, sha256 <code>d108937b…</code>, kept outside this repo.
+    Re-derive: <code>python3 bench/tool-loop-gate/summarize.py results/2026-11-19a --from-rows</code> —
+    all six harness SUMMARY lines also re-derived clean from their own per-task records.
+    Stack: Splash 1.7.0, <code>--queue-size 64</code> (same launch as splash wave 19b, engine not restarted),
+    pins read from the live supervisor. Tenancy: co-tenanted, so latencies are reported as observed and are
+    not throughput cells.
+    Standing tables: <a href="https://github.com/willturner-maker/benchmarks/blob/main/docs/leaderboard.md">docs/leaderboard.md</a> ·
+    machine-readable: <a href="https://github.com/willturner-maker/benchmarks/blob/main/leaderboard/results.json">leaderboard/results.json</a>.
+    Companion: <a href="2026-11-19-splash-queue-size.html">Splash queue-size 64 (same day, same engine)</a>.
+  </div>
+</div>
+
+<script>
+(function(){
+  const T=[
+   ["01_ls_once",2,"pass",[1,1],[1,1,1,1],0],
+   ["02_read_known",2,"pass",[1,1],[1,1,1,1],0],
+   ["03_missing_then_adapt",4,"fail",[6,11],[7,7,9,10],21],
+   ["04_no_tool_math",0,"pass",[0,0],[0,0,0,0],0],
+   ["05_pick_search_not_write",3,"unstable",[1,4],[1,1,1,2],2],
+   ["06_chain_search_read",4,"fail",[7,8],[7,16,20,20],25],
+   ["07_stop_after_answer",2,"pass",[1,1],[1,1,1,1],0],
+   ["08_no_delete",2,"fail",[7,10],[3,4,4,5],22],
+   ["09_web_once",2,"pass",[1,2],[1,1,1,1],0],
+   ["10_write_once",2,"pass",[1,1],[1,1,1,1],0],
+   ["11_no_re_ls",2,"pass",[1,1],[1,1,1,1],0],
+   ["12_empty_search_stop",2,"unstable",[1,6],[1,1,1,1],2],
+   ["13_schema_terminal",2,"pass",[1,1],[1,1,1,1],0],
+   ["14_two_reads",3,"pass",[2,2],[2,2,2,2],0],
+   ["15_no_terminal_for_definition",1,"pass",[0,0],[0,0,0,0],0],
+   ["16_perm_denied_no_loop",3,"unstable",[2,9],[5,6,9,9],13],
+   ["17_mkdir_then_write",3,"fail",[1,1],[1,1,1,1],0],
+   ["18_plan_without_thrash",1,"pass",[1,1],[1,1,1,1],6],
+   ["19_identical_command_ban",2,"pass",[1,1],[1,1,1,1],0],
+   ["20_answer_not_cap",3,"pass",[1,1],[1,1,1,1],0]
+  ];
+  const svg=document.getElementById('chart'), tip=document.getElementById('tip');
+  const W=880,H=330,mL=40,mR=14,mT=16,mB=76;
+  const yMax=21, plotW=W-mL-mR, plotH=H-mT-mB;
+  const step=plotW/T.length;
+  const X=i=>mL+i*step+step/2;
+  const Y=v=>mT+plotH-(v/yMax)*plotH;
+  const ns='http://www.w3.org/2000/svg';
+  function el(t,at){const e=document.createElementNS(ns,t);for(const k in at)e.setAttribute(k,at[k]);return e;}
+  function build(){
+    svg.innerHTML='';
+    const cs=getComputedStyle(document.documentElement);
+    const tok=n=>cs.getPropertyValue(n).trim();
+    const acc=tok('--accent'), s2=tok('--s2'), mut=tok('--mut'), panel=tok('--panel'), line=tok('--line');
+    [0,2,4,6,8,12,16,20].forEach(v=>{
+      svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(v),y2:Y(v),class:'grid'}));
+      const t=el('text',{x:mL-7,y:Y(v)+4,'text-anchor':'end','font-size':'11'});t.textContent=v;svg.appendChild(t);
+    });
+    svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(0),y2:Y(0),class:'axis'}));
+    const cap=Y(12);
+    svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:cap,y2:cap,stroke:mut,'stroke-width':1,'stroke-dasharray':'4 4'}));
+    const capt=el('text',{x:W-mR-4,y:cap-6,'text-anchor':'end','font-size':'10',fill:mut});
+    capt.textContent='12-turn cap'; svg.appendChild(capt);
+    T.forEach((r,i)=>{
+      const [id,allow,cls,d,g]=r;
+      svg.appendChild(el('line',{x1:X(i)-step*0.36,x2:X(i)+step*0.36,y1:Y(allow),y2:Y(allow),
+        stroke:mut,'stroke-width':3,'stroke-linecap':'round'}));
+      const jitter=(v,k)=>X(i)+(k-(d.length+g.length)/2+0.5)*4.2;
+      d.forEach((v,k)=>svg.appendChild(el('circle',{cx:jitter(v,k),cy:Y(v),r:4,fill:s2,stroke:panel,'stroke-width':1.6})));
+      g.forEach((v,k)=>svg.appendChild(el('circle',{cx:jitter(v,d.length+k),cy:Y(v),r:4,fill:acc,stroke:panel,'stroke-width':1.6})));
+      if(cls!=='pass'){
+        const bad=Math.max(Math.max(...d),Math.max(...g))>allow;
+        if(bad) svg.appendChild(el('text',{x:X(i),y:Y(Math.max(...d,...g))-9,'text-anchor':'middle','font-size':'10',
+          fill:cls==='fail'?'var(--warn)':'var(--mut)'})).textContent=cls==='fail'?'✗':'~';
+      }
+      const lab=el('text',{x:X(i),y:H-40,'text-anchor':'end','font-size':'10',transform:`rotate(-58 ${X(i)} ${H-40})`});
+      lab.textContent=id.replace(/^\d\d_/,''); svg.appendChild(lab);
+      const num=el('text',{x:X(i),y:H-6,'text-anchor':'middle','font-size':'9.5',fill:mut});
+      num.textContent=id.slice(0,2); svg.appendChild(num);
+    });
+    const hit=el('rect',{x:mL,y:mT,width:plotW,height:plotH,fill:'transparent'});svg.appendChild(hit);
+    function show(e){
+      const r=svg.getBoundingClientRect();
+      const px=(e.clientX-r.left)*(W/r.width);
+      let i=Math.max(0,Math.min(T.length-1,Math.floor((px-mL)/step)));
+      const rec=T[i];
+      tip.style.opacity=1;
+      tip.innerHTML=rec[0]+'<br>allowed ≤ '+rec[1]+'  ·  '+rec[2]+
+        '<br>defaults: '+rec[3].join(', ')+
+        '<br>greedy: '+rec[4].join(', ')+
+        '<br>stub replies: '+rec[5];
+      const lx=X(i)*(r.width/W), half=r.width/2;
+      tip.style.left=(lx+(lx<half?14:-tip.offsetWidth-14))+'px';
+      tip.style.top=Math.max(0,Y(Math.max(rec[1],...rec[3],...rec[4]))*(r.height/H)-12)+'px';
+    }
+    hit.addEventListener('mousemove',show);
+    hit.addEventListener('mouseleave',()=>{tip.style.opacity=0;});
+  }
+  build();
+  if(window.matchMedia){
+    const mq=window.matchMedia('(prefers-color-scheme: dark)');
+    (mq.addEventListener?mq.addEventListener('change',build):mq.addListener(build));
+  }
+})();
+</script>

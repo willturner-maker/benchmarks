@@ -1,0 +1,59 @@
+{
+ "run": "tool-loop-gate 2026-11-19a",
+ "upstream": {
+  "repo": "https://github.com/vcruz305/hermes-agentic-bench",
+  "commit": "6dc6f0e570850c196c8bda6e5e1f8ad5f7082910",
+  "commit_date": "2026-08-14",
+  "file": "hermes_loop_gate.py",
+  "sha256_16": "d108937b8cdee86e",
+  "modified": false,
+  "license": "MIT",
+  "kept_outside_repo": "~/hermes-agentic-bench"
+ },
+ "harness_env": {
+  "python": "3.12.16",
+  "venv": "~/hermes-agentic-bench/.venv (isolated; httpx 0.28.1 only)",
+  "note": "NOT the Resolve MCP venv and NOT the vision venv"
+ },
+ "engine": {
+  "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+  "endpoint": "http://127.0.0.1:8000/v1",
+  "engine": "Splash 1.7.0",
+  "maximum_context_tokens": 262144,
+  "kv_budget_tokens": 155648,
+  "supervisor_pins": {
+   "--max-memory": "60129542144",
+   "--max-cache-disk": "274877906944",
+   "--default-reasoning-effort": "medium",
+   "--thinking-token-budget": "32768",
+   "--queue-size": "64"
+  },
+  "supervisor_flags": [
+   "--model",
+   "--binary",
+   "--port",
+   "--serve-record",
+   "--persistent-cache"
+  ],
+  "proof": "pins read from the running supervisor (pgrep -f server.server), not from start.sh on disk",
+  "same_stack_as": "splash_engine wave 2026-11-19b (queue-size 64, thinking-token-budget 32768); engine NOT restarted for this suite",
+  "model_id_strictness": "HTTP 404 model_not_found for any model string other than the exact id above - matters when pointing LiteLLM-style harnesses at it"
+ },
+ "lifetime_counters": {
+  "before": {
+   "prefill_rows": 12035832,
+   "prefill_batches": 1972,
+   "decode_batches": 26845
+  },
+  "after": {
+   "prefill_rows": 12068141,
+   "prefill_batches": 2098,
+   "decode_batches": 30749
+  }
+ },
+ "tenancy": "CO-TENANTED: the operator's own OpenCode session is served by the same engine and was active throughout. Pass/fail and tool counts are behavioral; per-call latencies are reported as observed, not as a throughput claim.",
+ "sampling_axes": {
+  "defaults": "upstream defaults, unmodified: temperature 0.6, top_p 0.95, top_k 64 (the axis the upstream reference row used)",
+  "greedy": "temperature 0, top_p 1.0, top_k 1"
+ }
+}

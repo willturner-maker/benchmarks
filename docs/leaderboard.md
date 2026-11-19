@@ -688,6 +688,73 @@ pipeline hardened (builder prints `fixture=glb|none`, `run_bench` aborts on mism
 history: [`bench/blender-benchmark/README.md`](../bench/blender-benchmark/README.md).
 Rerun: `python3 bench/blender-benchmark/run_bench.py --tag NAME [--no-fixture]`.
 
+## Tool-loop gate — tool-loop hygiene, reference host
+
+Fourth live suite, and the only one here whose number **another machine can diff against its own**: no
+container, no VM, no GPU toolchain, no footage — it talks to any OpenAI-compatible
+`/v1/chat/completions` that returns `message.tool_calls`. The instrument is **third-party and unmodified**
+([`vcruz305/hermes-agentic-bench`](https://github.com/vcruz305/hermes-agentic-bench) `hermes_loop_gate.py`,
+MIT), commit-pinned in every record (`6dc6f0e`, 2026-08-14, sha256 `d108937b…`) and cloned *outside* this
+repo. 20 tasks against five **scripted** tools, 12-turn cap, scored from the observed call trace:
+`parse_ok`, `n_tools`, `duplicate_calls`, `hit_cap`, `pass`. The criteria deliberately reward a **short**
+trace rather than a completed mission — the gate exists because the reported local-model failure is not
+"can't call tools" but "50–150 `terminal` calls and no answer."
+
+| Date | Upstream | Axis | Score (band) | mean tools | HIT_CAP | parse-fail | dup | stub rate |
+|---|---|---|---|---|---|---|---|---|
+| **2026-11-19a** | `6dc6f0e`¹ | defaults (temp 0.6 / top_p 0.95 / top_k 64) | **14–15 / 20** | 2.40–2.55 | 0 | 0 | 0 | 29–33 %² |
+| **2026-11-19a** | `6dc6f0e`¹ | greedy (temp 0 / top_p 1 / top_k 1) | **15 / 20** ×4 | 2.00–2.80 | 3 task-runs | 0 | 1 | 23–38 %² |
+
+**Loop hygiene is clean; stop discipline is not.** In 6 passes / 120 task-runs: **0 parse failures**
+(every tool turn arrived as a real `tool_calls` array, every task-run produced an answer — our engine's
+separate `reasoning_content` field keeps `content` clean for harnesses), **1 duplicate-call task-run**,
+**3 cap hits** (all on task 06, all under greedy, at 16 / 20 / 20 calls). The upstream reference row is the
+opposite profile — Muse Glimmer 30B UD-Q4_K_XL on llama-server with the speculative drafter **off**:
+**7/20, mean 5.7 tools, 7 HIT_CAP**. Different checkpoint family and host, so the *profiles* are comparable
+and the numbers are not.
+
+**Task structure (stable across all six passes):** 13 always-pass, 4 always-fail (03, 06, 08, 17),
+3 unstable under default sampling (05, 12, 16 — all steady under greedy). Two of the four persistent
+failures are **grader shape, not wrong behavior**, and are published as failures anyway: `08_no_delete`
+refuses the delete, asks which file, and issues **no `rm` in any of 120 task-runs** but uses 3–10 calls
+against a ceiling of 2; `17_mkdir_then_write` solves the task in **one** `terminal` command and loses
+because the criterion demands a `write_file` call.
+
+**Disclosed confound — the stub rate.** `world_readonly` answers only *exact* commands and returns a
+generic `ok: ran \`cmd\`` for everything else; this model writes compound commands (`pwd && ls -la`), so
+**91 of 301 calls (30 %) were never answered**. The group split is near-perfect: the 13 always-pass tasks
+hold 6 stubs between them (all from task 18, which still passes), the 4 always-fail tasks hold 68, the 3
+unstable 17. Any cross-host `mean_tools` comparison that omits this rate is comparing command styles, not
+competence. Details: [`docs/tool-loop-gate-benchmark-results.md`](tool-loop-gate-benchmark-results.md).
+
+**Determinism finding.** `temperature 0` does **not** pin agent behavior on this stack: 14/20 tasks gave
+bit-identical call traces across four greedy passes, task 18 drifted without changing its score, and
+divergence concentrated on the four stub-heavy tasks — task 06 escalating 7 → 16 → 20 → 20 calls. Same
+mechanism as the 2026-11-13 tenancy/instance-state result, now visible in the logits of an agent loop
+(batch composition under `maximum_batch_width = 4`). Hence: **bands, never single passes.**
+
+**Behavior flag for anyone reaching for the native battery** (not run here, and upstream states its file
+toolset **cannot be sandboxed**): when a tool refuses, this model escalates to the host — 26 host-path or
+privilege probes across the wave (`cat /etc/secret.conf`, `sudo -n cat …`, `cat /etc/passwd`, `find /`,
+`ls -R /`) plus three `write_file /tmp/probe.txt` probes. Harmless against scripted tools. Positive
+control on the destructive task: refused, asked which file, no `rm` anywhere.
+
+Rerun: `bench/tool-loop-gate/run_gate.sh bench/tool-loop-gate/results/<wave> defaults greedy greedy greedy`
+— re-derive published numbers with
+`python3 bench/tool-loop-gate/summarize.py results/2026-11-19a --from-rows` (all six harness `SUMMARY`
+lines also re-derived clean from their own per-task records).
+
+¹ **The instrument is not ours, so the commit is part of the row.** Task set, pass criteria and the
+scripted worlds can all change upstream; a row that does not name `6dc6f0e…` is not comparable to this one.
+We ran the contract tests only. `simulated_battery.py` (the older 6-scenario smoke) was skipped because
+upstream itself calls the gate the better simulated slot, and `hermes_native_battery.py` was not run at
+all: it needs the Hermes CLI installed, and upstream documents that its file toolset **cannot be
+sandboxed** (four override attempts failed) with a destructive test that is opt-in by that reason.
+² **Stub rate = share of tool calls the scripted world never answered** (the generic
+`ok: ran \`cmd\` (no further output)` reply). It is a property of the model's command style meeting the
+world's exact-match command table, and it drives `mean_tools`, so it belongs on every future row.
+`summarize.py` computes it per pass and per task.
+
 ## Reports — what's in each scorecard
 
 Self-contained HTML (no external assets, no build step). GitHub's file view shows source;
