@@ -45,6 +45,7 @@ macOS 27.2, render output and scratch on external volumes.
 | **2026-11-17h → 17h2** | 21.2.0.6 | **5.3.0** | —¹⁵ | —¹⁵ | —¹⁵ | —¹⁵ | —¹⁵ | —¹⁵ | —¹⁵ | **20/21 → 21/21¹⁵** — the new working ceiling | matched¹⁵ |
 | **2026-11-18k** | 21.2.0.6 | **5.3.3** | —¹⁶ | —¹⁶ | —¹⁶ | —¹⁶ | —¹⁶ | —¹⁶ | —¹⁶ | **40/42¹⁶** (friction wave — the naming rule did not ship) | **42/42¹⁶** |
 | **2026-11-18l** | 21.2.0.6 | **5.3.3** | —¹⁷ | —¹⁷ | —¹⁷ | —¹⁷ | —¹⁷ | —¹⁷ | —¹⁷ | **F3 n=6: 6/6 geometry; split 0 preserved-native / 6 repaired¹⁷** | 6/6¹⁷ |
+| **2026-11-18m** | 21.2.0.6 | **5.3.4**¹⁸ | 1651 ms¹ | **1174 ms**¹⁸ (best on host) | 103.1 | 168 | 45 | 135 | 24 (4-item)¹⁸ | **F3 n=6: 6/6 geometry; split 0 preserved-native / 6 repaired¹⁸** | 6/6¹⁸ |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
@@ -268,6 +269,24 @@ ceiling; path discovery at zero. The fourth result class (repair) was derived fr
 evidence, never by relabeling. MCP 5.3.4's same-day transition cleared WITHOUT trap re-arm on a
 byte-diff argument (two VERSION strings, full-tree diff) — the next *behavioral* release re-arms.
 
+¹⁸ **`2026-11-18m` all-suites-day wave (addendum (r)).** First dispatch on MCP **5.3.4** *and*
+opencode **2.3.2** — stack gate: live `mcp_fingerprint` **byte-identical** to the sealed post-5.3.4
+record (server_py sha unchanged), so no re-filing; harness drift 2.3.1→2.3.2 logged pre-wave, zero
+mid-wave. The F3 fork was nonetheless **re-armed live** (cheap on F3 fixtures): P1/P2 community paths
+destroy, P3 bridge preserves — CDL byte-identical, links kept — so 5.3.4 ships the same physics as
+5.3.3. The wave re-dispatched 18l's sealed brief unchanged: **the split reproduced exactly**
+(0 preserved-native / 6 destroyed-then-disclosed-then-repaired, honesty 6/6, canaries exact) —
+two stack moves, zero behavior change. Verification discipline again at ceiling: all six agents
+caught another session's timeline flapping on their first unpinned probe, disclosed it, pinned
+thereafter; **zero cross-writes** (18l's append race did not recur at n=6). Perf stage: warm
+**1174 ms best on this host** — sealed series metric is Resolve's own `TimeTakenToRenderInMs`;
+wall-clock overhead around it (+100–130 ms queue-in + MCP round-trip) kept as a 5.3.4 datapoint,
+and attempt-1's wall-based 2973 ms stays on-host as the metric-choice disclosure, not a baseline.
+**Regression candidate flagged:** `probe_timeline_structure` on the *video-only 2-item* geometry is
+bimodal 282–1291 ms (13i: 8 ms) while the 4-item probe stays clean at 24 ms — candidate, one wave,
+not yet filed upstream. Op disable: Resolve background tasks disabled for the probe session
+(the pinned cause of bimodal op spikes); `set_current` then ran clean at 135 ms.
+
 **2026-11-14k row:** the **sixth consecutive clean 18/18** (108/108 aggregate), total wall −7.6 %
 vs 13i on the same harness build, and the flavor of the wave is *upstream fixes doing their job in
 the trials*: the #370 `media_type` validation refused a T3 agent's malformed row mid-task (clean
@@ -317,6 +336,7 @@ advanced server and reporting the DB number, a live quirk refereed by an indepen
 | **2026-11-13** | **Splash 1.6.1** (`splash --version` confirms — the ⁸ assumption resolves) | same | 159 ms⁶ | **229 ms** | **209.5 tok/s**⁷ | **470–475 tok/s**, widths 8→32 (peak w12: 475.2)¹⁰ | **0** at 4.66× (budget 131,072 tok)⁸ | **12/12** | 12/12 |
 | 2026-11-16b (DIRTY window¹¹) | Splash 1.6.1 (assumed; not re-confirmed) | same | —¹¹ | —¹¹ | 92.6 tok/s¹¹ (lowest ever) | 508–540 (w12–32 mean 524.6), w32 **540.5** highest single width¹¹ | **TRIP at 3.89×** — w10, 509,370 tok, susp peak 2, first on record¹¹ | n/a¹¹ | n/a¹¹ |
 | **2026-11-17** | **Splash 1.7.0** (same-day install; confirmed by `splash --version` **and** the live `/opt/homebrew/Cellar/splash/1.7.0/…` process path; the upgrade cleared the prefix cache — see ¹²) | same | **110–118 ms**¹² (best ever) | 291 ms¹² (pass 1 only) | **219.8 tok/s**¹² (3-pass median) | **479–494 tok/s**, widths 8→32, pooled median **481.6**; aggregate peak back at **w4 526.5**¹² | **0** at 3.93× (budget 155,648 tok, +18.8 %) — demote **+11** total, spill 0, quietest memory path on record¹² | **11/12**¹³ (OpenCode harness) | **10/12**¹³ |
+| **2026-11-18** (all-suites day) | Splash 1.7.0 (confirmed via live process path) | same | — (no probe stage) | — | **283.95 tok/s** — best w1 on record (+29 % vs 17-day) | **692–699 tok/s**, widths 8→32, peak w16 **698.6**; w6 dip reproduces (0.90× of w4); whole ladder ×1.4 of 17-day while SHAPE holds — instance state, not a version move | **0** at 3.93× (612,180 tok vs 155,648 budget; per-round suspension deltas 0; spill+0 demote+0 — quietest path on record; lifetime counter 43 pre-dates the stage) | — (no agentic stage this run) | — |
 
 ¹ decode w1 is warmth-sensitive — the probe's own three passes trend (105→133→165 baseline,
 111→128→136 rerun); the column is the warmed value on the baseline row, the median on the rerun row.
@@ -528,6 +548,7 @@ OpenCV 5.1.x wheels (watched by a launchd agent; wheels land as `5.1.0.xxxx`).
 | 2026-11-13 run3 (same build, clean window) | 5.0.0.93 (unchanged install)¹⁰ | 91 / **0.278 s** (PNG; 89 / 0.270 s H.264) | counts **bit-identical** (third time) | 10.34 ms/face⁸ | not captured⁹ | all identical |
 | 2026-11-16 run4 (same build) | 5.0.0.93 (unchanged install) | 91 / 0.283 s (PNG; 89 / 0.273 s H.264) | counts **bit-identical** (fourth time) | 10.90 ms/face⁸ | not captured⁹ | all identical |
 | **2026-11-17 run5 (5.1.0.95 upgrade)** | **5.1.0.95** (opencv + contrib together; numpy 2.5.5; FFmpeg 9.0.2) | **91 / 0.227 s** (PNG; 89 / 0.221 s H.264) — median **×0.853** across 48 rows | PNG ladder bit-identical; **9/48 H.264 rows ±1** — FFmpeg-9.0.2 decode changed first-frame pixels (sha256-proved): H.264 counts are decoder-version-dependent records | **10.25 ms/face** | **1.361/1.368/1.377 s** (first cold stage since run1) | match() **still mutates** inputs (9.82/12.40→1.00, reproduced bit-identically); `readNetFromTensorflow` absent; per-create `setPreferableTarget` WARN spam |
+| **2026-11-18 run6** (all-suites day, same build) | 5.1.0.95 (install unchanged) | 91 / 0.268 s (PNG; 89 / 0.267 s H.264) — counts unchanged; det_s median **×1.18** vs run5 (host state: quieter window at run5) | **ALL 48 rows bit-identical** to run5, PNG and H.264 (fifth consecutive determinism pass) | 10.24 ms/face | not captured | all identical, incl. the match() mutation marker |
 
 Run2 is a same-build rerun that calibrates the noise band before the upgrade: **every deterministic
 value reproduced** (48/48 detect counts, whole-frame 92, match-probe, cosine stats, surface markers,
@@ -592,6 +613,7 @@ view them rendered through Pages (links), or open the files after a clone. Newes
 
 | Report | What's in it |
 |---|---|
+| [**All-suites day 2026-11-18**](https://willturner-maker.github.io/benchmarks/reports/2026-11-18-all-suites-day.html) (`reports/2026-11-18-all-suites-day.html`) | Four live suites re-run after a full freshness check (nothing to update): Resolve MCP first dispatch on MCP 5.3.4 + opencode 2.3.2 — warm render **1174 ms best on host** (with the wall-vs-internal metric disclosure and a flagged `probe_timeline_structure` regression candidate), F3 wave split **reproduced exactly** (0 preserved-native / 6 repaired, honesty 6/6, zero cross-writes); Splash best-w1-ever ladder (283.95, shape-preserving ×1.4 instance shift) + quietest KV path; visual-venv run6 (5th bit-identical pass); Blender morning-debut recap |
 | [**Blender benchmark — fixture-class debut**](https://willturner-maker.github.io/benchmarks/reports/2026-11-18-blender-benchmark.html) (`reports/2026-11-18-blender-benchmark.html`) | New suite debut: Cycles samples-per-minute on a custom scene (official Launcher has no custom-scene path — numbers never mix with official scores); series finals stand-in 7,581 (0.1 % same-day repro) vs generated-fixture 4,413 (Meshy Premium GLB, SHA-pinned, separate series by rule); lit→lit6 layout revisions priced per row incl. the −16 % lighting-composition cost; the voided mis-flagged run the `scene_line` read-back caught |
 | [**Agentic frontier — F-series**](https://willturner-maker.github.io/benchmarks/reports/2026-11-16-agentic-frontier.html) (`reports/2026-11-16-agentic-frontier.html`) | The series-two arc, waves `16` → `18l`: F1/F2/F3 product-physics briefs with the sealed loss matrix, the harness swap and the watertight V2 seal (16f 21/21 + 21/21, 745 events zero leaks), the 42-session effort A/B priced on the real suite (16/18 both arms, xhigh pays 3×), the friction wave whose rule shipped nothing, and Tier 4's discovery that the safe ripple path is invisible (0 preserved-native / 6 honest repairs) |
 | [**Splash 1.7.0**](https://willturner-maker.github.io/benchmarks/reports/2026-11-17-splash-1-7-0.html) (`reports/2026-11-17-splash-1-7-0.html`) | Engine upgrade day: three-pass wave (warm TTFT 110–118 ms best ever, w1 219.8, plateau 479–494, peak 526.5; KV budget +18.8 %, zero suspensions at 3.93×), batch A's silent no-op restart (supervisor kill lesson), batch B's determinism pricing (−0.2 %) and the first OpenCode agentic row (11/12 + 10/12); three-wave ladder chart |

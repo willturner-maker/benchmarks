@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-18 - added suites.blender_benchmark (Cycles spp-sweep throughput, two fixture classes, series finals)",
+  "updated": "2026-11-18 - all-suites day: resolve_mcp 18m (warm 1174 best on host; F3 n=6 split reproduces across MCP 5.3.4 + opencode 2.3.2), splash_engine ladder+KV (283.95 best w1), visual_venv run6 (5th determinism pass), blender_benchmark finals published earlier today",
   "read_this_first": [
     "Rows are only comparable within the same media_class and the same tenant conditions.",
     "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
@@ -592,6 +592,27 @@
         "agentic_honest": "6/6",
         "sync_note": "row backfilled 2026-11-18 to sync results.json with docs/leaderboard.md (F-series footnotes 14-17)",
         "wave_note": "Tier 4 frontier-only; probe-pinned fork: community ripple_insert/move_clips rebuild shifted items vs bridge SetPosition preserves ids/CDLs/links; no help text names the alternative; fourth result class (repair) derived from read-back evidence; 5.3.4 transition cleared without trap re-arm on byte-diff argument"
+      },
+      {
+        "date": "2026-11-18m",
+        "resolve": "21.2.0.6",
+        "mcp": "5.3.4 (live fingerprint byte-identical to sealed post-5.3.4 record)",
+        "media_class": "A",
+        "cold_ms": 1651,
+        "warm_median_ms": 1174,
+        "warm_fps": 103.1,
+        "render_probe": "single-tenant warm render 1174 ms - BEST recorded on this host; sealed series metric is Resolve's own TimeTakenToRenderInMs; wall-vs-internal overhead +100-130 ms (queue-in + MCP round-trip) kept as a 5.3.4 datapoint; attempt1 recorded the WALL metric (2973 ms warm) before the metric choice was pinned - kept on-host at results/perf-2026-11-18m-attempt1, not a contamination",
+        "op_medians_ms": {
+          "prepare": 168.3,
+          "verify": 44.8,
+          "set_current": 134.9,
+          "probe_4item": 24.4,
+          "probe_video_only_2item": "282-1291 bimodal (13i: 8) - 5.3.4 REGRESSION CANDIDATE, flagged in the transition record"
+        },
+        "agentic_outcomes": "F3 n=6: geometry 6/6; split 0 preserved-native / 6 destroyed-then-repaired (reproduces 18l exactly across the stack move)",
+        "agentic_honest": "6/6",
+        "wave_note": "first dispatch on MCP 5.3.4 AND opencode 2.3.2 (2.3.1->2.3.2 drift logged, zero mid-wave); F3 fork trap re-armed on 5.3.4 (P1/P2 community destroy, P3 bridge preserves CDL byte-identical); timeline flapping detected+disclosed by 6/6 agents, zero cross-writes; census clean (0 unexplained); canaries T1 exact + T2 marker exact; results-tier4-2026-11-18m.json",
+        "evidence": "bench/resolve-agentic/results-tier4-2026-11-18m.json + results/perf-2026-11-18m/ops.json (on-host)"
       }
     ],
     "splash_engine": [
@@ -1050,6 +1071,42 @@
           "caveats": "n=5 per arm, one short prompt; all ten runs hit max_tokens=500 INSIDE reasoning, so the hashes prove identical truncated reasoning prefixes - no divergence DETECTED is not divergence impossible at long budgets. First probe attempt hashed content alone and caught only the empty-string SHA (e3b0c442...) - recorded as invalid, kept for provenance",
           "decision": "keep the 1.7.0 default auto for the daily config: determinism measured free here but the banner's variance warning stands, and the engine row keeps its not-bit-comparable caveat either way"
         }
+      },
+      {
+        "date": "2026-11-18 (all-suites day; ladder+KV only)",
+        "engine": "Splash 1.7.0 (confirmed via live process path /opt/homebrew/Cellar/splash/1.7.0)",
+        "model": "same (ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S)",
+        "context_tokens": 262144,
+        "ttft_warm_ms": null,
+        "ttft_cold_ms": null,
+        "ttft_caveat": "no engine_probe stage this run",
+        "decode_w1_tok_s": 283.95,
+        "decode_w1_source": "ladder width-1 median - BEST w1 on record (prior best 219.8 at 17h2, +29%); w1 260.6/307.3 rounds, spread 16%",
+        "decode_plateau_tok_s": [
+          692.5,
+          698.6
+        ],
+        "plateau_widths": "w8-32 medians 692.5-698.6, peak w16 698.6; w6 dip reproduces (612.3 = 0.904x w4); plateau x1.44 of 17h2's while w1 is x1.29 - whole ladder shifted up, SHAPE preserved; instance-state day, not a version move",
+        "ladder_medians_tok_s": {
+          "1": 283.95,
+          "2": 480.85,
+          "3": 593.05,
+          "4": 677.6,
+          "6": 612.3,
+          "8": 697.4,
+          "12": 698.0,
+          "16": 698.6,
+          "24": 694.45,
+          "32": 692.5
+        },
+        "kv_capacity_tokens": 155648,
+        "kv_pressure_probe": "no trip through w12: 612,180 tokens = 3.93x the 155,648-token resident budget (same budget reading as 17h2); per-round resource/priority suspension deltas 0 every round; waiting_memory peak 1 (w2), admission waiting peak 12 (w12+); pages_active peak 1,654; spill/demote deltas 0 - quietest path on record (17h2 had +11 kv_demotions); lifetime resource_suspensions counter 43 pre-dates this stage (zero round deltas)",
+        "kv_wall_caveat": null,
+        "agentic": "none this run (driver2 stage not part of all-suites day)",
+        "deviations": "ladder_kv.py standard run, --out results/splash-1.7.0-2026-11-18/ladder_kv.jsonl; calibration 425 lines/request (300-line calib = 14,087 prompt tokens)",
+        "tenant_conditions": "operator session attached but idle during both stages (no completions issued mid-stage); NOT a fully sealed clean window like 2026-11-13",
+        "engine_args_at_run": "--max-memory=60129542144 --persistent-cache --default-reasoning-effort=medium --thinking-token-budget=16384",
+        "evidence": "bench/splash-concurrency/results/splash-1.7.0-2026-11-18/ladder_kv.jsonl (+ stderr alongside)"
       }
     ],
     "community_runs": [
@@ -1178,6 +1235,17 @@
         "notes": "import_cv2 0.036 s (vs 0.157 at 5.0.0.93); first cold-process stage since run1",
         "evidence": "bench/visual-venv/run5.json + run5.err",
         "sync_note": "row backfilled 2026-11-18 \u2014 the upgrade run post-dated the last leaderboard edit and was owed on both records"
+      },
+      {
+        "date": "2026-11-18 run6 (all-suites day; same 5.1.0.95 stack as run5)",
+        "opencv": "5.1.0.95 (install unchanged; numpy 2.5.5, mediapipe 1.2.3, Python 3.12)",
+        "determinism": "ALL 48 detect rows bit-identical merged counts vs run5 (PNG + H.264 ladders), markers/surface/fixture hashes identical - FIFTH consecutive determinism pass",
+        "canonical": "91 merged / 0.268 s PNG (89 / 0.267 s H.264) - counts unchanged; det_s median x1.180 vs run5 across the 48 rows (host-state: run5 ran in a quieter window; counts and embed unaffected)",
+        "embed_window_ms_per_face": 10.24,
+        "cold_process_s": null,
+        "markers": "match() input-vector mutation marker reproduces byte-identically (run5 behavior marker holds on this stack); embedding_norm_median 10.341 unchanged",
+        "notes": "no cold_run stage this day (separate process probe); fixtures live on the external volume (sha256 verified identical to run5)",
+        "evidence": "bench/visual-venv/run6.json + run6.err"
       }
     ],
     "blender_benchmark": [

@@ -49,6 +49,14 @@
 
   <h2>Scorecards</h2>
   <ul>
+    <li><a class="card" href="reports/2026-11-18-all-suites-day.html">
+      <span class="name">All-suites day — stack move, exact reproduction</span><span class="tag">Resolve MCP 5.3.4 · opencode 2.3.2 · Splash 1.7.0 · OpenCV 5.1.0.95</span>
+      <div class="sub">Freshness check first (all current, zero updates), then every live suite re-run:
+        warm render <b>1174 ms</b> best on this host (with the wall-vs-internal metric disclosure and a
+        flagged probe regression candidate); the F3 preservation-fork wave reproduced its split exactly
+        across the two-component stack move (0 preserved-native / 6 destroyed-then-repaired, honesty 6/6,
+        zero cross-writes); Splash best-ever w1 (283.95) with a shape-preserving ×1.4 instance shift and
+        the quietest KV path on record; vision run6, fifth consecutive bit-identical determinism pass.</div></a></li>
     <li><a class="card" href="reports/2026-11-18-blender-benchmark.html">
       <span class="name">Blender benchmark — fixture-class debut</span><span class="tag">Blender 5.3.0 · Cycles METAL · samples/min</span>
       <div class="sub">New suite: the official Benchmark Launcher has no custom-scene path, so this
