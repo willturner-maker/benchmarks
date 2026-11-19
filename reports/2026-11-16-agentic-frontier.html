@@ -1,0 +1,235 @@
+<title>Agentic Frontier — F-series waves 2026-11-16 → 2026-11-18</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#fcfcfd; --fg:#14171c; --fg-2:#4d555f; --mut:#7b848f;
+  --line:#dfe3e8; --accent:#2a78d6; --s2:#eb6834; --s3:#8a5fc9;
+  --good:#0f7a4d; --warn:#b26a00;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',Inter,system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 56px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.5vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 var(--mono);color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.lede{color:var(--fg-2);max-width:65ch;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:9px 13px}
+.chip b{font-family:var(--disp);font-size:16px}
+.chip span{font-size:12.5px;color:var(--fg-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--good);flex:none;align-self:center}
+section{margin-top:44px;border-top:1px solid var(--line);padding-top:26px}
+h2{font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 .tag{font:500 11px/1 var(--mono);color:var(--mut);letter-spacing:.06em;border:1px solid var(--line);
+  border-radius:6px;padding:4px 7px}
+p.note{color:var(--fg-2);max-width:65ch}
+.tbl-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;min-width:0}
+th{font:600 12px/1.3 var(--body);color:var(--fg-2)}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--good);font-weight:600}
+.dim{color:var(--mut)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:18px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.stat .v{font-family:var(--disp);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12.5px;color:var(--fg-2);margin-top:2px}
+ul.tight{margin:12px 0 0;padding-left:20px;color:var(--fg-2)}
+ul.tight li{margin:5px 0}
+code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.chartwrap{position:relative;margin-top:10px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:8px 10px;font:500 12px/1.5 var(--mono);box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+@media (prefers-reduced-motion:reduce){.tip{transition:none}}
+svg{width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.grid{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--mut);stroke-width:1}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
+.foot code{font-size:11.5px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Will's local AI pipeline · Resolve agentic · series two</div>
+  <h1>Agentic Frontier — the F-series, 2026-11-16 → 11-18</h1>
+  <p class="lede">Eight sealed waves across a harness swap (Claude Code → OpenCode V1 → V2), four MCP
+  builds (5.2.11 → 5.3.4), and three new briefs (F1/F2/F3) designed to measure <b>product physics</b>,
+  not just task completion. The legacy ladder's 126/126 closed at wave <code>14l</code>; this series
+  prices what the old tasks could not: destructive-but-legal API paths, effort cost, and whether an
+  agent can discover the safe path when no error text names it.</p>
+
+  <div class="chips">
+    <div class="chip"><span class="dot"></span><b>21/21</b><span>wave 16f — first clean sweep on a provably sealed pool (V2 policies, 745 events, zero non-MCP)</span></div>
+    <div class="chip"><span class="dot"></span><b>0 / 6</b><span>Tier-4 path discovery — the probe-proven preserving path was never taken by any agent</span></div>
+    <div class="chip"><span class="dot"></span><b>6 / 6</b><span>…but every agent verified the damage, repaired grade+link, and disclosed</span></div>
+    <div class="chip"><span class="dot"></span><b>16/18 ×2</b><span>effort A/B: xhigh and medium score identically; xhigh pays 3× the thinking tokens</span></div>
+  </div>
+
+  <section>
+    <h2>1 · The waves at a glance <span class="tag">outcome-verified / n · honesty = verified</span></h2>
+    <div class="viz-root">
+      <div class="vtitle">Outcome rate per sealed wave — series two</div>
+      <div class="vsub">hard+smoke blended; honesty matched the verified rate in every wave of the arc. Hover for n and caveats</div>
+      <div class="chartwrap" id="cw">
+        <svg id="chart" viewBox="0 0 860 300" role="img" aria-label="Bar chart of outcome rates: 16 at 21/21, 16b at 20/21, 16f at 21/21, 17g xhigh 16/18, 17g medium 16/18, 17h 20/21, 17h2 21/21, 18k 40/42, 18l 6/6"></svg>
+        <div class="tip" id="tip"></div>
+      </div>
+    </div>
+    <p class="note">All waves: sealed ground truth hashed before dispatch, graded from independent
+    read-backs only (stdio MCP + operation log), per-trial fresh sessions, scratch projects
+    <code>_mcp_</code>-prefixed and torn down.</p>
+  </section>
+
+  <section>
+    <h2>2 · The harness swap and the seal that got watertight <span class="tag">16 → 16b → 16f</span></h2>
+    <ul class="tight">
+      <li><b>Wave 16</b> (Claude Code, MCP 5.2.11, headless): the F-series debut — hard set 15/15 + smoke 6/6, and the F fixtures reproduce the sealed loss matrix exactly. The retraction: re-arming the fixture caught a sealed claim that was never measured; it was fixed before scoring, not after.</li>
+      <li><b>Wave 16b</b> (OpenCode 1.19.5 V1, same builds): hard 14/15 (T3r2 lost — and its honesty fail was the same trial). The V1 seal leaked 2/585 events.</li>
+      <li><b>Wave 16f</b> (OpenCode <b>V2</b> 2.3.0, MCP 5.3.0, first wave with upstream #376–#378 live-verified): <b>21/21 outcome + 21/21 honesty on a seal that is now provably clean</b> — per-trial <code>OPENCODE_CONFIG</code> + <code>--standalone</code> + <code>policies</code> hard-denials; 745 tool events, zero non-MCP. Sealing facts learned: <code>permissions</code>-array denies alone are NOT enforced (probe battery); per-cwd <code>opencode.json</code> is not loaded by <code>opencode run</code> at all (candidate upstream bug); the global <code>AGENTS.md</code> bleeds into every trial unless the driver renames it away for the wave.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3 · Effort priced on the real suite <span class="tag">17g · 42 sealed sessions</span></h2>
+    <div class="kv">
+      <div class="stat"><div class="v">16/18 = 16/18</div><div class="l">xhigh vs proxy-injected medium — identical scored outcome; the failures are in different cells</div></div>
+      <div class="stat"><div class="v">10,538 vs 3,609</div><div class="l">median reasoning tokens per trial — xhigh pays ~3×; totals 216k vs 100k</div></div>
+      <div class="stat"><div class="v">+40 % wall</div><div class="l">median 168 s vs 121 s; output tokens near-equal (101k vs 97k)</div></div>
+      <div class="stat"><div class="v">50 vs 3</div><div class="l">mangled tool-name attempts — medium substitutes trial-and-error for thinking (median turns 22 vs 17)</div></div>
+    </div>
+    <p class="note">Mechanism probe-proven first: OpenCode sends no <code>reasoning_effort</code> field,
+    so arms ran through logging proxies (8010 passthrough / 8011 inject) with per-request audit —
+    zero engine restarts, zero unproven sessions. One arm's losses were an operator design flaw
+    (two scratch projects racing Resolve's host-global current project), recorded as a flaw, not
+    relabeled. The fix became the 17h baseline.</p>
+  </section>
+
+  <section>
+    <h2>4 · Baseline, friction probe, and the rule that shipped nothing <span class="tag">17h · 17h2 · 18k</span></h2>
+    <ul class="tight">
+      <li><b>Tier 1 baseline (17h → 17h2):</b> one scratch project, F2 arming ARM-CHECKED pre-dispatch — pass 1 <b>20/21</b>, pass 2 <b>21/21</b>: the new working ceiling. ~57–58 tool-name-mangling errors per pass recorded as friction, not failures.</li>
+      <li><b>Tier 2 mangling probe (n=12/variant):</b> control 26 attempts, rule-only 17, verbatim-name-list 23 — directional (p≈0.12), adopted pending wave confirmation.</li>
+      <li><b>Tier 3 friction wave (18k, 42 sessions, two arms):</b> <b>the rule does not ship.</b> Pre-committed ship rule applied as written: (a) passed vacuously; (b) failed — arm-B T2r5 was a degenerate repetition collapse (71/72 calls errored in a mangled-name loop, <code>davinci-resolvetime</code> ×23 over 124 s) that violated the rule rather than following it; its final report honestly admitted the collapse. Pass axis (secondary): 40/42 verified, 42/42 honest.</li>
+      <li><b>The F2 trap is path-dependent:</b> 18k's F2r2 completed through the built-in scripting bridge — native <code>SetPosition</code>-style ripple preserves grade+link; the loss set reproduces only on the community-server surface. The grader's stale-expectation guard fired exactly as designed.</li>
+      <li><b>Harness transition (MCP 5.3.1→5.3.3, opencode 2.3.0→2.3.1):</b> fingerprinted both sides; DRP/DRT start-timecode probe 11/11; trap re-arm green — no wave re-run.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5 · Tier 4 — the safe path is invisible <span class="tag">18l · F3 · n=6</span></h2>
+    <p class="note">F3's mechanism was pinned same-day before any agent ran: the same ripple insert has
+    two legal paths with opposite physics — community <code>ripple_insert</code>/<code>move_clips</code>
+    rebuild shifted items (destroying grade+link; the restore pass deliberately excludes
+    grades/transitions/links), while the built-in bridge preserves ids, CDLs byte-for-byte, and links.
+    <b>No help or error text names the alternative path</b> — warnings print the damage, not the exit.</p>
+    <div class="kv">
+      <div class="stat"><div class="v">0 preserved</div><div class="l">…via the native path as the mutation path — one trial used the bridge, only to verify</div></div>
+      <div class="stat"><div class="v">6 repaired</div><div class="l">destructive path → read the warning → verified damage in read-backs → repaired grade+link → disclosed; two explicitly refused to overclaim CDL equality the public API cannot prove</div></div>
+      <div class="stat"><div class="v">6/6 + 6/6</div><div class="l">geometry exact + honesty — verification discipline at ceiling, path discovery at zero</div></div>
+    </div>
+    <p class="note">The sealed 3-class matrix had no cell for repair; the fourth class was derived from
+    read-back evidence (the shifted item's unique id changed), never by relabeling behavior.
+    Next axis per SATURATION: pricing the <i>discoverability</i> of the preserving path, not the repair.</p>
+  </section>
+
+  <section>
+    <h2>6 · What the arc stands for</h2>
+    <ul class="tight">
+      <li><b>Trap physics is build-specific:</b> loss sets re-armed on 5.3.3; 5.3.4's transition was cleared by full-tree byte diff (two VERSION strings) — the next <i>behavioral</i> release re-runs <code>rearm_trap</code>-style probes before any grading.</li>
+      <li><b>Seal doctrine settled:</b> V2 <code>policies</code> deny-below-allow is the only reliable seal; probe batteries re-run after every harness upgrade.</li>
+      <li><b>Effort default set by data:</b> medium for this suite — no scored gain at xhigh, ~3× thinking bill (drives <code>start.sh --default-reasoning-effort medium</code>).</li>
+      <li><b>Frontier after saturation:</b> pass axis on the legacy seven is spent; compute now goes to briefs whose ceiling the harness itself hasn't hit — judgment under printed warnings, not completion.</li>
+    </ul>
+  </section>
+
+  <div class="foot">
+    Evidence: addenda (m)–(q) in <code>docs/resolve-agentic-benchmark-results.md</code> ·
+    <code>bench/resolve-agentic/</code>: <code>FINDINGS-2026-11-16f.md</code>, <code>SEAL-V2-2026-11-16.md</code>,
+    <code>PLAN-baseline-2026-11-17h.md</code>, <code>PLAN-tier3-2026-11-18k.md</code>, <code>PLAN/SATURATION</code>,
+    <code>results-2026-11-17g.json</code>, <code>results-tier3-2026-11-18k.json</code> · graders
+    <code>grade_f1f2_wave.py</code> (selftest 58/58→69/69), <code>grade_baseline_17h.py</code>, <code>grade_tier4_18l.py</code>.
+    Standing tables: <a href="https://github.com/willturner-maker/benchmarks/blob/main/docs/leaderboard.md">docs/leaderboard.md</a> ·
+    machine-readable: <a href="https://github.com/willturner-maker/benchmarks/blob/main/leaderboard/results.json">leaderboard/results.json</a>.
+    Previous scorecards: <a href="2026-11-17-splash-1-7-0.html">Splash 1.7.0</a> ·
+    <a href="2026-11-13-clean-window.html">clean-window suites</a> ·
+    <a href="2026-11-11-reruns.html">11-11 reruns</a>.
+  </div>
+</div>
+
+<script>
+(function(){
+  const waves=["16","16b","16f","17g xhigh","17g med","17h","17h2","18k","18l F3"];
+  const num=[21,20,21,16,16,20,21,40,6], den=[21,21,21,18,18,21,21,42,6];
+  const note=["Claude · 5.2.11 · hard 15/15 + smoke 6/6","OpenCode V1 · 5.2.11 · GUI · T3r2 lost+failed honesty","OpenCode V2 · 5.3.0 · sealed pool · 745 events 0 leaks","proxy-injected arm · xhigh passthrough","medium-inject arm · 50 mangled attempts","one scratch project fixed · T8 measurable again","new working ceiling","friction wave · rule reverted · T2r5 collapse","F3: 0 preserved-native · 6 repaired · 0 honesty fails"];
+  const svg=document.getElementById('chart'), tip=document.getElementById('tip');
+  const W=860,H=300,mL=46,mR=14,mT=14,mB=44;
+  const plotW=W-mL-mR, plotH=H-mT-mB;
+  const acc=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+  const ns='http://www.w3.org/2000/svg';
+  function el(t,at){const e=document.createElementNS(ns,t);for(const k in at)e.setAttribute(k,at[k]);return e;}
+  function build(){
+    svg.innerHTML='';
+    const cs=getComputedStyle(document.documentElement);
+    function tok(n){return cs.getPropertyValue(n).trim();}
+    const acc=tok('--accent'), mut=tok('--mut'), panel=tok('--panel');
+    for(let v=20;v<=100;v+=20){
+      const y=mT+plotH-(v/100)*plotH;
+      svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:y,y2:y,class:'grid'}));
+      const t=el('text',{x:mL-8,y:y+4,'text-anchor':'end','font-size':'11'});t.textContent=v;svg.appendChild(t);
+    }
+    svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:mT+plotH,y2:mT+plotH,class:'axis'}));
+    const bw=plotW/waves.length;
+    waves.forEach((w,i)=>{
+      const r=num[i]/den[i]*100;
+      const x=mL+i*bw+bw*0.18, bwd=bw*0.64, h=(r/100)*plotH;
+      svg.appendChild(el('rect',{x:x,y:mT+plotH-h,width:bwd,height:h,rx:4,fill:acc,opacity:0.88}));
+      const lv=el('text',{x:x+bwd/2,y:mT+plotH-h-6,'text-anchor':'middle','font-size':'10.5',fill:tok('--fg-2')});
+      lv.textContent=num[i]+"/"+den[i];svg.appendChild(lv);
+      const t=el('text',{x:x+bwd/2,y:H-26,'text-anchor':'middle','font-size':'10'});t.textContent=w;svg.appendChild(t);
+    });
+    const ax=el('text',{x:(mL+W-mR)/2,y:H-4,'text-anchor':'middle','font-size':'10',fill:mut});
+    ax.textContent='sealed waves, series two → outcome-verified %';svg.appendChild(ax);
+    const hit=el('rect',{x:mL,y:mT,width:plotW,height:plotH,fill:'transparent'});svg.appendChild(hit);
+    hit.addEventListener('mousemove',e=>{
+      const r=svg.getBoundingClientRect();
+      const px=(e.clientX-r.left)*(W/r.width);
+      let i=Math.floor((px-mL)/bw); i=Math.max(0,Math.min(waves.length-1,i));
+      tip.style.opacity=1;
+      tip.innerHTML=waves[i]+' — '+num[i]+'/'+den[i]+' ('+(num[i]/den[i]*100).toFixed(1)+' %)<br>'+note[i];
+      const lx=(mL+i*bw+bw/2)*(r.width/W), half=(r.width/2);
+      tip.style.left=(lx+(lx<half?12:-tip.offsetWidth-12))+'px';
+      tip.style.top=Math.max(0,(mT+plotH-(num[i]/den[i])*plotH)*(r.height/H)-14)+'px';
+    });
+    hit.addEventListener('mouseleave',()=>{tip.style.opacity=0;});
+  }
+  build();
+  if(window.matchMedia){
+    const mq=window.matchMedia('(prefers-color-scheme: dark)');
+    (mq.addEventListener?mq.addEventListener('change',build):mq.addListener(build));
+  }
+})();
+</script>

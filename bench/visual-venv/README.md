@@ -83,7 +83,7 @@ mutating in place, all surface markers, fixture hashes vs run1-3). Canonical 4×
 PNG (89 faces / 0.273 s H.264) — ×1.018 vs run3, inside the ×1.15 band. Embed window 10.90 ms/face
 (0.992 s / 91). `import_cv2` 0.157 s vs run3's 0.064 s — cold page cache, process state not
 OpenCV. No cold stage (unchanged since run2). Fixture copies live on the external volume beside
-the bench (`vision-detector-compare/bench-20261111/`); `run4.err` is empty — no stderr output.
+the bench (`vision-detector-compare/bench-20261111/`); `run4.err` was empty and was not kept on disk.
 
 ## Tooling change 2026-11-16: records self-identify
 
@@ -136,5 +136,5 @@ observed move is a *speed-up*, far outside the ×1.15 drift band.
      wheel; the vision code must keep copying vectors before `match()`.
   3. New stderr on every `FaceDetectorYN/FaceRecognizerSF.create()`:
      `[ WARN] setPreferableTarget Targets are not supported by the new graph engine for now` —
-     96 lines in `run5.err` (run4.err was empty). Harmless but noisy for stderr-capturing
+     55 WARN lines in the committed `run5.err` (counted 2026-11-18; run4.err was empty and not kept). Harmless but noisy for stderr-capturing
      pipelines; silence via `cv2.utils.logging.setLogLevel`.

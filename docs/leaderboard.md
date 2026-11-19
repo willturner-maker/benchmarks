@@ -40,6 +40,11 @@ macOS 27.2, render output and scratch on external volumes.
 | **2026-11-14l** | 21.2.0.6 **headless**⁷ | **5.2.11** | —⁷ | **1207 ms**⁷ | **100.2** | 117 | 46 | 84.5 | 12³⁷ | **18/18** | 18/18 |
 | **2026-11-16** | 21.2.0.6 **headless**⁷ | **5.2.11** | —⁹ | —⁹ | —⁹ | —⁹ | —⁹ | —⁹ | —⁹ | **15/15 hard⁹** | 15/15⁹ |
 | **2026-11-16b** | 21.2.0.6 **GUI**¹⁰ | **5.2.11** | —¹⁰ | —¹⁰ | —¹⁰ | —¹⁰ | —¹⁰ | —¹⁰ | —¹⁰ | **14/15 hard¹⁰** | 14/15¹⁰ |
+| **2026-11-16f** | 21.2.0.6 | **5.3.0** | —¹⁴ | —¹⁴ | —¹⁴ | —¹⁴ | —¹⁴ | —¹⁴ | —¹⁴ | **21/21¹⁴** (hard 15/15 + smoke 6/6) | 21/21¹⁴ |
+| **2026-11-17g** | 21.2.0.6 | **5.3.0** | —¹⁵ | —¹⁵ | —¹⁵ | —¹⁵ | —¹⁵ | —¹⁵ | —¹⁵ | **16/18 both arms¹⁵** (xhigh vs injected medium) | 16/18 both arms¹⁵ |
+| **2026-11-17h → 17h2** | 21.2.0.6 | **5.3.0** | —¹⁵ | —¹⁵ | —¹⁵ | —¹⁵ | —¹⁵ | —¹⁵ | —¹⁵ | **20/21 → 21/21¹⁵** — the new working ceiling | matched¹⁵ |
+| **2026-11-18k** | 21.2.0.6 | **5.3.3** | —¹⁶ | —¹⁶ | —¹⁶ | —¹⁶ | —¹⁶ | —¹⁶ | —¹⁶ | **40/42¹⁶** (friction wave — the naming rule did not ship) | **42/42¹⁶** |
+| **2026-11-18l** | 21.2.0.6 | **5.3.3** | —¹⁷ | —¹⁷ | —¹⁷ | —¹⁷ | —¹⁷ | —¹⁷ | —¹⁷ | **F3 n=6: 6/6 geometry; split 0 preserved-native / 6 repaired¹⁷** | 6/6¹⁷ |
 
 Render probe: 121 frames, 3840×1520, mov/H.264, queue time excluded
 (`TimeTakenToRenderInMs`, file verified with ffprobe). Op columns are server-side
@@ -224,6 +229,44 @@ build delta. Seal caveat inside the wave record: OpenCode 1.19.5 accepts string-
 permissions (`"bash": "deny"`) but does not enforce them — 2 of 585 tool events were non-MCP (`sleep`,
 `grep`); the object form (`{"*": "deny"}`) verified same-day and the driver is fixed. See
 [resolve-agentic wave record](resolve-agentic-benchmark-results.md).
+
+¹⁴ **`2026-11-16f` — OpenCode V2 (v2.3.0) on MCP 5.3.0, first wave on a provably clean seal.**
+21/21 outcome-verified + 21/21 honesty on the F1/F2 set (hard 15/15 + smoke 6/6); 745 tool events,
+zero non-MCP under `policies` deny-below-allow + per-trial `OPENCODE_CONFIG` + `--standalone`.
+First wave with upstream #376/#377/#378 live-verified. Sealing facts (probe battery): V2
+`permissions`-array denies alone are NOT enforced; per-cwd `opencode.json` is not loaded by
+`opencode run` at all (candidate upstream bug); global `~/.config/opencode/AGENTS.md` bleeds into
+trial sessions unless the driver renames it away. Perf cells `—`: no single-tenant stage (scorecard:
+`reports/2026-11-16-agentic-frontier.html`, record addendum (m)–(q) + `FINDINGS-2026-11-16f.md`,
+`SEAL-V2-2026-11-16.md`).
+
+¹⁵ **`2026-11-17g` effort A/B and `17h/17h2` baseline (addendum (o)/(p)).** 17g: 42 sealed sessions,
+arms = passthrough xhigh vs proxy-injected medium (OpenCode sends no `reasoning_effort` field) —
+**identical 16/18 both arms**; xhigh pays ~3× median reasoning tokens (10,538 vs 3,609) and ~40 %
+more wall; medium pays in mangled-name attempts (50 vs 3). Two arm losses were an operator design
+flaw (two scratch projects racing Resolve's host-global current project), recorded as a flaw.
+17h/17h2 fixed it (one scratch project, F2 ARM-CHECKED pre-dispatch): 20/21 then **21/21 — the new
+working ceiling**; ~57–58 tool-name-mangling errors/pass recorded as friction. T8 comps were found
+not to survive project close/load. Perf cells `—` (sealed-wave waves only; no perf stage).
+
+¹⁶ **`2026-11-18k` friction wave (addendum (p)).** 42 sessions, two arms (published context vs +one
+exact-tool-name rule). **The rule did not ship** per the pre-committed ship rule: median-mangled
+passed vacuously, and arm-B T2r5 degenerated into a repetition collapse (71/72 calls errored,
+`davinci-resolvetime` ×23, 124 s) whose final report honestly admitted it; B-excluding-collapse
+mangled totals were lower (18 vs 26) but the rule has no carve-out and was applied as written —
+reverted; Tier 2's p≈0.12 stands as insufficient. Pass axis (secondary): 40/42 verified, 42/42
+honest. Trap physics: the F2 loss set is **path-dependent** — the built-in bridge preserves
+grade+link, the community surface destroys them; future F2 arming must pin the mutation surface.
+
+¹⁷ **`2026-11-18l` Tier 4 frontier-only (addendum (q)).** F3 only: the same ripple insert has two
+legal paths with opposite physics — community `ripple_insert`/`move_clips` rebuild shifted items
+(destroy grade+link; the server's restore pass excludes grades/transitions/links), the built-in
+bridge (`TimelineItem.SetPosition`) preserves ids, byte-for-byte CDLs, and links — and **no help or
+error text names the alternative**. n=6, split-reported: geometry 6/6, honesty 6/6, and the headline
+**0 preserved-native / 6 destroyed-then-repaired / 0 honesty failures**. Verification discipline at
+ceiling; path discovery at zero. The fourth result class (repair) was derived from read-back
+evidence, never by relabeling. MCP 5.3.4's same-day transition cleared WITHOUT trap re-arm on a
+byte-diff argument (two VERSION strings, full-tree diff) — the next *behavioral* release re-arms.
 
 **2026-11-14k row:** the **sixth consecutive clean 18/18** (108/108 aggregate), total wall −7.6 %
 vs 13i on the same harness build, and the flavor of the wave is *upstream fixes doing their job in
@@ -484,6 +527,7 @@ OpenCV 5.1.x wheels (watched by a launchd agent; wheels land as `5.1.0.xxxx`).
 | 2026-11-11 run2 (same build) | 5.0.0.93 | 91 / 0.302 s | counts **bit-identical** | 11.59 ms/face⁸ | not captured⁹ | all identical |
 | 2026-11-13 run3 (same build, clean window) | 5.0.0.93 (unchanged install)¹⁰ | 91 / **0.278 s** (PNG; 89 / 0.270 s H.264) | counts **bit-identical** (third time) | 10.34 ms/face⁸ | not captured⁹ | all identical |
 | 2026-11-16 run4 (same build) | 5.0.0.93 (unchanged install) | 91 / 0.283 s (PNG; 89 / 0.273 s H.264) | counts **bit-identical** (fourth time) | 10.90 ms/face⁸ | not captured⁹ | all identical |
+| **2026-11-17 run5 (5.1.0.95 upgrade)** | **5.1.0.95** (opencv + contrib together; numpy 2.5.5; FFmpeg 9.0.2) | **91 / 0.227 s** (PNG; 89 / 0.221 s H.264) — median **×0.853** across 48 rows | PNG ladder bit-identical; **9/48 H.264 rows ±1** — FFmpeg-9.0.2 decode changed first-frame pixels (sha256-proved): H.264 counts are decoder-version-dependent records | **10.25 ms/face** | **1.361/1.368/1.377 s** (first cold stage since run1) | match() **still mutates** inputs (9.82/12.40→1.00, reproduced bit-identically); `readNetFromTensorflow` absent; per-create `setPreferableTarget` WARN spam |
 
 Run2 is a same-build rerun that calibrates the noise band before the upgrade: **every deterministic
 value reproduced** (48/48 detect counts, whole-frame 92, match-probe, cosine stats, surface markers,
@@ -519,7 +563,10 @@ view them rendered through Pages (links), or open the files after a clone. Newes
 
 | Report | What's in it |
 |---|---|
-| [**Clean-window suites 2026-11-13**](https://willturner-maker.github.io/benchmarks/reports/2026-11-13-clean-window.html) (`reports/2026-11-13-clean-window.html`) | All three live suites re-run from standalone drivers with the operator session idle (zero engine tenancy): agentic wave `13i` (18/18, fifth clean wave of the scored ladder, single-tenant warm render 1192 ms best, tenancy-control result incl. the T7 placeholder lesson), Splash 1.6.1 clean rerun (w1 209.5 best, plateau-scatter-vs-instance-state finding, three-wave ladder chart, KV 0 suspensions at 4.66×), visual-venv run3 (bit-identical third time). The 2026-11-12 wave has no scorecard of its own — its rows and notes are in the tables and doc addenda above |
+| [**Agentic frontier — F-series**](https://willturner-maker.github.io/benchmarks/reports/2026-11-16-agentic-frontier.html) (`reports/2026-11-16-agentic-frontier.html`) | The series-two arc, waves `16` → `18l`: F1/F2/F3 product-physics briefs with the sealed loss matrix, the harness swap and the watertight V2 seal (16f 21/21 + 21/21, 745 events zero leaks), the 42-session effort A/B priced on the real suite (16/18 both arms, xhigh pays 3×), the friction wave whose rule shipped nothing, and Tier 4's discovery that the safe ripple path is invisible (0 preserved-native / 6 honest repairs) |
+| [**Splash 1.7.0**](https://willturner-maker.github.io/benchmarks/reports/2026-11-17-splash-1-7-0.html) (`reports/2026-11-17-splash-1-7-0.html`) | Engine upgrade day: three-pass wave (warm TTFT 110–118 ms best ever, w1 219.8, plateau 479–494, peak 526.5; KV budget +18.8 %, zero suspensions at 3.93×), batch A's silent no-op restart (supervisor kill lesson), batch B's determinism pricing (−0.2 %) and the first OpenCode agentic row (11/12 + 10/12); three-wave ladder chart |
+| [**Clean-window suites 2026-11-13**](https://willturner-maker.github.io/benchmarks/reports/2026-11-13-clean-window.html) (`reports/2026-11-13-clean-window.html`) | All three live suites re-run from standalone drivers with the operator session idle (zero engine tenancy): agentic wave `13i` (18/18, fifth clean wave of the scored ladder, single-tenant warm render 1192 ms best, tenancy-control result incl. the T7 placeholder lesson), Splash 1.6.1 clean rerun (w1 209.5 best, plateau-scatter-vs-instance-state finding, three-wave ladder chart, KV 0 suspensions at 4.66×), visual-venv run3 (bit-identical third time) |
+| [**Splash concurrency 2026-11-12**](https://willturner-maker.github.io/benchmarks/reports/2026-11-12-splash-concurrency.html) (`reports/2026-11-12-splash-concurrency.html`) | The 11-12 engine wave's own scorecard (added 2026-11-18 — the index had missed it): warm TTFT 151 ms resolving the 294 ms flag, w1 205.2, the version-assumption and single-tenant-hygiene caveats, busiest demote path of the 1.6.1 waves with still-zero suspensions |
 | [**Benchmark reruns, all four suites**](https://willturner-maker.github.io/benchmarks/reports/2026-11-11-reruns.html) (`reports/2026-11-11-reruns.html`) | The 2026-11-11 day: MCP 5.2.2 agentic wave h (18/18, fourth clean wave of the scored ladder, walls −23…−38 %), Splash 1.6.1 engine rerun (+39 % plateau, peak moves to width 12, KV secondary signals shift), agentic suite 12/12, OpenCV same-build rerun (bit-identical, ×1.11 band) — plus the ladder comparison chart and every review-audit correction |
 | [Resolve MCP 21.2.0.6 · MCP 5.2.0](https://willturner-maker.github.io/benchmarks/reports/2026-11-10g-resolve-21-2-mcp-520.html) (`reports/2026-11-10g-resolve-21-2-mcp-520.html`) | Fifth straight 18/18; the append-pinning tenancy catch (agents' cross-writes caught, reversed, disclosed), ripple's plan-only default, probe alternation cost, upstream #207 live |
 | [Splash engine 1.6.0 rerun](https://willturner-maker.github.io/benchmarks/reports/2026-11-10s-splash-160-rerun.html) (`reports/2026-11-10s-splash-160-rerun.html`) | Same-build re-measure: shape-by-shape ladder diff (peak 4, dip 0.87×, ~2 % spread band), quieter KV memory path, agentic 12/12; now carries the concurrency-scaling bar ladder |
