@@ -44,6 +44,13 @@ python3 run_bench.py --sweep 64,128,256 [--tag NAME] [--no-fixture]
 | `2026-11-18-generated` | Meshy fixture (606k verts), original side layout | same | **5,213** | 5/5 PASS after verifier calibration v2 (soft face: none — hair covers face at this angle) |
 | `2026-11-18-lit` | same fixture, **face-on layout**: woman faces the laptop, camera upper-right above the table aiming at her face, screen + lamp as key lights | same | **5,270** | 5/5 PASS (soft Haar face still none — stylized features) |
 | `2026-11-18-lit2` | same, + prop geometry fixes (lamp elbow joint, flush display, laptop yawed −42°) | same | **5,345** | 5/5 PASS (soft Haar face still none) |
+| `2026-11-18-lit3` | same, + real laptop hinge (panel hinged to base's back edge, opened 105°) and lamp holder knuckle; display tilt now spills more light into frame | same | **4,478** | 5/5 PASS (soft Haar face still none) |
+
+The `lit3` −16 % is a **lighting-composition cost, not a regression**: the
+re-hinged display faces more of the camera at grazing angle, so every
+sample integrates more emissive contribution and bounce. Same fixture,
+same geometry (+66 verts for the holder); in this metric the score tracks
+light complexity too, so layout changes move it — noted per run.
 
 Fixture class is part of the run identity: the −31 % gap is the geometry
 cost (91× the vertices), not a regression — the two columns are separate
@@ -81,6 +88,18 @@ laptop panel, reading as a gap (now mounted flush along the panel's own
 normal, offset = half thicknesses, sharing its rotation). The laptop is
 also yawed −42° so the camera catches the lit display face instead of the
 panel back. Score 5,345 — same series, +1.4 %.
+
+`lit2` still failed a second review: the display was **hinged to nothing**
+— the panel floated beside the base (its placement had never been derived
+from the base's geometry), and the arm ended bluntly with no socket. In
+`lit3` the laptop is built as a real hinged assembly: the base itself
+carries the −42° yaw, and the panel's lower edge is computed onto the
+base's back-top edge with an open angle of 105° (15° back-tilt), so it
+stands exactly where a real screen would; the display stays flush-mounted
+on the panel's front face. The lamp chain is now base → post → elbow
+sphere → arm → **knuckle holder pin** → shade, with the shade hung from
+the arm's end. Camera pulled back slightly (props were clipping the frame
+under the taller lamp).
 
 ## Fixture provenance (fixture/PROVENANCE.json)
 

@@ -241,42 +241,66 @@ def main():
                 if leg:
                     leg.location = (lx, ly, 0.25)
                     leg.scale = (0.05, 0.05, 0.50)
-            # laptop: base centered on the table, display facing +Y (toward her)
+            # laptop as a real hinged assembly: base yawed -42, panel stands
+            # on the base's back-top edge (hinge), opened 105 deg from the
+            # base (leaning back), display face tilted up toward her face
+            yaw = math.radians(-42)
+            rot = (math.radians(105), 0, yaw)
             lb = S.objects.get("laptop_base")
             if lb:
                 lb.location = (0, 0.02, 0.522)
+                lb.rotation_euler = (0, 0, yaw)
             ls = S.objects.get("laptop_screen")
             lp = S.objects.get("laptop_display")
+            # base half-extents (0.165, 0.115, 0.008): hinge = back-top edge
+            hinge = Vector((0, 0.02, 0.530)) + \
+                Euler((0, 0, yaw)).to_matrix() @ Vector((0.0, -0.115, 0.0))
+            m = Euler(rot).to_matrix()
+            s = m @ Vector((0, 1, 0))  # screen height axis: up, tilted 15 deg back
             if ls:
-                ls.location = (-0.08, 0.30, 0.66)
-                ls.rotation_euler = (math.radians(-105), 0, math.radians(-42))
+                # panel half-height 0.11: its lower edge lands exactly on the hinge
+                ls.location = hinge + s * 0.11
+                ls.rotation_euler = rot
             if ls and lp:
                 # mount the display flush on the panel's front face: offset along
                 # the panel's own normal by half each thickness (0.006 + 0.002)
-                n = Euler(ls.rotation_euler).to_matrix() @ Vector((0, 0, 1))
+                n = m @ Vector((0, 0, 1))
                 if n.y < 0:
                     n = -n
                 lp.location = ls.location + n * 0.008
-                lp.rotation_euler = ls.rotation_euler
+                lp.rotation_euler = rot
             # lamp on the table's right-front corner, canted to light her
-            lamp_map = {"lamp_base": (0.52, -0.05, 0.52), "lamp_post": (0.52, -0.05, 0.68),
-                        "lamp_shade": (0.35, -0.07, 0.83), "lamp_bulb": (0.35, -0.07, 0.785)}
+            lamp_map = {"lamp_base": (0.52, -0.05, 0.52), "lamp_post": (0.52, -0.05, 0.68)}
             for nm, loc in lamp_map.items():
                 o2 = S.objects.get(nm)
                 if o2:
                     o2.location = loc
-            # elbow joint + arm rebuilt to actually connect post to shade
+            # architect arm: post -> elbow -> arm -> holder -> shade.
+            # Shade cone: depth half 0.14, so its top sits at shade_loc.z + 0.14.
+            shade_top = Vector((0.35, -0.07, 0.945))
+            post_top = Vector((0.52, -0.05, 0.86))
+            sh = S.objects.get("lamp_shade")
+            if sh:
+                sh.location = shade_top - Vector((0, 0, 0.14))
+                sh.rotation_euler = (0, 0, 0)
+            bl = S.objects.get("lamp_bulb")
+            if bl:
+                bl.location = (0.35, -0.07, 0.755)
             elbow = primitive("sphere", "lamp_elbow", metal,
-                              location=(0.52, -0.05, 0.86), scale=0.03)
+                              location=post_top, scale=0.032)
             smooth(elbow)
             arm = S.objects.get("lamp_arm")
             if arm:
-                start = Vector((0.52, -0.05, 0.86))
-                end = Vector((0.36, -0.07, 0.90))
-                d = end - start
-                arm.location = (start + end) / 2
+                d = shade_top - post_top
+                arm.location = (post_top + shade_top) / 2
                 arm.rotation_euler = d.to_track_quat("Z", "Y").to_euler()
-                arm.scale = (0.015, 0.015, d.length + 0.03)
+                arm.scale = (0.014, 0.014, d.length)
+            # holder: knuckle pin at the arm's end gripping the shade's crown
+            holder = primitive("cyl", "lamp_holder", metal,
+                               location=shade_top,
+                               rotation=(math.radians(90), 0, 0),
+                               scale=(0.05, 0.05, 0.032))
+            smooth(holder)
         # screen as a key light on her face: brighter, cooler display
         scr = bpy.data.materials.get("screen")
         if scr:
@@ -349,8 +373,8 @@ def main():
         cam.location = (1.70, -1.15, 1.50)
         target = Vector((0.0, 0.15, 0.95))
     elif opts.fixture:
-        cam.location = (1.25, -0.95, 1.65)
-        target = Vector((0.0, 0.55, 0.92))
+        cam.location = (1.45, -1.05, 1.62)
+        target = Vector((0.0, 0.30, 0.72))
     else:
         cam.location = (2.30, 0.60, 1.45)
         target = Vector((-0.05, 0.40, 0.75))
