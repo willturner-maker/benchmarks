@@ -36,6 +36,12 @@ Widths stay BELOW the serve-time queue-size, and the run refuses to start otherw
 queue-size 64 the top probe width is 48, leaving slack for one interactive session so a refusal
 means the engine's limit, not our own saturation. To probe past that, launch
 QUEUE_SIZE=96 ./start.sh and pass --widths with higher values.
+
+Same launch also carries the 2026-11-19 thinking-budget raise to 32768 (engine_config.json records
+whatever the supervisor actually runs). That is a second stack move, but it is inert for both stages
+here: ladder completions are pinned at 512 tokens and KV completions at 8, so no request can reach a
+thinking cap. The comparable-throughput check is stage 1 - if the ladder does not land near 294 /
+693-701, queue-size or the budget moved the instance state and the KV rounds are read against that.
 """
 import argparse, json, os, subprocess, sys, threading, time, urllib.error, urllib.request
 import concurrent.futures as cf
@@ -88,10 +94,24 @@ def kv_fresh_prompt(width, i, lines):
 def serve_pins():
     p = subprocess.run(["pgrep", "-f", "-fl", "server.server"], capture_output=True, text=True)
     lines = [l for l in p.stdout.splitlines() if "--" in l]
-    pins = {t.lstrip("-").split("=")[0]: t.lstrip("-").split("=", 1)[1]
-            for l in lines for t in l.split() if t.startswith("--") and "=" in t}
+    pins = {}
+    for l in lines:
+        toks = l.split()
+        i = 0
+        while i < len(toks):
+            t = toks[i]
+            if not t.startswith("--"):
+                i += 1; continue
+            if "=" in t:
+                k, v = t.lstrip("-").split("=", 1)
+                pins[k] = v; i += 1
+            elif i + 1 < len(toks) and not toks[i + 1].startswith("--"):
+                # start.sh passes some flags space-separated (e.g. --queue-size 64)
+                pins[t.lstrip("-")] = toks[i + 1]; i += 2
+            else:
+                pins[t.lstrip("-")] = True; i += 1
     return {"raw_present": bool(lines), "pins": pins,
-            "queue_size": int(pins.get("queue-size", 32)),   # splash default when flag absent
+            "queue_size": int(pins.get("queue-size", 32)) if str(pins.get("queue-size", 32)).isdigit() else 32,
             "queue_size_explicit": "queue-size" in pins}
 
 
