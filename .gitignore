@@ -25,5 +25,8 @@ bench/effort-ab-*/proxy-80*.out
 pyrightconfig.json
 .venv/
 bench/blender-benchmark/woman_red_dress.blend
+bench/blender-benchmark/woman_red_dress.blend1
+bench/blender-benchmark/test_comp.png*
+bench/blender-benchmark/prop_test.png*
 bench/blender-benchmark/results/
 bench/blender-benchmark/fixture/*.glb
