@@ -282,11 +282,13 @@ def main():
             post_top = Vector((0.52, -0.05, 0.86))
             sh = S.objects.get("lamp_shade")
             if sh:
-                sh.location = shade_top - Vector((0, 0, 0.07))
+                # +0.012 clearance: the holder pin (r 0.025) stays visible
+                # proud of the crown instead of the cone swallowing it
+                sh.location = shade_top - Vector((0, 0, 0.082))
                 sh.rotation_euler = (0, 0, 0)
             bl = S.objects.get("lamp_bulb")
             if bl:
-                bl.location = (0.35, -0.07, 0.86)  # inside the shade cavity
+                bl.location = (0.35, -0.07, 0.845)  # inside the shade cavity
             elbow = primitive("sphere", "lamp_elbow", metal,
                               location=post_top, scale=0.032)
             smooth(elbow)
