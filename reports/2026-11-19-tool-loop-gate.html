@@ -147,7 +147,7 @@ svg text{font-family:var(--mono);fill:var(--fg-2)}
     "15 correct tool-use decisions."</p>
     <div class="viz-root">
       <div class="vtitle">The confound, quantified: how often the scripted world answered at all</div>
-      <div class="vsub">Stub = the world's generic <code>ok: ran `cmd` (no further output)</code>, returned for any command it does not model. The split is clean: <b>every task that always passed has zero stubs</b>; the failures carry all of them</div>
+      <div class="vsub">Stub = the world's generic <code>ok: ran `cmd` (no further output)</code>, returned for any command it does not model. The split is clean: the 13 always-pass tasks took <b>6 stubs between them — all from task 18, which still passes</b> — while the failures took 68 and the unstable three took 17</div>
       <div class="tbl-scroll">
         <table>
           <thead><tr><th>group</th><th class="num">stub replies / task-runs</th><th>tasks</th></tr></thead>
