@@ -276,16 +276,17 @@ def main():
                 if o2:
                     o2.location = loc
             # architect arm: post -> elbow -> arm -> holder -> shade.
-            # Shade cone: depth half 0.14, so its top sits at shade_loc.z + 0.14.
+            # Cone primitive has depth=1, so its half-height is 0.5 * scale_z
+            # (0.07 here) — the shade's crown must be placed at arm end.
             shade_top = Vector((0.35, -0.07, 0.945))
             post_top = Vector((0.52, -0.05, 0.86))
             sh = S.objects.get("lamp_shade")
             if sh:
-                sh.location = shade_top - Vector((0, 0, 0.14))
+                sh.location = shade_top - Vector((0, 0, 0.07))
                 sh.rotation_euler = (0, 0, 0)
             bl = S.objects.get("lamp_bulb")
             if bl:
-                bl.location = (0.35, -0.07, 0.755)
+                bl.location = (0.35, -0.07, 0.86)  # inside the shade cavity
             elbow = primitive("sphere", "lamp_elbow", metal,
                               location=post_top, scale=0.032)
             smooth(elbow)

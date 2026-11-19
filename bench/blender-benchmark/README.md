@@ -45,6 +45,7 @@ python3 run_bench.py --sweep 64,128,256 [--tag NAME] [--no-fixture]
 | `2026-11-18-lit` | same fixture, **face-on layout**: woman faces the laptop, camera upper-right above the table aiming at her face, screen + lamp as key lights | same | **5,270** | 5/5 PASS (soft Haar face still none — stylized features) |
 | `2026-11-18-lit2` | same, + prop geometry fixes (lamp elbow joint, flush display, laptop yawed −42°) | same | **5,345** | 5/5 PASS (soft Haar face still none) |
 | `2026-11-18-lit3` | same, + real laptop hinge (panel hinged to base's back edge, opened 105°) and lamp holder knuckle; display tilt now spills more light into frame | same | **4,478** | 5/5 PASS (soft Haar face still none) |
+| `2026-11-18-lit4` | same, + shade hung from the holder (cone half-height is 0.5 × scale_z — the earlier `scale_z` assumption left a 7 cm float; bulb moved inside the shade) | same | **4,492** | 5/5 PASS (soft Haar face still none) |
 
 The `lit3` −16 % is a **lighting-composition cost, not a regression**: the
 re-hinged display faces more of the camera at grazing angle, so every
@@ -150,5 +151,8 @@ possible. Do not mix numbers across the two.
 - `look(mode="angles")` backdrop is viewport shading, not geometry — a
   full-frame gray plane in those previews is NOT a generated table;
   measure banded bounding boxes on the mesh before assuming furniture.
+- Primitive cone/cylinder `depth=1` means **half-height = 0.5 × scale_z**;
+  treating `scale_z` as the half-height hangs a shade 7 cm below its arm.
+  Compute hangs from `loc + 0.5*scale_z`, not `loc + scale_z`.
 - Blender 5.3 still warns `Material.use_nodes` is deprecated (removal in
   6.0) — silence is fine today, schedule the node-graph update.
