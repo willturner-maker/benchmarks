@@ -43,6 +43,7 @@ python3 run_bench.py --sweep 64,128,256 [--tag NAME] [--no-fixture]
 | `2026-11-18-standin` | procedural stand-in (6.6k verts) | M5 Ultra, METAL, 1 dev | **7,589** | 5/5 PASS (soft face: none — mannequin profile) |
 | `2026-11-18-generated` | Meshy fixture (606k verts), original side layout | same | **5,213** | 5/5 PASS after verifier calibration v2 (soft face: none — hair covers face at this angle) |
 | `2026-11-18-lit` | same fixture, **face-on layout**: woman faces the laptop, camera upper-right above the table aiming at her face, screen + lamp as key lights | same | **5,270** | 5/5 PASS (soft Haar face still none — stylized features) |
+| `2026-11-18-lit2` | same, + prop geometry fixes (lamp elbow joint, flush display, laptop yawed −42°) | same | **5,345** | 5/5 PASS (soft Haar face still none) |
 
 Fixture class is part of the run identity: the −31 % gap is the geometry
 cost (91× the vertices), not a regression — the two columns are separate
@@ -71,6 +72,15 @@ generated table came back as a featureless pedestal block and the lamp as
 an untextured cone (the premium backend's prop outputs lack the detail the
 character output had). Procedural table/laptop/lamp stay; the generated
 asset remains the woman only. Two more jobs spent learning that.
+
+Operator review of the `lit` frames found two staging defects, fixed in
+`lit2`: the lamp arm floated with nothing connecting post to shade (now a
+sphere elbow joint at the corner, with the arm recomputed to span
+post-top → shade-top), and the emissive display plane sat ~2 cm off the
+laptop panel, reading as a gap (now mounted flush along the panel's own
+normal, offset = half thicknesses, sharing its rotation). The laptop is
+also yawed −42° so the camera catches the lit display face instead of the
+panel back. Score 5,345 — same series, +1.4 %.
 
 ## Fixture provenance (fixture/PROVENANCE.json)
 

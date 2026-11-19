@@ -16,7 +16,7 @@ import argparse
 import bpy
 import math
 import sys
-from mathutils import Vector
+from mathutils import Euler, Vector
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--out", required=True)
@@ -246,21 +246,37 @@ def main():
             if lb:
                 lb.location = (0, 0.02, 0.522)
             ls = S.objects.get("laptop_screen")
+            lp = S.objects.get("laptop_display")
             if ls:
                 ls.location = (-0.08, 0.30, 0.66)
-                ls.rotation_euler = (math.radians(-105), 0, math.radians(-18))
-            lp = S.objects.get("laptop_display")
-            if lp:
-                lp.location = (-0.067, 0.32, 0.66)
-                lp.rotation_euler = (math.radians(-105), 0, math.radians(-18))
+                ls.rotation_euler = (math.radians(-105), 0, math.radians(-42))
+            if ls and lp:
+                # mount the display flush on the panel's front face: offset along
+                # the panel's own normal by half each thickness (0.006 + 0.002)
+                n = Euler(ls.rotation_euler).to_matrix() @ Vector((0, 0, 1))
+                if n.y < 0:
+                    n = -n
+                lp.location = ls.location + n * 0.008
+                lp.rotation_euler = ls.rotation_euler
             # lamp on the table's right-front corner, canted to light her
-            lamp_map = {"lamp_base": (0.52, -0.05, 0.52), "lamp_post": (0.52, -0.05, 0.70),
-                        "lamp_arm": (0.44, -0.07, 0.88), "lamp_shade": (0.35, -0.07, 0.83),
-                        "lamp_bulb": (0.35, -0.07, 0.785)}
+            lamp_map = {"lamp_base": (0.52, -0.05, 0.52), "lamp_post": (0.52, -0.05, 0.68),
+                        "lamp_shade": (0.35, -0.07, 0.83), "lamp_bulb": (0.35, -0.07, 0.785)}
             for nm, loc in lamp_map.items():
                 o2 = S.objects.get(nm)
                 if o2:
                     o2.location = loc
+            # elbow joint + arm rebuilt to actually connect post to shade
+            elbow = primitive("sphere", "lamp_elbow", metal,
+                              location=(0.52, -0.05, 0.86), scale=0.03)
+            smooth(elbow)
+            arm = S.objects.get("lamp_arm")
+            if arm:
+                start = Vector((0.52, -0.05, 0.86))
+                end = Vector((0.36, -0.07, 0.90))
+                d = end - start
+                arm.location = (start + end) / 2
+                arm.rotation_euler = d.to_track_quat("Z", "Y").to_euler()
+                arm.scale = (0.015, 0.015, d.length + 0.03)
         # screen as a key light on her face: brighter, cooler display
         scr = bpy.data.materials.get("screen")
         if scr:
