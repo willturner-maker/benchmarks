@@ -59,6 +59,26 @@ agent hits them, but the operator hits them first here.
   that two waves graded the same expectations. Re-hash after any legitimate fixture change and say
   in the record what changed.
 
+### Engine reasoning pins (and the 2026-11-19 move)
+
+Two engine-side settings shape every wave and must be recorded per wave, not assumed:
+
+- `--default-reasoning-effort=medium` (from `resolve-ai-workflow/start.sh`) — the 17g A/B ran
+  xhigh vs medium arms and scored **16/18 in both arms**, so on this quant the effort axis is flat
+  for this task class. Raising effort buys tokens, not outcomes.
+- `--thinking-token-budget` — **16,384 through wave 2026-11-18m (sealed), 32,768 from 2026-11-19**.
+  The tier-4 waves logged per-step reasoning and the peak was **2,348 tokens**, so the old cap never
+  bound; the raise is headroom for long written instructions and for xhigh arms, not a fix for
+  anything observed. Wave records should report **max per-step reasoning**, and any step that touches
+  the cap is a disclosed finding rather than a silent truncation.
+
+If the budget moves, the trial-config **output ceiling moves with it** (thinking tokens count against
+the completion budget, so a bigger thinking cap on a small output ceiling truncates the visible answer
+instead of the reasoning). That ceiling is `OUTPUT_TOKENS` in `wave_driver_f1f2_opencode_v2.py`; it
+still **defaults to the sealed 16,384** so 18l/18m stay reproducible — a new brief family opts in with
+`AGBENCH_OUTPUT_TOKENS=32768` and declares it as a stack move. Note the ceiling in the *harness* config
+(`~/.config/opencode/opencode.json`) also went 16,384 → 32,768 on 2026-11-19 for interactive work.
+
 ### Harness-specific seal (OpenCode V2, since wave 2026-11-16f)
 
 The per-cwd config primitive that sealed the V1-era waves is **dead under V2**: `opencode run`

@@ -35,6 +35,11 @@ DEFAULT_RENDER_ROOT = "/Volumes/YourVolume/local.AI/resolve-audio-analysis/agben
 MODEL = "splash/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S"
 PROVIDER_BASE_URL = "http://127.0.0.1:8000/v1"
 CONTEXT_TOKENS = 262144
+# Output ceiling for trial configs. 16384 is the SEALED value for the tier-4 series
+# (waves 18l/18m ran under it); do not change it mid-series. The engine-side thinking
+# budget moved 16384 -> 32768 on 2026-11-19, so the next brief family opts in to the
+# paired ceiling with AGBENCH_OUTPUT_TOKENS=32768 and declares it as a stack move.
+OUTPUT_TOKENS = int(os.environ.get("AGBENCH_OUTPUT_TOKENS", "16384"))
 
 # The three Resolve MCP servers are read from the host's global opencode config at
 # runtime (mirrors how wave_driver.py pulls them from ~/.claude.json). Every other
@@ -253,7 +258,7 @@ def trial_config():
         "providers": {"splash": {
             "package": "aisdk:@ai-sdk/openai-compatible",
             "settings": {"baseURL": PROVIDER_BASE_URL, "apiKey": "none"},
-            "models": {MODEL.split("/", 1)[1]: {"limit": {"context": CONTEXT_TOKENS, "output": 16384}}}}},
+            "models": {MODEL.split("/", 1)[1]: {"limit": {"context": CONTEXT_TOKENS, "output": OUTPUT_TOKENS}}}}},
         "model": MODEL,
         "mcp": {"servers": strict_servers()},
         "permissions": PERMISSIONS,
