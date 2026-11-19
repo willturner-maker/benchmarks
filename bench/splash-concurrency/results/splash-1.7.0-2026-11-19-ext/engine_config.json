@@ -1,0 +1,53 @@
+{
+ "run": "splash-1.7.0-2026-11-19-ext",
+ "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+ "supervisor": {
+  "raw": [
+   "1288 /opt/homebrew/Cellar/splash/1.7.0/libexec/python/bin/python3 -u -P -m server.server ~/Library/Application Support/Splash/models/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S --model ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S --binary /opt/homebrew/Cellar/splash/1.7.0/libexec/engine/splash --port 8000 --serve-record ~/Library/Application Support/Splash/runtime/serve-8000.json --max-memory=60129542144 --max-cache-disk=274877906944 --persistent-cache --default-reasoning-effort=medium --thinking-token-budget=16384"
+  ],
+  "pins": {
+   "--max-memory": "60129542144",
+   "--max-cache-disk": "274877906944",
+   "--default-reasoning-effort": "medium",
+   "--thinking-token-budget": "16384"
+  },
+  "flags": [
+   "--persistent-cache"
+  ]
+ },
+ "host": {
+  "uptime": "8:57  up 17:40, 3 users, load averages: 1.55 1.75 1.69",
+  "memory_pressure_pct": "",
+  "thermal": "Note: No performance warning level has been recorded\nNote: No CPU power status has been recorded"
+ },
+ "status_kv_budget_tokens": 155648,
+ "lifetime_at_start": {
+  "resource_suspensions": 45,
+  "priority_suspensions": 0,
+  "capacity_failures": 0
+ },
+ "sealed_stack_inherit": {
+  "widths": [
+   1,
+   2,
+   3,
+   4,
+   6,
+   8,
+   12,
+   16,
+   24,
+   32
+  ],
+  "kv_widths": [
+   2,
+   4,
+   6,
+   8,
+   10,
+   12
+  ],
+  "kv_target_tokens": 20000
+ },
+ "note": "engine not restarted; thinking budget stays at the sealed 16384 and is structurally inert for both stages (max_tokens 512 ladder / 8 KV)"
+}

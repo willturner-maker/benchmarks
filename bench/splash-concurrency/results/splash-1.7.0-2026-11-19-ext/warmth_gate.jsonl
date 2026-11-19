@@ -1,0 +1,6 @@
+{"method": "warmth_gate", "kind": "decode_w1", "pass": 1, "completion_tokens": 300, "wall_s": 3.88, "tok_s": 77.3}
+{"method": "warmth_gate", "kind": "decode_w1", "pass": 2, "completion_tokens": 300, "wall_s": 3.39, "tok_s": 88.6}
+{"method": "warmth_gate", "kind": "decode_w1", "pass": 3, "completion_tokens": 300, "wall_s": 2.57, "tok_s": 116.7}
+{"method": "warmth_gate", "kind": "ttft", "pass": 1, "note": "cold", "prompt_tokens": 55, "ttft_ms": 209}
+{"method": "warmth_gate", "kind": "ttft", "pass": 2, "note": "warm-prefix", "prompt_tokens": 55, "ttft_ms": 95}
+{"method": "warmth_gate", "kind": "summary", "decode_tok_s": [77.3, 88.6, 116.7], "spread_ratio": 1.51, "gate": "cold", "ttft_ms": [209, 95]}
