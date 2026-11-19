@@ -41,7 +41,8 @@ python3 run_bench.py --sweep 64,128,256 [--tag NAME] [--no-fixture]
 | Run | Fixture | GPU | score (samples/min, Σ) | verify |
 |---|---|---|---|---|
 | `2026-11-18-standin` | procedural stand-in (6.6k verts) | M5 Ultra, METAL, 1 dev | **7,589** | 5/5 PASS (soft face: none — mannequin profile) |
-| `2026-11-18-generated` | Meshy Premium fixture (606k verts, 2K PBR) | same | **5,213** | 5/5 PASS after verifier calibration v2 (soft face: none — hair covers face at this angle) |
+| `2026-11-18-generated` | Meshy fixture (606k verts), original side layout | same | **5,213** | 5/5 PASS after verifier calibration v2 (soft face: none — hair covers face at this angle) |
+| `2026-11-18-lit` | same fixture, **face-on layout**: woman faces the laptop, camera upper-right above the table aiming at her face, screen + lamp as key lights | same | **5,270** | 5/5 PASS (soft Haar face still none — stylized features) |
 
 Fixture class is part of the run identity: the −31 % gap is the geometry
 cost (91× the vertices), not a regression — the two columns are separate
@@ -53,6 +54,23 @@ pass scored 3/5 on these exact frames; the verifier was then calibrated
 (screen core blows out to near-white → accept blue-cast lit clusters;
 generated skin sits in shadow → V>70, proximity 0.35) and re-run on the
 sealed frames. Frames were never re-rendered or altered.
+
+## Face-on layout (the `lit` series)
+
+Operator review of the first fixture frames: the woman read as facing away
+from the computer. Rebuilt the fixture layout: she faces the laptop due
+north, the screen's emissive display (strength 6 → 14) is her key light,
+the lamp moves to the table's right-front as warm fill, and the camera sits
+upper-right **above/behind the table** aiming down at her face
+((1.25, -0.95, 1.65) → (0, 0.55, 0.92)); the area key drops 60 W → 18 W so
+the screen actually reads as the light source. Layout change moves the
+score by ~1 % (same geometry) — it is a framing revision, not a series one.
+
+Premium prop generations were tried for this pass and **rejected**: the
+generated table came back as a featureless pedestal block and the lamp as
+an untextured cone (the premium backend's prop outputs lack the detail the
+character output had). Procedural table/laptop/lamp stay; the generated
+asset remains the woman only. Two more jobs spent learning that.
 
 ## Fixture provenance (fixture/PROVENANCE.json)
 
@@ -97,7 +115,9 @@ possible. Do not mix numbers across the two.
   OpenCV's bundled Haar cascade for the soft face check.
 - SAFE_MODE inside `execute_blender_code` blocks `open()`, `datetime`,
   `hashlib` — export via Blender operators only, do hashing/provenance
-  host-side.
+  host-side. Also: the per-generator premium use-toggle (`blendermcp_use_meshy`)
+  is a SCENE property — a fresh Blender session resets it; re-arm before
+  the first `generate_3d` call of the day.
 - `look(mode="angles")` backdrop is viewport shading, not geometry — a
   full-frame gray plane in those previews is NOT a generated table;
   measure banded bounding boxes on the mesh before assuming furniture.

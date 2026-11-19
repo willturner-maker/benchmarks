@@ -233,30 +233,43 @@ def main():
         # low table: 0.50 top instead of 0.74
         tt = S.objects.get("table_top")
         if tt:
-            tt.location = (0, 0.52, 0.50)
-            tt.scale = (1.10, 0.55, 0.05)
-            for i, (lx, ly) in enumerate([(-0.50, 0.30), (0.50, 0.30),
-                                          (-0.50, 0.73), (0.50, 0.73)]):
+            tt.location = (0, 0.10, 0.50)
+            tt.scale = (1.10, 0.60, 0.05)
+            for i, (lx, ly) in enumerate([(-0.50, -0.18), (0.50, -0.18),
+                                          (-0.50, 0.38), (0.50, 0.38)]):
                 leg = S.objects.get(f"table_leg_{i}")
                 if leg:
                     leg.location = (lx, ly, 0.25)
                     leg.scale = (0.05, 0.05, 0.50)
+            # laptop: base centered on the table, display facing +Y (toward her)
             lb = S.objects.get("laptop_base")
             if lb:
-                lb.location = (0, 0.46, 0.522)
+                lb.location = (0, 0.02, 0.522)
             ls = S.objects.get("laptop_screen")
             if ls:
-                ls.location = (0, 0.57, 0.66)
+                ls.location = (-0.08, 0.30, 0.66)
+                ls.rotation_euler = (math.radians(-105), 0, math.radians(-18))
             lp = S.objects.get("laptop_display")
             if lp:
-                lp.location = (0, 0.563, 0.66)
-            lamp_map = {"lamp_base": (0.42, 0.70, 0.52), "lamp_post": (0.42, 0.70, 0.70),
-                        "lamp_arm": (0.34, 0.68, 0.88), "lamp_shade": (0.25, 0.68, 0.83),
-                        "lamp_bulb": (0.25, 0.68, 0.785)}
+                lp.location = (-0.067, 0.32, 0.66)
+                lp.rotation_euler = (math.radians(-105), 0, math.radians(-18))
+            # lamp on the table's right-front corner, canted to light her
+            lamp_map = {"lamp_base": (0.52, -0.05, 0.52), "lamp_post": (0.52, -0.05, 0.70),
+                        "lamp_arm": (0.44, -0.07, 0.88), "lamp_shade": (0.35, -0.07, 0.83),
+                        "lamp_bulb": (0.35, -0.07, 0.785)}
             for nm, loc in lamp_map.items():
                 o2 = S.objects.get(nm)
                 if o2:
                     o2.location = loc
+        # screen as a key light on her face: brighter, cooler display
+        scr = bpy.data.materials.get("screen")
+        if scr:
+            b = next(n for n in scr.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+            b.inputs["Emission Strength"].default_value = 14.0
+        shd = bpy.data.materials.get("shade")
+        if shd:
+            b = next(n for n in shd.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+            b.inputs["Emission Strength"].default_value = 2.5
         import mathutils as _mu
         existing_before = {o.name for o in S.objects}
         existing_meshes_before = {o.name for o in S.objects if o.type == "MESH"}
@@ -276,7 +289,7 @@ def main():
             scale = 1.15 / h if h > 0 else 1.0
             for root_obj in fix_roots:
                 root_obj.scale = (scale, scale, scale)
-                root_obj.rotation_euler = (0, 0, math.radians(180))  # face +Y, toward table
+                root_obj.rotation_euler = (0, 0, 0)  # v3 faces -Y, straight at the laptop
             bpy.context.view_layer.update()
             pts2 = []
             for o in S.objects:
@@ -286,7 +299,7 @@ def main():
                         pts2.append(ev.matrix_world @ _mu.Vector(c))
             xs = [v.x for v in pts2]; ys = [v.y for v in pts2]; zs = [v.z for v in pts2]
             dx = -(min(xs) + max(xs)) / 2
-            dy = 0.05 - (min(ys) + max(ys)) / 2
+            dy = 0.65 - (min(ys) + max(ys)) / 2
             dz = -min(zs)
             for root_obj in fix_roots:
                 root_obj.location = (root_obj.location.x + dx,
@@ -304,7 +317,7 @@ def main():
 
     # soft cool key from the camera side: lifts the figure out of the gloom
     key_data = bpy.data.lights.new("key", type="AREA")
-    key_data.energy = 60
+    key_data.energy = 18 if opts.fixture else 60
     key_data.size = 1.4
     key = bpy.data.objects.new("key", key_data)
     S.collection.objects.link(key)
@@ -319,6 +332,9 @@ def main():
     if opts.composite:
         cam.location = (1.70, -1.15, 1.50)
         target = Vector((0.0, 0.15, 0.95))
+    elif opts.fixture:
+        cam.location = (1.25, -0.95, 1.65)
+        target = Vector((0.0, 0.55, 0.92))
     else:
         cam.location = (2.30, 0.60, 1.45)
         target = Vector((-0.05, 0.40, 0.75))
