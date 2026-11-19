@@ -47,6 +47,7 @@ python3 run_bench.py --sweep 64,128,256 [--tag NAME] [--no-fixture]
 | `2026-11-18-lit3` | same, + real laptop hinge (panel hinged to base's back edge, opened 105°) and lamp holder knuckle; display tilt now spills more light into frame | same | **4,478** | 5/5 PASS (soft Haar face still none) |
 | `2026-11-18-lit4` | same, + shade hung from the holder (cone half-height is 0.5 × scale_z — the earlier `scale_z` assumption left a 7 cm float; bulb moved inside the shade) | same | **4,492** | 5/5 PASS (soft Haar face still none) |
 | `2026-11-18-lit5` | same, + 12 mm shade clearance so the holder pin sits proud of the crown instead of the cone swallowing it | same | **4,511** | 5/5 PASS (soft Haar face still none) |
+| `2026-11-18-lit6` | same, + lamp moved fully onto the table (base at x 0.52 overhung the x 0.55 edge by ~4 cm; fixture shifted as one to (0.40, 0.05)) | same | **4,371** | 5/5 PASS (soft Haar face still none) |
 
 The `lit3` −16 % is a **lighting-composition cost, not a regression**: the
 re-hinged display faces more of the camera at grazing angle, so every
