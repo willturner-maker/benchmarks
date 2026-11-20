@@ -975,3 +975,23 @@ turn 6 (0.90×) and turn 7 (1.04×), not resolved inside it. `pages_active` samp
 each turn completes in ~7 s — the spill deltas are the residency evidence here, and a rerun wanting the occupancy
 curve must sample at 1–2 s. `spill_moves` units are the engine's own counter (movement, not bytes). Synthetic
 filler text: right shape, not real retrieval behaviour.
+
+
+**Fine pass (same night, raw: `bench/splash-concurrency/results/depth-fine-2026-11-19/`).** The limits above
+were closed the same night: `--turn-tokens 5000 --max-turns 44` (5.5–5.9 k-token steps) with an **intra-turn
+1 s sampler** added to the instrument, in a window clean by attribution (38 samples, all 18 in-flight requests
+this run). 44 turns served, 9,049 → **258,611 tokens (1.662×)**, no refusal (the walk stopped below the
+window by design), spill **+5,120** moves total, and every pressure counter — plus the 1 s intra-turn peaks
+of `admission.waiting_memory / suspended / restoring` — **zero on all 44 turns**. Three refinements:
+
+1. **The spill trigger is the page capacity exactly.** Last clean turn peaks **4,784 pages** (< the 4,864-page
+   capacity, spill 0); first spilling turn peaks **4,968 pages** (spill +2,048). Onset bracket tightens from
+   (0.90×, 1.04×] to **(0.984×, 1.021×]** — within one 5,862-token step of
+   `kv_capacity_pages × block_tokens`.
+2. **Residency is 1:1 with context while it fits** (peak `kv_tokens` tracks `prompt_tokens` within one page on
+   all 44 turns), and past the line it keeps climbing to **8,083 pages = 1.66× capacity**, served, with only
+   a ~256-move/turn spill churn doing the eviction.
+3. **"Cheap per turn" survives:** wall 1.57 s → 2.11 s across a 28.6× context increase; effective
+   new-turn service slips ~3,570 → ~2,780 tok/s (−22 %), landing in the same flat band as the volume
+   waves' prefill plateau (3,469–3,498 tok/s). Two probes with different step sizes now corroborate the
+   same mechanism — the onset is not a step-size artifact.

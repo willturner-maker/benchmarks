@@ -581,7 +581,12 @@ switching on exactly at the resident line (turns 1–6 spill 0; from turn 7 at 1
 and **zero** suspension / disk-demotion / capacity-failure counters moving at any depth. **The depth wall is the
 262,144-token context window, not memory** — turn 12 was refused *before admission* (`400
 context_length_exceeded`, `prefill_rows` unmoved). Per-turn cost stays flat while the context grows 9.8× (6.42 s →
-8.61 s) because cross-turn prefix reuse prefills only the new ~22.7 k tokens.
+8.61 s) because cross-turn prefix reuse prefills only the new ~22.7 k tokens. A **fine pass** the same night
+(`results/depth-fine-2026-11-19/`, 44 turns of ~5.9 k tokens, intra-turn 1 s sampler, tenancy clean by
+attribution) resolved the mechanism: residency is **1:1 with context** (peak `kv_tokens` = `prompt_tokens` to one
+page), the spill trigger is the **4,864-page capacity exactly** (4,784 pages clean / 4,968 spills), onset bracket
+now **(0.984×, 1.021×]**, and per-turn wall stays ~flat (1.57 → 2.11 s over 28.6× context, −22 % effective
+rate). Still zero suspensions / demotions / queueing at any depth.
 
 Cross-hardware context (DGX Spark / RTX Spark / RTX 5090 on the same resident model): the
 [comparison section](splash-engine-benchmark-results.md#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13).

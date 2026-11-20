@@ -1721,6 +1721,20 @@
         "tenancy": "detached, /status at 10 s, 9 of 10 in-flight samples attributed to this run; the one foreign sample (178,359 tok, spill/decode) is the operator's last message inside the 90 s lead-in",
         "limits": "n=1 conversation, 11 served turns, one instance; pages_active sampled 0 at every 10 s sample (turns complete in ~7 s), so the spill deltas are the residency evidence and a rerun wanting the occupancy curve must sample at 1-2 s; spill_moves units are the engine's own counter (movement, not bytes); synthetic filler text has the shape of an agent session, not its retrieval behaviour",
         "evidence": "bench/splash-concurrency/results/depth-2026-11-19/ (RECORD.md, depth_probe.jsonl, engine_samples.jsonl, status edges, pins.txt); instrument bench/splash-concurrency/depth_probe.py; runner bench/splash-concurrency/run_depth_detached.sh"
+      },
+      {
+        "date": "2026-11-19 depth probe FINE pass (occupancy curve at 1 s; NOT a throughput row)",
+        "engine": "Splash 1.7.0, same instance as 19b/19c and the coarse depth probe, NOT restarted; window deltas only",
+        "question": "Close the coarse probe's stated limits: get the actual residency curve (1 s intra-turn sampling) and resolve the spill onset finer than a 20 k-token step",
+        "answer": "Spill trigger is the page capacity exactly: turn 26 peaks 4,784 pages (< 4,864) with zero spill; turn 27 peaks 4,968 pages and spills +2,048. Onset bracket (0.984x, 1.021x] of the 155,648-token resident budget - within one 5,862-token step of kv_capacity_pages x block_tokens.",
+        "design": "same instrument plus an intra-turn 1 s sampler and per-turn timestamps; --turn-tokens 5000 --max-turns 44, steps of 5,549-5,862 tokens; 44 turns all served, 9,049 -> 258,611 prompt tokens (1.662x), walk stopped below the 262,144 window by design",
+        "tenancy": "clean by attribution: 38 status samples, all 18 in-flight requests attributed to this run, zero foreign; window 02:44:50Z-02:51:02Z",
+        "occupancy": "peak kv_tokens tracks prompt_tokens within one page on every turn (1:1 residency while it fits); peak pages_active climbs past capacity to 8,083 = 1.66x of the 4,864-page pool, served, with ~256-move/turn spill churn (0 on every third turn); 18 turns above capacity",
+        "pressure_counters": "spill_moves +5,120 total; resource/priority_suspensions, disk.kv_demotions, kv_demotions_refused, capacity_failures all 0; and the 1 s intra-turn peaks of admission.waiting_memory / suspended / restoring are 0 on every one of the 44 turns",
+        "per_turn_cost": "wall 1.57s (9k ctx) -> 2.01s (153k) -> 2.11s (258k): -22% effective new-turn rate (3,574 -> 2,778 tok/s) over a 28.6x context increase; prefill rows for the whole pass 255,986 ~ 44 x step, i.e. the prefix cache carries the history. Consistent with the volume waves' flat prefill plateau (3,469-3,498 tok/s)",
+        "corroboration": "coarse (20k steps) and fine (5.5k steps) agree: same onset region, comparable spill totals (4,945 vs 5,120), same zero-suspension/zero-demotion picture",
+        "limits": "n=1 conversation again, one instance/day; 2-3 intra-turn samples per turn (a peak between samples could still be missed, though 44/44 1:1 tracking makes a large miss implausible); wall includes ~constant HTTP overhead; synthetic filler text",
+        "evidence": "bench/splash-concurrency/results/depth-fine-2026-11-19/ (RECORD.md, depth_probe.jsonl with intra_turn peaks + t_start/t_end, engine_samples.jsonl, status edges, pins.txt)"
       }
     ]
   },

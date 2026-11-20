@@ -10,7 +10,7 @@ in the leaderboard.
 |---|---|---|
 | `ladder_kv.py` | the sealed two-stage run: width ladder (1→32, 512-token outputs, 2 rounds/width, stop within 10 % of w1) + KV pressure by summed volume (widths 2→12, ~20 k-token prompts, 8-token outputs) | 11-06 · 11-10s · 11-13 · 16b · 11-17 · 11-18 · 19-ext |
 | `kv_bracket_2026-11-19b.py` | the same two stages **past the 32-request cap**: reads the live `--queue-size` and refuses to start if the top width would self-saturate; refusals are recorded as data, not raised; prompts in a fresh seed namespace with per-round cache-served validation; stage 0 warmth gate on the ladder's own primitive | 19b · 19c-clean |
-| `depth_probe.py` | the other axis: **one** conversation grown turn over turn across the resident KV line toward the context window, `max_tokens 8`, unique blocks per turn | depth-2026-11-19 |
+| `depth_probe.py` | the other axis: **one** conversation grown turn over turn across the resident KV line toward the context window, `max_tokens 8`, unique blocks per turn; `--sample-interval` adds an intra-turn occupancy sampler (the fine pass) | depth-2026-11-19 · depth-fine-2026-11-19 |
 | `run_clean_detached.sh` | runs `kv_bracket` in a window the operator can claim is single-tenant, then **proves** it by request attribution | 19c-clean |
 | `run_depth_detached.sh` | the same discipline around `depth_probe.py` | depth-2026-11-19 |
 | `engine_probe.py` · `width_ladder.py` · `width512.py` · `kv_pressure_v4.py` | the sealed primitives, kept for provenance | — |

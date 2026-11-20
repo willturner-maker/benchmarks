@@ -154,6 +154,15 @@ svg text{font-family:var(--mono);fill:var(--fg-2)}
     sampling ran at 10 s, so the residency evidence here is the spill deltas; an occupancy curve needs 1–2 s
     sampling. <code>spill_moves</code> is the engine's counter of moves, not bytes. The text is synthetic filler —
     right shape (held, growing), not real retrieval behaviour.</p>
+    <p class="note"><b>Update, same night:</b> the sampling gap above was closed by a
+    <b>fine pass</b> — 44 turns of ~5.9 k tokens with an <b>intra-turn 1 s sampler</b>, tenancy clean by
+    attribution (<code>results/depth-fine-2026-11-19/</code>). Residency is <b>1:1 with context</b> (peak
+    <code>kv_tokens</code> = <code>prompt_tokens</code> within one page on all 44 turns); the spill trigger is the
+    <b>4,864-page capacity exactly</b> — last clean turn peaks 4,784 pages, first spilling turn 4,968 — tightening
+    the onset bracket from (0.90×, 1.04×] to <b>(0.984×, 1.021×]</b>. Peak residency climbs to <b>8,083 pages =
+    1.66× capacity</b> and is still served, with ~256 spill moves/turn of churn and the 1 s peaks of
+    <code>waiting_memory / suspended / restoring</code> at <b>zero on every turn</b>. Wall time stays near flat
+    (1.57 → 2.11 s over 28.6× context, −22 % effective rate), so "cheap per turn" survives.</p>
     <pre>git clone https://github.com/willturner-maker/benchmarks
 cd benchmarks/bench/splash-concurrency
 ./run_depth_detached.sh ~/my-depth 20000 18     # detached, samples /status, proves its own tenancy
