@@ -4,6 +4,11 @@ Snapshot of `~/resolve-vision-venv312` (opencv-python/-contrib **5.0.0.93**, num
 before the 5.1.0 wheel lands (opencv-watch launchd agent is watching; expect 5.1.0.94/.95).
 Rerun this same dir post-upgrade and diff `run1.json` vs `run2.json`.
 
+**Where the series stands now (2026-11-19):** the venv runs **5.1.0.95** since run5, numpy 2.5.5;
+run1–run4 sections below keep the 5.0.0.93 labels they were written with (published records are
+never relabeled). Sections run in order: run1 baseline → run2/3/4 (5.0.0.93 repeats) →
+**run5 (the 5.1.0.95 upgrade)** → **run6 (same wheel, host-state control)**.
+
 ## Files
 - `bench_visvenv.py` — full bench: import/init timing, YuNet tiled detect (4 grids × 6 thresholds × 2
   fixtures), whole-frame control, SFace embed pass + cosine stats, `match()` in-place-normalisation probe,
@@ -138,3 +143,31 @@ observed move is a *speed-up*, far outside the ×1.15 drift band.
      `[ WARN] setPreferableTarget Targets are not supported by the new graph engine for now` —
      55 WARN lines in the committed `run5.err` (counted 2026-11-18; run4.err was empty and not kept). Harmless but noisy for stderr-capturing
      pipelines; silence via `cv2.utils.logging.setLogLevel`.
+
+## Rerun 2026-11-18 (`run6.json`, label `visvenv-2026-11-18` — all-suites day, same wheel)
+
+`opencv-python`/`-contrib` **still 5.1.0.95**, numpy 2.5.5, Python 3.12.16 — nothing in the venv
+changed between run5 and run6, which makes this a pure **host-state** measurement and the
+suite's control pair for the ×1.15 ceiling. Measured 17:34 local during the all-suites day,
+i.e. the engine and Resolve were active on the same machine: **not** a clean window, and the
+timings below are read as machine state, never as a library change.
+
+- **Determinism (the record):** leaf-by-leaf diff vs `run5.json` → **269 values identical**, and
+  the only numeric non-timing difference is `embed.ms_per_face` 10.25 → 10.24, which is derived
+  from the embed wall time. **All 48 detect rows identical in counts, PNG and H.264** — so
+  run5's 9 shifted H.264 rows **reproduce bit-exactly**: the shift is decoder-version-bound and
+  stable, not sampling noise, which is the confirmation run5's sha256 attribution was waiting for.
+  Whole-frame raw 92, cosine (4095 pairs, median 0.1265, p95 0.3121), SFace norm median, surface
+  markers, fixture SHA-256s, and the `match()` probe (`in_place_mutation: true`, 9.821/12.40 →
+  1.00/1.00) all identical. Fifth consecutive determinism pass (run2/3/4/5/6 after the run1 baseline).
+- **Timings (the control):** canonical 4×3@0.5 **0.227 → 0.268 s** (PNG; H.264 0.221 → 0.267),
+  median **×1.181 across 54 timing rows** on an unchanged wheel. Largest moves are the smallest
+  absolutes — YuNet create 0.0052 → 0.0177 s (×3.4), `import_cv2` 0.0363 → 0.0808 s (×2.2),
+  whole-frame 0.194 → 0.407 s (×2.1) — which is what contention does to sub-100 ms measurements.
+- **Why this row matters for the suite's rules:** ×1.18 is **outside** the ×1.15 same-build
+  ceiling calibrated by run1→run2. Same wheel, same fixtures, different machine state — so the
+  ceiling is a *band to flag*, not a threshold that proves a library effect. It also bounds
+  run5's headline: run5 vs run4 was **×0.853**, the opposite direction and well outside the band,
+  so the 5.1.0.95 speed-up stands while a ×1.2 move in either direction stays unclaimable.
+- **Not captured:** the cold-start stage (`cold_run.py`) was not re-run — it wants an idle machine.
+  `run6.err` carries the same `setPreferableTarget` WARN spam (one line per model create).

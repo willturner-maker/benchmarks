@@ -1,0 +1,64 @@
+[17:53:23] agent harness: opencode opencode v2.3.1
+  same opencode build as wave tier3-2026-11-18k-smoke.
+engine proof: 1160 /opt/homebrew/Cellar/splash/1.7.0/libexec/python/bin/python3 -u -P -m server.server ~/Library/Ap
+[17:53:24] T1r4 arm=B_rule (sequential, daily)
+[17:54:12] T1r2 arm=A_control (sequential, daily)
+[17:54:50] T1r5 arm=B_rule (sequential, daily)
+[17:55:16] T1r3 arm=A_control (sequential, daily)
+[17:55:39] T1r6 arm=B_rule (sequential, daily)
+[17:56:09] T2r1 arm=A_control (sequential, daily)
+  !! SEAL LEAK in T2r1: ["('davinci-resolve-media_pool', 'error')", "('davinci-resolve-timeline', 'error')"]
+[17:57:42] T2r4 arm=B_rule (sequential, daily)
+  !! SEAL LEAK in T2r4: ["('davinci-resolve-media_pool', 'error')", "('davinci-resolve-media_pool', 'error')", "('davinci-resolve-media_pool', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-resolve_control', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-project_manager', 'error')"]
+[17:59:48] T2r2 arm=A_control (sequential, daily)
+  !! SEAL LEAK in T2r2: ["('davinci-resolve-media_pool', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-builtin-get_resolve_status', 'error')", "('davinci-resolve-timeline_list', 'error')", "('davinci-resolve-media_pool_probe_media_pool', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-timeline', 'error')"]
+[18:01:14] T2r5 arm=B_rule (sequential, daily)
+  !! SEAL LEAK in T2r5: ["('davinci-resolve-project_manager', 'error')", "('davinci-resolve-media_pool', 'error')", "('davinci-resolve-project-manager', 'error')", "('davinci-resolve-media-pool', 'error')", "('davinci-resolve-project_manager', 'error')", "('davinci-resolve-media_pool', 'error')", "('davinci-resolvetimeline', 'error')", "('davinci-resolve:timeline', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-media_pool', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-media_pool', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-media_pool', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-media_pool', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolve-time', 'error')", "('davinci-resolve-builtin-run-script', 'error')", "('davinci-resolve-builtin-run-script', 'error')", "('davinci-resolve-builtinrun_script', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolve-builtinget_resolve_status', 'error')", "('davinci-resolve-builtinget_resolve_status', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolve-project-manager', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolve-gallery-stills', 'error')", "('timeline', 'error')", "('resolvetime', 'error')", "('get_resolve_status', 'error')", "('davinci-resolve-builtin-run-script', 'error')", "('davinci-resolve-advanced-capabilities', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolveproject_manager', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolvetime', 'error')", "('davinci_resolve_timeline', 'error')", "('davinci-resolveadvanced_audio', 'error')", "('davinci-resolvebuiltinlaunch_resolve', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolvecolor_group', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolvegallery', 'error')", "('davinci-resolvetime', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolveedit_engine', 'error')", "('davinci-resolve-builtinget_version', 'error')", "('davinci-resolvetime', 'error')"]
+[18:03:42] T2r3 arm=A_control (sequential, daily)
+[18:05:18] T2r6 arm=B_rule (sequential, daily)
+  !! SEAL LEAK in T2r6: ["('davinci-resolve-project_manager', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-builtin-get_resolve_status', 'error')", "('davinci-resolve-timeline_list', 'error')"]
+[18:06:41] T3r1 arm=A_control (sequential, daily)
+[18:08:36] T3r4 arm=B_rule (sequential, daily)
+[18:09:59] T3r2 arm=A_control (sequential, daily)
+[18:11:04] T3r5 arm=B_rule (sequential, daily)
+[18:12:20] T3r3 arm=A_control (sequential, daily)
+[18:13:57] T3r6 arm=B_rule (sequential, daily)
+[18:15:34] F1r1 arm=A_control (sequential, daily)
+[18:16:36] F1r4 arm=B_rule (sequential, daily)
+[18:17:36] F1r2 arm=A_control (sequential, daily)
+[18:19:22] F1r5 arm=B_rule (sequential, daily)
+[18:20:24] F1r3 arm=A_control (sequential, daily)
+[18:21:28] F1r6 arm=B_rule (sequential, daily)
+[18:22:25] T7r1 arm=A_control (sequential, daily)
+[18:23:30] T7r4 arm=B_rule (sequential, daily)
+  !! SEAL LEAK in T7r4: ["('davinci-resolve-project_manager', 'error')", "('davinci-resolve-media_analysis', 'error')"]
+[18:26:29] T7r2 arm=A_control (sequential, daily)
+  !! SEAL LEAK in T7r2: ["('davinci-resolve-media_analysis', 'error')"]
+[18:28:39] T7r5 arm=B_rule (sequential, daily)
+  !! SEAL LEAK in T7r5: ["('davinci-resolve-project_manager_snapshot', 'error')", "('davinci-resolve-project_manager', 'error')", "('davinci-resolve-media_pool', 'error')"]
+[18:30:34] T7r3 arm=A_control (sequential, daily)
+  !! SEAL LEAK in T7r3: ["('davinci-resolve-media_inventory', 'error')"]
+[18:32:10] T7r6 arm=B_rule (sequential, daily)
+[18:34:18] T8r1 arm=A_control (sequential, daily)
+  !! SEAL LEAK in T8r1: ["('davinci-resolve-builtin-get_resolve_status', 'error')", "('davinci-resolve-media_pool', 'error')", "('davinci-resolve-media_pool', 'error')"]
+  T8 snapshot _mcp_AGBench-2026-11-18k_T8r1: [{'item_index': 0, 'comp_count': 1, 'comp_names': ['Composition 1']}]
+[18:35:08] T8r4 arm=B_rule (sequential, daily)
+  T8 snapshot _mcp_AGBench-2026-11-18k_T8r4: [{'item_index': 0, 'comp_count': 1, 'comp_names': ['Composition 1']}]
+[18:35:55] T8r2 arm=A_control (sequential, daily)
+  T8 snapshot _mcp_AGBench-2026-11-18k_T8r2: [{'item_index': 0, 'comp_count': 1, 'comp_names': ['Composition 1']}]
+[18:36:34] T8r5 arm=B_rule (sequential, daily)
+  T8 snapshot _mcp_AGBench-2026-11-18k_T8r5: [{'item_index': 0, 'comp_count': 1, 'comp_names': ['Composition 1']}]
+[18:37:31] T8r3 arm=A_control (sequential, daily)
+  T8 snapshot _mcp_AGBench-2026-11-18k_T8r3: [{'item_index': 0, 'comp_count': 1, 'comp_names': ['Composition 1']}]
+[18:38:14] T8r6 arm=B_rule (sequential, daily)
+  T8 snapshot _mcp_AGBench-2026-11-18k_T8r6: [{'item_index': 0, 'comp_count': 1, 'comp_names': ['Composition 1']}]
+[18:39:04] F2r1 arm=A_control (sequential, daily)
+[18:40:28] F2r4 arm=B_rule (sequential, daily)
+[18:42:08] F2r2 arm=A_control (sequential, daily)
+  !! SEAL LEAK in F2r2: ["('davinci-resolve-resolve_control', 'error')", "('davinci-resolve-project_manager', 'error')", "('davinci-resolve-resolve_control', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-project_manager', 'error')", "('davinci-resolve-resolve-control', 'error')", "('davinci-resolve-graph', 'error')", "('davinci-resolve-timeline_markers', 'error')"]
+[18:46:24] F2r5 arm=B_rule (sequential, daily)
+[18:47:34] F2r3 arm=A_control (sequential, daily)
+  !! SEAL LEAK in F2r3: ["('davinci-resolve-timeline', 'error')", "('davinci-resolve-timeline', 'error')"]
+[18:49:03] F2r6 arm=B_rule (sequential, daily)
+WAVE DONE — results/tier3-2026-11-18k
+global AGENTS.md restored

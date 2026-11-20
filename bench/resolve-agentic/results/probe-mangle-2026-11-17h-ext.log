@@ -1,0 +1,53 @@
+[17:13:09] A_control r5
+    {"probe": "A_control__r5", "variant": "A_control", "rep": 5, "ok": true, "wall_s": 36.0, "start_ms": 1794964389686, "end_ms": 1794964425679}
+[17:13:50] B_rule r5
+    {"probe": "B_rule__r5", "variant": "B_rule", "rep": 5, "ok": true, "wall_s": 26.9, "start_ms": 1794964430685, "end_ms": 1794964457618}
+[17:14:22] C_rule_names r5
+    {"probe": "C_rule_names__r5", "variant": "C_rule_names", "rep": 5, "ok": true, "wall_s": 9.1, "start_ms": 1794964462626, "end_ms": 1794964471677}
+[17:14:36] A_control r6
+    {"probe": "A_control__r6", "variant": "A_control", "rep": 6, "ok": true, "wall_s": 14.9, "start_ms": 1794964476685, "end_ms": 1794964491629}
+[17:14:56] B_rule r6
+    {"probe": "B_rule__r6", "variant": "B_rule", "rep": 6, "ok": true, "wall_s": 22.9, "start_ms": 1794964496637, "end_ms": 1794964519545}
+[17:15:24] C_rule_names r6
+    {"probe": "C_rule_names__r6", "variant": "C_rule_names", "rep": 6, "ok": true, "wall_s": 10.2, "start_ms": 1794964524553, "end_ms": 1794964534725}
+[17:15:39] A_control r7
+    {"probe": "A_control__r7", "variant": "A_control", "rep": 7, "ok": true, "wall_s": 33.5, "start_ms": 1794964539733, "end_ms": 1794964573264}
+[17:16:18] B_rule r7
+    {"probe": "B_rule__r7", "variant": "B_rule", "rep": 7, "ok": true, "wall_s": 12.0, "start_ms": 1794964578273, "end_ms": 1794964590230}
+[17:16:35] C_rule_names r7
+    {"probe": "C_rule_names__r7", "variant": "C_rule_names", "rep": 7, "ok": true, "wall_s": 10.2, "start_ms": 1794964595237, "end_ms": 1794964605467}
+[17:16:50] A_control r8
+    {"probe": "A_control__r8", "variant": "A_control", "rep": 8, "ok": true, "wall_s": 7.3, "start_ms": 1794964610475, "end_ms": 1794964617739}
+[17:17:02] B_rule r8
+    {"probe": "B_rule__r8", "variant": "B_rule", "rep": 8, "ok": true, "wall_s": 9.9, "start_ms": 1794964622746, "end_ms": 1794964632613}
+[17:17:17] C_rule_names r8
+    {"probe": "C_rule_names__r8", "variant": "C_rule_names", "rep": 8, "ok": true, "wall_s": 46.3, "start_ms": 1794964637621, "end_ms": 1794964683915}
+[17:18:08] A_control r9
+    {"probe": "A_control__r9", "variant": "A_control", "rep": 9, "ok": true, "wall_s": 36.7, "start_ms": 1794964688923, "end_ms": 1794964725576}
+[17:18:50] B_rule r9
+    {"probe": "B_rule__r9", "variant": "B_rule", "rep": 9, "ok": true, "wall_s": 9.6, "start_ms": 1794964730584, "end_ms": 1794964740202}
+[17:19:05] C_rule_names r9
+    {"probe": "C_rule_names__r9", "variant": "C_rule_names", "rep": 9, "ok": true, "wall_s": 16.9, "start_ms": 1794964745209, "end_ms": 1794964762112}
+[17:19:27] A_control r10
+    {"probe": "A_control__r10", "variant": "A_control", "rep": 10, "ok": true, "wall_s": 8.7, "start_ms": 1794964767119, "end_ms": 1794964775783}
+[17:19:40] B_rule r10
+    {"probe": "B_rule__r10", "variant": "B_rule", "rep": 10, "ok": true, "wall_s": 10.6, "start_ms": 1794964780791, "end_ms": 1794964791371}
+[17:19:56] C_rule_names r10
+    {"probe": "C_rule_names__r10", "variant": "C_rule_names", "rep": 10, "ok": true, "wall_s": 11.5, "start_ms": 1794964796379, "end_ms": 1794964807858}
+[17:20:12] A_control r11
+    {"probe": "A_control__r11", "variant": "A_control", "rep": 11, "ok": true, "wall_s": 11.7, "start_ms": 1794964812865, "end_ms": 1794964824598}
+[17:20:29] B_rule r11
+    {"probe": "B_rule__r11", "variant": "B_rule", "rep": 11, "ok": true, "wall_s": 12.9, "start_ms": 1794964829605, "end_ms": 1794964842541}
+[17:20:47] C_rule_names r11
+    {"probe": "C_rule_names__r11", "variant": "C_rule_names", "rep": 11, "ok": true, "wall_s": 13.5, "start_ms": 1794964847547, "end_ms": 1794964861089}
+[17:21:06] A_control r12
+    {"probe": "A_control__r12", "variant": "A_control", "rep": 12, "ok": true, "wall_s": 12.7, "start_ms": 1794964866095, "end_ms": 1794964878770}
+[17:21:23] B_rule r12
+    {"probe": "B_rule__r12", "variant": "B_rule", "rep": 12, "ok": true, "wall_s": 24.0, "start_ms": 1794964883778, "end_ms": 1794964907740}
+[17:21:52] C_rule_names r12
+    {"probe": "C_rule_names__r12", "variant": "C_rule_names", "rep": 12, "ok": true, "wall_s": 14.2, "start_ms": 1794964912748, "end_ms": 1794964926920}
+global AGENTS.md restored
+A_control {"trials": 12, "mangled_attempts_total": 26, "trials_with_any_attempt": 9, "never_recovered": 0, "harness_ms_wasted": 4616, "wall_s_mean": 20.2, "per_trial_attempts": [0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 6]}
+B_rule {"trials": 12, "mangled_attempts_total": 17, "trials_with_any_attempt": 8, "never_recovered": 0, "harness_ms_wasted": 2482, "wall_s_mean": 16.1, "per_trial_attempts": [0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 4, 4]}
+C_rule_names {"trials": 12, "mangled_attempts_total": 23, "trials_with_any_attempt": 10, "never_recovered": 0, "harness_ms_wasted": 4699, "wall_s_mean": 16.5, "per_trial_attempts": [0, 0, 1, 1, 1, 1, 1, 2, 2, 3, 3, 8]}
+wrote results/probe-mangle-2026-11-17h/probe-summary.json

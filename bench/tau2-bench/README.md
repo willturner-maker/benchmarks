@@ -50,14 +50,21 @@ The excluded ids are listed in `run_wave.sh` and `RECORD.md`, which makes the su
    config file on disk.
 2. **`--num-trials ≥ 2` and publish `pass^1` *and* `pass^2` plus the per-task structure** (both-pass /
    disagree / all-fail). One trial is not publishable: 45 of 238 tasks flipped between two greedy trials
-   (18.9 %), so `temperature 0` does not pin agent behaviour.
-3. **Never pool domains.** Different task counts, different graded components.
-4. **State self-play.** The engine under test also plays the user. τ²'s own leaderboard rows are cross-model;
+   (18.9 %).
+3. **Attribute your flips, don't just count them.** Report **where each flip first appears** — who produces
+   the first differing message (`triage_flips.py` does this from any wave's transcripts). In our wave 37 of
+   45 flips surface in the **user-simulator's** turn (33 at the opening turn) and only **8 of 238 tasks
+   (3.4 %) diverge in the agent's own turn** under an identical prefix. Under self-play both roles are the
+   engine under test, so this locates the flip rather than excusing it. Note also that τ² sends a per-trial
+   `seed` which this engine shows no reaction to at `temperature 0` — do not credit reseeding for the
+   variance, and do not claim a seeded replay you do not have.
+4. **Never pool domains.** Different task counts, different graded components.
+5. **State self-play.** The engine under test also plays the user. τ²'s own leaderboard rows are cross-model;
    a self-play row is comparable to another self-play row, nothing else.
-5. **State tenancy** and attribute it: engine counters are window deltas (the engine is not restarted for
+6. **State tenancy** and attribute it: engine counters are window deltas (the engine is not restarted for
    these waves), and `summarize.py` separates benchmark from co-tenant traffic by `prompt_tokens` size
    (τ² sessions ≤ ~16 k tokens; an operator chat session sits at 10⁵).
-6. **Keep transcripts local.** `tasks.jsonl` publishes per-simulation rows — ids, seeds, reward
+7. **Keep transcripts local.** `tasks.jsonl` publishes per-simulation rows — ids, seeds, reward
    decomposition, action/DB/assertion counts, tool-call counts, depth, durations — but **no message content,
    no tool arguments, no model free text**. Reviewers recompute every headline with
    `summarize.py --from-rows`.
@@ -91,7 +98,15 @@ intact.
 | `engine_samples.jsonl` | 10 s `/status` samples: KV residency, scheduler queue, admission counters |
 | `engine_config.json` | pin, harness env, stack flags, τ² scoring config, wall clock |
 | `<domain>.log` | τ²'s stdout for that domain (kept local; contains task text) |
+| `flip_triage.json` | (optional) per-flip first-difference location + component, from `triage_flips.py` |
 | `RECORD.md` | the human-readable record: scores, exclusions, confounds, engine behaviour |
+
+## Published records in this directory
+
+| dir | what it is |
+|---|---|
+| `results/2026-11-19a/` | the scored wave: 238 tasks × 2 trials, `tasks.jsonl` (476 rows), `summary.json`, `flip_triage.json`, engine samples, `RECORD.md` |
+| `results/2026-11-19-smoke/` | the pre-wave smoke run (mock 4 + airline 5 + retail 5 + telecom 3, one task per component). This is the record behind the "3 of 5 retail tasks die as `infrastructure_error`" claim, and behind the co-tenancy counter-example (the operator session was 94 % of peak residency there). No transcripts |
 
 ## What τ² is *not* good for on this machine
 

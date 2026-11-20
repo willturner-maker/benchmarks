@@ -137,5 +137,26 @@ operator's own session at the window's edge and it is what a `spill` + demote si
    are listed in this record so the subset is reconstructible.
 4. **No latency-per-domain** split from the engine side; the engine counters are window-level, and only τ²'s
    own records carry per-sim durations (medians above).
-5. The 45 disagreeing tasks are not yet triaged into model error vs user-simulator drift vs grader shape —
-   that triage is the next analytical step, not a prerequisite for publishing the row.
+5. The 45 disagreeing tasks were **triaged on 2026-11-19** (see `flip_triage.json` and the addendum below):
+   the triage locates where each flip first appears; it does not fully explain the cause.
+
+## Addendum 2026-11-19 — flip triage, and one published claim corrected
+
+`flip_triage.json` (45 rows, produced by `../triage_flips.py` from the local transcripts) splits the
+disagreeing tasks by **who produces the first differing message**: 37 user-simulator turns (33 at the
+opening sentence), 8 agent turns under an identical prefix, 0 length-only. Per domain: airline 0 agent-first
+/ 5 user-first; retail 3 / 14; telecom 5 / 18. Components: `ENV_ASSERTION` 23, `DB` 21, `COMMUNICATE` 1;
+direction 24 down / 21 up.
+
+Two corrections to what this record first shipped:
+
+1. The wave notes attributed the whole 18.9 % to greedy non-reproducibility under batching. Only the 8
+   agent-first flips are visible in the agent's own turn; 37 become visible through the simulated user's
+   wording. Under self-play both are engine output, so the split is a location, not an exoneration.
+2. **The per-trial seed is not the mechanism.** τ² puts a per-trial seed (`626729` / `373753`) in the request
+   body, but the engine returned byte-identical greedy output for both seeds in 3/3 unloaded probes, so
+   reseeding cannot explain the divergence and no seeded replay is available on this stack.
+
+The open question — batch-dependent numerics (`--max-concurrency 3`) vs greedy not reproducing even alone —
+is being separated by a width-1 control over 8 of these tasks; whatever it shows, it will be recorded here
+rather than used to rewrite the numbers above.

@@ -1,7 +1,7 @@
 {
  "probe": "MCP tool-name guidance (Tier 2 sizing probe)",
  "published_at": "2026-11-18",
- "harness": "opencode v2.3.0; MCP 5.3.1; model Qwen3.8-Flash-Next-GSQ-RCO-GGUF IQ3_S via Splash 1.7.0 (engine shared with operator session \u2014 disclosed tenancy)",
+ "harness": "opencode v2.3.0; MCP 5.3.1; model Qwen3.8-Flash-Next-GSQ-RCO-GGUF IQ3_S via Splash 1.7.0 (engine shared with operator session — disclosed tenancy)",
  "kind": "probe, not a wave: read-only briefs, no ground truth, no grading",
  "n_per_variant": 12,
  "variants": {
@@ -118,5 +118,302 @@
   "cannot_speak_to": "whole-trial collapse (T2r1-class): 0 never-recovered in 36 read-only trials"
  },
  "tree": "results/probe-mangle-2026-11-17h (36 sessions; README + probe-summary.json + probe-analysis.json on disk)",
- "teardown": "probe project _mcp_17i_nameprobe deleted 2026-11-18 (results/teardown-2026-11-17h.jsonl)"
+ "teardown": "probe project _mcp_17i_nameprobe deleted 2026-11-18 (results/teardown-2026-11-17h.jsonl)",
+ "trials": [
+  {
+   "trial": "A_control__r1",
+   "attempts": 3,
+   "distinct_names": 3,
+   "recovery_calls": 3,
+   "wasted_ms": 546,
+   "recovered": true
+  },
+  {
+   "trial": "A_control__r10",
+   "attempts": 0,
+   "distinct_names": 0,
+   "recovery_calls": null,
+   "wasted_ms": 0,
+   "recovered": true
+  },
+  {
+   "trial": "A_control__r11",
+   "attempts": 2,
+   "distinct_names": 2,
+   "recovery_calls": 2,
+   "wasted_ms": 330,
+   "recovered": true
+  },
+  {
+   "trial": "A_control__r12",
+   "attempts": 1,
+   "distinct_names": 1,
+   "recovery_calls": 1,
+   "wasted_ms": 236,
+   "recovered": true
+  },
+  {
+   "trial": "A_control__r2",
+   "attempts": 6,
+   "distinct_names": 5,
+   "recovery_calls": 2,
+   "wasted_ms": 867,
+   "recovered": true
+  },
+  {
+   "trial": "A_control__r3",
+   "attempts": 0,
+   "distinct_names": 0,
+   "recovery_calls": null,
+   "wasted_ms": 0,
+   "recovered": true
+  },
+  {
+   "trial": "A_control__r4",
+   "attempts": 1,
+   "distinct_names": 1,
+   "recovery_calls": 1,
+   "wasted_ms": 347,
+   "recovered": true
+  },
+  {
+   "trial": "A_control__r5",
+   "attempts": 3,
+   "distinct_names": 3,
+   "recovery_calls": 3,
+   "wasted_ms": 709,
+   "recovered": true
+  },
+  {
+   "trial": "A_control__r6",
+   "attempts": 4,
+   "distinct_names": 2,
+   "recovery_calls": 2,
+   "wasted_ms": 673,
+   "recovered": true
+  },
+  {
+   "trial": "A_control__r7",
+   "attempts": 4,
+   "distinct_names": 3,
+   "recovery_calls": 3,
+   "wasted_ms": 623,
+   "recovered": true
+  },
+  {
+   "trial": "A_control__r8",
+   "attempts": 0,
+   "distinct_names": 0,
+   "recovery_calls": null,
+   "wasted_ms": 0,
+   "recovered": true
+  },
+  {
+   "trial": "A_control__r9",
+   "attempts": 2,
+   "distinct_names": 1,
+   "recovery_calls": 2,
+   "wasted_ms": 285,
+   "recovered": true
+  },
+  {
+   "trial": "B_rule__r1",
+   "attempts": 1,
+   "distinct_names": 1,
+   "recovery_calls": 1,
+   "wasted_ms": 197,
+   "recovered": true
+  },
+  {
+   "trial": "B_rule__r10",
+   "attempts": 0,
+   "distinct_names": 0,
+   "recovery_calls": null,
+   "wasted_ms": 0,
+   "recovered": true
+  },
+  {
+   "trial": "B_rule__r11",
+   "attempts": 1,
+   "distinct_names": 1,
+   "recovery_calls": 1,
+   "wasted_ms": 265,
+   "recovered": true
+  },
+  {
+   "trial": "B_rule__r12",
+   "attempts": 4,
+   "distinct_names": 1,
+   "recovery_calls": 3,
+   "wasted_ms": 598,
+   "recovered": true
+  },
+  {
+   "trial": "B_rule__r2",
+   "attempts": 4,
+   "distinct_names": 2,
+   "recovery_calls": 4,
+   "wasted_ms": 445,
+   "recovered": true
+  },
+  {
+   "trial": "B_rule__r3",
+   "attempts": 0,
+   "distinct_names": 0,
+   "recovery_calls": null,
+   "wasted_ms": 0,
+   "recovered": true
+  },
+  {
+   "trial": "B_rule__r4",
+   "attempts": 0,
+   "distinct_names": 0,
+   "recovery_calls": null,
+   "wasted_ms": 0,
+   "recovered": true
+  },
+  {
+   "trial": "B_rule__r5",
+   "attempts": 0,
+   "distinct_names": 0,
+   "recovery_calls": null,
+   "wasted_ms": 0,
+   "recovered": true
+  },
+  {
+   "trial": "B_rule__r6",
+   "attempts": 2,
+   "distinct_names": 2,
+   "recovery_calls": 2,
+   "wasted_ms": 112,
+   "recovered": true
+  },
+  {
+   "trial": "B_rule__r7",
+   "attempts": 1,
+   "distinct_names": 1,
+   "recovery_calls": 1,
+   "wasted_ms": 196,
+   "recovered": true
+  },
+  {
+   "trial": "B_rule__r8",
+   "attempts": 2,
+   "distinct_names": 2,
+   "recovery_calls": 2,
+   "wasted_ms": 303,
+   "recovered": true
+  },
+  {
+   "trial": "B_rule__r9",
+   "attempts": 2,
+   "distinct_names": 1,
+   "recovery_calls": 2,
+   "wasted_ms": 366,
+   "recovered": true
+  },
+  {
+   "trial": "C_rule_names__r1",
+   "attempts": 1,
+   "distinct_names": 1,
+   "recovery_calls": 1,
+   "wasted_ms": 232,
+   "recovered": true
+  },
+  {
+   "trial": "C_rule_names__r10",
+   "attempts": 1,
+   "distinct_names": 1,
+   "recovery_calls": 1,
+   "wasted_ms": 194,
+   "recovered": true
+  },
+  {
+   "trial": "C_rule_names__r11",
+   "attempts": 2,
+   "distinct_names": 1,
+   "recovery_calls": 2,
+   "wasted_ms": 1042,
+   "recovered": true
+  },
+  {
+   "trial": "C_rule_names__r12",
+   "attempts": 0,
+   "distinct_names": 0,
+   "recovery_calls": null,
+   "wasted_ms": 0,
+   "recovered": true
+  },
+  {
+   "trial": "C_rule_names__r2",
+   "attempts": 1,
+   "distinct_names": 1,
+   "recovery_calls": 1,
+   "wasted_ms": 187,
+   "recovered": true
+  },
+  {
+   "trial": "C_rule_names__r3",
+   "attempts": 8,
+   "distinct_names": 7,
+   "recovery_calls": 8,
+   "wasted_ms": 831,
+   "recovered": true
+  },
+  {
+   "trial": "C_rule_names__r4",
+   "attempts": 2,
+   "distinct_names": 2,
+   "recovery_calls": 2,
+   "wasted_ms": 329,
+   "recovered": true
+  },
+  {
+   "trial": "C_rule_names__r5",
+   "attempts": 1,
+   "distinct_names": 1,
+   "recovery_calls": 1,
+   "wasted_ms": 197,
+   "recovered": true
+  },
+  {
+   "trial": "C_rule_names__r6",
+   "attempts": 0,
+   "distinct_names": 0,
+   "recovery_calls": null,
+   "wasted_ms": 0,
+   "recovered": true
+  },
+  {
+   "trial": "C_rule_names__r7",
+   "attempts": 1,
+   "distinct_names": 1,
+   "recovery_calls": 1,
+   "wasted_ms": 203,
+   "recovered": true
+  },
+  {
+   "trial": "C_rule_names__r8",
+   "attempts": 3,
+   "distinct_names": 2,
+   "recovery_calls": 3,
+   "wasted_ms": 923,
+   "recovered": true
+  },
+  {
+   "trial": "C_rule_names__r9",
+   "attempts": 3,
+   "distinct_names": 2,
+   "recovery_calls": 3,
+   "wasted_ms": 561,
+   "recovered": true
+  }
+ ],
+ "trials_backfill": {
+  "rule": "per-trial scalars copied from the wave's driver log; `verified` is the grader verdict, never the driver ok flag; unmeasurable verdicts are kept as explicit nulls; grader notes/why and claim quotes are not copied",
+  "not_backfilled": "`honest` (claim-vs-read-back agreement) is not derivable from the archived grading JSON without re-reading transcripts, so it stays only where the wave published it at the time",
+  "backfilled_at": "2026-11-19",
+  "source": "results/probe-mangle-2026-11-17h/probe-summary.json:per_trial",
+  "per_trial_semantics": "no grader on this probe: `recovered` = the intended MCP call eventually landed (attempts 0 means the first call was correct); `never_recovered` counts per variant are in the `variants` block"
+ }
 }

@@ -1,0 +1,107 @@
+pin in record: git_commit=fc0055dc4e0a316c3f83133267fbd6faaa770992
+domain=None  trials=1  max_steps=200  seed(s)=[626729]
+agent llm   : openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+user llm    : openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+simulations : 4
+reward_basis census over 4 task definitions: {'DB': 4, 'COMMUNICATE': 3, 'ENV_ASSERTION': 1}
+tasks declaring expected_nl_assertions (=> gpt-4.1 judge in the reward path): 0
+sims whose record carries nl_assertions verdicts: 0/4
+
+scored / unscored(infrastructure_error or no reward)  4/0
+mean reward over ALL sims (None=0)      1.0000
+mean reward over SCORED sims            1.0000
+reward==1.0                             4/4 sims (4/4 scored)
+db_match True/False      4/0
+termination              {'user_stop': 4}
+cost (agent+user, local model => 0 by design) 0.0000
+annotated actions: 3  matched 3 (read 0, write 3)
+
+per task:
+       create_task_1 reward=1.0 db=True turns=8 tool_calls=2 dur=4s depth 979 -> 1070 (0.01x KV budget)
+  create_task_1_nl_eval reward=1.0 db=True turns=12 tool_calls=3 dur=7s depth 985 -> 1225 (0.01x KV budget)
+  create_task_1_with_env_assertions reward=1.0 db=True turns=8 tool_calls=2 dur=5s depth 979 -> 1070 (0.01x KV budget)
+       update_task_1 reward=1.0 db=True turns=10 tool_calls=2 dur=7s depth 952 -> 1127 (0.01x KV budget)
+
+call-level depth: median 999  p90 1,127  max 1,225 tokens (0.01x KV budget, 0.00x context window)
+calls with usage: 25
+pin in record: git_commit=fc0055dc4e0a316c3f83133267fbd6faaa770992
+domain=None  trials=1  max_steps=60  seed(s)=[626729]
+agent llm   : openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+user llm    : openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+simulations : 5
+reward_basis census over 5 task definitions: {'DB': 5, 'COMMUNICATE': 5}
+tasks declaring expected_nl_assertions (=> gpt-4.1 judge in the reward path): 0
+sims whose record carries nl_assertions verdicts: 0/5
+
+scored / unscored(infrastructure_error or no reward)  5/0
+mean reward over ALL sims (None=0)      1.0000
+mean reward over SCORED sims            1.0000
+reward==1.0                             5/5 sims (5/5 scored)
+db_match True/False      5/0
+termination              {'user_stop': 5}
+cost (agent+user, local model => 0 by design) 0.0000
+annotated actions: 13  matched 13 (read 13, write 0)
+
+per task:
+                   0 reward=1.0 db=True turns=14 tool_calls=2 dur=61s depth 449 -> 6563 (0.04x KV budget)
+                   1 reward=1.0 db=True turns=20 tool_calls=7 dur=39s depth 443 -> 8136 (0.05x KV budget)
+                   2 reward=1.0 db=True turns=57 tool_calls=29 dur=114s depth 593 -> 10531 (0.07x KV budget)
+                   3 reward=1.0 db=True turns=14 tool_calls=3 dur=51s depth 505 -> 6696 (0.04x KV budget)
+                   4 reward=1.0 db=True turns=25 tool_calls=9 dur=60s depth 429 -> 8749 (0.06x KV budget)
+
+call-level depth: median 5,955  p90 8,749  max 10,531 tokens (0.07x KV budget, 0.04x context window)
+calls with usage: 75
+pin in record: git_commit=fc0055dc4e0a316c3f83133267fbd6faaa770992
+domain=None  trials=1  max_steps=60  seed(s)=[626729]
+agent llm   : openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+user llm    : openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+simulations : 5
+reward_basis census over 5 task definitions: {'DB': 5, 'NL_ASSERTION': 5}
+tasks declaring expected_nl_assertions (=> gpt-4.1 judge in the reward path): 0
+sims whose record carries nl_assertions verdicts: 0/5
+
+scored / unscored(infrastructure_error or no reward)  2/3
+mean reward over ALL sims (None=0)      0.4000
+mean reward over SCORED sims            1.0000
+reward==1.0                             2/5 sims (2/2 scored)
+db_match True/False      2/0
+termination              {'user_stop': 2, 'infrastructure_error': 3}
+cost (agent+user, local model => 0 by design) 0.0000
+annotated actions: 10  matched 10 (read 8, write 2)
+
+per task:
+                   0 reward=1.0 db=True turns=22 tool_calls=6 dur=48s depth 448 -> 10349 (0.07x KV budget)
+                   1 reward=1.0 db=True turns=20 tool_calls=5 dur=49s depth 448 -> 9713 (0.06x KV budget)
+                   2 reward=None db=None turns=0 tool_calls=0 dur=0s depth - -> - (0.00x KV budget)
+                   3 reward=None db=None turns=0 tool_calls=0 dur=0s depth - -> - (0.00x KV budget)
+                   4 reward=None db=None turns=0 tool_calls=0 dur=0s depth - -> - (0.00x KV budget)
+
+call-level depth: median 5,341  p90 9,494  max 10,349 tokens (0.07x KV budget, 0.04x context window)
+calls with usage: 29
+pin in record: git_commit=fc0055dc4e0a316c3f83133267fbd6faaa770992
+domain=None  trials=1  max_steps=60  seed(s)=[626729]
+agent llm   : openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+user llm    : openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+simulations : 5
+reward_basis census over 5 task definitions: {'ENV_ASSERTION': 5}
+tasks declaring expected_nl_assertions (=> gpt-4.1 judge in the reward path): 0
+sims whose record carries nl_assertions verdicts: 0/5
+
+scored / unscored(infrastructure_error or no reward)  5/0
+mean reward over ALL sims (None=0)      0.6000
+mean reward over SCORED sims            0.6000
+reward==1.0                             3/5 sims (3/5 scored)
+db_match True/False      3/0
+termination              {'user_stop': 3, 'max_steps': 2}
+cost (agent+user, local model => 0 by design) 0.0000
+annotated actions: 6  matched 6 (read 0, write 6)
+
+per task:
+  [mobile_data_issue]airplane_mode_on|bad_network_preference[PERSONA:Hard] reward=1.0 db=True turns=34 tool_calls=11 dur=48s depth 3992 -> 9559 (0.06x KV budget)
+  [mobile_data_issue]airplane_mode_on|data_mode_off[PERSONA:None] reward=1.0 db=True turns=26 tool_calls=8 dur=33s depth 3855 -> 8965 (0.06x KV budget)
+  [mobile_data_issue]airplane_mode_on|user_abroad_roaming_enabled_off[PERSONA:None] reward=0.0 db=None turns=63 tool_calls=23 dur=100s depth 3852 -> 10810 (0.07x KV budget)
+  [mobile_data_issue]bad_network_preference|user_abroad_roaming_enabled_off[PERSONA:Hard] reward=0.0 db=None turns=62 tool_calls=20 dur=65s depth 3989 -> 10446 (0.07x KV budget)
+  [mobile_data_issue]data_saver_mode_on|user_abroad_roaming_enabled_off[PERSONA:Easy] reward=1.0 db=True turns=28 tool_calls=9 dur=26s depth 3986 -> 9030 (0.06x KV budget)
+
+call-level depth: median 6,607  p90 9,147  max 10,810 tokens (0.07x KV budget, 0.04x context window)
+calls with usage: 137

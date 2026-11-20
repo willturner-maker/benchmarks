@@ -3,3 +3,8 @@
 # are written separately at the repo bench/resolve-agentic/ root, like prior waves.
 */
 !distill/
+
+# raw MCP call logs echo live Resolve project names (the precommit scan blocked one).
+# The published teardown-2026-11-17h.jsonl was scrubbed first; keep raw ones local.
+*-mcp-calls.jsonl
+*-calls.jsonl

@@ -781,9 +781,16 @@ the domains** — different task counts and different graded components.
 tasks, which with 2 trials means "both trials passed". So 45 of 238 tasks (18.9 %) flipped between two
 `temperature 0` trials, and the two published numbers carry no information beyond each other. The looser
 independent-trials variant (`mean p^k`) would print 0.845 / 0.733 / 0.822 — `summarize.py` prints both,
-because a row that quotes one without naming the definition is defective. Same mechanism as the 2026-11-13
-instance-state result and the tool-loop gate: **greedy does not pin agent behavior on this stack** (batch
-composition under `maximum_batch_width = 4`).
+because a row that quotes one without naming the definition is defective. **Flip location triaged** (after
+publishing): 37 of 45 flips first diverge at a *user-simulator* turn (33 at the opening sentence) and only
+**8 of 238 tasks (3.4 %) diverge in the agent's own turn** under an identical prefix. Under self-play both
+roles are the engine under test, so this locates the flip rather than excusing it. Trap closed on the way:
+τ² sends a per-trial `seed` (626729 / 373753), but this engine returned byte-identical greedy output for
+both seeds (3/3 unloaded probes), so **reseeding is not the mechanism** and no seeded replay exists here.
+The earlier wording attributed the whole 18.9 % to greedy non-reproducibility under batching
+(`maximum_batch_width = 4`); the batching question is now under direct test (same flipping tasks at
+`--max-concurrency 1`), and until that reports the split above is the published fact and the mechanism
+stays open.
 
 **Engine side, this is a prefix-cache workload, not a KV-stress one.** Depth tops out at 16,341 tokens =
 **0.105× the 155,648-token KV budget**, and τ²'s own `--max-concurrency 3` keeps decode width under our

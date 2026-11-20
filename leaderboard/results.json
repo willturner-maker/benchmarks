@@ -1511,7 +1511,10 @@
           "pooled": "NOT published: domains differ in task count and in graded components"
         },
         "pass_k_definition": "upstream definition: per task C(n_pass,k)/C(n_trials,k), averaged over tasks. With 2 trials pass^2 == 'both trials passed', so pass^1 - pass^2 IS the flip count. The independent-trials variant (mean p^k) would print 0.845/0.733/0.822; summarize.py prints both and every row must name which it quotes.",
-        "stability_finding": "45 of 238 tasks (18.9%) flipped between two temperature-0 trials: airline 5/50, retail 17/74, telecom 23/114. Same mechanism as the 2026-11-13 instance-state result and the tool-loop-gate greedy-trace divergence: batch composition under maximum_batch_width=4. Two trials is the floor; pass^3 not available.",
+        "stability_finding": "45 of 238 tasks (18.9%) flipped between two temperature-0 trials: airline 5/50, retail 17/74, telecom 23/114. Direction near-symmetric (24 down, 21 up): sampling, not drift. Two trials is the floor; pass^3 not available.",
+        "flip_location": "triaged post-publication over the local transcripts (results/2026-11-19a/flip_triage.json): 37 of 45 flips first diverge at a USER-SIMULATOR turn (33 at the opening sentence), 8 at an AGENT turn under an identical prefix, 0 length-only. Under self-play both roles are the engine under test, so this locates the flip rather than excusing it. Components: ENV_ASSERTION 23, DB 21, COMMUNICATE 1.",
+        "seed_inert_on_engine": "tau2 sends a per-trial seed (626729 trial 0 / 373753 trial 1 under --seed 300), but the engine returned byte-identical greedy output for both seeds in 3/3 unloaded probes: reseeding is not the flip mechanism here and no seeded replay exists on this stack.",
+        "mechanism_status": "OPEN. Earlier wording credited batching (maximum_batch_width=4 at --max-concurrency 3); the separating experiment is the same flipping tasks at --max-concurrency 1. Until it reports the flip-location split is the published fact and the cause stays open.",
         "volume": {
           "completions": 12088,
           "prompt_tokens": 78251808,

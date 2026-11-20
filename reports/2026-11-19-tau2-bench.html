@@ -123,10 +123,17 @@ svg text{font-family:var(--mono);fill:var(--fg-2)}
       <div class="legend"><span><i style="background:var(--accent)"></i>pass^1</span><span><i style="background:var(--s2)"></i>pass^2</span><span><i class="ln" style="background:var(--s3)"></i>the looser independent-trials variant (mean p^k), for contrast</span></div>
       <div class="chartwrap"><svg id="chart" viewBox="0 0 880 300" role="img" aria-label="Grouped bars per domain: airline pass^1 0.870 and pass^2 0.820, retail 0.791 and 0.676, telecom 0.873 and 0.772. Markers above show the looser independent-trials pass^2 variant at 0.845, 0.733 and 0.822. The gap between pass^1 and pass^2 equals the number of tasks whose two greedy trials disagreed: airline 5 of 50, retail 17 of 74, telecom 23 of 114"></svg><div class="tip" id="tip"></div></div>
     </div>
-    <p class="note">Same mechanism as the 2026-11-13 instance-state result and the tool-loop gate: <b>greedy
-    does not pin agent behavior on this stack</b>, because batch composition under
-    <code>maximum_batch_width = 4</code> still varies. Two trials is the floor of what this repo publishes, and
-    a third would move pass^2 materially — that is a limitation of this row, stated rather than smoothed.</p>
+    <p class="note"><b>Where the flips appear</b> (triaged after publishing, over the local transcripts):
+    <b>37 of the 45 first diverge at a <i>user-simulator</i> turn</b> — 33 of those at the opening sentence —
+    and only <b>8 of 238 tasks (3.4 %) diverge in the agent's own turn</b> under an identical prefix. Under
+    self-play both roles are the engine under test, so this locates the flip rather than excusing it. A trap
+    closed: τ² sends a per-trial <code>seed</code> (626729 / 373753), but this engine gave byte-identical
+    greedy output for both seeds (3/3 unloaded probes), so <b>reseeding is not the mechanism</b> and no
+    seeded replay exists here. Direction is near-symmetric (24 down, 21 up): sampling, not drift. Two trials
+    is still the floor of what this repo publishes, and a third would move pass^2 materially — stated rather
+    than smoothed. Whether the divergence is batch-dependent numerics (<code>--max-concurrency 3</code>) or
+    greedy simply not reproducing alone is being separated by a <b>width-1 control</b> over 8 flipping tasks;
+    until it reports, the split above is the fact and the mechanism stays open.</p>
   </section>
 
   <section>

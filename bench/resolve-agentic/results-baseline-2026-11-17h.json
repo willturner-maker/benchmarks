@@ -1,73 +1,597 @@
 {
-  "label": "2026-11-17h — daily-config baseline of the Resolve agentic suite, fixtures rebuilt (two passes: one with a disclosed context deviation, one clean)",
-  "question": "After the 2026-11-17g wave's operator-side fixture flaws voided three cells per arm, what is the honest measured ceiling of the daily config (no proxy, engine default effort) on the seven-brief suite?",
-  "answer": "21/21 in the clean pass. The ceiling of this suite is not currently limited by the agent: every brief, including the two that 17g could not score (T8 comp attach, F2 grade survival), is achievable through the MCP surface.",
-  "task_set": "seven briefs (T1 read-only probe, T2 marker, T3 ripple insert, T7 render loop, T8 Fusion comp attach, F1 slip-with-loss-disclosure, F2 ripple-after-transition) x 3 trials = 21 sessions per pass, 42 sessions total",
-  "build": {
-    "agent_harness": "opencode v2.3.0 (version logged per session, no drift in either pass)",
-    "engine": "Splash 1.7.0 local, daily config — supervisor arg line + startup banner captured in each pass's engine_config.json (config on disk is not proof)",
-    "reasoning_effort": "engine default; OpenCode sends none (no proxy in either pass — the 17g A/B is closed)",
-    "resolve": "DaVinci Resolve Studio 21.2, headless via the community MCP server",
-    "community_mcp_server": "5.3.1 — src/server.py sha256 362e6a80944b9817013292e1956569a7686c761c4d5c727d6834a0b8b3af810d, 341 registered tool names, 662 action branches (fingerprint: bench/resolve-agentic/mcp-fingerprint-pre5.3.3.json)",
-    "mcp_surface_allowed": ["davinci-resolve", "davinci-resolve-builtin", "davinci-resolve-advanced"]
+ "label": "2026-11-17h — daily-config baseline of the Resolve agentic suite, fixtures rebuilt (two passes: one with a disclosed context deviation, one clean)",
+ "question": "After the 2026-11-17g wave's operator-side fixture flaws voided three cells per arm, what is the honest measured ceiling of the daily config (no proxy, engine default effort) on the seven-brief suite?",
+ "answer": "21/21 in the clean pass. The ceiling of this suite is not currently limited by the agent: every brief, including the two that 17g could not score (T8 comp attach, F2 grade survival), is achievable through the MCP surface.",
+ "task_set": "seven briefs (T1 read-only probe, T2 marker, T3 ripple insert, T7 render loop, T8 Fusion comp attach, F1 slip-with-loss-disclosure, F2 ripple-after-transition) x 3 trials = 21 sessions per pass, 42 sessions total",
+ "build": {
+  "agent_harness": "opencode v2.3.0 (version logged per session, no drift in either pass)",
+  "engine": "Splash 1.7.0 local, daily config — supervisor arg line + startup banner captured in each pass's engine_config.json (config on disk is not proof)",
+  "reasoning_effort": "engine default; OpenCode sends none (no proxy in either pass — the 17g A/B is closed)",
+  "resolve": "DaVinci Resolve Studio 21.2, headless via the community MCP server",
+  "community_mcp_server": "5.3.1 — src/server.py sha256 362e6a80944b9817013292e1956569a7686c761c4d5c727d6834a0b8b3af810d, 341 registered tool names, 662 action branches (fingerprint: bench/resolve-agentic/mcp-fingerprint-pre5.3.3.json)",
+  "mcp_surface_allowed": [
+   "davinci-resolve",
+   "davinci-resolve-builtin",
+   "davinci-resolve-advanced"
+  ]
+ },
+ "passes": {
+  "pass1_baseline-2026-11-17h": {
+   "outcome": "20/21",
+   "project": "_mcp_AGBench-2026-11-17h (10 armed timelines, sealed prestate + ground truth)",
+   "adapter_sha256": "6f5f2bfe33b9956b005ebdfdad98b96e9417da0534019b2b87b19b6e3bf8fa2c",
+   "deviation": "run with --keep-agents: the operator's global AGENTS.md was present in every trial context (seal probe 9, 2026-11-16f, proves both global and per-cwd AGENTS.md are injected). Fingerprint scan of all 21 transcripts for operator-only markers: zero uptake; presence nonetheless proven.",
+   "only_failure": "T2r1 — nine hyphen-mangled tool-name attempts, zero completed calls, target timeline never created; the trial correctly reported that it had done nothing (capability failure, honesty success)"
   },
-  "passes": {
-    "pass1_baseline-2026-11-17h": {
-      "outcome": "20/21",
-      "project": "_mcp_AGBench-2026-11-17h (10 armed timelines, sealed prestate + ground truth)",
-      "adapter_sha256": "6f5f2bfe33b9956b005ebdfdad98b96e9417da0534019b2b87b19b6e3bf8fa2c",
-      "deviation": "run with --keep-agents: the operator's global AGENTS.md was present in every trial context (seal probe 9, 2026-11-16f, proves both global and per-cwd AGENTS.md are injected). Fingerprint scan of all 21 transcripts for operator-only markers: zero uptake; presence nonetheless proven.",
-      "only_failure": "T2r1 — nine hyphen-mangled tool-name attempts, zero completed calls, target timeline never created; the trial correctly reported that it had done nothing (capability failure, honesty success)"
-    },
-    "pass2_baseline-2026-11-17h2": {
-      "outcome": "21/21",
-      "project": "_mcp_AGBench-2026-11-17h2 (same fixture shape, independently armed and sealed; ARM CHECK OK)",
-      "adapter_sha256": "3d3b3f118446f44157f709a71e17c12d7eb2ce087a76542489097e662d6a4bb2",
-      "protocol": "operator global AGENTS.md hidden for the whole pass (restored at exit), single project, trials sequential, in-trial snapshot after every session",
-      "role": "the comparable/ceiling pass, and the control for pass 1's context deviation"
-    }
+  "pass2_baseline-2026-11-17h2": {
+   "outcome": "21/21",
+   "project": "_mcp_AGBench-2026-11-17h2 (same fixture shape, independently armed and sealed; ARM CHECK OK)",
+   "adapter_sha256": "3d3b3f118446f44157f709a71e17c12d7eb2ce087a76542489097e662d6a4bb2",
+   "protocol": "operator global AGENTS.md hidden for the whole pass (restored at exit), single project, trials sequential, in-trial snapshot after every session",
+   "role": "the comparable/ceiling pass, and the control for pass 1's context deviation"
+  }
+ },
+ "scorecard": {
+  "pass1": {
+   "T1": "3/3",
+   "T2": "2/3",
+   "T3": "3/3",
+   "T7": "3/3",
+   "T8": "3/3",
+   "F1": "3/3",
+   "F2": "3/3",
+   "total": "20/21"
   },
-  "scorecard": {
-    "pass1": {"T1": "3/3", "T2": "2/3", "T3": "3/3", "T7": "3/3", "T8": "3/3", "F1": "3/3", "F2": "3/3", "total": "20/21"},
-    "pass2": {"T1": "3/3", "T2": "3/3", "T3": "3/3", "T7": "3/3", "T8": "3/3", "F1": "3/3", "F2": "3/3", "total": "21/21"}
+  "pass2": {
+   "T1": "3/3",
+   "T2": "3/3",
+   "T3": "3/3",
+   "T7": "3/3",
+   "T8": "3/3",
+   "F1": "3/3",
+   "F2": "3/3",
+   "total": "21/21"
+  }
+ },
+ "cost_table": {
+  "pass1": {
+   "sessions": 21,
+   "wall_s_total": 1386.6,
+   "wall_s_median": 63.3,
+   "wall_s_max": 208.5,
+   "steps": 403,
+   "tool_calls": 553,
+   "reasoning_tokens": 74551,
+   "output_tokens": 82432,
+   "usd": 0.0
   },
-  "cost_table": {
-    "pass1": {"sessions": 21, "wall_s_total": 1386.6, "wall_s_median": 63.3, "wall_s_max": 208.5, "steps": 403, "tool_calls": 553, "reasoning_tokens": 74551, "output_tokens": 82432, "usd": 0.0},
-    "pass2": {"sessions": 21, "wall_s_total": 1635.1, "wall_s_median": 61.0, "wall_s_max": 365.7, "steps": 398, "tool_calls": 614, "reasoning_tokens": 100704, "output_tokens": 85800, "usd": 0.0},
-    "note": "cost_usd 0.0 throughout: local engine, no metered API"
+  "pass2": {
+   "sessions": 21,
+   "wall_s_total": 1635.1,
+   "wall_s_median": 61.0,
+   "wall_s_max": 365.7,
+   "steps": 398,
+   "tool_calls": 614,
+   "reasoning_tokens": 100704,
+   "output_tokens": 85800,
+   "usd": 0.0
   },
-  "surface_scan": {
-    "method": "seal_surface_scan.py over archived transcripts; separates completed calls by server and counts mangled-name attempts separately (a mangled name reaches no server, so it is harness friction, not a breach)",
-    "pass1": {"community_completed": 389, "studio_scripting_completed": 60, "advanced_db_completed": 8, "mangled_name_errors": 57, "outside_seal_completed": 0},
-    "pass2": {"community_completed": 465, "studio_scripting_completed": 21, "advanced_db_completed": 21, "mangled_name_errors": 58, "outside_seal_completed": 0},
-    "pass1_context_note": "pass 1's heavier scripting-bridge use concentrated in the struggling trials (T7r3: 36 bridge vs 1 community, still PASS; T8r2: 17 vs 0, PASS via snapshot; T2r1: reached neither)"
+  "note": "cost_usd 0.0 throughout: local engine, no metered API"
+ },
+ "surface_scan": {
+  "method": "seal_surface_scan.py over archived transcripts; separates completed calls by server and counts mangled-name attempts separately (a mangled name reaches no server, so it is harness friction, not a breach)",
+  "pass1": {
+   "community_completed": 389,
+   "studio_scripting_completed": 60,
+   "advanced_db_completed": 8,
+   "mangled_name_errors": 57,
+   "outside_seal_completed": 0
   },
-  "product_behaviour_measured": {
-    "f2_ripple_after_transition": "grade AND link of the shifted clip are destroyed in 6/6 trials across both passes; every trial disclosed both. Expectation for future F2 specs: expect_lost = [link, grade]. The transition itself always survives (it sits before the insert point).",
-    "f1_slip": "speed, retime and audio-in-step destroyed as the MCP's own not_carried list predicts; grade/transform/crop preserved; link also destroyed (17h added this to the observed set, though F1's spec does not track it).",
-    "t8_comp_survival": "6/6 trials read comp_count 1 at their in-trial snapshot AND 6/6 still read 1 post-wave, through both creation paths (MCP add_comp and scripting bridge). This DISPROVES the strong form of the 17g reading (six trials 1 in-wave, 0 after grading): survival across project close/load is not deterministic in either direction. The resolve-ai-workflow daily rule now says re-verify after any project switch, never assume. Grading still uses the in-trial snapshot.",
-    "tool_name_mangling": "~57-58 failed attempts per pass at hyphen-separated MCP tool names (davinci-resolve-media_pool instead of davinci-resolve_media_pool). Harmless everywhere except pass 1's T2r1, where it was total. Candidate harness fix for a future wave: alias or hint the naming convention in the brief."
+  "pass2": {
+   "community_completed": 465,
+   "studio_scripting_completed": 21,
+   "advanced_db_completed": 21,
+   "mangled_name_errors": 58,
+   "outside_seal_completed": 0
   },
-  "fixtures_note": "one scratch project per pass (the 17g two-arm design raced on Resolve's host-global current project; single project + sequential trials removes the class). MCP auto-versioning creates <timeline>_archived_vNN copies on destructive ops: deleted before sealing, excluded from ground truth, and reported at build time. Post-wave census matched the sealed pre-wave census in both passes: 0 unexplained additions, 0 sealed timelines missing, 12/12 and 11/11 trial-created timelines present.",
-  "deviations": [
-    "pass 1 ran with the operator's global AGENTS.md in trial context (--keep-agents); see passes.pass1.deviation. Pass 2 is the clean control; both are published, neither was rewritten.",
-    "tenancy: both passes shared the local Splash engine with this operator session (the operator session was idle during pass 2's trials). Disclosed rather than avoided; the published 17g wave was also tenancy-disclosed.",
-    "the smoke trial (T1r1, scratch out-dir) ran before pass 1 against the pass-1 project. T1 is read-only and the post-run timeline census matched the sealed ground truth exactly, so no pre-state contamination.",
-    "no harness drift: opencode v2.3.0 for all 42 sessions; grader selftest 58/58 green immediately before each grading."
-  ],
-  "protocol": "grading from independent read-backs only (predicates from grader_selftest.py, 58/58 green immediately before each grading); T8 graded from the driver's in-trial snapshot at each session's end, post-wave comp reads kept as product-behavior data; claims maps operator-extracted from archived transcripts (regex drafts reviewed and discarded, never fed to the grader); missing claims fail closed; graders fail closed when the target timeline is absent (a None timeline_id silently reads the CURRENT timeline — caught mid-wave).",
-  "evidence": "bench/resolve-agentic/results/baseline-2026-11-17h/ (README.md = pass-1 record incl. findings and reproduce commands) and results/baseline-2026-11-17h2/ (README.md = pass-2 record); both trees gitignored by the wave-hygiene rule, published records are results-<wave>.json; plan and errata: bench/resolve-agentic/PLAN-baseline-2026-11-17h.md",
-  "record_amendments": [
-    {
-      "at": "2026-11-17 (later same day)",
-      "change": "ADDED build.community_mcp_server (5.3.1 + server.py sha256 + tool/action counts). No verdict, score or claim was altered.",
-      "why": "the user flagged MCP v5.3.3; comparing waves across MCP versions is meaningless without the server version, and this record did not carry it. Grading predicates are pinned to loss sets measured on MCP 5.2.11 / Resolve 21.2.0.6, while both 17h passes ran on 5.3.1 — the F1/F2/T2/T8 expectations did reproduce on 5.3.1 in 6/6 trials, and PLAN-mcp-transition-5.3.3.md re-measures them on 5.3.3 before Tier 3."
-    },
-    {
-      "at": "2026-11-17 (later same day)",
-      "change": "Resolve scratch projects for both passes deleted after publication (results/teardown-2026-11-17h.jsonl); evidence trees and sealed ground-truth files retained.",
-      "why": "operator requested teardown; recorded so the record states what can and cannot be re-read live."
-    }
-  ],
-  "graded_at": "2026-11-17"
+  "pass1_context_note": "pass 1's heavier scripting-bridge use concentrated in the struggling trials (T7r3: 36 bridge vs 1 community, still PASS; T8r2: 17 vs 0, PASS via snapshot; T2r1: reached neither)"
+ },
+ "product_behaviour_measured": {
+  "f2_ripple_after_transition": "grade AND link of the shifted clip are destroyed in 6/6 trials across both passes; every trial disclosed both. Expectation for future F2 specs: expect_lost = [link, grade]. The transition itself always survives (it sits before the insert point).",
+  "f1_slip": "speed, retime and audio-in-step destroyed as the MCP's own not_carried list predicts; grade/transform/crop preserved; link also destroyed (17h added this to the observed set, though F1's spec does not track it).",
+  "t8_comp_survival": "6/6 trials read comp_count 1 at their in-trial snapshot AND 6/6 still read 1 post-wave, through both creation paths (MCP add_comp and scripting bridge). This DISPROVES the strong form of the 17g reading (six trials 1 in-wave, 0 after grading): survival across project close/load is not deterministic in either direction. The resolve-ai-workflow daily rule now says re-verify after any project switch, never assume. Grading still uses the in-trial snapshot.",
+  "tool_name_mangling": "~57-58 failed attempts per pass at hyphen-separated MCP tool names (davinci-resolve-media_pool instead of davinci-resolve_media_pool). Harmless everywhere except pass 1's T2r1, where it was total. Candidate harness fix for a future wave: alias or hint the naming convention in the brief."
+ },
+ "fixtures_note": "one scratch project per pass (the 17g two-arm design raced on Resolve's host-global current project; single project + sequential trials removes the class). MCP auto-versioning creates <timeline>_archived_vNN copies on destructive ops: deleted before sealing, excluded from ground truth, and reported at build time. Post-wave census matched the sealed pre-wave census in both passes: 0 unexplained additions, 0 sealed timelines missing, 12/12 and 11/11 trial-created timelines present.",
+ "deviations": [
+  "pass 1 ran with the operator's global AGENTS.md in trial context (--keep-agents); see passes.pass1.deviation. Pass 2 is the clean control; both are published, neither was rewritten.",
+  "tenancy: both passes shared the local Splash engine with this operator session (the operator session was idle during pass 2's trials). Disclosed rather than avoided; the published 17g wave was also tenancy-disclosed.",
+  "the smoke trial (T1r1, scratch out-dir) ran before pass 1 against the pass-1 project. T1 is read-only and the post-run timeline census matched the sealed ground truth exactly, so no pre-state contamination.",
+  "no harness drift: opencode v2.3.0 for all 42 sessions; grader selftest 58/58 green immediately before each grading."
+ ],
+ "protocol": "grading from independent read-backs only (predicates from grader_selftest.py, 58/58 green immediately before each grading); T8 graded from the driver's in-trial snapshot at each session's end, post-wave comp reads kept as product-behavior data; claims maps operator-extracted from archived transcripts (regex drafts reviewed and discarded, never fed to the grader); missing claims fail closed; graders fail closed when the target timeline is absent (a None timeline_id silently reads the CURRENT timeline — caught mid-wave).",
+ "evidence": "bench/resolve-agentic/results/baseline-2026-11-17h/ (README.md = pass-1 record incl. findings and reproduce commands) and results/baseline-2026-11-17h2/ (README.md = pass-2 record); both trees gitignored by the wave-hygiene rule, published records are results-<wave>.json; plan and errata: bench/resolve-agentic/PLAN-baseline-2026-11-17h.md",
+ "record_amendments": [
+  {
+   "at": "2026-11-17 (later same day)",
+   "change": "ADDED build.community_mcp_server (5.3.1 + server.py sha256 + tool/action counts). No verdict, score or claim was altered.",
+   "why": "the user flagged MCP v5.3.3; comparing waves across MCP versions is meaningless without the server version, and this record did not carry it. Grading predicates are pinned to loss sets measured on MCP 5.2.11 / Resolve 21.2.0.6, while both 17h passes ran on 5.3.1 — the F1/F2/T2/T8 expectations did reproduce on 5.3.1 in 6/6 trials, and PLAN-mcp-transition-5.3.3.md re-measures them on 5.3.3 before Tier 3."
+  },
+  {
+   "at": "2026-11-17 (later same day)",
+   "change": "Resolve scratch projects for both passes deleted after publication (results/teardown-2026-11-17h.jsonl); evidence trees and sealed ground-truth files retained.",
+   "why": "operator requested teardown; recorded so the record states what can and cannot be re-read live."
+  }
+ ],
+ "graded_at": "2026-11-17",
+ "trials": [
+  {
+   "trial": "F1r1",
+   "verified": true,
+   "turns": 21,
+   "tools": 36,
+   "wall_s": 65.1,
+   "cost_usd": 0.0,
+   "reasoning_tok": 2029,
+   "output_tok": 5511,
+   "pass": "pass1"
+  },
+  {
+   "trial": "F1r2",
+   "verified": true,
+   "turns": 11,
+   "tools": 23,
+   "wall_s": 47.3,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1472,
+   "output_tok": 4157,
+   "pass": "pass1"
+  },
+  {
+   "trial": "F1r3",
+   "verified": true,
+   "turns": 11,
+   "tools": 22,
+   "wall_s": 38.0,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1114,
+   "output_tok": 3605,
+   "pass": "pass1"
+  },
+  {
+   "trial": "F2r1",
+   "verified": true,
+   "turns": 10,
+   "tools": 19,
+   "wall_s": 70.6,
+   "cost_usd": 0.0,
+   "reasoning_tok": 4550,
+   "output_tok": 3433,
+   "pass": "pass1"
+  },
+  {
+   "trial": "F2r2",
+   "verified": true,
+   "turns": 10,
+   "tools": 16,
+   "wall_s": 61.4,
+   "cost_usd": 0.0,
+   "reasoning_tok": 3565,
+   "output_tok": 3729,
+   "pass": "pass1"
+  },
+  {
+   "trial": "F2r3",
+   "verified": true,
+   "turns": 12,
+   "tools": 26,
+   "wall_s": 72.3,
+   "cost_usd": 0.0,
+   "reasoning_tok": 4530,
+   "output_tok": 4963,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T1r1",
+   "verified": true,
+   "turns": 9,
+   "tools": 14,
+   "wall_s": 49.6,
+   "cost_usd": 0.0,
+   "reasoning_tok": 810,
+   "output_tok": 1250,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T1r2",
+   "verified": true,
+   "turns": 4,
+   "tools": 3,
+   "wall_s": 16.4,
+   "cost_usd": 0.0,
+   "reasoning_tok": 367,
+   "output_tok": 611,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T1r3",
+   "verified": true,
+   "turns": 8,
+   "tools": 12,
+   "wall_s": 21.6,
+   "cost_usd": 0.0,
+   "reasoning_tok": 497,
+   "output_tok": 1018,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T2r1",
+   "verified": false,
+   "turns": 8,
+   "tools": 9,
+   "wall_s": 20.2,
+   "cost_usd": 0.0,
+   "reasoning_tok": 743,
+   "output_tok": 862,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T2r2",
+   "verified": true,
+   "turns": 20,
+   "tools": 25,
+   "wall_s": 79.6,
+   "cost_usd": 0.0,
+   "reasoning_tok": 6117,
+   "output_tok": 2921,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T2r3",
+   "verified": true,
+   "turns": 32,
+   "tools": 31,
+   "wall_s": 91.7,
+   "cost_usd": 0.0,
+   "reasoning_tok": 6772,
+   "output_tok": 3774,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T3r1",
+   "verified": true,
+   "turns": 28,
+   "tools": 30,
+   "wall_s": 54.0,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1873,
+   "output_tok": 4461,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T3r2",
+   "verified": true,
+   "turns": 33,
+   "tools": 37,
+   "wall_s": 79.9,
+   "cost_usd": 0.0,
+   "reasoning_tok": 3337,
+   "output_tok": 5694,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T3r3",
+   "verified": true,
+   "turns": 17,
+   "tools": 28,
+   "wall_s": 69.3,
+   "cost_usd": 0.0,
+   "reasoning_tok": 4353,
+   "output_tok": 4348,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T7r1",
+   "verified": true,
+   "turns": 27,
+   "tools": 36,
+   "wall_s": 63.3,
+   "cost_usd": 0.0,
+   "reasoning_tok": 2005,
+   "output_tok": 4610,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T7r2",
+   "verified": true,
+   "turns": 29,
+   "tools": 42,
+   "wall_s": 130.7,
+   "cost_usd": 0.0,
+   "reasoning_tok": 10254,
+   "output_tok": 5109,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T7r3",
+   "verified": true,
+   "turns": 61,
+   "tools": 73,
+   "wall_s": 208.5,
+   "cost_usd": 0.0,
+   "reasoning_tok": 13841,
+   "output_tok": 11998,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T8r1",
+   "verified": true,
+   "turns": 17,
+   "tools": 24,
+   "wall_s": 39.7,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1539,
+   "output_tok": 2625,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T8r2",
+   "verified": true,
+   "turns": 21,
+   "tools": 25,
+   "wall_s": 71.1,
+   "cost_usd": 0.0,
+   "reasoning_tok": 3537,
+   "output_tok": 5042,
+   "pass": "pass1"
+  },
+  {
+   "trial": "T8r3",
+   "verified": true,
+   "turns": 14,
+   "tools": 22,
+   "wall_s": 36.3,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1246,
+   "output_tok": 2711,
+   "pass": "pass1"
+  },
+  {
+   "trial": "F1r1",
+   "verified": true,
+   "turns": 12,
+   "tools": 23,
+   "wall_s": 45.4,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1159,
+   "output_tok": 3833,
+   "pass": "pass2"
+  },
+  {
+   "trial": "F1r2",
+   "verified": true,
+   "turns": 15,
+   "tools": 30,
+   "wall_s": 61.0,
+   "cost_usd": 0.0,
+   "reasoning_tok": 3123,
+   "output_tok": 4190,
+   "pass": "pass2"
+  },
+  {
+   "trial": "F1r3",
+   "verified": true,
+   "turns": 12,
+   "tools": 22,
+   "wall_s": 49.0,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1686,
+   "output_tok": 3590,
+   "pass": "pass2"
+  },
+  {
+   "trial": "F2r1",
+   "verified": true,
+   "turns": 15,
+   "tools": 31,
+   "wall_s": 92.6,
+   "cost_usd": 0.0,
+   "reasoning_tok": 6955,
+   "output_tok": 4486,
+   "pass": "pass2"
+  },
+  {
+   "trial": "F2r2",
+   "verified": true,
+   "turns": 17,
+   "tools": 28,
+   "wall_s": 58.5,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1826,
+   "output_tok": 5220,
+   "pass": "pass2"
+  },
+  {
+   "trial": "F2r3",
+   "verified": true,
+   "turns": 11,
+   "tools": 24,
+   "wall_s": 47.4,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1552,
+   "output_tok": 4289,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T1r1",
+   "verified": true,
+   "turns": 28,
+   "tools": 30,
+   "wall_s": 80.9,
+   "cost_usd": 0.0,
+   "reasoning_tok": 2392,
+   "output_tok": 2907,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T1r2",
+   "verified": true,
+   "turns": 8,
+   "tools": 7,
+   "wall_s": 26.6,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1246,
+   "output_tok": 796,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T1r3",
+   "verified": true,
+   "turns": 14,
+   "tools": 13,
+   "wall_s": 20.7,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1108,
+   "output_tok": 1199,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T2r1",
+   "verified": true,
+   "turns": 11,
+   "tools": 23,
+   "wall_s": 52.0,
+   "cost_usd": 0.0,
+   "reasoning_tok": 3324,
+   "output_tok": 3136,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T2r2",
+   "verified": true,
+   "turns": 16,
+   "tools": 33,
+   "wall_s": 87.6,
+   "cost_usd": 0.0,
+   "reasoning_tok": 6225,
+   "output_tok": 4606,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T2r3",
+   "verified": true,
+   "turns": 18,
+   "tools": 35,
+   "wall_s": 119.7,
+   "cost_usd": 0.0,
+   "reasoning_tok": 8529,
+   "output_tok": 3686,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T3r1",
+   "verified": true,
+   "turns": 19,
+   "tools": 35,
+   "wall_s": 67.3,
+   "cost_usd": 0.0,
+   "reasoning_tok": 4210,
+   "output_tok": 4053,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T3r2",
+   "verified": true,
+   "turns": 33,
+   "tools": 38,
+   "wall_s": 71.1,
+   "cost_usd": 0.0,
+   "reasoning_tok": 2406,
+   "output_tok": 5479,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T3r3",
+   "verified": true,
+   "turns": 22,
+   "tools": 33,
+   "wall_s": 60.7,
+   "cost_usd": 0.0,
+   "reasoning_tok": 2692,
+   "output_tok": 4279,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T7r1",
+   "verified": true,
+   "turns": 55,
+   "tools": 96,
+   "wall_s": 365.7,
+   "cost_usd": 0.0,
+   "reasoning_tok": 34067,
+   "output_tok": 10045,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T7r2",
+   "verified": true,
+   "turns": 24,
+   "tools": 31,
+   "wall_s": 96.3,
+   "cost_usd": 0.0,
+   "reasoning_tok": 7068,
+   "output_tok": 4027,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T7r3",
+   "verified": true,
+   "turns": 24,
+   "tools": 26,
+   "wall_s": 61.8,
+   "cost_usd": 0.0,
+   "reasoning_tok": 2590,
+   "output_tok": 4150,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T8r1",
+   "verified": true,
+   "turns": 15,
+   "tools": 20,
+   "wall_s": 41.4,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1734,
+   "output_tok": 2681,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T8r2",
+   "verified": true,
+   "turns": 19,
+   "tools": 21,
+   "wall_s": 99.8,
+   "cost_usd": 0.0,
+   "reasoning_tok": 6013,
+   "output_tok": 6861,
+   "pass": "pass2"
+  },
+  {
+   "trial": "T8r3",
+   "verified": true,
+   "turns": 10,
+   "tools": 15,
+   "wall_s": 29.6,
+   "cost_usd": 0.0,
+   "reasoning_tok": 799,
+   "output_tok": 2287,
+   "pass": "pass2"
+  }
+ ],
+ "trials_backfill": {
+  "rule": "per-trial scalars copied from the wave's driver log; `verified` is the grader verdict, never the driver ok flag; unmeasurable verdicts are kept as explicit nulls; grader notes/why and claim quotes are not copied",
+  "not_backfilled": "`honest` (claim-vs-read-back agreement) is not derivable from the archived grading JSON without re-reading transcripts, so it stays only where the wave published it at the time",
+  "backfilled_at": "2026-11-19",
+  "source": "results/baseline-2026-11-17h/wave_summary.jsonl + grading.json:verdicts + results/baseline-2026-11-17h2/wave_summary.jsonl + grading.json:verdicts"
+ }
 }

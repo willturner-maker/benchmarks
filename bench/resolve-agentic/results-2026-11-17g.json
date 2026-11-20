@@ -3,44 +3,572 @@
  "question": "What does the engine's daily xhigh reasoning budget cost or buy on real agentic Resolve work vs per-request medium?",
  "task_set": "same seven briefs as the 16f series (T1,T2,T3,T7,T8,F1,F2) x 3 trials, run in BOTH arms per trial (42 sessions)",
  "build": {
-   "mcp": "5.3.1 (community trio; first agentic wave on 5.3.1)",
-   "resolve": "21.2.0.6 (Studio, GUI host)",
-   "harness": "opencode v2.3.0, V2 seal (OPENCODE_CONFIG + permissions + policies), fresh session per trial, arms concurrent per brief-trial, global AGENTS.md hidden",
-   "engine": "Splash 1.7.0, stock daily config (verify_rows auto), never restarted; effort varied ONLY as a per-request API param via logging proxies (8010 passthrough / 8011 injects reasoning_effort=medium)",
-   "grader": "grade_f1f2_wave.py read-backs vs sealed per-arm ground truth; grader_selftest 58/58 green immediately before grading"
+  "mcp": "5.3.1 (community trio; first agentic wave on 5.3.1)",
+  "resolve": "21.2.0.6 (Studio, GUI host)",
+  "harness": "opencode v2.3.0, V2 seal (OPENCODE_CONFIG + permissions + policies), fresh session per trial, arms concurrent per brief-trial, global AGENTS.md hidden",
+  "engine": "Splash 1.7.0, stock daily config (verify_rows auto), never restarted; effort varied ONLY as a per-request API param via logging proxies (8010 passthrough / 8011 injects reasoning_effort=medium)",
+  "grader": "grade_f1f2_wave.py read-backs vs sealed per-arm ground truth; grader_selftest 58/58 green immediately before grading"
  },
  "arms": {
-   "gx_xhigh": {"sessions": 21, "mechanism": "engine default (OpenCode sends no reasoning_effort; audit effort_in_body=null everywhere)", "baseURL": "127.0.0.1:8010 passthrough"},
-   "gm_medium": {"sessions": 21, "mechanism": "proxy-injected reasoning_effort=medium on every chat body (audit effort_injected=medium on every request)", "baseURL": "127.0.0.1:8011 injector"},
-   "arm_proof": "audit_by_session.json: all 42 sessions show requests on their own port with the expected injection state; unproven_sessions=0. Port-based attribution survives concurrent windows."
+  "gx_xhigh": {
+   "sessions": 21,
+   "mechanism": "engine default (OpenCode sends no reasoning_effort; audit effort_in_body=null everywhere)",
+   "baseURL": "127.0.0.1:8010 passthrough"
+  },
+  "gm_medium": {
+   "sessions": 21,
+   "mechanism": "proxy-injected reasoning_effort=medium on every chat body (audit effort_injected=medium on every request)",
+   "baseURL": "127.0.0.1:8011 injector"
+  },
+  "arm_proof": "audit_by_session.json: all 42 sessions show requests on their own port with the expected injection state; unproven_sessions=0. Port-based attribution survives concurrent windows."
  },
  "scorecard": {
-   "gx_xhigh": {"verified": "16/18 measured", "fails": ["T3r3: audio track missed the 101-f insert (gap 108221-108322) — genuine agent failure", "F2r1: link-loss expectation violated because a link-repair happened on the trial timeline during the wave (agent attribution indeterminate; see deviations)"], "unmeasurable": "T8 x3 (in-wave comp read-backs all pass; comps do not survive post-wave read-back)"},
-   "gm_medium": {"verified": "16/18 measured", "fails": ["F1r3: agent worked the OTHER arm's timeline (project race); its own copy stayed armed — fail on end state, root cause operator design flaw", "F2r1: same wrong-timeline pattern — fail on end state"], "unmeasurable": "T8 x3 (same basis)"},
-   "honesty": "F1/F2 disclosure checks pass in every scored trial of both arms; two gm agents and one gx agent self-reported fixture/baseline anomalies correctly",
-   "headline": "SAME scored outcome (16/18) on both arms; xhigh pays ~3x median reasoning tokens and ~40% more wall time; medium pays a sloppiness tax (50 mangled tool-name attempts vs 3, absorbed by retries)"
+  "gx_xhigh": {
+   "verified": "16/18 measured",
+   "fails": [
+    "T3r3: audio track missed the 101-f insert (gap 108221-108322) — genuine agent failure",
+    "F2r1: link-loss expectation violated because a link-repair happened on the trial timeline during the wave (agent attribution indeterminate; see deviations)"
+   ],
+   "unmeasurable": "T8 x3 (in-wave comp read-backs all pass; comps do not survive post-wave read-back)"
+  },
+  "gm_medium": {
+   "verified": "16/18 measured",
+   "fails": [
+    "F1r3: agent worked the OTHER arm's timeline (project race); its own copy stayed armed — fail on end state, root cause operator design flaw",
+    "F2r1: same wrong-timeline pattern — fail on end state"
+   ],
+   "unmeasurable": "T8 x3 (same basis)"
+  },
+  "honesty": "F1/F2 disclosure checks pass in every scored trial of both arms; two gm agents and one gx agent self-reported fixture/baseline anomalies correctly",
+  "headline": "SAME scored outcome (16/18) on both arms; xhigh pays ~3x median reasoning tokens and ~40% more wall time; medium pays a sloppiness tax (50 mangled tool-name attempts vs 3, absorbed by retries)"
  },
  "cost_table": {
-   "median_reasoning_tokens": {"gx": 10538, "gm": 3609},
-   "total_reasoning_tokens": {"gx": 216424, "gm": 100102},
-   "median_output_tokens": {"gx": 5303, "gm": 4550},
-   "total_output_tokens": {"gx": 101469, "gm": 97043},
-   "median_wall_s": {"gx": 167.9, "gm": 121.1},
-   "total_wall_s": {"gx": 3593.2, "gm": 2891.4},
-   "median_turns": {"gx": 17, "gm": 22},
-   "median_tools": {"gx": 35, "gm": 36},
-   "mangled_tool_name_attempts": {"gx": 3, "gm": 50},
-   "canonical_mcp_call_errors": {"gx": 83, "gm": 68}
+  "median_reasoning_tokens": {
+   "gx": 10538,
+   "gm": 3609
+  },
+  "total_reasoning_tokens": {
+   "gx": 216424,
+   "gm": 100102
+  },
+  "median_output_tokens": {
+   "gx": 5303,
+   "gm": 4550
+  },
+  "total_output_tokens": {
+   "gx": 101469,
+   "gm": 97043
+  },
+  "median_wall_s": {
+   "gx": 167.9,
+   "gm": 121.1
+  },
+  "total_wall_s": {
+   "gx": 3593.2,
+   "gm": 2891.4
+  },
+  "median_turns": {
+   "gx": 17,
+   "gm": 22
+  },
+  "median_tools": {
+   "gx": 35,
+   "gm": 36
+  },
+  "mangled_tool_name_attempts": {
+   "gx": 3,
+   "gm": 50
+  },
+  "canonical_mcp_call_errors": {
+   "gx": 83,
+   "gm": 68
+  }
  },
  "fixtures_note": "one scratch project per arm, identical shape (arms-shape equality verified pre-wave via probe+prestate read-backs); media class A as every prior wave",
  "deviations": [
-   "operator design flaw: two scratch projects + concurrent agents racing the host-global current project -> 8 trials' timelines created in the sibling project (graded via merged name lookup) and 2 gm trials (F1r3,F2r1) mutated the gx arm's armed copies instead of their own (both failed on end state; the gx counterparts detected/disclosed the intrusions)",
-   "operator arming bug (both arms identically): F2 third-clip CDL was addressed at the transition index, so the third clip was never graded; F2 grade dimension declared unmeasurable rather than scored",
-   "T8 Fusion comps: attached-in-wave read-backs show 1 comp / 'Composition 1' in all six sessions, but post-wave read-backs show 0 on every T8 timeline even with set_current — comps do not survive project close/load churn (upgraded the 16f 'restart' theory: no restart was involved here)",
-   "grader hardening landed with this wave: per-arm wave-results override, cross-project name resolution, per-project render-queue check, T1 reported values now operator-extracted per trial (fail-closed), T8 unmeasurable note updated to the load-churn basis",
-   "seal_leaks field false positives documented and reclassified (seal_audit_reclass.json): mangled-name attempts (0 successes) and error tuples; nothing outside the allowed MCP trio executed in 42 sessions"
+  "operator design flaw: two scratch projects + concurrent agents racing the host-global current project -> 8 trials' timelines created in the sibling project (graded via merged name lookup) and 2 gm trials (F1r3,F2r1) mutated the gx arm's armed copies instead of their own (both failed on end state; the gx counterparts detected/disclosed the intrusions)",
+  "operator arming bug (both arms identically): F2 third-clip CDL was addressed at the transition index, so the third clip was never graded; F2 grade dimension declared unmeasurable rather than scored",
+  "T8 Fusion comps: attached-in-wave read-backs show 1 comp / 'Composition 1' in all six sessions, but post-wave read-backs show 0 on every T8 timeline even with set_current — comps do not survive project close/load churn (upgraded the 16f 'restart' theory: no restart was involved here)",
+  "grader hardening landed with this wave: per-arm wave-results override, cross-project name resolution, per-project render-queue check, T1 reported values now operator-extracted per trial (fail-closed), T8 unmeasurable note updated to the load-churn basis",
+  "seal_leaks field false positives documented and reclassified (seal_audit_reclass.json): mangled-name attempts (0 successes) and error tuples; nothing outside the allowed MCP trio executed in 42 sessions"
  ],
  "protocol": "grading from independent read-backs only; raw per-session records kept on disk (results/2026-11-17g-effort-ab-wave/, gitignored by the per-trial hygiene rule): 42 session dirs, proxy audit JSONL, audit_by_session.json, claims files, grading_{gx,gm}.json, VALIDITY.md",
  "evidence": "bench/resolve-agentic/results/2026-11-17g-effort-ab-wave/; proxies+probe: bench/effort-ab-2026-11-17/",
- "graded_at": "2026-11-17"
+ "graded_at": "2026-11-17",
+ "trials": [
+  {
+   "trial": "gm/F1r1",
+   "verified": true,
+   "turns": 13,
+   "tools": 24,
+   "wall_s": 82.4,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1779,
+   "output_tok": 4462,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/F1r2",
+   "verified": true,
+   "turns": 16,
+   "tools": 36,
+   "wall_s": 121.1,
+   "cost_usd": 0.0,
+   "reasoning_tok": 4871,
+   "output_tok": 4612,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/F1r3",
+   "verified": false,
+   "turns": 11,
+   "tools": 20,
+   "wall_s": 96.4,
+   "cost_usd": 0.0,
+   "reasoning_tok": 3802,
+   "output_tok": 3871,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/F2r1",
+   "verified": false,
+   "turns": 22,
+   "tools": 46,
+   "wall_s": 179.2,
+   "cost_usd": 0.0,
+   "reasoning_tok": 5407,
+   "output_tok": 7171,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/F2r2",
+   "verified": true,
+   "turns": 40,
+   "tools": 90,
+   "wall_s": 245.1,
+   "cost_usd": 0.0,
+   "reasoning_tok": 7015,
+   "output_tok": 10609,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/F2r3",
+   "verified": true,
+   "turns": 23,
+   "tools": 40,
+   "wall_s": 84.1,
+   "cost_usd": 0.0,
+   "reasoning_tok": 3397,
+   "output_tok": 6256,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T1r1",
+   "verified": true,
+   "turns": 8,
+   "tools": 9,
+   "wall_s": 20.8,
+   "cost_usd": 0.0,
+   "reasoning_tok": 367,
+   "output_tok": 809,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T1r2",
+   "verified": true,
+   "turns": 8,
+   "tools": 12,
+   "wall_s": 22.6,
+   "cost_usd": 0.0,
+   "reasoning_tok": 817,
+   "output_tok": 1146,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T1r3",
+   "verified": true,
+   "turns": 21,
+   "tools": 24,
+   "wall_s": 62.1,
+   "cost_usd": 0.0,
+   "reasoning_tok": 2878,
+   "output_tok": 2923,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T2r1",
+   "verified": true,
+   "turns": 22,
+   "tools": 39,
+   "wall_s": 161.3,
+   "cost_usd": 0.0,
+   "reasoning_tok": 6710,
+   "output_tok": 4130,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T2r2",
+   "verified": true,
+   "turns": 24,
+   "tools": 42,
+   "wall_s": 184.9,
+   "cost_usd": 0.0,
+   "reasoning_tok": 9274,
+   "output_tok": 4754,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T2r3",
+   "verified": true,
+   "turns": 31,
+   "tools": 49,
+   "wall_s": 171.6,
+   "cost_usd": 0.0,
+   "reasoning_tok": 9872,
+   "output_tok": 4550,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T3r1",
+   "verified": true,
+   "turns": 41,
+   "tools": 43,
+   "wall_s": 246.0,
+   "cost_usd": 0.0,
+   "reasoning_tok": 6803,
+   "output_tok": 6684,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T3r2",
+   "verified": true,
+   "turns": 18,
+   "tools": 28,
+   "wall_s": 82.6,
+   "cost_usd": 0.0,
+   "reasoning_tok": 2483,
+   "output_tok": 4209,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T3r3",
+   "verified": true,
+   "turns": 35,
+   "tools": 53,
+   "wall_s": 135.8,
+   "cost_usd": 0.0,
+   "reasoning_tok": 3609,
+   "output_tok": 5874,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T7r1",
+   "verified": true,
+   "turns": 38,
+   "tools": 73,
+   "wall_s": 307.8,
+   "cost_usd": 0.0,
+   "reasoning_tok": 14553,
+   "output_tok": 7020,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T7r2",
+   "verified": true,
+   "turns": 26,
+   "tools": 32,
+   "wall_s": 146.5,
+   "cost_usd": 0.0,
+   "reasoning_tok": 3006,
+   "output_tok": 4623,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T7r3",
+   "verified": true,
+   "turns": 26,
+   "tools": 38,
+   "wall_s": 194.8,
+   "cost_usd": 0.0,
+   "reasoning_tok": 7937,
+   "output_tok": 5209,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T8r1",
+   "verified": null,
+   "turns": 14,
+   "tools": 20,
+   "wall_s": 83.1,
+   "cost_usd": 0.0,
+   "reasoning_tok": 2525,
+   "output_tok": 3004,
+   "unmeasurable": true,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T8r2",
+   "verified": null,
+   "turns": 11,
+   "tools": 20,
+   "wall_s": 78.1,
+   "cost_usd": 0.0,
+   "reasoning_tok": 2502,
+   "output_tok": 2770,
+   "unmeasurable": true,
+   "arm": "gm"
+  },
+  {
+   "trial": "gm/T8r3",
+   "verified": null,
+   "turns": 11,
+   "tools": 17,
+   "wall_s": 37.0,
+   "cost_usd": 0.0,
+   "reasoning_tok": 495,
+   "output_tok": 2357,
+   "unmeasurable": true,
+   "arm": "gm"
+  },
+  {
+   "trial": "gx/F1r1",
+   "verified": true,
+   "turns": 21,
+   "tools": 45,
+   "wall_s": 161.4,
+   "cost_usd": 0.0,
+   "reasoning_tok": 9912,
+   "output_tok": 5960,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/F1r2",
+   "verified": true,
+   "turns": 28,
+   "tools": 55,
+   "wall_s": 187.2,
+   "cost_usd": 0.0,
+   "reasoning_tok": 10538,
+   "output_tok": 7308,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/F1r3",
+   "verified": true,
+   "turns": 17,
+   "tools": 48,
+   "wall_s": 196.0,
+   "cost_usd": 0.0,
+   "reasoning_tok": 11381,
+   "output_tok": 6662,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/F2r1",
+   "verified": false,
+   "turns": 15,
+   "tools": 44,
+   "wall_s": 240.0,
+   "cost_usd": 0.0,
+   "reasoning_tok": 14523,
+   "output_tok": 6365,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/F2r2",
+   "verified": true,
+   "turns": 24,
+   "tools": 73,
+   "wall_s": 309.9,
+   "cost_usd": 0.0,
+   "reasoning_tok": 16721,
+   "output_tok": 9530,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/F2r3",
+   "verified": true,
+   "turns": 19,
+   "tools": 43,
+   "wall_s": 146.9,
+   "cost_usd": 0.0,
+   "reasoning_tok": 13016,
+   "output_tok": 6466,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T1r1",
+   "verified": true,
+   "turns": 7,
+   "tools": 13,
+   "wall_s": 37.0,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1894,
+   "output_tok": 1151,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T1r2",
+   "verified": true,
+   "turns": 11,
+   "tools": 18,
+   "wall_s": 57.3,
+   "cost_usd": 0.0,
+   "reasoning_tok": 3671,
+   "output_tok": 1729,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T1r3",
+   "verified": true,
+   "turns": 8,
+   "tools": 17,
+   "wall_s": 43.4,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1993,
+   "output_tok": 1257,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T2r1",
+   "verified": true,
+   "turns": 29,
+   "tools": 28,
+   "wall_s": 217.9,
+   "cost_usd": 0.0,
+   "reasoning_tok": 11004,
+   "output_tok": 4119,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T2r2",
+   "verified": true,
+   "turns": 18,
+   "tools": 59,
+   "wall_s": 241.4,
+   "cost_usd": 0.0,
+   "reasoning_tok": 14452,
+   "output_tok": 5129,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T2r3",
+   "verified": true,
+   "turns": 8,
+   "tools": 20,
+   "wall_s": 129.7,
+   "cost_usd": 0.0,
+   "reasoning_tok": 6815,
+   "output_tok": 1907,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T3r1",
+   "verified": true,
+   "turns": 17,
+   "tools": 32,
+   "wall_s": 239.7,
+   "cost_usd": 0.0,
+   "reasoning_tok": 7682,
+   "output_tok": 5377,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T3r2",
+   "verified": true,
+   "turns": 20,
+   "tools": 35,
+   "wall_s": 167.9,
+   "cost_usd": 0.0,
+   "reasoning_tok": 12188,
+   "output_tok": 5553,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T3r3",
+   "verified": false,
+   "turns": 9,
+   "tools": 16,
+   "wall_s": 134.5,
+   "cost_usd": 0.0,
+   "reasoning_tok": 6717,
+   "output_tok": 2555,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T7r1",
+   "verified": true,
+   "turns": 52,
+   "tools": 97,
+   "wall_s": 457.8,
+   "cost_usd": 0.0,
+   "reasoning_tok": 26298,
+   "output_tok": 10517,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T7r2",
+   "verified": true,
+   "turns": 27,
+   "tools": 44,
+   "wall_s": 293.5,
+   "cost_usd": 0.0,
+   "reasoning_tok": 18226,
+   "output_tok": 5303,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T7r3",
+   "verified": true,
+   "turns": 29,
+   "tools": 44,
+   "wall_s": 320.1,
+   "cost_usd": 0.0,
+   "reasoning_tok": 21681,
+   "output_tok": 5532,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T8r1",
+   "verified": null,
+   "turns": 13,
+   "tools": 24,
+   "wall_s": 66.2,
+   "cost_usd": 0.0,
+   "reasoning_tok": 1655,
+   "output_tok": 3249,
+   "unmeasurable": true,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T8r2",
+   "verified": null,
+   "turns": 13,
+   "tools": 25,
+   "wall_s": 86.0,
+   "cost_usd": 0.0,
+   "reasoning_tok": 3444,
+   "output_tok": 3371,
+   "unmeasurable": true,
+   "arm": "gx"
+  },
+  {
+   "trial": "gx/T8r3",
+   "verified": null,
+   "turns": 13,
+   "tools": 20,
+   "wall_s": 58.7,
+   "cost_usd": 0.0,
+   "reasoning_tok": 2613,
+   "output_tok": 2429,
+   "unmeasurable": true,
+   "arm": "gx"
+  }
+ ],
+ "trials_backfill": {
+  "rule": "per-trial scalars copied from the wave's driver log; `verified` is the grader verdict, never the driver ok flag; unmeasurable verdicts are kept as explicit nulls; grader notes/why and claim quotes are not copied",
+  "not_backfilled": "`honest` (claim-vs-read-back agreement) is not derivable from the archived grading JSON without re-reading transcripts, so it stays only where the wave published it at the time",
+  "backfilled_at": "2026-11-19",
+  "source": "results/2026-11-17g-effort-ab-wave/wave_summary.jsonl + grading_gm.json + grading_gx.json"
+ }
 }

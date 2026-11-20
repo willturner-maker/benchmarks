@@ -1,0 +1,15 @@
+[18:12:55] agent harness: opencode opencode v2.3.2
+  same opencode build as wave tier4-2026-11-18m-smoke.
+[18:12:56] T1 (sequential, daily)
+  !! SEAL LEAK (raw; audit reclassifies errored attempts) in T1: ["('project_manager', 'error')"]
+[18:13:39] T2r1 (sequential, daily)
+  !! SEAL LEAK (raw; audit reclassifies errored attempts) in T2r1: ["('davinci-resolve-media_pool', 'error')", "('davinci-resolve-project_manager', 'error')"]
+[18:15:06] F3r1 (sequential, daily)
+[18:17:54] F3r2 (sequential, daily)
+[18:20:42] F3r3 (sequential, daily)
+[18:22:53] F3r4 (sequential, daily)
+  !! SEAL LEAK (raw; audit reclassifies errored attempts) in F3r4: ["('davinci-resolve-builtin-describe_grade', 'error')", "('davinci-resolve-builtin-describe_grade', 'error')", "('davinci-resolve-project_settings', 'error')", "('davinci-resolve-timeline', 'error')", "('davinci-resolve-timeline', 'error')"]
+[18:27:31] F3r5 (sequential, daily)
+[18:29:37] F3r6 (sequential, daily)
+WAVE DONE — ~/benchmarks/bench/resolve-agentic/results/tier4-2026-11-18m
+global AGENTS.md restored

@@ -17,6 +17,7 @@ telecom 0.873 / 0.772.** And the number that matters most for reading the others
 - [The scores](#the-scores-238-tasks--476-simulations)
 - [Judge-free scope: the one deviation](#judge-free-scope-the-one-deviation)
 - [Stability: pass^1 − pass^2 *is* the flip count](#stability-pass1--pass2-is-the-flip-count)
+- [Flip triage: what the 45 flips actually are](#flip-triage-what-the-45-flips-actually-are)
 - [Reading tau2's own output correctly](#reading-tau2s-own-output-correctly)
 - [Engine findings: a prefix-cache workload, not a KV-stress workload](#engine-findings-a-prefix-cache-workload-not-a-kv-stress-workload)
 - [Comparability rules](#comparability-rules)
@@ -102,15 +103,47 @@ no extra information:
 The looser **independent-trials** variant (`mean p^k`) would print **0.845 / 0.733 / 0.822** — 2.5 to 5.7
 points higher. `summarize.py` prints both; a row that quotes one without saying which is defective.
 
-This is the same mechanism measured on 2026-11-13 (instance state) and in the tool-loop gate (greedy traces
-diverging on stub-heavy tasks): **temperature 0 does not pin agent behaviour on this stack**, because batch
-composition under `maximum_batch_width = 4` still varies. τ² adds a flip rate, and it is *bigger* than the
-gate's. Two trials is the floor; a third would move pass^2 materially — a limitation of this row, stated
-rather than smoothed.
-
 Per-task structure is in `tasks.jsonl` (task id, trial, seed, reward, `reward_breakdown` per basis, DB match,
-action/assertion counts, tool calls, depth, duration). The 45 flipping tasks are **not yet triaged** into
-model error vs user-simulator drift vs grader shape; that triage is the next analytical step.
+action/assertion counts, tool calls, depth, duration).
+
+## Flip triage: where the 45 flips first appear
+
+Triaged the day after publishing, with `bench/tau2-bench/triage_flips.py` over the local transcripts
+(published aggregate: `results/2026-11-19a/flip_triage.json` — 45 rows: first-difference position and role,
+component, tool-call counts, no dialogue). The discriminator is **who produces the first differing
+message**: up to that point the two trials are identical by construction.
+
+| first difference produced by | flips | share |
+|---|---|---|
+| **user simulator** (33 of them at the opening turn, message index 1) | **37** | 82 % |
+| agent (identical prefix, then a different tool call or reply) | **8** | 18 % |
+| length-only (identical prefix, one run just goes longer) | 0 | — |
+
+| domain | flips | agent-first | user-first | median onset |
+|---|---|---|---|---|
+| airline | 5 | 0 | 5 | 0.04 |
+| retail | 17 | 3 | 14 | 0.06 |
+| telecom | 23 | 5 | 18 | 0.02 |
+
+Component view: `ENV_ASSERTION` flipped 23 times, `DB` 21, `COMMUNICATE` 1 — and direction is near
+symmetric (24 down, 21 up), which is what sampling looks like and not what drift looks like.
+
+**A trap worth naming.** τ² does derive a different seed per trial (the records show `626729` for trial 0
+and `373753` for trial 1 under `--seed 300`), and it puts that seed into the request body. The tempting
+explanation — "the two trials replay different conversations because the user simulator was reseeded" —
+**does not hold on this stack**: at `temperature 0` the engine produced byte-identical output for both
+seeds (3/3 unloaded probes, `42` / same reasoning text), so the seed has no observable effect here and no
+seeded replay exists. Since this wave is self-play, **both** roles are served by the engine under test, so
+every flip traces back to an engine call either way. What the triage establishes is the *location*: the
+majority become visible in the simulated user's wording, and only **8 of 238 tasks (3.4 %)** diverge in the
+agent's own turn under an identical prefix.
+
+**Corrected mechanism claim.** The first version of this row attributed the whole 18.9 % to greedy
+non-reproducibility under batching. That is now refined rather than asserted: the remaining candidate for
+the divergence itself is **batch-dependent numerics** (the wave ran at `--max-concurrency 3`, decode width
+up to 3 under `maximum_batch_width = 4`). A **width-1 control** — the same flipping tasks, two trials, one
+request in flight — is the experiment that separates "batching" from "greedy is not reproducible even
+alone"; until it reports, the mechanism stays open and the split above is the published fact.
 
 ## Reading tau2's own output correctly
 

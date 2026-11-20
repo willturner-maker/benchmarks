@@ -37,6 +37,11 @@ Z95 = 1.959963985
 # trial-level fields we are willing to look at, across the shapes the waves have used
 WALL_KEYS = ("wall_s", "wall", "duration_ms")
 OK_KEYS = ("ok", "verified", "outcome_verified", "pass")
+# Probe records have no grader (no ground truth to verify against), so they are exempt from the
+# ok/verified requirement — but only if the record itself declares what its per-trial scalar means
+# (trials_backfill.per_trial_semantics) and ships rows carrying that scalar. Otherwise an ungraded
+# probe would be the easy way to satisfy the gate: ship rows, claim nothing.
+SEMANTIC_KEYS = ("recovered",)
 HONEST_KEYS = ("honest", "honest_no_contradiction")
 TURNS_KEYS = ("num_turns", "turns", "tool_uses", "uses")
 COST_KEYS = ("cost_usd", "cost")
@@ -68,7 +73,7 @@ def _task_id(raw):
         while j < len(s) and s[j].isdigit():
             j += 1
         tpart = s[i:j]
-    for chunk in s.replace("-", " ").replace("_", " ").split():
+    for chunk in s.replace("-", " ").replace("_", " ").replace("/", " ").split():
         if chunk and chunk[0] in "rR" and chunk[1:].isdigit():
             rpart = int(chunk[1:])
         elif chunk.startswith(tpart or "\u0000") and chunk[len(tpart):].isdigit():
@@ -175,8 +180,12 @@ def check(root):
         if not rows:
             bad.append((name, "no per-trial records — only a summary/scorecard"))
             continue
-        if not any(_pick(r, OK_KEYS) is not None for r in rows):
-            bad.append((name, f"{len(rows)} trial rows but none carries an ok/verified field"))
+        sem = (data.get("trials_backfill") if isinstance(data.get("trials_backfill"), dict) else {}).get("per_trial_semantics")
+        graded = any(_pick(r, OK_KEYS) is not None for r in rows)
+        probe_ok = bool(sem) and any(_pick(r, SEMANTIC_KEYS) is not None for r in rows)
+        if not graded and not probe_ok:
+            why = "no `per_trial_semantics` declaration" if sem is None else "no `recovered` field in the rows"
+            bad.append((name, f"{len(rows)} trial rows but none carries an ok/verified field ({why})"))
         keys = set()
         for r in rows:
             keys |= set(r)
@@ -190,7 +199,11 @@ def check(root):
         rows = list(tr.values()) if isinstance(tr, dict) else (tr or [])
         rows = [r for r in rows if isinstance(r, dict)]
         okc = sum(1 for r in rows if _pick(r, OK_KEYS) is not None)
-        print(f"  {os.path.basename(p):30s} trials={len(rows):3d} with-ok={okc:3d}")
+        nulls = sum(1 for r in rows if _pick(r, OK_KEYS) is None and any(k in r for k in ("unmeasurable",)))
+        sem = " probe" if (data.get("trials_backfill") if isinstance(data.get("trials_backfill"), dict) else {}).get("per_trial_semantics") else ""
+        back = " backfilled" if (data.get("trials_backfill") if isinstance(data.get("trials_backfill"), dict) else {}).get("backfilled_at") else ""
+        print(f"  {os.path.basename(p):30s} trials={len(rows):3d} with-ok={okc:3d}"
+              f"{f' unmeasurable={nulls}' if nulls else ''}{sem}{back}")
     for name, why in advisories:
         print(f"  ADVISORY {name}: free-text keys in trial records {why} — confirm no media paths "
               f"before this file is published")
@@ -228,6 +241,12 @@ def fmt_pct(x):
 def report(records, coverage, only_task=None):
     if only_task:
         records = [r for r in records if r["task"] == only_task]
+    # Ungraded probe rows (no grader verdict, no wall time) satisfy the publication gate but have no
+    # place in a pass-rate or timing table, and their pseudo-task labels (A_control__r7) would blow up
+    # the column set. They are counted here and excluded from the tables.
+    probe_rows = [r for r in records if r["ok"] is None and r["wall_s"] is None]
+    if probe_rows:
+        records = [r for r in records if not (r["ok"] is None and r["wall_s"] is None)]
     waves, seen = [], set()
     for c in coverage:
         if c["wave"] in seen or not any(r["wave"] == c["wave"] for r in records):
@@ -249,8 +268,11 @@ def report(records, coverage, only_task=None):
                 continue
             walls = [r["wall_s"] for r in rs if r["wall_s"] is not None]
             passes = sum(1 for r in rs if r["ok"])
+            if not walls:
+                cells.append(f"{len(rs)}p/{passes} (no wall time)".rjust(22))
+                continue
             spread = (max(walls) / min(walls) - 1) if len(walls) > 1 else 0.0
-            med = statistics.median(walls) if walls else 0.0
+            med = statistics.median(walls)
             cells.append(f"{len(rs)}p/{passes} {med:6.1f}s {min(walls):5.0f}-{max(walls):5.0f} {100*spread:4.0f}%".rjust(22))
         print(f"{w:26s} " + " ".join(cells))
 
@@ -272,6 +294,9 @@ def report(records, coverage, only_task=None):
     k = sum(1 for r in known if r["ok"])
     lo, hi = wilson(k, len(known))
     print(f"\naggregate: {k}/{len(known)} verified; Wilson 95% [{100*lo:.1f}, {100*hi:.1f}]")
+    if probe_rows:
+        print(f"({len(probe_rows)} ungraded probe rows held for re-derivability but excluded from "
+              f"pass-rate/timing tables — they carry no grader verdict)")
     n18 = [r for r in records if r["ok"] is not None]
     per_wave = max(len([r for r in records if r["wave"] == w and r["ok"] is not None]) for w in waves) if waves else 0
     print(f"largest wave n = {per_wave} trials; consecutive clean waves: "

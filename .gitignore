@@ -31,3 +31,6 @@ bench/blender-benchmark/prop_test.png*
 bench/blender-benchmark/results/*/frame_*.png
 bench/blender-benchmark/results/*/latest-frame.png
 bench/blender-benchmark/fixture/*.glb
+
+# operator scratch (holds machine-local absolute paths; never published)
+bench/**/_scratch_*/
