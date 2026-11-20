@@ -37,6 +37,7 @@ DOMS=("$@")
 if [ "${#DOMS[@]}" -eq 0 ]; then DOMS=(airline retail telecom); fi
 
 mkdir -p "$WAVE"
+WAVE=$(cd "$WAVE" && pwd)   # absolute: the script cd's into $TAU2 below, relative wave dirs must survive it
 cd "$TAU2" || exit 1
 
 # pin + stack proof: the tag is verified from the clone, the flags from the RUNNING supervisor
