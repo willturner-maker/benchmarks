@@ -573,12 +573,15 @@ self-check that wrongly says *dirty* is as dangerous as one that says *clean*. R
 RECORD in
 [results/splash-1.7.0-2026-11-19c-clean/](../bench/splash-concurrency/results/splash-1.7.0-2026-11-19c-clean/), scorecard [2026-11-19-splash-kv-clean-window.html](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-kv-clean-window.html).
 
-**Where the KV question goes next.** Tripping KV by summed volume is now bounded out for this
-instrument: at 17.04× the governor still reports no work, and the only failure mode past that is the
-request-count flag. The live question is **depth, not volume** — `context_bounds` puts resident at
-155,633 against a 262,144 window, and the open probe is a single context walking toward the resident
-line **while held across turns**, which is what real agent sessions do and no wave in this series has
-measured directly.
+**Where the KV question went, and what answered it.** Tripping KV by summed volume is bounded out: at
+17.04× the governor reports no work, and the only failure mode past that is the request-count flag. The
+question was **depth**, and the depth probe (`results/depth-2026-11-19/`) answered it the same night: **one
+held conversation was served at 255,948 prompt tokens = 1.64× the 155,648-token resident budget**, with spill
+switching on exactly at the resident line (turns 1–6 spill 0; from turn 7 at 1.04×: +2,176 … 4,945 moves total)
+and **zero** suspension / disk-demotion / capacity-failure counters moving at any depth. **The depth wall is the
+262,144-token context window, not memory** — turn 12 was refused *before admission* (`400
+context_length_exceeded`, `prefill_rows` unmoved). Per-turn cost stays flat while the context grows 9.8× (6.42 s →
+8.61 s) because cross-turn prefix reuse prefills only the new ~22.7 k tokens.
 
 Cross-hardware context (DGX Spark / RTX Spark / RTX 5090 on the same resident model): the
 [comparison section](splash-engine-benchmark-results.md#cross-hardware--the-same-model-on-nvidia-boxes-external-data-2026-11-13).
