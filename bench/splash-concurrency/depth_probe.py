@@ -102,14 +102,17 @@ def main():
           f"turn size ~{args.turn_tokens:,} words, max {args.max_turns} turns", flush=True)
 
     header = {"method": "depth_probe", "kind": "setup", "model": MODEL, "seed_namespace": SEED_NAMESPACE,
-              "turn_words": args.turn_tokens, "context_bounds": cb, "kv_capacity_tokens": budget,
+              "turn_words": args.turn_tokens, "context_bounds": cb,
+              "maximum_context_tokens": s0.get("maximum_context_tokens"),
+              "kv_capacity_tokens": budget,
+              "kv_page_bytes": s0["memory_plan"]["budget"].get("kv_page_bytes"),
+              "kv_capacity_pages": s0["memory_plan"]["budget"].get("kv_capacity_pages"),
               "lifetime_at_start": counters(s0), "gauges_at_start": gauges(s0)}
-    with open(args.out, "a") as f:
-        f.write(json.dumps(header) + "\n")
 
     msgs = [{"role": "user", "content": filler(0, 200)}]
     # calibrate: the token cost of a filler word is engine-side, not ours to assume
     d0, e0 = chat(msgs, 8)
+    words = args.turn_tokens
     if not e0:
         per_word = ((d0.get("usage") or {}).get("prompt_tokens") or 0) / 220.0
         if per_word > 0:
@@ -117,13 +120,15 @@ def main():
             print(f"calibration: 200-word probe = {(d0.get('usage') or {}).get('prompt_tokens')} prompt "
                   f"tokens -> {per_word:.2f} tok/word, so a {args.turn_tokens:,}-token turn is "
                   f"~{words:,} words", flush=True)
-            args.turn_tokens = words
+    header["turn_words"] = words
+    with open(args.out, "a") as f:
+        f.write(json.dumps(header) + "\n")
     prev = counters(s0)
     sent_words = 0
     stop = None
     for turn in range(1, args.max_turns + 1):
-        block = filler(turn, args.turn_tokens)
-        sent_words += args.turn_tokens
+        block = filler(turn, words)
+        sent_words += words
         msgs.append({"role": "user", "content": block})
         pre = gauges(get("/status"))
         t0 = time.time()
