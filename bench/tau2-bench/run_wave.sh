@@ -26,6 +26,9 @@ HERE=$(cd "$(dirname "$0")" && pwd)
 TAU2=${TAU2_DIR:-$HOME/tau2-bench}
 MODEL=${TAU2_MODEL:-openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S}
 LLM_ARGS=${TAU2_LLM_ARGS:-'{"temperature":0,"api_base":"http://127.0.0.1:8000/v1","api_key":"local","max_tokens":4096}'}
+# agent-only override so an effort A/B keeps the USER-SIMULATOR stream reproducible
+# (same seed + same user-sim args as the baseline wave; only the agent changes)
+AGENT_ARGS=${TAU2_AGENT_LLM_ARGS:-$LLM_ARGS}
 TRIALS=${TAU2_TRIALS:-2}
 CONC=${TAU2_CONCURRENCY:-3}
 SEED=${TAU2_SEED:-300}
@@ -51,7 +54,7 @@ printf 'wave started %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee "$WAVE/wave.lo
 
 # engine sampler: KV residency depth, scheduler queue, admission counters, spill/demote.
 # Attribution by prompt_tokens size keeps benchmark traffic separable from co-tenants.
-python3 "$HERE/sample_engine.py" "$WAVE/engine_samples.jsonl" 21600 10 > "$WAVE/sampler.log" 2>&1 &
+python3 "$HERE/sample_engine.py" "$WAVE/engine_samples.jsonl" "${TAU2_SAMPLE_SECONDS:-21600}" 10 > "$WAVE/sampler.log" 2>&1 &
 SAMPLER=$!
 sleep 3
 
@@ -60,7 +63,7 @@ run_domain() {
   echo "===== $dom $(date -u +%H:%M:%SZ) =====" | tee -a "$WAVE/wave.log"
   uv run tau2 run --domain "$dom" \
     --agent-llm "$MODEL" --user-llm "$MODEL" \
-    --agent-llm-args "$LLM_ARGS" --user-llm-args "$LLM_ARGS" \
+    --agent-llm-args "$AGENT_ARGS" --user-llm-args "$LLM_ARGS" \
     --num-trials "$TRIALS" --max-concurrency "$CONC" --seed "$SEED" \
     --save-to "wave-$(basename "$WAVE")-$dom" "$@" \
     > "$WAVE/$dom.log" 2>&1
