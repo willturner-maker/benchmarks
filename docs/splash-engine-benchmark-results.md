@@ -936,6 +936,8 @@ night — see the depth-probe section below.
 
 ## Depth probe 2026-11-19 — one context walked across the resident line (raw: `bench/splash-concurrency/results/depth-2026-11-19/`)
 
+Scorecard: [Splash depth probe — 1.64× the KV budget and still serving](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-depth-probe.html)
+
 `depth_probe.py`, run detached through `run_depth_detached.sh` (`02:24:58Z → 02:28:37Z`, same 1.7.0 instance, not
 restarted; 9 of 10 in-flight samples attributed to the run, the one foreign request landing inside the 90 s
 lead-in). One conversation, turns appended one at a time, `max_tokens 8` so decode is irrelevant, every block

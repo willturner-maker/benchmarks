@@ -1,0 +1,230 @@
+<title>Splash depth probe — 1.64× the KV budget and still serving</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#fcfcfd; --fg:#14171c; --fg-2:#4d555f; --mut:#7b848f;
+  --line:#dfe3e8; --accent:#2a78d6; --s2:#eb6834; --s3:#8a5fc9;
+  --good:#0f7a4d; --warn:#b26a00;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',Inter,system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 56px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.5vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 var(--mono);color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.lede{color:var(--fg-2);max-width:65ch;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:9px 13px}
+.chip b{font-family:var(--disp);font-size:16px}
+.chip span{font-size:12.5px;color:var(--fg-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--good);flex:none;align-self:center}
+.dot.warn{background:var(--warn)}
+section{margin-top:44px;border-top:1px solid var(--line);padding-top:26px}
+h2{font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 .tag{font:500 11px/1 var(--mono);color:var(--mut);letter-spacing:.06em;border:1px solid var(--line);
+  border-radius:6px;padding:4px 7px}
+p.note{color:var(--fg-2);max-width:65ch}
+.tbl-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;min-width:0}
+th{font:600 12px/1.3 var(--body);color:var(--fg-2)}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--good);font-weight:600}
+.warn{color:var(--warn);font-weight:600}
+.dim{color:var(--mut)}
+code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;
+  font:500 12px/1.5 var(--mono);color:var(--fg-2);margin:14px 0 0}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.chartwrap{position:relative;margin-top:10px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:8px 10px;font:500 12px/1.5 var(--mono);box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+@media (prefers-reduced-motion:reduce){.tip{transition:none}}
+svg{width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.grid{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--mut);stroke-width:1}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
+.foot code{font-size:11.5px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Will's local AI pipeline · Splash 1.7.0 · depth probe · engine finding</div>
+  <h1>Session length here is capped by the window, not by KV</h1>
+  <p class="lede">Every wave in this suite has pushed prompt <b>volume</b> and failed to trip the KV pool; the last
+  one explained why (width becomes queue depth). So the probe walked the other axis: <b>one conversation, held
+  across turns, past the resident line</b>. It was served at <b>255,948 prompt tokens = 1.64× the 155,648-token
+  resident KV budget</b>. The next turn was refused — and the refusal was <b>the 262,144-token context
+  window</b>, arriving before the engine ever saw the request.</p>
+
+  <div class="chips">
+    <div class="chip"><span class="dot"></span><b>1.64× resident</b><span>255,948 tokens in one held context, served normally</span></div>
+    <div class="chip"><span class="dot"></span><b>spill at the line</b><span>turns 1–6 spill 0 · turn 7 (1.04×) +2,176</span></div>
+    <div class="chip"><span class="dot"></span><b>0 suspensions</b><span>no disk demotion, no capacity failure, at any depth reached</span></div>
+    <div class="chip"><span class="dot warn"></span><b>refused pre-admission</b><span>400 <code>context_length_exceeded</code>, <code>prefill_rows</code> unmoved</span></div>
+  </div>
+
+  <section>
+    <h2>1 · Context grows, spill switches on once <span class="tag">11 served turns, then a refusal</span></h2>
+    <div class="viz-root">
+      <div class="vtitle">One conversation: context size, spill activity, and wall time per turn</div>
+      <div class="vsub">Bars = prompt tokens the engine reported for that turn (× the resident KV budget). Orange = <code>spill_moves</code> during that turn. Dashed = wall seconds (right-hand scale). Hover a bar</div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>context × resident budget</span><span><i style="background:var(--s2)"></i>spill moves in that turn</span><span><i style="background:var(--s3)"></i>wall s (turn cost)</span></div>
+      <div class="chartwrap"><svg id="depth" viewBox="0 0 880 320" role="img" aria-label="Eleven bars growing from 0.17 to 1.64 times the resident KV budget. The first six turns show no spill. From turn 7, at 1.04 times, spill appears: 2,176 moves, then 798, 512, 709 and 750. Wall time per turn stays between 6.4 and 8.6 seconds the whole way. Turn 12 is refused"></svg><div class="tip" id="tip"></div></div>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>turn</th><th class="num">prompt tokens</th><th class="num">× resident</th><th class="num">wall s</th><th class="num">prefill_rows Δ</th><th class="num">spill Δ</th><th class="num">susp / demote / capacity</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td class="num">26,222</td><td class="num">0.17×</td><td class="num">6.42</td><td class="num">26,244</td><td class="num">0</td><td class="num ok">0 / 0 / 0</td></tr>
+          <tr><td>2</td><td class="num">48,944</td><td class="num">0.31×</td><td class="num">6.73</td><td class="num">22,736</td><td class="num">0</td><td class="num ok">0 / 0 / 0</td></tr>
+          <tr><td>3</td><td class="num">71,666</td><td class="num">0.46×</td><td class="num">6.94</td><td class="num">22,738</td><td class="num">0</td><td class="num ok">0 / 0 / 0</td></tr>
+          <tr><td>4</td><td class="num">94,388</td><td class="num">0.61×</td><td class="num">7.14</td><td class="num">22,740</td><td class="num">0</td><td class="num ok">0 / 0 / 0</td></tr>
+          <tr><td>5</td><td class="num">117,110</td><td class="num">0.75×</td><td class="num">7.01</td><td class="num">22,742</td><td class="num">0</td><td class="num ok">0 / 0 / 0</td></tr>
+          <tr><td>6</td><td class="num">139,832</td><td class="num">0.90×</td><td class="num">7.21</td><td class="num">22,744</td><td class="num">0</td><td class="num ok">0 / 0 / 0</td></tr>
+          <tr><td><b>7</b></td><td class="num"><b>162,554</b></td><td class="num warn"><b>1.04×</b></td><td class="num">7.35</td><td class="num">22,746</td><td class="num warn"><b>+2,176</b></td><td class="num ok">0 / 0 / 0</td></tr>
+          <tr><td>8</td><td class="num">185,276</td><td class="num">1.19×</td><td class="num">7.36</td><td class="num">22,748</td><td class="num warn">+798</td><td class="num ok">0 / 0 / 0</td></tr>
+          <tr><td>9</td><td class="num">207,998</td><td class="num">1.34×</td><td class="num">7.77</td><td class="num">22,750</td><td class="num warn">+512</td><td class="num ok">0 / 0 / 0</td></tr>
+          <tr><td>10</td><td class="num">231,973</td><td class="num">1.49×</td><td class="num">8.35</td><td class="num">24,005</td><td class="num warn">+709</td><td class="num ok">0 / 0 / 0</td></tr>
+          <tr><td><b>11</b></td><td class="num"><b>255,948</b></td><td class="num warn"><b>1.64×</b></td><td class="num">8.61</td><td class="num">23,980</td><td class="num warn">+750</td><td class="num ok">0 / 0 / 0</td></tr>
+          <tr><td class="warn">12</td><td class="dim" colspan="3">refused <code>400 context_length_exceeded</code></td><td class="num ok"><b>0</b></td><td class="num ok">0</td><td class="num ok">0 / 0 / 0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Totals across the probe: <b>256,173 prefill rows</b>, <b>4,945 spill moves</b>, and
+    <code>resource_suspensions</code>, <code>priority_suspensions</code>, <code>disk.kv_demotions</code>,
+    <code>kv_demotions_refused</code>, <code>capacity_failures</code> — <b>not one moved</b>. Governor headroom
+    stayed between 10 MB and 79 MB the whole time, so the spill onset tracks <b>the resident line</b>, not host
+    memory pressure.</p>
+  </section>
+
+  <section>
+    <h2>2 · Deep sessions are cheap, because the cache carries the history <span class="tag">the part that matters for agents</span></h2>
+    <p class="note">Each turn appended ~20 k tokens, and <b>every turn prefilled only ~22.7 k rows</b> — the new
+    block, never the history. So wall time per turn went <b>6.42 s → 8.61 s across a 9.8× context increase</b>
+    (+34 %). <code>kv.pages_cache</code> climbed 5,718 → 7,998 pages, which is <b>above the 4,864-page resident KV
+    capacity</b>: the cache pool and the resident pool are different pools, and that is exactly why a session can
+    stand at 1.64× the resident budget without the engine objecting.</p>
+    <p class="note">Practical reading for agent sessions on this box: <b>long held context is not a memory
+    problem, it is a window problem.</b> The thing to budget against is 262,144 tokens; spill is what the engine
+    does for free past 155,648.</p>
+  </section>
+
+  <section>
+    <h2>3 · Two refusal modes, and only one of them is the engine <span class="tag">how to tell them apart in one counter</span></h2>
+    <pre>turn 12 -&gt; HTTP 400  {"error":{"message":"prompt exceeds the context window",
+                          "code":"context_length_exceeded"}}
+           scheduler.prefill_rows delta during that turn: 0   &lt;- never admitted</pre>
+    <p class="note">Compare the 2026-11-19 wave, where width 40 produced <b>HTTP 503</b>
+    <code>frontend request capacity is exhausted</code> — that was <code>--queue-size</code>, a capacity ceiling,
+    and it had queued counters moving. <b>Both look like "the engine refused me" if you read only the HTTP code.</b>
+    The discriminator is one gauge: if <code>scheduler.prefill_rows</code> did not move, the request never reached
+    the engine — it is a client-side contract error, and the fix is on the caller.</p>
+  </section>
+
+  <section>
+    <h2>4 · What this design does <em>not</em> settle <span class="tag">limits stated, not smoothed</span></h2>
+    <p class="note"><b>n = 1 conversation, 11 served turns, one engine instance</b>, one day, not restarted
+    (lifetime counters carried in at <code>resource_suspensions 4 / spill_moves 22,560</code>). The spill onset is
+    <b>bounded</b> to the interval between turn 6 (0.90×) and turn 7 (1.04×) — this probe cannot resolve it finer
+    than that. <code>pages_active</code> read <b>0</b> at every sample because each turn finishes in ~7 s and
+    sampling ran at 10 s, so the residency evidence here is the spill deltas; an occupancy curve needs 1–2 s
+    sampling. <code>spill_moves</code> is the engine's counter of moves, not bytes. The text is synthetic filler —
+    right shape (held, growing), not real retrieval behaviour.</p>
+    <pre>git clone https://github.com/willturner-maker/benchmarks
+cd benchmarks/bench/splash-concurrency
+./run_depth_detached.sh ~/my-depth 20000 18     # detached, samples /status, proves its own tenancy
+# instrument: depth_probe.py  (turn size calibrated from the engine's own tokenizer: 15.95 tok/word here)</pre>
+  </section>
+
+  <div class="foot">
+    Engine: <code>Splash 1.7.0</code>, <code>ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S</code>, same
+    instance as waves 19b/19c (not restarted). Read back from <code>/status</code>: resident KV
+    <code>kv_capacity_tokens 155,648</code> = 4,864 pages × 32 tok, <code>kv_page_bytes 423,936</code>,
+    <code>maximum_context_tokens 262,144</code>, <code>maximum_batch_width 4</code>. Window
+    <code>2026-11-20T02:24:58Z → 02:28:37Z</code>, detached, operator idle; 9 of 10 in-flight samples attributed to
+    this run, the one foreign sample inside the 90 s lead-in. Record:
+    <code>bench/splash-concurrency/results/depth-2026-11-19/</code> (<code>depth_probe.jsonl</code>, engine
+    samples, status edges, pins, <code>RECORD.md</code>); instrument
+    <code>bench/splash-concurrency/depth_probe.py</code>; runner
+    <code>bench/splash-concurrency/run_depth_detached.sh</code>. Context: <a href="https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-kv-clean-window.html">the clean-window volume wave</a> that made depth the live question.
+  </div>
+</div>
+
+<script>
+const turns=[
+ {t:1, x:0.168, spill:0, wall:6.42, tok:26222},
+ {t:2, x:0.314, spill:0, wall:6.73, tok:48944},
+ {t:3, x:0.460, spill:0, wall:6.94, tok:71666},
+ {t:4, x:0.606, spill:0, wall:7.14, tok:94388},
+ {t:5, x:0.752, spill:0, wall:7.01, tok:117110},
+ {t:6, x:0.898, spill:0, wall:7.21, tok:139832},
+ {t:7, x:1.044, spill:2176, wall:7.35, tok:162554},
+ {t:8, x:1.190, spill:798, wall:7.36, tok:185276},
+ {t:9, x:1.336, spill:512, wall:7.77, tok:207998},
+ {t:10,x:1.490, spill:709, wall:8.35, tok:231973},
+ {t:11,x:1.644, spill:750, wall:8.61, tok:255948}
+];
+const ns='http://www.w3.org/2000/svg';
+function el(t,a){const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+(function(){
+  const svg=document.getElementById('depth'), tip=document.getElementById('tip');
+  const W=880,H=320,mL=48,mR=52,bTop=22,bH=210;
+  const max=1.8, Y=v=>bTop+bH-(v/max)*bH, Y0=Y(0);
+  const bw=(W-mL-mR)/turns.length;
+  [0,0.5,1.0,1.5].forEach(v=>{
+    svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(v),y2:Y(v),class:'grid'}));
+    const t=el('text',{x:mL-8,y:Y(v)+4,'font-size':'10.5','text-anchor':'end'});t.textContent=v.toFixed(1)+'×';svg.appendChild(t);
+  });
+  // the resident line
+  svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(1),y2:Y(1),stroke:'var(--warn)','stroke-width':1.5,'stroke-dasharray':'6 4'}));
+  const rl=el('text',{x:W-mR-4,y:Y(1)-8,'font-size':'11','text-anchor':'end',fill:'var(--warn)'});
+  rl.textContent='resident KV budget = 155,648 tok';svg.appendChild(rl);
+
+  const maxSpill=2176, Hs=54, base=Y0+18;
+  turns.forEach((r,i)=>{
+    const x=mL+i*bw+bw*0.16, w=bw*0.68;
+    const rect=el('rect',{x:x,y:Y(r.x),width:w,height:Math.max(1,Y0-Y(r.x)),
+      fill:i>=6?'var(--s3)':'var(--accent)',rx:3,tabindex:0});
+    rect.addEventListener('mousemove',e=>{
+      const bb=svg.getBoundingClientRect();
+      tip.textContent=`turn ${r.t}: ${r.tok.toLocaleString()} tok = ${r.x.toFixed(3)}× resident · ${r.wall}s · spill +${r.spill}`;
+      tip.style.opacity=1;tip.style.left=(e.clientX-bb.left+12)+'px';tip.style.top=(e.clientY-bb.top-10)+'px';
+    });
+    rect.addEventListener('mouseleave',()=>tip.style.opacity=0);
+    svg.appendChild(rect);
+    const hs=r.spill?Math.max(2,(r.spill/maxSpill)*Hs):0;
+    if(hs) svg.appendChild(el('rect',{x:x,y:base-hs,width:w,height:hs,fill:'var(--s2)',rx:2}));
+    const lab=el('text',{x:x+w/2,y:base+Hs+16,'font-size':'10.5','text-anchor':'middle'});lab.textContent='t'+r.t;svg.appendChild(lab);
+    const wt=el('text',{x:x+w/2,y:Y(r.x)-7,'font-size':'9.5','text-anchor':'middle',fill:'var(--fg-2)'});
+    wt.textContent=r.wall.toFixed(1)+'s';svg.appendChild(wt);
+  });
+  const sp=el('text',{x:mL,y:base-2,'font-size':'10.5',fill:'var(--s2)'});
+  sp.textContent='spill moves (t7 2,176 · t8 798 · t9 512 · t10 709 · t11 750; t1–t6 zero)';svg.appendChild(sp);
+  const rf=el('text',{x:W-mR-2,y:base+Hs+16,'font-size':'10.5','text-anchor':'end',fill:'var(--warn)'});
+  rf.textContent='t12 refused before admission';svg.appendChild(rf);
+})();
+</script>
