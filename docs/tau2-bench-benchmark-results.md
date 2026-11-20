@@ -155,8 +155,10 @@ than from the flag we passed.
 | **c3** | `--max-concurrency 3` | b1 1,757 · b2 1,347 · **b3 5,115** | 3 | 0 | **3 / 8** |
 
 The c1 arm is a real never-batched condition: every decode batch was width 1, one request in flight, nobody
-else attached. "Co-tenant samples" counts in-flight requests over 20,000 prompt tokens (τ²'s own requests top
-out near 16 k; an operator session runs well above that), and it is zero in both arms. It still flipped 3 of 8
+else attached. "Co-tenant samples" counts in-flight requests over 20,000 prompt tokens: inside the arm windows
+the largest in-flight prompt is **11,488 tokens** (τ² scale), while an operator session on this stack runs at
+~200 k, and the only over-threshold sample in the whole 15-minute file is a **197,507-token prefill at
+`00:47:04`, three seconds before the first arm started**. So zero co-tenant traffic inside the windows. It still flipped 3 of 8
 — **the same count as the width-3 replication**, and only **one task (retail 90) is unstable in all three
 passes**. Flip identity is not a stable task property either: across all six simulations of these tasks the
 `reward == 1` counts run 2/6 to 5/6.

@@ -21,6 +21,7 @@
     "b4": 0
    },
    "peak_requests_in_flight": 1,
+   "max_inflight_prompt_tokens": 11442,
    "co_tenant_request_samples": 0,
    "peak_kv_tokens": 12160,
    "per_domain_widths": {
@@ -52,6 +53,7 @@
     "b4": 0
    },
    "peak_requests_in_flight": 3,
+   "max_inflight_prompt_tokens": 11488,
    "co_tenant_request_samples": 0,
    "peak_kv_tokens": 19424,
    "per_domain_widths": {

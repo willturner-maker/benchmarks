@@ -75,10 +75,14 @@ for c, dom, n, t0, t1 in re.findall(r"== arm c(\d) (\w+) n=(\d+) (\d\d:\d\d:\d\d
     a, b = w[0], w[-1]
     key = f"c{c}"
     d = arms.setdefault(key, {"widths": Counter(), "peak_inflight": 0, "co_tenant": 0,
+                              "max_inflight_prompt_tokens": 0,
                               "peak_kv_tokens": 0, "domains": {}})
     for k, v in b["decode_batches_by_width"].items():
         d["widths"][k] += int(v) - int(a["decode_batches_by_width"].get(k, 0))
     d["peak_inflight"] = max(d["peak_inflight"], max(len(r["active_requests"]) for r in w))
+    d["max_inflight_prompt_tokens"] = max([d.get("max_inflight_prompt_tokens", 0)] +
+                                          [int(q.get("prompt_tokens") or 0) for r in w
+                                           for q in r["active_requests"]])
     d["co_tenant"] += sum(1 for r in w for q in r["active_requests"]
                           if int(q.get("prompt_tokens") or 0) > 20000)
     d["peak_kv_tokens"] = max(d["peak_kv_tokens"], max(int(r["kv_tokens_active"]) for r in w))
@@ -131,6 +135,7 @@ summary = {
     "sampled_tasks": [str(t) for t in tasks and [k[1] for k in tasks]],
     "engine_arms": {k: {"decode_batches_by_width_delta": dict(v["widths"]),
                         "peak_requests_in_flight": v["peak_inflight"],
+                        "max_inflight_prompt_tokens": v["max_inflight_prompt_tokens"],
                         "co_tenant_request_samples": v["co_tenant"],
                         "peak_kv_tokens": v["peak_kv_tokens"],
                         "per_domain_widths": v["domains"]} for k, v in arms.items()},

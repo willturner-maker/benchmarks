@@ -18,6 +18,11 @@ The arms are proven from `/status` sampled at 10 s (`engine_samples.jsonl`), not
 zero co-tenant request-samples. c3 reproduces the published wave's shape (b3 dominant). Peak KV: 12,160 tok
 (c1) / 19,424 tok (c3) against a 155,648-token budget.
 
+Tenancy is checkable rather than asserted. Inside any arm window the largest in-flight prompt is **11,488
+tokens** (τ² scale); across the whole 15-minute file the only in-flight request over 20,000 tokens is **one
+197,507-token prefill at 00:47:04, three seconds before the first arm started** — the operator's last request
+before going idle. So the windows contain τ² traffic only.
+
 **Result — batching is excluded as the mechanism.**
 
 | condition | flips among the 8 | which ones |
