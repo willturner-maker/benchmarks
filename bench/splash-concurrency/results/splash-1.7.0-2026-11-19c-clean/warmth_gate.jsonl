@@ -1,0 +1,4 @@
+{"method": "warmth_gate", "kind": "decode_w1_ladder_prompt", "pass": 1, "completion_tokens": 512, "tok_s": 274.5}
+{"method": "warmth_gate", "kind": "decode_w1_ladder_prompt", "pass": 2, "completion_tokens": 512, "tok_s": 314.1}
+{"method": "warmth_gate", "kind": "decode_w1_ladder_prompt", "pass": 3, "completion_tokens": 512, "tok_s": 307.7}
+{"method": "warmth_gate", "kind": "summary", "decode_tok_s": [274.5, 314.1, 307.7], "spread_ratio": 1.144, "gate": "soft", "reference_11_19_w1": 294.4, "reference_11_18_w1": [260.6, 307.3]}

@@ -43,15 +43,37 @@ date -u +"done %Y-%m-%dT%H:%M:%SZ" | tee -a "$OUT/run.log"
 kill "$SAMPLER" 2>/dev/null
 trap - EXIT
 
-# tenancy read-back: anything over 20k prompt tokens in flight is not this wave's traffic
+# tenancy read-back: attribute every in-flight request to this wave or to somebody else. A size threshold
+# alone is wrong — the KV stage deliberately runs 55k-token prompts, so "over 20k = operator" flags our own
+# traffic. Match against the prompt sizes THIS wave recorded, and treat anything else as a co-tenant.
 python3 - "$OUT" <<'PY'
-import json, sys
+import json, sys, datetime
 out = sys.argv[1]
+own = set()
+for line in open(f"{out}/ladder_kv.jsonl"):
+    r = json.loads(line)
+    for k in ("prompt_tokens_each",):
+        own |= set(r.get(k) or [])
+    if r.get("method") == "width_ladder":
+        own.add(None)  # ladder prompts are tiny; counted separately below
 rows = [json.loads(l) for l in open(f"{out}/engine_samples.jsonl") if l.strip()]
-big = [(r.get("prompt_tokens"), r.get("kv_mode")) for s in rows for r in (s["active_requests"] or [])
-       if int(r.get("prompt_tokens") or 0) > 20000]
-print(f"tenancy: {len(rows)} status samples, {len(big)} operator-size (>20k tok) in-flight samples")
-print("  CLEAN window" if not big else "  NOT single-tenant — do not publish as a clean wave")
+small, foreign = 0, []
+for s in rows:
+    for r in (s["active_requests"] or []):
+        tok = int(r.get("prompt_tokens") or 0)
+        if tok in own or tok < 5000:
+            small += 1
+        else:
+            foreign.append((tok, r.get("kv_mode"), r.get("phase"),
+                            datetime.datetime.utcfromtimestamp(float(s["t"])).strftime("%H:%M:%S")))
+print(f"tenancy: {len(rows)} status samples, {small} samples attributed to this wave "
+      f"(prompt sizes {sorted(x for x in own if x)})")
+if foreign:
+    print(f"  {len(foreign)} FOREIGN in-flight samples:")
+    for tok, mode, phase, t in foreign[:10]:
+        print(f"    {t}  {tok:,} tok  {mode}/{phase}")
+else:
+    print("  CLEAN: every in-flight request in the window belongs to this wave")
 PY
 touch "$OUT/DONE"
 echo "out: $OUT"
