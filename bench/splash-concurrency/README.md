@@ -52,7 +52,14 @@ in the leaderboard.
 9. **Diff across waves on w1 and the plateau only.** Mid-width singles do not reproduce even on the same launch
    (19b vs 19c-clean: w2 417.0 vs 487.05, w12 647.55 vs 694.4). Shape invariants that do reproduce: the w6 dip,
    the admission ceiling (12), and the flat prefill rate that `maximum_batch_width = 4` implies.
-10. **Match the sampling interval to the event.** The depth probe sampled at 10 s and caught `pages_active = 0` at
+10. **Zero operator engine calls for the whole window.** The agent session is served by the engine being
+measured: every operator message and tool call is co-tenant load. A 90 s lead-in protects only the pre-launch
+message — after launching a detached wave, **end the turn and do not return until the completion notification**.
+Earned the hard way: the 2026-11-19 tenancy run contaminated its own "clean" arm (operator requests of 79k–83k
+tok decoded inside the only recorded round) and then deadlocked a continuous co-tenant against `wait_idle()`
+for **15 h 45 m**, moving lifetime `spill_moves` by +3.1 M (`results/tenancy-2026-11-19-runaway/RECORD.md`). A
+measurement script must carry a hard deadline; the harness must never assume the operator stayed idle.
+11. **Match the sampling interval to the event.** The depth probe sampled at 10 s and caught `pages_active = 0` at
     every sample, because each turn completes in ~7 s. The spill deltas carried the residency finding; an occupancy
     curve needs 1–2 s sampling.
 

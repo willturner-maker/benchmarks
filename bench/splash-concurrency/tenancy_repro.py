@@ -43,6 +43,7 @@ CO_TENANT_TARGET_TOKENS = 120_000   # an operator/agent context, not a benchmark
 CO_TENANT_MAX_TOKENS = 512
 CO_TENANT_CONCURRENCY = 3
 ROUNDS_PER_WIDTH = 2
+DEADLINE = 0.0                                # epoch; set in main() from --deadline-minutes
 
 
 def status():
@@ -112,7 +113,7 @@ class CoTenant:
 
     def _worker(self, k):
         i = 0
-        while not self.stop.is_set():
+        while not self.stop.is_set() and time.time() < DEADLINE:
             tag = f"tenancyrepro-ct{k}-i{i}"
             t0 = time.time()
             r = chat(bench_prompt(tag, self.tokens // 13), CO_TENANT_MAX_TOKENS)
@@ -125,6 +126,7 @@ class CoTenant:
                     self.stats["prompt_tokens"] += r.get("prompt_tokens") or 0
                     self.stats["completion_tokens"] += r.get("completion_tokens") or 0
             i += 1
+            time.sleep(2)   # small duty gap so a round can actually start
 
     def __enter__(self):
         for k in range(self.n):
@@ -138,12 +140,19 @@ class CoTenant:
             t.join(timeout=30)
 
 
-def run_arm(out, widths, arm):
+def run_arm(out, widths, arm, co_tenant=None):
     words = 1500                                   # ~20k tokens at the engine's own tokenizer
     prev = counters(status())
     for w in widths:
         for rnd in range(1, ROUNDS_PER_WIDTH + 1):
-            wait_idle()
+            if not co_tenant:
+                wait_idle()   # clean arm only: a co-tenanted engine NEVER idles by design
+            if time.time() > DEADLINE:
+                rec = {"method": "tenancy_repro", "arm": arm, "deadline_exceeded": True,
+                       "note": "stopped at --deadline; see run.log"}
+                with open(out, "a") as f:
+                    f.write(json.dumps(rec) + "\n")
+                return rec
             before = peaks(status())
             t0 = time.time()
             with cf.ThreadPoolExecutor(max_workers=w) as ex:
@@ -190,9 +199,14 @@ def main():
     ap.add_argument("--widths", default=",".join(str(w) for w in WIDTHS))
     ap.add_argument("--co-tenant-concurrency", type=int, default=CO_TENANT_CONCURRENCY)
     ap.add_argument("--co-tenant-tokens", type=int, default=CO_TENANT_TARGET_TOKENS)
+    ap.add_argument("--deadline-minutes", type=int, default=25)
     ap.add_argument("--skip-clean", action="store_true",
                     help="only run the co-tenanted arm (use when the clean arm already ran)")
     args = ap.parse_args()
+    global DEADLINE
+    DEADLINE = time.time() + args.deadline_minutes * 60
+    import atexit
+    atexit.register(lambda: print(f"[deadline] {DEADLINE - time.time():.0f}s left", flush=True))
 
     MODEL = json.load(urllib.request.urlopen(BASE + "/v1/models", timeout=10))["data"][0]["id"]
     s0 = status()
@@ -219,7 +233,7 @@ def main():
           f"~{args.co_tenant_tokens:,} tok) ==", flush=True)
     with CoTenant(args.co_tenant_concurrency, args.co_tenant_tokens) as ct:
         time.sleep(20)                       # let the co-tenant reach steady state
-        trip = run_arm(args.out, widths, "co_tenant")
+        trip = run_arm(args.out, widths, "co_tenant", co_tenant=ct)
         ct_stats = dict(ct.stats)
     s_end = status()
     tail = {"method": "tenancy_repro", "kind": "summary", "trip_round": trip,
