@@ -32,6 +32,7 @@ macOS 27.2.0. Engine args: working set 56 GiB, SSD cache cap 128 GiB, persistent
 - [Re-run 2026-11-17 — Splash 1.7.0](#re-run-2026-11-17--splash-170-three-passes-warm-gate-raw-benchsplash-concurrencyresultssplash-170-2026-11-17)
 - [Re-run 2026-11-19 — the 32-request wall, then the queueing regime](#re-run-2026-11-19--the-32-request-wall-then-the-queueing-regime-raw-benchsplash-concurrencyresultssplash-170-2026-11-19-ext-and--2026-11-19b)
 - [Re-run 2026-11-19c-clean — the single-tenant control](#re-run-2026-11-19c-clean--the-single-tenant-control-on-the-queue-size-64-stack-raw-benchsplash-concurrency-resultssplash-170-2026-11-19c-clean)
+- [Depth probe 2026-11-19 — one context across the resident line](#depth-probe-2026-11-19--one-context-walked-across-the-resident-line-raw-benchsplash-concurrency-resultsdepth-2026-11-19)
 
 ## Layer 1 — engine probe (deterministic, run by the orchestrator, not the LLM)
 
@@ -423,6 +424,7 @@ suhailmohebi.com/notes/qwen3-8-flash-next-hardware-requirements/ (download sizes
 Local measurement for the model-size framing: the IQ3_S snapshot, 51 + 27 **GiB** shards (51.05 GiB
 of transformer weights + 26.82 GiB n-gram lookup table = 77.87 GiB = 83.6 GB decimal — and see
 *Quant memory accounting* below for which of those two shards is actually resident).
+
 
 ## Co-tenancy — Resolve Studio on the same 96 GiB (measured 2026-11-15) (raw: `bench/resolve-ram-coexistence/`)
 
@@ -928,6 +930,46 @@ co-tenancy is a hypothesis about the regime that produced it, and it has not bee
 primitive, same band: on this engine the gate's own run-to-run spread sits just above the 1.10 pass line, so a
 "soft" is not a defect of an individual wave — quote the band, don't chase the pass.
 
-**Still open after this wave.** Volume is bounded out as a lever, so the live question stays **depth**: one
-context walking toward the resident line (`context_bounds` resident 155,633 of a 262,144 window) **held across
-turns**, which is what real agent sessions do and no wave here has measured directly.
+**What this wave left open, and the probe that closed it.** Volume is bounded out as a lever, so the live
+question became **depth**: one context walking toward the resident line **held across turns**. That ran the same
+night — see the depth-probe section below.
+
+## Depth probe 2026-11-19 — one context walked across the resident line (raw: `bench/splash-concurrency/results/depth-2026-11-19/`)
+
+`depth_probe.py`, run detached through `run_depth_detached.sh` (`02:24:58Z → 02:28:37Z`, same 1.7.0 instance, not
+restarted; 9 of 10 in-flight samples attributed to the run, the one foreign request landing inside the 90 s
+lead-in). One conversation, turns appended one at a time, `max_tokens 8` so decode is irrelevant, every block
+unique so the prefix cache cannot serve it back, and the turn size **calibrated from the engine's tokenizer**
+(200 words → 3,510 prompt tokens → 15.95 tok/word, so ~1,253 words per ~20 k-token turn).
+
+| turn | prompt tokens | × resident (155,648) | wall s | `prefill_rows` Δ | `spill_moves` Δ |
+|---|---|---|---|---|---|
+| 1 | 26,222 | 0.17× | 6.42 | 26,244 | 0 |
+| 6 | 139,832 | 0.90× | 7.21 | 22,744 | 0 |
+| **7** | **162,554** | **1.04×** | 7.35 | 22,746 | **+2,176** |
+| 11 | 255,948 | **1.64×** | 8.61 | 23,980 | +750 |
+| 12 | — | — | — | **0** | 0 |
+
+Four findings:
+
+1. **Depth is capped by the context window, not by KV.** A single held context was served at **255,948 tokens =
+   1.64× the 155,648-token resident budget**. Turn 12 was refused **before admission** — `400
+   context_length_exceeded`, with `prefill_rows` unmoved. So "the KV budget caps session length on this box" is
+   false for this build; the model window (262,144) is the wall.
+2. **Spill switches on exactly at the resident line, and nothing else does.** Turns 1–6 (0.17×–0.90×): spill
+   **zero**. From turn 7 (1.04×): +2,176 / +798 / +512 / +709 / +750 — **4,945 spill moves total**, while
+   `resource_suspensions`, `priority_suspensions`, `disk.kv_demotions`, `kv_demotions_refused` and
+   `capacity_failures` **never moved**. Depth past residency is answered by in-memory spill.
+3. **Deep sessions are cheap per turn.** Every turn after the first prefilled only ~**22.7 k** new rows while the
+   context grew to 256 k, and wall time moved **6.42 s → 8.61 s** across a 9.8× context increase (+34 %). Cross-
+   turn reuse is real: `kv.pages_cache` climbed 5,718 → 7,998 pages, i.e. above the 4,864-page resident capacity —
+   the cache pool is not the resident pool.
+4. **Two refusal modes, told apart by whether `prefill_rows` moved.** This 400 is request validation (zero
+   counters moved); the 19-ext 503 at `--queue-size` was capacity. A monitor that only watches HTTP codes will
+   conflate them.
+
+**Limits.** n = 1 conversation, 11 served turns, one instance. The spill onset is bounded to the interval between
+turn 6 (0.90×) and turn 7 (1.04×), not resolved inside it. `pages_active` sampled 0 at every 10 s sample because
+each turn completes in ~7 s — the spill deltas are the residency evidence here, and a rerun wanting the occupancy
+curve must sample at 1–2 s. `spill_moves` units are the engine's own counter (movement, not bytes). Synthetic
+filler text: right shape, not real retrieval behaviour.

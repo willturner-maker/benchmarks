@@ -1626,6 +1626,102 @@
           "co_tenant_definition": "in-flight requests over 20,000 prompt tokens (tau2 requests top out near 16k, an operator session runs far above that)"
         }
       }
+    ],
+    "splash_depth_probe": [
+      {
+        "date": "2026-11-19 depth probe (one context held across turns; NOT a throughput row)",
+        "engine": "Splash 1.7.0, same instance as the 19b/19c waves, NOT restarted; lifetime counters carried in (resource_suspensions 4, spill_moves 22,560, kv_demotions 9,045) and every figure below is a window delta",
+        "model": "same (ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S)",
+        "question": "19b/19c closed VOLUME as a way to trip KV (width becomes queue depth). Does DEPTH - one context held across turns and walked past the resident line - behave differently?",
+        "answer": "Yes, and the wall is not KV: the context WINDOW is. A single held conversation was served at 255,948 prompt tokens = 1.64x the 155,648-token resident budget; the next turn was refused BEFORE admission (400 context_length_exceeded, prefill_rows unmoved).",
+        "design": "one chat, turns appended one at a time, max_tokens 8 (decode irrelevant), every block unique (depth-2026-11-19-tN-wI) so the persistent prefix cache cannot serve it back; turn size calibrated from the engine's tokenizer (200 words -> 3,510 prompt tokens -> 15.95 tok/word, so ~1,253 words per ~20k-token turn); stop on first refusal / counter move",
+        "turns_served": 11,
+        "prompt_tokens_by_turn": [
+          26222,
+          48944,
+          71666,
+          94388,
+          117110,
+          139832,
+          162554,
+          185276,
+          207998,
+          231973,
+          255948
+        ],
+        "x_resident_budget_by_turn": [
+          0.17,
+          0.31,
+          0.46,
+          0.61,
+          0.75,
+          0.9,
+          1.04,
+          1.19,
+          1.34,
+          1.49,
+          1.64
+        ],
+        "wall_s_by_turn": [
+          6.42,
+          6.73,
+          6.94,
+          7.14,
+          7.01,
+          7.21,
+          7.35,
+          7.36,
+          7.77,
+          8.35,
+          8.61
+        ],
+        "prefill_rows_delta_by_turn": [
+          26244,
+          22736,
+          22738,
+          22740,
+          22742,
+          22744,
+          22746,
+          22748,
+          22750,
+          24005,
+          23980
+        ],
+        "spill_moves_delta_by_turn": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2176,
+          798,
+          512,
+          709,
+          750
+        ],
+        "spill_onset": "zero spill for turns 1-6 (0.17x-0.90x resident); starts at turn 7 (1.04x). Onset bounded to the 0.90x-1.04x interval, not resolved inside it",
+        "counters_never_moved": [
+          "cache.resource_suspensions",
+          "cache.priority_suspensions",
+          "disk.kv_demotions",
+          "disk.kv_demotions_refused",
+          "metrics.capacity_failures"
+        ],
+        "totals": {
+          "prefill_rows": 256173,
+          "spill_moves": 4945,
+          "suspensions": 0,
+          "disk_demotions": 0,
+          "capacity_failures": 0
+        },
+        "per_turn_cost": "every turn after the first prefilled only ~22.7k new rows while the context grew to 256k, and wall time moved 6.42s -> 8.61s across a 9.8x context increase (+34%): deep sessions are cheap per turn because cross-turn prefix reuse handles the history. kv.pages_cache climbed 5,718 -> 7,998 pages, ABOVE the 4,864-page resident KV capacity - the cache pool is not the resident pool",
+        "refusal_modes": "distinguishable by whether prefill_rows moved: this 400 context_length_exceeded is request validation (zero counters moved, refused before admission); the 2026-11-19-ext 503 frontend_overloaded was capacity (--queue-size). HTTP codes alone conflate them",
+        "tenancy": "detached, /status at 10 s, 9 of 10 in-flight samples attributed to this run; the one foreign sample (178,359 tok, spill/decode) is the operator's last message inside the 90 s lead-in",
+        "limits": "n=1 conversation, 11 served turns, one instance; pages_active sampled 0 at every 10 s sample (turns complete in ~7 s), so the spill deltas are the residency evidence and a rerun wanting the occupancy curve must sample at 1-2 s; spill_moves units are the engine's own counter (movement, not bytes); synthetic filler text has the shape of an agent session, not its retrieval behaviour",
+        "evidence": "bench/splash-concurrency/results/depth-2026-11-19/ (RECORD.md, depth_probe.jsonl, engine_samples.jsonl, status edges, pins.txt); instrument bench/splash-concurrency/depth_probe.py; runner bench/splash-concurrency/run_depth_detached.sh"
+      }
     ]
   },
   "withdrawn": [
