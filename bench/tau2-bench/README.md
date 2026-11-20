@@ -86,6 +86,11 @@ Defaults in the runner: `--num-trials 2 --max-concurrency 3 --seed 300`, upstrea
 string at the **first** `/`, so a registry-style id containing `/` and `:` (ours does) reaches the engine
 intact.
 
+To publish your own record: `python3 build_rows.py --out tasks.jsonl <save-dir> …` turns τ²'s own
+`results.json` files into the per-simulation row file (no transcripts). The field set is fixed by that
+script, and running it on wave 2026-11-19a regenerates the published 476-row `tasks.jsonl`
+**byte-identically** — that check is how a reviewer confirms the published rows came from these rules.
+
 ## Wave directory layout
 
 | file | what it is |

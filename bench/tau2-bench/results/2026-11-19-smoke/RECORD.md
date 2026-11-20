@@ -27,7 +27,9 @@ Self-play: the engine is both agent and user simulator.
 | telecom | 5 | 5 | **0.6000** | 137 | 71 | 1 | 10,810 | 271 s | 3 user_stop, **2 max_steps** |
 
 Totals: 19 sims, 16 scored, 266 completions, 141 tool calls, 1 tool error. τ²'s own printed summaries
-agree with the recomputed values (`analyze.py` re-derives them from per-simulation records).
+agree with the recomputed values. The per-simulation rows are in `tasks.jsonl` (19 rows, built by
+`../../build_rows.py`, so this table is re-derivable by a reader); `smoke_summary.txt` is the aggregate
+printed by the pre-wave analyzer, whose logic now lives in the published `summarize.py`.
 
 - **No truncation**: max `completion_tokens` 1,162 vs the 2,048 cap — 0 sims at the cap, so the `max_tokens`
   I passed never bit (engine thinking counts inside completion tokens: the probe call showed
