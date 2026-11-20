@@ -1625,6 +1625,50 @@
           "evidence": "bench/tau2-bench/results/2026-11-19b-width-control/ (RECORD.md, width_control.json, tasks.jsonl 32 rows, engine_samples.jsonl, status edges, discarded_attempt_status edges, build_control_record.py); runner bench/tau2-bench/width_control.sh",
           "co_tenant_definition": "in-flight requests over 20,000 prompt tokens (tau2 requests top out near 16k, an operator session runs far above that)"
         }
+      },
+      {
+        "date": "2026-11-20-pass3 (three trials on the same 238 judge-free tasks; upgrades the 19a record to pass^3)",
+        "pin": "tau2-bench v1.0.1 = fc0055dc4e0a316c3f83133267fbd6faaa770992; judge-free scope identical to 2026-11-19a; seed 300; self-play; engine Splash 1.7.0 not restarted",
+        "scores": {
+          "airline(50x3)": {
+            "pass_1": 0.8667,
+            "pass_2": 0.82,
+            "pass_3": 0.78,
+            "flips": 7,
+            "always_pass": 39,
+            "all_fail": 4
+          },
+          "retail(74x3)": {
+            "pass_1": 0.8243,
+            "pass_2": 0.7162,
+            "pass_3": 0.6351,
+            "flips": 24,
+            "always_pass": 47,
+            "all_fail": 3
+          },
+          "telecom(114x3)": {
+            "pass_1": 0.8596,
+            "pass_2": 0.7602,
+            "pass_3": 0.693,
+            "flips": 34,
+            "always_pass": 79,
+            "all_fail": 1
+          },
+          "all(238x3)": {
+            "pass_1": 0.8501,
+            "pass_2": 0.7591,
+            "pass_3": 0.6933,
+            "flips": 65,
+            "always_pass": 165,
+            "all_fail": 8
+          }
+        },
+        "stability": "n_pass/3 over 238 tasks: 165 always pass, 47 pass 2/3, 18 pass 1/3, 8 never. 65/238 (27.3%) flip at least once. OVERLAP with 19a's unstable 45 is only 24 tasks: the instability RATE replicates (~19% at 2 trials, 27% at 3, 36% of tasks flip across all 5 trials) but WHICH task you catch is a sampling event; 152 tasks (64%) are stable across all five trials. retail/90 flipped again (3/5 lifetime) - the one label holding up",
+        "first_mover": "triage of 130 flipping trial-pairs: user-simulator-first 96 (74%), agent-first 34 (26%), median onset 0.02-0.06 - same direction as 19a's 37/8 (82/18). Per-trial user seeds differ by design, so this remains user-sampling vs engine-nondeterminism, not engine-only",
+        "engine_context": "tau2 per-call depth max 19,035 tok = 0.122x KV budget; retail window sampled 311x with benchmark at concurrency 3 for 298/311 and one 133,473-tok OPERATOR request (spill mode) pushing pages_active to 133,504 = 0.86x pool on its own with kv_demotions +5,301 - real-session corroboration of the tenancy A/B; airline/telecom windows are tenancy-by-protocol (their sampler file was truncated by a continuation - disclosed gap)",
+        "totals": "714 sims, 0 unscored, 119,767,224 prompt / 3,223,954 completion tokens; upstream re-derivation agrees per domain",
+        "evidence": "bench/tau2-bench/results/2026-11-20-pass3/ (RECORD.md, tasks.jsonl 714 rows, pins, logs, retail-window samples)",
+        "incidents": "wrapper relative-path bug (zero sims); zsh word-split killed retail attempt 1 at task resolution (zero sims); attempt 2 killed for contamination, 1 sim quarantined; sampler/log truncation by continuation (artifacts renamed, wave.log reconstructed); build_rows domain parse fixed for wave-prefixed save names"
       }
     ],
     "splash_depth_probe": [

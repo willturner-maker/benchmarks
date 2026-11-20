@@ -74,6 +74,11 @@ The excluded ids are listed in `run_wave.sh` and `RECORD.md`, which makes the su
    these waves), and `summarize.py` separates benchmark from co-tenant traffic by `prompt_tokens` size
    (τ² sessions ≤ ~16 k tokens; an operator chat session sits at 10⁵).
 8. **Keep transcripts local.** `tasks.jsonl` publishes per-simulation rows — ids, seeds, reward
+9. **Quote flip RATES, not flip LISTS, across waves.** The 2026-11-20 pass^3 wave found 65/238 tasks flipping
+over 3 trials where 19a found 45/238 over 2 — but only 24 tasks are in both sets, and 152 tasks stayed clean
+across all five trials. Which task you catch flipping is a sampling event; the rate (~19 % at 2 trials, 27 %
+at 3) and the first-mover split (user-simulator-first 82 %, then 74 %) are what replicate. A per-task
+"unstable" label needs several passes before it can be published.
    decomposition, action/DB/assertion counts, tool-call counts, depth, durations — but **no message content,
    no tool arguments, no model free text**. Reviewers recompute every headline with
    `summarize.py --from-rows`.

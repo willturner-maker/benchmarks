@@ -56,30 +56,45 @@ def comp_flip(ra, rb):
 
 
 def main():
+    import argparse
+    from itertools import combinations
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--wave", default="2026-11-19",
+                    help="wave token in the tau2 save name; both orderings (wave-<dom>-<w> / wave-<w>-<dom>) are tried")
+    ap.add_argument("--pairs", default="adjacent", choices=["adjacent", "all"],
+                    help="which trial pairs to triage for tasks with >=3 trials")
+    args = ap.parse_args()
     rows = []
     for d in DOMAINS:
-        res = json.load(open(f"{SIM}/wave-{d}-2026-11-19/results.json"))
+        path = next((f"{SIM}/wave-{w}/results.json"
+                     for w in (f"{d}-{args.wave}", f"{args.wave}-{d}")
+                     if os.path.exists(f"{SIM}/wave-{w}/results.json")), None)
+        if not path:
+            sys.exit(f"no results.json for wave {args.wave} domain {d}")
+        res = json.load(open(path))
         by = defaultdict(list)
         for s in res["simulations"]:
             by[s["task_id"]].append(s)
-        for t, pair in by.items():
-            if len(pair) < 2:
+        for t, tr in by.items():
+            if len(tr) < 2:
                 continue
-            pair.sort(key=lambda s: s.get("trial") or 0)
-            a, b = pair[0], pair[1]
-            ra, rb = a.get("reward_info") or {}, b.get("reward_info") or {}
-            if (ra.get("reward") == 1.0) == (rb.get("reward") == 1.0):
-                continue
-            idx, who = first_diff(a["messages"], b["messages"])
-            ua = [norm(m.get("content")) for m in a["messages"] if m["role"] == "user"]
-            ub = [norm(m.get("content")) for m in b["messages"] if m["role"] == "user"]
-            n = min(len(a["messages"]), len(b["messages"]))
-            tc = lambda s: sum(len(m.get("tool_calls") or []) for m in s["messages"])
-            rows.append({
-                "domain": d, "task": t,
-                "dir": f"{ra.get('reward')}->{rb.get('reward')}",
-                "comp": comp_flip(ra, rb),
-                "db": f"{(ra.get('db_check') or {}).get('db_match')}->{(rb.get('db_check') or {}).get('db_match')}",
+            tr.sort(key=lambda x: x.get("trial") or 0)
+            pairs = list(combinations(tr, 2)) if args.pairs == "all" \
+                else [(tr[i], tr[i + 1]) for i in range(len(tr) - 1)]
+            for a, b in pairs:
+                ra, rb = a.get("reward_info") or {}, b.get("reward_info") or {}
+                if (ra.get("reward") == 1.0) == (rb.get("reward") == 1.0):
+                    continue
+                idx, who = first_diff(a["messages"], b["messages"])
+                ua = [norm(m.get("content")) for m in a["messages"] if m["role"] == "user"]
+                ub = [norm(m.get("content")) for m in b["messages"] if m["role"] == "user"]
+                n = min(len(a["messages"]), len(b["messages"]))
+                tc = lambda s: sum(len(m.get("tool_calls") or []) for m in s["messages"])
+                rows.append({
+                    "domain": d, "task": t,
+                    "dir": f"{ra.get('reward')}->{rb.get('reward')}",
+                    "comp": comp_flip(ra, rb),
+                    "db": f"{(ra.get('db_check') or {}).get('db_match')}->{(rb.get('db_check') or {}).get('db_match')}",
                 "who": who, "idx": idx, "onset": round(idx / max(1, n), 2), "turns": n,
                 "user_var": sum(1 for x, y in zip(ua, ub) if x != y), "user_turns": min(len(ua), len(ub)),
                 "tools": f"{tc(a)}->{tc(b)}",

@@ -75,9 +75,12 @@ def main():
         res = os.path.join(d, "results.json")
         if not os.path.exists(res):
             sys.exit(f"no results.json in {d}")
-        # domain = the leading token of tau2's save name (wave-retail-... / smoke-airline-...), else the dir
+        # tau2 save names put the domain FIRST (wave-retail-smoke) or LAST (wave-2026-11-20-pass3-retail).
+        # Recognized domain tokens win over position; fall back to the old leading-token rule.
         base = os.path.basename(d.rstrip("/"))
-        domain = base.split("-")[1] if len(base.split("-")) > 1 else base
+        toks = base.split("-")
+        domain = next((t for t in reversed(toks) if t in ("airline", "retail", "telecom", "mock")),
+                      toks[1] if len(toks) > 1 else base)
         rows += rows_from(res, domain)
 
     leak = [k for r in rows for k in r if k not in ROW_KEYS]

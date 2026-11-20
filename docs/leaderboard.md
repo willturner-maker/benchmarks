@@ -813,6 +813,9 @@ substring check), not from a judge's opinion — which is why this suite is pinn
 | **2026-11-19a** | `v1.0.1`¹ | airline (all 50, `[DB, COMMUNICATE]`) | 50 × 2 | **0.8700** | **0.8200** | 5 (10.0 %) | 4 | 7.46 | 16,341 tok |
 | **2026-11-19a** | `v1.0.1`¹ | retail (**74 of 114**, judge-free)² | 74 × 2 | **0.7905** | **0.6757** | 17 (23.0 %) | 7 | 6.96 | 14,006 tok |
 | **2026-11-19a** | `v1.0.1`¹ | telecom (all 114 base, `[ENV_ASSERTION]`) | 114 × 2 | **0.8728** | **0.7719** | 23 (20.2 %) | 3 | 15.58 | 14,403 tok |
+| **2026-11-20-pass3** | `v1.0.1`¹ | airline (all 50, `[DB, COMMUNICATE]`) | 50 × 3 | **0.8667** | 0.8200 · ^3 **0.7800** | 7 (14.0 %) | 4 | 7.75 | 19,035 tok |
+| **2026-11-20-pass3** | `v1.0.1`¹ | retail (**74 of 114**, judge-free)² | 74 × 3 | **0.8243** | 0.7162 · ^3 **0.6351** | 24 (32.4 %) | 3 | 6.92 | 13,790 tok |
+| **2026-11-20-pass3** | `v1.0.1`¹ | telecom (all 114 base, `[ENV_ASSERTION]`) | 114 × 3 | **0.8596** | 0.7602 · ^3 **0.6930** | 34 (29.8 %) | 1 | 15.70 | 13,616 tok |
 
 476 simulations, **476 scored, 0 infrastructure errors**, 0 `agent_error`, 1 `max_steps`, in 2 h 26 min
 (12,088 completions, 78,251,808 prompt tokens, 5,329 tool calls). **Self-play**: the engine under test also

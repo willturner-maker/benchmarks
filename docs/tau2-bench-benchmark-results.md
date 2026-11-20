@@ -9,7 +9,9 @@ all scored, 0 infrastructure errors**, 2 h 26 min, effectively single-tenant.
 
 Headline: **airline pass^1 0.870 / pass^2 0.820 · retail (74-task judge-free subset) 0.791 / 0.676 ·
 telecom 0.873 / 0.772.** And the number that matters most for reading the others: **45 of 238 tasks
-(18.9 %) flipped between two `temperature 0` trials.**
+(18.9 %) flipped between two `temperature 0` trials.* **Three trials now exist (wave 2026-11-20-pass3): pass^3 is airline 0.780 / retail 0.635 /
+telecom 0.693, and the flip *rate* replicated (65/238 at 3 trials) while the flip *list* largely did not
+(overlap with 19a: 24 of 45) — see the three-trial-wave section.**
 
 ## Contents
 
@@ -17,6 +19,7 @@ telecom 0.873 / 0.772.** And the number that matters most for reading the others
 - [The scores](#the-scores-238-tasks--476-simulations)
 - [Judge-free scope: the one deviation](#judge-free-scope-the-one-deviation)
 - [Stability: pass^1 − pass^2 *is* the flip count](#stability-pass1--pass2-is-the-flip-count)
+- [Three-trial wave 2026-11-20 — pass^3 and the stability correction](#three-trial-wave-2026-11-20--pass3-published-and-the-stability-story-corrected-raw-benchtau2-benchresults2026-11-20-pass3)
 - [Flip triage: what the 45 flips actually are](#flip-triage-what-the-45-flips-actually-are)
 - [Width control: batching is not the mechanism](#width-control-batching-is-not-the-mechanism)
 - [Reading tau2's own output correctly](#reading-tau2s-own-output-correctly)
@@ -274,5 +277,34 @@ Point it at any OpenAI-compatible endpoint via `TAU2_LLM_ARGS`; LiteLLM splits t
 `src/tau2/config.py: API_PORT = 8000` (used only by `api_service/simulation_service.py`) does not collide
 with an engine on 8000.
 
-To publish a row, follow the six rules in `bench/tau2-bench/README.md` and send a PR — see
+## Three-trial wave 2026-11-20 — pass^3 published, and the stability story corrected (raw: `bench/tau2-bench/results/2026-11-20-pass3/`)
+
+Same 238 judge-free tasks, same pin (`v1.0.1` = `fc0055d`), same seed 300, `--num-trials 3` → **714 sims**,
+all scored, upstream re-derivation agrees per domain.
+
+| domain | tasks × trials | pass^1 | pass^2 | **pass^3** | always pass | disagree | never |
+|---|---|---|---|---|---|---|---|
+| airline | 50 × 3 | 0.8667 | 0.8200 | **0.7800** | 39 | 7 | 4 |
+| retail (judge-free) | 74 × 3 | 0.8243 | 0.7162 | **0.6351** | 47 | 24 | 3 |
+| telecom | 114 × 3 | 0.8596 | 0.7602 | **0.6930** | 79 | 34 | 1 |
+| **all** | **238 × 3** | **0.8501** | **0.7591** | **0.6933** | **165** | **65** | **8** |
+
+Two corrections to how 19a's flip finding should now be read:
+
+1. **The rate replicates; the task list does not.** 65/238 (27.3 %) flip at least once over 3 trials, vs 45/238
+   (18.9 %) over 2 — but **only 24 tasks** are in both unstable sets. Across all five trials, **152 tasks
+   (64 %) never flip**; task-level "unstable" labels are weak evidence (only `retail/90`, 3/5, keeps holding).
+   The reproducible claim is the *rate*: ~19 % of tasks flip within 2 trials, 27 % within 3, 36 % across 5.
+2. **First-mover holds up directionally.** 130 flipping trial-pairs triaged: **user-simulator-first 96 (74 %),
+   agent-first 34 (26 %)** — 19a was 82/18 — with the same early onset (median 0.02–0.06). The seed caveat
+   stands: fresh user-simulator seed per trial by design, so this is user-sampling variance, not
+   engine nondeterminism, which still needs a same-seed repeat to be isolated.
+
+Engine side: τ² calls peak at **0.122× KV budget**, and the retail window's one foreign sample was this
+session's own 133,473-tok request — `pages_active` 0.86× of the pool *on its own*, `kv_demotions` +5,301 — an
+unintended but exact live corroboration of the [tenancy A/B](splash-engine-benchmark-results.md). Run incidents
+(wrapper path bug, zsh word-splitting, one quarantined contaminated sim, sampler truncation by a continuation —
+airline/telecom windows are tenancy-by-protocol, disclosed) are itemized in the wave RECORD.
+
+To publish a row, follow the numbered rules in `bench/tau2-bench/README.md` and send a PR — see
 [Community runs](leaderboard.md#community-runs--your-numbers).

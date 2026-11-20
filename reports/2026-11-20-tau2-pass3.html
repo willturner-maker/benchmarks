@@ -1,0 +1,199 @@
+<title>τ² three trials — pass^3, and why the flip list moved</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#fcfcfd; --fg:#14171c; --fg-2:#4d555f; --mut:#7b848f;
+  --line:#dfe3e8; --accent:#2a78d6; --s2:#eb6834; --s3:#8a5fc9;
+  --good:#0f7a4d; --warn:#b26a00;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',Inter,system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 56px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.5vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 var(--mono);color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.lede{color:var(--fg-2);max-width:65ch;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:9px 13px}
+.chip b{font-family:var(--disp);font-size:16px}
+.chip span{font-size:12.5px;color:var(--fg-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--good);flex:none;align-self:center}
+.dot.warn{background:var(--warn)}
+section{margin-top:44px;border-top:1px solid var(--line);padding-top:26px}
+h2{font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 .tag{font:500 11px/1 var(--mono);color:var(--mut);letter-spacing:.06em;border:1px solid var(--line);
+  border-radius:6px;padding:4px 7px}
+p.note{color:var(--fg-2);max-width:65ch}
+.tbl-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;min-width:0}
+th{font:600 12px/1.3 var(--body);color:var(--fg-2)}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--good);font-weight:600}
+.warn{color:var(--warn);font-weight:600}
+.dim{color:var(--mut)}
+code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;
+  font:500 12px/1.5 var(--mono);color:var(--fg-2);margin:14px 0 0}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+svg{width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.grid{stroke:var(--line);stroke-width:1}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
+.foot code{font-size:11.5px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Will's local AI pipeline · τ²-bench · three trials · stability</div>
+  <h1>Same tasks, third trial: <code>pass^3</code> lands, and the flip <em>list</em> moves</h1>
+  <p class="lede">The published τ² wave ran 238 judge-free tasks twice; now they've run three times, same pin
+  (<code>v1.0.1</code>), same seed, self-play — 714 sims, all scored. Two things replicate and one doesn't:
+  the <b>pass^k decay</b> and the <b>user-simulator-first</b> split replicate; the <b>set of flipping tasks
+  mostly does not</b> — only 24 of 19a's 45 show up again.</p>
+
+  <div class="chips">
+    <div class="chip"><span class="dot"></span><b>pass^3 0.6933</b><span>all 238 · airline 0.780 · retail 0.635 · telecom 0.693</span></div>
+    <div class="chip"><span class="dot"></span><b>165/238 always pass</b><span>at temperature 0 with a fresh user simulator per trial</span></div>
+    <div class="chip"><span class="dot warn"></span><b>65 flip once+</b><span>27.3 % at 3 trials — but only 24 overlap with 19a's 45</span></div>
+    <div class="chip"><span class="dot warn"></span><b>74 % user-first</b><span>of 130 flipping trial-pairs — 19a said 82 %</span></div>
+  </div>
+
+  <section>
+    <h2>1 · pass^k decay per domain <span class="tag">714 sims · 0 unscored · re-derivation agrees</span></h2>
+    <div class="viz-root">
+      <div class="vtitle">pass^1 → pass^2 → pass^3, where pass^k = mean over tasks of C(n_pass,k)/C(n_trials,k)</div>
+      <div class="vsub">Bars = pass^k for k = 1, 2, 3. Hover any bar. retail decays fastest — it also has the most flipping tasks (24/74)</div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>pass^1</span><span><i style="background:var(--s2)"></i>pass^2</span><span><i style="background:var(--s3)"></i>pass^3</span></div>
+      <div><svg id="decay" viewBox="0 0 880 300" role="img" aria-label="Three groups of three bars. Airline descends 0.867 to 0.820 to 0.780. Retail descends 0.824 to 0.716 to 0.635, the steepest. Telecom descends 0.860 to 0.760 to 0.693. The all-domains group descends 0.850 to 0.759 to 0.693."></svg></div>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>domain</th><th class="num">tasks × trials</th><th class="num">pass^1</th><th class="num">pass^2</th><th class="num">pass^3</th><th class="num">always pass</th><th class="num">disagree</th><th class="num">never pass</th></tr></thead>
+        <tbody>
+          <tr><td>airline</td><td class="num">50 × 3</td><td class="num">0.8667</td><td class="num">0.8200</td><td class="num"><b>0.7800</b></td><td class="num">39</td><td class="num">7</td><td class="num">4</td></tr>
+          <tr><td>retail (judge-free)</td><td class="num">74 × 3</td><td class="num">0.8243</td><td class="num">0.7162</td><td class="num"><b>0.6351</b></td><td class="num">47</td><td class="num">24</td><td class="num">3</td></tr>
+          <tr><td>telecom</td><td class="num">114 × 3</td><td class="num">0.8596</td><td class="num">0.7602</td><td class="num"><b>0.6930</b></td><td class="num">79</td><td class="num">34</td><td class="num">1</td></tr>
+          <tr><td><b>all</b></td><td class="num"><b>238 × 3</b></td><td class="num"><b>0.8501</b></td><td class="num"><b>0.7591</b></td><td class="num"><b>0.6933</b></td><td class="num"><b>165</b></td><td class="num"><b>65</b></td><td class="num"><b>8</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Versus the 2-trial wave: pass^1 moved −0.003 / <b>+0.034</b> / −0.013 — a third trial is
+    itself a sample, and even the headline moved by three points on retail.</p>
+  </section>
+
+  <section>
+    <h2>2 · The correction: instability is a rate, not a roster <span class="tag">read 19a's "45 flips" this way now</span></h2>
+    <div class="viz-root">
+      <div class="vtitle">Which tasks flipped, wave to wave</div>
+      <div class="vsub">238 tasks, five trials total across the two waves (2 + 3)</div>
+      <div><svg id="venn" viewBox="0 0 880 200" role="img" aria-label="Of 238 tasks: 24 flipped in both waves, 21 only in the 2-trial wave, 41 only in the 3-trial wave, and 152 never flipped across all five trials."></svg></div>
+    </div>
+    <p class="note"><b>Rates replicate:</b> ~19 % of tasks flip within 2 trials, 27 % within 3, 36 % across all
+    five. <b>The roster does not:</b> only 24 of 19a's 45 unstable tasks flip again; 62 flip in exactly one of
+    the two waves' views. <b>152 tasks (64 %) never flip in five tries.</b> A per-task "unstable" label now
+    needs several passes before it gets published — the one surviving label is <code>retail/90</code>, unstable
+    in every pass it has ever appeared in (3/5 lifetime).</p>
+  </section>
+
+  <section>
+    <h2>3 · Who moves first in a flip — still the user simulator <span class="tag">130 trial-pairs</span></h2>
+    <pre>pass^3 wave, all flipping trial-pairs:   user-first  96  (74 %)     agent-first  34  (26 %)
+2026-11-19a, the 45 pairs:                user-first  37  (82 %)     agent-first   8  (18 %)
+median onset: 2-6 % into the conversation — same in both waves</pre>
+    <p class="note">Caveat unchanged and load-bearing: τ² gives each trial a <b>different user-simulator seed
+    by design</b> (626729 / 373753 for <code>--seed 300</code>), so "user-first" flips are user-sampling
+    variance. The share attributable to <b>engine nondeterminism</b> still needs the same-seed repeat, which
+    remains the open τ² experiment.</p>
+  </section>
+
+  <section>
+    <h2>4 · Engine footnote, and the run's own incidents <span class="tag">disclosed, not smoothed</span></h2>
+    <p class="note">τ² calls are shallow — max <b>19,035 tok = 0.122× KV budget</b>. But the retail window's one
+    foreign sample was the operator's own session at <b>133,473 tokens</b>: alone it pushed
+    <code>pages_active</code> to <b>0.86× of the resident pool</b> and moved <code>kv_demotions</code>
+    <b>+5,301</b> — an unplanned live corroboration of the same engine's
+    <a href="https://willturner-maker.github.io/benchmarks/docs/splash-engine-benchmark-results.md">tenancy A/B</a>.
+    Incidents from getting 714 sims done: a relative-path wrapper bug (died pre-flight, zero sims), a zsh
+    word-splitting failure on retail's 74 ids (died at task resolution), one killed-and-quarantined retail
+    attempt (1 sim), and a sampler truncation by the continuation — which is why the airline/telecom windows
+    are tenancy-<em>by-protocol</em> while retail's is tenancy-<em>by-samples</em>. Itemized in the wave RECORD.</p>
+    <pre>git clone https://github.com/willturner-maker/benchmarks
+cd benchmarks/bench/tau2-bench
+TAU2_TRIALS=3 bash run_wave.sh "$PWD/results/my-pass3"     # any OpenAI-compatible endpoint
+python3 summarize.py --wave-dir results/my-pass3 --from-rows results/my-pass3/tasks.jsonl</pre>
+  </section>
+
+  <div class="foot">
+    Pin: <code>tau2-bench v1.0.1 = fc0055dc4e0a316c3f83133267fbd6faaa770992</code>, judge-free subset (airline
+    50 + retail 74/114 + telecom 114), self-play, temperature 0, seed 300, model
+    <code>ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S</code> on Splash 1.7.0 (not restarted; window
+    2026-11-20T18:57:36Z → 22:44:53Z). Record:
+    <code>bench/tau2-bench/results/2026-11-20-pass3/</code> (<code>tasks.jsonl</code> 714 rows, RECORD.md,
+    pins, logs, retail-window samples). Prior wave:
+    <a href="https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-bench.html">the 2-trial τ² debut</a>;
+    flip-mechanism control: <a href="https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-width-control.html">the width control</a>.
+  </div>
+</div>
+
+<script>
+const ns='http://www.w3.org/2000/svg';
+function el(t,a){const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+(function(){
+  const svg=document.getElementById('decay');
+  const G=[['airline',[0.8667,0.8200,0.7800]],['retail',[0.8243,0.7162,0.6351]],
+           ['telecom',[0.8596,0.7602,0.6930]],['all 238',[0.8501,0.7591,0.6933]]];
+  const W=880,H=300,mL=54,bTop=18,bH=220,base=bTop+bH;
+  const Y=v=>base-(v-0.5)/0.4*bH, colors=['var(--accent)','var(--s2)','var(--s3)'];
+  [0.5,0.6,0.7,0.8,0.9].forEach(v=>{
+    svg.appendChild(el('line',{x1:mL,x2:W-16,y1:Y(v),y2:Y(v),class:'grid'}));
+    const t=el('text',{x:mL-8,y:Y(v)+4,'font-size':'10.5','text-anchor':'end'});t.textContent=v.toFixed(1);svg.appendChild(t);
+  });
+  const gw=(W-mL-16)/G.length;
+  G.forEach(([name,vals],gi)=>{
+    const bw=gw*0.22;
+    vals.forEach((v,k)=>{
+      const x=mL+gi*gw+gw*0.14+k*(bw+8);
+      const r=el('rect',{x:x,y:Y(v),width:bw,height:base-Y(v),fill:colors[k],rx:3,tabindex:0});
+      r.addEventListener('mousemove',e=>{
+        r.setAttribute('opacity','0.85');
+      });
+      r.addEventListener('mouseleave',()=>r.setAttribute('opacity','1'));
+      svg.appendChild(r);
+      const t=el('text',{x:x+bw/2,y:Y(v)-6,'font-size':'10','text-anchor':'middle'});t.textContent=v.toFixed(3);svg.appendChild(t);
+    });
+    const lb=el('text',{x:mL+gi*gw+gw/2,y:base+20,'font-size':'12','text-anchor':'middle'});lb.textContent=name;svg.appendChild(lb);
+  });
+})();
+(function(){
+  const svg=document.getElementById('venn');
+  const segs=[['both waves',24,'var(--s2)'],['only 2-trial wave',21,'var(--accent)'],
+              ['only 3-trial wave',41,'var(--s3)'],['never in 5 trials',152,'var(--good)']];
+  const total=238; let x=10; const W=880,H=200;
+  segs.forEach(([lab,n,c])=>{
+    const w=(n/total)*(W-20);
+    svg.appendChild(el('rect',{x:x,y:40,width:Math.max(2,w-3),height:64,fill:c,rx:4}));
+    const t=el('text',{x:x+w/2,y:30,'font-size':'12','text-anchor':'middle'});t.textContent=n;svg.appendChild(t);
+    const s=el('text',{x:x+w/2,y:124,'font-size':'11','text-anchor':'middle'});s.textContent=lab;svg.appendChild(s);
+    x+=w;
+  });
+  const cap=el('text',{x:W/2,y:164,'font-size':'11.5','text-anchor':'middle',fill:'var(--mut)'});
+  cap.textContent='unstable-set overlap between the two waves: 24 of 45 — the rate replicates, the roster does not';
+  svg.appendChild(cap);
+})();
+</script>
