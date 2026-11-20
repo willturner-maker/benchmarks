@@ -29,6 +29,10 @@ SAMPLER=$!
 trap 'kill "$SAMPLER" 2>/dev/null' EXIT
 
 sleep 3
+# Lead-in, not padding: the operator's own final message is being decoded on this engine right now, and the
+# warmth gate + width-1 baseline are the two most sensitive measurements in the run. Wait it out before the
+# first timed stage.
+sleep 90
 python3 "$HERE/kv_bracket_2026-11-19b.py" --out "$OUT/ladder_kv.jsonl" --widths "$WIDTHS" \
   > "$OUT/run.out" 2> "$OUT/run.err"
 rc=$?
