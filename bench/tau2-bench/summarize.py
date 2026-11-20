@@ -61,6 +61,8 @@ def upstream_lines(log_path):
     for key, pat in (("reward", r"Average Reward\s+([\d.]+)"),
                      ("pass1", r"Pass\^1\s+([\d.]+)"),
                      ("pass2", r"Pass\^2\s+([\d.]+)"),
+                     ("pass3", r"Pass\^3\s+([\d.]+)"),
+                     ("pass4", r"Pass\^4\s+([\d.]+)"),
                      ("db", r"DB Match\s+✓ (\d+) / ✗ (\d+)"),
                      ("read_actions", r"📖 Read Actions\s+(\d+)/(\d+)"),
                      ("write_actions", r"✏️\s+Write Actions\s+(\d+)/(\d+)"),
@@ -80,13 +82,15 @@ def report_rows(rows, wave_dir=None):
         rs = by_dom[dom]
         groups, g = groups_from_rows(rs)
         p1, p2 = passk(groups, 1), passk(groups, 2)
+        maxtr = max(n for n, _ in groups)
+        extra = "".join(f"  pass^{k} {passk(groups, k):.4f}" for k in range(3, maxtr + 1))
         naive = statistics.mean((np_ / n) ** 2 for n, np_ in groups)
         depths = [r["depth_max"] for r in rs if r["depth_max"]]
         print(f"\n### {dom}: {len(g)} tasks x {max(n for n, _ in groups)} trials = {len(rs)} sims "
               f"({sum(1 for r in rs if r['reward'] is not None)} scored, "
               f"{sum(1 for r in rs if r['reward'] is None)} unscored)")
         print(f"  mean reward {statistics.mean([r['reward'] or 0 for r in rs]):.4f}  "
-              f"pass^1 {p1:.4f}  pass^2 {p2:.4f}   (independent-trials pass^2 would print {naive:.4f})")
+              f"pass^1 {p1:.4f}  pass^2 {p2:.4f}{extra}   (independent-trials pass^2 would print {naive:.4f})")
         print(f"  tasks both-pass {sum(1 for n, np_ in groups if np_ == n)}  "
               f"trials disagree {sum(1 for n, np_ in groups if 0 < np_ < n)}  "
               f"all-trials-fail {sum(1 for n, np_ in groups if np_ == 0)}")
