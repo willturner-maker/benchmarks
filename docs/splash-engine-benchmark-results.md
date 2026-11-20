@@ -788,7 +788,9 @@ soft ≤1.20). Not a clean pass, and stated as such; the ladder that follows lan
 | median tok/s | **307.1** | 416.95 | 581.25 | **724.6** | 613.3 | 698.9 | 647.55 | 700.65 | 698.0 | 699.5 |
 | round spread | 1.011 | **1.377** | 1.020 | 1.045 | 1.000 | 1.014 | **1.139** | 1.019 | 1.003 | 1.001 |
 
-w1 **307.1** is the best width-1 on record (prior 283.95) and **w4 724.6** the highest aggregate peak
+w1 **307.1** was the best width-1 on record at the date (prior 283.95) — **superseded by 19c-clean's 308.75 in a
+proven single-tenant window**, which also showed this wave's w1 was not actually hurt by its tenancy — and
+**w4 724.6** remains the highest aggregate peak
 on record; w6 dip 0.846× of w4 continues the trend of shallower dips across build generations; stop
 rule never fired. Two cells carry labelled scatter rather than smoothing: w2 (350.8 / 483.1) and w12
 (689.6 / 605.5) — both stay far above w1, so neither threatens the shape.

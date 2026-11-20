@@ -336,9 +336,9 @@ advanced server and reporting the DB number, a live quirk refereed by an indepen
 | **2026-11-13** | **Splash 1.6.1** (`splash --version` confirms — the ⁸ assumption resolves) | same | 159 ms⁶ | **229 ms** | **209.5 tok/s**⁷ | **470–475 tok/s**, widths 8→32 (peak w12: 475.2)¹⁰ | **0** at 4.66× (budget 131,072 tok)⁸ | **12/12** | 12/12 |
 | 2026-11-16b (DIRTY window¹¹) | Splash 1.6.1 (assumed; not re-confirmed) | same | —¹¹ | —¹¹ | 92.6 tok/s¹¹ (lowest ever) | 508–540 (w12–32 mean 524.6), w32 **540.5** highest single width¹¹ | **TRIP at 3.89×** — w10, 509,370 tok, susp peak 2, first on record¹¹ | n/a¹¹ | n/a¹¹ |
 | **2026-11-17** | **Splash 1.7.0** (same-day install; confirmed by `splash --version` **and** the live `/opt/homebrew/Cellar/splash/1.7.0/…` process path; the upgrade cleared the prefix cache — see ¹²) | same | **110–118 ms**¹² (best ever) | 291 ms¹² (pass 1 only) | **219.8 tok/s**¹² (3-pass median) | **479–494 tok/s**, widths 8→32, pooled median **481.6**; aggregate peak back at **w4 526.5**¹² | **0** at 3.93× (budget 155,648 tok, +18.8 %) — demote **+11** total, spill 0, quietest memory path on record¹² | **11/12**¹³ (OpenCode harness) | **10/12**¹³ |
-| **2026-11-18** (all-suites day) | Splash 1.7.0 (confirmed via live process path) | same | — (no probe stage) | — | **283.95 tok/s** — best w1 on record (+29 % vs 17-day) | **692–699 tok/s**, widths 8→32, peak w16 **698.6**; w6 dip reproduces (0.90× of w4); whole ladder ×1.4 of 17-day while SHAPE holds — instance state, not a version move | **0** at 3.93× (612,180 tok vs 155,648 budget; per-round suspension deltas 0; spill+0 demote+0 — quietest path on record; lifetime counter 43 pre-dates the stage) | — (no agentic stage this run) | — |
+| **2026-11-18** (all-suites day) | Splash 1.7.0 (confirmed via live process path) | same | — (no probe stage) | — | **283.95 tok/s** — best w1 at the date (+29 % vs 17-day) | **692–699 tok/s**, widths 8→32, peak w16 **698.6**; w6 dip reproduces (0.90× of w4); whole ladder ×1.4 of 17-day while SHAPE holds — instance state, not a version move | **0** at 3.93× (612,180 tok vs 155,648 budget; per-round suspension deltas 0; spill+0 demote+0 — quietest path on record; lifetime counter 43 pre-dates the stage) | — (no agentic stage this run) | — |
 | **2026-11-19-ext** (diagnostic)¹⁹ | Splash 1.7.0 — same instance as 11-18, **not restarted**, and **no `--queue-size` flag**, so the default **32** governed | same | — (no probe stage) | — | 294.35 tok/s (rounds 281.6 / 307.1) | **693.65–701.5**, widths 8→32, peak w16 701.15; w6 dip **0.884×** of w4; stop rule never fired | **CENSORED, then diagnosed**: no trip through w32 (**1,632,480 tok = 10.49× budget**), then the stage died at **w40 on HTTP 503** — and the ceiling proved to be a **request count (32)**, not KV¹⁹ | — | — |
-| **2026-11-19b** (STACK MOVE: `--queue-size 64`)²⁰ | Splash 1.7.0, **restarted for the wave** so the flag could bind; `--queue-size=64` + `--thinking-token-budget=32768` read from the **live supervisor**, not the file on disk²⁰ | same | — (no probe; stage-0 gate on the ladder primitive: 272.0 / 282.1 / 309.6 tok/s, spread 1.138 → **soft**)²⁰ | — | **307.1 tok/s** ← **best w1 on record**²⁰ | **647.55–700.65**, widths 8→32; **aggregate peak w4 724.6 = highest on record**; w6 dip **0.846×** (reproduces, shallower each generation); stop rule never fired²⁰ | **NO TRIP at 17.04×** — **2,652,720 tok with 48 concurrent 55k-token requests, 0 refusals**, 0 suspensions, 0 spill, 0 demote, `capacity_failures` 0; and **`admission.waiting` / `waiting_memory` / `waiting_concurrency` all peaked at 0 at every width** — the wait moved to the scheduler prefill queue²⁰ | — | — |
+| **2026-11-19b** (STACK MOVE: `--queue-size 64`)²⁰ | Splash 1.7.0, **restarted for the wave** so the flag could bind; `--queue-size=64` + `--thinking-token-budget=32768` read from the **live supervisor**, not the file on disk²⁰ | same | — (no probe; stage-0 gate on the ladder primitive: 272.0 / 282.1 / 309.6 tok/s, spread 1.138 → **soft**)²⁰ | — | **307.1 tok/s** ← best w1 at the date²⁰ | **647.55–700.65**, widths 8→32; **aggregate peak w4 724.6 = highest on record**; w6 dip **0.846×** (reproduces, shallower each generation); stop rule never fired²⁰ | **NO TRIP at 17.04×** — **2,652,720 tok with 48 concurrent 55k-token requests, 0 refusals**, 0 suspensions, 0 spill, 0 demote, `capacity_failures` 0; and **`admission.waiting` / `waiting_memory` / `waiting_concurrency` all peaked at 0 at every width** — the wait moved to the scheduler prefill queue²⁰ | — | — |
 | **2026-11-19c-clean** (single-tenant control on the same launch)²¹ | Splash 1.7.0, **same instance as 19b, NOT restarted** (lifetime counters carried in; every figure is a window delta) | same | stage-0 gate 274.5 / 314.1 / 307.7 tok/s, spread **1.144 → soft** (19b: 1.138 — the gate's own band on this engine) | — | **308.75 tok/s** (rounds 305.7 / 311.8, spread **1.020** = tightest w1 pair on record) | **692.0–698.95**, widths 12→32 (mean **695.6**, vs 19b's 686.4); peak **w8 700.55**; stop rule never fired; admission peaks 0/0/0/0/2/4/8/12/12/12 | **NO TRIP at 17.04×** — **11,771,445 tok of fresh prefill** across six widths, 0 refusals / suspensions / spill / demotions, prefill flat **3,469.0–3,497.8 tok/s (±0.8 %)**; `pages_active` pinned at **1,920 pages = 0.39× budget** while `queued` went 11→47: **extra width becomes queue depth, not KV residency** | — | — |
 
 ¹ decode w1 is warmth-sensitive — the probe's own three passes trend (105→133→165 baseline,
@@ -441,7 +441,7 @@ runs, both recorded in
 and
 [results/clean-verifyrows-2026-11-17-pass2/](../bench/splash-concurrency/results/clean-verifyrows-2026-11-17-pass2/) (batch B).
 **(a) Clean-window 1.7.0 pass (batch A ladder+probe).** Zero operator turns during the timed stages —
-tenancy caveat (c) of ¹² is retired for this pass. Ladder w1 **225.2** (best w1 on record), plateau
+tenancy caveat (c) of ¹² is retired for this pass. Ladder w1 **225.2** (best w1 at the date), plateau
 w8–32 **462.9–484.4** (mean 476.8), peak **w4 543.8** (highest peak on record), probe decode median
 **197.4**, warm TTFT 98 ms. KV at 611,244 tok: **0 suspensions, 0 demotions** on this instance
 (`disk.kv_demotions` delta 0; instance budget 4,352 pages × 32 = **139,264 tok**, so 4.39×). Its
@@ -516,7 +516,7 @@ passes `--queue-size 64` (resolve-ai-workflow `81a9235`); the flag binds only at
 land together (queue-size 64 + thinking budget 32768), and the second is inert for both stages here:
 ladder outputs are pinned at 512 tokens and KV outputs at 8, so no request can reach a thinking cap —
 the comparable-throughput check is the ladder itself. **The ladder came back better, not perturbed**:
-w1 **307.1** (best on record, prior 283.95), **peak w4 724.6** (highest aggregate on record), plateau
+w1 **307.1** (best on record at the date — superseded by 19c-clean's 308.75, footnote ²¹), **peak w4 724.6** (highest aggregate on record), plateau
 w8–32 647.55–700.65, w6 dip 0.846×, stop rule never fired. Caveats carried on the row: the stage-0
 gate is **soft** (272.0 / 282.1 / 309.6, spread 1.138), two cells carry labelled round scatter (**w2**
 350.8 / 483.1 = 1.377×, **w12** 689.6 / 605.5 = 1.139×), and the run was **not clean-window** — the
@@ -592,24 +592,25 @@ Same host, same model (Qwen3.8-Flash-Next IQ3_S, 262k ctx), same spec: 512-token
 rounds per width, median shown. Comparable across rows only because the harness is identical;
 1.6.1's INT8 default means numerics are not bit-comparable with the 1.6.0 rows.
 
-| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | 1.6.1 (11-11h) | 1.6.1 (11-12) | 1.6.1 (11-13 clean) | **1.7.0 (11-17, 3-pass median)**¹² | **1.7.0 (11-17 clean window)**¹³ | 1.7.0 (11-18) | 1.7.0 (11-19 ext)¹⁹ | **1.7.0 (11-19b, queue-size 64)**²⁰ |
+| width | 1.6.0 (11-06) | 1.6.0 (11-10s) | 1.6.1 (11-11h) | 1.6.1 (11-12) | 1.6.1 (11-13 clean) | **1.7.0 (11-17, 3-pass median)**¹² | **1.7.0 (11-17 clean window)**¹³ | 1.7.0 (11-18) | 1.7.0 (11-19 ext)¹⁹ | **1.7.0 (11-19b, queue-size 64)**²⁰  **1.7.0 (19c clean)**²¹ |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 147.6 | 151.5 | 186.9 | 205.2 | 209.5 | 219.8 (spread 12.4 %) | 225.2 ← new best at the date | 283.95 | 294.35 | **307.1** ← best on record |
-| 2 | 259.1 | 250.7 | 301.0 | 334.5 | 299.2 | 320.9 | 331.4 | 480.85 | 485.3 | 416.95 (spread 1.377×) |
-| 3 | 306.1 | 290.9 | 378.5 | 393.4 | 362.6 | 405.5 | **438.4** ← new best | 593.05 | 585.6 | 581.25 |
-| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 | 464.3 | 453.3 | 526.5 ← peak | 543.8 ← peak, new best at the date | 677.6 | 697.5 | **724.6** ← peak, best on record |
-| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) | 417.6 (0.90×) | 438.1 (0.97×) | 430.4 (0.82×) | 426.2 (0.78×) | 612.3 (0.904×) | 617.0 (0.884×) | 613.3 (0.846×) |
-| 8 | 373.9 | 368.7 | 488.4 | **522.7** ← peak | 470.2 | 485.3 | 480.5 | 697.4 | 693.65 | 698.9 |
-| 12 | 375.7 | 367.7 | **524.8** ← peak | 487.1 | **475.2** ← peak | 494.2 | 481.7 | 698.0 | 696.9 | 647.55 (spread 1.139×) |
-| 16 | 371.9 | 369.1 | 510.0 | 505.7 | 470.7 | 481.6 | **484.4** | 698.6 ← peak | 701.15 ← peak | 700.65 |
-| 24 | 382.9 | 368.8 | 518.5 | 493.1 | 474.5 | 479.2 | 462.9 | 694.45 | 695.2 | 698.0 |
-| 32 | 371.7 | 365.5 | 519.8 | 500.5 | 474.4 | 479.2 | 474.6 | 692.5 | 701.5 | 699.5 |
+| 1 | 147.6 | 151.5 | 186.9 | 205.2 | 209.5 | 219.8 (spread 12.4 %) | 225.2 ← new best at the date | 283.95 | 294.35 | 307.1 ← best at the date | **308.75** ← best on record |
+| 2 | 259.1 | 250.7 | 301.0 | 334.5 | 299.2 | 320.9 | 331.4 | 480.85 | 485.3 | 416.95 (spread 1.377×) | 487.05 |
+| 3 | 306.1 | 290.9 | 378.5 | 393.4 | 362.6 | 405.5 | **438.4** ← new best | 593.05 | 585.6 | 581.25 | 564.2 |
+| 4 | **377.7** ← peak | **369.7** ← peak | 427.5 | 464.3 | 453.3 | 526.5 ← peak | 543.8 ← peak, new best at the date | 677.6 | 697.5 | **724.6** ← peak, best on record | 690.9 |
+| 6 | 330.4 (0.87×) | 322.4 (0.87×) | 396.9 (0.93×) | 417.6 (0.90×) | 438.1 (0.97×) | 430.4 (0.82×) | 426.2 (0.78×) | 612.3 (0.904×) | 617.0 (0.884×) | 613.3 (0.846×) | 627.35 (0.908×) |
+| 8 | 373.9 | 368.7 | 488.4 | **522.7** ← peak | 470.2 | 485.3 | 480.5 | 697.4 | 693.65 | 698.9 | **700.55** |
+| 12 | 375.7 | 367.7 | **524.8** ← peak | 487.1 | **475.2** ← peak | 494.2 | 481.7 | 698.0 | 696.9 | 647.55 (spread 1.139×) | 694.4 |
+| 16 | 371.9 | 369.1 | 510.0 | 505.7 | 470.7 | 481.6 | **484.4** | 698.6 ← peak | 701.15 ← peak | 700.65 | 698.95 |
+| 24 | 382.9 | 368.8 | 518.5 | 493.1 | 474.5 | 479.2 | 462.9 | 694.45 | 695.2 | 698.0 | 692.0 |
+| 32 | 371.7 | 365.5 | 519.8 | 500.5 | 474.4 | 479.2 | 474.6 | 692.5 | 701.5 | 699.5 | 697.15 |
 
 **Marker note (added 2026-11-19, so the columns don't quietly mislead).** The three new right-hand
 columns were missing from this table until now, which left its "← new best" markers reading as current
 when 11-18 had already beaten them. Older cells are kept **as written on their date**; two markers are
-relabelled "at the date" because they are no longer the record, and the current bests are w1 **307.1**
-and peak **w4 724.6**, both 19b. The 1.7.0 era sits in two clearly separated bands — **~460–545**
+relabelled "at the date" because they are no longer the record. **Current bests: w1 308.75 (19c-clean, a proven
+single-tenant window) and peak w4 724.6 (19b).** 19c-clean's row is the first column in this series with tenancy
+attributed per request rather than assumed, so it is the reference column for w1 and the plateau. The 1.7.0 era sits in two clearly separated bands — **~460–545**
 (11-17 waves) then **~610–725** (11-18 onward) — a ×1.4 instance shift with the shape intact, already
 recorded on the 11-18 row as instance state rather than a version move.
 
