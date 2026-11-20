@@ -1,0 +1,237 @@
+<title>Splash KV at 17× budget — width becomes queue depth, not memory</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#fcfcfd; --fg:#14171c; --fg-2:#4d555f; --mut:#7b848f;
+  --line:#dfe3e8; --accent:#2a78d6; --s2:#eb6834; --s3:#8a5fc9;
+  --good:#0f7a4d; --warn:#b26a00;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',Inter,system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 56px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.5vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 var(--mono);color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.lede{color:var(--fg-2);max-width:65ch;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:9px 13px}
+.chip b{font-family:var(--disp);font-size:16px}
+.chip span{font-size:12.5px;color:var(--fg-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--good);flex:none;align-self:center}
+.dot.warn{background:var(--warn)}
+section{margin-top:44px;border-top:1px solid var(--line);padding-top:26px}
+h2{font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 .tag{font:500 11px/1 var(--mono);color:var(--mut);letter-spacing:.06em;border:1px solid var(--line);
+  border-radius:6px;padding:4px 7px}
+p.note{color:var(--fg-2);max-width:65ch}
+.tbl-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;min-width:0}
+th{font:600 12px/1.3 var(--body);color:var(--fg-2)}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--good);font-weight:600}
+.warn{color:var(--warn);font-weight:600}
+.dim{color:var(--mut)}
+code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;
+  font:500 12px/1.5 var(--mono);color:var(--fg-2);margin:14px 0 0}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.chartwrap{position:relative;margin-top:10px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:8px 10px;font:500 12px/1.5 var(--mono);box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+@media (prefers-reduced-motion:reduce){.tip{transition:none}}
+svg{width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.grid{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--mut);stroke-width:1}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
+.foot code{font-size:11.5px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Will's local AI pipeline · Splash 1.7.0 · single-tenant control · wave record</div>
+  <h1>17× the KV budget, and the memory never moved</h1>
+  <p class="lede">A concurrency wave on the <code>--queue-size 64</code> stack pushed <b>11.77 M tokens of fresh
+  prefill</b> through Splash, peaking at <b>2,652,720 prompt tokens = 17.04× the 155,648-token resident KV
+  budget</b>: zero refusals, zero suspensions, zero spill, zero demotions. The reason turned out to be
+  structural, and it is visible in one line of the samples — <b><code>pages_active</code> pins at 0.39× budget in
+  every round while <code>queued</code> climbs 11 → 47</b>. <b>Extra width becomes queue depth, not KV
+  residency.</b></p>
+
+  <div class="chips">
+    <div class="chip"><span class="dot"></span><b>17.04× budget</b><span>2,652,720 tok admitted at width 48, 0 refusals</span></div>
+    <div class="chip"><span class="dot"></span><b>pages 0.39×</b><span>1,920 pages = 61,440 tok, flat across all six widths</span></div>
+    <div class="chip"><span class="dot"></span><b>w1 308.75</b><span>rounds 305.7 / 311.8 — spread 1.020, tightest on record</span></div>
+    <div class="chip"><span class="dot"></span><b>0 co-tenant</b><span>7,034 of 7,035 in-flight samples are this wave's own traffic</span></div>
+  </div>
+
+  <section>
+    <h2>1 · Volume climbs, residency does not <span class="tag">the same wave's two axes</span></h2>
+    <p class="note">Bars are the prompt volume each KV round threw at the engine (× the resident budget); the
+    markers are the peak <code>kv.pages_active</code> actually occupied in that round. If width filled memory,
+    the line would climb with the bars.</p>
+    <div class="viz-root">
+      <div class="vtitle">KV rounds at widths 12 → 48: prompt volume vs resident KV</div>
+      <div class="vsub">Fresh seed namespace; every round validated as fresh prefill (<code>prefill_rows</code> delta equals prompt tokens). Hover a bar</div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>prompt tokens offered (× budget)</span><span><i style="background:var(--s2)"></i>pages_active, in × budget</span><span><i style="background:var(--mut)"></i>queued (right-hand scale)</span></div>
+      <div class="chartwrap"><svg id="kv" viewBox="0 0 880 300" role="img" aria-label="Six bars rising from 4.26 times budget at width 12 to 17.04 times at width 48. The pages_active markers stay flat at 0.39 times budget for all six rounds, while queued rises from 11 to 47"></svg><div class="tip" id="tip"></div></div>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>width</th><th class="num">prompt tokens</th><th class="num">× budget</th><th class="num">wall s</th><th class="num">ok / refused</th><th class="num">prefill tok/s</th><th class="num">Δ susp / spill / demote</th><th class="num">pages_active</th><th class="num">queued peak</th></tr></thead>
+        <tbody>
+          <tr><td>12</td><td class="num">663,180</td><td class="num">4.26×</td><td class="num">189.6</td><td class="num ok">12 / 0</td><td class="num">3,497.8</td><td class="num ok">0 / 0 / 0</td><td class="num">1,920</td><td class="num">11</td></tr>
+          <tr><td>33</td><td class="num">1,823,745</td><td class="num">11.72×</td><td class="num">522.5</td><td class="num ok">33 / 0</td><td class="num">3,490.6</td><td class="num ok">0 / 0 / 0</td><td class="num">1,920</td><td class="num">32</td></tr>
+          <tr><td>36</td><td class="num">1,989,540</td><td class="num">12.78×</td><td class="num">570.9</td><td class="num ok">36 / 0</td><td class="num">3,485.1</td><td class="num ok">0 / 0 / 0</td><td class="num">1,920</td><td class="num">35</td></tr>
+          <tr><td>40</td><td class="num">2,210,600</td><td class="num">14.20×</td><td class="num">633.3</td><td class="num ok">40 / 0</td><td class="num">3,490.8</td><td class="num ok">0 / 0 / 0</td><td class="num">1,920</td><td class="num">39</td></tr>
+          <tr><td>44</td><td class="num">2,431,660</td><td class="num">15.62×</td><td class="num">700.5</td><td class="num ok">44 / 0</td><td class="num">3,471.5</td><td class="num ok">0 / 0 / 0</td><td class="num">1,920</td><td class="num">43</td></tr>
+          <tr><td><b>48</b></td><td class="num"><b>2,652,720</b></td><td class="num"><b>17.04×</b></td><td class="num">764.7</td><td class="num ok">48 / 0</td><td class="num">3,469.0</td><td class="num ok">0 / 0 / 0</td><td class="num"><b>1,920</b></td><td class="num"><b>47</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Prefill is flat at <b>3,469.0–3,497.8 tok/s (±0.8 %)</b> across a 4× width range, and the whole
+    stage costs 3,381 s ≈ 11.77 M ÷ ~3,480 tok/s: <b>the stage is entirely prefill-bound</b>. The mechanism is in
+    <code>/status</code>: <code>memory_plan.budget.maximum_batch_width = 4</code>. Reading
+    <code>admission.*</code> here would report an idle engine — <code>waiting</code>,
+    <code>waiting_memory</code> and <code>held_behind_refusal</code> all peak at <b>0</b>; the wait lives in the
+    scheduler prefill queue.</p>
+  </section>
+
+  <section>
+    <h2>2 · The claim this retires <span class="tag">an open correction, not a silent rewrite</span></h2>
+    <p class="note">The 2026-11-16b wave was published as <i>“first KV trip on record: stopped at width 10,
+    509,370 tokens = <b>3.89× budget</b>, peak suspended 2, lifetime <code>resource_suspensions</code> +3,
+    <code>demote</code> +1502.”</i> In this clean window, <b>4.4× that prompt pressure produced no trip at
+    all</b>. So the token-count reading of that trip does not stand: 16b's trip came together with
+    <code>waiting_memory</code> and <code>admission.waiting</code> movement, in a window with operator traffic on
+    the engine, on a pre-<code>--queue-size</code> stack.</p>
+    <p class="note"><b>What is established:</b> prompt volume alone does not trip this stack, at any multiple tried
+    here (up to 17.04×). <b>What stays open:</b> why 16b tripped. Co-tenancy is a candidate description of the
+    regime that produced it, and it has never been reproduced on purpose — this wave does not test that, and the
+    rows are not directly comparable (different flags, different engine instance).</p>
+  </section>
+
+  <section>
+    <h2>3 · The clean ladder, and what actually diff <span class="tag">same launch as 19b, not restarted</span></h2>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>width</th><th class="num">1</th><th class="num">2</th><th class="num">3</th><th class="num">4</th><th class="num">6</th><th class="num">8</th><th class="num">12</th><th class="num">16</th><th class="num">24</th><th class="num">32</th></tr></thead>
+        <tbody>
+          <tr><td><b>19c-clean</b> median tok/s</td><td class="num ok"><b>308.75</b></td><td class="num">487.05</td><td class="num">564.2</td><td class="num">690.9</td><td class="num">627.35</td><td class="num"><b>700.55</b></td><td class="num">694.4</td><td class="num">698.95</td><td class="num">692.0</td><td class="num">697.15</td></tr>
+          <tr><td class="dim">19b (had operator traffic on the engine)</td><td class="num dim">307.1</td><td class="num dim">417.0</td><td class="num dim">581.2</td><td class="num dim">724.6</td><td class="num dim">613.3</td><td class="num dim">698.9</td><td class="num dim">647.55</td><td class="num dim">700.65</td><td class="num dim">698.0</td><td class="num dim">699.5</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>w1 and the plateau reproduce; mid-width singles do not.</b> 308.75 vs 307.1 and 695.6 vs
+    686.4 (w12–w32 means) — while w2 differs by 17 % and w12 by 7 %. With tenancy removed on this side, 19b's
+    mid-cells are the suspect ones, so the diff rule going forward is <b>w1 and the plateau only</b>. 19b keeps the
+    <b>w4 724.6</b> aggregate-peak record. The admission ceiling (12) and the w6 dip reproduce. The stage-0 warmth
+    gate is <b>“soft” again</b> (spread 1.144 vs 19b's 1.138): on this engine the gate's own run-to-run spread sits
+    just above the 1.10 pass line, so quote the band rather than chasing the pass.</p>
+  </section>
+
+  <section>
+    <h2>4 · Proving the window, and a self-check that got it wrong <span class="tag">the method is the contribution</span></h2>
+    <p class="note">Tenancy here is a measurement, not a claim: <b>390 <code>/status</code> samples at 10 s, 7,035
+    in-flight request records, 7,034 attributed to this wave</b> by the prompt sizes the wave itself recorded
+    (55,265 tok KV, 29 tok ladder). The <b>single</b> foreign request is 98,779 tokens at <code>01:10:19</code> —
+    <b>93 s before the first timed stage</b>, the operator's last message before going idle.</p>
+    <p class="note warn">The first version of this check used a size threshold (<i>“over 20,000 prompt tokens is
+    co-tenant”</i>) and printed <b>NOT single-tenant, 6,851 samples</b>. Those were this wave's <i>own</i>
+    long-context prompts. A threshold cannot tell a long-context benchmark from an operator sharing the engine;
+    attribution must use the wave's recorded sizes. Published because <b>a self-check that wrongly says “dirty” is as
+    dangerous as one that says “clean”</b> — it would have thrown away a valid 65-minute wave.</p>
+    <pre>git clone https://github.com/willturner-maker/benchmarks
+cd benchmarks/bench/splash-concurrency
+./run_clean_detached.sh ~/my-clean-wave          # then: STOP USING THE ENGINE
+# prints tenancy attribution by the wave's own prompt sizes before you publish anything</pre>
+    <p class="note">Two things the runner does that the earlier waves lacked: it waits <b>90 s</b> before the first
+    timed stage (the operator's last message is still being decoded on that engine when the run starts), and it
+    attributes traffic <b>after</b> the run from saved samples instead of from memory.</p>
+  </section>
+
+  <div class="foot">
+    Engine: <code>Splash 1.7.0</code>, model <code>ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S</code>,
+    same instance as wave 19b (<b>not restarted</b>, so every counter here is a window delta; lifetime carried in
+    at <code>resource_suspensions 4 / spill_moves 18,445 / kv_demotions_refused 1,287</code> and none moved).
+    Flags read from the running supervisor: <code>--queue-size=64 --thinking-token-budget=32768
+    --default-reasoning-effort=medium --persistent-cache --max-memory=60129542144</code>;
+    KV budget 155,648 tok (4,864 pages × 32), <code>maximum_batch_width = 4</code>.
+    Window <code>2026-11-20T01:10:19Z → 02:15:19Z</code> (65 m), detached, operator idle.
+    Record: <code>bench/splash-concurrency/results/splash-1.7.0-2026-11-19c-clean/</code> (rows, gate rows,
+    10 s samples, status edges, supervisor pins, <code>RECORD.md</code>); runner
+    <code>bench/splash-concurrency/run_clean_detached.sh</code>; instrument
+    <code>kv_bracket_2026-11-19b.py</code> unchanged. Parent row:
+    <a href="https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-queue-size.html">the queue-size 64 wave</a>.
+  </div>
+</div>
+
+<script>
+const rounds=[
+  {w:12, x:4.26, pages:0.395, queued:11, tok:663180, wall:189.6},
+  {w:33, x:11.72, pages:0.395, queued:32, tok:1823745, wall:522.5},
+  {w:36, x:12.78, pages:0.395, queued:35, tok:1989540, wall:570.9},
+  {w:40, x:14.20, pages:0.395, queued:39, tok:2210600, wall:633.3},
+  {w:44, x:15.62, pages:0.395, queued:43, tok:2431660, wall:700.5},
+  {w:48, x:17.04, pages:0.395, queued:47, tok:2652720, wall:764.7}
+];
+const ns='http://www.w3.org/2000/svg';
+function el(t,a){const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+(function(){
+  const svg=document.getElementById('kv'), tip=document.getElementById('tip');
+  const W=880,H=300,mL=48,mR=48,bTop=26,bH=190;
+  const max=18, Y=v=>bTop+bH-(v/max)*bH;
+  const bw=(W-mL-mR)/rounds.length;
+  [0,5,10,15].forEach(v=>{
+    svg.appendChild(el('line',{x1:mL,x2:W-mR,y1:Y(v),y2:Y(v),class:'grid'}));
+    const t=el('text',{x:mL-8,y:Y(v)+4,'font-size':'10.5','text-anchor':'end'});t.textContent=v+'×';svg.appendChild(t);
+  });
+  rounds.forEach((r,i)=>{
+    const x=mL+i*bw+bw*0.18, w=bw*0.64;
+    const rect=el('rect',{x:x,y:Y(r.x),width:w,height:Math.max(1,Y(0)-Y(r.x)),fill:'var(--accent)',rx:3,tabindex:0});
+    rect.addEventListener('mousemove',e=>{
+      const bb=svg.getBoundingClientRect();
+      tip.textContent=`w${r.w}: ${r.tok.toLocaleString()} tok = ${r.x}× budget · ${r.wall}s · queued ${r.queued} · pages 0.395×`;
+      tip.style.opacity=1;tip.style.left=(e.clientX-bb.left+12)+'px';tip.style.top=(e.clientY-bb.top-10)+'px';
+    });
+    rect.addEventListener('mouseleave',()=>tip.style.opacity=0);
+    svg.appendChild(rect);
+    const lab=el('text',{x:x+w/2,y:H-28,'font-size':'11','text-anchor':'middle'});lab.textContent='w'+r.w;svg.appendChild(lab);
+    const q=el('text',{x:x+w/2,y:Y(r.x)-8,'font-size':'10.5','text-anchor':'middle',fill:'var(--fg-2)'});
+    q.textContent=r.x+'×';svg.appendChild(q);
+  });
+  // pages_active line (flat) and queued line (rising), right scale 0..48 mapped onto same box
+  const Q=v=>bTop+bH-(v/48)*bH;
+  const pts=rounds.map((r,i)=>[mL+i*bw+bw/2, Y(r.pages)]).map(p=>p.join(',')).join(' ');
+  svg.appendChild(el('polyline',{points:pts,fill:'none',stroke:'var(--s2)','stroke-width':3,'stroke-linecap':'round'}));
+  rounds.forEach((r,i)=>{const x=mL+i*bw+bw/2;svg.appendChild(el('circle',{cx:x,cy:Y(r.pages),r:4,fill:'var(--s2)'}));});
+  const qp=rounds.map((r,i)=>[mL+i*bw+bw/2, Q(r.queued)]).map(p=>p.join(',')).join(' ');
+  svg.appendChild(el('polyline',{points:qp,fill:'none',stroke:'var(--mut)','stroke-width':2,'stroke-dasharray':'5 4'}));
+  const cap=el('text',{x:mL,y:Y(0)+18,'font-size':'11',fill:'var(--fg-2)'});
+  cap.textContent='resident KV budget = 155,648 tok (1.0×) — pages_active never reaches 0.40× of it';
+  svg.appendChild(cap);
+})();
+</script>

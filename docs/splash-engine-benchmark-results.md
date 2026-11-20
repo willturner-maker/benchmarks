@@ -877,6 +877,8 @@ stays in the results tree as provenance, unranked.
 
 ## Re-run 2026-11-19c-clean — the single-tenant control on the queue-size 64 stack (raw: `bench/splash-concurrency/results/splash-1.7.0-2026-11-19c-clean/`)
 
+Scorecard: [Splash KV at 17× budget — width becomes queue depth, not memory](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-kv-clean-window.html)
+
 Same instrument (`kv_bracket_2026-11-19b.py`, unchanged), same engine instance as 19b (**not restarted**, so
 only window deltas are read), but run through `run_clean_detached.sh`: detached, `/status` sampled every 10 s
 across the whole 65-minute window, and the operator idle from the moment the runner started. This is the wave

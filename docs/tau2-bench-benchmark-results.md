@@ -145,6 +145,8 @@ to 3 under `maximum_batch_width = 4`). That was tested and **did not survive**: 
 
 ## Width control: batching is not the mechanism
 
+Scorecard: [the width-control report](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-width-control.html)
+
 `results/2026-11-19b-width-control/` — 8 of the 45 flipping tasks, two trials per arm, same seed, run
 **detached with the operator idle** and sampled at 10 s so the condition is proven from the engine rather
 than from the flag we passed.

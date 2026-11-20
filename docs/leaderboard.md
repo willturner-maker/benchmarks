@@ -571,7 +571,7 @@ samples** — those were this wave's own KV prompts. A size threshold cannot sep
 from an operator on a shared engine; the check now attributes by the wave's recorded sizes. Kept because a
 self-check that wrongly says *dirty* is as dangerous as one that says *clean*. Raw, samples, status edges and
 RECORD in
-[results/splash-1.7.0-2026-11-19c-clean/](../bench/splash-concurrency/results/splash-1.7.0-2026-11-19c-clean/).
+[results/splash-1.7.0-2026-11-19c-clean/](../bench/splash-concurrency/results/splash-1.7.0-2026-11-19c-clean/), scorecard [2026-11-19-splash-kv-clean-window.html](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-kv-clean-window.html).
 
 **Where the KV question goes next.** Tripping KV by summed volume is now bounded out for this
 instrument: at 17.04× the governor still reports no work, and the only failure mode past that is the

@@ -52,6 +52,8 @@ The scorecards themselves are self-contained HTML (no external assets, no build 
 render on Pages:
 
 - [τ²-bench — an agent benchmark you can actually reproduce — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-bench.html)
+- [τ² width control — the flip rate is not batching — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-width-control.html)
+- [Splash KV at 17× budget — width becomes queue depth, not memory — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-kv-clean-window.html)
 - [Tool-loop gate — the model stops using tools, it just doesn't stop early — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tool-loop-gate.html)
 - [Splash engine · `--queue-size 64` — the KV ceiling was a request count — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-queue-size.html)
 - [All-suites day — Resolve MCP 5.3.4 · opencode 2.3.2 · Splash 1.7.0 · OpenCV 5.1.0.95 — 2026-11-18](https://willturner-maker.github.io/benchmarks/reports/2026-11-18-all-suites-day.html)
