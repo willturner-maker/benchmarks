@@ -1,0 +1,67 @@
+model ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S  KV budget 155,648 tok  widths [2, 4, 6, 8, 10, 12]
+== arm A: clean (nothing else on the engine) ==
+[clean] w 2 r1: 45,812 tok 12.79s ok=2 err=0 pages_active 0 (0 tok) susp+0 waitmem_peak 0 spill+0 demote+0
+[clean] w 2 r2: 45,812 tok 12.86s ok=2 err=0 pages_active 0 (0 tok) susp+0 waitmem_peak 0 spill+0 demote+0
+[clean] w 4 r1: 91,624 tok 25.61s ok=4 err=0 pages_active 0 (0 tok) susp+0 waitmem_peak 0 spill+0 demote+0
+[clean] w 4 r2: 91,624 tok 25.45s ok=4 err=0 pages_active 0 (0 tok) susp+0 waitmem_peak 0 spill+0 demote+0
+[clean] w 6 r1: 137,436 tok 38.21s ok=6 err=0 pages_active 0 (0 tok) susp+0 waitmem_peak 0 spill+0 demote+0
+[clean] w 6 r2: 137,436 tok 38.23s ok=6 err=0 pages_active 0 (0 tok) susp+0 waitmem_peak 0 spill+0 demote+0
+[clean] w 8 r1: 183,248 tok 50.82s ok=8 err=0 pages_active 0 (0 tok) susp+0 waitmem_peak 0 spill+0 demote+0
+[clean] w 8 r2: 183,248 tok 50.84s ok=8 err=0 pages_active 0 (0 tok) susp+0 waitmem_peak 0 spill+0 demote+0
+[clean] w10 r1: 244,060 tok 67.06s ok=10 err=0 pages_active 0 (0 tok) susp+0 waitmem_peak 0 spill+0 demote+0
+[clean] w10 r2: 244,060 tok 67.11s ok=10 err=0 pages_active 0 (0 tok) susp+0 waitmem_peak 0 spill+0 demote+0
+[clean] w12 r1: 295,872 tok 81.55s ok=12 err=0 pages_active 0 (0 tok) susp+0 waitmem_peak 0 spill+0 demote+0
+[clean] w12 r2: 295,872 tok 81.68s ok=12 err=0 pages_active 0 (0 tok) susp+0 waitmem_peak 0 spill+0 demote+0
+== arm B: co-tenanted (3 sessions @ ~120,000 tok) ==
+[co_tenant] w 2 r1: 51,812 tok 40.02s ok=2 err=0 pages_active 1060 (33,920 tok) susp+1 waitmem_peak 0 spill+3275 demote+555  <-- TRIP
+{
+ "method": "tenancy_repro",
+ "kind": "summary",
+ "trip_round": {
+  "method": "tenancy_repro",
+  "arm": "co_tenant",
+  "width": 2,
+  "round": 1,
+  "ok": 2,
+  "errors": [],
+  "prompt_tokens_total": 51812,
+  "prefill_rows_delta": 140128,
+  "fresh_prefill": true,
+  "peaks_pre": {
+   "admission.waiting": 0,
+   "admission.waiting_memory": 0,
+   "admission.suspended": 0,
+   "admission.restoring": 0,
+   "kv.pages_active": 2304,
+   "kv_tokens_active": 73728,
+   "kv.pages_cache": 4096,
+   "scheduler.queued": 2,
+   "scheduler.prefilling": 1,
+   "scheduler.decoding": 0
+  },
+  "peaks_post": {
+   "admission.waiting": 0,
+   "admission.waiting_memory": 0,
+   "admission.suspended": 0,
+   "admission.restoring": 0,
+   "kv.pages_active": 1060,
+   "kv_tokens_active": 33920,
+   "kv.pages_cache": 1612,
+   "scheduler.queued": 1,
+   "scheduler.prefilling": 2,
+   "scheduler.decoding": 0
+  },
+  "counter_deltas": {
+   "cache.resource_suspensions": 1,
+   "cache.priority_suspensions": 0,
+   "kv_spill.spill_moves": 3275,
+   "disk.kv_demotions": 555,
+   "disk.kv_demotions_refused": 7,
+   "metrics.capacity_failures": 0,
+   "scheduler.prefill_rows": 140128
+  },
+  "wall_s": 40.02,
+  "trip": true
+ },
+ "co_tenant_st
+[deadline] 745s left

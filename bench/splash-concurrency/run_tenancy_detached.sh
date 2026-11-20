@@ -42,7 +42,11 @@ for line in open(f"{out}/tenancy_repro.jsonl"):
     if r.get("method") == "tenancy_repro" and "width" in r:
         rounds.append((r["arm"], r["width"], r["prompt_tokens_total"] // max(1, r["ok"])))
 rows = [json.loads(l) for l in open(f"{out}/engine_samples.jsonl") if l.strip()]
-fam = [22906, ct]  # bench round size and co-tenant target (co-tenant actuals land near target)
+fam = [22906, ct]  # co-tenant ACTUAL sizes recorded by the run override the target
+try:
+    fam = [22906] + sorted({int(x) for x in open(f"{out}/tenancy_repro.jsonl.co_tenant_sizes.txt") if x.strip()})
+except FileNotFoundError:
+    pass
 own, foreign = 0, []
 for s in rows:
     for q in (s["active_requests"] or []):

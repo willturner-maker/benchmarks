@@ -33,6 +33,7 @@ macOS 27.2.0. Engine args: working set 56 GiB, SSD cache cap 128 GiB, persistent
 - [Re-run 2026-11-19 — the 32-request wall, then the queueing regime](#re-run-2026-11-19--the-32-request-wall-then-the-queueing-regime-raw-benchsplash-concurrencyresultssplash-170-2026-11-19-ext-and--2026-11-19b)
 - [Re-run 2026-11-19c-clean — the single-tenant control](#re-run-2026-11-19c-clean--the-single-tenant-control-on-the-queue-size-64-stack-raw-benchsplash-concurrency-resultssplash-170-2026-11-19c-clean)
 - [Depth probe 2026-11-19 — one context across the resident line](#depth-probe-2026-11-19--one-context-walked-across-the-resident-line-raw-benchsplash-concurrency-resultsdepth-2026-11-19)
+- [Tenancy A/B 2026-11-20 — co-tenant residency trips the pool, offered volume does not](#tenancy-ab-2026-11-20--co-tenant-residency-trips-the-pool-offered-volume-does-not-raw-benchsplash-concurrency-resultstenancy-2026-11-20)
 
 ## Layer 1 — engine probe (deterministic, run by the orchestrator, not the LLM)
 
@@ -923,8 +924,9 @@ peak suspended 2, lifetime `resource_suspensions` +3, `demote` +1502"). In a pro
 same host, **4.4× that prompt pressure produced no trip**. So 16b's trip was not a token-count threshold: it
 came together with `waiting_memory` and `admission.waiting` movement, in a window with operator traffic on the
 engine and a pre-`--queue-size` stack. **What is established is the negative** — volume alone does not trip this
-stack, at any multiple tried here — and **what is not established** is why 16b tripped; attributing it to
-co-tenancy is a hypothesis about the regime that produced it, and it has not been reproduced on purpose.
+stack, at any multiple tried here — and **what was not established at the time** was why 16b tripped. Attributing
+it to co-tenancy was a hypothesis about the regime; it has **now been tested on purpose and holds as
+sufficiency** — see the tenancy A/B section below — though sufficiency is not historical proof about 16b's window.
 
 **Gate note.** Warmth gate 274.5 / 314.1 / 307.7 → spread **1.144**, "soft" again (19b: 1.138). Two waves, same
 primitive, same band: on this engine the gate's own run-to-run spread sits just above the 1.10 pass line, so a
@@ -995,3 +997,29 @@ of `admission.waiting_memory / suspended / restoring` — **zero on all 44 turns
    new-turn service slips ~3,570 → ~2,780 tok/s (−22 %), landing in the same flat band as the volume
    waves' prefill plateau (3,469–3,498 tok/s). Two probes with different step sizes now corroborate the
    same mechanism — the onset is not a step-size artifact.
+
+## Tenancy A/B 2026-11-20 — co-tenant residency trips the pool; offered volume does not (raw: `bench/splash-concurrency/results/tenancy-2026-11-20/`)
+
+The controlled attack on the open half of 19c-clean's correction: the same KV ladder on one launch, both arms, the
+only difference being co-resident long sessions. Window `18:40:53Z → 18:55:01Z`, clean by attribution (the only
+foreign request is one operator decode inside the 90 s lead-in). Instrument `tenancy_repro.py`, runner
+`run_tenancy_detached.sh` (25-min hard deadline; first attempt failed and is recorded in
+`results/tenancy-2026-11-19-runaway/`).
+
+- **Arm A (clean): 12/12 survived.** Widths 2→12 at the 16b prompt scale, up to **295,872 tok/round =
+  1.90× budget**, zero spill / suspension / demotion. Sampled residency never crossed **99,744 tok =
+  0.64× capacity** even while summed in-flight contexts hit 1.90× — admission throttling (`prefilling ≤ 2`)
+  never lets offered volume become residency. Flat plateau reproduced: **3,582–3,639 tok/s**, wall linear.
+- **Arm B (3 co-tenant sessions, 128,126-tok prompts + 512-tok decode): first round, TRIP.** Width 2,
+  **51,812 tok = 0.33× budget**: `resource_suspensions` **+1**, `spill_moves` **+3,275**,
+  `disk.kv_demotions` **+555**, `kv_demotions_refused` **+7**, and `pages_cache` evicted **4,096 → 1,612** —
+  exactly 16b's signature, produced on demand.
+
+**Mechanism, from the wave's own samples:** one 128,126-tok context is **4,004 pages = 0.82× of the 4,864-page
+pool on its own**; two 22.9k bench rounds plus cache prefixes cross it, and the governor answers with spill,
+demotion (some refused) and a cache suspension. The KV question is entirely about **what is admitted at once**
+(residency), not **what is offered in total** (volume) — the latter is admission-capped by construction.
+**Not established:** that 16b's window actually contained ~100k+-tok co-resident sessions. Sufficiency plus a
+matching signature is not proof about a historical window; 16b is attributed to "the co-tenancy regime", not a
+named tenant. n = 1 trip round (stop-on-trip by design).
+

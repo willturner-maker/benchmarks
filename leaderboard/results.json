@@ -1736,6 +1736,19 @@
         "limits": "n=1 conversation again, one instance/day; 2-3 intra-turn samples per turn (a peak between samples could still be missed, though 44/44 1:1 tracking makes a large miss implausible); wall includes ~constant HTTP overhead; synthetic filler text",
         "evidence": "bench/splash-concurrency/results/depth-fine-2026-11-19/ (RECORD.md, depth_probe.jsonl with intra_turn peaks + t_start/t_end, engine_samples.jsonl, status edges, pins.txt)"
       }
+    ],
+    "splash_tenancy_repro": [
+      {
+        "date": "2026-11-20 tenancy A/B (co-tenant residency vs clean volume; NOT a throughput row)",
+        "engine": "Splash 1.7.0, same instance as 19b/19c/depth/depth-fine, never restarted; carry-in susp 7 / spill 3,135,729 / demotions 9,209 (the last includes the 2026-11-19 runaway footprint); window deltas only",
+        "question": "The 16b KV trip (signature: spill + disk demotion + suspension at 3.89x of the then budget, dirty window) had its threshold reading retired by 19c-clean and its cause published as OPEN. Is co-tenant residency sufficient to produce that trip?",
+        "answer": "Yes, by a factor of ~50. Arm A (clean): 12/12 rounds survived, up to 295,872 prompt tok per round = 1.90x the resident budget, zero spill/suspension/demotion; sampled residency never exceeded 99,744 tok = 0.64x capacity because admission throttling (prefilling <=2) never lets offered volume become residency. Arm B (3 co-tenant sessions, 128,126-tok prompts + 512-tok decode): the FIRST width-2 round, 51,812 tok = 0.33x budget, TRIPPED: resource_suspensions +1, spill_moves +3,275, disk.kv_demotions +555, kv_demotions_refused +7, pages_cache evicted 4,096 -> 1,612.",
+        "mechanism": "one 128,126-tok context is 4,004 pages = 0.82x of the 4,864-page pool on its own; add two 22.9k rounds plus cache prefixes and the pool crosses. The KV question is about what is ADMITTED at once (residency), not what is OFFERED in total (volume) - the latter is admission-capped (flat ~3,580-3,640 tok/s plateau reproduced from 19c-clean, wall linear in width)",
+        "tenancy": "clean window: 85 samples, 275 attributed in-flight, the only foreign request is one 99,721-tok operator decode at 18:40:53 inside the 90 s lead-in; 34 co-tenant samples were mislabelled foreign by the wrapper matcher (target 120k vs actual 128,126) - fixed post-run, affects no measurement",
+        "design": "same KV ladder both arms (widths 2-12, 1,500-word prompts ~22.9k tok, 2 rounds/width, fresh seed namespace, prefill_rows validated per round); arm B adds 3 continuous synthetic operator sessions (~128k tok, 512 tok decode); stop-on-trip; hard 25-min deadline in both rounds and workers",
+        "not_established": "that 16b's actual window contained ~100k+-tok co-resident sessions: sufficiency + matching signature is not historical proof; 16b is attributed to 'the co-tenancy regime', not to a named tenant. n=1 trip round by design; the confounded 2026-11-19 runaway hint (operator 83k co-resident -> +1 suspension below the line) is a second same-direction observation",
+        "evidence": "bench/splash-concurrency/results/tenancy-2026-11-20/ (RECORD.md, tenancy_repro.jsonl 13 rounds, engine_samples.jsonl, status edges, pins); instrument bench/splash-concurrency/tenancy_repro.py; runner run_tenancy_detached.sh; invalidation record of the first failed attempt: results/tenancy-2026-11-19-runaway/"
+      }
     ]
   },
   "withdrawn": [

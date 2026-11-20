@@ -408,8 +408,11 @@ opposite directions, no shape claim. The KV stage's first trip on record (w10, 3
 suspension counters moved) is real — but the token-threshold reading of it is **not standing**: the clean-window
 rerun on a later engine state (19c-clean, footnote ²¹) hit **17.04× budget with zero suspensions**, so 4.4× the
 pressure of that trip produced nothing. What is established is the negative (prompt volume alone does not trip
-this stack); **why 16b tripped stays open**, and its trip came with `waiting_memory` and `admission.waiting`
-movement in a co-tenanted window, which is a description of the regime, not a measured mechanism. Full caveats in the wave's
+this stack); the follow-up **tenancy A/B (2026-11-20)** then produced 16b's exact trip signature on demand —
+co-tenanted, a width-2 round at **0.33× budget** tripped (spill +3,275, demotions +555, refusal +7, cache
+evicted) where the clean arm had survived **1.90× per round** with residency capped at 0.64× of capacity by
+admission. So the mechanism is residency contention, not volume — but sufficiency is not proof about 16b's
+historical window, which stays attributed to the regime, not a named tenant. Full caveats in the wave's
 [NOTES.md](../bench/splash-concurrency/results/rerun-2026-11-16b/NOTES.md).
 
 ¹² **2026-11-17 Splash 1.7.0 wave — three passes on one engine instance, with the warmth gate on the

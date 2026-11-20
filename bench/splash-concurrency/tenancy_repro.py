@@ -103,8 +103,9 @@ def wait_idle():
 class CoTenant:
     """Synthetic operator: continuous long-context requests with real decode."""
 
-    def __init__(self, n, tokens):
+    def __init__(self, n, tokens, sizes_path="co_tenant_sizes.txt"):
         self.n, self.tokens = n, tokens
+        self.sizes_path = sizes_path
         self.stop = threading.Event()
         self.lock = threading.Lock()
         self.stats = {"sent": 0, "errors": 0, "prompt_tokens": 0, "completion_tokens": 0,
@@ -124,6 +125,9 @@ class CoTenant:
                 else:
                     self.stats["sent"] += 1
                     self.stats["prompt_tokens"] += r.get("prompt_tokens") or 0
+                    if r.get("prompt_tokens"):
+                        with open(self.sizes_path, "a") as f:
+                            f.write(f"{r['prompt_tokens']}\n")
                     self.stats["completion_tokens"] += r.get("completion_tokens") or 0
             i += 1
             time.sleep(2)   # small duty gap so a round can actually start
@@ -231,7 +235,8 @@ def main():
 
     print(f"== arm B: co-tenanted ({args.co_tenant_concurrency} sessions @ "
           f"~{args.co_tenant_tokens:,} tok) ==", flush=True)
-    with CoTenant(args.co_tenant_concurrency, args.co_tenant_tokens) as ct:
+    with CoTenant(args.co_tenant_concurrency, args.co_tenant_tokens,
+                  sizes_path=args.out + ".co_tenant_sizes.txt") as ct:
         time.sleep(20)                       # let the co-tenant reach steady state
         trip = run_arm(args.out, widths, "co_tenant", co_tenant=ct)
         ct_stats = dict(ct.stats)
