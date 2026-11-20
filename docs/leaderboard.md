@@ -339,6 +339,7 @@ advanced server and reporting the DB number, a live quirk refereed by an indepen
 | **2026-11-18** (all-suites day) | Splash 1.7.0 (confirmed via live process path) | same | — (no probe stage) | — | **283.95 tok/s** — best w1 on record (+29 % vs 17-day) | **692–699 tok/s**, widths 8→32, peak w16 **698.6**; w6 dip reproduces (0.90× of w4); whole ladder ×1.4 of 17-day while SHAPE holds — instance state, not a version move | **0** at 3.93× (612,180 tok vs 155,648 budget; per-round suspension deltas 0; spill+0 demote+0 — quietest path on record; lifetime counter 43 pre-dates the stage) | — (no agentic stage this run) | — |
 | **2026-11-19-ext** (diagnostic)¹⁹ | Splash 1.7.0 — same instance as 11-18, **not restarted**, and **no `--queue-size` flag**, so the default **32** governed | same | — (no probe stage) | — | 294.35 tok/s (rounds 281.6 / 307.1) | **693.65–701.5**, widths 8→32, peak w16 701.15; w6 dip **0.884×** of w4; stop rule never fired | **CENSORED, then diagnosed**: no trip through w32 (**1,632,480 tok = 10.49× budget**), then the stage died at **w40 on HTTP 503** — and the ceiling proved to be a **request count (32)**, not KV¹⁹ | — | — |
 | **2026-11-19b** (STACK MOVE: `--queue-size 64`)²⁰ | Splash 1.7.0, **restarted for the wave** so the flag could bind; `--queue-size=64` + `--thinking-token-budget=32768` read from the **live supervisor**, not the file on disk²⁰ | same | — (no probe; stage-0 gate on the ladder primitive: 272.0 / 282.1 / 309.6 tok/s, spread 1.138 → **soft**)²⁰ | — | **307.1 tok/s** ← **best w1 on record**²⁰ | **647.55–700.65**, widths 8→32; **aggregate peak w4 724.6 = highest on record**; w6 dip **0.846×** (reproduces, shallower each generation); stop rule never fired²⁰ | **NO TRIP at 17.04×** — **2,652,720 tok with 48 concurrent 55k-token requests, 0 refusals**, 0 suspensions, 0 spill, 0 demote, `capacity_failures` 0; and **`admission.waiting` / `waiting_memory` / `waiting_concurrency` all peaked at 0 at every width** — the wait moved to the scheduler prefill queue²⁰ | — | — |
+| **2026-11-19c-clean** (single-tenant control on the same launch)²¹ | Splash 1.7.0, **same instance as 19b, NOT restarted** (lifetime counters carried in; every figure is a window delta) | same | stage-0 gate 274.5 / 314.1 / 307.7 tok/s, spread **1.144 → soft** (19b: 1.138 — the gate's own band on this engine) | — | **308.75 tok/s** (rounds 305.7 / 311.8, spread **1.020** = tightest w1 pair on record) | **692.0–698.95**, widths 12→32 (mean **695.6**, vs 19b's 686.4); peak **w8 700.55**; stop rule never fired; admission peaks 0/0/0/0/2/4/8/12/12/12 | **NO TRIP at 17.04×** — **11,771,445 tok of fresh prefill** across six widths, 0 refusals / suspensions / spill / demotions, prefill flat **3,469.0–3,497.8 tok/s (±0.8 %)**; `pages_active` pinned at **1,920 pages = 0.39× budget** while `queued` went 11→47: **extra width becomes queue depth, not KV residency** | — | — |
 
 ¹ decode w1 is warmth-sensitive — the probe's own three passes trend (105→133→165 baseline,
 111→128→136 rerun); the column is the warmed value on the baseline row, the median on the rerun row.
@@ -404,8 +405,11 @@ the engine had served the day's 21-trial agentic wave (not restarted), three ope
 calls hit it mid-ladder (tenancy tax, reproduced), w1 collapsed to 92.6 with no external traffic
 during its own rounds (instance state, unexplained), and the plateau went *up* at the same time —
 opposite directions, no shape claim. The KV stage's first trip on record (w10, 3.89× budget,
-suspension counters moved) is real but its threshold shift is unestablished pending a clean-window
-and fresh-engine rerun. Full caveats in the wave's
+suspension counters moved) is real — but the token-threshold reading of it is **not standing**: the clean-window
+rerun on a later engine state (19c-clean, footnote ²¹) hit **17.04× budget with zero suspensions**, so 4.4× the
+pressure of that trip produced nothing. What is established is the negative (prompt volume alone does not trip
+this stack); **why 16b tripped stays open**, and its trip came with `waiting_memory` and `admission.waiting`
+movement in a co-tenanted window, which is a description of the regime, not a measured mechanism. Full caveats in the wave's
 [NOTES.md](../bench/splash-concurrency/results/rerun-2026-11-16b/NOTES.md).
 
 ¹² **2026-11-17 Splash 1.7.0 wave — three passes on one engine instance, with the warmth gate on the
@@ -517,7 +521,8 @@ w8–32 647.55–700.65, w6 dip 0.846×, stop rule never fired. Caveats carried 
 gate is **soft** (272.0 / 282.1 / 309.6, spread 1.138), two cells carry labelled round scatter (**w2**
 350.8 / 483.1 = 1.377×, **w12** 689.6 / 605.5 = 1.139×), and the run was **not clean-window** — the
 operator's session, served by this same engine, took turns during it, so the best-w1 cell carries the
-latency-cell tax and a detached single-tenant re-run of stage 1 is owed.
+latency-cell tax and a detached single-tenant re-run of stage 1 is owed — **that re-run is now published as
+19c-clean (footnote ²¹), and it supersedes this row's w1 cell: 308.75 tok/s in a proven clean window.**
 
 **What the KV stage actually found.** Widths 12 → 33 → 36 → 40 → 44 → **48** (capped at 48 to leave 16
 lanes of slack under 64, so a refusal would mean the engine's limit rather than our own saturation):
@@ -542,6 +547,31 @@ the lifetime read. The cache confound is closed and *proven* closed: all six rou
 namespace with `scheduler.prefill_rows` delta **equal to** prompt tokens exactly, round by round.
 Raw, gate rows, supervisor pins and RECORD in
 [results/splash-1.7.0-2026-11-19b/](../bench/splash-concurrency/results/splash-1.7.0-2026-11-19b/).
+
+²¹ **`2026-11-19c-clean` — the detached single-tenant control on the same 19b launch.** Run
+`2026-11-20T01:10:19Z → 02:15:19Z` through `run_clean_detached.sh`, **engine not restarted**, so every number is
+a window delta and the lifetime column carried in at `resource_suspensions 4 / spill 18,445 /
+kv_demotions_refused 1,287` and did not move. **Tenancy proven, not asserted:** of 7,035 in-flight request
+samples, 7,034 carry this wave's own recorded prompt sizes (55,265 tok KV / 29 tok ladder); the single foreign
+request is 98,779 tok at `01:10:19`, **93 s before the first timed stage**.
+*Ladder (clean):* **w1 308.75** (rounds 305.7 / 311.8, spread **1.020** — tightest w1 pair on record, and it
+supersedes 19b's tax-carrying 307.1), peak **w8 700.55**, plateau w12–w32 mean **695.6** vs 19b's 686.4, stop
+rule never fired, admission ceiling **12** reproduced. w1 and the plateau are the comparable cells; **mid-width
+singles do not diff across these two waves** (w2 487.05 vs 417.0, w12 694.4 vs 647.5) and the suspect side is
+19b's. *KV:* six widths, **11,771,445 tokens of fresh prefill** (`prefill_rows` delta equals prompt tokens in
+every round), top round **2,652,720 tok = 17.04× the 155,648-token budget**, zero refusals / suspensions / spill
+/ demotions, prefill flat **3,469.0–3,497.8 tok/s (±0.8 %)**, and **`pages_active` pinned at 1,920 pages =
+61,440 tok = 0.39× budget in every round while `queued` climbed 11 → 47 with `prefilling ≤ 2`, `decoding 1`.**
+That is the mechanism, and it is new to this series: **extra width becomes scheduler queue depth, not KV
+residency**, so summed prompt volume cannot reach the pool; the wall is the prefill rate that
+`maximum_batch_width = 4` fixes. *Gate:* 274.5 / 314.1 / 307.7 → spread **1.144**, "soft" like 19b's 1.138 —
+two waves, same primitive, same band: quote the band, do not chase the pass. *A published runner bug:* the
+first tenancy check flagged "over 20,000 prompt tokens" as co-tenant and printed **`NOT single-tenant`, 6,851
+samples** — those were this wave's own KV prompts. A size threshold cannot separate a long-context benchmark
+from an operator on a shared engine; the check now attributes by the wave's recorded sizes. Kept because a
+self-check that wrongly says *dirty* is as dangerous as one that says *clean*. Raw, samples, status edges and
+RECORD in
+[results/splash-1.7.0-2026-11-19c-clean/](../bench/splash-concurrency/results/splash-1.7.0-2026-11-19c-clean/).
 
 **Where the KV question goes next.** Tripping KV by summed volume is now bounded out for this
 instrument: at 17.04× the governor still reports no work, and the only failure mode past that is the

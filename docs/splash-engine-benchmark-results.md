@@ -31,6 +31,7 @@ macOS 27.2.0. Engine args: working set 56 GiB, SSD cache cap 128 GiB, persistent
 - [Quant memory accounting](#quant-memory-accounting--what-bpw-actually-scopes-and-what-a-quant-costs-in-ram-measured-2026-11-15-raw-benchsplash-quant-memory)
 - [Re-run 2026-11-17 — Splash 1.7.0](#re-run-2026-11-17--splash-170-three-passes-warm-gate-raw-benchsplash-concurrencyresultssplash-170-2026-11-17)
 - [Re-run 2026-11-19 — the 32-request wall, then the queueing regime](#re-run-2026-11-19--the-32-request-wall-then-the-queueing-regime-raw-benchsplash-concurrencyresultssplash-170-2026-11-19-ext-and--2026-11-19b)
+- [Re-run 2026-11-19c-clean — the single-tenant control](#re-run-2026-11-19c-clean--the-single-tenant-control-on-the-queue-size-64-stack-raw-benchsplash-concurrency-resultssplash-170-2026-11-19c-clean)
 
 ## Layer 1 — engine probe (deterministic, run by the orchestrator, not the LLM)
 
@@ -832,7 +833,7 @@ confound is closed, and shown closed. Findings:
 **Caveats on this row.** (a) Gate "soft", not a clean pass. (b) **Not a clean window** — the operator's
 OpenCode session is served by this same engine and took turns during the run, including inside the KV
 rounds; per the 11-13 finding that tax lands on latency cells, so the best-w1 cell carries it and a
-detached single-tenant re-run of stage 1 is owed. (c) The restart makes lifetime reads non-comparable
+detached single-tenant re-run of stage 1 is owed — **now delivered, see 19c-clean below**. (c) The restart makes lifetime reads non-comparable
 with earlier waves. (d) `--verify-rows auto` still applies: not bit-comparable with the 1.6.x rows.
 
 **What this instrument can no longer answer.** Tripping KV by summed volume is bounded out — at 17×
@@ -873,3 +874,56 @@ relative paths against the launcher's cwd, not the session cwd** (probe: a sessi
 three S3 artifacts overwriting each other at one path and batch B's S4 verify failure; briefs now
 name absolute paths. Batch A's corrected offline re-grade (9/12 verified, 8/12 honest, S3 unscored)
 stays in the results tree as provenance, unranked.
+
+## Re-run 2026-11-19c-clean — the single-tenant control on the queue-size 64 stack (raw: `bench/splash-concurrency/results/splash-1.7.0-2026-11-19c-clean/`)
+
+Same instrument (`kv_bracket_2026-11-19b.py`, unchanged), same engine instance as 19b (**not restarted**, so
+only window deltas are read), but run through `run_clean_detached.sh`: detached, `/status` sampled every 10 s
+across the whole 65-minute window, and the operator idle from the moment the runner started. This is the wave
+19b's caveat (b) asked for.
+
+**Tenancy, measured rather than claimed.** Of 7,035 in-flight request-samples, **7,034 belong to this wave**
+(their prompt sizes are recorded in the wave's own rows: 55,265 tok KV / 29 tok ladder). Exactly **one** foreign
+request appears — 98,779 tokens at `01:10:19`, **93 s before the first timed stage**: the operator's last message
+before going idle. So every timed stage here ran single-tenant.
+
+**A runner bug that nearly discarded it.** The first version of the tenancy check flagged "requests over 20,000
+prompt tokens" as co-tenant and printed **`NOT single-tenant`, 6,851 samples**. Those were *this wave's own*
+KV prompts. A size threshold cannot separate a long-context benchmark from an operator on a shared engine; the
+check now attributes by the prompt sizes the wave itself recorded. Published because a wrong self-check that
+says "dirty" is as dangerous as one that says "clean".
+
+**Stage 1 — the clean ladder.** w1 **308.75** (rounds 305.7 / 311.8, spread 1.020 — the tightest w1 pair in the
+series), peak **700.55 at w8**, plateau w12–w32 mean **695.6**, stop rule never fired, admission peaks
+0/0/0/0/2/4/8/12/12/12. Against 19b (307.1 / 698.9 / 686.4): **w1 and the plateau reproduce; individual mid-width
+cells do not** (w2 487.05 here vs 417.0 there, w12 694.4 vs 647.5). With tenancy removed on this side, the
+suspect cells are 19b's, and the rule for future diffs is the plateau and w1, not mid-width singles.
+
+**Stage 2 — KV pressure, and the correction this wave exists to make.** All six widths admitted everything:
+**11,771,445 tokens of fresh prefill** (`scheduler.prefill_rows` delta equals each round's prompt tokens in all
+six rounds, `cache_served_rounds = []`), top round **2,652,720 tokens = 17.04× the 155,648-token resident
+budget**, **zero refusals, zero suspensions, zero spill, zero demotions**, `capacity_failures` and
+`kv_demotions_refused` unmoved, prefill flat at **3,469.0–3,497.8 tok/s (±0.8 %)** from w12 to w48, and
+`pages_active` pinned at **1,920 pages = 61,440 tokens = 0.39× budget** in every round while `queued` climbed
+11 → 47 with `prefilling ≤ 2`, `decoding 1`.
+
+The mechanism that follows from those numbers: **extra width becomes queue depth, not KV residency.** The
+scheduler keeps about one 55 k-token context resident and parks the rest in its prefill queue, so summed prompt
+volume cannot reach the KV pool at all — the ceiling is the prefill rate, which `maximum_batch_width = 4`
+explains.
+
+That directly rebuts the 2026-11-16b row's headline ("first KV trip on record: stopped at w10, 3.89× budget,
+peak suspended 2, lifetime `resource_suspensions` +3, `demote` +1502"). In a proven single-tenant window on the
+same host, **4.4× that prompt pressure produced no trip**. So 16b's trip was not a token-count threshold: it
+came together with `waiting_memory` and `admission.waiting` movement, in a window with operator traffic on the
+engine and a pre-`--queue-size` stack. **What is established is the negative** — volume alone does not trip this
+stack, at any multiple tried here — and **what is not established** is why 16b tripped; attributing it to
+co-tenancy is a hypothesis about the regime that produced it, and it has not been reproduced on purpose.
+
+**Gate note.** Warmth gate 274.5 / 314.1 / 307.7 → spread **1.144**, "soft" again (19b: 1.138). Two waves, same
+primitive, same band: on this engine the gate's own run-to-run spread sits just above the 1.10 pass line, so a
+"soft" is not a defect of an individual wave — quote the band, don't chase the pass.
+
+**Still open after this wave.** Volume is bounded out as a lever, so the live question stays **depth**: one
+context walking toward the resident line (`context_bounds` resident 155,633 of a 262,144 window) **held across
+turns**, which is what real agent sessions do and no wave here has measured directly.

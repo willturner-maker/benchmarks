@@ -1156,7 +1156,7 @@
         "ttft_cold_ms": null,
         "ttft_caveat": "no engine_probe stage; stage-0 gate uses the ladder primitive instead",
         "decode_w1_tok_s": 307.1,
-        "decode_w1_source": "ladder width-1 median (rounds 305.4/308.8, spread 1.011) - best w1 on record (prior 283.95 at 11-18, +8.2%). Stage-0 gate on the same primitive: 272.0/282.1/309.6, spread 1.138, gate 'soft' (not a clean pass)",
+        "decode_w1_source": "ladder width-1 median (rounds 305.4/308.8, spread 1.011) - best w1 on record AT PUBLICATION (prior 283.95 at 11-18, +8.2%) - SUPERSEDED by 2026-11-19c-clean's 308.75 in a proven clean window; this wave's own RECORD flagged its w1 as carrying the operator-tenancy tax. Stage-0 gate on the same primitive: 272.0/282.1/309.6, spread 1.138, gate 'soft' (not a clean pass)",
         "decode_plateau_tok_s": [
           647.55,
           700.65
@@ -1182,6 +1182,40 @@
         "tenant_conditions": "NOT clean-window: the operator's OpenCode session is served by this same engine and took turns during the run, including inside the KV rounds. Per the 11-13 finding the tax falls on latency cells rather than saturated-decode aggregates, so the best-w1 cell carries this caveat and a detached single-tenant re-run of stage 1 is owed.",
         "engine_args_at_run": "--max-memory=60129542144 --max-cache-disk=274877906944 --persistent-cache --default-reasoning-effort=medium --thinking-token-budget=32768 --queue-size=64",
         "evidence": "bench/splash-concurrency/results/splash-1.7.0-2026-11-19b/ (ladder_kv.jsonl, warmth_gate.jsonl, engine_config.json, run.log, RECORD.md)"
+      },
+      {
+        "date": "2026-11-19c-clean (single-tenant control on the same 19b launch; not restarted)",
+        "engine": "Splash 1.7.0, SAME instance as 2026-11-19b, NOT restarted (flags already bound: --queue-size=64, --thinking-token-budget=32768, read from the running supervisor); lifetime counters carried in (resource_suspensions 4, spill_moves 18,445, kv_demotions_refused 1,287) and none moved, so every figure is a window delta",
+        "model": "same (ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S)",
+        "context_tokens": 262144,
+        "ttft_warm_ms": null,
+        "ttft_cold_ms": null,
+        "ttft_caveat": "no engine_probe stage; stage-0 gate on the ladder primitive: 274.5/314.1/307.7, spread 1.144, gate 'soft' (19b measured 1.138 - two waves, same primitive, same band)",
+        "decode_w1_tok_s": 308.75,
+        "decode_w1_source": "ladder width-1 median (rounds 305.7/311.8, spread 1.020 = tightest w1 pair on record). Clean-window reference for queue-size 64: 19b's 307.1 is statistically the same number, and 19b's own RECORD said its w1 carried the tenancy tax - the tax turned out not to land on w1",
+        "decode_plateau_tok_s": [
+          692.0,
+          698.95
+        ],
+        "plateau_widths": "w12-32 medians 692.0-698.95, mean 695.6 (19b: 686.4 on the same launch); aggregate peak w8 700.55; w6 dip 627.35 = 0.908x of w4 (reproduces); stop rule never fired; admission waiting peaks 0/0/0/0/2/4/8/12/12/12, suspended 0. Mid-width singles DO NOT diff across the two waves (w2 487.05 vs 417.0, w12 694.4 vs 647.5) - with tenancy removed here, 19b's mid-cells are the suspect side",
+        "ladder_medians_tok_s": {
+          "1": 308.75,
+          "2": 487.05,
+          "3": 564.2,
+          "4": 690.9,
+          "6": 627.35,
+          "8": 700.55,
+          "12": 694.4,
+          "16": 698.95,
+          "24": 692.0,
+          "32": 697.15
+        },
+        "kv_capacity_tokens": 155648,
+        "kv_pressure_probe": "NO TRIP at 2,652,720 prompt tokens = 17.04x the resident budget, and 11,771,445 tokens of FRESH prefill across the six widths (scheduler.prefill_rows delta equals each round's prompt tokens in all six; cache_served_rounds empty). Zero refusals, zero suspension deltas, zero spill, zero demote, kv_demotions_refused and capacity_failures unmoved, prefill flat 3,469.0-3,497.8 tok/s (+-0.8%) from w12 to w48. MECHANISM (new to this series): pages_active pins at 1,920 pages = 61,440 tok = 0.39x budget in EVERY round while scheduler.queued climbs 11 -> 47 with prefilling <=2 and decoding 1 - extra width becomes SCHEDULER QUEUE DEPTH, not KV residency, so summed prompt volume cannot reach the pool at all. This retires the token-threshold reading of the 16b trip (3.89x, w10): 4.4x that pressure in a proven single-tenant window produced no trip. What is established is the negative; WHY 16b tripped stays open (its round came with waiting_memory and admission.waiting movement in a co-tenanted window - a description of the regime, not a measured mechanism).",
+        "kv_wall_caveat": "Same launch as 19b (not restarted), so lifetime counters carried in at resource_suspensions 4 / spill 18,445 / kv_demotions_refused 1,287 and did not move by run end. Engine instance state therefore cannot be separated from tenancy when comparing against 16b (different flags, different instance); the claim published here is only 'volume does not trip it'.",
+        "tenancy": "PROVEN single-tenant for every timed stage: 390 /status samples at 10 s, 7,034 of 7,035 in-flight request samples carry this wave's own recorded prompt sizes (55,265 tok KV / 29 tok ladder); the one foreign request is 98,779 tok at 01:10:19, 93 s BEFORE the first timed stage. Attribution is by recorded prompt size - an earlier version of the runner used a >20k threshold and mislabelled 6,851 of this wave's own KV prompts as co-tenant, printing NOT single-tenant; the bug and its fix are published with the record because a self-check that wrongly says dirty is as dangerous as one that says clean.",
+        "window_utc": "2026-11-20T01:10:19Z -> 02:15:19Z (65 m), detached, operator idle",
+        "evidence": "bench/splash-concurrency/results/splash-1.7.0-2026-11-19c-clean/ (RECORD.md, ladder_kv.jsonl, warmth_gate.jsonl, run.out, run.err (empty), run.log, engine_samples.jsonl, status_before/after.json, pins.txt, engine_config.json); runner bench/splash-concurrency/run_clean_detached.sh; instrument bench/splash-concurrency/kv_bracket_2026-11-19b.py (unchanged)"
       }
     ],
     "community_runs": [
