@@ -1,0 +1,351 @@
+{
+ "date": "2026-11-19b",
+ "kind": "control experiment on tasks that flipped in wave 2026-11-19a (not a scored row)",
+ "question": "does removing batching remove the tau2 flips?",
+ "sampled_tasks": [
+  "12",
+  "29",
+  "33",
+  "66",
+  "90",
+  "91",
+  "[mms_issue]break_app_both_permissions|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "[mobile_data_issue]airplane_mode_on|bad_network_preference|bad_vpn|data_saver_mode_on|data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:None]"
+ ],
+ "engine_arms": {
+  "c1": {
+   "decode_batches_by_width_delta": {
+    "b1": 19439,
+    "b2": 0,
+    "b3": 0,
+    "b4": 0
+   },
+   "peak_requests_in_flight": 1,
+   "co_tenant_request_samples": 0,
+   "peak_kv_tokens": 12160,
+   "per_domain_widths": {
+    "airline": {
+     "b1": 6922,
+     "b2": 0,
+     "b3": 0,
+     "b4": 0
+    },
+    "retail": {
+     "b1": 4777,
+     "b2": 0,
+     "b3": 0,
+     "b4": 0
+    },
+    "telecom": {
+     "b1": 7740,
+     "b2": 0,
+     "b3": 0,
+     "b4": 0
+    }
+   }
+  },
+  "c3": {
+   "decode_batches_by_width_delta": {
+    "b1": 1757,
+    "b2": 1347,
+    "b3": 5115,
+    "b4": 0
+   },
+   "peak_requests_in_flight": 3,
+   "co_tenant_request_samples": 0,
+   "peak_kv_tokens": 19424,
+   "per_domain_widths": {
+    "airline": {
+     "b1": 546,
+     "b2": 223,
+     "b3": 2221,
+     "b4": 0
+    },
+    "retail": {
+     "b1": 1044,
+     "b2": 368,
+     "b3": 1158,
+     "b4": 0
+    },
+    "telecom": {
+     "b1": 167,
+     "b2": 756,
+     "b3": 1736,
+     "b4": 0
+    }
+   }
+  }
+ },
+ "flips_per_arm": {
+  "wave_c3": 8,
+  "c1": 3,
+  "c3": 3
+ },
+ "flip_sets": {
+  "wave_c3": [
+   "12",
+   "29",
+   "33",
+   "66",
+   "90",
+   "91",
+   "[mms_issue]break_app_both_permissions|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+   "[mobile_data_issue]airplane_mode_on|bad_network_preference|bad_vpn|data_saver_mode_on|data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:None]"
+  ],
+  "c1": [
+   "66",
+   "90",
+   "[mms_issue]break_app_both_permissions|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:Hard]"
+  ],
+  "c3": [
+   "12",
+   "90",
+   "91"
+  ]
+ },
+ "flips_common_c1_and_c3": [
+  "90"
+ ],
+ "tasks": [
+  {
+   "domain": "airline",
+   "task_id": "12",
+   "passes": {
+    "wave_c3": [
+     0.0,
+     1.0
+    ],
+    "c1": [
+     1.0,
+     1.0
+    ],
+    "c3": [
+     0.0,
+     1.0
+    ]
+   },
+   "agreement": {
+    "wave_c3": false,
+    "c1": true,
+    "c3": false
+   },
+   "c1_user_turns_identical": "0/4",
+   "c1_first_diff": {
+    "index": 1,
+    "role": "user"
+   },
+   "sims_total": 6,
+   "reward_1_count": 4
+  },
+  {
+   "domain": "airline",
+   "task_id": "29",
+   "passes": {
+    "wave_c3": [
+     0.0,
+     1.0
+    ],
+    "c1": [
+     0.0,
+     0.0
+    ],
+    "c3": [
+     1.0,
+     1.0
+    ]
+   },
+   "agreement": {
+    "wave_c3": false,
+    "c1": true,
+    "c3": true
+   },
+   "c1_user_turns_identical": "0/4",
+   "c1_first_diff": {
+    "index": 1,
+    "role": "user"
+   },
+   "sims_total": 6,
+   "reward_1_count": 3
+  },
+  {
+   "domain": "airline",
+   "task_id": "33",
+   "passes": {
+    "wave_c3": [
+     1.0,
+     0.0
+    ],
+    "c1": [
+     1.0,
+     1.0
+    ],
+    "c3": [
+     1.0,
+     1.0
+    ]
+   },
+   "agreement": {
+    "wave_c3": false,
+    "c1": true,
+    "c3": true
+   },
+   "c1_user_turns_identical": "0/7",
+   "c1_first_diff": {
+    "index": 1,
+    "role": "user"
+   },
+   "sims_total": 6,
+   "reward_1_count": 5
+  },
+  {
+   "domain": "retail",
+   "task_id": "66",
+   "passes": {
+    "wave_c3": [
+     1.0,
+     0.0
+    ],
+    "c1": [
+     1.0,
+     0.0
+    ],
+    "c3": [
+     0.0,
+     0.0
+    ]
+   },
+   "agreement": {
+    "wave_c3": false,
+    "c1": false,
+    "c3": true
+   },
+   "c1_user_turns_identical": "0/6",
+   "c1_first_diff": {
+    "index": 1,
+    "role": "user"
+   },
+   "sims_total": 6,
+   "reward_1_count": 2
+  },
+  {
+   "domain": "retail",
+   "task_id": "90",
+   "passes": {
+    "wave_c3": [
+     1.0,
+     0.0
+    ],
+    "c1": [
+     0.0,
+     1.0
+    ],
+    "c3": [
+     0.0,
+     1.0
+    ]
+   },
+   "agreement": {
+    "wave_c3": false,
+    "c1": false,
+    "c3": false
+   },
+   "c1_user_turns_identical": "1/5",
+   "c1_first_diff": {
+    "index": 3,
+    "role": "user"
+   },
+   "sims_total": 6,
+   "reward_1_count": 3
+  },
+  {
+   "domain": "retail",
+   "task_id": "91",
+   "passes": {
+    "wave_c3": [
+     1.0,
+     0.0
+    ],
+    "c1": [
+     0.0,
+     0.0
+    ],
+    "c3": [
+     0.0,
+     1.0
+    ]
+   },
+   "agreement": {
+    "wave_c3": false,
+    "c1": true,
+    "c3": false
+   },
+   "c1_user_turns_identical": "1/7",
+   "c1_first_diff": {
+    "index": 3,
+    "role": "user"
+   },
+   "sims_total": 6,
+   "reward_1_count": 2
+  },
+  {
+   "domain": "telecom",
+   "task_id": "[mms_issue]break_app_both_permissions|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+   "passes": {
+    "wave_c3": [
+     0.0,
+     1.0
+    ],
+    "c1": [
+     1.0,
+     0.0
+    ],
+    "c3": [
+     0.0,
+     0.0
+    ]
+   },
+   "agreement": {
+    "wave_c3": false,
+    "c1": false,
+    "c3": true
+   },
+   "c1_user_turns_identical": "14/28",
+   "c1_first_diff": {
+    "index": 6,
+    "role": "assistant"
+   },
+   "sims_total": 6,
+   "reward_1_count": 2
+  },
+  {
+   "domain": "telecom",
+   "task_id": "[mobile_data_issue]airplane_mode_on|bad_network_preference|bad_vpn|data_saver_mode_on|data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:None]",
+   "passes": {
+    "wave_c3": [
+     1.0,
+     0.0
+    ],
+    "c1": [
+     1.0,
+     1.0
+    ],
+    "c3": [
+     1.0,
+     1.0
+    ]
+   },
+   "agreement": {
+    "wave_c3": false,
+    "c1": true,
+    "c3": true
+   },
+   "c1_user_turns_identical": "10/25",
+   "c1_first_diff": {
+    "index": 2,
+    "role": "assistant"
+   },
+   "sims_total": 6,
+   "reward_1_count": 5
+  }
+ ]
+}

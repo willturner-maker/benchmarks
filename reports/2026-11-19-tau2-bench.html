@@ -131,9 +131,11 @@ svg text{font-family:var(--mono);fill:var(--fg-2)}
     greedy output for both seeds (3/3 unloaded probes), so <b>reseeding is not the mechanism</b> and no
     seeded replay exists here. Direction is near-symmetric (24 down, 21 up): sampling, not drift. Two trials
     is still the floor of what this repo publishes, and a third would move pass^2 materially — stated rather
-    than smoothed. Whether the divergence is batch-dependent numerics (<code>--max-concurrency 3</code>) or
-    greedy simply not reproducing alone is being separated by a <b>width-1 control</b> over 8 flipping tasks;
-    until it reports, the split above is the fact and the mechanism stays open.</p>
+    than smoothed. <b>The batching story was tested and refuted:</b> the same 8 flipping tasks re-run detached
+    at <code>--max-concurrency 1</code> produced <b>19,439 width-1 decode batches and none wider</b>, and still
+    flipped <b>3 of 8 — the same count as the width-3 replication</b>. Full control:
+    <a href="https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-width-control.html">the
+    width-control report</a>.</p>
   </section>
 
   <section>

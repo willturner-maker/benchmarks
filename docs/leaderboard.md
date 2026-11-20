@@ -787,10 +787,15 @@ publishing): 37 of 45 flips first diverge at a *user-simulator* turn (33 at the 
 roles are the engine under test, so this locates the flip rather than excusing it. Trap closed on the way:
 τ² sends a per-trial `seed` (626729 / 373753), but this engine returned byte-identical greedy output for
 both seeds (3/3 unloaded probes), so **reseeding is not the mechanism** and no seeded replay exists here.
-The earlier wording attributed the whole 18.9 % to greedy non-reproducibility under batching
-(`maximum_batch_width = 4`); the batching question is now under direct test (same flipping tasks at
-`--max-concurrency 1`), and until that reports the split above is the published fact and the mechanism
-stays open.
+**Batching excluded by control** (`results/2026-11-19b-width-control/`): the 8 sampled flipping tasks were
+re-run detached and operator-idle at `--max-concurrency 1` and `3`. The c1 arm never batched once — decode
+widths **b1 19,439, b2/b3/b4 = 0**, peak 1 request in flight, 0 co-tenant samples — and still flipped
+**3 of 8, the same count as the width-3 replication**, with only retail 90 unstable in all three passes. The
+first version of this row blamed batching; the control refutes it, and the surviving candidate is
+**long-context KV/prefix-cache state** (user turns are still never byte-identical at c1, and the 2026-11-17
+`verify_rows` A/B found no divergence on a short prompt). A discarded first attempt is recorded too: its own
+"concurrency 1" window contained **8,599 decode batches wider than b1** (b2 8,190 · b3 409) from operator
+traffic, and it had no engine sampler, which is part of why it was thrown out.
 
 **Engine side, this is a prefix-cache workload, not a KV-stress one.** Depth tops out at 16,341 tokens =
 **0.105× the 155,648-token KV budget**, and τ²'s own `--max-concurrency 3` keeps decode width under our

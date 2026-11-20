@@ -9,7 +9,7 @@
     "probe_timeline_structure ms is item-count linear (~3 ms/item on 5.1.0+, ~2 ms/item on 4.19.3): probe cells compare only at matched item counts \u2014 every published cell uses the 4-item base geometry (2026-11-13 addendum (j)).",
     "KV rows are not comparable across the 2026-11-19b boundary: waves before it ran under the splash default --queue-size 32 (request 33 refused instantly with frontend_overloaded), 19b onward runs --queue-size 64. And no wave in this series has tripped KV by summed volume - the governor answers with spill/demote, and suspension is a held-context mechanism.",
     "tool_loop_gate rows are comparable only within a sampling axis (upstream defaults temp 0.6 vs greedy temp 0) and only against the same upstream commit; publish the band and the stub-response rate, never a single pass or a bare mean_tools.",
-    "tau2_bench rows are comparable only within the same upstream pin (v1.0.1 / fc0055dc), the same task scope (airline 50 + retail 74 judge-free + telecom 114; NOT 2.x, NOT retail's 40 judged tasks, NOT banking_knowledge or voice), the same trial count (pass^k is per task C(n_pass,k)/C(n_trials,k)) and the same self-play/cross-model user; publish pass^1 AND pass^2 plus the flip count, never a pooled cross-domain mean, and label which graded components a domain actually scores, and attribute flips by first-difference role (37 of our 45 surface in a user-simulator turn, 8 in the agent's own turn under an identical prefix). Do not credit the per-trial seed for variance: this engine shows no reaction to it at temperature 0, so a same-seed replay is not available on this stack."
+    "tau2_bench rows are comparable only within the same upstream pin (v1.0.1 / fc0055dc), the same task scope (airline 50 + retail 74 judge-free + telecom 114; NOT 2.x, NOT retail's 40 judged tasks, NOT banking_knowledge or voice), the same trial count (pass^k is per task C(n_pass,k)/C(n_trials,k)) and the same self-play/cross-model user; publish pass^1 AND pass^2 plus the flip count, never a pooled cross-domain mean, and label which graded components a domain actually scores, and attribute flips by first-difference role (37 of our 45 surface in a user-simulator turn, 8 in the agent's own turn under an identical prefix). Do not credit the per-trial seed for variance (this engine shows no reaction to it at temperature 0), and do not blame batching without a width control: at --max-concurrency 1 the engine batched zero times and the sampled flip count was unchanged."
   ],
   "host_reference": {
     "cpu": "Apple M5 Ultra, 64-core GPU",
@@ -1514,7 +1514,7 @@
         "stability_finding": "45 of 238 tasks (18.9%) flipped between two temperature-0 trials: airline 5/50, retail 17/74, telecom 23/114. Direction near-symmetric (24 down, 21 up): sampling, not drift. Two trials is the floor; pass^3 not available.",
         "flip_location": "triaged post-publication over the local transcripts (results/2026-11-19a/flip_triage.json): 37 of 45 flips first diverge at a USER-SIMULATOR turn (33 at the opening sentence), 8 at an AGENT turn under an identical prefix, 0 length-only. Under self-play both roles are the engine under test, so this locates the flip rather than excusing it. Components: ENV_ASSERTION 23, DB 21, COMMUNICATE 1.",
         "seed_inert_on_engine": "tau2 sends a per-trial seed (626729 trial 0 / 373753 trial 1 under --seed 300), but the engine returned byte-identical greedy output for both seeds in 3/3 unloaded probes: reseeding is not the flip mechanism here and no seeded replay exists on this stack.",
-        "mechanism_status": "OPEN. Earlier wording credited batching (maximum_batch_width=4 at --max-concurrency 3); the separating experiment is the same flipping tasks at --max-concurrency 1 (run 2026-11-19, ~/tau2-width1-control-2026-11-19). Until it reports, the flip-location split is the published fact and the cause stays open.",
+        "mechanism_status": "BATCHING EXCLUDED by control (2026-11-19b). 8 sampled flipping tasks re-run detached and operator-idle at --max-concurrency 1 and 3: the c1 arm never batched once (decode widths b1 19,439, b2/b3/b4 all 0, peak 1 request in flight, 0 co-tenant samples) and still flipped 3 of 8 - the same count as the width-3 replication - with only retail 90 unstable in all three passes. Surviving candidate: long-context KV/prefix-cache state (user-simulator turns are never byte-identical even at c1; the 2026-11-17 verify_rows A/B found no divergence on a short prompt). Earlier wording blamed batching; the control refutes it.",
         "volume": {
           "completions": 12088,
           "prompt_tokens": 78251808,
@@ -1534,7 +1534,63 @@
         "re_derivation": "summarize.py recomputes mean reward / pass^1 / pass^2 from per-simulation records and matches tau2's own printed block for all three domains (0.8700/0.870/0.820, 0.7905/0.791/0.676, 0.8728/0.873/0.772), and reproduces tau2's DB-match and annotated-action counts (airline 177/182 read, 78/98 write; retail 428/458, 193/228; telecom 956/988 write). --from-rows recomputes every headline from the published tasks.jsonl alone (verified)",
         "privacy": "tasks.jsonl publishes 476 per-simulation rows (ids, seed, reward + per-basis breakdown, db_match, action/assertion counts, tool calls, depth, duration) with NO message content, no tool arguments, no model free text; full transcripts stay local in ~/tau2-bench/data/simulations",
         "limitations": "self-play; 2 trials only (no pass^3); retail is a 74/114 subset chosen by a property of the grading path, not difficulty; the flip triage locates first-difference role but the mechanism is open (see mechanism_status); no per-domain engine-side latency split",
-        "files": "bench/tau2-bench/{README.md,run_wave.sh,summarize.py,sample_engine.py,triage_flips.py,probe_seed_inert.sh}; results/2026-11-19a/{RECORD.md,summary.json,tasks.jsonl,flip_triage.json,engine_config.json,upstream_summaries.txt,supervisor_pins.txt,status_before.json,status_after.json,engine_samples.jsonl,wave.log}; results/2026-11-19-smoke/{RECORD.md,PROTOCOL.md,smoke_summary.txt,supervisor_pins.txt,status_before.json,status_after.json,engine_samples.jsonl}"
+        "files": "bench/tau2-bench/{README.md,run_wave.sh,summarize.py,sample_engine.py,triage_flips.py,build_rows.py,probe_seed_inert.sh,width_control.sh}; results/2026-11-19a/{RECORD.md,summary.json,tasks.jsonl,flip_triage.json,engine_config.json,upstream_summaries.txt,supervisor_pins.txt,status_before.json,status_after.json,engine_samples.jsonl,wave.log}; results/2026-11-19b-width-control/{RECORD.md,width_control.json,tasks.jsonl,engine_samples.jsonl,status_before.json,status_after.json,control.log,pins.txt}; results/2026-11-19-smoke/{RECORD.md,PROTOCOL.md,tasks.jsonl,smoke_summary.txt,supervisor_pins.txt,status_before.json,status_after.json,engine_samples.jsonl}",
+        "width_control": {
+          "date": "2026-11-19b",
+          "kind": "control experiment, not a scored row",
+          "question": "does removing batching remove the tau2 flips? answer: no",
+          "sample": "8 of the 45 flipping tasks (airline 12 29 33; retail 66 90 91; telecom 2 agent-first), 2 trials per arm, seed 300, temperature 0",
+          "arms": {
+            "c1": {
+              "flag": "--max-concurrency 1",
+              "decode_batches_by_width_delta": {
+                "b1": 19439,
+                "b2": 0,
+                "b3": 0,
+                "b4": 0
+              },
+              "peak_requests_in_flight": 1,
+              "co_tenant_request_samples": 0,
+              "peak_kv_tokens": 12160,
+              "flips_of_8": 3
+            },
+            "c3": {
+              "flag": "--max-concurrency 3",
+              "decode_batches_by_width_delta": {
+                "b1": 1757,
+                "b2": 1347,
+                "b3": 5115,
+                "b4": 0
+              },
+              "peak_requests_in_flight": 3,
+              "co_tenant_request_samples": 0,
+              "peak_kv_tokens": 19424,
+              "flips_of_8": 3
+            }
+          },
+          "flip_sets": {
+            "wave_c3": "all 8",
+            "c1": "retail 66, retail 90, telecom mms_issue|break_app_both_permissions",
+            "c3": "airline 12, retail 90, retail 91",
+            "common_to_both_control_arms": [
+              "retail 90"
+            ]
+          },
+          "per_task_over_6_sims_reward1": {
+            "airline 12": "4/6",
+            "airline 29": "3/6",
+            "airline 33": "5/6",
+            "retail 66": "2/6",
+            "retail 90": "3/6",
+            "retail 91": "2/6",
+            "telecom mms": "2/6",
+            "telecom mobile_data": "5/6"
+          },
+          "residual_variance": "even at c1 the two trials' user-simulator turns are essentially never byte-identical (airline 0/4, 0/4, 0/7; retail 0/6, 1/5, 1/7; telecom 14/28 and 10/25 because scripted confirmations repeat), so identical input at temperature 0 with no batching and no co-tenant still yields different greedy output",
+          "discarded_attempt": "first same-day run thrown out before analysis: the decode-width delta across its own window is b1 14,329 / b2 8,190 / b3 409, i.e. 8,599 batches wider than b1 during a run passed --max-concurrency 1; it also carried no 10 s engine sampler. Its 5/8-agree number is used nowhere and the reason is recorded. Status edges published as discarded_attempt_status_{before,after}.json",
+          "evidence": "bench/tau2-bench/results/2026-11-19b-width-control/ (RECORD.md, width_control.json, tasks.jsonl 32 rows, engine_samples.jsonl, status edges, discarded_attempt_status edges, build_control_record.py); runner bench/tau2-bench/width_control.sh",
+          "co_tenant_definition": "in-flight requests over 20,000 prompt tokens (tau2 requests top out near 16k, an operator session runs far above that)"
+        }
       }
     ]
   },

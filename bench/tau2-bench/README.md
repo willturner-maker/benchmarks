@@ -58,13 +58,22 @@ The excluded ids are listed in `run_wave.sh` and `RECORD.md`, which makes the su
    engine under test, so this locates the flip rather than excusing it. Note also that τ² sends a per-trial
    `seed` which this engine shows no reaction to at `temperature 0` — do not credit reseeding for the
    variance, and do not claim a seeded replay you do not have.
-4. **Never pool domains.** Different task counts, different graded components.
-5. **State self-play.** The engine under test also plays the user. τ²'s own leaderboard rows are cross-model;
+4. **Do not blame batching without running the width control.** `width_control.sh` re-runs flipping tasks at
+   `--max-concurrency 1` and `3` with the operator idle and `/status` sampled. On this stack the flip count
+   was **identical in both arms (3 of 8) even though the c1 arm never batched once** (b1 19,439, b2/b3/b4 =
+   0), so batching is excluded here — the surviving candidate is long-context KV/prefix-cache state. Record
+   the decode-width deltas, not the flag you passed: our first attempt at this control was discarded because
+   its own "concurrency 1" window contained 8,599 batches wider than b1 (b2 8,190 · b3 409) from operator
+   traffic, and it carried no sampler at all, so the only evidence it left is a pair of `/status` snapshots.
+   **A control that never samples the engine cannot prove its own condition** — attach `sample_engine.py` to
+   any run whose claim is about engine state.
+5. **Never pool domains.** Different task counts, different graded components.
+6. **State self-play.** The engine under test also plays the user. τ²'s own leaderboard rows are cross-model;
    a self-play row is comparable to another self-play row, nothing else.
-6. **State tenancy** and attribute it: engine counters are window deltas (the engine is not restarted for
+7. **State tenancy** and attribute it: engine counters are window deltas (the engine is not restarted for
    these waves), and `summarize.py` separates benchmark from co-tenant traffic by `prompt_tokens` size
    (τ² sessions ≤ ~16 k tokens; an operator chat session sits at 10⁵).
-7. **Keep transcripts local.** `tasks.jsonl` publishes per-simulation rows — ids, seeds, reward
+8. **Keep transcripts local.** `tasks.jsonl` publishes per-simulation rows — ids, seeds, reward
    decomposition, action/DB/assertion counts, tool-call counts, depth, durations — but **no message content,
    no tool arguments, no model free text**. Reviewers recompute every headline with
    `summarize.py --from-rows`.
@@ -111,6 +120,7 @@ script, and running it on wave 2026-11-19a regenerates the published 476-row `ta
 | dir | what it is |
 |---|---|
 | `results/2026-11-19a/` | the scored wave: 238 tasks × 2 trials, `tasks.jsonl` (476 rows), `summary.json`, `flip_triage.json`, engine samples, `RECORD.md` |
+| `results/2026-11-19b-width-control/` | the control experiment on flipping tasks at `--max-concurrency 1` vs `3` (32 rows, per-arm engine decode widths, RECORD.md) — the record behind "batching is not the mechanism" |
 | `results/2026-11-19-smoke/` | the pre-wave smoke run (mock 4 + airline 5 + retail 5 + telecom 3, one task per component). This is the record behind the "3 of 5 retail tasks die as `infrastructure_error`" claim, and behind the co-tenancy counter-example (the operator session was 94 % of peak residency there). No transcripts |
 
 ## What τ² is *not* good for on this machine

@@ -160,3 +160,17 @@ Two corrections to what this record first shipped:
 The open question — batch-dependent numerics (`--max-concurrency 3`) vs greedy not reproducing even alone —
 is being separated by a width-1 control over 8 of these tasks; whatever it shows, it will be recorded here
 rather than used to rewrite the numbers above.
+
+## Addendum 2026-11-19b — the width control ran, and it refutes the batching story
+
+The open question above was settled by `../2026-11-19b-width-control/`: 8 of these 45 flipping tasks, two
+trials per arm, detached with the operator idle and `/status` sampled every 10 s. At `--max-concurrency 1` the
+engine produced **b1 19,439 decode batches and not one wider**, peak 1 request in flight, zero co-tenant
+request-samples — a genuine never-batched condition — and **3 of 8 still flipped**, the same count as the
+`--max-concurrency 3` replication of the same tasks, with only retail 90 unstable in all three passes.
+
+So the 18.9 % flip rate on this stack is **not a batching artifact**, and the earlier attribution in this
+record's notes was wrong. What survives: same input, `temperature 0`, no batching, single tenant → different
+greedy output, first visible in the user-simulator role (its turns are essentially never byte-identical even
+at width 1). The remaining candidate is long-context numerical state in the persistent prefix cache, not batch
+composition; isolating that needs a fresh-cache-vs-warm-cache arm. No number in this record changed.

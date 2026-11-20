@@ -18,6 +18,7 @@ telecom 0.873 / 0.772.** And the number that matters most for reading the others
 - [Judge-free scope: the one deviation](#judge-free-scope-the-one-deviation)
 - [Stability: pass^1 − pass^2 *is* the flip count](#stability-pass1--pass2-is-the-flip-count)
 - [Flip triage: what the 45 flips actually are](#flip-triage-what-the-45-flips-actually-are)
+- [Width control: batching is not the mechanism](#width-control-batching-is-not-the-mechanism)
 - [Reading tau2's own output correctly](#reading-tau2s-own-output-correctly)
 - [Engine findings: a prefix-cache workload, not a KV-stress workload](#engine-findings-a-prefix-cache-workload-not-a-kv-stress-workload)
 - [Comparability rules](#comparability-rules)
@@ -138,12 +139,44 @@ every flip traces back to an engine call either way. What the triage establishes
 majority become visible in the simulated user's wording, and only **8 of 238 tasks (3.4 %)** diverge in the
 agent's own turn under an identical prefix.
 
-**Corrected mechanism claim.** The first version of this row attributed the whole 18.9 % to greedy
-non-reproducibility under batching. That is now refined rather than asserted: the remaining candidate for
-the divergence itself is **batch-dependent numerics** (the wave ran at `--max-concurrency 3`, decode width
-up to 3 under `maximum_batch_width = 4`). A **width-1 control** — the same flipping tasks, two trials, one
-request in flight — is the experiment that separates "batching" from "greedy is not reproducible even
-alone"; until it reports, the mechanism stays open and the split above is the published fact.
+**Corrected mechanism claim, and then the control that settled it.** The first version of this row
+attributed the 18.9 % to greedy non-reproducibility under batching (`--max-concurrency 3`, decode width up
+to 3 under `maximum_batch_width = 4`). That was tested and **did not survive**: see the width control below.
+
+## Width control: batching is not the mechanism
+
+`results/2026-11-19b-width-control/` — 8 of the 45 flipping tasks, two trials per arm, same seed, run
+**detached with the operator idle** and sampled at 10 s so the condition is proven from the engine rather
+than from the flag we passed.
+
+| arm | τ² flag | decode batches in the window (lifetime deltas) | peak in flight | co-tenant samples | flips among the 8 |
+|---|---|---|---|---|---|
+| **c1** | `--max-concurrency 1` | **b1 19,439 · b2 0 · b3 0 · b4 0** | **1** | **0** | **3 / 8** |
+| **c3** | `--max-concurrency 3` | b1 1,757 · b2 1,347 · **b3 5,115** | 3 | 0 | **3 / 8** |
+
+The c1 arm is a real never-batched condition: every decode batch was width 1, one request in flight, nobody
+else attached. "Co-tenant samples" counts in-flight requests over 20,000 prompt tokens (τ²'s own requests top
+out near 16 k; an operator session runs well above that), and it is zero in both arms. It still flipped 3 of 8
+— **the same count as the width-3 replication**, and only **one task (retail 90) is unstable in all three
+passes**. Flip identity is not a stable task property either: across all six simulations of these tasks the
+`reward == 1` counts run 2/6 to 5/6.
+
+What does survive: in the never-batched arm the two trials' **user-simulator turns are still essentially
+never byte-identical** (airline 0/4, 0/4, 0/7 identical; retail 0/6, 1/5, 1/7 — telecom higher only because
+its scripted confirmations repeat verbatim). Same input, `temperature 0`, no batching, single tenant →
+different greedy output, first visible in the user role. **The candidate that survives is long-context
+numerical state** — the same persistent prefix cache that served 97.3 % of the wave's prompt volume — not
+batch composition. Candidate, not proven: the 2026-11-17 `verify_rows` A/B saw no divergence on a short
+greedy prompt (1/5 distinct = all identical), so the effect shows up at 10–16 k-token contexts and not at
+~100-token ones. Isolating it further needs a fresh-cache-vs-warm-cache arm on the same tasks.
+
+**A discarded attempt, recorded.** The first run of this control was thrown out before analysis: the
+decode-width delta across its own window is **b1 14,329 · b2 8,190 · b3 409**, i.e. **8,599 batches wider
+than b1 during a run we had passed `--max-concurrency 1` to** — the operator session was on the engine, so the
+flag described the τ² runner, not the engine. That run had no 10 s sampler, which is itself part of why it is
+unusable for engine claims; its status edges are published alongside this record
+(`discarded_attempt_status_{before,after}.json`) so the 8,599 figure is checkable. Its 5/8-agree number is used
+nowhere, and the reason is written down instead of the files being deleted.
 
 ## Reading tau2's own output correctly
 

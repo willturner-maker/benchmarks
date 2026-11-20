@@ -1,0 +1,223 @@
+<title>τ² width control — the agent-benchmark flip rate is not batching</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#fcfcfd; --fg:#14171c; --fg-2:#4d555f; --mut:#7b848f;
+  --line:#dfe3e8; --accent:#2a78d6; --s2:#eb6834; --s3:#8a5fc9;
+  --good:#0f7a4d; --warn:#b26a00;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',Inter,system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 56px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.5vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 var(--mono);color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.lede{color:var(--fg-2);max-width:65ch;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:9px 13px}
+.chip b{font-family:var(--disp);font-size:16px}
+.chip span{font-size:12.5px;color:var(--fg-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--good);flex:none;align-self:center}
+.dot.warn{background:var(--warn)}
+section{margin-top:44px;border-top:1px solid var(--line);padding-top:26px}
+h2{font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 .tag{font:500 11px/1 var(--mono);color:var(--mut);letter-spacing:.06em;border:1px solid var(--line);
+  border-radius:6px;padding:4px 7px}
+p.note{color:var(--fg-2);max-width:65ch}
+.tbl-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;min-width:0}
+th{font:600 12px/1.3 var(--body);color:var(--fg-2)}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--good);font-weight:600}
+.warn{color:var(--warn);font-weight:600}
+.dim{color:var(--mut)}
+code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;
+  font:500 12px/1.5 var(--mono);color:var(--fg-2);margin:14px 0 0}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.chartwrap{position:relative;margin-top:10px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:8px 10px;font:500 12px/1.5 var(--mono);box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+@media (prefers-reduced-motion:reduce){.tip{transition:none}}
+svg{width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.grid{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--mut);stroke-width:1}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
+.foot code{font-size:11.5px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Will's local AI pipeline · τ²-bench · control experiment · control result, not a score</div>
+  <h1>The agent-benchmark flip rate is not batching</h1>
+  <p class="lede">τ²-bench flipped <b>45 of 238 tasks</b> between two <code>temperature 0</code> trials, and the
+  first version of that row blamed decode batching. A control run with the operator idle says the blame was
+  wrong: at <code>--max-concurrency 1</code> the engine <b>batched zero times</b> — <b>19,439 width-1 decode
+  batches and not one wider</b> — and <b>3 of 8 sampled tasks still flipped</b>, exactly as many as the
+  <code>--max-concurrency 3</code> replication of the same tasks.</p>
+
+  <div class="chips">
+    <div class="chip"><span class="dot"></span><b>b2/b3/b4 = 0</b><span>the c1 arm never batched, proven from <code>/status</code> deltas</span></div>
+    <div class="chip"><span class="dot warn"></span><b>3 / 8 vs 3 / 8</b><span>flips at width 1 and width 3 — identical count, different tasks</span></div>
+    <div class="chip"><span class="dot warn"></span><b>1 task</b><span>is unstable in all three passes (retail 90)</span></div>
+    <div class="chip"><span class="dot"></span><b>0 co-tenant samples</b><span>detached, operator idle, 10 s engine sampling</span></div>
+  </div>
+
+  <section>
+    <h2>1 · The two arms, and how they are proven <span class="tag">same 8 tasks · same seed · 2 trials each</span></h2>
+    <p class="note">The flag you pass is not evidence of the condition the engine ran in, so the arms are read
+    from <code>decode_batches_by_width</code> <b>deltas</b> in <code>/status</code> sampled every 10 s.</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>arm</th><th>τ² flag</th><th class="num">b1</th><th class="num">b2</th><th class="num">b3</th><th class="num">b4</th><th class="num">peak in flight</th><th class="num">peak KV</th><th class="num">co-tenant</th><th class="num">flips / 8</th></tr></thead>
+        <tbody>
+          <tr><td><b>c1</b></td><td><code>--max-concurrency 1</code></td><td class="num">19,439</td><td class="num ok">0</td><td class="num ok">0</td><td class="num ok">0</td><td class="num ok">1</td><td class="num">12,160 tok</td><td class="num ok">0</td><td class="num warn">3</td></tr>
+          <tr><td><b>c3</b></td><td><code>--max-concurrency 3</code></td><td class="num">1,757</td><td class="num">1,347</td><td class="num">5,115</td><td class="num">0</td><td class="num">3</td><td class="num">19,424 tok</td><td class="num ok">0</td><td class="num warn">3</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="viz-root">
+      <div class="vtitle">Decode batch width composition per arm — the proof the arms are what they claim to be</div>
+      <div class="vsub">Lifetime-counter deltas over each arm's window. c1 is a genuine never-batched condition;
+      c3 reproduces the published wave's b3-dominant shape. Hover a segment</div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>b1</span><span><i style="background:var(--s2)"></i>b2</span><span><i style="background:var(--s3)"></i>b3</span></div>
+      <div class="chartwrap"><svg id="widths" viewBox="0 0 880 210" role="img" aria-label="Two stacked bars of decode batches by width. Arm c1 at concurrency 1: 19,439 width-1 batches and zero batches of width 2, 3 or 4. Arm c3 at concurrency 3: 1,757 width-1, 1,347 width-2 and 5,115 width-3 batches"></svg><div class="tip" id="tip"></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2 · Same flip count, different tasks <span class="tag">which task flips is not a task property</span></h2>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>task</th><th>wave @ c3</th><th>control @ c1</th><th>control @ c3</th><th class="num">reward==1 over 6 sims</th><th>first difference at c1</th><th class="num">user turns identical at c1</th></tr></thead>
+        <tbody>
+          <tr><td>airline 12</td><td class="warn">flip</td><td class="ok">stable</td><td class="warn">flip</td><td class="num">4/6</td><td>user @ 1</td><td class="num">0/4</td></tr>
+          <tr><td>airline 29</td><td class="warn">flip</td><td class="ok">stable</td><td class="ok">stable</td><td class="num">3/6</td><td>user @ 1</td><td class="num">0/4</td></tr>
+          <tr><td>airline 33</td><td class="warn">flip</td><td class="ok">stable</td><td class="ok">stable</td><td class="num">5/6</td><td>user @ 1</td><td class="num">0/7</td></tr>
+          <tr><td>retail 66</td><td class="warn">flip</td><td class="warn">flip</td><td class="ok">stable</td><td class="num">2/6</td><td>user @ 1</td><td class="num">0/6</td></tr>
+          <tr><td><b>retail 90</b></td><td class="warn">flip</td><td class="warn">flip</td><td class="warn">flip</td><td class="num">3/6</td><td>user @ 3</td><td class="num">1/5</td></tr>
+          <tr><td>retail 91</td><td class="warn">flip</td><td class="ok">stable</td><td class="warn">flip</td><td class="num">2/6</td><td>user @ 3</td><td class="num">1/7</td></tr>
+          <tr><td>telecom <code>mms…both_permissions</code></td><td class="warn">flip</td><td class="warn">flip</td><td class="ok">stable</td><td class="num">2/6</td><td>assistant @ 6</td><td class="num">14/28</td></tr>
+          <tr><td>telecom <code>mobile_data…</code></td><td class="warn">flip</td><td class="ok">stable</td><td class="ok">stable</td><td class="num">5/6</td><td>assistant @ 2</td><td class="num">10/25</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">The two control arms agree on the <b>count</b> (3 of 8) and almost disagree on
+    <b>everything else</b>: only <b>retail 90</b> is unstable in all three passes. Across all six simulations of
+    these tasks, <code>reward == 1</code> counts land anywhere from <b>2/6 to 5/6</b> — these tasks are close to
+    coin flips, which is why two trials is the floor for publishing a τ² row and why <code>pass^1 − pass^2</code>
+    (with 2 trials, exactly the flip count) should never be read as a capability gap.</p>
+  </section>
+
+  <section>
+    <h2>3 · What survives the control <span class="tag">the candidate, stated as a candidate</span></h2>
+    <p class="note">Even in the never-batched arm, with nobody else on the engine and <code>temperature 0</code>,
+    the two trials' <b>user-simulator turns are essentially never byte-identical</b>: airline 0/4, 0/4, 0/7
+    identical, retail 0/6, 1/5, 1/7. (Telecom scores higher — 14/28, 10/25 — only because its scripted
+    confirmations repeat verbatim.) Same input → different greedy output, first visible in the user role.
+    With reseeding already excluded (the engine ignores <code>seed</code> at <code>temperature 0</code>) and
+    batching now excluded too, the surviving candidate is <b>long-context numerical state</b>: the same
+    persistent prefix cache that served <b>97.3 %</b> of the wave's prompt volume.</p>
+    <p class="note">That is a candidate, not a proven cause, and it is bounded by earlier evidence: the
+    2026-11-17 <code>verify_rows</code> A/B found <b>no divergence at all</b> on a short greedy prompt
+    (1/5 distinct = all identical), so the effect appears at <b>10–16 k-token</b> contexts and not at ~100.
+    Separating "cache state" from "unbounded greedy variance" needs a fresh-cache-vs-warm-cache arm on these
+    same tasks, which is the next experiment for this suite.</p>
+  </section>
+
+  <section>
+    <h2>4 · The run that got thrown out <span class="tag">why the first attempt is not in the numbers</span></h2>
+    <p class="note">The first time this control ran, it ran while the operator session (this agent) was live on
+    the same engine. The decode-width delta across its own window: <b>b1 14,329 · b2 8,190 · b3 409</b> —
+    <b>8,599 decode batches wider than b1</b> during a run that had been passed <code>concurrency 1</code>.
+    Inline <code>/status</code> reads in that window also showed operator-size requests in <code>spill</code>
+    mode, but that run carried no 10 s sampler, so the citable evidence is the status-edge delta (published
+    alongside the record). So <code>concurrency 1</code> described the τ² runner, not the engine. It reported 5
+    of 8 pairs agreeing. That number is used nowhere, and the reason is written into the record rather than the
+    files deleted.</p>
+    <pre>git clone https://github.com/sierra-research/tau2-bench ~/tau2-bench
+cd ~/tau2-bench &amp;&amp; git checkout v1.0.1 &amp;&amp; uv sync
+~/benchmarks/bench/tau2-bench/width_control.sh ~/my-width-control   # both arms, sampler on
+python3 ~/benchmarks/bench/tau2-bench/build_rows.py --out rows.jsonl \
+  ~/tau2-bench/data/simulations/ctl-c1-* ~/tau2-bench/data/simulations/ctl-c3-*</pre>
+    <p class="note">Then read <code>decode_batches_by_width</code> deltas for <b>your</b> engine before
+    interpreting anything: if the width-1 arm shows batches wider than b1, the control measured nothing and
+    has to be re-run detached.</p>
+  </section>
+
+  <div class="foot">
+    Instrument: <code>sierra-research/tau2-bench</code> @ <code>v1.0.1</code> =
+    <code>fc0055dc4e0a316c3f83133267fbd6faaa770992</code> (MIT), unmodified. Engine: Splash 1.7.0,
+    <code>ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S</code>, same launch as the wave (not restarted;
+    counters read as window deltas). Control window <code>2026-11-20T00:47:04Z → 01:02:04Z</code>, 15 min,
+    detached, operator idle. Record: <code>bench/tau2-bench/results/2026-11-19b-width-control/</code>
+    (32 per-simulation rows, <code>width_control.json</code>, engine samples, status edges, <code>RECORD.md</code>);
+    runner <code>bench/tau2-bench/width_control.sh</code>. τ²'s own stdout logs stay local (they carry task text).
+    Parent row: <a href="https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-bench.html">the τ²-bench debut scorecard</a>.
+  </div>
+</div>
+
+<script>
+const arms=[
+  {name:'c1 — concurrency 1', w:{b1:19439,b2:0,b3:0,b4:0}, flips:3},
+  {name:'c3 — concurrency 3', w:{b1:1757,b2:1347,b3:5115,b4:0}, flips:3}
+];
+const colors={b1:'var(--accent)',b2:'var(--s2)',b3:'var(--s3)',b4:'var(--warn)'};
+const ns='http://www.w3.org/2000/svg';
+function el(t,a){const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+(function(){
+  const svg=document.getElementById('widths'),tip=document.getElementById('tip');
+  const W=880,H=210,mL=10,mR=10,bTop=34,bH=48,gap=44;
+  const max=Math.max(...arms.map(a=>a.w.b1+a.w.b2+a.w.b3+a.w.b4));
+  const X=v=>mL+v/max*(W-mL-mR);
+  arms.forEach((a,i)=>{
+    const y=bTop+i*(bH+gap); let acc=0;
+    ['b1','b2','b3','b4'].forEach(k=>{
+      const v=a.w[k]; if(!v) return;
+      const x=X(acc), w=Math.max(1,X(acc+v)-X(acc));
+      const r=el('rect',{x:x,y:y,width:w,height:bH,fill:colors[k],rx:4,tabindex:0});
+      r.addEventListener('mousemove',e=>{
+        const bb=svg.getBoundingClientRect();
+        tip.textContent=`${a.name} · ${k}: ${v.toLocaleString()} batches`;
+        tip.style.opacity=1;tip.style.left=(e.clientX-bb.left+12)+'px';tip.style.top=(e.clientY-bb.top-10)+'px';
+      });
+      r.addEventListener('mouseleave',()=>tip.style.opacity=0);
+      svg.appendChild(r);
+      if(w>52){const t=el('text',{x:x+8,y:y+20,'font-size':'11',fill:'#fff'});t.textContent=`${k} ${v.toLocaleString()}`;svg.appendChild(t);}
+      acc+=v;
+    });
+    const miss=['b2','b3','b4'].filter(k=>!a.w[k]);
+    if(miss.length){
+      const t=el('text',{x:X(acc)+10,y:y+20,'font-size':'11.5',fill:'var(--good)'});
+      t.textContent=`${miss.join('/')} = 0 — never batched`;svg.appendChild(t);
+    }
+    const lab=el('text',{x:mL,y:y-8,'font-size':'12'});
+    lab.textContent=`${a.name}  ·  ${(acc).toLocaleString()} decode batches  ·  flipped ${a.flips}/8`;
+    svg.appendChild(lab);
+  });
+})();
+</script>
