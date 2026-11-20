@@ -1,0 +1,308 @@
+<title>τ²-bench — an agent benchmark you can actually reproduce</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#fcfcfd; --fg:#14171c; --fg-2:#4d555f; --mut:#7b848f;
+  --line:#dfe3e8; --accent:#2a78d6; --s2:#eb6834; --s3:#8a5fc9;
+  --good:#0f7a4d; --warn:#b26a00;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',Inter,system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 56px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.5vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 var(--mono);color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.lede{color:var(--fg-2);max-width:65ch;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:9px 13px}
+.chip b{font-family:var(--disp);font-size:16px}
+.chip span{font-size:12.5px;color:var(--fg-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--good);flex:none;align-self:center}
+.dot.warn{background:var(--warn)}
+section{margin-top:44px;border-top:1px solid var(--line);padding-top:26px}
+h2{font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 .tag{font:500 11px/1 var(--mono);color:var(--mut);letter-spacing:.06em;border:1px solid var(--line);
+  border-radius:6px;padding:4px 7px}
+p.note{color:var(--fg-2);max-width:65ch}
+.tbl-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;min-width:0}
+th{font:600 12px/1.3 var(--body);color:var(--fg-2)}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--good);font-weight:600}
+.warn{color:var(--warn);font-weight:600}
+.dim{color:var(--mut)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:18px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.stat .v{font-family:var(--disp);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12.5px;color:var(--fg-2);margin-top:2px}
+ul.tight{margin:12px 0 0;padding-left:20px;color:var(--fg-2)}
+ul.tight li{margin:5px 0}
+code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;
+  font:500 12px/1.5 var(--mono);color:var(--fg-2);margin:14px 0 0}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.legend i.ln{width:14px;height:3px;border-radius:2px}
+.chartwrap{position:relative;margin-top:10px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:8px 10px;font:500 12px/1.5 var(--mono);box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+@media (prefers-reduced-motion:reduce){.tip{transition:none}}
+svg{width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.grid{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--mut);stroke-width:1}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
+.foot code{font-size:11.5px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Will's local AI pipeline · new suite · τ²-bench · tag-pinned v1.0.1</div>
+  <h1>An agent benchmark you can actually reproduce</h1>
+  <p class="lede">τ²-bench grades an agent from the <b>end state of a scripted environment</b> — a database
+  hash, in-process assertion replay, a substring check — not from a judge's opinion. That is what makes it
+  worth running, and what makes it hard to fake. Splash + Qwen3.8-Flash-Next IQ3_S scored
+  <b>pass^1 0.870 (airline) / 0.791 (retail, judge-free subset) / 0.873 (telecom)</b> over
+  <b>476 simulations, all scored, zero infrastructure errors</b>. The number that decides how to read the
+  others: <b>45 of 238 tasks flipped between two <code>temperature 0</code> trials</b>.</p>
+
+  <div class="chips">
+    <div class="chip"><span class="dot"></span><b>476 / 476</b><span>simulations scored · 0 infra errors · 0 agent errors</span></div>
+    <div class="chip"><span class="dot warn"></span><b>45 / 238</b><span>tasks flipped between two greedy trials (18.9 %)</span></div>
+    <div class="chip"><span class="dot"></span><b>97.3 %</b><span>of 78.25 M prompt tokens served from cached KV state</span></div>
+    <div class="chip"><span class="dot warn"></span><b>74 of 114</b><span>retail tasks run — the 40 needing a cloud judge are excluded, on the record</span></div>
+  </div>
+
+  <section>
+    <h2>1 · The scores <span class="tag">238 tasks × 2 trials · 2 h 26 m</span></h2>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>domain</th><th>task scope</th><th class="num">tasks × trials</th><th class="num">pass^1</th><th class="num">pass^2</th><th class="num">both-pass</th><th class="num">disagree</th><th class="num">all-fail</th><th class="num">tools/sim</th><th class="num">median sim</th></tr></thead>
+        <tbody>
+          <tr><td>airline</td><td>all 50 · <code>[DB, COMMUNICATE]</code></td><td class="num">50 × 2</td><td class="num ok">0.8700</td><td class="num">0.8200</td><td class="num">41</td><td class="num warn">5</td><td class="num">4</td><td class="num">7.46</td><td class="num">48 s</td></tr>
+          <tr><td>retail</td><td><b>74 of 114</b> · judge-free²</td><td class="num">74 × 2</td><td class="num ok">0.7905</td><td class="num">0.6757</td><td class="num">50</td><td class="num warn">17</td><td class="num">7</td><td class="num">6.96</td><td class="num">39 s</td></tr>
+          <tr><td>telecom</td><td>all 114 base · <code>[ENV_ASSERTION]</code></td><td class="num">114 × 2</td><td class="num ok">0.8728</td><td class="num">0.7719</td><td class="num">88</td><td class="num warn">23</td><td class="num">3</td><td class="num">15.58</td><td class="num">58 s</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>Never pooled.</b> The domains differ in task count and in which components are graded,
+    so a cross-domain mean would be a made-up number. <b>Self-play:</b> the engine under test also plays the
+    user simulator, so this row is comparable to other self-play rows and nothing else. Volume: 12,088
+    completions, 78,251,808 prompt tokens, 2,086,415 completion tokens, 5,329 tool calls.</p>
+  </section>
+
+  <section>
+    <h2>2 · <code>pass^1 − pass^2</code> <i>is</i> the flip count <span class="tag">the stability finding</span></h2>
+    <div class="viz-root">
+      <div class="vtitle">Per domain: pass^1 vs pass^2, and what the gap costs</div>
+      <div class="vsub">τ²'s <code>pass^k</code> is per task <code>C(n_pass,k)/C(n_trials,k)</code> averaged
+      over tasks — with 2 trials, "both trials passed". So the gap is not extra information: it is the count of
+      tasks whose two greedy trials disagreed. Hover a bar</div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>pass^1</span><span><i style="background:var(--s2)"></i>pass^2</span><span><i class="ln" style="background:var(--s3)"></i>the looser independent-trials variant (mean p^k), for contrast</span></div>
+      <div class="chartwrap"><svg id="chart" viewBox="0 0 880 300" role="img" aria-label="Grouped bars per domain: airline pass^1 0.870 and pass^2 0.820, retail 0.791 and 0.676, telecom 0.873 and 0.772. Markers above show the looser independent-trials pass^2 variant at 0.845, 0.733 and 0.822. The gap between pass^1 and pass^2 equals the number of tasks whose two greedy trials disagreed: airline 5 of 50, retail 17 of 74, telecom 23 of 114"></svg><div class="tip" id="tip"></div></div>
+    </div>
+    <p class="note">Same mechanism as the 2026-11-13 instance-state result and the tool-loop gate: <b>greedy
+    does not pin agent behavior on this stack</b>, because batch composition under
+    <code>maximum_batch_width = 4</code> still varies. Two trials is the floor of what this repo publishes, and
+    a third would move pass^2 materially — that is a limitation of this row, stated rather than smoothed.</p>
+  </section>
+
+  <section>
+    <h2>3 · The one deviation: 40 retail tasks have no local grader <span class="tag">judge-free scope</span></h2>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>domain</th><th class="num">tasks</th><th><code>reward_basis</code> on v1.0.1</th><th class="num">need an LLM judge</th></tr></thead>
+        <tbody>
+          <tr><td>airline</td><td class="num">50</td><td><code>[DB, COMMUNICATE]</code> ×50</td><td class="num ok">0</td></tr>
+          <tr><td>retail</td><td class="num">114</td><td><code>[DB, NL_ASSERTION]</code> ×112, <code>[DB]</code> ×2</td><td class="num warn">40</td></tr>
+          <tr><td>telecom</td><td class="num">114</td><td><code>[ENV_ASSERTION]</code> ×112, <code>+ACTION</code> ×2</td><td class="num ok">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Those 40 call <code>gpt-4.1-2025-04-14</code>, and on v1.0.1 there is no way to point that
+    at a local model: it is a constant in <code>config.py</code> (no <code>getenv</code> in the file), there is
+    no CLI judge flag, and the engine takes a single <code>--model</code> with no alias. The smoke run proved
+    the cost of ignoring this before the wave: <code>litellm.NotFoundError</code>, 3 retries each, then
+    <code>infrastructure_error</code>, <code>reward: null</code> and <b>0 messages</b> — the finished dialogue
+    is thrown away. 3 of 5 smoke retail tasks died that way.</p>
+    <p class="note">Excluded with upstream's own <code>--task-ids</code> (ids in the runner), so <b>no benchmark
+    data was edited</b>. And a trap for anyone looking for a shortcut: retail's <code>train</code>/<code>test</code>
+    split is also 74/40, but it is a <b>different</b> 74/40 — set-compared — so
+    <code>--task-split-name train</code> is not a judge-free switch.</p>
+  </section>
+
+  <section>
+    <h2>4 · Engine side: a prefix-cache workload, not a KV-stress workload <span class="tag">same launch as wave 19b, not restarted</span></h2>
+    <div class="kv">
+      <div class="stat"><div class="v">16,341</div><div class="l">max per-call context = <b>0.105× the 155,648-token KV budget</b>, 0.062× the 262,144-token window</div></div>
+      <div class="stat"><div class="v">2.79 M</div><div class="l">rows actually prefilled, out of <b>78.25 M prompt tokens requested</b></div></div>
+      <div class="stat"><div class="v">97.3 %</div><div class="l"><code>cache.reused_tokens</code> +76,108,064 · hit rate <b>0.7223 → 0.9671</b> over the window</div></div>
+      <div class="stat"><div class="v">0.6 %</div><div class="l">agreement between engine <code>decode_output_tokens</code> (+2,098,867) and τ²'s own 2,086,415</div></div>
+      <div class="stat"><div class="v">b3</div><div class="l">first suite here whose dominant decode width is width 3 (high-water b1 59,969 · b2 35,920 · <b>b3 179,929</b> · b4 5,801)</div></div>
+      <div class="stat"><div class="v">1</div><div class="l"><b>first non-zero <code>admission.waiting</code></b> this engine has shown (with <code>waiting_memory</code> 1, <code>restoring</code> 2)</div></div>
+    </div>
+    <p class="note">τ² re-sends a session's whole context every turn across 20–60 turns — the exact shape
+    persistent KV caching exists for, and the reason 3.6 % of the prompt volume cost anything to prefill.
+    Window rates: decode <b>≈310 tok/s</b>, <code>itl_ms</code> p50 7.94 → 9.68, <code>ttft_ms</code> p50
+    <b>172.5 ms</b>, draft acceptance <b>63.9 %</b> (2,358,289 drafted / 1,506,035 accepted). The window prefill
+    figure (≈1,468 tok/s) is <b>not</b> a throughput claim: it is cache-hit-dominated with tiny prefills and
+    block-probe overhead, and is not comparable to wave 19b's flat 3,485–3,499 tok/s.</p>
+    <div class="viz-root">
+      <div class="vtitle">Where the 78.25 M requested prompt tokens went</div>
+      <div class="vsub">Window deltas from <code>/status</code> before/after. Benchmark traffic stayed
+      <b>100 % <code>kv_mode: resident</code></b> (2,575 request-samples, 376–15,629 tokens); peak residency
+      3,025 pages = 96,800 tokens = 0.62× KV budget — while the persistent store wrote <b>+428.7 GB</b> and
+      reclaimed 206.4 GB of KV blocks (<code>disk.kv_blocks</code> 520,304 → 35,692)</div>
+      <div class="chartwrap"><svg id="cache" viewBox="0 0 880 190" role="img" aria-label="Horizontal stacked bar: of 78,251,808 requested prompt tokens, 76,108,064 were reused from cached KV state and 2,790,208 rows were prefilled"></svg><div class="tip" id="tip2"></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>5 · Tenancy of this window <span class="tag">the smoke run was the opposite case</span></h2>
+    <p class="note">878 <code>/status</code> samples at 10 s over 146 min, attributed by
+    <code>prompt_tokens</code> size: <b>2,575 benchmark request-samples</b> (all resident, ≤15,629 tokens)
+    against <b>3 co-tenant samples</b> — this operator's own chat session at up to 87,043 tokens in
+    <code>spill</code> mode, ~30 s of the window. The wave ran detached and operator-idle.</p>
+    <p class="note">Two days earlier the smoke run showed what happens if you don't: the operator session
+    (221,058 tokens) accounted for <b>94 % of peak residency and every spill/demote delta</b>, while τ²'s own
+    traffic was 0.09× the budget. <b>Every engine-side claim on this page comes from the wave, not the
+    smoke.</b></p>
+  </section>
+
+  <section>
+    <h2>6 · Reproduce it <span class="tag">no container, no VM, no GPU toolchain, no footage</span></h2>
+    <pre>git clone https://github.com/sierra-research/tau2-bench ~/tau2-bench
+cd ~/tau2-bench &amp;&amp; git checkout v1.0.1 &amp;&amp; uv sync          # not on PyPI
+~/benchmarks/bench/tau2-bench/run_wave.sh ~/my-wave
+python3 ~/benchmarks/bench/tau2-bench/summarize.py --wave-dir ~/my-wave \
+  --domains "airline retail telecom"</pre>
+    <p class="note">Any OpenAI-compatible endpoint works (<code>TAU2_LLM_ARGS</code>); LiteLLM splits the model
+    string at the first <code>/</code>, so registry ids with <code>/</code> and <code>:</code> survive intact.
+    A community row must state: host, engine, model + quant, <b>tag and commit</b>, trial count, whether the
+    user simulator is self-play or cross-model, the task scope (which retail subset), and <b>which
+    <code>pass^k</code> definition</b> it is quoting. Re-derivation is a first-class feature:
+    <code>summarize.py</code> reproduces τ²'s own printed <code>Average Reward</code>/<code>Pass^1</code>/<code>Pass^2</code>
+    and its DB-match and annotated-action counts for all three domains, and
+    <code>--from-rows</code> recomputes every headline above from the published per-simulation rows alone.</p>
+    <ul class="tight">
+      <li>Suite + row rules: <a href="https://github.com/willturner-maker/benchmarks/blob/main/bench/tau2-bench/README.md"><code>bench/tau2-bench/README.md</code></a></li>
+      <li>Full write-up: <a href="https://github.com/willturner-maker/benchmarks/blob/main/docs/tau2-bench-benchmark-results.md"><code>docs/tau2-bench-benchmark-results.md</code></a></li>
+      <li>Raw rows (476, no transcripts): <a href="https://github.com/willturner-maker/benchmarks/blob/main/bench/tau2-bench/results/2026-11-19a/tasks.jsonl"><code>results/2026-11-19a/tasks.jsonl</code></a> · <a href="https://github.com/willturner-maker/benchmarks/blob/main/bench/tau2-bench/results/2026-11-19a/RECORD.md"><code>RECORD.md</code></a></li>
+    </ul>
+  </section>
+
+  <div class="foot">
+    Instrument: <code>sierra-research/tau2-bench</code> @ <code>v1.0.1</code> =
+    <code>fc0055dc4e0a316c3f83133267fbd6faaa770992</code> (MIT), unmodified, clone kept outside this repo;
+    <code>uv sync</code> rewrote 2 lines of <code>uv.lock</code> and that drift is named in the record.
+    Engine: Splash 1.7.0, <code>ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S</code>, same launch as splash
+    wave <code>19b</code> (<code>--queue-size=64</code>, <code>--thinking-token-budget=32768</code>,
+    <code>--default-reasoning-effort=medium</code>, <code>--persistent-cache</code>), <b>not restarted</b> — all
+    engine figures are window deltas from <code>/status</code>, never lifetime totals. Wave
+    <code>2026-11-19a</code>: airline 21:34:13Z → 22:04:28Z, retail → 22:39:35Z, telecom → 00:00:34Z.
+    Transcripts stay local: <code>tasks.jsonl</code> carries reward decomposition, action/assertion counts,
+    tool calls, depth and durations, but no message content and no tool arguments.
+  </div>
+</div>
+
+<script>
+const scores=[
+  {d:'airline',p1:0.8700,p2:0.8200,naive:0.8450,tasks:50,flip:5,fail:4,pass2both:41},
+  {d:'retail (74)',p1:0.7905,p2:0.6757,naive:0.7331,tasks:74,flip:17,fail:7,pass2both:50},
+  {d:'telecom',p1:0.8728,p2:0.7719,naive:0.8224,tasks:114,flip:23,fail:3,pass2both:88}
+];
+const cache=[{k:'reused from cached KV',v:76108064,c:'var(--accent)'},
+             {k:'prefilled (2,790,208 rows)',v:2143744,c:'var(--s2)'}];
+const ns='http://www.w3.org/2000/svg';
+function el(t,a){const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+function pct(v){return (v*100).toFixed(1)+'%';}
+
+(function(){
+  const svg=document.getElementById('chart'),tip=document.getElementById('tip');
+  const W=880,H=300,mL=58,mR=18,mT=18,mB=44,X0=mL,X1=W-mR,Y0=H-mB,Y1=mT;
+  const lo=0.60,hi=0.90;
+  const Y=v=>Y0-(v-lo)/(hi-lo)*(Y0-Y1);
+  for(let v=0.60;v<=0.9001;v+=0.05){
+    svg.appendChild(el('line',{x1:X0,x2:X1,y1:Y(v),y2:Y(v),class:'grid'}));
+    const t=el('text',{x:X0-8,y:Y(v)+4,'text-anchor':'end','font-size':'11'});
+    t.textContent=(v*100).toFixed(0)+'%';svg.appendChild(t);
+  }
+  svg.appendChild(el('line',{x1:X0,x2:X1,y1:Y0,y2:Y0,class:'axis'}));
+  const gw=(X1-X0)/scores.length, bw=Math.min(46,gw*0.22);
+  scores.forEach((s,i)=>{
+    const cx=X0+gw*(i+0.5);
+    [[s.p1,'var(--accent)','pass^1'],[s.p2,'var(--s2)','pass^2']].forEach(([v,c,lab],j)=>{
+      const x=cx+(j-0.5)*bw-bw*0.1;
+      const r=el('rect',{x:x,y:Y(v),width:bw,height:Math.max(1,Y0-Y(v)),fill:c,rx:3,tabindex:0});
+      r.addEventListener('mousemove',e=>show(tip,e,`${s.d} · ${lab} ${v.toFixed(4)}`,svg));
+      r.addEventListener('mouseleave',()=>tip.style.opacity=0);
+      svg.appendChild(r);
+      const lb=el('text',{x:x+bw/2,y:Y(v)-6,'text-anchor':'middle','font-size':'10.5'});
+      lb.textContent=v.toFixed(3);svg.appendChild(lb);
+    });
+    const mx=cx+gw*0.20;
+    svg.appendChild(el('line',{x1:mx-bw*0.55,x2:mx+bw*0.55,y1:Y(s.naive),y2:Y(s.naive),
+      stroke:'var(--s3)','stroke-width':3,'stroke-linecap':'round'}));
+    const g=el('text',{x:cx,y:H-mB+18,'text-anchor':'middle','font-size':'12'});
+    g.textContent=s.d;svg.appendChild(g);
+    const sub=el('text',{x:cx,y:H-mB+33,'text-anchor':'middle','font-size':'10.5',fill:'var(--mut)'});
+    sub.textContent=`${s.flip}/${s.tasks} flipped`;svg.appendChild(sub);
+  });
+  function show(t,e,txt,root){
+    const b=root.getBoundingClientRect();
+    t.textContent=txt;t.style.opacity=1;t.style.left=(e.clientX-b.left+12)+'px';
+    t.style.top=(e.clientY-b.top-10)+'px';
+  }
+})();
+
+(function(){
+  const svg=document.getElementById('cache'),tip=document.getElementById('tip2');
+  const W=880,H=190,mL=8,mR=8,bTop=46,bH=44,total=78251808;
+  const X=v=>mL+v/total*(W-mL-mR);
+  let acc=0;
+  cache.forEach(s=>{
+    const x=X(acc),w=X(acc+s.v)-X(acc);
+    const r=el('rect',{x:x,y:bTop,width:Math.max(1,w),height:bH,fill:s.c,rx:4,tabindex:0});
+    r.addEventListener('mousemove',e=>{
+      const b=svg.getBoundingClientRect();
+      tip.textContent=`${s.k}: ${s.v.toLocaleString()} tok = ${(100*s.v/total).toFixed(1)}%`;
+      tip.style.opacity=1;tip.style.left=(e.clientX-b.left+12)+'px';tip.style.top=(e.clientY-b.top-10)+'px';
+    });
+    r.addEventListener('mouseleave',()=>tip.style.opacity=0);
+    svg.appendChild(r);
+    const t=el('text',{x:x+8,y:bTop+18,'font-size':'11',fill:'#fff'});
+    t.textContent=(100*s.v/total).toFixed(1)+'%';svg.appendChild(t);
+    acc+=s.v;
+  });
+  const h=el('text',{x:mL,y:bTop-12,'font-size':'11.5'});
+  h.textContent='78,251,808 prompt tokens requested by 12,088 completions';svg.appendChild(h);
+  const f=el('text',{x:mL,y:bTop+bH+22,'font-size':'11.5'});
+  f.textContent='reused +76,108,064 (cache.reused_tokens)  ·  prefill_input_tokens +2,790,208  ·  cache.hits +12,179  ·  hit rate 0.7223 → 0.9671';
+  svg.appendChild(f);
+  const f2=el('text',{x:mL,y:bTop+bH+40,'font-size':'11',fill:'var(--mut)'});
+  f2.textContent='the second band is drawn at its prompt-token share, not its row count (2,790,208 prefilled rows)';
+  svg.appendChild(f2);
+})();
+</script>

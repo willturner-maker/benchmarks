@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-19 - new suite tool_loop_gate (upstream hermes-agentic-bench gate, commit-pinned, unmodified): 6 passes / 120 task-runs on the queue-size 64 engine, 14-15 of 20, zero parse failures, 3 cap hits; over-work is the failure mode and 30% of tool calls were stubbed by the scripted world.",
+  "updated": "2026-11-19",
   "read_this_first": [
     "Rows are only comparable within the same media_class and the same tenant conditions.",
     "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
@@ -8,7 +8,8 @@
     "Every number here came from an independent read-back (ffprobe / item geometry / server operation log), never from the agent's report.",
     "probe_timeline_structure ms is item-count linear (~3 ms/item on 5.1.0+, ~2 ms/item on 4.19.3): probe cells compare only at matched item counts \u2014 every published cell uses the 4-item base geometry (2026-11-13 addendum (j)).",
     "KV rows are not comparable across the 2026-11-19b boundary: waves before it ran under the splash default --queue-size 32 (request 33 refused instantly with frontend_overloaded), 19b onward runs --queue-size 64. And no wave in this series has tripped KV by summed volume - the governor answers with spill/demote, and suspension is a held-context mechanism.",
-    "tool_loop_gate rows are comparable only within a sampling axis (upstream defaults temp 0.6 vs greedy temp 0) and only against the same upstream commit; publish the band and the stub-response rate, never a single pass or a bare mean_tools."
+    "tool_loop_gate rows are comparable only within a sampling axis (upstream defaults temp 0.6 vs greedy temp 0) and only against the same upstream commit; publish the band and the stub-response rate, never a single pass or a bare mean_tools.",
+    "tau2_bench rows are comparable only within the same upstream pin (v1.0.1 / fc0055dc), the same task scope (airline 50 + retail 74 judge-free + telecom 114; NOT 2.x, NOT retail's 40 judged tasks, NOT banking_knowledge or voice), the same trial count (pass^k is per task C(n_pass,k)/C(n_trials,k)) and the same self-play/cross-model user; publish pass^1 AND pass^2 plus the flip count, never a pooled cross-domain mean, and label which graded components a domain actually scores."
   ],
   "host_reference": {
     "cpu": "Apple M5 Ultra, 64-core GPU",
@@ -1431,6 +1432,106 @@
         "tenancy": "CO-TENANTED (operator OpenCode session on the same engine). Pass/fail and tool counts are behavioral outcomes of the scripted world; per-call latencies (median 0.45-0.85 s, max 7.46 s) are reported as observed and are NOT throughput cells - throughput lives in splash_engine",
         "notes": "first suite in this repo that another machine can reproduce with no container, VM, GPU toolchain or footage: any OpenAI-compatible endpoint returning message.tool_calls. Resolution is 6 tasks (13 pass on every axis), so it measures loop hygiene and stop discipline only - the axis resolve-agentic cannot see, since that suite scores our harness's tooling",
         "evidence": "bench/tool-loop-gate/results/2026-11-19a/ (wave.jsonl 120 per-task rows with full traces and NO model free text, summary.json, engine_config.json, supervisor_pins.txt, status_before/after.json, RECORD.md). Re-derive: bench/tool-loop-gate/summarize.py <wave> --from-rows; all 6 harness SUMMARY lines also re-derived clean from their own per-task records"
+      }
+    ],
+    "tau2_bench": [
+      {
+        "date": "2026-11-19a (suite debut; same engine launch as splash_engine 2026-11-19b)",
+        "suite": "tau2_bench - sierra-research/tau2-bench, upstream UNMODIFIED",
+        "upstream": "github.com/sierra-research/tau2-bench pinned at tag v1.0.1 = fc0055dc4e0a316c3f83133267fbd6faaa770992 (2026-07-16, MIT); clone kept outside this repo at ~/tau2-bench; no source files edited (uv sync rewrote 2 lines of uv.lock: revision 3->5, version 1.0.0->1.0.1); tau2 is NOT on PyPI",
+        "engine": "Splash 1.7.0, --queue-size=64 + --thinking-token-budget=32768 (pins read from the running supervisor; engine not restarted, lifetime counters continue from wave 19b and are reported as window deltas)",
+        "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S (the engine returns 404 model_not_found for any other model string)",
+        "wall_clock": {
+          "start_utc": "2026-11-19T21:34:10Z",
+          "end_utc": "2026-11-20T00:00:34Z",
+          "elapsed": "2h26m24s",
+          "detached_operator_idle": true
+        },
+        "sampling": "self-play: agent AND user simulator = the engine under test (tau2 leaderboard rows are cross-model, so this row compares only against other self-play rows); --num-trials 2 --max-concurrency 3 --seed 300; temperature 0; max_tokens 4096; tau2 defaults max_steps 200, max_errors 10, evaluation_type ALL",
+        "task_scope": {
+          "total_tasks": 238,
+          "sims": 476,
+          "scored": 476,
+          "infrastructure_errors": 0,
+          "airline": "50 of 50 base tasks; reward_basis [DB, COMMUNICATE]; no LLM judge",
+          "retail": "74 of 114 (judge-free subset); reward_basis [DB, NL_ASSERTION]; the 40 tasks that declare nl_assertions are EXCLUDED because their judge is gpt-4.1-2025-04-14 and v1.0.1 offers no local override (no getenv in config.py, no CLI judge flag, single --model on the engine); selected with upstream's own --task-ids, no benchmark data edited",
+          "telecom": "114 of 114 base tasks; reward_basis [ENV_ASSERTION] (+ACTION x32); in-process env assertion replay; DB Match is INFORMATIONAL ONLY for this domain",
+          "not_run": "banking_knowledge (its own 1.0.1 grading break), voice domains, mock as a scored row"
+        },
+        "scores": {
+          "airline": {
+            "tasks": 50,
+            "trials": 2,
+            "pass_1": 0.87,
+            "pass_2": 0.82,
+            "tasks_both_pass": 41,
+            "tasks_trials_disagree": 5,
+            "tasks_all_trials_fail": 4,
+            "tool_calls": 746,
+            "tool_calls_mean_per_sim": 7.46,
+            "depth_max_tokens": 16341,
+            "sim_duration_median_s": 48,
+            "termination": {
+              "user_stop": 100
+            }
+          },
+          "retail_74_judge_free": {
+            "tasks": 74,
+            "trials": 2,
+            "pass_1": 0.7905,
+            "pass_2": 0.6757,
+            "tasks_both_pass": 50,
+            "tasks_trials_disagree": 17,
+            "tasks_all_trials_fail": 7,
+            "tool_calls": 1030,
+            "tool_calls_mean_per_sim": 6.96,
+            "depth_max_tokens": 14006,
+            "sim_duration_median_s": 39,
+            "termination": {
+              "user_stop": 148
+            }
+          },
+          "telecom": {
+            "tasks": 114,
+            "trials": 2,
+            "pass_1": 0.8728,
+            "pass_2": 0.7719,
+            "tasks_both_pass": 88,
+            "tasks_trials_disagree": 23,
+            "tasks_all_trials_fail": 3,
+            "tool_calls": 3553,
+            "tool_calls_mean_per_sim": 15.58,
+            "depth_max_tokens": 14403,
+            "sim_duration_median_s": 58,
+            "termination": {
+              "user_stop": 227,
+              "max_steps": 1
+            }
+          },
+          "pooled": "NOT published: domains differ in task count and in graded components"
+        },
+        "pass_k_definition": "upstream definition: per task C(n_pass,k)/C(n_trials,k), averaged over tasks. With 2 trials pass^2 == 'both trials passed', so pass^1 - pass^2 IS the flip count. The independent-trials variant (mean p^k) would print 0.845/0.733/0.822; summarize.py prints both and every row must name which it quotes.",
+        "stability_finding": "45 of 238 tasks (18.9%) flipped between two temperature-0 trials: airline 5/50, retail 17/74, telecom 23/114. Same mechanism as the 2026-11-13 instance-state result and the tool-loop-gate greedy-trace divergence: batch composition under maximum_batch_width=4. Two trials is the floor; pass^3 not available.",
+        "volume": {
+          "completions": 12088,
+          "prompt_tokens": 78251808,
+          "completion_tokens": 2086415,
+          "tool_calls": 5329
+        },
+        "engine_findings": {
+          "kv_depth": "per-call prompt_tokens max 16,341 = 0.105x the 155,648-token KV budget and 0.062x the 262,144-token window; benchmark traffic 100% kv_mode=resident (2,575 request-samples, 376-15,629 tok); peak residency 3,025 pages = 96,800 tok = 0.62x KV budget. tau2 is NOT a KV-stress workload - it is a turn-count and prefix-cache workload",
+          "prefix_cache": "78,251,808 prompt tokens requested, 2,790,208 rows prefilled; cache.reused_tokens +76,108,064 = 97.3% of requested prompt volume; cache.hits +12,179; hit_rate 0.7223 -> 0.9671 over the window",
+          "decode_width": "first suite here whose dominant decode width is b3: decode_batches_by_width lifetime high-water b1 59,969 / b2 35,920 / b3 179,929 / b4 5,801; benchmark concurrency at tau2's own cap of 3 in 831 of 878 samples",
+          "admission": "FIRST non-zero admission counters on this engine: admission.waiting peaked at 1, waiting_memory 1, restoring 2 (waiting_concurrency / held_behind_refusal / suspended stayed 0). Waves 19-ext/19b kept admission.* at 0 at every width",
+          "cross_check": "engine decode_output_tokens +2,098,867 vs tau2's own 2,086,415 completion tokens = 0.6% agreement between independent instruments",
+          "rates": "decode ~310 tok/s in-window (2,098,867 / 6,783.96 s decode wall); decode_tokens_per_second 218.0 -> 287.4; itl_ms p50 7.94 -> 9.68; ttft_ms p50 172.5 ms, p95 365.7 ms; draft acceptance 63.9% (drafted +2,358,289, accepted +1,506,035). Window prefill ~1,468 tok/s is NOT a throughput claim: cache-hit-dominated with tiny prefills and probe overhead (+2,572,508 blocks), not comparable to wave 19b's 3,485-3,499 tok/s",
+          "disk_churn": "disk.written_bytes +428.7 GB in 2h26m (last-hour counter 60.8 -> 201.3 GB), disk.read_bytes +89.2 GB, disk.kv_blocks 520,304 -> 35,692 (206.4 GB of KV blocks reclaimed); kv_demotions +6,156, kv_demotions_refused +1,009, kv_restores +15,988; capacity_failures 0, metal_failures 0"
+        },
+        "tenancy": "878 engine samples at 10 s over 146 min: 2,575 benchmark request-samples (all resident, <=15,629 tok) vs 3 co-tenant request-samples (the operator chat session, up to 87,043 tok, kv_mode=spill, ~30 s of the window). Attribution by prompt_tokens size. Contrast the same-day smoke run, where the operator session (221,058 tok) was 94% of peak residency and all the spill/demote deltas - which is why engine-side claims come from the wave only",
+        "re_derivation": "summarize.py recomputes mean reward / pass^1 / pass^2 from per-simulation records and matches tau2's own printed block for all three domains (0.8700/0.870/0.820, 0.7905/0.791/0.676, 0.8728/0.873/0.772), and reproduces tau2's DB-match and annotated-action counts (airline 177/182 read, 78/98 write; retail 428/458, 193/228; telecom 956/988 write). --from-rows recomputes every headline from the published tasks.jsonl alone (verified)",
+        "privacy": "tasks.jsonl publishes 476 per-simulation rows (ids, seed, reward + per-basis breakdown, db_match, action/assertion counts, tool calls, depth, duration) with NO message content, no tool arguments, no model free text; full transcripts stay local in ~/tau2-bench/data/simulations",
+        "limitations": "self-play; 2 trials only (no pass^3); retail is a 74/114 subset chosen by a property of the grading path, not difficulty; the 45 flipping tasks are not yet triaged into model error vs user-simulator drift vs grader shape; no per-domain engine-side latency split",
+        "files": "bench/tau2-bench/{README.md,run_wave.sh,summarize.py,sample_engine.py}; results/2026-11-19a/{RECORD.md,summary.json,tasks.jsonl,engine_config.json,upstream_summaries.txt,supervisor_pins.txt,status_before.json,status_after.json,engine_samples.jsonl,wave.log}"
       }
     ]
   },

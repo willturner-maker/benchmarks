@@ -1,0 +1,57 @@
+{
+  "run": "tau2-bench 2026-11-19a",
+  "upstream": {
+    "repo": "https://github.com/sierra-research/tau2-bench",
+    "tag": "v1.0.1",
+    "commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
+    "commit_date": "2026-07-16",
+    "modified": false,
+    "note": "no source edits; uv sync rewrote 2 lines of uv.lock (revision 3->5, version 1.0.0->1.0.1)",
+    "kept_outside_repo": "~/tau2-bench",
+    "on_pypi": false
+  },
+  "harness_env": {
+    "python": "3.12.16",
+    "venv": "~/tau2-bench/.venv (uv-managed)",
+    "litellm": "1.81.11"
+  },
+  "engine": {
+    "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+    "endpoint": "http://127.0.0.1:8000/v1",
+    "engine": "Splash 1.7.0",
+    "maximum_context_tokens": 262144,
+    "kv_capacity_tokens": 155648,
+    "maximum_batch_width": 4,
+    "stack_flags_read_from": "the running supervisor (pgrep -fl server.server), not a config file",
+    "not_restarted_for_this_wave": true
+  },
+  "tau2_config": {
+    "evaluation_type_default": "ALL",
+    "reward_basis_airline": [
+      "DB",
+      "COMMUNICATE"
+    ],
+    "reward_basis_retail": [
+      "DB",
+      "NL_ASSERTION"
+    ],
+    "reward_basis_telecom": [
+      "ENV_ASSERTION"
+    ],
+    "judge_in_reward_path": "none for the published task set (40 retail tasks excluded)",
+    "nl_judge_default": "gpt-4.1-2025-04-14 (no local override in v1.0.1)",
+    "temperature_agent": 0.0,
+    "seed": 300,
+    "num_trials": 2,
+    "max_concurrency": 3,
+    "max_steps": 200,
+    "max_errors": 10,
+    "max_tokens_per_call": 4096,
+    "self_play": true
+  },
+  "wall_clock": {
+    "start_utc": "2026-11-19T21:34:10Z",
+    "end_utc": "2026-11-20T00:00:34Z",
+    "elapsed_s": 8784
+  }
+}

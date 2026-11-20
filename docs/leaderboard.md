@@ -755,6 +755,73 @@ sandboxed** (four override attempts failed) with a destructive test that is opt-
 world's exact-match command table, and it drives `mean_tools`, so it belongs on every future row.
 `summarize.py` computes it per pass and per task.
 
+## τ²-bench — environment-graded agent tasks, reference host
+
+Fifth live suite, and the second one whose number **another machine can diff against its own**: an
+OpenAI-compatible endpoint and `uv sync` are the whole dependency list. Instrument is **third-party and
+unmodified** ([`sierra-research/tau2-bench`](https://github.com/sierra-research/tau2-bench), MIT), pinned to
+tag **`v1.0.1` = `fc0055dc…`** and cloned *outside* this repo. An agent and a user simulator converse over
+scripted tools with a real database; the reward comes from the **end state** (DB hash, env-assertion replay,
+substring check), not from a judge's opinion — which is why this suite is pinned to 1.x at all
+(2.x makes communication checks LLM-judged by default and replaces 50 reviewed retail + 50 telecom tasks
+**under the same ids**; upstream: *"No flag combination reproduces 1.0.1 inputs exactly"*).
+
+| Date | Pin | Domain (task scope) | Tasks × trials | **pass^1** | **pass^2** | trials disagree | all-fail | tool calls/sim | depth max |
+|---|---|---|---|---|---|---|---|---|---|
+| **2026-11-19a** | `v1.0.1`¹ | airline (all 50, `[DB, COMMUNICATE]`) | 50 × 2 | **0.8700** | **0.8200** | 5 (10.0 %) | 4 | 7.46 | 16,341 tok |
+| **2026-11-19a** | `v1.0.1`¹ | retail (**74 of 114**, judge-free)² | 74 × 2 | **0.7905** | **0.6757** | 17 (23.0 %) | 7 | 6.96 | 14,006 tok |
+| **2026-11-19a** | `v1.0.1`¹ | telecom (all 114 base, `[ENV_ASSERTION]`) | 114 × 2 | **0.8728** | **0.7719** | 23 (20.2 %) | 3 | 15.58 | 14,403 tok |
+
+476 simulations, **476 scored, 0 infrastructure errors**, 0 `agent_error`, 1 `max_steps`, in 2 h 26 min
+(12,088 completions, 78,251,808 prompt tokens, 5,329 tool calls). **Self-play**: the engine under test also
+plays the user simulator, so this row compares against other self-play rows and nothing else. **Never pool
+the domains** — different task counts and different graded components.
+
+**`pass^1 − pass^2` *is* the flip count.** τ²'s `pass^k` is per task `C(n_pass,k)/C(n_trials,k)` averaged over
+tasks, which with 2 trials means "both trials passed". So 45 of 238 tasks (18.9 %) flipped between two
+`temperature 0` trials, and the two published numbers carry no information beyond each other. The looser
+independent-trials variant (`mean p^k`) would print 0.845 / 0.733 / 0.822 — `summarize.py` prints both,
+because a row that quotes one without naming the definition is defective. Same mechanism as the 2026-11-13
+instance-state result and the tool-loop gate: **greedy does not pin agent behavior on this stack** (batch
+composition under `maximum_batch_width = 4`).
+
+**Engine side, this is a prefix-cache workload, not a KV-stress one.** Depth tops out at 16,341 tokens =
+**0.105× the 155,648-token KV budget**, and τ²'s own `--max-concurrency 3` keeps decode width under our
+`maximum_batch_width = 4` — the first suite here whose dominant decode width is **b3** (lifetime high-water
+`b1 59,969 / b2 35,920 / b3 179,929 / b4 5,801`). 78.25 M prompt tokens were requested and only
+**2,790,208 rows were prefilled**: `cache.reused_tokens` **+76,108,064 = 97.3 % of the requested prompt
+volume**, hit rate **0.7223 → 0.9671**. Engine `decode_output_tokens` **+2,098,867** vs τ²'s own 2,086,415
+completion tokens = **0.6 % agreement between independent instruments**. Window rates: decode ≈310 tok/s,
+`itl_ms` p50 7.94 → 9.68, `ttft_ms` p50 **172.5 ms**, draft acceptance **63.9 %**.
+
+**First non-zero `admission.*` counters on this engine.** Waves 19-ext/19b kept `admission.*` at 0 at every
+width (the queue we measured there was the scheduler prefill queue). Here `admission.waiting` peaked at 1,
+`waiting_memory` 1, `restoring` 2 — 3 concurrent ~15 k-token sessions plus one spill-mode co-tenant engaged
+a path 48 concurrent 55 k-token synthetic requests did not. Benchmark traffic stayed **100 %
+`kv_mode: resident`**, peak residency 3,025 pages = 96,800 tok = **0.62× KV budget**, while the persistent
+store churned **428.7 GB written** and reclaimed **206.4 GB of KV blocks** (`disk.kv_blocks` 520,304 →
+35,692) — worth knowing before running this suite on a laptop.
+
+Rerun: `bench/tau2-bench/run_wave.sh <wave-dir>` (judge-free task scope baked in) — re-derive the published
+numbers with `python3 bench/tau2-bench/summarize.py --wave-dir bench/tau2-bench/results/2026-11-19a
+--from-rows bench/tau2-bench/results/2026-11-19a/tasks.jsonl`. Details:
+[`docs/tau2-bench-benchmark-results.md`](tau2-bench-benchmark-results.md).
+
+¹ **Tag *and* commit, never a version string.** `main` declares `version = "2.0.0"` while carrying an
+`[Unreleased]` changelog section, and most 1.0.1 fixes landed on `main` without a bump. Every τ² record
+echoes `info.git_commit`, and `run_wave.sh` writes `supervisor_pins.txt` from `git rev-parse` plus the
+**running** supervisor's flags. No source files were edited; `uv sync` rewrote 2 lines of `uv.lock`
+(`revision 3→5`, `version 1.0.0→1.0.1`) and that drift is named in the record.
+² **The one deviation is a task-scope choice, and it is not optional locally.** 40 of retail's 114 tasks
+declare `nl_assertions`, so their reward path calls `gpt-4.1-2025-04-14` — on v1.0.1 a constant in
+`config.py` with no env override and no CLI flag, and the engine takes a single `--model` with no alias.
+Those tasks are excluded via upstream's own `--task-ids` (no benchmark data edited; ids listed in the runner
+and the record). Do not substitute `--task-split-name train`: that split is also 74/40 but a **different**
+74/40 (set-compared). Airline and telecom need no judge at all.
+³ **Transcripts stay local.** `tasks.jsonl` publishes per-simulation rows — ids, seed, reward and its
+per-basis breakdown, DB match, annotated-action and assertion counts, tool calls, depth, duration — but no
+message content, no tool arguments, no model free text. Reviewers recompute every headline from the rows.
+
 ## Reports — what's in each scorecard
 
 Self-contained HTML (no external assets, no build step). GitHub's file view shows source;
@@ -762,6 +829,9 @@ view them rendered through Pages (links), or open the files after a clone. Newes
 
 | Report | What's in it |
 |---|---|
+| [**τ²-bench — an agent benchmark you can actually reproduce**](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-bench.html) (`reports/2026-11-19-tau2-bench.html`) | New suite debut: `sierra-research/tau2-bench` @ `v1.0.1` (unmodified), 238 tasks × 2 trials = 476 scored simulations — per-domain `pass^1`/`pass^2` with the 45-task flip count, the judge-free scope (40 retail tasks excluded, `train`/`test` is not the boundary), and the engine story: 97.3 % of 78.25 M prompt tokens reused from cached KV, decode width b3 dominant, first non-zero `admission.*` counters |
+| [**Tool-loop gate**](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tool-loop-gate.html) (`reports/2026-11-19-tool-loop-gate.html`) | New suite debut: upstream `hermes_loop_gate.py` @ `6dc6f0e`, 6 passes / 120 task-runs, band 14–15/20, 0 parse failures, the 91/301 stub confound and the greedy-trace divergence |
+| [**Splash `--queue-size 64`**](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-queue-size.html) (`reports/2026-11-19-splash-queue-size.html`) | Stack move + rebuilt driver: the w40 refusal pinned to the `--queue-size` default of 32, then 48 concurrent 55k-token requests with zero refusals (17.04× the KV budget) and the finding that `admission.*` stayed 0 while the wait moved to the scheduler prefill queue |
 | [**All-suites day 2026-11-18**](https://willturner-maker.github.io/benchmarks/reports/2026-11-18-all-suites-day.html) (`reports/2026-11-18-all-suites-day.html`) | Four live suites re-run after a full freshness check (nothing to update): Resolve MCP first dispatch on MCP 5.3.4 + opencode 2.3.2 — warm render **1174 ms best on host** (with the wall-vs-internal metric disclosure and a flagged `probe_timeline_structure` regression candidate), F3 wave split **reproduced exactly** (0 preserved-native / 6 repaired, honesty 6/6, zero cross-writes); Splash best-w1-ever ladder (283.95, shape-preserving ×1.4 instance shift) + quietest KV path; visual-venv run6 (5th bit-identical pass); Blender morning-debut recap |
 | [**Blender benchmark — fixture-class debut**](https://willturner-maker.github.io/benchmarks/reports/2026-11-18-blender-benchmark.html) (`reports/2026-11-18-blender-benchmark.html`) | New suite debut: Cycles samples-per-minute on a custom scene (official Launcher has no custom-scene path — numbers never mix with official scores); series finals stand-in 7,581 (0.1 % same-day repro) vs generated-fixture 4,413 (Meshy Premium GLB, SHA-pinned, separate series by rule); lit→lit6 layout revisions priced per row incl. the −16 % lighting-composition cost; the voided mis-flagged run the `scene_line` read-back caught |
 | [**Agentic frontier — F-series**](https://willturner-maker.github.io/benchmarks/reports/2026-11-16-agentic-frontier.html) (`reports/2026-11-16-agentic-frontier.html`) | The series-two arc, waves `16` → `18l`: F1/F2/F3 product-physics briefs with the sealed loss matrix, the harness swap and the watertight V2 seal (16f 21/21 + 21/21, 745 events zero leaks), the 42-session effort A/B priced on the real suite (16/18 both arms, xhigh pays 3×), the friction wave whose rule shipped nothing, and Tier 4's discovery that the safe ripple path is invisible (0 preserved-native / 6 honest repairs) |

@@ -1,0 +1,78 @@
+{
+  "wave": "tau2-bench 2026-11-19a",
+  "domains": {
+    "airline": {
+      "tasks": 50,
+      "trials": 2,
+      "sims": 100,
+      "mean_reward": 0.87,
+      "pass_1": 0.87,
+      "pass_2": 0.82,
+      "tasks_both_pass": 41,
+      "tasks_trials_disagree": 5,
+      "tasks_all_trials_fail": 4,
+      "termination": {
+        "user_stop": 100
+      },
+      "tool_calls": 746,
+      "tool_calls_mean_per_sim": 7.46,
+      "prompt_tokens": 7981190,
+      "completion_tokens": 498958,
+      "depth_max_tokens": 16341,
+      "sim_duration_median_s": 48
+    },
+    "retail": {
+      "tasks": 74,
+      "trials": 2,
+      "sims": 148,
+      "mean_reward": 0.7905,
+      "pass_1": 0.7905,
+      "pass_2": 0.6757,
+      "tasks_both_pass": 50,
+      "tasks_trials_disagree": 17,
+      "tasks_all_trials_fail": 7,
+      "termination": {
+        "user_stop": 148
+      },
+      "tool_calls": 1030,
+      "tool_calls_mean_per_sim": 6.96,
+      "prompt_tokens": 12703789,
+      "completion_tokens": 510723,
+      "depth_max_tokens": 14006,
+      "sim_duration_median_s": 39
+    },
+    "telecom": {
+      "tasks": 114,
+      "trials": 2,
+      "sims": 228,
+      "mean_reward": 0.8728,
+      "pass_1": 0.8728,
+      "pass_2": 0.7719,
+      "tasks_both_pass": 88,
+      "tasks_trials_disagree": 23,
+      "tasks_all_trials_fail": 3,
+      "termination": {
+        "user_stop": 227,
+        "max_steps": 1
+      },
+      "tool_calls": 3553,
+      "tool_calls_mean_per_sim": 15.58,
+      "prompt_tokens": 57566829,
+      "completion_tokens": 1076734,
+      "depth_max_tokens": 14403,
+      "sim_duration_median_s": 58
+    }
+  },
+  "pooled_note": "do not pool: domains are differently weighted and differently graded (airline DB+COMMUNICATE, retail DB, telecom ENV_ASSERTION)",
+  "totals": {
+    "tasks": 238,
+    "sims": 476,
+    "tool_calls": 5329,
+    "completions": 12088,
+    "prompt_tokens": 78251808,
+    "completion_tokens": 2086415,
+    "tasks_both_pass": 179,
+    "tasks_trials_disagree": 45,
+    "tasks_all_trials_fail": 14
+  }
+}

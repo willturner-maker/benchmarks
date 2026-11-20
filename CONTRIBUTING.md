@@ -72,6 +72,39 @@ behavior). No footage, no container, no GPU toolchain — which is why these row
 table with those fields present. Do **not** run `hermes_native_battery.py` without reading upstream's
 warning that its file toolset cannot be sandboxed.
 
+### τ²-bench — full agent tasks, graded by the environment
+
+Also third-party and tag-pinned, and also reproducible on your hardware — but harder: an agent and a user
+simulator converse over scripted tools with a real database, and the reward comes from the **end state**
+(DB-state hash, in-process env-assertion replay, substring check).
+
+```bash
+git clone https://github.com/sierra-research/tau2-bench ~/tau2-bench
+cd ~/tau2-bench && git checkout v1.0.1 && uv sync     # NOT on PyPI; python >=3.12,<3.14
+```
+
+Then, from this repo:
+
+```bash
+TAU2_MODEL='openai/your-model-id' \
+TAU2_LLM_ARGS='{"temperature":0,"api_base":"http://127.0.0.1:8000/v1","api_key":"local","max_tokens":4096}' \
+  bench/tau2-bench/run_wave.sh bench/tau2-bench/results/2026-MM-DDa
+python3 bench/tau2-bench/summarize.py --wave-dir bench/tau2-bench/results/2026-MM-DDa \
+  --domains "airline retail telecom"
+```
+
+A community row must state: host, engine, model + quant, **tag and commit** (`v1.0.1` = `fc0055dc…` — never a
+version string, because `main` declares `2.0.0` while carrying an `[Unreleased]` section), **trial count**
+(≥ 2: our wave flipped 45 of 238 tasks between greedy trials), **which `pass^k` definition** it quotes
+(upstream `C(n_pass,k)/C(n_trials,k)` vs the looser `mean p^k` — they differ by 2.5–5.7 points), **self-play
+or cross-model** user simulator, **task scope** (airline 50 + retail 74 judge-free + telecom 114 is our set;
+the 40 judged retail tasks need `gpt-4.1-2025-04-14` and have no local override on 1.0.1 — if you judged them
+with a cloud model, say so and your row is **not** comparable to ours), and `--max-concurrency`. Publish
+`pass^1` **and** `pass^2` **and** the flip count, never a pooled cross-domain mean, and label which graded
+components each domain scores (telecom's `DB Match` is informational only). Run detached if you want the
+engine-side figures: our sampler attributes traffic by `prompt_tokens` size, so an operator chat session on
+the same engine is visible and separable — the smoke run showed it accounting for 94 % of peak residency.
+
 ### Visual venv
 
 ```bash

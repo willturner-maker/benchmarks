@@ -49,6 +49,19 @@
 
   <h2>Scorecards</h2>
   <ul>
+    <li><a class="card" href="reports/2026-11-19-tau2-bench.html">
+      <span class="name">An agent benchmark you can actually reproduce</span><span class="tag">new suite · τ²-bench · tag-pinned v1.0.1</span>
+      <div class="sub">The second suite here another machine can run — <b>238 tasks × 2 trials = 476 simulations,
+        all scored, 0 infrastructure errors</b> in 2 h 26 m, graded by the <b>environment</b> (DB-state hash,
+        in-process env assertions), not by a judge's opinion. <b>airline pass^1 0.870 / pass^2 0.820</b>,
+        <b>retail (74 of 114, judge-free) 0.791 / 0.676</b>, <b>telecom 0.873 / 0.772</b>, self-play.
+        The honest number: <b>45 of 238 tasks flipped between two temperature-0 trials</b> — and because
+        τ²'s <code>pass^k</code> is <code>C(n_pass,k)/C(n_trials,k)</code>, <b>pass^1 − pass^2 <i>is</i> that
+        flip count</b>. Scope deviation published: the <b>40 retail tasks needing the <code>gpt-4.1</code>
+        judge are excluded</b> (v1.0.1 has no local override), and <code>train</code>/<code>test</code> is
+        <b>not</b> the judge boundary. Engine side: <b>97.3 % of 78.25 M prompt tokens served from cached
+        KV</b>, decode width <b>b3</b> dominant, and the <b>first non-zero <code>admission.*</code> counters</b>
+        this engine has ever shown.</div></a></li>
     <li><a class="card" href="reports/2026-11-19-tool-loop-gate.html">
       <span class="name">The model stops using tools — it just doesn't stop early</span><span class="tag">new suite · tool-loop gate · upstream-pinned</span>
       <div class="sub">First run of the only suite here another machine can reproduce with <b>no container, VM,
