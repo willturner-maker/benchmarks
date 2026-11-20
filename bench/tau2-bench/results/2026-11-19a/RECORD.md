@@ -174,3 +174,7 @@ record's notes was wrong. What survives: same input, `temperature 0`, no batchin
 greedy output, first visible in the user-simulator role (its turns are essentially never byte-identical even
 at width 1). The remaining candidate is long-context numerical state in the persistent prefix cache, not batch
 composition; isolating that needs a fresh-cache-vs-warm-cache arm. No number in this record changed.
+
+**Seed-inert probe, re-run after the control** (same engine launch, idle, `probe_seed_inert.sh` as published):
+all three calls — seed `626729`, seed `373753`, seed `626729` again — digest to the same greedy output
+(`sha1 bae7e824885e6dbc`). The claim this record makes about the seed reproduces from the published script.
