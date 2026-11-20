@@ -25,7 +25,7 @@ Run it in a window you can claim is single-tenant: python3 depth_probe.py --out 
 import argparse
 import json
 import os
-import statistics as st
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -91,6 +91,8 @@ def main():
     ap.add_argument("--out", default="/tmp/splash-bench/depth_probe.jsonl")
     ap.add_argument("--turn-tokens", type=int, default=20000)
     ap.add_argument("--max-turns", type=int, default=16)
+    ap.add_argument("--sample-interval", type=float, default=1.0,
+                    help="intra-turn /status sampling seconds; the curve needs <=2 s")
     args = ap.parse_args()
 
     MODEL = get("/v1/models")["data"][0]["id"]
@@ -102,7 +104,11 @@ def main():
           f"turn size ~{args.turn_tokens:,} words, max {args.max_turns} turns", flush=True)
 
     header = {"method": "depth_probe", "kind": "setup", "model": MODEL, "seed_namespace": SEED_NAMESPACE,
-              "turn_words": args.turn_tokens, "context_bounds": cb,
+              "turn_words": args.turn_tokens, "turn_target_tokens": args.turn_tokens,
+              "sample_interval_s": args.sample_interval,
+              "onset_resolution_note": "spill onset can only be resolved to within one turn step; "
+                                       "turn_target_tokens / kv_capacity_tokens is that step",
+              "context_bounds": cb,
               "maximum_context_tokens": s0.get("maximum_context_tokens"),
               "kv_capacity_tokens": budget,
               "kv_page_bytes": s0["memory_plan"]["budget"].get("kv_page_bytes"),
@@ -132,17 +138,39 @@ def main():
         msgs.append({"role": "user", "content": block})
         pre = gauges(get("/status"))
         t0 = time.time()
+        rec_t_start = round(t0, 3)
+        # intra-turn occupancy: the request lasts ~7 s, so an external 10 s sampler sees none of it.
+        intra = {"peak_pages_active": 0, "peak_kv_tokens": 0, "peak_waiting_memory": 0,
+                 "peak_suspended": 0, "samples": 0}
+        stop_samp = threading.Event()
+
+        def sample_intra():
+            while not stop_samp.is_set():
+                try:
+                    g = gauges(get("/status"))
+                except Exception:
+                    time.sleep(args.sample_interval); continue
+                intra["peak_pages_active"] = max(intra["peak_pages_active"], g["kv.pages_active"])
+                intra["peak_kv_tokens"] = max(intra["peak_kv_tokens"], g["kv_tokens_active"])
+                intra["peak_waiting_memory"] = max(intra["peak_waiting_memory"], g["admission.waiting_memory"])
+                intra["peak_suspended"] = max(intra["peak_suspended"], g["admission.suspended"])
+                intra["samples"] += 1
+                time.sleep(args.sample_interval)
+
+        th = threading.Thread(target=sample_intra, daemon=True); th.start()
         d, err = chat(msgs, 8)
         wall = round(time.time() - t0, 2)
+        stop_samp.set(); th.join(timeout=3)
         post_s = get("/status")
         post = gauges(post_s)
         now = counters(post_s)
         deltas = {k: now[k] - prev[k] for k in now}
         prev = now
         rec = {"method": "depth_probe", "kind": "turn", "turn": turn,
-               "sent_words_cum": sent_words, "messages": len(msgs)}
+               "sent_words_cum": sent_words, "messages": len(msgs),
+               "t_start": rec_t_start, "t_end": round(time.time(), 3)}
         if err:
-            rec.update({"ok": False, "error": err, "wall_s": wall,
+            rec.update({"ok": False, "error": err, "wall_s": wall, "intra_turn": intra,
                         "gauges_pre": pre, "gauges_post": post, "counter_deltas": deltas})
             with open(args.out, "a") as f:
                 f.write(json.dumps(rec) + "\n")
@@ -156,7 +184,7 @@ def main():
                     "finish_reason": choice.get("finish_reason"),
                     "content": (choice.get("message") or {}).get("content"),
                     "wall_s": wall, "gauges_pre": pre, "gauges_post": post,
-                    "counter_deltas": deltas,
+                    "counter_deltas": deltas, "intra_turn": intra,
                     "prompt_over_resident": round(pt / budget, 3) if pt else None})
         with open(args.out, "a") as f:
             f.write(json.dumps(rec) + "\n")
