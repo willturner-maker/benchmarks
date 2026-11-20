@@ -29,7 +29,7 @@ LLM_ARGS=${TAU2_LLM_ARGS:-'{"temperature":0,"api_base":"http://127.0.0.1:8000/v1
 TRIALS=${TAU2_TRIALS:-2}
 CONC=${TAU2_CONCURRENCY:-3}
 SEED=${TAU2_SEED:-300}
-RETAIL_FREE='0 1 5 6 7 8 9 10 11 12 13 14 15 17 18 20 22 23 25 26 27 30 31 32 33 34 35 41 42 48 49 50 51 52 53 55 56 57 58 61 64 65 66 69 71 72 73 74 75 77 78 79 80 81 82 83 84 85 86 87 88 90 91 92 93 94 96 97 98 99 100 101 102 112'
+RETAIL_FREE=(0 1 5 6 7 8 9 10 11 12 13 14 15 17 18 20 22 23 25 26 27 30 31 32 33 34 35 41 42 48 49 50 51 52 53 55 56 57 58 61 64 65 66 69 71 72 73 74 75 77 78 79 80 81 82 83 84 85 86 87 88 90 91 92 93 94 96 97 98 99 100 101 102 112)   # array, not string: safe under bash AND zsh
 
 WAVE=${1:?wave dir required}
 shift
@@ -67,10 +67,9 @@ run_domain() {
   echo "  exit=$? $(date -u +%H:%M:%SZ)" | tee -a "$WAVE/wave.log"
 }
 
-# shellcheck disable=SC2086  # word splitting is intended: nargs="+" needs separate args
 for dom in "${DOMS[@]}"; do
   case "$dom" in
-    retail) run_domain retail --task-ids $RETAIL_FREE ;;
+    retail) run_domain retail --task-ids "${RETAIL_FREE[@]}" ;;
     *) run_domain "$dom" ;;
   esac
 done
