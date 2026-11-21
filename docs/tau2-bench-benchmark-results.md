@@ -19,13 +19,16 @@ telecom 0.693, and the flip *rate* replicated (65/238 at 3 trials) while the fli
 - [The scores](#the-scores-238-tasks--476-simulations)
 - [Judge-free scope: the one deviation](#judge-free-scope-the-one-deviation)
 - [Stability: pass^1 − pass^2 *is* the flip count](#stability-pass1--pass2-is-the-flip-count)
-- [Three-trial wave 2026-11-20 — pass^3 and the stability correction](#three-trial-wave-2026-11-20--pass3-published-and-the-stability-story-corrected-raw-benchtau2-benchresults2026-11-20-pass3)
-- [Flip triage: what the 45 flips actually are](#flip-triage-what-the-45-flips-actually-are)
+- [Flip triage: where the 45 flips first appear](#flip-triage-where-the-45-flips-first-appear)
 - [Width control: batching is not the mechanism](#width-control-batching-is-not-the-mechanism)
 - [Reading tau2's own output correctly](#reading-tau2s-own-output-correctly)
 - [Engine findings: a prefix-cache workload, not a KV-stress workload](#engine-findings-a-prefix-cache-workload-not-a-kv-stress-workload)
 - [Comparability rules](#comparability-rules)
 - [Running it on your own machine](#running-it-on-your-own-machine)
+- [Three-trial wave 2026-11-20 — pass^3 published](#three-trial-wave-2026-11-20--pass3-published-and-the-stability-story-corrected-raw-benchtau2-benchresults2026-11-20-pass3)
+- [Effort A/B 2026-11-21 — agent at xhigh](#effort-ab-2026-11-21--agent-at-reasoning_effort-xhigh-user-simulator-unchanged-raw-benchtau2-benchresults2026-11-21-pass3-xhigh)
+- [Same-seed repeat 2026-11-21 — the flip floor is the engine](#same-seed-repeat-2026-11-21--the-flip-floor-is-the-engine-not-user-resampling-raw-benchtau2-benchresults2026-11-21-sameseed-pair)
+- [Pass^3 replay 2026-11-21 — the new epoch reproduces the headline](#pass3-replay-2026-11-21--the-new-engine-epoch-reproduces-the-old-epoch-headline-raw-benchtau2-benchresults2026-11-21-pass3-replay)
 
 ## Why this instrument, and why pinned at 1.0.1
 
@@ -362,6 +365,33 @@ Both windows were the tenancy-cleanest τ² runs here: 0 co-tenant samples, 0 sp
 confound: this is the first pair on the new epoch and both telecom arms (+3.5/+4.4 pts over the medium
 wave) sit high on single-trial waves; no epoch effect is claimed. Not a scored row — the per-arm pass^1
 values (0.857 / 0.882 pooled) are context, and `pass^2` is undefined at one trial.
+*(Update, same day: the epoch confound was tested by the pass^3 replay below — no epoch effect.)*
+
+## Pass^3 replay 2026-11-21 — the new engine epoch reproduces the old-epoch headline (raw: `bench/tau2-bench/results/2026-11-21-pass3-replay/`)
+
+The 2026-11-20-pass3 headline predates the 05:03Z engine restart, and the same-seed pair's telecom
+arms ran high on the new epoch. The old epoch is unrecoverable, so the epoch question is settled by
+rerunning the **exact wave** (238 judge-free tasks × 3 trials, seed 300, medium, same argv-pinned
+server) on the new epoch — instance `08d662f6`, 227 min, 714/714 scored, upstream re-derivation
+agrees in every domain.
+
+| domain | pass^1 | pass^2 | pass^3 | Δ vs old epoch (pts) |
+|---|---|---|---|---|
+| airline | 0.8933 | 0.8533 | 0.8200 | +2.7 / +3.3 / +4.0 |
+| retail (judge-free) | 0.7703 | 0.6396 | 0.5541 | −5.4 / −7.7 / −8.1 |
+| telecom | 0.8713 | 0.8041 | 0.7544 | +1.2 / +4.4 / +6.1 |
+| **all 238** | **0.8445** | **0.7633** | **0.7059** | **−0.6 / +0.4 / +1.3** |
+
+**Verdict: no epoch effect.** Telecom returns to its old-epoch level (0.871 vs 0.860 pass^1, far below
+the same-seed pair's ~0.92 arms) — that elevation was arm-level sampling noise. The aggregate deltas
+(≤1.3 pts) sit inside the run-to-run band the flip rates themselves predict (15–27 %); retail's
+−5.4/−7.7/−8.1 is the suite's noisiest domain moving within its own trial-disagreement spread
+(29/74 tasks disagree across trials in this very wave). The published pass^3 headline
+(0.8501 / 0.7591 / 0.6933) stands unadjusted.
+
+Tenancy: 45 co-tenant request-samples (this agent's own session), Δ261 spill moves, Δ10 suspensions —
+lighter than the old-epoch window, and far from the invalidation threshold (rule: sustained co-tenant
+pressure invalidates; this was not sustained).
 
 To publish a row, follow the numbered rules in `bench/tau2-bench/README.md` and send a PR — see
 [Community runs](leaderboard.md#community-runs--your-numbers).
