@@ -1,35 +1,51 @@
 #!/usr/bin/env python3
-"""Build a draft-free manifest directory for the Splash drafter-off A/B.
+"""Build a draft-free assembly for the Splash drafter-off A/B.
 
-The drafter (incoai/Qwen3.8-Flash-Next-DFlash2) is resolved into the model directory as `draft/`
-plus `draft/*` entries in model.json. The engine auto-loads it from there. To serve the SAME target
-weights WITHOUT the drafter, this builds a sibling named-model directory whose model.json manifest
-drops every draft entry, with config/target/tokenizer/vision symlinked to the originals - target
-weights stay byte-identical by construction (same files), and the live model directory is never
-touched.
+The drafter (incoai/Qwen3.8-Flash-Next-DFlash2) is resolved into the model assembly as `draft/`
+plus `draft/*` entries in model.json; the engine auto-loads it from there. To serve the SAME target
+weights WITHOUT the drafter, build a sibling assembly whose model.json drops every draft entry,
+with config/target/tokenizer/vision symlinked - target weights stay byte-identical by construction.
 
-Prints the farm path on success.
+Why the first attempt failed (attempt 1 rejected at serve time): the supervisor's hold()
+(install/assembly.py) requires the model path to resolve to a directory whose PARENT is named
+`.resolved` - a named dir under models/ISTA-DASLab/ is not an assembly. And collect_garbage()
+removes .resolved assemblies that "no selection links and no server holds" - so the farm also
+gets a selection link (a named model-ID symlink pointing at it), which is also how every real
+install is referenced.
+
+Never touches the live assembly. Prints the selection-link path (what the supervisor is launched
+with) on success.
 """
 import json, os, sys
 from pathlib import Path
 
 MODELS = Path.home() / "Library/Application Support/Splash/models"
 NAME = "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S"
-FARM_NAME = "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S-nodraft"
+ASM = MODELS / ".resolved" / "nodraft-f073087d1dff7edaf96fe2f5ee568630"
+LINK = MODELS / "ISTA-DASLab" / "Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S-nodraft"
 
-src = MODELS / NAME            # symlink into .resolved/<hash>
+src = MODELS / NAME
+if not src.is_symlink():
+    sys.exit("live named model dir missing/unexpected")
 src_res = src.resolve()
-farm = MODELS / FARM_NAME
-if farm.exists():
-    print(str(farm)); sys.exit(0)
 
-manifest = json.loads((src_res / "model.json").read_text())
-files = {k: v for k, v in manifest.get("files", {}).items() if not k.startswith("draft/")}
-sources = {k: v for k, v in manifest.get("sources", {}).items() if k != "draft"}
-assert "draft" not in sources and not any(k.startswith("draft/") for k in files)
-farm.mkdir(parents=True)
-(farm / "model.json").write_text(json.dumps({"files": files, "sources": sources}, indent=2))
-for entry in ("config.json", "target", "tokenizer", "vision"):
-    if (src_res / entry).exists():
-        os.symlink(src_res / entry, farm / entry)
-print(str(farm))
+# clean the rejected attempt-1 layout if present
+stale = MODELS / "ISTA-DASLab" / "Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S-nodraft"
+if stale.is_dir():                       # attempt 1 built a plain DIR where the LINK now goes
+    import shutil
+    shutil.rmtree(stale)
+
+if not ASM.exists():
+    manifest = json.loads((src_res / "model.json").read_text())
+    files = {k: v for k, v in manifest.get("files", {}).items() if not k.startswith("draft/")}
+    sources = {k: v for k, v in manifest.get("sources", {}).items() if k != "draft"}
+    assert sources and files and not any(k.startswith("draft/") for k in files)
+    ASM.mkdir(parents=True)
+    (ASM / "model.json").write_text(json.dumps({"files": files, "sources": sources}, indent=2))
+    for entry in ("config.json", "target", "tokenizer", "vision"):
+        if (src_res / entry).exists():
+            os.symlink(src_res / entry, ASM / entry)
+if LINK.is_symlink():
+    LINK.unlink()
+os.symlink(ASM, LINK)
+print(str(LINK))

@@ -1,0 +1,11 @@
+2026-11-21T14:54:43Z phase 1: retail-40 ENV closure wave
+2026-11-21T16:19:43Z phase 1 exit=0
+2026-11-21T16:19:43Z phase 2: drafter-off arm
+2026-11-21T16:19:43Z farm: \~/Library/Application Support/Splash/models/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S-nodraft
+drafted_tokens delta over probe: 49
+2026-11-21T16:24:50Z DRAFTER STILL ON - arm invalid, restoring without measuring
+drafted_tokens delta over probe: 288
+2026-11-21T16:25:05Z pin restored, drafter ON again
+2026-11-21T16:25:05Z drafter arm result: ok=0
+2026-11-21T16:25:05Z phase 3: pass^3 replay (238 x 3, medium) on the new epoch
+2026-11-21T16:31:15Z arm-1 postmortem: farm layout fixed (.resolved assembly + selection link); rerun via run_drafter_arm.sh gated on instance pid; current engine 08d662f6 (chain-launched) is serving phase 3
