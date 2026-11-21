@@ -20,7 +20,7 @@ unified memory, macOS 27.2.0.
 | Machine-readable results schema | [`docs/schema.md`](docs/schema.md) |
 | Community runs (class B / other hosts) | [`docs/leaderboard.md#community-runs--your-numbers`](docs/leaderboard.md#community-runs--your-numbers) |
 | Self-contained HTML scorecards (GitHub Pages) | [index.html](https://willturner-maker.github.io/benchmarks/) or the `reports/` directory |
-| Newest wave | [τ² three trials — pass^3 0.693 and the flip roster that moved, 2026-11-20](https://willturner-maker.github.io/benchmarks/reports/2026-11-20-tau2-pass3.html) · also new that day: [tenancy A/B](bench/splash-concurrency/results/tenancy-2026-11-20/RECORD.md) (co-tenant residency, not volume, trips the KV pool) |
+| Newest wave | [τ² effort A/B — xhigh agent costs nothing and lifts pass^3 to 0.714, 2026-11-21](https://willturner-maker.github.io/benchmarks/reports/2026-11-21-tau2-effort-ab.html) · the flip rate doesn't move (26.5 % vs 27.3 %) — the decay floor is user-sampling, not the agent |
 | Newest suite (debut) | [τ²-bench — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-bench.html) · environment-graded agent tasks, reproducible on any OpenAI-compatible endpoint, no containers · (also new: [the width control that refuted its own first mechanism claim](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-width-control.html), and the [Tool-loop gate](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tool-loop-gate.html), same day) |
 | Latest combined (multi-suite) results | [All-suites day, 2026-11-18](https://willturner-maker.github.io/benchmarks/reports/2026-11-18-all-suites-day.html) |
 
@@ -54,6 +54,7 @@ render on Pages:
 - [τ²-bench — an agent benchmark you can actually reproduce — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-bench.html)
 - [τ² width control — the flip rate is not batching — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-width-control.html)
 - [τ² three trials — pass^3 and why the flip list moved — 2026-11-20](https://willturner-maker.github.io/benchmarks/reports/2026-11-20-tau2-pass3.html)
+- [τ² effort A/B — xhigh agent, same flip rate, free wall time — 2026-11-21](https://willturner-maker.github.io/benchmarks/reports/2026-11-21-tau2-effort-ab.html)
 - [Splash KV at 17× budget — width becomes queue depth, not memory — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-kv-clean-window.html)
 - [Splash depth probe — 1.64× the KV budget and still serving — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-splash-depth-probe.html)
 - [Tool-loop gate — the model stops using tools, it just doesn't stop early — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tool-loop-gate.html)

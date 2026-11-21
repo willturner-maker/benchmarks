@@ -129,7 +129,9 @@ def main():
               f"median onset {sorted(r['onset'] for r in rs)[len(rs)//2] if rs else '-'}")
     print("\nNOTE seeds per trial differ by design (626729 vs 373753 for --seed 300), so pass^k samples a")
     print("fresh user simulator per trial. Engine-nondeterminism share needs a same-seed repeat, not this table.")
-    json.dump(rows, open(os.path.expanduser("~/tau2-wave-2026-11-19/flip_triage.json"), "w"), indent=1)
+    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results", args.wave, "flip_triage.json")
+    json.dump(rows, open(out, "w"), indent=1)
+    print("wrote", out)
     return 0
 
 

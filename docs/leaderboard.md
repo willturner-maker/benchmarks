@@ -816,6 +816,14 @@ substring check), not from a judge's opinion — which is why this suite is pinn
 | **2026-11-20-pass3** | `v1.0.1`¹ | airline (all 50, `[DB, COMMUNICATE]`) | 50 × 3 | **0.8667** | 0.8200 · ^3 **0.7800** | 7 (14.0 %) | 4 | 7.75 | 19,035 tok |
 | **2026-11-20-pass3** | `v1.0.1`¹ | retail (**74 of 114**, judge-free)² | 74 × 3 | **0.8243** | 0.7162 · ^3 **0.6351** | 24 (32.4 %) | 3 | 6.92 | 13,790 tok |
 | **2026-11-20-pass3** | `v1.0.1`¹ | telecom (all 114 base, `[ENV_ASSERTION]`) | 114 × 3 | **0.8596** | 0.7602 · ^3 **0.6930** | 34 (29.8 %) | 1 | 15.70 | 13,616 tok |
+| **2026-11-21-pass3-xhigh** ³ | `v1.0.1`¹ | airline, agent `reasoning_effort: xhigh` | 50 × 3 | **0.8867** | 0.8333 · ^3 **0.8000** | 8 (16.0 %) | 2 | 7.55 | 19,037 tok |
+| **2026-11-21-pass3-xhigh** ³ | `v1.0.1`¹ | retail (**74 of 114**), agent xhigh | 74 × 3 | 0.8153 | 0.7117 · ^3 **0.6486** | 23 (31.1 %) | 3 | 6.96 | 14,088 tok |
+| **2026-11-21-pass3-xhigh** ³ | `v1.0.1`¹ | telecom, agent xhigh | 114 × 3 | **0.8860** | 0.7924 · ^3 **0.7193** | 32 (28.1 %) | 0 | 15.61 | 14,448 tok |
+
+³ Effort A/B: identical to the pass^3 rows except `--agent-llm-args` adds `"reasoning_effort":"xhigh"` — the
+user simulator keeps baseline args/seed, so the delta is agent-attributable. All 238 pooled: pass^1 **0.8641**,
+pass^2 **0.7759**, pass^3 **0.7143** (+1.4 / +1.7 / +2.1 pts), flip rate unchanged (63/238 vs 65/238), and the
+wave cost *less* than medium (3 h 42 m, −1.6 % prompt tokens).
 
 476 simulations, **476 scored, 0 infrastructure errors**, 0 `agent_error`, 1 `max_steps`, in 2 h 26 min
 (12,088 completions, 78,251,808 prompt tokens, 5,329 tool calls). **Self-play**: the engine under test also

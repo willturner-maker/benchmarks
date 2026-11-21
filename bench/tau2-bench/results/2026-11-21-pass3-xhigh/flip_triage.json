@@ -1,0 +1,2144 @@
+[
+ {
+  "domain": "airline",
+  "task": "29",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "assistant",
+  "idx": 6,
+  "onset": 0.29,
+  "turns": 21,
+  "user_var": 3,
+  "user_turns": 5,
+  "tools": "6->6",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "airline",
+  "task": "11",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.11,
+  "turns": 19,
+  "user_var": 4,
+  "user_turns": 5,
+  "tools": "7->6",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "airline",
+  "task": "11",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.11,
+  "turns": 19,
+  "user_var": 4,
+  "user_turns": 5,
+  "tools": "7->6",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "airline",
+  "task": "45",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.11,
+  "turns": 18,
+  "user_var": 3,
+  "user_turns": 4,
+  "tools": "5->5",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "airline",
+  "task": "45",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.11,
+  "turns": 18,
+  "user_var": 6,
+  "user_turns": 7,
+  "tools": "2->5",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "airline",
+  "task": "29",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.1,
+  "turns": 21,
+  "user_var": 3,
+  "user_turns": 5,
+  "tools": "6->6",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "airline",
+  "task": "32",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.06,
+  "turns": 18,
+  "user_var": 3,
+  "user_turns": 3,
+  "tools": "9->6",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "airline",
+  "task": "32",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.06,
+  "turns": 18,
+  "user_var": 2,
+  "user_turns": 3,
+  "tools": "10->6",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "airline",
+  "task": "23",
+  "dir": "0.0->1.0",
+  "comp": [
+   "COMMUNICATE:0.0->1.0"
+  ],
+  "db": "True->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.04,
+  "turns": 27,
+  "user_var": 5,
+  "user_turns": 5,
+  "tools": "13->10",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "airline",
+  "task": "23",
+  "dir": "1.0->0.0",
+  "comp": [
+   "COMMUNICATE:1.0->0.0"
+  ],
+  "db": "True->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.04,
+  "turns": 27,
+  "user_var": 5,
+  "user_turns": 5,
+  "tools": "10->15",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "airline",
+  "task": "42",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.04,
+  "turns": 24,
+  "user_var": 5,
+  "user_turns": 5,
+  "tools": "11->10",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "airline",
+  "task": "14",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 30,
+  "user_var": 7,
+  "user_turns": 7,
+  "tools": "9->8",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "airline",
+  "task": "14",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 29,
+  "user_var": 6,
+  "user_turns": 6,
+  "tools": "8->10",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "airline",
+  "task": "42",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 32,
+  "user_var": 5,
+  "user_turns": 5,
+  "tools": "11->11",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "airline",
+  "task": "44",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 30,
+  "user_var": 2,
+  "user_turns": 2,
+  "tools": "27->22",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "airline",
+  "task": "44",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 44,
+  "user_var": 5,
+  "user_turns": 5,
+  "tools": "27->18",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "31",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "assistant",
+  "idx": 16,
+  "onset": 0.73,
+  "turns": 22,
+  "user_var": 2,
+  "user_turns": 5,
+  "tools": "9->8",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "102",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "assistant",
+  "idx": 8,
+  "onset": 0.29,
+  "turns": 28,
+  "user_var": 4,
+  "user_turns": 6,
+  "tools": "10->9",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "101",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "assistant",
+  "idx": 10,
+  "onset": 0.26,
+  "turns": 38,
+  "user_var": 6,
+  "user_turns": 9,
+  "tools": "10->10",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "41",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "assistant",
+  "idx": 6,
+  "onset": 0.25,
+  "turns": 24,
+  "user_var": 2,
+  "user_turns": 4,
+  "tools": "8->9",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "0",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 3,
+  "onset": 0.2,
+  "turns": 15,
+  "user_var": 3,
+  "user_turns": 4,
+  "tools": "4->5",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "64",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 3,
+  "onset": 0.19,
+  "turns": 16,
+  "user_var": 3,
+  "user_turns": 4,
+  "tools": "5->4",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "9",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 3,
+  "onset": 0.15,
+  "turns": 20,
+  "user_var": 4,
+  "user_turns": 5,
+  "tools": "6->5",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "9",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 3,
+  "onset": 0.15,
+  "turns": 20,
+  "user_var": 4,
+  "user_turns": 5,
+  "tools": "5->6",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "90",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 3,
+  "onset": 0.15,
+  "turns": 20,
+  "user_var": 4,
+  "user_turns": 5,
+  "tools": "5->6",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "31",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 3,
+  "onset": 0.14,
+  "turns": 22,
+  "user_var": 4,
+  "user_turns": 5,
+  "tools": "8->9",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "90",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 3,
+  "onset": 0.14,
+  "turns": 22,
+  "user_var": 4,
+  "user_turns": 5,
+  "tools": "7->6",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "93",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 3,
+  "onset": 0.12,
+  "turns": 24,
+  "user_var": 4,
+  "user_turns": 5,
+  "tools": "8->7",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "71",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 3,
+  "onset": 0.11,
+  "turns": 28,
+  "user_var": 6,
+  "user_turns": 7,
+  "tools": "8->7",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "102",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 3,
+  "onset": 0.11,
+  "turns": 28,
+  "user_var": 5,
+  "user_turns": 6,
+  "tools": "10->9",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "18",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.09,
+  "turns": 22,
+  "user_var": 5,
+  "user_turns": 6,
+  "tools": "5->6",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "18",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.09,
+  "turns": 22,
+  "user_var": 4,
+  "user_turns": 6,
+  "tools": "5->6",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "64",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.09,
+  "turns": 22,
+  "user_var": 3,
+  "user_turns": 6,
+  "tools": "5->5",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "84",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.09,
+  "turns": 22,
+  "user_var": 4,
+  "user_turns": 5,
+  "tools": "6->7",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "84",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.09,
+  "turns": 22,
+  "user_var": 4,
+  "user_turns": 5,
+  "tools": "6->7",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "88",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.09,
+  "turns": 22,
+  "user_var": 3,
+  "user_turns": 5,
+  "tools": "7->6",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "0",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.07,
+  "turns": 15,
+  "user_var": 4,
+  "user_turns": 4,
+  "tools": "6->4",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "34",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.07,
+  "turns": 14,
+  "user_var": 4,
+  "user_turns": 4,
+  "tools": "3->6",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "34",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.07,
+  "turns": 14,
+  "user_var": 4,
+  "user_turns": 4,
+  "tools": "3->4",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "87",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.07,
+  "turns": 28,
+  "user_var": 3,
+  "user_turns": 4,
+  "tools": "10->11",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "13",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.06,
+  "turns": 18,
+  "user_var": 5,
+  "user_turns": 5,
+  "tools": "5->4",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "13",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.06,
+  "turns": 18,
+  "user_var": 5,
+  "user_turns": 5,
+  "tools": "4->5",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "33",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.06,
+  "turns": 18,
+  "user_var": 4,
+  "user_turns": 4,
+  "tools": "6->5",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "33",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.06,
+  "turns": 18,
+  "user_var": 4,
+  "user_turns": 4,
+  "tools": "6->5",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "32",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.05,
+  "turns": 20,
+  "user_var": 4,
+  "user_turns": 4,
+  "tools": "10->6",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "32",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.05,
+  "turns": 20,
+  "user_var": 4,
+  "user_turns": 4,
+  "tools": "10->6",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "88",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.05,
+  "turns": 22,
+  "user_var": 5,
+  "user_turns": 5,
+  "tools": "8->6",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "93",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.05,
+  "turns": 20,
+  "user_var": 4,
+  "user_turns": 4,
+  "tools": "8->6",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "41",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.04,
+  "turns": 24,
+  "user_var": 4,
+  "user_turns": 4,
+  "tools": "8->9",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "71",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.04,
+  "turns": 28,
+  "user_var": 7,
+  "user_turns": 7,
+  "tools": "7->8",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "74",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.04,
+  "turns": 26,
+  "user_var": 5,
+  "user_turns": 5,
+  "tools": "9->9",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "74",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.04,
+  "turns": 25,
+  "user_var": 5,
+  "user_turns": 5,
+  "tools": "9->9",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "78",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.04,
+  "turns": 28,
+  "user_var": 6,
+  "user_turns": 6,
+  "tools": "8->9",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "78",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.04,
+  "turns": 28,
+  "user_var": 6,
+  "user_turns": 6,
+  "tools": "8->8",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "82",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.04,
+  "turns": 24,
+  "user_var": 5,
+  "user_turns": 5,
+  "tools": "7->7",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "82",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.04,
+  "turns": 24,
+  "user_var": 5,
+  "user_turns": 5,
+  "tools": "7->7",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "87",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.04,
+  "turns": 28,
+  "user_var": 4,
+  "user_turns": 4,
+  "tools": "10->11",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "retail",
+  "task": "22",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 32,
+  "user_var": 7,
+  "user_turns": 9,
+  "tools": "9->7",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "22",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 32,
+  "user_var": 9,
+  "user_turns": 9,
+  "tools": "7->7",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "23",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 34,
+  "user_var": 6,
+  "user_turns": 6,
+  "tools": "11->11",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "23",
+  "dir": "1.0->0.0",
+  "comp": [
+   "DB:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 34,
+  "user_var": 6,
+  "user_turns": 6,
+  "tools": "11->11",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "retail",
+  "task": "101",
+  "dir": "0.0->1.0",
+  "comp": [
+   "DB:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 38,
+  "user_var": 9,
+  "user_turns": 9,
+  "tools": "10->10",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:Easy]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 12,
+  "onset": 0.19,
+  "turns": 63,
+  "user_var": 21,
+  "user_turns": 24,
+  "tools": "19->24",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:Easy]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 10,
+  "onset": 0.15,
+  "turns": 65,
+  "user_var": 19,
+  "user_turns": 27,
+  "tools": "30->19",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_apn_mms_setting|break_app_sms_permission|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:None]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 10,
+  "onset": 0.12,
+  "turns": 81,
+  "user_var": 32,
+  "user_turns": 34,
+  "tools": "29->25",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]break_apn_mms_setting|data_mode_off|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 6,
+  "onset": 0.1,
+  "turns": 58,
+  "user_var": 16,
+  "user_turns": 24,
+  "tools": "24->15",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|break_apn_mms_setting|break_app_both_permissions|data_mode_off|data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 6,
+  "onset": 0.1,
+  "turns": 62,
+  "user_var": 20,
+  "user_turns": 26,
+  "tools": "25->22",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_app_sms_permission|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_off[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 6,
+  "onset": 0.07,
+  "turns": 86,
+  "user_var": 31,
+  "user_turns": 37,
+  "tools": "27->25",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]airplane_mode_on|bad_network_preference|bad_vpn|data_saver_mode_on|user_abroad_roaming_disabled_on[PERSONA:Easy]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.05,
+  "turns": 40,
+  "user_var": 12,
+  "user_turns": 16,
+  "tools": "10->17",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]break_apn_mms_setting|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.04,
+  "turns": 54,
+  "user_var": 13,
+  "user_turns": 22,
+  "tools": "16->20",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_app_storage_permission|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 3,
+  "onset": 0.04,
+  "turns": 78,
+  "user_var": 24,
+  "user_turns": 35,
+  "tools": "22->23",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]airplane_mode_on|bad_network_preference|data_mode_off|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 40,
+  "user_var": 16,
+  "user_turns": 16,
+  "tools": "12->17",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]bad_vpn|data_mode_off|data_usage_exceeded|user_abroad_roaming_disabled_off[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 40,
+  "user_var": 13,
+  "user_turns": 14,
+  "tools": "21->13",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]airplane_mode_on|bad_network_preference|bad_vpn|data_saver_mode_on|user_abroad_roaming_disabled_on[PERSONA:Easy]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 36,
+  "user_var": 10,
+  "user_turns": 13,
+  "tools": "12->17",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]airplane_mode_on|bad_network_preference|data_saver_mode_on|data_usage_exceeded|user_abroad_roaming_disabled_off[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.03,
+  "turns": 40,
+  "user_var": 12,
+  "user_turns": 14,
+  "tools": "17->12",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]airplane_mode_on|bad_network_preference|bad_vpn|data_mode_off|data_saver_mode_on|data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.03,
+  "turns": 66,
+  "user_var": 22,
+  "user_turns": 27,
+  "tools": "29->18",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]break_apn_mms_setting|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.03,
+  "turns": 60,
+  "user_var": 17,
+  "user_turns": 25,
+  "tools": "17->20",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_wifi_calling|break_apn_mms_setting|data_mode_off|data_usage_exceeded|unseat_sim_card[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.03,
+  "turns": 62,
+  "user_var": 19,
+  "user_turns": 26,
+  "tools": "22->19",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_network_preference|bad_wifi_calling|break_app_both_permissions|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_off[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.03,
+  "turns": 66,
+  "user_var": 26,
+  "user_turns": 28,
+  "tools": "20->28",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_network_preference|bad_wifi_calling|break_app_sms_permission|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.03,
+  "turns": 72,
+  "user_var": 27,
+  "user_turns": 29,
+  "tools": "23->23",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_network_preference|bad_wifi_calling|break_app_sms_permission|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.03,
+  "turns": 69,
+  "user_var": 23,
+  "user_turns": 29,
+  "tools": "20->23",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_apn_mms_setting|break_app_storage_permission|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_off[PERSONA:Easy]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.03,
+  "turns": 80,
+  "user_var": 28,
+  "user_turns": 34,
+  "tools": "30->25",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_apn_mms_setting|break_app_both_permissions|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 3,
+  "onset": 0.03,
+  "turns": 97,
+  "user_var": 29,
+  "user_turns": 41,
+  "tools": "32->31",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]bad_network_preference|bad_vpn|user_abroad_roaming_disabled_off[PERSONA:Hard]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 42,
+  "user_var": 10,
+  "user_turns": 16,
+  "tools": "12->16",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]bad_network_preference|bad_vpn|user_abroad_roaming_disabled_off[PERSONA:Hard]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 50,
+  "user_var": 19,
+  "user_turns": 20,
+  "tools": "13->16",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]airplane_mode_on|bad_network_preference|data_mode_off|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 61,
+  "user_var": 19,
+  "user_turns": 25,
+  "tools": "21->17",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]bad_vpn|data_mode_off|data_usage_exceeded|user_abroad_roaming_disabled_off[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 44,
+  "user_var": 14,
+  "user_turns": 15,
+  "tools": "21->15",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]airplane_mode_on|bad_network_preference|data_saver_mode_on|data_usage_exceeded|user_abroad_roaming_disabled_off[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 60,
+  "user_var": 20,
+  "user_turns": 24,
+  "tools": "17->18",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]airplane_mode_on|bad_network_preference|bad_vpn|data_mode_off|data_saver_mode_on|data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 56,
+  "user_var": 19,
+  "user_turns": 23,
+  "tools": "15->18",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]airplane_mode_on|bad_network_preference|bad_vpn|data_mode_off|data_saver_mode_on|data_usage_exceeded|user_abroad_roaming_disabled_on[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 52,
+  "user_var": 18,
+  "user_turns": 19,
+  "tools": "25->14",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]airplane_mode_on|bad_network_preference|bad_vpn|data_mode_off|data_saver_mode_on|data_usage_exceeded|user_abroad_roaming_disabled_on[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 46,
+  "user_var": 15,
+  "user_turns": 17,
+  "tools": "25->13",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]airplane_mode_on|bad_network_preference|bad_vpn|data_mode_off|data_saver_mode_on|data_usage_exceeded|user_abroad_roaming_disabled_off[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 50,
+  "user_var": 16,
+  "user_turns": 18,
+  "tools": "20->14",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mobile_data_issue]airplane_mode_on|bad_network_preference|bad_vpn|data_mode_off|data_saver_mode_on|data_usage_exceeded|user_abroad_roaming_disabled_off[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 48,
+  "user_var": 17,
+  "user_turns": 18,
+  "tools": "20->13",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]break_app_storage_permission|data_usage_exceeded[PERSONA:Easy]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 56,
+  "user_var": 20,
+  "user_turns": 22,
+  "tools": "16->17",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]break_app_storage_permission|data_usage_exceeded[PERSONA:Easy]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 48,
+  "user_var": 18,
+  "user_turns": 19,
+  "tools": "17->15",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]break_app_sms_permission|data_usage_exceeded|user_abroad_roaming_disabled_on[PERSONA:None]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 51,
+  "user_var": 18,
+  "user_turns": 19,
+  "tools": "15->19",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]break_app_sms_permission|data_usage_exceeded|user_abroad_roaming_disabled_on[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 47,
+  "user_var": 15,
+  "user_turns": 17,
+  "tools": "19->14",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]break_apn_mms_setting|data_mode_off|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 58,
+  "user_var": 21,
+  "user_turns": 24,
+  "tools": "15->26",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_network_preference|break_app_sms_permission|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 56,
+  "user_var": 19,
+  "user_turns": 23,
+  "tools": "20->18",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_network_preference|break_app_sms_permission|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 56,
+  "user_var": 19,
+  "user_turns": 23,
+  "tools": "20->18",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_wifi_calling|break_apn_mms_setting|unseat_sim_card|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 58,
+  "user_var": 19,
+  "user_turns": 25,
+  "tools": "21->17",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_app_storage_permission|unseat_sim_card[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 58,
+  "user_var": 25,
+  "user_turns": 25,
+  "tools": "20->16",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_app_storage_permission|unseat_sim_card[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 66,
+  "user_var": 29,
+  "user_turns": 29,
+  "tools": "20->17",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_network_preference|break_app_sms_permission|data_mode_off|data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 60,
+  "user_var": 20,
+  "user_turns": 24,
+  "tools": "19->17",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_network_preference|break_app_sms_permission|data_mode_off|data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:None]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 52,
+  "user_var": 15,
+  "user_turns": 19,
+  "tools": "17->18",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|break_apn_mms_setting|break_app_both_permissions|data_mode_off|data_usage_exceeded|user_abroad_roaming_enabled_off[PERSONA:None]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.02,
+  "turns": 62,
+  "user_var": 23,
+  "user_turns": 26,
+  "tools": "22->26",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_apn_mms_setting|break_app_storage_permission|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_off[PERSONA:Easy]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.02,
+  "turns": 88,
+  "user_var": 26,
+  "user_turns": 37,
+  "tools": "27->35",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_apn_mms_setting|break_app_storage_permission|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_off[PERSONA:Easy]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.02,
+  "turns": 87,
+  "user_var": 25,
+  "user_turns": 34,
+  "tools": "27->34",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_apn_mms_setting|break_app_both_permissions|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "assistant",
+  "idx": 2,
+  "onset": 0.02,
+  "turns": 96,
+  "user_var": 30,
+  "user_turns": 41,
+  "tools": "31->28",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]break_app_both_permissions|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 82,
+  "user_var": 22,
+  "user_turns": 34,
+  "tools": "27->24",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]break_app_both_permissions|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 68,
+  "user_var": 19,
+  "user_turns": 29,
+  "tools": "20->24",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_wifi_calling|break_apn_mms_setting|unseat_sim_card|user_abroad_roaming_enabled_off[PERSONA:Easy]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 67,
+  "user_var": 26,
+  "user_turns": 28,
+  "tools": "24->21",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_wifi_calling|break_apn_mms_setting|data_mode_off|data_usage_exceeded|unseat_sim_card[PERSONA:None]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 68,
+  "user_var": 23,
+  "user_turns": 29,
+  "tools": "21->22",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_network_preference|bad_wifi_calling|break_app_both_permissions|data_usage_exceeded|user_abroad_roaming_disabled_off[PERSONA:Hard]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 72,
+  "user_var": 19,
+  "user_turns": 29,
+  "tools": "22->25",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_network_preference|bad_wifi_calling|break_app_both_permissions|data_usage_exceeded|user_abroad_roaming_disabled_off[PERSONA:Hard]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 72,
+  "user_var": 23,
+  "user_turns": 30,
+  "tools": "23->25",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_network_preference|bad_wifi_calling|break_app_sms_permission|data_mode_off|unseat_sim_card|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "True->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 76,
+  "user_var": 29,
+  "user_turns": 33,
+  "tools": "23->20",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_network_preference|bad_wifi_calling|break_app_sms_permission|data_mode_off|unseat_sim_card|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->True",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 74,
+  "user_var": 28,
+  "user_turns": 33,
+  "tools": "20->20",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|break_app_both_permissions|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 80,
+  "user_var": 26,
+  "user_turns": 34,
+  "tools": "26->21",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|break_app_both_permissions|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 80,
+  "user_var": 25,
+  "user_turns": 32,
+  "tools": "26->21",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]bad_network_preference|bad_wifi_calling|break_app_both_permissions|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_off[PERSONA:None]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 73,
+  "user_var": 30,
+  "user_turns": 31,
+  "tools": "28->22",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_app_storage_permission|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_enabled_off[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 72,
+  "user_var": 26,
+  "user_turns": 30,
+  "tools": "22->23",
+  "seeds": "373753|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_app_sms_permission|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_off[PERSONA:None]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 81,
+  "user_var": 26,
+  "user_turns": 33,
+  "tools": "27->27",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_apn_mms_setting|break_app_sms_permission|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_on[PERSONA:None]",
+  "dir": "1.0->0.0",
+  "comp": [
+   "ENV_ASSERTION:1.0->0.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 84,
+  "user_var": 29,
+  "user_turns": 35,
+  "tools": "25->25",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_apn_mms_setting|break_app_storage_permission|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_off[PERSONA:Easy]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 93,
+  "user_var": 36,
+  "user_turns": 40,
+  "tools": "30->29",
+  "seeds": "626729|361454"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_apn_mms_setting|break_app_both_permissions|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_off[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 108,
+  "user_var": 34,
+  "user_turns": 47,
+  "tools": "31->33",
+  "seeds": "626729|373753"
+ },
+ {
+  "domain": "telecom",
+  "task": "[mms_issue]airplane_mode_on|bad_network_preference|bad_wifi_calling|break_apn_mms_setting|break_app_both_permissions|data_mode_off|data_usage_exceeded|unseat_sim_card|user_abroad_roaming_disabled_off[PERSONA:Hard]",
+  "dir": "0.0->1.0",
+  "comp": [
+   "ENV_ASSERTION:0.0->1.0"
+  ],
+  "db": "False->False",
+  "who": "user",
+  "idx": 1,
+  "onset": 0.01,
+  "turns": 95,
+  "user_var": 37,
+  "user_turns": 41,
+  "tools": "31->29",
+  "seeds": "626729|361454"
+ }
+]

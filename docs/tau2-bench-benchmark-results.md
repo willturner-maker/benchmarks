@@ -306,5 +306,35 @@ unintended but exact live corroboration of the [tenancy A/B](splash-engine-bench
 (wrapper path bug, zsh word-splitting, one quarantined contaminated sim, sampler truncation by a continuation —
 airline/telecom windows are tenancy-by-protocol, disclosed) are itemized in the wave RECORD.
 
+## Effort A/B 2026-11-21 — agent at `reasoning_effort: xhigh`, user simulator unchanged (raw: `bench/tau2-bench/results/2026-11-21-pass3-xhigh/`)
+
+The published rows run at engine-default (medium) reasoning; frontier leaderboard rows run at high/xhigh. This
+paired wave changes **one** thing: `--agent-llm-args` gains `"reasoning_effort":"xhigh"`. The user simulator
+keeps the baseline args and seed, so the delta is agent-attributable. Effort verified live: an idle probe
+returned a 3,084-char reasoning block at `medium` vs 3,790 at `xhigh`, and per-sim completion tokens shift in
+both directions on the same task+seed (airline task 0 seed 373753: 1,377 → 2,751 tok).
+
+| domain | pass^1 med → xh | pass^2 med → xh | pass^3 med → xh |
+|---|---|---|---|
+| airline | 0.8667 → **0.8867** | 0.8200 → **0.8333** | 0.7800 → **0.8000** |
+| retail (74, judge-free) | 0.8243 → 0.8153 | 0.7162 → 0.7117 | 0.6351 → **0.6486** |
+| telecom | 0.8596 → **0.8860** | 0.7602 → **0.7924** | 0.6930 → **0.7193** |
+| **all 238 × 3** | 0.8501 → **0.8641** | 0.7591 → **0.7759** | 0.6933 → **0.7143** |
+
+- **airline +2.0 / telecom +2.6 to +3.2 points** — several whole tasks each, above per-wave noise. **Retail is
+  a wash** (−0.9 at pass^1 is under one task on 74, and retail carries the highest flip rate); no claim there.
+- **The negative result is the headline: effort does not move the flip rate.** xhigh flips 63/238 (26.5 %) vs
+  medium 65/238 (27.3 %) — the pass^k decay floor is user-simulator sampling, exactly as rule 9 and the
+  first-mover triage predict. Roster overlap across the two 3-trial waves: 146 tasks stable in both, 56 in
+  exactly one, 36 flip in both.
+- **It was ~free:** 3 h 42 m vs 3 h 47 m wall, −1.6 % prompt tokens, −1.1 % completion tokens — deeper
+  per-decision thinking paid back in fewer wrong turns. Workload-shaped, not a law.
+- Engine tenancy over this window is the *benign* tenancy case: all 3,919 benchmark request-samples stayed
+  `kv_mode=resident` while one 214,460-tok operator co-tenant pushed `pages_active` to 1.45× the pool and
+  absorbed its own spill (+2,496 moves, +7,839 demotions, 0 suspensions/refusals).
+- Incident disclosed in the RECORD: `summarize.py`'s fallback glob was unscoped (`wave-*-{dom}`) and first
+  scored airline/telecom off the *medium* wave's sims; caught by the tool's own upstream re-derivation check,
+  fixed to scope by wave dir with a multi-match warning, and the stats gate still passes byte-identically.
+
 To publish a row, follow the numbered rules in `bench/tau2-bench/README.md` and send a PR — see
 [Community runs](leaderboard.md#community-runs--your-numbers).

@@ -202,7 +202,15 @@ def main() -> int:
         return 0
 
     for dom in a.domains.split():
-        rec = glob.glob(f"{a.tau2_dir}/data/simulations/wave-*-{dom}/results.json")
+        # Scope the fallback to THIS wave: run_wave.sh names save dirs wave-<wave-basename>-<dom>.
+        # An unscoped wave-* glob silently merges every past wave (a 2026-11-21 A/B misread the
+        # medium baseline's sims until this was fixed); broad glob only as last resort, with a warning.
+        label = os.path.basename(a.wave_dir.rstrip("/"))
+        rec = glob.glob(f"{a.tau2_dir}/data/simulations/wave-{label}-{dom}/results.json")
+        if not rec:
+            rec = glob.glob(f"{a.tau2_dir}/data/simulations/wave-*-{dom}/results.json")
+            if len(rec) > 1:
+                print(f"WARNING: {len(rec)} wave dirs match wave-*-{dom}; using {rec[-1]}")
         if not rec:
             rec = sorted(glob.glob(f"{a.tau2_dir}/data/simulations/*{dom}*/results.json"))
         if not rec:

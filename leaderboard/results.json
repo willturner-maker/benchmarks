@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-19",
+  "updated": "2026-11-21T03:02:25Z",
   "read_this_first": [
     "Rows are only comparable within the same media_class and the same tenant conditions.",
     "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
@@ -1669,6 +1669,61 @@
         "totals": "714 sims, 0 unscored, 119,767,224 prompt / 3,223,954 completion tokens; upstream re-derivation agrees per domain",
         "evidence": "bench/tau2-bench/results/2026-11-20-pass3/ (RECORD.md, tasks.jsonl 714 rows, pins, logs, retail-window samples)",
         "incidents": "wrapper relative-path bug (zero sims); zsh word-split killed retail attempt 1 at task resolution (zero sims); attempt 2 killed for contamination, 1 sim quarantined; sampler/log truncation by continuation (artifacts renamed, wave.log reconstructed); build_rows domain parse fixed for wave-prefixed save names"
+      },
+      {
+        "date": "2026-11-21-pass3-xhigh (effort A/B: agent reasoning_effort xhigh, user simulator unchanged; paired against 2026-11-20-pass3)",
+        "pin": "tau2-bench v1.0.1 = fc0055dc4e0a316c3f83133267fbd6faaa770992; judge-free scope identical; seed 300; self-play; engine Splash 1.7.0 not restarted",
+        "design": "one-line change vs the pass3 baseline: --agent-llm-args adds reasoning_effort:xhigh; user-llm-args and seed untouched so the delta is agent-attributable. Effort verified: idle probe medium 3,084-char reasoning block vs xhigh 3,790 at equal budget; per-sim completion tokens shift both directions on same task+seed (airline task0 seed373753: 1,377->2,751)",
+        "scores": {
+          "airline(50x3)": {
+            "pass_1": 0.8867,
+            "pass_2": 0.8333,
+            "pass_3": 0.8,
+            "flips": 8,
+            "always_pass": 40,
+            "all_fail": 2,
+            "delta_pass3_vs_medium_pts": 2.0
+          },
+          "retail(74x3)": {
+            "pass_1": 0.8153,
+            "pass_2": 0.7117,
+            "pass_3": 0.6486,
+            "flips": 23,
+            "always_pass": 48,
+            "all_fail": 3,
+            "delta_pass1_pts": -0.9,
+            "note": "wash: under one task on 74; no effort claim in either direction"
+          },
+          "telecom(114x3)": {
+            "pass_1": 0.886,
+            "pass_2": 0.7924,
+            "pass_3": 0.7193,
+            "flips": 32,
+            "always_pass": 82,
+            "all_fail": 0,
+            "delta_pass3_vs_medium_pts": 2.63
+          },
+          "all(238x3)": {
+            "pass_1": 0.8641,
+            "pass_2": 0.7759,
+            "pass_3": 0.7143,
+            "flips": 63,
+            "always_pass": 170,
+            "all_fail": 5,
+            "delta_pts_vs_medium": [
+              1.4,
+              1.68,
+              2.1
+            ]
+          }
+        },
+        "stability_finding": "effort does NOT move the flip rate: 63/238 (26.5%) vs medium 65/238 (27.3%) - consistent with user-simulator-sampling dominance (rule 9, first-mover triage). Across the two 3-trial waves: 146 tasks stable in both, 56 in exactly one, 36 flip in both. First-mover mix unchanged under xhigh: 126 flipping trial-pairs, user-first 91 (72%), agent-first 35 (28%) vs medium 74/26 (flip_triage.json).",
+        "cost_finding": "xhigh was ~free on this stack: 3h42m19s vs 3h47m14s wall, 117,887,136 prompt (-1.6%) / 3,189,224 completion (-1.1%) tokens; airline prompt -4.4%. Deeper thinking paid back in fewer wrong turns; workload-shaped, not a law",
+        "engine_context": "1,333 samples/222 min: all 3,919 benchmark request-samples kv_mode=resident (379-18,660 tok), concurrency 3 in 1,262/1,332; 2 co-tenant samples max 214,460 tok (operator session, spill) pushed pages_active peak 7,039 pages = 1.45x pool; spill +2,496, kv_demotions +7,839, suspensions/refusals 0 - benign tenancy case: the oversized co-tenant absorbed its own spill",
+        "totals": "714 sims, 0 unscored; upstream re-derivation agrees per domain after the scoping fix",
+        "incidents": "summarize.py fallback glob was unscoped (wave-*-{dom}) and first scored airline/telecom off the MEDIUM wave's sims - caught by the tool's own upstream re-derivation check (0.887/0.833 vs 0.8667/0.8200), fixed same commit to scope by wave-dir + warning on multi-match; tasks.jsonl built post-wave from the three explicit xhigh sim dirs; stats gate still byte-identical",
+        "limitations": "single xhigh wave (no repeat arm); paired arms but not matched pairs - transcripts diverge from turn 1; retail deltas inside noise; self-play caveat unchanged; same-seed repeat still the open \u03c4\u00b2 experiment",
+        "evidence": "bench/tau2-bench/results/2026-11-21-pass3-xhigh/ (RECORD.md, tasks.jsonl 714 rows, pins, logs, engine_samples.jsonl, flip_triage.json 126 pairs, status edges)"
       }
     ],
     "splash_depth_probe": [
