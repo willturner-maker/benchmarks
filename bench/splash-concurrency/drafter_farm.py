@@ -37,15 +37,18 @@ elif stale.is_dir():                        # attempt 1 built a plain DIR where 
     import shutil
     shutil.rmtree(stale)
 
-if not ASM.exists():
+if True:  # (re)write the manifest every run: attempt 3 failed because the first builder copied
+    # ONLY files/sources and the supervisor's family check needs family/model/metadata/... intact.
     manifest = json.loads((src_res / "model.json").read_text())
+    stripped = {k: v for k, v in manifest.items() if k not in ("files", "sources")}
     files = {k: v for k, v in manifest.get("files", {}).items() if not k.startswith("draft/")}
     sources = {k: v for k, v in manifest.get("sources", {}).items() if k != "draft"}
     assert sources and files and not any(k.startswith("draft/") for k in files)
-    ASM.mkdir(parents=True)
-    (ASM / "model.json").write_text(json.dumps({"files": files, "sources": sources}, indent=2))
+    assert all(k in stripped for k in ("family", "model", "version", "metadata", "target_format")), stripped.keys()
+    ASM.mkdir(parents=True, exist_ok=True)
+    (ASM / "model.json").write_text(json.dumps({**stripped, "files": files, "sources": sources}, indent=2))
     for entry in ("config.json", "target", "tokenizer", "vision"):
-        if (src_res / entry).exists():
+        if (src_res / entry).exists() and not (ASM / entry).exists():
             os.symlink(src_res / entry, ASM / entry)
 if LINK.is_symlink():
     LINK.unlink()
