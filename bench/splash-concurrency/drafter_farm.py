@@ -39,11 +39,15 @@ elif stale.is_dir():                        # attempt 1 built a plain DIR where 
 
 if True:  # (re)write the manifest every run: attempt 3 failed because the first builder copied
     # ONLY files/sources and the supervisor's family check needs family/model/metadata/... intact.
+    # _well_formed() (install/assembly.py:187) also REQUIRES sources == {target, draft} - the
+    # record shape always names the draft repo; it is the draft/* file entries that the loader
+    # reads, so only those are dropped.
     manifest = json.loads((src_res / "model.json").read_text())
     stripped = {k: v for k, v in manifest.items() if k not in ("files", "sources")}
     files = {k: v for k, v in manifest.get("files", {}).items() if not k.startswith("draft/")}
-    sources = {k: v for k, v in manifest.get("sources", {}).items() if k != "draft"}
-    assert sources and files and not any(k.startswith("draft/") for k in files)
+    sources = manifest.get("sources", {})
+    assert set(sources) == {"target", "draft"}, sources.keys()
+    assert files and not any(k.startswith("draft/") for k in files)
     assert all(k in stripped for k in ("family", "model", "version", "metadata", "target_format")), stripped.keys()
     ASM.mkdir(parents=True, exist_ok=True)
     (ASM / "model.json").write_text(json.dumps({**stripped, "files": files, "sources": sources}, indent=2))

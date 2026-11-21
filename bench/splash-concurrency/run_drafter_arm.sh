@@ -91,8 +91,8 @@ FARM=$(python3 "$BENCH/bench/splash-concurrency/drafter_farm.py") || { log "draf
 if [ -z "$FARM" ] || [ ! -f "$FARM/model.json" ] || python3 -c "
 import json,sys
 m=json.load(open('$FARM/model.json'))
-bad=sum(1 for k in m.get('files',{}) if 'draft' in k.lower())+sum(1 for k in m.get('sources',{}) if 'draft' in k)
-sys.exit(0 if bad==0 and m.get('files') else 1)"; then
+bad=sum(1 for k in m.get('files',{}) if k.startswith('draft/'))
+sys.exit(0 if bad==0 and m.get('files') and 'family' in m else 1)"; then
   log "farm link verified: ${FARM/#$HOME/\~} (zero draft entries)"
 else
   log "drafter-arm: farm manifest failed verification - engine untouched"; exit 1
