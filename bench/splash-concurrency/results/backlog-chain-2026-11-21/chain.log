@@ -9,3 +9,16 @@ drafted_tokens delta over probe: 288
 2026-11-21T16:25:05Z drafter arm result: ok=0
 2026-11-21T16:25:05Z phase 3: pass^3 replay (238 x 3, medium) on the new epoch
 2026-11-21T16:31:15Z arm-1 postmortem: farm layout fixed (.resolved assembly + selection link); rerun via run_drafter_arm.sh gated on instance pid; current engine 08d662f6 (chain-launched) is serving phase 3
+2026-11-21T20:12:34Z phase 3 exit=0
+2026-11-21T20:12:34Z backlog chain complete
+2026-11-21T20:17:08Z retail40 rerun (ENV seam fixed): launching sampler + 40x2 wave
+2026-11-21T20:38:34Z retail40 rerun exit=0
+2026-11-21T20:38:34Z handing off to drafter arm
+2026-11-21T20:39:34Z drafter-arm rerun: killing current engine (operator's or chain's - none launched by this script yet)
+2026-11-21T20:39:36Z farm link: 
+2026-11-21T20:39:36Z farm supervisor pid 8180
+2026-11-21T20:54:42Z drafter arm invalid (launch/identity/draft check failed) - restoring pin
+2026-11-21T20:54:42Z pin supervisor pid 9072
+drafted_tokens delta over probe: 186
+2026-11-21T20:54:56Z pin restored, drafter ON again, identity verified
+2026-11-21T20:54:56Z retail40-then-drafter driver complete

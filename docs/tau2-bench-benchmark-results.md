@@ -29,6 +29,7 @@ telecom 0.693, and the flip *rate* replicated (65/238 at 3 trials) while the fli
 - [Effort A/B 2026-11-21 — agent at xhigh](#effort-ab-2026-11-21--agent-at-reasoning_effort-xhigh-user-simulator-unchanged-raw-benchtau2-benchresults2026-11-21-pass3-xhigh)
 - [Same-seed repeat 2026-11-21 — the flip floor is the engine](#same-seed-repeat-2026-11-21--the-flip-floor-is-the-engine-not-user-resampling-raw-benchtau2-benchresults2026-11-21-sameseed-pair)
 - [Pass^3 replay 2026-11-21 — the new epoch reproduces the headline](#pass3-replay-2026-11-21--the-new-engine-epoch-reproduces-the-old-epoch-headline-raw-benchtau2-benchresults2026-11-21-pass3-replay)
+- [Retail-40 closure 2026-11-21 — the judge gap measured without a judge](#retail-40-closure-2026-11-21--the-judge-gap-measured-without-a-judge-raw-benchtau2-benchresults2026-11-21-retail40-env)
 
 ## Why this instrument, and why pinned at 1.0.1
 
@@ -80,6 +81,9 @@ The reward path is judge-free only for part of the suite. Census of the pinned t
 | telecom (114 base) | `[ENV_ASSERTION]` ×112, `+ACTION` ×2 | **0** — in-process env-assertion replay |
 
 Those 40 retail tasks are excluded, and the exclusion is a property of the grading path, not of difficulty.
+*(Update 2026-11-21: the gap is closed as an **ENV-component-only** measurement — see “Retail-40 closure”
+below. The exclusion still governs the scored pass^k rows; nothing published as a headline row includes
+the 40.)*
 On v1.0.1 there is no way to point the judge at a local model: `DEFAULT_LLM_NL_ASSERTIONS` is a constant in
 `src/tau2/config.py` (no `getenv` anywhere in that file), `cli.py` has no judge flag, and the engine takes a
 single `--model` with no alias — so an alias would mean a relaunch, which this suite deliberately avoids.
@@ -392,6 +396,30 @@ the same-seed pair's ~0.92 arms) — that elevation was arm-level sampling noise
 Tenancy: 45 co-tenant request-samples (this agent's own session), Δ261 spill moves, Δ10 suspensions —
 lighter than the old-epoch window, and far from the invalidation threshold (rule: sustained co-tenant
 pressure invalidates; this was not sustained).
+
+## Retail-40 closure 2026-11-21 — the judge gap measured without a judge (raw: `bench/tau2-bench/results/2026-11-21-retail40-env/`)
+
+**Informational component score — not a pass^k row and not comparable to the published retail numbers.**
+The 40 judge-dependent retail tasks ran 2 trials × seed 300 (same pin, args, self-play) scored with
+`EvaluationType.ENV` — DB end-state + env-assertion components only; the NL evaluator is never entered
+and no judge is called. The seam is `runner.run_tasks(..., evaluation_type=ENV)` called as a library;
+`run_domain` cannot do this because it never forwards `evaluation_type` (attempt 1 learned that the hard
+way: the judge re-engaged and all 80 sims died `infrastructure_error` — postmortem kept in the wave dir).
+
+| measure (40 tasks, ENV components) | value |
+|---|---|
+| **ENV-component pass^1** | **0.6625** |
+| ENV-component pass^2 (adjacent trials) | 0.5500 |
+| trial split | both-pass 22 · disagree 9 · never 9 |
+| flip rate | 9/40 = 22.5 % — another independent replication of the 15–27 % band |
+
+Two honest caveats: the number mixes a different task set (the 40, plausibly the harder retail half)
+with a different scoring basis (no COMMUNICATE credit), so it brackets context rather than measuring a
+delta. And if a gpt-4.1-class judge ever becomes available, these sims' transcripts (kept local) can be
+rescored `ALL_WITH_NL_ASSERTIONS` without rerunning a single conversation.
+
+Engine: same instance as the replay (`08d662f6`), drafter **on** (Δdrafted 332,715 over the wave —
+the drafter-off comparison is a separate arm). Wave 20:17:08Z → 20:38:34Z, 80/80 scored, 0 infra errors.
 
 To publish a row, follow the numbered rules in `bench/tau2-bench/README.md` and send a PR — see
 [Community runs](leaderboard.md#community-runs--your-numbers).
