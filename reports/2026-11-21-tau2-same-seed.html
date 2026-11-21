@@ -1,0 +1,193 @@
+<title>τ² same-seed pair — identical seeds, every transcript still diverged</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#fcfcfd; --fg:#14171c; --fg-2:#4d555f; --mut:#7b848f;
+  --line:#dfe3e8; --accent:#2a78d6; --s2:#eb6834; --s3:#8a5fc9;
+  --good:#0f7a4d; --warn:#b26a00;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',Inter,system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 56px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.5vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 var(--mono);color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.lede{color:var(--fg-2);max-width:65ch;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:9px 13px}
+.chip b{font-family:var(--disp);font-size:16px}
+.chip span{font-size:12.5px;color:var(--fg-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--good);flex:none;align-self:center}
+.dot.warn{background:var(--warn)}
+section{margin-top:44px;border-top:1px solid var(--line);padding-top:26px}
+h2{font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 .tag{font:500 11px/1 var(--mono);color:var(--mut);letter-spacing:.06em;border:1px solid var(--line);
+  border-radius:6px;padding:4px 7px}
+p.note{color:var(--fg-2);max-width:65ch}
+.tbl-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;min-width:0}
+th{font:600 12px/1.3 var(--body);color:var(--fg-2)}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--good);font-weight:600}
+.warn{color:var(--warn);font-weight:600}
+.dim{color:var(--mut)}
+code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;
+  font:500 12px/1.5 var(--mono);color:var(--fg-2);margin:14px 0 0}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+svg{width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.grid{stroke:var(--line);stroke-width:1}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
+.foot code{font-size:11.5px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Will's local AI pipeline · τ²-bench · same-seed repeat · mechanism correction</div>
+  <h1>Same seed. Same prompts. <code>0 / 238</code> transcripts alike.</h1>
+  <p class="lede">Every published τ² flip story here blamed the fresh user-simulator seed per trial. This pair
+  removes the variable: two full waves of all 238 judge-free tasks with <b>identical trial seeds (626729)</b>,
+  temperature 0, self-play, identical args — first runs on the post-restart engine epoch. The result refutes
+  the published reading: <b>100 % of conversations still diverged</b>, and 15.1 % still flipped their reward.
+  The instability floor is the engine's own greedy decode nondeterminism at conversation depth.</p>
+
+  <div class="chips">
+    <div class="chip"><span class="dot warn"></span><b>0/238 byte-identical</b><span>identical seed, identical starting prompts, temperature 0</span></div>
+    <div class="chip"><span class="dot warn"></span><b>15.1 % reward flips</b><span>36/238 at identical seeds — the engine-only floor</span></div>
+    <div class="chip"><span class="dot"></span><b>≈80 % of the flip rate</b><span>15.1 of 18.9 pts survives with the seed held constant</span></div>
+    <div class="chip"><span class="dot"></span><b>73 % user-turn-first</b><span>the role split replicates (74/26, 82/18) — role ≠ cause</span></div>
+  </div>
+
+  <section>
+    <h2>1 · What identical inputs still do <span class="tag">arm A 05:23→06:37Z · arm B 06:37→07:53Z · 476 sims, 0 unscored</span></h2>
+    <div class="viz-root">
+      <div class="vtitle">Funnel: 238 identical-seed task pairs → divergence → consequences</div>
+      <div class="vsub">Every conversation micro-diverges; only a lottery of tasks diverges far enough to change the graded end state</div>
+      <div><svg id="funnel" viewBox="0 0 880 210" role="img" aria-label="Of 238 identical-seed task pairs: 238 transcripts diverge somewhere, 36 flip the reward, direction 21 up and 15 down."></svg></div>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>domain</th><th class="num">pairs</th><th class="num">transcripts identical</th><th class="num">reward-diverging</th><th class="num">rate</th><th class="num">pass^1 A</th><th class="num">pass^1 B</th></tr></thead>
+        <tbody>
+          <tr><td>airline</td><td class="num">50</td><td class="num ok">0</td><td class="num">4</td><td class="num">8.0 %</td><td class="num">0.880</td><td class="num">0.920</td></tr>
+          <tr><td>retail (judge-free)</td><td class="num">74</td><td class="num ok">0</td><td class="num">17</td><td class="num warn">23.0 %</td><td class="num">0.784</td><td class="num">0.824</td></tr>
+          <tr><td>telecom</td><td class="num">114</td><td class="num ok">0</td><td class="num">15</td><td class="num">13.2 %</td><td class="num">0.895</td><td class="num">0.904</td></tr>
+          <tr><td><b>all</b></td><td class="num"><b>238</b></td><td class="num"><b>0 (0.0 %)</b></td><td class="num"><b>36</b></td><td class="num"><b>15.1 %</b></td><td class="num"><b>0.857</b></td><td class="num"><b>0.882</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Validity: rows confirm seed 626729 for <b>every</b> sim in both arms (tau2 draws
+    <code>random.seed(300)</code> per trial — one trial each, so both draw the first value). Re-derivation
+    agrees with upstream for both arms. Per-arm pass^1 shown as context only — single-trial waves, and
+    <code>pass^2</code> is undefined at one trial.</p>
+  </section>
+
+  <section>
+    <h2>2 · The corrected decomposition <span class="tag">the claim this replaces, in its own numbers</span></h2>
+    <div class="viz-root">
+      <div class="vtitle">Reward flip rate by what varies</div>
+      <div class="vsub">Same 238 tasks, same pin. Holding the seed constant still leaves ~80 % of the 2-trial flip rate standing</div>
+      <div class="legend"><span><i style="background:var(--s2)"></i>engine-only (identical seed)</span><span><i style="background:var(--accent)"></i>+ seed change</span></div>
+      <div><svg id="decomp" viewBox="0 0 880 240" role="img" aria-label="Three bars. Identical seed, 1 vs 1 trial: 15.1 percent fully engine-attributed. Different seeds, 2 trials: 18.9 percent, 15.1 engine plus 3.8 seed. Different seeds, 3 trials: 27.3 percent, 15.1 engine-attributed baseline plus the rest from seed and trial draws."></svg></div>
+    </div>
+    <pre>first divergence (identical seeds):   user-turn 174 (73 %)   agent-turn 64 (27 %)   median onset 0.045
+first divergence (different seeds):   74 % (pass^3)   ·   82 % (19a)      ← the split replicates WITHOUT a seed change
+mechanism: greedy decode at conversation depth — the same signature the 19b width control saw at
+--max-concurrency 1, now measured end-to-end; batching excluded, co-tenancy not required (these windows:
+0 co-tenant samples, 0 spill, 0 suspensions — the tenancy-cleanest τ² runs here)</pre>
+    <p class="note"><b>What this corrects:</b> 19a/pass^3 said "fresh user-simulator seed per trial, so flips are
+    user-sampling variance." With the seed fixed the transcripts still <em>all</em> diverge — at temperature 0
+    there is barely any "resampling" left; the seed swap contributes roughly the remaining ~12 points of the
+    3-trial 27.3 %. "User-first" survives as <em>where</em> the engine's divergence surfaces first (a new open
+    question: why user turns ~3:1), not as the cause. Rule 9 now carries the mechanism: micro-divergence is
+    near-universal, reward flips are a per-task lottery — which is exactly why <b>rates replicate and rosters
+    don't</b>.</p>
+  </section>
+
+  <section>
+    <h3 style="font-size:17px">Disclosed confounds &amp; context</h3>
+    <p class="note">First pair on the post-restart epoch (engine restarted 05:20:26Z — memory-cold for arm A,
+    <code>pages_active</code> peak 4,456, warm for B, peak 917; disk KV cache survived via
+    <code>--persistent-cache</code>). Both telecom arms sit +3.5/+4.4 pts above the medium wave on
+    single-trial samples — disclosed, <b>no epoch effect claimed</b>. Control experiment, not a leaderboard
+    row. Arm order fixed (A before B): if anything B's warmer cache is part of what determinism-vs-drift
+    comparison wants measured.</p>
+    <pre>git clone https://github.com/willturner-maker/benchmarks
+cd benchmarks/bench/tau2-bench
+TAU2_TRIALS=1 bash run_wave.sh "$PWD/results/my-sameseed"     # run it twice with the same seed
+# then diff per-task rewards + first-diff roles across the two dirs (same_seed_pairs.json shows the shape)</pre>
+  </section>
+
+  <div class="foot">
+    Pin: <code>tau2-bench v1.0.1 = fc0055dc4e0a316c3f83133267fbd6faaa770992</code>; model
+    <code>ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S</code> on Splash 1.7.0, new epoch instance
+    <code>627c2f53</code> (window 2026-11-21T05:23:32Z → 07:53:06Z; restart record:
+    <a href="https://willturner-maker.github.io/benchmarks/bench/splash-concurrency/results/restart-2026-11-21/RECORD.md">restart-2026-11-21</a>).
+    Records: <code>bench/tau2-bench/results/2026-11-21-sameseed-pair/</code> (RECORD.md, same_seed_pairs.json
+    238 rows) + arms <code>2026-11-21-sameseed-{a,b}/</code>. Corrected docs:
+    <a href="https://willturner-maker.github.io/benchmarks/reports/2026-11-20-tau2-pass3.html">pass^3 scorecard</a> and
+    <a href="https://willturner-maker.github.io/benchmarks/reports/2026-11-21-tau2-effort-ab.html">effort A/B scorecard</a>
+    carry correction notes. Transcripts stay local; published rows are scalars only.
+  </div>
+</div>
+
+<script>
+const ns='http://www.w3.org/2000/svg';
+function el(t,a){const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+(function(){
+  const svg=document.getElementById('funnel');
+  const rows=[['238 identical-seed task pairs',238,'var(--accent)'],
+              ['transcripts diverging somewhere',238,'var(--s2)'],
+              ['reward flips (21 up / 15 down)',36,'var(--warn)']];
+  const W=880,x0=14,x1=866; let y=34;
+  rows.forEach(([lab,n,c])=>{
+    const w=(n/238)*(x1-x0);
+    svg.appendChild(el('rect',{x:x0,y:y,width:w,height:38,fill:c,rx:5,opacity:n===238?0.85:1}));
+    const t=el('text',{x:x0+10,y:y+24,'font-size':'12.5',fill:'#fff'});t.textContent=lab;
+    if(n<50){t.setAttribute('x',x0+w+10);t.setAttribute('fill','var(--fg)');}
+    if(n===238)t.setAttribute('fill','#fff');
+    svg.appendChild(t);
+    const v=el('text',{x:x1-6,y:y+24,'font-size':'13','text-anchor':'end',fill:n<50?'var(--fg)':'#fff'});
+    v.textContent=`${n} (${(100*n/238).toFixed(1)} %)`;svg.appendChild(v);
+    y+=52;
+  });
+})();
+(function(){
+  const svg=document.getElementById('decomp');
+  const rows=[['identical seed · 1 vs 1',[[15.1,'var(--s2)']],'15.1 %'],
+              ['different seeds · 2 trials',[[15.1,'var(--s2)'],[3.8,'var(--accent)']],'18.9 %'],
+              ['different seeds · 3 trials',[[15.1,'var(--s2)'],[12.2,'var(--accent)']],'27.3 %']];
+  const W=880,x0=250,x1=800,max=30; let y=40;
+  [10,20,30].forEach(v=>{svg.appendChild(el('line',{x1:x0+v/max*(x1-x0),x2:x0+v/max*(x1-x0),y1:22,y2:170,class:'grid'}));
+    const t=el('text',{x:x0+v/max*(x1-x0),y:186,'font-size':'10','text-anchor':'middle'});t.textContent=v+' %';svg.appendChild(t);});
+  rows.forEach(([lab,segs,tot])=>{
+    let x=x0;
+    segs.forEach(([v,c])=>{
+      const w=v/max*(x1-x0);
+      const r=el('rect',{x:x,y:y-20,width:w,height:26,fill:c,rx:4,tabindex:0});
+      r.appendChild(el('title')).textContent=`${lab}: ${v} %`;
+      svg.appendChild(r);x+=w;
+    });
+    const l=el('text',{x:x0-12,y:y,'font-size':'12','text-anchor':'end',fill:'var(--fg)'});l.textContent=lab;svg.appendChild(l);
+    const t2=el('text',{x:x+8,y:y,'font-size':'12.5','text-anchor':'start',fill:'var(--fg)'});t2.textContent=tot;svg.appendChild(t2);
+    y+=52;
+  });
+})();
+</script>

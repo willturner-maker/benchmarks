@@ -120,6 +120,11 @@ median onset: 2-6 % into the conversation — same in both waves</pre>
     by design</b> (626729 / 373753 for <code>--seed 300</code>), so "user-first" flips are user-sampling
     variance. The share attributable to <b>engine nondeterminism</b> still needs the same-seed repeat, which
     remains the open τ² experiment.</p>
+    <p class="note"><b>Correction (2026-11-21):</b> the same-seed repeat has since run
+    (<a href="https://willturner-maker.github.io/benchmarks/reports/2026-11-21-tau2-same-seed.html">same-seed pair</a>)
+    and it <b>refutes the reading above</b>: at temperature 0 with an identical seed, 0/238 transcripts are
+    byte-identical and 15.1 % still flip reward — the micro-divergence is the engine's own decode
+    nondeterminism, not user resampling. "User-first" remains true as <em>where</em> divergence surfaces first.</p>
   </section>
 
   <section>

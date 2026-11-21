@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-21T03:02:25Z",
+  "updated": "2026-11-21T07:56:16Z",
   "read_this_first": [
     "Rows are only comparable within the same media_class and the same tenant conditions.",
     "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
@@ -1724,6 +1724,21 @@
         "incidents": "summarize.py fallback glob was unscoped (wave-*-{dom}) and first scored airline/telecom off the MEDIUM wave's sims - caught by the tool's own upstream re-derivation check (0.887/0.833 vs 0.8667/0.8200), fixed same commit to scope by wave-dir + warning on multi-match; tasks.jsonl built post-wave from the three explicit xhigh sim dirs; stats gate still byte-identical",
         "limitations": "single xhigh wave (no repeat arm); paired arms but not matched pairs - transcripts diverge from turn 1; retail deltas inside noise; self-play caveat unchanged; same-seed repeat still the open \u03c4\u00b2 experiment",
         "evidence": "bench/tau2-bench/results/2026-11-21-pass3-xhigh/ (RECORD.md, tasks.jsonl 714 rows, pins, logs, engine_samples.jsonl, flip_triage.json 126 pairs, status edges)"
+      },
+      {
+        "date": "2026-11-21-sameseed-pair (control experiment, not a scored row: the same-seed repeat that isolates engine nondeterminism)",
+        "pin": "tau2-bench v1.0.1 = fc0055dc4e0a316c3f83133267fbd6faaa770992; judge-free scope; two waves of --num-trials 1 --seed 300 -> trial seed 626729 for EVERY sim in both arms (verified from rows); temperature 0; self-play; new engine epoch (instance 627c2f53, started 2026-11-21T05:20:26Z after the restart record)",
+        "design": "arm A 05:23:32Z->06:37:14Z (memory-cold, pages_active peak 4,456), arm B 06:37:14Z->07:53:06Z (warm, peak 917); identical tasks/seed/args/pin; 476 sims total, 0 unscored",
+        "findings": {
+          "byte_identical_transcripts": "0 / 238 (0.0%)",
+          "first_divergence": "user 174 (73%), agent 64 (27%); median onset 0.045",
+          "reward_diverging_tasks": "36 / 238 (15.1%): airline 4 (8.0%), retail 17 (23.0%), telecom 15 (13.2%); direction 21 up / 15 down",
+          "per_arm_pass1": "airline 0.880/0.920, retail 0.784/0.824, telecom 0.895/0.904 (single-trial arms; context only, pass^2 undefined)"
+        },
+        "correction": "REFUTES the published reading (19a, pass^3) that flips are user-simulator sampling: with identical seeds at temperature 0 ALL transcripts still diverged. Engine-only reward-flip floor 15.1% ~ 80% of the 2-trial flip rate (18.9%); seed changes add the rest. 'User-first' remains where divergence surfaces first, not the cause. Rule 9 updated with the mechanism.",
+        "engine_context": "tenancy-cleanest tau2 windows here: 0 co-tenant samples, 0 spill moves, 0 suspensions; disk.kv_demotions +3,345/+2,726 persistent-cache churn (informational); cache.reused_tokens +38.4M/+39.9M",
+        "confounds_disclosed": "first pair on the new epoch; both telecom arms +3.5/+4.4 pts over the medium wave on single-trial waves - no epoch effect claimed; arm-vs-arm cache warmth differs (A cold, B warm)",
+        "evidence": "bench/tau2-bench/results/2026-11-21-sameseed-pair/ (RECORD.md, same_seed_pairs.json 238 rows) + raw arms results/2026-11-21-sameseed-{a,b}/ (tasks.jsonl 238 rows each, logs, engine samples, status edges)"
       }
     ],
     "splash_depth_probe": [

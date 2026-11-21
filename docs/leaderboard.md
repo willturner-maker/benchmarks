@@ -846,7 +846,11 @@ widths **b1 19,439, b2/b3/b4 = 0**, peak 1 request in flight, 0 co-tenant sample
 **3 of 8, the same count as the width-3 replication**, with only retail 90 unstable in all three passes. The
 first version of this row blamed batching; the control refutes it, and the surviving candidate is
 **long-context KV/prefix-cache state** (user turns are still never byte-identical at c1, and the 2026-11-17
-`verify_rows` A/B found no divergence on a short prompt). A discarded first attempt is recorded too: its own
+`verify_rows` A/B found no divergence on a short prompt). **Corroborated by the 2026-11-21 same-seed
+pair:** at an identical seed and temperature 0, 0/238 transcripts are byte-identical (median onset 4.5 %),
+and the identical-seed reward-flip floor of 15.1 % carries ~80 % of the two-trial flip rate — the flips are
+engine decode nondeterminism amplified through conversation, not user resampling. A discarded first
+attempt is recorded too: its own
 "concurrency 1" window contained **8,599 decode batches wider than b1** (b2 8,190 · b3 409) from operator
 traffic, and it had no engine sampler, which is part of why it was thrown out.
 

@@ -297,8 +297,8 @@ Two corrections to how 19a's flip finding should now be read:
    The reproducible claim is the *rate*: ~19 % of tasks flip within 2 trials, 27 % within 3, 36 % across 5.
 2. **First-mover holds up directionally.** 130 flipping trial-pairs triaged: **user-simulator-first 96 (74 %),
    agent-first 34 (26 %)** — 19a was 82/18 — with the same early onset (median 0.02–0.06). The seed caveat
-   stands: fresh user-simulator seed per trial by design, so this is user-sampling variance, not
-   engine nondeterminism, which still needs a same-seed repeat to be isolated.
+   seed caveat — superseded by the 2026-11-21 same-seed pair below: with identical seeds the transcripts
+   *still* all diverged, so the micro-divergence is engine decode nondeterminism, not user resampling.
 
 Engine side: τ² calls peak at **0.122× KV budget**, and the retail window's one foreign sample was this
 session's own 133,473-tok request — `pages_active` 0.86× of the pool *on its own*, `kv_demotions` +5,301 — an
@@ -335,6 +335,33 @@ both directions on the same task+seed (airline task 0 seed 373753: 1,377 → 2,7
 - Incident disclosed in the RECORD: `summarize.py`'s fallback glob was unscoped (`wave-*-{dom}`) and first
   scored airline/telecom off the *medium* wave's sims; caught by the tool's own upstream re-derivation check,
   fixed to scope by wave dir with a multi-match warning, and the stats gate still passes byte-identically.
+
+## Same-seed repeat 2026-11-21 — the flip floor is the engine, not user resampling (raw: `bench/tau2-bench/results/2026-11-21-sameseed-pair/`)
+
+The last open mechanism experiment: two waves of all 238 judge-free tasks with `--num-trials 1 --seed 300`,
+which makes tau2 draw the **same trial seed (626729) for every sim in both arms** — verified from the rows.
+Same pin, same model args (medium), self-play, temperature 0; first runs on the post-restart engine epoch.
+
+| measure | value |
+|---|---|
+| byte-identical A-vs-B transcripts | **0 / 238 (0.0 %)** |
+| first divergence role | user 174 (73 %) · agent 64 (27 %) — median onset 0.045 |
+| **reward-diverging tasks** | **36 / 238 (15.1 %)** — airline 4, retail 17, telecom 15; 21 up / 15 down |
+
+**Correction, published openly:** the 19a and pass^3 records read the flips as *user-simulator sampling*
+(fresh seed per trial). With the seed held identical the transcripts **still all diverged** — at temperature
+0 the micro-divergence is the engine's own greedy decode nondeterminism at conversation depth, the
+mechanism the 19b width control pointed at. Corrected decomposition: the identical-seed reward-flip floor
+(15.1 %) accounts for ~80 % of the 2-trial flip rate (18.9 %); changing seeds adds roughly the rest, and
+more trials more draws. "User-first" stays valid as *where divergence surfaces first*, not as *cause*; why
+user turns move first ~3:1 is a new open question. Rule 9 also gains its mechanism: micro-divergence is
+near-universal, reward flips are a per-task lottery — rates replicate, rosters don't.
+
+Both windows were the tenancy-cleanest τ² runs here: 0 co-tenant samples, 0 spill, 0 suspensions
+(new-epoch counters; `disk.kv_demotions` +3,345/+2,726 is persistent-cache churn, informational). Disclosed
+confound: this is the first pair on the new epoch and both telecom arms (+3.5/+4.4 pts over the medium
+wave) sit high on single-trial waves; no epoch effect is claimed. Not a scored row — the per-arm pass^1
+values (0.857 / 0.882 pooled) are context, and `pass^2` is undefined at one trial.
 
 To publish a row, follow the numbered rules in `bench/tau2-bench/README.md` and send a PR — see
 [Community runs](leaderboard.md#community-runs--your-numbers).
