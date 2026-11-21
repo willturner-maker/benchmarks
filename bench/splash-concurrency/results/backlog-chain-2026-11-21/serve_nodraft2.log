@@ -1,0 +1,8 @@
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+13:15:43 Loading · ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+[transformers] You are using a model of type `qwen4_exp` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+[transformers] The tokenizer you are loading from '~/Library/Application Support/Splash/models/.resolved/nodraft-f073087d1dff7edaf96fe2f5ee568630/tokenizer' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+13:15:44 Chat template · patched to render later system messages in place (the original template rejects them), generation prompt 5-7 tokens
+error: MODEL_DIRECTORY must hold the model's target/ and draft/ directories
+13:15:44 Error · MODEL_DIRECTORY must hold the model's target/ and draft/ directories
+13:15:44 Stopping · releasing engine resources

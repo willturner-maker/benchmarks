@@ -1,0 +1,3 @@
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+08:19:45 Loading · ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+08:19:45 Error · ~/Library/Application Support/Splash/models/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S-nodraft is not a model directory Splash prepared

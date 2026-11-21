@@ -1023,3 +1023,25 @@ demotion (some refused) and a cache suspension. The KV question is entirely abou
 matching signature is not proof about a historical window; 16b is attributed to "the co-tenancy regime", not a
 named tenant. n = 1 trip round (stop-on-trip by design).
 
+## Drafter-off is not runnable on 1.7.0 — a pinned-stack constraint, found the hard way (2026-11-21) (raw: `bench/splash-concurrency/results/backlog-chain-2026-11-21/ARM-FINAL.md`)
+
+Planned A/B: serve the same target weights without the DFlash2 drafter, measure the throughput cost
+of speculation. Closed as a **finding**: the drafter is mandatory at every layer of the release.
+
+- The engine's `serve-native` refuses any MODEL_DIRECTORY without BOTH `target/` and `draft/` — and exposes
+  no draft-related flag at all (its own usage text; no `--*draft*` string in the binary).
+- The supervisor record format itself (`install/assembly.py::_well_formed`) accepts only
+  `sources == {target, draft}` — a draft-less assembly record is invalid by construction; the install
+  pipeline (`install/local.py::_draft`) resolves the family's draft repo or refuses.
+- The only draft-adjacent knob is `--verify-rows {auto,all}`, which changes verification strictness, not
+  speculation on/off.
+
+Four launch attempts to establish it (each failure a real layer: selection-link/assembly rules → record
+shape keys → the engine's directory rule), each fixed and re-gated, engine always restored to the pinned
+argv and identity-verified (`ARM1-FAILURE.md` + `ARM-FINAL.md`). A dummy draft would have measured a
+pathological drafter, not none — not run. **Takeaway for wave planning:** drafter ablation waits for an
+upstream option; its contribution stays telemetry-only (acceptance ~0.61–0.63 across today's windows).
+Reusable harvest: the restart tooling now has an instance-identity kill gate and a build+verify-before-kill
+ordering (`run_drafter_arm.sh`), directly applicable to the flag-class A/Bs that *are* supported
+(`--thinking-token-budget`, `--queue-size`, …).
+

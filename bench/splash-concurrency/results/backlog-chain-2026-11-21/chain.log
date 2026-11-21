@@ -22,3 +22,17 @@ drafted_tokens delta over probe: 288
 drafted_tokens delta over probe: 186
 2026-11-21T20:54:56Z pin restored, drafter ON again, identity verified
 2026-11-21T20:54:56Z retail40-then-drafter driver complete
+2026-11-21T20:57:28Z farm link verified: \~/Library/Application Support/Splash/models/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S-nodraft (zero draft entries)
+2026-11-21T20:57:28Z drafter-arm rerun: killing current engine (operator's or chain's - none launched by this script yet)
+2026-11-21T20:57:29Z farm supervisor pid 15297
+2026-11-21T21:12:35Z drafter arm invalid (launch/identity/draft check failed) - restoring pin
+2026-11-21T21:12:35Z pin supervisor pid 16186
+drafted_tokens delta over probe: 265
+2026-11-21T21:12:49Z pin restored, drafter ON again, identity verified
+2026-11-21T21:15:41Z farm link verified: \~/Library/Application Support/Splash/models/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S-nodraft (zero draft entries)
+2026-11-21T21:15:41Z drafter-arm rerun: killing current engine (operator's or chain's - none launched by this script yet)
+2026-11-21T21:15:43Z farm supervisor pid 17164
+2026-11-21T21:30:49Z drafter arm invalid (launch/identity/draft check failed) - restoring pin
+2026-11-21T21:30:49Z pin supervisor pid 18096
+drafted_tokens delta over probe: 62
+2026-11-21T21:31:02Z pin restored, drafter ON again, identity verified

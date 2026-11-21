@@ -1,0 +1,62 @@
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+13:30:50 Loading · ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+[transformers] You are using a model of type `qwen4_exp` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+[transformers] The tokenizer you are loading from '~/Library/Application Support/Splash/models/.resolved/f073087d1dff7edaf96fe2f5ee568630feced771f7d81c0484351ebe0eabc260/tokenizer' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+13:30:50 Chat template · patched to render later system messages in place (the original template rejects them), generation prompt 5-7 tokens
+13:30:53 Weights loaded in 2.51 s.
+13:30:53 Decode cycles verify the rows their cost line's floor passes (--verify-rows auto): greedy and seeded outputs can differ from run to run.
+13:30:53 SSD cache: up to 256.0 GiB of persistent files in ~/Library/Caches/Splash/prefix-cache/c1cb917d9d464d6595b9c2db5a834158 (its quota, while its volume has room beyond the 10.0 GiB it keeps free); KV pages of 416 KiB and states of 33 MiB, a state's write staging through 33 MiB of the memory plan; --max-cache-disk 0 turns it off.
+13:30:53 Table per_layer_token_embd.weight streams from its file: 27465 MiB stay on the SSD; row cache of 2097152 rows in 237 MiB, the most --ple-memory auto takes: the rows of every id a 128K-token prompt stages; 32 readers.
+13:30:53 Routed experts stream from their files: 23007 slots for 24576 experts (93%) in 46090 MiB, a store of 46820 MiB in 7 chunks, all that --expert-memory auto leaves it beside the floors and the KV kept resident; it gives none back, its floor, 46820 MiB, 100% of its slots, being all of it.
+13:30:53 Kernel policy for GPU family 10 with 64 cores.
+13:30:53 Long requests keep their KV on the SSD cache: 262144 tokens of context (bound: model; window 262144, resident 155633, spilled 262144, disk 262144); hot block cache 585 MiB (floor 585 MiB); history staging in 2 buffers; SSD room for active KV 256.0 GiB.
+13:30:53 Persistent cache ~/Library/Caches/Splash/prefix-cache/c1cb917d9d464d6595b9c2db5a834158: took back 7124 restore points over 47702 KV blocks (261149 MiB); left 0 copies behind.
+13:30:53 Warming up · 0 of 14 steps
+13:30:54 Warming up · 1 of 14 steps
+13:30:54 Warming up · 2 of 14 steps
+13:30:54 Warming up · 3 of 14 steps
+13:30:54 Warming up · 4 of 14 steps
+13:30:55 Warming up · 5 of 14 steps
+13:30:55 Warming up · 6 of 14 steps
+13:30:55 Warming up · 7 of 14 steps
+13:30:55 Warming up · 8 of 14 steps
+13:30:55 Warming up · 9 of 14 steps
+13:30:55 Warming up · 10 of 14 steps
+13:30:55 Warming up · 11 of 14 steps
+13:30:56 Warming up · 12 of 14 steps
+13:30:56 Warming up · 13 of 14 steps
+13:30:56 Warming up · 14 of 14 steps
+13:30:57 Ready · ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S · context 256K · http://127.0.0.1:8000
+13:30:58 Started · request 1 · input 22 · cached 0 · effort absent → medium · thinking on
+13:30:59 TTFT of request 1: 332.05 ms: own prefill 331.651, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.398792
+13:31:00 Done · request 1 · input 22 · cached 0 · output 68 · TTFT 0.3s · 69.7 tok/s · 4.2 tok/cycle
+13:31:02 Started · request 2 · input 133,706 · cached 133,056 · effort absent → medium · thinking on
+13:31:03 TTFT of request 2: 1634.54 ms: own prefill 1455.4, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 179.141
+13:31:05 Done · request 2 · input 133,706 · cached 133,056 · output 351 · tools 13·35e3c6cf · TTFT 1.6s · 190.8 tok/s · 5.7 tok/cycle
+13:31:05 Started · request 3 · input 134,613 · cached 133,696 · effort absent → medium · thinking on
+13:31:06 TTFT of request 3: 439.979 ms: own prefill 439.417, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.561668
+13:31:07 Done · request 3 · input 134,613 · cached 133,696 · deduplicated 352 · output 136 · tools 13·35e3c6cf · TTFT 0.4s · 138.2 tok/s · 3.6 tok/cycle
+13:31:07 Started · request 4 · input 134,889 · cached 134,592 · effort absent → medium · thinking on
+13:31:07 TTFT of request 4: 237.322 ms: own prefill 236.813, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.509834
+13:31:12 Done · request 4 · input 134,889 · cached 134,592 · deduplicated 128 · output 569 · tools 13·35e3c6cf · TTFT 0.2s · 121.9 tok/s · 3.1 tok/cycle
+13:31:12 Started · request 5 · input 135,580 · cached 134,880 · effort absent → medium · thinking on
+13:31:13 TTFT of request 5: 344.874 ms: own prefill 344.294, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.579834
+13:31:14 Done · request 5 · input 135,580 · cached 134,880 · deduplicated 576 · output 187 · tools 13·35e3c6cf · TTFT 0.3s · 131.1 tok/s · 3.2 tok/cycle
+13:31:14 Started · request 6 · input 136,100 · cached 135,552 · effort absent → medium · thinking on
+13:31:14 TTFT of request 6: 334.57 ms: own prefill 334.046, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.524042
+13:31:17 Done · request 6 · input 136,100 · cached 135,552 · deduplicated 192 · output 285 · tools 13·35e3c6cf · TTFT 0.3s · 131.3 tok/s · 3.2 tok/cycle
+13:31:17 Started · request 7 · input 136,773 · cached 136,064 · effort absent → medium · thinking on
+13:31:17 TTFT of request 7: 380.562 ms: own prefill 380.033, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.5295
+13:31:21 Done · request 7 · input 136,773 · cached 136,064 · deduplicated 320 · output 444 · tools 13·35e3c6cf · TTFT 0.4s · 110.6 tok/s · 2.8 tok/cycle
+13:31:21 Started · request 8 · input 137,539 · cached 136,768 · effort absent → medium · thinking on
+13:31:21 TTFT of request 8: 374.264 ms: own prefill 373.792, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.472333
+13:31:28 Done · request 8 · input 137,539 · cached 136,768 · deduplicated 448 · output 729 · tools 13·35e3c6cf · TTFT 0.4s · 107.3 tok/s · 2.7 tok/cycle
+13:31:28 Started · request 9 · input 138,289 · cached 137,504 · effort absent → medium · thinking on
+13:31:29 TTFT of request 9: 351.553 ms: own prefill 351.072, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.480917
+13:31:29 Done · request 9 · input 138,289 · cached 137,504 · deduplicated 736 · output 90 · tools 13·35e3c6cf · TTFT 0.4s · 173.1 tok/s · 4.5 tok/cycle
+13:31:29 Started · request 10 · input 138,974 · cached 138,272 · effort absent → medium · thinking on
+13:31:30 TTFT of request 10: 391.596 ms: own prefill 391.082, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.513875
+13:31:42 Done · request 10 · input 138,974 · cached 138,272 · deduplicated 96 · output 1,385 · tools 13·35e3c6cf · TTFT 0.4s · 112.3 tok/s · 2.8 tok/cycle
+13:31:42 Started · request 11 · input 140,414 · cached 138,944 · effort absent → medium · thinking on
+13:31:42 TTFT of request 11: 518.327 ms: own prefill 517.737, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.590541
+13:31:46 Done · request 11 · input 140,414 · cached 138,944 · deduplicated 1,408 · output 510 · tools 13·35e3c6cf · TTFT 0.5s · 144.8 tok/s · 3.6 tok/cycle
