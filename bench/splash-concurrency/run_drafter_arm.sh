@@ -85,6 +85,19 @@ draft_probe(){  # $1 zero|nonzero
 }
 
 # ---------- arm ---------------------------------------------------------------------------
+# Build + fully verify the farm BEFORE touching the engine (attempt 2 burned a 15-min engine gap
+# when the farm builder crashed on its own symlink after the kill had already happened).
+FARM=$(python3 "$BENCH/bench/splash-concurrency/drafter_farm.py") || { log "drafter-arm: farm build failed - engine untouched"; exit 1; }
+if [ -z "$FARM" ] || [ ! -f "$FARM/model.json" ] || python3 -c "
+import json,sys
+m=json.load(open('$FARM/model.json'))
+bad=sum(1 for k in m.get('files',{}) if 'draft' in k.lower())+sum(1 for k in m.get('sources',{}) if 'draft' in k)
+sys.exit(0 if bad==0 and m.get('files') else 1)"; then
+  log "farm link verified: ${FARM/#$HOME/\~} (zero draft entries)"
+else
+  log "drafter-arm: farm manifest failed verification - engine untouched"; exit 1
+fi
+
 log "drafter-arm rerun: killing current engine (operator's or chain's - none launched by this script yet)"
 CUR=$(inst_pid)
 [ -n "$CUR" ] && kill "$CUR" 2>/dev/null   # the ONLY kill of a foreign pid, logged above by design
@@ -92,8 +105,6 @@ for _ in {1..30}; do pgrep -f "server.server.*--port $PORT" > /dev/null || pgrep
 pkill -f "splash serve-native" 2>/dev/null || true
 for _ in {1..15}; do lsof -nP -iTCP:"$PORT" -sTCP:LISTEN > /dev/null 2>&1 || break; sleep 1; done
 
-FARM=$(python3 "$BENCH/bench/splash-concurrency/drafter_farm.py")
-log "farm link: ${FARM/#$HOME/\~}"
 SUP=$(relaunch "$FARM" "$REC/serve_nodraft2.log"); log "farm supervisor pid $SUP"
 if wait_ready post_nodraft2 "$SUP" && draft_probe zero; then
   log "drafter CONFIRMED OFF (identity verified); running 238x1 medium wave"

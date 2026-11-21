@@ -31,7 +31,9 @@ src_res = src.resolve()
 
 # clean the rejected attempt-1 layout if present
 stale = MODELS / "ISTA-DASLab" / "Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S-nodraft"
-if stale.is_dir():                       # attempt 1 built a plain DIR where the LINK now goes
+if stale.is_symlink():
+    pass                                    # this is our LINK below, not the stale attempt-1 dir
+elif stale.is_dir():                        # attempt 1 built a plain DIR where the LINK now goes
     import shutil
     shutil.rmtree(stale)
 
