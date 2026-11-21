@@ -1,0 +1,1 @@
+/opt/homebrew/Cellar/splash/1.7.0/libexec/python/bin/python3: Error while finding module specification for 'server.server' (ModuleNotFoundError: No module named 'server')

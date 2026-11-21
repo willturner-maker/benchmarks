@@ -55,7 +55,15 @@ for _ in {1..15}; do
 done
 
 # --- 4. relaunch detached, poll until ready --------------------------------------------------
-cd "$HOME"
+# CRITICAL: `-m server.server` resolves the `server` package (lives under libexec) via PYTHONPATH or
+# CWD - every past launch inherited it from an interactive shell; a bare relaunch died of
+# ModuleNotFoundError (attempt 1, from $HOME). Make the dependency explicit: cd to libexec AND
+# export PYTHONPATH. (Note: -P suppresses script-dir/user-site, but PYTHONPATH IS honored.)
+LIBEXEC=$(dirname "$(dirname "$(dirname "$BIN")")")   # .../splash/<ver>/libexec/python -> .../libexec
+[ -d "$LIBEXEC/server" ] || LIBEXEC=$(dirname "$(find /opt/homebrew/Cellar/splash -maxdepth 3 -type d -name server | head -1)")
+echo "$(date -u +%FT%TZ) relaunch from: $LIBEXEC (PYTHONPATH exported)" >> "$REC/restart.log"
+cd "$LIBEXEC"
+export PYTHONPATH="$LIBEXEC${PYTHONPATH:+:$PYTHONPATH}"
 nohup "$BIN" -u -P -m server.server "$MODEL_PATH" \
   --model "$MODEL_ID" \
   --binary "$ENGINE_BIN" \
@@ -68,14 +76,16 @@ disown
 echo "$(date -u +%FT%TZ) relaunched pid $!" >> "$REC/restart.log"
 
 ready=0
-for _ in {1..72}; do
-  if curl -s --max-time 5 "http://127.0.0.1:$PORT/status" | \
-     python3 -c "import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get('ready') else 1)"; then
+for _ in {1..180}; do
+  # guard: a down engine returns an EMPTY body; only feed JSON to the parser, no tracebacks
+  body=$(curl -s --max-time 5 "http://127.0.0.1:$PORT/status" || true)
+  if [ -n "$body" ] && printf '%s' "$body" | \
+     python3 -c "import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get('ready') else 1)" 2>/dev/null; then
     ready=1; break
   fi
   sleep 5
 done
-[ "$ready" = 1 ] || { echo "$(date -u +%FT%TZ) FATAL: engine not ready after 6 min" >> "$REC/restart.log"; exit 1; }
+[ "$ready" = 1 ] || { echo "$(date -u +%FT%TZ) FATAL: engine not ready after 15 min" >> "$REC/restart.log"; exit 1; }
 curl -s --max-time 10 "http://127.0.0.1:$PORT/status" > "$REC/status_first_post_restart.json"
 
 # --- 5. pin gate: identity/window/KV-pool fields must match the pre-restart snapshot ----------
