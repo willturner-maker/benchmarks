@@ -75,7 +75,7 @@ def main():
     # stratify each stratum by prompt-size quartile, then round-robin pick
     def stratified(pool, k):
         pool = sorted(pool, key=lambda r: len(json.dumps(r["request"].get("messages", []))))
-        qs = [pool[i::max(1, len(pool) // 4)] for i in range(4)]
+        qs = [pool[i::4] for i in range(4)]   # true size quartiles (round-robin split)
         picks, i = [], 0
         while len(picks) < k and any(qs):
             q = qs[i % 4]
