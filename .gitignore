@@ -34,3 +34,4 @@ bench/blender-benchmark/fixture/*.glb
 
 # operator scratch (holds machine-local absolute paths; never published)
 bench/**/_scratch_*/
+bench/tau2-bench/results/*/captures.jsonl

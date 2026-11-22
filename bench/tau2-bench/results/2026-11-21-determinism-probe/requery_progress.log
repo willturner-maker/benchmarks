@@ -1,0 +1,42 @@
+seq agent done, agree=False
+seq agent done, agree=False
+seq agent done, agree=False
+seq agent done, agree=True
+seq agent done, agree=True
+seq agent done, agree=False
+seq agent done, agree=False
+seq agent done, agree=False
+seq agent done, agree=False
+seq agent done, agree=False
+seq agent done, agree=False
+seq agent done, agree=False
+seq agent done, agree=False
+seq agent done, agree=False
+seq agent done, agree=True
+seq agent done, agree=False
+seq user done, agree=False
+seq user done, agree=False
+seq user done, agree=False
+seq user done, agree=True
+seq user done, agree=False
+seq user done, agree=False
+seq user done, agree=True
+seq user done, agree=False
+seq user done, agree=False
+seq user done, agree=True
+seq user done, agree=False
+seq user done, agree=False
+seq user done, agree=False
+seq user done, agree=False
+seq user done, agree=False
+seq user done, agree=False
+seq user done, agree=False
+seq user done, agree=True
+Traceback (most recent call last):
+  File "~/benchmarks/bench/tau2-bench/probe_requery.py", line 131, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "~/benchmarks/bench/tau2-bench/probe_requery.py", line 117, in main
+    stat[k][0] += row["agree"]; stat[k][1] += row["vs_orig"]; stat[k][2] += 1
+                                              ~~~^^^^^^^^^^^
+KeyError: 'vs_orig'

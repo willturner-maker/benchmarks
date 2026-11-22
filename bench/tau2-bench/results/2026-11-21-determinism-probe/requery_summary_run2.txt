@@ -1,0 +1,6 @@
+reps=3  sample per cell=40
+mix agent: identical-action 1/16 (6.2 %)  identical-message(incl thinking) 0/16 (0.0 %)  matched-original-action 1/16 (6.2 %)
+mix user : identical-action 2/18 (11.1 %)  identical-message(incl thinking) 1/18 (5.6 %)  matched-original-action 6/18 (33.3 %)
+seq agent: identical-action 2/16 (12.5 %)  identical-message(incl thinking) 2/16 (12.5 %)  matched-original-action 2/16 (12.5 %)
+seq user : identical-action 5/18 (27.8 %)  identical-message(incl thinking) 4/18 (22.2 %)  matched-original-action 6/18 (33.3 %)
+first-difference offset when diverging: median 5 chars (n=58)

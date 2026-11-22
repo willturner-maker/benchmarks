@@ -30,6 +30,7 @@ telecom 0.693, and the flip *rate* replicated (65/238 at 3 trials) while the fli
 - [Same-seed repeat 2026-11-21 — the flip floor is the engine](#same-seed-repeat-2026-11-21--the-flip-floor-is-the-engine-not-user-resampling-raw-benchtau2-benchresults2026-11-21-sameseed-pair)
 - [Pass^3 replay 2026-11-21 — the new epoch reproduces the headline](#pass3-replay-2026-11-21--the-new-engine-epoch-reproduces-the-old-epoch-headline-raw-benchtau2-benchresults2026-11-21-pass3-replay)
 - [Retail-40 closure 2026-11-21 — the judge gap measured without a judge](#retail-40-closure-2026-11-21--the-judge-gap-measured-without-a-judge-raw-benchtau2-benchresults2026-11-21-retail40-env)
+- [Determinism probe 2026-11-22 — byte-identical requests are an ~85 % action coin flip](#determinism-probe-2026-11-22--byte-identical-requests-are-an-85-action-coin-flip-raw-benchtau2-benchresults2026-11-21-determinism-probe)
 
 ## Why this instrument, and why pinned at 1.0.1
 
@@ -363,6 +364,9 @@ mechanism the 19b width control pointed at. Corrected decomposition: the identic
 more trials more draws. "User-first" stays valid as *where divergence surfaces first*, not as *cause*; why
 user turns move first ~3:1 is a new open question. Rule 9 also gains its mechanism: micro-divergence is
 near-universal, reward flips are a per-task lottery — rates replicate, rosters don't.
+*(Refinement, same night: the determinism probe below shows the instability is **per-request** — a byte-identical
+single prompt at temperature 0 re-decodes to the same action only 15–27 % of the time — so "at conversation
+depth" described where it surfaces, not its scale.)*
 
 Both windows were the tenancy-cleanest τ² runs here: 0 co-tenant samples, 0 spill, 0 suspensions
 (new-epoch counters; `disk.kv_demotions` +3,345/+2,726 is persistent-cache churn, informational). Disclosed
@@ -396,6 +400,35 @@ the same-seed pair's ~0.92 arms) — that elevation was arm-level sampling noise
 Tenancy: 45 co-tenant request-samples (this agent's own session), Δ261 spill moves, Δ10 suspensions —
 lighter than the old-epoch window, and far from the invalidation threshold (rule: sustained co-tenant
 pressure invalidates; this was not sustained).
+
+## Determinism probe 2026-11-22 — byte-identical requests are an ~85 % action coin flip (raw: `bench/tau2-bench/results/2026-11-21-determinism-probe/`)
+
+The mechanism probe the same-seed pair demanded: capture **430 wire requests** (agent AND user-sim) through
+a transparent logging proxy during a normal airline wave (the only deviation is `api_base` for that capture
+wave), then re-POST sampled bodies **verbatim** — 3 repeats solo (`seq`) and 3 repeats batched with fresh
+mates (`mix`) — and compare actions (content + tool_calls, ignoring thinking-text churn).
+
+| arm / stratum (n=40 each) | identical action | identical full message |
+|---|---|---|
+| solo · agent calls | **15.0 %** | 12.5 % |
+| solo · user-sim calls | **27.5 %** | 17.5 % |
+| batched · agent calls | 15.0 % | 10.0 % |
+| batched · user-sim calls | 40.0 % | 30.0 % |
+
+**The nondeterminism is per-request, not cumulative-at-depth.** An identical single prompt at temperature 0
+alone on the engine reproduces its own action 15 % of the time (agent calls; user calls 27.5 %, Wilson 95 %
+CIs 7–28 % / 16–44 % overlap — the honest claim is “15–40 %, with the longer agent-call stream at the low
+end”); divergence appears at median char 25 (often
+char ~0). Depth *grades* it (small-prompt half 30–45 %, large 18–22 %) but shallow prompts are nowhere near
+deterministic. Batch width changes nothing (agent arms identical at 15 %, matching the 19b width control).
+Task-level reward flips (the 15.1 % floor) are then the environment **absorbing** an ~85 %-unstable call
+stream — which is why the lottery sits far below the call-level instability.
+
+Not established: the engine-internal cause (int8 cached-KV vs bf16 prefill precision and the drafter verify
+path remain candidates; solo repeats 2–3 reuse the cache repeat 1 built and still disagree, arguing against
+a pure cache-vs-prefill story). Scope: airline only (the depth gradient predicts telecom is worse — untested),
+single instance, drafter on (ablation impossible on 1.7.0, see the splash-engine doc). Suite rule 9 gains the
+per-request floor: determinism gets quoted at request level from now on.
 
 ## Retail-40 closure 2026-11-21 — the judge gap measured without a judge (raw: `bench/tau2-bench/results/2026-11-21-retail40-env/`)
 

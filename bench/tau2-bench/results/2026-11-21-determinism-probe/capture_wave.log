@@ -1,0 +1,1663 @@
+2026-11-21 15:33:42.198 | WARNING  | tau2.utils.utils:<module>:15 - No .env file found
+2026-11-21 15:33:42.198 | INFO     | tau2.utils.utils:<module>:28 - Using data directory from source: ~/tau2-bench/data
+2026-11-21 15:33:43.112 | INFO     | tau2.utils.llm_utils:<module>:102 - LiteLLM: Cache is disabled
+2026-11-21 15:33:43.161 | DEBUG    | tau2.registry:<module>:281 - Registering default components...
+2026-11-21 15:33:43.162 | DEBUG    | tau2.registry:<module>:292 - Voice dependencies not installed, skipping voice user registration
+2026-11-21 15:33:43.163 | DEBUG    | tau2.registry:<module>:350 - Default components registered successfully. Registry info: {
+  "domains": [
+    "mock",
+    "airline",
+    "retail",
+    "telecom",
+    "telecom-workflow",
+    "banking_knowledge"
+  ],
+  "agents": [
+    "llm_agent",
+    "llm_agent_gt",
+    "llm_agent_solo",
+    "discrete_time_audio_native_agent"
+  ],
+  "users": [
+    "user_simulator",
+    "dummy_user"
+  ],
+  "task_sets": [
+    "mock",
+    "airline",
+    "retail",
+    "telecom_full",
+    "telecom_small",
+    "telecom",
+    "telecom-workflow",
+    "banking_knowledge"
+  ]
+}
+╭────────────────────────── Simulation Configuration ──────────────────────────╮
+│ Domain: airline  Task Set: Default  Tasks: 0, 2, 4, 6, 8, 10, 12, 14, 16,    │
+│ 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48               │
+│ Trials: 1  Max Steps: 200  Max Errors: 10                                    │
+│                                                                              │
+│ Agent: llm_agent → openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S  │
+│ User:  user_simulator →                                                      │
+│ openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S                     │
+│                                                                              │
+│ Save: wave-2026-11-21-probe-capture-airline  Concurrency: 3  Verbose: False  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+0/25 (trial 1/1). Running task 0, trial 1
+2/25 (trial 1/1). Running task 4, trial 1
+1/25 (trial 1/1). Running task 2, trial 1
+2026-11-21 15:33:44.965 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:46.463 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:49.254 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:49.306 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:52.679 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:53.876 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:55.320 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:56.022 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:56.049 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:56.941 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:57.270 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:57.829 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:58.505 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:59.000 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:33:59.386 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:00.144 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:00.571 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:01.187 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:02.052 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:02.084 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:03.245 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:04.908 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:04.939 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:05.625 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:06.219 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:06.540 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 0                                                                   │
+│ Trial: 0                                                                     │
+│ Duration: 22.86s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: {'note': 'No actions to evaluate'}                                   │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+3/25 (trial 1/1). Running task 6, trial 1
+2026-11-21 15:34:07.665 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:09.039 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:09.484 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:10.174 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:11.730 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:12.912 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 1/25 complete. Avg reward: 1.00 (N=1). 3 running: 4.0(30s), 2.0(30s), 
+6.0(7s)
+2026-11-21 15:34:13.508 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:14.297 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:15.657 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:18.481 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:21.032 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:21.655 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:23.853 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:24.338 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:25.149 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:26.637 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:28.952 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:30.955 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:32.730 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:34.476 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:34.781 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:40.107 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:40.510 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:40.938 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:41.493 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 4                                                                   │
+│ Trial: 0                                                                     │
+│ Duration: 58.14s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_user_details [read] ✅ 1.0                                    │
+│ - 1: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 2: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 3: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 4: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 5: agent get_reservation_details [read] ✅ 1.0                             │
+│                                                                              │
+│ Partial Action Reward: 6/6 (100.0%)                                          │
+│   Read:  6/6 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+4/25 (trial 1/1). Running task 8, trial 1
+2026-11-21 15:34:41.905 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 2/25 complete. Avg reward: 1.00 (N=2). 3 running: 2.0(60s), 6.0(37s), 
+8.0(1s)
+2026-11-21 15:34:43.331 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:45.363 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:45.906 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:46.620 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:47.559 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:49.344 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:50.954 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:52.912 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:53.765 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:54.617 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:56.401 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:57.020 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:57.486 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:58.107 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:34:58.586 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:03.041 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 6                                                                   │
+│ Trial: 0                                                                     │
+│ Duration: 56.41s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_reservation_details [read] ✅ 1.0                             │
+│                                                                              │
+│ Partial Action Reward: 1/1 (100.0%)                                          │
+│   Read:  1/1 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+5/25 (trial 1/1). Running task 10, trial 1
+2026-11-21 15:35:04.383 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:05.560 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:06.550 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:06.898 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:07.610 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:09.903 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:12.592 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:12.855 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 3/25 complete. Avg reward: 1.00 (N=3). 3 running: 2.0(90s), 8.0(31s), 
+10.0(10s)
+2026-11-21 15:35:13.987 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:14.770 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:16.660 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 8                                                                   │
+│ Trial: 0                                                                     │
+│ Duration: 34.76s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_user_details [read] ✅ 1.0                                    │
+│ - 1: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 2: agent search_direct_flight [read] ✅ 1.0                                │
+│ - 3: agent book_reservation [write] ✅ 1.0                                   │
+│                                                                              │
+│ Partial Action Reward: 4/4 (100.0%)                                          │
+│   Read:  3/3 (100.0%)                                                        │
+│   Write: 1/1 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+6/25 (trial 1/1). Running task 12, trial 1
+2026-11-21 15:35:17.421 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:19.329 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:20.262 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:23.517 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:25.843 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:27.883 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:29.661 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:30.752 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:33.914 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:36.676 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:37.773 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:41.276 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 4/25 complete. Avg reward: 1.00 (N=4). 3 running: 2.0(120s), 10.0(40s), 
+12.0(26s)
+2026-11-21 15:35:43.784 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:44.341 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:44.844 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:45.275 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 2                                                                   │
+│ Trial: 0                                                                     │
+│ Duration: 121.91s                                                            │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_user_details [read] ✅ 1.0                                    │
+│ - 1: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 2: agent get_reservation_details [read] ✅ 1.0                             │
+│                                                                              │
+│ Partial Action Reward: 3/3 (100.0%)                                          │
+│   Read:  3/3 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+7/25 (trial 1/1). Running task 14, trial 1
+2026-11-21 15:35:46.898 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:47.723 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:49.851 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:50.806 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:51.393 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:52.508 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:53.281 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:54.117 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:54.576 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:55.577 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:57.149 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:35:59.893 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:00.602 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:03.572 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:05.774 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 12                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 48.82s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 1: agent search_direct_flight [read] ✅ 1.0                                │
+│ - 2: agent search_direct_flight [read] ✅ 1.0                                │
+│ - 3: agent calculate [generic] ❌ 0.0                                        │
+│ - 4: agent update_reservation_baggages [write] ✅ 1.0                        │
+│                                                                              │
+│ Partial Action Reward: 4/5 (80.0%)                                           │
+│   Read:  3/3 (100.0%)                                                        │
+│   Write: 1/1 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+8/25 (trial 1/1). Running task 16, trial 1
+2026-11-21 15:36:08.167 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:09.441 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:10.184 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:10.781 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:11.576 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:12.110 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 6/25 complete. Avg reward: 1.00 (N=6). 3 running: 10.0(70s), 14.0(28s), 
+16.0(7s)
+2026-11-21 15:36:15.946 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:27.412 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:28.438 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:29.037 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:30.862 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:31.925 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:43.021 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 6/25 complete. Avg reward: 1.00 (N=6). 3 running: 10.0(100s), 14.0(58s),
+16.0(37s)
+2026-11-21 15:36:45.127 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:47.578 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:49.742 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:50.397 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:51.342 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:51.404 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:53.045 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 16                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 46.87s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent update_reservation_flights [write] ✅ 1.0                         │
+│                                                                              │
+│ Partial Action Reward: 1/1 (100.0%)                                          │
+│   Write: 1/1 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+9/25 (trial 1/1). Running task 18, trial 1
+2026-11-21 15:36:54.009 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:56.031 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:57.668 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:36:58.796 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:00.430 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:01.158 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:01.694 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:02.802 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:03.578 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:04.807 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 14                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 79.23s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent cancel_reservation [write] ✅ 1.0                                 │
+│ - 1: agent book_reservation [write] ✅ 1.0                                   │
+│                                                                              │
+│ Partial Action Reward: 2/2 (100.0%)                                          │
+│   Write: 2/2 (100.0%)                                                        │
+│                                                                              │
+│ Communicate Checks:                                                          │
+│ - 0: 327 ✅                                                                  │
+│ - 1: 1000 ✅                                                                 │
+│ - 2: 1786 ✅                                                                 │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: None                                                            │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+10/25 (trial 1/1). Running task 20, trial 1
+2026-11-21 15:37:06.392 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:09.786 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:10.617 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:11.348 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 8/25 complete. Avg reward: 1.00 (N=8). 3 running: 10.0(130s), 18.0(20s),
+20.0(8s)
+2026-11-21 15:37:13.988 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:18.043 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:18.108 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:23.718 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:25.700 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:29.423 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:34.455 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:39.281 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:42.951 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 8/25 complete. Avg reward: 1.00 (N=8). 3 running: 10.0(160s), 18.0(50s),
+20.0(38s)
+2026-11-21 15:37:47.904 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:50.833 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:51.463 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:52.799 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:56.102 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:58.472 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:37:59.772 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:00.078 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:01.589 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:02.944 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:03.907 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:06.757 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:07.244 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:08.616 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:09.163 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:11.786 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 18                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 78.32s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent update_reservation_flights [write] ✅ 1.0                         │
+│ - 1: agent update_reservation_flights [write] ✅ 1.0                         │
+│ - 2: agent update_reservation_flights [write] ✅ 1.0                         │
+│ - 3: agent update_reservation_flights [write] ✅ 1.0                         │
+│ - 4: agent update_reservation_flights [write] ✅ 1.0                         │
+│                                                                              │
+│ Partial Action Reward: 5/5 (100.0%)                                          │
+│   Write: 5/5 (100.0%)                                                        │
+│                                                                              │
+│ Communicate Checks:                                                          │
+│ - 0: 23553 ✅                                                                │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: None                                                            │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+11/25 (trial 1/1). Running task 22, trial 1
+2026-11-21 15:38:12.592 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 9/25 complete. Avg reward: 1.00 (N=9). 3 running: 10.0(190s), 20.0(68s),
+22.0(1s)
+2026-11-21 15:38:13.875 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:14.623 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:15.116 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:15.980 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:15.984 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 20                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 70.75s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent book_reservation [write] ✅ 1.0                                   │
+│                                                                              │
+│ Partial Action Reward: 1/1 (100.0%)                                          │
+│   Write: 1/1 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+12/25 (trial 1/1). Running task 24, trial 1
+2026-11-21 15:38:16.950 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:18.161 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:18.428 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:19.385 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:20.220 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:20.755 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:21.942 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:24.176 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:25.448 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:25.479 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:26.285 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:26.571 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:27.200 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 10                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 203.75s                                                            │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: {'note': 'No actions to evaluate'}                                   │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+13/25 (trial 1/1). Running task 26, trial 1
+2026-11-21 15:38:27.973 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:29.365 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:30.594 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:30.786 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:31.357 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:32.075 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:32.765 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:34.083 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:35.147 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:37.333 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:39.313 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:39.496 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 11/25 complete. Avg reward: 1.00 (N=11). 3 running: 22.0(31s), 
+24.0(27s), 26.0(16s)
+2026-11-21 15:38:43.290 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:45.422 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:46.009 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:46.627 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:47.188 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 26                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 19.55s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: {'note': 'No actions to evaluate'}                                   │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+14/25 (trial 1/1). Running task 28, trial 1
+2026-11-21 15:38:49.489 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:50.417 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:51.082 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:52.759 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:53.151 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:55.038 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:55.934 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:57.090 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:58.025 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:58.668 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:38:59.132 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:00.548 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:00.579 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:01.400 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:02.152 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:02.156 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 22                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 49.94s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent update_reservation_flights [write] ✅ 1.0                         │
+│ - 1: agent update_reservation_passengers [write] ✅ 1.0                      │
+│ - 2: agent update_reservation_baggages [write] ✅ 1.0                        │
+│                                                                              │
+│ Partial Action Reward: 3/3 (100.0%)                                          │
+│   Write: 3/3 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+15/25 (trial 1/1). Running task 30, trial 1
+2026-11-21 15:39:02.924 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:03.678 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:04.544 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:04.801 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:05.321 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:05.695 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:05.949 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:06.946 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:07.784 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:08.845 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:09.543 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:09.792 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:10.780 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:10.965 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:11.789 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:12.790 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:13.133 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 13/25 complete. Avg reward: 1.00 (N=13). 3 running: 24.0(57s), 
+28.0(26s), 30.0(11s)
+2026-11-21 15:39:13.938 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:14.678 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:15.042 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:15.270 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:16.065 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:16.926 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:17.206 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:18.556 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:19.132 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 24                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 62.85s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent book_reservation [write] ✅ 1.0                                   │
+│                                                                              │
+│ Partial Action Reward: 1/1 (100.0%)                                          │
+│   Write: 1/1 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+16/25 (trial 1/1). Running task 32, trial 1
+2026-11-21 15:39:19.470 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:20.399 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:21.109 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:21.502 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:22.171 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:22.496 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:23.345 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:24.144 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:24.345 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:24.819 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:24.964 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:25.590 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:25.952 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:26.836 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:26.867 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:28.032 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:28.410 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:29.595 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:30.304 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:30.962 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:31.590 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:32.301 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:32.970 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 30                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 30.37s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 1: agent search_direct_flight [read] ✅ 1.0                                │
+│ - 2: agent update_reservation_flights [write] ✅ 1.0                         │
+│                                                                              │
+│ Partial Action Reward: 3/3 (100.0%)                                          │
+│   Read:  2/2 (100.0%)                                                        │
+│   Write: 1/1 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+17/25 (trial 1/1). Running task 34, trial 1
+2026-11-21 15:39:34.864 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:35.093 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:36.147 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:36.446 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:38.767 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:40.286 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:41.218 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 15/25 complete. Avg reward: 1.00 (N=15). 3 running: 28.0(56s), 
+32.0(24s), 34.0(10s)
+2026-11-21 15:39:44.390 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:44.827 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:47.211 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:49.070 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:49.922 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:53.017 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:53.536 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:39:58.575 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:00.635 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:06.546 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:13.265 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 15/25 complete. Avg reward: 1.00 (N=15). 3 running: 28.0(86s), 
+32.0(54s), 34.0(40s)
+2026-11-21 15:40:14.763 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:17.849 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:20.042 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:21.150 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:21.983 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 34                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 48.70s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: {'note': 'No actions to evaluate'}                                   │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+18/25 (trial 1/1). Running task 36, trial 1
+2026-11-21 15:40:22.724 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:24.944 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:25.302 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:27.566 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:27.748 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:30.629 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:32.784 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:34.198 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:35.851 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:37.652 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:39.469 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:40.682 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:41.332 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:42.766 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 16/25 complete. Avg reward: 1.00 (N=16). 3 running: 28.0(116s), 
+32.0(84s), 36.0(21s)
+2026-11-21 15:40:44.297 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:44.622 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 28                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 116.68s                                                            │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: {'note': 'No actions to evaluate'}                                   │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+19/25 (trial 1/1). Running task 38, trial 1
+2026-11-21 15:40:45.717 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:46.582 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:47.453 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:47.650 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 32                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 88.01s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_user_details [read] ✅ 1.0                                    │
+│ - 1: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 2: agent search_direct_flight [read] ✅ 1.0                                │
+│ - 3: agent update_reservation_flights [write] ✅ 1.0                         │
+│ - 4: agent update_reservation_flights [write] ✅ 1.0                         │
+│                                                                              │
+│ Partial Action Reward: 5/5 (100.0%)                                          │
+│   Read:  3/3 (100.0%)                                                        │
+│   Write: 2/2 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+20/25 (trial 1/1). Running task 40, trial 1
+2026-11-21 15:40:48.291 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:48.677 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:49.309 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:49.549 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:50.718 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:50.951 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:51.433 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:52.533 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:53.327 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:53.813 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:54.185 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:54.744 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:55.213 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:56.191 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:56.800 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:58.199 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:58.601 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:40:59.359 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:00.675 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:00.969 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:01.667 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:02.452 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 40                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 14.55s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 1: agent update_reservation_passengers [write] ✅ 1.0                      │
+│                                                                              │
+│ Partial Action Reward: 2/2 (100.0%)                                          │
+│   Read:  1/1 (100.0%)                                                        │
+│   Write: 1/1 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+21/25 (trial 1/1). Running task 42, trial 1
+2026-11-21 15:41:04.127 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:04.688 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:05.221 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:05.249 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:06.186 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:06.803 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:07.377 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:09.336 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:09.748 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:10.300 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:10.778 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:11.291 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:11.801 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:12.264 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:12.266 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:12.904 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 19/25 complete. Avg reward: 1.00 (N=19). 3 running: 36.0(51s), 
+38.0(29s), 42.0(11s)
+2026-11-21 15:41:15.239 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:22.390 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:23.059 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:27.260 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:27.634 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:27.977 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:29.764 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:31.258 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:31.612 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:33.890 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:33.892 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:34.705 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:35.948 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:37.785 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:39.267 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:41.464 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:42.156 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 38                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 57.41s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_user_details [read] ✅ 1.0                                    │
+│ - 1: agent get_reservation_details [read] ✅ 1.0                             │
+│                                                                              │
+│ Partial Action Reward: 2/2 (100.0%)                                          │
+│   Read:  2/2 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+22/25 (trial 1/1). Running task 44, trial 1
+Status: 20/25 complete. Avg reward: 1.00 (N=20). 3 running: 36.0(81s), 
+42.0(41s), 44.0(1s)
+2026-11-21 15:41:45.327 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:46.129 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:47.920 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:48.383 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:51.486 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:52.556 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:53.111 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:53.612 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:54.242 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:41:58.636 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:00.003 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:02.190 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:02.561 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:04.621 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:05.096 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:08.338 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:08.884 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:10.036 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:11.206 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:12.662 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 20/25 complete. Avg reward: 1.00 (N=20). 3 running: 36.0(111s), 
+42.0(71s), 44.0(31s)
+2026-11-21 15:42:13.720 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 42                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 70.95s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_user_details [read] ✅ 1.0                                    │
+│ - 1: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 2: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 3: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 4: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 5: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 6: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 7: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 8: agent cancel_reservation [write] ✅ 1.0                                 │
+│ - 9: agent cancel_reservation [write] ✅ 1.0                                 │
+│                                                                              │
+│ Partial Action Reward: 10/10 (100.0%)                                        │
+│   Read:  8/8 (100.0%)                                                        │
+│   Write: 2/2 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+23/25 (trial 1/1). Running task 46, trial 1
+2026-11-21 15:42:14.742 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:16.133 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:16.589 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:17.985 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:21.663 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:22.100 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:22.445 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:22.998 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 46                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 8.96s                                                              │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: {'note': 'No actions to evaluate'}                                   │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+24/25 (trial 1/1). Running task 48, trial 1
+2026-11-21 15:42:24.291 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:25.259 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:27.342 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:27.373 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:29.338 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:30.530 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:35.290 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:36.852 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:39.742 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 22/25 complete. Avg reward: 1.00 (N=22). 3 running: 36.0(141s), 
+44.0(61s), 48.0(20s)
+2026-11-21 15:42:44.577 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:47.373 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:49.348 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:50.518 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:51.083 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:51.725 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 48                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 28.27s                                                             │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_reservation_details [read] ✅ 1.0                             │
+│                                                                              │
+│ Partial Action Reward: 1/1 (100.0%)                                          │
+│   Read:  1/1 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+2026-11-21 15:42:52.725 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:55.892 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:42:59.952 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:43:05.992 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:43:08.545 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:43:09.552 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 23/25 complete. Avg reward: 1.00 (N=23). 2 running: 36.0(171s), 
+44.0(91s)
+2026-11-21 15:43:14.671 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:43:16.118 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:43:16.749 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:43:18.720 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:43:19.851 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:43:22.320 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:43:22.799 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:43:23.332 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 44                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 100.86s                                                            │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ❌ 0.0000 (COMMUNICATE: 1.0, DB: 0.0)                                │
+│                                                                              │
+│ DB Check:❌ 0.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_user_details [read] ✅ 1.0                                    │
+│ - 1: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 2: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 3: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 4: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 5: agent get_reservation_details [read] ✅ 1.0                             │
+│ - 6: agent search_direct_flight [read] ✅ 1.0                                │
+│ - 7: agent search_direct_flight [read] ✅ 1.0                                │
+│ - 8: agent search_direct_flight [read] ❌ 0.0                                │
+│ - 9: agent search_direct_flight [read] ✅ 1.0                                │
+│ - 10: agent search_direct_flight [read] ✅ 1.0                               │
+│ - 11: agent search_direct_flight [read] ❌ 0.0                               │
+│ - 12: agent search_direct_flight [read] ✅ 1.0                               │
+│ - 13: agent search_direct_flight [read] ✅ 1.0                               │
+│ - 14: agent search_direct_flight [read] ✅ 1.0                               │
+│ - 15: agent search_direct_flight [read] ❌ 0.0                               │
+│ - 16: agent update_reservation_flights [write] ✅ 1.0                        │
+│ - 17: agent update_reservation_flights [write] ❌ 0.0                        │
+│ - 18: agent update_reservation_flights [write] ❌ 0.0                        │
+│                                                                              │
+│ Partial Action Reward: 14/19 (73.7%)                                         │
+│   Read:  13/16 (81.2%)                                                       │
+│   Write: 1/3 (33.3%)                                                         │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+2026-11-21 15:43:29.560 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:43:34.011 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+Status: 24/25 complete. Avg reward: 0.96 (N=24). 1 running: 36.0(201s)
+2026-11-21 15:43:43.799 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+2026-11-21 15:43:48.618 | ERROR    | tau2.utils.llm_utils:get_response_cost:129 - This model isn't mapped yet. model=ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S, custom_llm_provider=openai. Add it here - https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json.
+
+╭──────────────────────────── Simulation Overview ─────────────────────────────╮
+│ Task ID: 36                                                                  │
+│ Trial: 0                                                                     │
+│ Duration: 206.32s                                                            │
+│ Mode: half_duplex                                                            │
+│ Termination Reason: TerminationReason.USER_STOP                              │
+│ Agent Cost: $0.0000                                                          │
+│ User Cost: $0.0000                                                           │
+│ Reward: ✅ 1.0000 (COMMUNICATE: 1.0, DB: 1.0)                                │
+│                                                                              │
+│ DB Check:✅ 1.0                                                              │
+│                                                                              │
+│ Action Checks:                                                               │
+│ - 0: agent get_reservation_details [read] ✅ 1.0                             │
+│                                                                              │
+│ Partial Action Reward: 1/1 (100.0%)                                          │
+│   Read:  1/1 (100.0%)                                                        │
+│                                                                              │
+│ Additional Info:                                                             │
+│ env: None                                                                    │
+│ nl: None                                                                     │
+│ communicate: {'note': 'No communicate_info to evaluate'}                     │
+│ action: None                                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Successfully completed all simulations!
+To review the simulations, run: tau2 view
+╭───────────────────────── Agent Performance Metrics ──────────────────────────╮
+│   ═══ Overview ═══                                                           │
+│   Total Simulations         25                                               │
+│   Total Tasks               25                                               │
+│                                                                              │
+│   ═══ Reward Metrics ═══                                                     │
+│   🏆 Average Reward         0.9600                                           │
+│      Pass^1                 0.960                                            │
+│   💰 Avg Cost/Conversation  $0.0000                                          │
+│                                                                              │
+│   ═══ Action Metrics ═══                                                     │
+│   📖 Read Actions           47/50 (94.0%)                                    │
+│   ✏️  Write Actions          22/24 (91.7%)                                    │
+│                                                                              │
+│   ═══ DB Match ═══                                                           │
+│   🗄️  DB Match               ✓ 24 / ✗ 1 (96.0%)                               │
+│                                                                              │
+│   ═══ Authentication ═══                                                     │
+│      Not Checked            25                                               │
+│                                                                              │
+│   ═══ Termination ═══                                                        │
+│   🛑 Normal Stop            25 (👤 25 / 🤖 0)                                │
+│                                                                              │
+│   ═══ LLM Judge Review ═══                                                   │
+│   🤖 Agent Errors           0 errors                                         │
+│      Sims by severity       -                                                │
+│   👤 User Errors            0 errors                                         │
+│      Sims by severity       -                                                │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
