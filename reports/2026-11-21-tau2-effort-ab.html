@@ -69,6 +69,16 @@ svg text{font-family:var(--mono);fill:var(--fg-2)}
   Airline and telecom gain 2 to 3.2 points; retail is a wash; instability is untouched, which is the
   result the user-sampling story predicted.</p>
 
+  <p class="lede" style="border-left:3px solid var(--warn);padding-left:12px;margin-top:14px">
+  <b>Two later corrections, same week (published openly).</b> (1) The mechanism line above is superseded:
+  the same-seed pair and the determinism probe showed the instability floor is <b>engine decode
+  nondeterminism, per request</b> (a byte-identical temp-0 request re-decodes to the same action only
+  15–40 % of the time) — not user resampling. (2) A <b>second xhigh wave</b>
+  (<code>results/2026-11-22-pass3-xhigh2/</code>) resolved the effect size: pass^1 0.8753 remains inside the
+  medium wave band (0.8445–0.8824) — <b>pass^1 superiority not established</b>; but pass^3 replicated
+  (0.7311 vs this wave's 0.7143, above both medium waves' 0.6933/0.7059) — the settled claim is
+  <b>more consistent passing, not a higher single-trial ceiling</b>, and still ~free (220 min).</p>
+
   <div class="chips">
     <div class="chip"><span class="dot"></span><b>pass^3 0.7143</b><span>all 238 × 3 · +2.10 pts vs medium's 0.6933</span></div>
     <div class="chip"><span class="dot"></span><b>airline 0.8867</b><span>best airline row measured on this stack at any k</span></div>

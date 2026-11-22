@@ -1,0 +1,12 @@
+2026-11-22T03:00:22Z xhigh2 wave launch: 238 x 3 trials, seed 300, agent args +reasoning_effort:xhigh, user args untouched (medium default)
+wave started 2026-11-22T03:00:23Z
+===== airline 03:00:26Z =====
+  exit=0 03:47:46Z
+===== retail 03:47:46Z =====
+  exit=0 04:39:46Z
+===== telecom 04:39:46Z =====
+  exit=0 06:41:30Z
+wave finished 2026-11-22T06:41:30Z
+~/benchmarks/bench/tau2-bench/run_wave.sh: line 82: 43928 Terminated: 15          python3 "$HERE/sample_engine.py" "$WAVE/engine_samples.jsonl" "${TAU2_SAMPLE_SECONDS:-21600}" 10 > "$WAVE/sampler.log" 2>&1
+next: python3 ~/benchmarks/bench/tau2-bench/summarize.py --tau2-dir ~/tau2-bench --wave-dir ~/benchmarks/bench/tau2-bench/results/2026-11-22-pass3-xhigh2 --domains 'airline retail telecom'
+2026-11-22T06:41:30Z xhigh2 wave exit=0
