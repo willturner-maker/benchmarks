@@ -1,0 +1,9 @@
+2026-11-22T17:37:45Z thinkbudget chain start (arms: 8192, 65536, 32768-pin-restore + control wave)
+2026-11-22T17:37:45Z stopped pinned engine pid 78165 for arm 8192
+2026-11-22T17:37:46Z arm 8192: launching engine
+2026-11-22T17:37:46Z arm 8192 supervisor pid 78621
+2026-11-22T17:37:55Z arm 8192: engine ready, identity + argv verified
+2026-11-22T18:51:50Z arm 8192 wave exit=0
+2026-11-22T19:01:59Z engine still busy after 10 min before arm 65536 - aborting, engine untouched
+2026-11-22T19:16:22Z thinkbudget chain start (arms: 8192, 65536, 32768-pin-restore + control wave)
+2026-11-22T19:26:29Z engine still busy after 10 min before arm 8192 - aborting, engine untouched

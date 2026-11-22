@@ -29,12 +29,14 @@ fi
 inst_pid(){ curl -s --max-time 5 "http://127.0.0.1:$PORT/status" | python3 -c "import json,sys
 d=json.load(sys.stdin); print((d.get('instance') or {}).get('pid') or '')" 2>/dev/null; }
 
-wait_idle(){  # engine must hold zero active requests before we kill it (co-tenant courtesy + rule 10)
+wait_idle(){  # safe-to-kill check: engine holds zero active requests, OR the port is dead (nothing
+  # to wait for - run1 bug: after our own kill the port was closed, curl failed, '?' != '0', and the
+  # chain "waited" 10 min for a nonexistent request stream then aborted).
   local n
   for _ in {1..120}; do
     n=$(curl -s --max-time 5 "http://127.0.0.1:$PORT/status" | python3 -c "import json,sys
-print(len((json.load(sys.stdin).get('active_requests') or [])))" 2>/dev/null || echo "?")
-    [ "$n" = "0" ] && return 0
+print(len((json.load(sys.stdin).get('active_requests') or [])))" 2>/dev/null || echo dead)
+    if [ "$n" = "0" ] || [ "$n" = "dead" ]; then return 0; fi
     sleep 5
   done
   return 1
@@ -103,18 +105,22 @@ run_arm(){  # $1 budget
 }
 
 # ---------- chain ----------
-log "thinkbudget chain start (arms: 8192, 65536, 32768-pin-restore + control wave)"
-for B in 8192 65536; do
-  if ! wait_idle; then log "engine still busy after 10 min before arm $B - aborting, engine untouched"; exit 1; fi
+# TB_ARMS lets a resumed chain skip completed arms (run1 completed 8192: full wave on a
+# ready+argv-verified 8192 engine, exit=0).
+ARM_LIST=${TB_ARMS:-"8192 65536 32768"}
+log "thinkbudget chain start (arms: $ARM_LIST, then pin-restore 32768 + control wave if not an arm)"
+for B in $ARM_LIST; do
+  [ "$B" = "32768" ] && continue   # the 32768 arm IS the pin-restore step, run at the end
+  if ! wait_idle; then log "engine live-but-busy >10 min before arm $B - skipping to pin restore"; break; fi
   CUR=$(inst_pid)
   if [ -n "$CUR" ]; then
     kill "$CUR" 2>/dev/null   # first kill: the live (pinned) engine, logged by design
-    log "stopped pinned engine pid $CUR for arm $B"
+    log "stopped live engine pid $CUR for arm $B"
   fi
   for _ in {1..30}; do pgrep -f "server.server.*--port $PORT" > /dev/null || pgrep -f "splash serve-native" > /dev/null || break; sleep 1; done
   pkill -f "splash serve-native" 2>/dev/null || true
   for _ in {1..15}; do lsof -nP -iTCP:"$PORT" -sTCP:LISTEN > /dev/null 2>&1 || break; sleep 1; done
-  run_arm "$B" || { log "chain aborted at arm $B - attempting pin restore"; break; }
+  run_arm "$B" || log "arm $B invalid - continuing to pin restore"
 done
 
 # pin restore (32768) + same-session control wave, always attempted
