@@ -69,8 +69,20 @@ def main():
 
     recs = [json.loads(l) for l in open(a.captures)]
     bodies = [r for r in recs if isinstance(r.get("request"), dict) and r.get("message") is not None]
-    agent = [r for r in bodies if r["request"].get("tools")]
-    user = [r for r in bodies if not r["request"].get("tools")]
+
+    def role(r):
+        # system-prompt classification: works in every domain (telecom's user simulator HAS its own
+        # tools, so the tools-present heuristic misclassified all telecom bodies as agent - the
+        # airline run1-vs-run2 lesson generalized).
+        msgs = r["request"].get("messages") or []
+        sysc = (msgs[0].get("content") or "") if msgs else ""
+        if sysc.startswith("# User Simulation Guidelines"):
+            return "user"
+        if r["request"].get("tools"):
+            return "agent"
+        return "user"
+    agent = [r for r in bodies if role(r) == "agent"]
+    user = [r for r in bodies if role(r) == "user"]
     rnd = random.Random(a.seed)
     # stratify each stratum by prompt-size quartile, then round-robin pick
     def stratified(pool, k):
