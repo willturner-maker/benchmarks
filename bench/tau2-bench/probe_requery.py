@@ -36,12 +36,14 @@ def canon(msg):
 
 
 def canon_action(msg):
-    """Engine-agnostic action identity: content + tool_calls only. reasoning_content is
-    excluded - thinking text can differ while the acted choice does not."""
+    """Action identity: content + tool_calls by NAME+ARGUMENTS only. tool_call 'id' fields are
+    engine-random per request (measured 2026-11-22: call_<random>_<idx> never repeats across
+    identical requests) and carry no agent intent - counting them made every tool call a
+    'different action' (the -1 first-diff mass in telecom rows). Thinking text also excluded."""
     if msg is None:
         return "\x00none"
-    return json.dumps({"content": msg.get("content"),
-                       "tool_calls": msg.get("tool_calls")}, sort_keys=True, ensure_ascii=False)
+    tcs = [{"function": tc.get("function")} for tc in (msg.get("tool_calls") or [])]
+    return json.dumps({"content": msg.get("content"), "tool_calls": tcs}, sort_keys=True, ensure_ascii=False)
 
 
 def first_diff(a, b):
