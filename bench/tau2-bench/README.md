@@ -85,10 +85,12 @@ at 3) and the first-mover split (user-simulator-first 82 %, then 74 %) are what 
    **Mechanism (2026-11-21 same-seed pair):** at temperature 0 with an identical seed, 0/238 transcripts are
    byte-identical, yet only 15.1 % of pairs flip reward — micro-divergence is engine decode nondeterminism,
    reward flips are the lottery. Do not attribute flips to user resampling without a same-seed control.
-   **Per-request floor (2026-11-22 determinism probe):** byte-identical single requests re-queried at
-   temperature 0 reproduce their own action only 15 % (agent) / 27.5 % (user) of the time — instability is
-   per-request and immediate (median first difference ~25 chars), not cumulative-only, and batch-width-
-   independent. Quote determinism at request level; `results/2026-11-21-determinism-probe/RECORD.md`.
+   **Per-request floor (2026-11-22 determinism probe, corrected metric):** byte-identical single requests
+   re-queried at temperature 0 reproduce their own action only ~45–55 % (agent calls) / 30–62 % (user-sim
+   calls) of the time; full messages including thinking only 10–20 % — instability is per-request and
+   immediate (median first difference ~20 chars), depth-independent at action level, and batch-width-
+   independent. Quote determinism at request level; action identity must ignore tool-call ids (engine-random
+   per request); `results/2026-11-21-determinism-probe/RECORD.md` + `results/2026-11-22-determinism-probe-telecom/RECORD.md`.
 
 ## Run it
 

@@ -17,7 +17,8 @@ telecom 0.693, and the flip *rate* replicated (65/238 at 3 trials) while the fli
 *stochastic process*, not deterministic measurements. The empirical wave-to-wave spread across every full-238
 medium configuration measured so far (19a, 20-pass3, both same-seed arms, the epoch replay): aggregate
 **pass^1 0.8445–0.8824 (±2 pts around 0.85), pass^3 0.6933–0.7059 (±1 pt around 0.70)**. The determinism
-probe says why: at temperature 0 a single request re-decodes to the same action only 15–40 % of the time,
+probe says why: at temperature 0 a single agent request re-decodes to the same action only ~half the time
+(45–55 %; full messages including thinking only 10–20 %),
 so every published number is a draw from the engine's action lottery, and the environment's absorption of
 that lottery is what produces task-level stability. Read any single-wave domain delta under ~5 pts as noise;
 read aggregates within the band as "reproduced." This does not make the scores less comparable to the
@@ -42,7 +43,7 @@ hiding it.
 - [Same-seed repeat 2026-11-21 — the flip floor is the engine](#same-seed-repeat-2026-11-21--the-flip-floor-is-the-engine-not-user-resampling-raw-benchtau2-benchresults2026-11-21-sameseed-pair)
 - [Pass^3 replay 2026-11-21 — the new epoch reproduces the headline](#pass3-replay-2026-11-21--the-new-engine-epoch-reproduces-the-old-epoch-headline-raw-benchtau2-benchresults2026-11-21-pass3-replay)
 - [Retail-40 closure 2026-11-21 — the judge gap measured without a judge](#retail-40-closure-2026-11-21--the-judge-gap-measured-without-a-judge-raw-benchtau2-benchresults2026-11-21-retail40-env)
-- [Determinism probe 2026-11-22 — byte-identical requests are an ~85 % action coin flip](#determinism-probe-2026-11-22--byte-identical-requests-are-an-85-action-coin-flip-raw-benchtau2-benchresults2026-11-21-determinism-probe)
+- [Determinism probe 2026-11-22 — byte-identical requests are a ~50 % action coin flip; messages never reproduce](#determinism-probe-2026-11-22--byte-identical-requests-are-a-50-action-coin-flip-messages-never-reproduce-raw-benchtau2-benchresults2026-11-21-determinism-probe-benchtau2-benchresults2026-11-22-determinism-probe-telecom)
 
 ## Why this instrument, and why pinned at 1.0.1
 
@@ -349,6 +350,12 @@ both directions on the same task+seed (airline task 0 seed 373753: 1,377 → 2,7
   (0.7143 vs 0.6933/0.7059 across the two medium 3-trial waves) — above both, but n=1 xhigh wave.
   A defensible verdict would need a second xhigh wave; the honest published claim is "xhigh did not hurt and
   plausibly helped ~1-2 pts at aggregate."
+  **RESOLVED same day by the replication wave** (`results/2026-11-22-pass3-xhigh2/`, 714 sims, exit=0):
+  xhigh pass^1 0.8753 is still **inside** the medium band → pass^1 effect remains **not established**
+  (though both xhigh waves now order above both medium waves). But pass^3 **replicated**: 0.7143 / 0.7311
+  (xhigh) vs 0.6933 / 0.7059 (medium), same at pass^2 — the settled effect is **consistency, not ceiling**:
+  always-pass tasks rise 165→170→175 across the four waves while never-pass stays 5–8, and flip rates stay
+  ~24–27 % regardless of effort. xhigh was again ~free (220 min vs the medium replay's 227).
 - **The negative result is the headline: effort does not move the flip rate.** xhigh flips 63/238 (26.5 %) vs
   medium 65/238 (27.3 %) — the pass^k decay floor is user-simulator sampling, exactly as rule 9 and the
   first-mover triage predict. Roster overlap across the two 3-trial waves: 146 tasks stable in both, 56 in
@@ -383,8 +390,8 @@ more trials more draws. "User-first" stays valid as *where divergence surfaces f
 user turns move first ~3:1 is a new open question. Rule 9 also gains its mechanism: micro-divergence is
 near-universal, reward flips are a per-task lottery — rates replicate, rosters don't.
 *(Refinement, same night: the determinism probe below shows the instability is **per-request** — a byte-identical
-single prompt at temperature 0 re-decodes to the same action only 15–27 % of the time — so "at conversation
-depth" described where it surfaces, not its scale.)*
+single agent prompt at temperature 0 re-decodes to the same action only ~half the time (45–55 %; full messages
+only 10–20 %) — so "at conversation depth" described where it surfaces, not its scale.)*
 
 Both windows were the tenancy-cleanest τ² runs here: 0 co-tenant samples, 0 spill, 0 suspensions
 (new-epoch counters; `disk.kv_demotions` +3,345/+2,726 is persistent-cache churn, informational). Disclosed
@@ -419,34 +426,45 @@ Tenancy: 45 co-tenant request-samples (this agent's own session), Δ261 spill mo
 lighter than the old-epoch window, and far from the invalidation threshold (rule: sustained co-tenant
 pressure invalidates; this was not sustained).
 
-## Determinism probe 2026-11-22 — byte-identical requests are an ~85 % action coin flip (raw: `bench/tau2-bench/results/2026-11-21-determinism-probe/`)
+## Determinism probe 2026-11-22 — byte-identical requests are a ~50 % action coin flip; messages never reproduce (raw: `bench/tau2-bench/results/2026-11-21-determinism-probe/`, `bench/tau2-bench/results/2026-11-22-determinism-probe-telecom/`)
 
-The mechanism probe the same-seed pair demanded: capture **430 wire requests** (agent AND user-sim) through
-a transparent logging proxy during a normal airline wave (the only deviation is `api_base` for that capture
-wave), then re-POST sampled bodies **verbatim** — 3 repeats solo (`seq`) and 3 repeats batched with fresh
-mates (`mix`) — and compare actions (content + tool_calls, ignoring thinking-text churn).
+The mechanism probe the same-seed pair demanded: capture every wire request (agent AND user-sim) through a
+transparent logging proxy during normal waves (the only deviation is `api_base` for the capture waves), then
+re-POST sampled bodies **verbatim** — 3 repeats solo (`seq`) and 3 repeats batched with fresh mates (`mix`) —
+comparing **actions** (content + tool-call name/arguments; thinking-text churn excluded) and **full messages**.
+Airline: 430 captured requests; telecom: 1,049 (the longest-conversation domain, median agent prompt 21.9 k chars).
 
-| arm / stratum (n=40 each) | identical action | identical full message |
+Corrected numbers (n=40 per cell; two metric bugs found and fixed mid-flight, bug trail kept in both records):
+
+| arm · agent calls | identical action (airline / telecom) | identical full message |
 |---|---|---|
-| solo · agent calls | **15.0 %** | 12.5 % |
-| solo · user-sim calls | **27.5 %** | 17.5 % |
-| batched · agent calls | 15.0 % | 10.0 % |
-| batched · user-sim calls | 40.0 % | 30.0 % |
+| solo | **50.0 % / 52.5 %** | 10–15 % |
+| batched | **55.0 % / 45.0 %** | 12.5–15 % |
 
-**The nondeterminism is per-request, not cumulative-at-depth.** An identical single prompt at temperature 0
-alone on the engine reproduces its own action 15 % of the time (agent calls; user calls 27.5 %, Wilson 95 %
-CIs 7–28 % / 16–44 % overlap — the honest claim is “15–40 %, with the longer agent-call stream at the low
-end”); divergence appears at median char 25 (often
-char ~0). Depth *grades* it (small-prompt half 30–45 %, large 18–22 %) but shallow prompts are nowhere near
-deterministic. Batch width changes nothing (agent arms identical at 15 %, matching the 19b width control).
-Task-level reward flips (the 15.1 % floor) are then the environment **absorbing** an ~85 %-unstable call
-stream — which is why the lottery sits far below the call-level instability.
+User-sim calls: identical action 30 % (airline) vs 57.5–62.5 % (telecom — more templated turns); full
+messages 10–20 % everywhere.
+
+**The nondeterminism is per-request.** A byte-identical agent prompt at temperature 0, alone on the engine,
+reproduces its own action only about **half** the time; divergence appears at median char ~17–27 (often char ~0).
+Counting thinking text, identical messages drop to 10–20 % — and that is the level that compounds across a
+40-turn conversation, which is why transcripts are one-off documents. **Depth does NOT deepen the action
+lottery**: telecom's far longer prompts match airline's agent identity (the earlier "depth makes it worse"
+reading and the "~85 % action flip" headline were inflated by bug #2 below). Batch width changes nothing
+(airline 50 vs 55, telecom 52.5 vs 45 — within noise; matching the 19b width control: three independent
+exclusions). Task-level reward flips (the 15.1 % floor) are the environment **absorbing** a ~50 %-unstable
+agent-call stream.
+
+The two metric bugs, published openly because they are traps for anyone else measuring determinism on this
+stack: (1) telecom's user simulator **has its own tools** — classifying roles by tool presence empties the
+user cell (fix: classify by system prompt, `e39566b`); (2) the engine mints **random `call_<hex>_<idx>`
+tool-call ids per request** (function+arguments byte-stable across repeats, ids never) — counting ids turns
+every tool call into a false action change and depressed the first published airline numbers 3–4× (`f496bd1`).
 
 Not established: the engine-internal cause (int8 cached-KV vs bf16 prefill precision and the drafter verify
 path remain candidates; solo repeats 2–3 reuse the cache repeat 1 built and still disagree, arguing against
-a pure cache-vs-prefill story). Scope: airline only (the depth gradient predicts telecom is worse — untested),
-single instance, drafter on (ablation impossible on 1.7.0, see the splash-engine doc). Suite rule 9 gains the
-per-request floor: determinism gets quoted at request level from now on.
+a pure cache-vs-prefill story). Single engine instance (`19a70e8c…`) across both domains, drafter on
+(ablation impossible on 1.7.0, see the splash-engine doc). Suite rule 9 gains the per-request floor:
+determinism gets quoted at request level from now on.
 
 ## Retail-40 closure 2026-11-21 — the judge gap measured without a judge (raw: `bench/tau2-bench/results/2026-11-21-retail40-env/`)
 

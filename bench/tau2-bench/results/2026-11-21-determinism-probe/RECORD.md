@@ -1,5 +1,27 @@
 # Same-request determinism probe (2026-11-21/22) — the engine is a per-request coin flip at temperature 0
 
+> **CORRECTION (2026-11-22, same day) — supersedes the action-identity numbers below.** The published
+> "identical action 15–40 %" figures used an action metric that included **tool-call `id` fields**, which
+> this engine mints **random per request** (`call_<random-hex>_<idx>`; measured: function+arguments byte-
+> stable across repeats, ids never). Every tool-call message was therefore a false "action change".
+> Re-run with the corrected metric (ids excluded; bug-trail files `*_idbug` kept):
+>
+> | arm / stratum (n=40) | identical action (corrected) | identical full message | matched original action |
+> |---|---|---|---|
+> | seq · agent | **20/40 = 50.0 %** | 4/40 = 10.0 % | 27/40 = 67.5 % |
+> | seq · user | **12/40 = 30.0 %** | 7/40 = 17.5 % | 13/40 = 32.5 % |
+> | mix · agent | **22/40 = 55.0 %** | 6/40 = 15.0 % | 24/40 = 60.0 % |
+> | mix · user | **12/40 = 30.0 %** | 8/40 = 20.0 % | 14/40 = 35.0 % |
+>
+> What SURVIVES: per-request nondeterminism is real and immediate (first-diff median 27 chars; thinking
+> text almost never repeats — full-message identity only 10–20 %), batch width is irrelevant (agent 50 vs
+> 55 %), and conversation transcripts will never reproduce (message-level instability compounds over turns).
+> What DIES: the "~85 % action coin flip" phrasing — the true action-level flip is ~45–50 % for agent
+> calls, and telecom reads *more* stable at user level (see the telecom record). The task-level 15.1 %
+> reward-flip floor is now read as the environment absorbing a ~50 % call-level action lottery, not an
+> 85 % one. Everything below this box is kept as the measurement of the *message* level plus the bug trail.
+
+
 The same-seed pair (see `../2026-11-21-sameseed-pair/RECORD.md`) established that τ² flips are
 engine-side, not user-resampling, and left the mechanism question open: is the nondeterminism
 **per request** (an identical prompt alone on the engine re-decodes differently) or only

@@ -7,3 +7,5 @@
 2026-11-22T00:04:41Z phase B rerun exit=0
 2026-11-22T00:05:09Z phase B run3: full 40/40 quartile sample
 2026-11-22T00:27:22Z phase B run3 exit=0
+2026-11-22T07:14:04Z id-corrected re-query: airline then telecom
+2026-11-22T07:46:44Z id-corrected re-query complete (airline+telecom)

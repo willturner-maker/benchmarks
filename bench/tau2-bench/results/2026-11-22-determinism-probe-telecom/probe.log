@@ -1,0 +1,7 @@
+2026-11-22T06:45:10Z capture wave: telecom base every-4th (29 x 1, via proxy)
+2026-11-22T06:56:42Z capture exit=0 captured_requests=    1049
+2026-11-22T06:56:42Z re-query (engine direct): 40 agent + 40 user bodies, 3 reps, seq + mix
+2026-11-22T07:01:43Z re-query exit=0
+2026-11-22T07:01:43Z telecom probe chain complete
+2026-11-22T07:02:14Z re-query rerun: system-prompt role split (434 agent / 615 user bodies)
+2026-11-22T07:13:18Z re-query rerun exit=0
