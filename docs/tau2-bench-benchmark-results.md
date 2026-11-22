@@ -13,6 +13,18 @@ telecom 0.873 / 0.772.** And the number that matters most for reading the others
 telecom 0.693, and the flip *rate* replicated (65/238 at 3 trials) while the flip *list* largely did not
 (overlap with 19a: 24 of 45) — see the three-trial-wave section.**
 
+**Uncertainty bands (added 2026-11-22, after the determinism probe).** These are point estimates of a
+*stochastic process*, not deterministic measurements. The empirical wave-to-wave spread across every full-238
+medium configuration measured so far (19a, 20-pass3, both same-seed arms, the epoch replay): aggregate
+**pass^1 0.8445–0.8824 (±2 pts around 0.85), pass^3 0.6933–0.7059 (±1 pt around 0.70)**. The determinism
+probe says why: at temperature 0 a single request re-decodes to the same action only 15–40 % of the time,
+so every published number is a draw from the engine's action lottery, and the environment's absorption of
+that lottery is what produces task-level stability. Read any single-wave domain delta under ~5 pts as noise;
+read aggregates within the band as "reproduced." This does not make the scores less comparable to the
+board's (their hosted submissions decode near-deterministically at temp 0; ours sample a distribution) —
+both are estimates of expected task success; only the variance differs, and we disclose it instead of
+hiding it.
+
 ## Contents
 
 - [Why this instrument, and why pinned at 1.0.1](#why-this-instrument-and-why-pinned-at-101)
@@ -331,6 +343,12 @@ both directions on the same task+seed (airline task 0 seed 373753: 1,377 → 2,7
 
 - **airline +2.0 / telecom +2.6 to +3.2 points** — several whole tasks each, above per-wave noise. **Retail is
   a wash** (−0.9 at pass^1 is under one task on 74, and retail carries the highest flip rate); no claim there.
+- **Uncertainty note (added 2026-11-22):** the observed medium-configuration wave-to-wave spread (pass^1
+  0.8445–0.8824) overlaps the xhigh arm's pass^1 (0.8641) — the aggregate +1.4 pts at pass^1 is **within the
+  medium band** and should be read as directional, not established. The stronger xhigh signal is at pass^3
+  (0.7143 vs 0.6933/0.7059 across the two medium 3-trial waves) — above both, but n=1 xhigh wave.
+  A defensible verdict would need a second xhigh wave; the honest published claim is "xhigh did not hurt and
+  plausibly helped ~1-2 pts at aggregate."
 - **The negative result is the headline: effort does not move the flip rate.** xhigh flips 63/238 (26.5 %) vs
   medium 65/238 (27.3 %) — the pass^k decay floor is user-simulator sampling, exactly as rule 9 and the
   first-mover triage predict. Roster overlap across the two 3-trial waves: 146 tasks stable in both, 56 in
