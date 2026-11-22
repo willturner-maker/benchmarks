@@ -52,11 +52,11 @@ relaunch(){  # $1 budget, $2 log file; echoes supervisor pid
   disown
 }
 
-verify_argv(){  # $1 supervisor pid, $2 budget: the engine child must carry the arm's flag
-  local child
-  child=$(pgrep -P "$1" -f splash 2>/dev/null | head -1)
-  if [ -n "$child" ] && ps -o args= -p "$child" | grep -q -- "--thinking-token-budget=$2"; then return 0; fi
-  log "ARGV CHECK FAILED for budget $2 (supervisor $1, engine child '$child')"
+verify_argv(){  # $1 supervisor pid, $2 budget. The SUPERVISOR carries the options: the engine
+  # child (`splash serve-native ...`) receives them by internal config, not argv (measured 2026-11-22:
+  # its 259-char argv holds no flags at all, and /status does not expose the budget either).
+  if ps -o args= -p "$1" | grep -q -- "--thinking-token-budget=$2"; then return 0; fi
+  log "ARGV CHECK FAILED for budget $2 (supervisor $1: '$(ps -o args= -p "$1" | tail -c 200)')"
   return 1
 }
 
