@@ -16,6 +16,8 @@ in the leaderboard.
 | `run_clean_detached.sh` | runs `kv_bracket` in a window the operator can claim is single-tenant, then **proves** it by request attribution | 19c-clean |
 | `run_depth_detached.sh` | the same discipline around `depth_probe.py` | depth-2026-11-19 |
 | `engine_probe.py` · `width_ladder.py` · `width512.py` · `kv_pressure_v4.py` | the sealed primitives, kept for provenance | — |
+| `engine_fingerprint.py` | **version transitions**: hash the install tree + `/status` + `/metrics` series + the running supervisor's argv, then `diff` two captures with runtime counters suppressed. The method, committed — the 5.3.1→5.3.3 MCP pair was captured with ad-hoc greps nobody could re-run | 1.7.1 transition (Tier 0) |
+| `golden_probes.py` | did a version move the engine's **behaviour**: 13 fixed requests, `kind`-typed (`byte` byte-compared, `grammar` payload-compared, `timing` usage-only), each run twice so the within-build floor is measured before any cross-build claim | 1.7.0 baseline (Tier 0) |
 
 ## Rules (each one is here because a wave broke it)
 
@@ -64,6 +66,13 @@ measurement script must carry a hard deadline; the harness must never assume the
 11. **Match the sampling interval to the event.** The depth probe sampled at 10 s and caught `pages_active = 0` at
     every sample, because each turn completes in ~7 s. The spill deltas carried the residency finding; an occupancy
     curve needs 1–2 s sampling.
+12. **A byte claim needs a byte-stable probe, and prose is not one.** The 1.7.1 transition baseline showed the same
+    prose request at `temperature 0` answering differently run to run (`finish=stop`, 114 vs 146 completion tokens) —
+    the same floor the τ² same-seed pair measured at 0/238 transcripts. So `golden_probes.py` types its probes:
+    `byte` (short greedy / tool-call, byte-compared), `grammar` (compared as parsed payload, because a grammar leaves
+    an optional `"flags": []` free and a byte hash calls that a version effect), `timing` (usage and latency, no byte
+    claim). Reasoning is hashed separately everywhere: 1.7.1 shifts reasoning length by design, so a combined hash
+    would report change on every probe.
 
 ## Records
 
@@ -74,6 +83,9 @@ record because it changes what the lifetime column can mean.
 
 ## Reading order for a new engine version
 
+`engine_fingerprint.py capture` **before the install** and again after it (`diff` prints the structural delta), then
+`golden_probes.py` on both sides and `golden_probes.py compare` — that pair decides whether new rows may be compared
+against published ones at all. Then:
 `ladder_kv.py --quick` (harness smoke, never baselining) → `run_clean_detached.sh` (ladder + KV volume, provable
 window) → `run_depth_detached.sh` (depth) → compare **w1, plateau, spill onset, refusal mode** against the newest
-rows in `../../docs/splash-engine-benchmark-results.md`.
+rows in `../../docs/splash-engine-benchmark-results.md`. Worked example: `PLAN-splash-transition-1.7.1.md`.

@@ -1,0 +1,626 @@
+{
+ "captured_at_utc": "2026-11-23T01:19:27Z",
+ "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+ "verify_rows": "auto",
+ "maximum_context_tokens": 262144,
+ "ane_ffn_state": "off",
+ "identity_cache": {
+  "loaded_model_layout_sha256": "aed100ae7c222db37a647acc6c36b9d0dbb405c48863c042e442c9e7a0d548bf",
+  "build_id": "src-90952b2ba4d49c0472535a95c46a840dc96cd6755fc91462905226bc98975ac7",
+  "dtype": "q8s8_f32_scale_per_token_head_k_token_major_v_token_major",
+  "block_tokens": 32,
+  "rope_scaling": null
+ },
+ "scheduler_before": {
+  "queued": 0,
+  "waiting_resources": 0,
+  "waiting_prefix": 0,
+  "prefilling": 0,
+  "decoding": 0,
+  "waiting_mask": 0,
+  "terminal": 0,
+  "prefill_batches": 175,
+  "prefill_rows": 225722,
+  "decode_batches": 30818,
+  "decode_batches_by_width": {
+   "b1": 30818,
+   "b2": 0,
+   "b3": 0,
+   "b4": 0
+  },
+  "decode_gap_target_ms": 500,
+  "contended_prefill_ms": {
+   "p50": 0,
+   "p95": 0,
+   "p99": 0,
+   "max": 0,
+   "total": 0,
+   "samples": 0
+  },
+  "prefill_units": 337,
+  "pass_commands": 94,
+  "abandoned_pass_commands": 0,
+  "bound_cuts": 0,
+  "index_page_conflicts": 0,
+  "replans": 7
+ },
+ "probes": {
+  "decode_greedy_64": {
+   "reproducible_within_build": true,
+   "runs": [
+    {
+     "content_sha": "8b0dcff966ecb7dda6db9f10dea79456",
+     "content_len": 85,
+     "reasoning_sha": "b527eebeafd67600d4670395190e435e",
+     "content": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember",
+     "reasoning_head": "The user wants me to list the twelve months of the year, one per line, in order. This is straightforward.\n",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 25,
+      "completion_tokens": 51,
+      "total_tokens": 76,
+      "prompt_tokens_details": {
+       "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 25
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 272.2
+    },
+    {
+     "content_sha": "8b0dcff966ecb7dda6db9f10dea79456",
+     "content_len": 85,
+     "reasoning_sha": "b527eebeafd67600d4670395190e435e",
+     "content": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember",
+     "reasoning_head": "The user wants me to list the twelve months of the year, one per line, in order. This is straightforward.\n",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 25,
+      "completion_tokens": 51,
+      "total_tokens": 76,
+      "prompt_tokens_details": {
+       "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 25
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 240.5
+    }
+   ]
+  },
+  "thinking_crowdout_16": {
+   "reproducible_within_build": true,
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "5e45940a33317d75ec4982ac5278d6db",
+     "content": null,
+     "reasoning_head": "The user is asking me to say \"READY.\" This is a simple, straightforward",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 13,
+      "completion_tokens": 16,
+      "total_tokens": 29,
+      "prompt_tokens_details": {
+       "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 16
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 101.8
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "5e45940a33317d75ec4982ac5278d6db",
+     "content": null,
+     "reasoning_head": "The user is asking me to say \"READY.\" This is a simple, straightforward",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 13,
+      "completion_tokens": 16,
+      "total_tokens": 29,
+      "prompt_tokens_details": {
+       "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 16
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 95.3
+    }
+   ]
+  },
+  "thinking_room_256": {
+   "reproducible_within_build": true,
+   "runs": [
+    {
+     "content_sha": "b59aa61bc9d935a7b927d275b3f595db",
+     "content_len": 6,
+     "reasoning_sha": "598e5998d790bb6b61212c6321a6aaf0",
+     "content": "READY.",
+     "reasoning_head": "The user is asking me to say \"READY.\" This is a simple, straightforward request. I'll comply.\n",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 13,
+      "completion_tokens": 28,
+      "total_tokens": 41,
+      "prompt_tokens_details": {
+       "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 23
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 189.4
+    },
+    {
+     "content_sha": "b59aa61bc9d935a7b927d275b3f595db",
+     "content_len": 6,
+     "reasoning_sha": "598e5998d790bb6b61212c6321a6aaf0",
+     "content": "READY.",
+     "reasoning_head": "The user is asking me to say \"READY.\" This is a simple, straightforward request. I'll comply.\n",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 13,
+      "completion_tokens": 28,
+      "total_tokens": 41,
+      "prompt_tokens_details": {
+       "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 23
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 185.7
+    }
+   ]
+  },
+  "toolcall_nested_forced": {
+   "reproducible_within_build": true,
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "5a9a2c7703ddf9ee89795698845555fa",
+     "content": null,
+     "reasoning_head": "The user wants me to call the record_readings tool with the data they provided. Let me parse the information:\n\n- Station",
+     "tool_calls": [
+      {
+       "name": "record_readings",
+       "args_sha": "aeb6098ed44a714c4bbb5928b69f9bf5"
+      }
+     ],
+     "finish": "tool_calls",
+     "usage": {
+      "prompt_tokens": 394,
+      "completion_tokens": 152,
+      "total_tokens": 546,
+      "prompt_tokens_details": {
+       "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 69
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 946.0
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "5a9a2c7703ddf9ee89795698845555fa",
+     "content": null,
+     "reasoning_head": "The user wants me to call the record_readings tool with the data they provided. Let me parse the information:\n\n- Station",
+     "tool_calls": [
+      {
+       "name": "record_readings",
+       "args_sha": "aeb6098ed44a714c4bbb5928b69f9bf5"
+      }
+     ],
+     "finish": "tool_calls",
+     "usage": {
+      "prompt_tokens": 394,
+      "completion_tokens": 152,
+      "total_tokens": 546,
+      "prompt_tokens_details": {
+       "cached_tokens": 384
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 69
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 635.3
+    }
+   ]
+  },
+  "toolcall_nested_stream": {
+   "reproducible_within_build": false,
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "eaf2d51dd9ea21ba82e2b86807214369",
+     "content": "",
+     "reasoning_head": "The user wants me to call the record_readings tool with the specified data for stations C1 and D9.\n\nC1: pressures [52, 5",
+     "tool_calls": [
+      {
+       "name": "record_readings",
+       "args_sha": "e4d3945c8d9328a1927135fc247d3809"
+      }
+     ],
+     "finish": "tool_calls",
+     "usage": null,
+     "ttft_ms": 286.6,
+     "total_ms": 849.2
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "39faa2820e09e68cff3c130601eca9eb",
+     "content": "",
+     "reasoning_head": "We need respond to user: \"Stations C1 and D9. C1 read 52 then 51; D9 read 60, 61, 62. D9 had flags 'overshoot'. Call the",
+     "tool_calls": [
+      {
+       "name": "record_readings",
+       "args_sha": "e4d3945c8d9328a1927135fc247d3809"
+      }
+     ],
+     "finish": "tool_calls",
+     "usage": null,
+     "ttft_ms": 48.2,
+     "total_ms": 879.0
+    }
+   ]
+  },
+  "shared_head_session_a": {
+   "reproducible_within_build": false,
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "e3503e548c68f465eb82574704ab7314",
+     "content": null,
+     "reasoning_head": "The user is asking about the primary gauge on station A7. This seems to be a question about a specific pump station's in",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 40,
+      "completion_tokens": 48,
+      "total_tokens": 88,
+      "prompt_tokens_details": {
+       "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 48
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 379.5
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "08a87b10c248661e7ade62b5ca54e8a2",
+     "content": null,
+     "reasoning_head": "The user is asking about the primary gauge on station A7. This seems to be a question about a specific pump station. I d",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 40,
+      "completion_tokens": 48,
+      "total_tokens": 88,
+      "prompt_tokens_details": {
+       "cached_tokens": 32
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 48
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 300.6
+    }
+   ]
+  },
+  "shared_head_session_b": {
+   "reproducible_within_build": true,
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "b21c84c1a230bd47173351a69f04ed0a",
+     "content": null,
+     "reasoning_head": "The user is asking about the primary gauge on station Q4. This seems to be a question about a specific pump station. I d",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 40,
+      "completion_tokens": 48,
+      "total_tokens": 88,
+      "prompt_tokens_details": {
+       "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 48
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 391.7
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "b21c84c1a230bd47173351a69f04ed0a",
+     "content": null,
+     "reasoning_head": "The user is asking about the primary gauge on station Q4. This seems to be a question about a specific pump station. I d",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 40,
+      "completion_tokens": 48,
+      "total_tokens": 88,
+      "prompt_tokens_details": {
+       "cached_tokens": 32
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 48
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 336.4
+    }
+   ]
+  },
+  "prefill_cold_2k": {
+   "reproducible_within_build": true,
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "6b81c770965b6e27c62baf24a4008979",
+     "content": null,
+     "reasoning_head": "The user has provided a very repetitive text about maintenance logs for pump stations 1 through 33. Each entry follows t",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 934,
+      "completion_tokens": 32,
+      "total_tokens": 966,
+      "prompt_tokens_details": {
+       "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 32
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 566.1
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "6b81c770965b6e27c62baf24a4008979",
+     "content": null,
+     "reasoning_head": "The user has provided a very repetitive text about maintenance logs for pump stations 1 through 33. Each entry follows t",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 934,
+      "completion_tokens": 32,
+      "total_tokens": 966,
+      "prompt_tokens_details": {
+       "cached_tokens": 928
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 32
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 228.8
+    }
+   ]
+  },
+  "prefill_warm_2k": {
+   "reproducible_within_build": true,
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "6b81c770965b6e27c62baf24a4008979",
+     "content": null,
+     "reasoning_head": "The user has provided a very repetitive text about maintenance logs for pump stations 1 through 33. Each entry follows t",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 934,
+      "completion_tokens": 32,
+      "total_tokens": 966,
+      "prompt_tokens_details": {
+       "cached_tokens": 928
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 32
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 230.4
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "6b81c770965b6e27c62baf24a4008979",
+     "content": null,
+     "reasoning_head": "The user has provided a very repetitive text about maintenance logs for pump stations 1 through 33. Each entry follows t",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 934,
+      "completion_tokens": 32,
+      "total_tokens": 966,
+      "prompt_tokens_details": {
+       "cached_tokens": 928
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 32
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 227.7
+    }
+   ]
+  },
+  "followup_uncached_63": {
+   "reproducible_within_build": true,
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "010a5be92384e9b7fd5cc09beb335938",
+     "content": null,
+     "reasoning_head": "The user is asking me to count how many pump stations appear in the text. Let me count them:\n\n1.",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 381,
+      "completion_tokens": 24,
+      "total_tokens": 405,
+      "prompt_tokens_details": {
+       "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 24
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 327.2
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "010a5be92384e9b7fd5cc09beb335938",
+     "content": null,
+     "reasoning_head": "The user is asking me to count how many pump stations appear in the text. Let me count them:\n\n1.",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 381,
+      "completion_tokens": 24,
+      "total_tokens": 405,
+      "prompt_tokens_details": {
+       "cached_tokens": 352
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 24
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 156.9
+    }
+   ]
+  },
+  "followup_uncached_72": {
+   "reproducible_within_build": true,
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "c3b662fc4021da921752e06b0c7ac8b4",
+     "content": null,
+     "reasoning_head": "The user wants me to count the number of pump stations mentioned in the log text above. Let me count them:\n\n",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 387,
+      "completion_tokens": 24,
+      "total_tokens": 411,
+      "prompt_tokens_details": {
+       "cached_tokens": 352
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 24
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 206.5
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "c3b662fc4021da921752e06b0c7ac8b4",
+     "content": null,
+     "reasoning_head": "The user wants me to count the number of pump stations mentioned in the log text above. Let me count them:\n\n",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 387,
+      "completion_tokens": 24,
+      "total_tokens": 411,
+      "prompt_tokens_details": {
+       "cached_tokens": 352
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 24
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 200.3
+    }
+   ]
+  }
+ },
+ "scheduler_after": {
+  "queued": 0,
+  "waiting_resources": 0,
+  "waiting_prefix": 0,
+  "prefilling": 0,
+  "decoding": 0,
+  "waiting_mask": 0,
+  "terminal": 0,
+  "prefill_batches": 197,
+  "prefill_rows": 228152,
+  "decode_batches": 31077,
+  "decode_batches_by_width": {
+   "b1": 31077,
+   "b2": 0,
+   "b3": 0,
+   "b4": 0
+  },
+  "decode_gap_target_ms": 500,
+  "contended_prefill_ms": {
+   "p50": 0,
+   "p95": 0,
+   "p99": 0,
+   "max": 0,
+   "total": 0,
+   "samples": 0
+  },
+  "prefill_units": 369,
+  "pass_commands": 98,
+  "abandoned_pass_commands": 0,
+  "bound_cuts": 0,
+  "index_page_conflicts": 0,
+  "replans": 7
+ },
+ "summary": {
+  "probes": 11,
+  "reproducible_within_build": 9,
+  "non_reproducible": 2
+ }
+}
