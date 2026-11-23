@@ -488,7 +488,7 @@ def main():
              ["T1r1", "T1r2", "T1r3", "T2r1", "T2r2", "T2r3", "T3r1", "T3r2",
               "T3r3", "F1r1", "F1r2", "F1r3", "T7r1", "T7r2", "T7r3", "T8r1",
               "T8r2", "T8r3", "F2r1", "F2r2", "F2r3"])
-      missing = [t for t in B if t not in seq]
+      missing = [t for t in B if re.search(r"r\d+$", t) and t not in seq]
       if missing:
           raise SystemExit(f"--order must cover every briefed task; missing {missing}")
       pairs = [(seq[i], seq[i + 1]) for i in range(0, len(seq) - 1, 2)]
