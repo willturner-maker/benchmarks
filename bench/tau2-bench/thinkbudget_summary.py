@@ -162,10 +162,10 @@ def samples_for(arm):
            "decode_batch_width_high_water": dict(sorted(widths.items())),
            "counter_deltas_over_window": life}
     # Provenance guard, threshold disclosed rather than tuned per arm: a wave that is really serving
-    # requests shows most samples with live requests (8192: 428/443, 32768: 421/438). Anything far
-    # below that is not a serving wave. This catches the 65536 arm exactly: its dir was re-entered by
-    # a stalled re-run, so its samples are 70 live samples over 84 min and must NOT be read as the
-    # 65536 wave's engine record. See that dir's TENANCY.md.
+    # requests shows nearly all samples with live requests (measured: 8192 441/443, 32768 436/438).
+    # Anything far below that is not a serving wave. This catches the 65536 arm exactly: its dir was
+    # re-entered by a stalled re-run, so its samples are 30/552 live over 92 min and must NOT be read
+    # as the 65536 wave's engine record. See that dir's TENANCY.md.
     frac = busy / len(rows)
     if frac < 0.25:
         out["provenance_warning"] = (f"only {busy}/{len(rows)} samples show live requests: this file is "
@@ -305,7 +305,8 @@ def main():
             print(f"  !! {br['samples_cap_disagreement']}")
         e = r.get("engine_samples")
         if e:
-            print(f"  engine samples {e['samples']} over {e['window_s']}s: pages_active max {e['pages_active_max']} "
+            print(f"  engine samples {e['samples']} over {e['window_s']}s "
+                  f"({e['samples_with_live_requests']} with live requests): pages_active max {e['pages_active_max']} "
                   f"({e['pages_active_max_tokens']:,} tok), queued max {e['queued_max']}, prefilling max "
                   f"{e['prefilling_max']}, decoding max {e['decoding_max']}, widths {e['decode_batch_width_high_water']}, "
                   f"counters {e['counter_deltas_over_window']}, kv modes {e['kv_mode_observations']}")

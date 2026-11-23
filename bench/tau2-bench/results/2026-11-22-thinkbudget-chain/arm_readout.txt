@@ -8,7 +8,7 @@
   simulator msgs: completion mean 110.1 max 1450
   messages at the harness cap (4096): 0   (the cap binds; the arm budget does not)
   budget reachability: arm budget 8192, harness cap 4096, largest agent completion 3106 -> inert: budget 8192 > harness cap 4096: completion cannot exceed the cap, and thinking counts inside the cap, so the budget cannot bind
-  engine samples 443 over 4424.1s: pages_active max 752 (24,064 tok), queued max 1, prefilling max 2, decoding max 3, widths {'b1': 2702, 'b2': 12674, 'b3': 87684, 'b4': 0}, counters {'spill_moves': 0, 'kv_demotions': 3164, 'suspensions': 0}, kv modes {'resident': 1296}
+  engine samples 443 over 4424.1s (441 with live requests): pages_active max 752 (24,064 tok), queued max 1, prefilling max 2, decoding max 3, widths {'b1': 2702, 'b2': 12674, 'b3': 87684, 'b4': 0}, counters {'spill_moves': 0, 'kv_demotions': 3164, 'suspensions': 0}, kv modes {'resident': 1296}
 
 === arm 65536 ===
   outcome: sims 238 over 238 tasks, trials [1], mean reward 0.8697, pass^1 0.8697, any-pass tasks 207
@@ -20,7 +20,7 @@
   messages at the harness cap (4096): 0   (the cap binds; the arm budget does not)
   budget reachability: arm budget 65536, harness cap 4096, largest agent completion 2781 -> inert: budget 65536 > harness cap 4096: completion cannot exceed the cap, and thinking counts inside the cap, so the budget cannot bind
   !! samples show max_new_tokens [8, 32768], but the harness declares 4096: those samples are not this wave's traffic
-  engine samples 552 over 5516.5s: pages_active max 4533 (145,056 tok), queued max 32, prefilling max 4, decoding max 1, widths {'b1': 8724, 'b2': 0, 'b3': 6, 'b4': 120}, counters {'spill_moves': 0, 'kv_demotions': 0, 'suspensions': 0}, kv modes {'resident': 64, 'spill': 6}
+  engine samples 552 over 5516.5s (30 with live requests): pages_active max 4533 (145,056 tok), queued max 32, prefilling max 4, decoding max 1, widths {'b1': 8724, 'b2': 0, 'b3': 6, 'b4': 120}, counters {'spill_moves': 0, 'kv_demotions': 0, 'suspensions': 0}, kv modes {'resident': 64, 'spill': 6}
   !! only 30/552 samples show live requests: this file is not a serving wave's record and its engine numbers must not be compared with the other arms (see the arm dir's TENANCY.md)
 
 === arm 32768 ===
@@ -32,7 +32,7 @@
   simulator msgs: completion mean 108.0 max 1125
   messages at the harness cap (4096): 1   (the cap binds; the arm budget does not)
   budget reachability: arm budget 32768, harness cap 4096, largest agent completion 4096 -> inert: budget 32768 > harness cap 4096: completion cannot exceed the cap, and thinking counts inside the cap, so the budget cannot bind
-  engine samples 438 over 4374.1s: pages_active max 816 (26,112 tok), queued max 1, prefilling max 2, decoding max 3, widths {'b1': 3383, 'b2': 11717, 'b3': 88028, 'b4': 0}, counters {'spill_moves': 0, 'kv_demotions': 2595, 'suspensions': 0}, kv modes {'resident': 1278}
+  engine samples 438 over 4374.1s (436 with live requests): pages_active max 816 (26,112 tok), queued max 1, prefilling max 2, decoding max 3, widths {'b1': 3383, 'b2': 11717, 'b3': 88028, 'b4': 0}, counters {'spill_moves': 0, 'kv_demotions': 2595, 'suspensions': 0}, kv modes {'resident': 1278}
 
 === vs the 32768 control (same-session, relaunched last) ===
 metric                                   32768 ctl        8192         d       65536         d
