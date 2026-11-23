@@ -44,6 +44,7 @@ hiding it.
 - [Pass^3 replay 2026-11-21 — the new epoch reproduces the headline](#pass3-replay-2026-11-21--the-new-engine-epoch-reproduces-the-old-epoch-headline-raw-benchtau2-benchresults2026-11-21-pass3-replay)
 - [Retail-40 closure 2026-11-21 — the judge gap measured without a judge](#retail-40-closure-2026-11-21--the-judge-gap-measured-without-a-judge-raw-benchtau2-benchresults2026-11-21-retail40-env)
 - [Determinism probe 2026-11-22 — byte-identical requests are a ~50 % action coin flip; messages never reproduce](#determinism-probe-2026-11-22--byte-identical-requests-are-a-50-action-coin-flip-messages-never-reproduce-raw-benchtau2-benchresults2026-11-21-determinism-probe-benchtau2-benchresults2026-11-22-determinism-probe-telecom)
+- [Thinking-token-budget A/B 2026-11-22 — a dead knob on medium-effort traffic](#thinking-token-budget-ab-2026-11-22--a-dead-knob-on-medium-effort-traffic-raw-benchtau2-benchresults2026-11-22-thinkbudget-chain)
 - [Thinking-budget chain 2026-11-22 — an inert manipulation, published as the noise floor](#thinking-budget-chain-2026-11-22--an-inert-manipulation-published-as-the-noise-floor-raw-benchtau2-benchresults2026-11-22-thinkbudget-chain)
 
 ## Why this instrument, and why pinned at 1.0.1
@@ -466,6 +467,18 @@ path remain candidates; solo repeats 2–3 reuse the cache repeat 1 built and st
 a pure cache-vs-prefill story). Single engine instance (`19a70e8c…`) across both domains, drafter on
 (ablation impossible on 1.7.0, see the splash-engine doc). Suite rule 9 gains the per-request floor:
 determinism gets quoted at request level from now on.
+
+## Thinking-token-budget A/B 2026-11-22 — a dead knob on medium-effort traffic (raw: `bench/tau2-bench/results/2026-11-22-thinkbudget-chain/`)
+
+Three full 238×1 medium waves, one per engine-level `--thinking-token-budget` arm (8192 / 65536 / the
+pinned 32768 as same-session control), each on an identity-verified fresh 1.7.0 instance. Pass^1:
+**0.8782 / 0.8697 / 0.8403** — all within (or at the edge of) the medium wave band, non-monotone in
+budget, CIs overlapping: **no budget effect established**. The request-level fingerprint is decisive where
+pass^1 cannot be: decode tokens Δ ≈1.04–1.06 M in every arm, drafter acceptance flat (63.5–64.3 %), wall
+73–74 min each — medium-effort thinking rarely reaches even the 8192 cap, so the knob never binds.
+Keep the pin at 32768; budget arms are not worth 2×-wave replication. (The chain itself is also a
+tooling record: two runner bugs caught and fixed mid-flight — supervisor-vs-engine argv verification, and
+dead-port-counted-as-busy — with a duplicate run that contaminated nothing, all logged in `chain.log`.)
 
 ## Retail-40 closure 2026-11-21 — the judge gap measured without a judge (raw: `bench/tau2-bench/results/2026-11-21-retail40-env/`)
 
