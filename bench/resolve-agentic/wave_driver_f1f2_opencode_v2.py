@@ -322,9 +322,10 @@ def trial_agents():
             "is not available to you, reply with exactly POOL_DEAD and stop; do not\n"
             "attempt the brief and do not substitute other tools.\n")
 
-PROBE_TOOL = "davinci-resolve-builtin_get_resolve_status"   # agent-directed STEP-0 hint only
 LIVE_PREFIXES = ("davinci-resolve_", "davinci-resolve-builtin_")  # real pool name forms
-POOL_DEAD_ERR = "no tool named"   # harness rejection for tools absent from the session pool
+RESOLVE_PREFIX = "davinci-resolve"   # any Resolve MCP tool, any name form
+RESOLVE_ERR_KILL = 6                 # rejections with zero completions => dropout burst
+POOL_DEAD_ERR = "no tool named"      # harness rejection for tools absent from the session pool
 PROBE_TIMEOUT_S = 180
 PROBE_MAX_ATTEMPTS = 3
 
@@ -363,13 +364,14 @@ def _run_trial_attempt(name, full, sess_root, prior_attempts):
     p = subprocess.Popen(cmd, cwd=str(cwd), env=env, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE, text=True)
     # pool watch (signature-based, NOT compliance-based — medium effort ignores STEP-0):
-    #   confirmed alive: a COMPLETED tool event with a real live-server name form.
-    #   dead: an ERRORED tool event with a real live-server name form whose harness error
-    #     says the tool is not available (23c dropout signature: live MCP children never
-    #     registered in that session's process; a healthy process answers real names, only
-    #     mangled names get "No tool named"), or an agent POOL_DEAD report, or still
-    #     unconfirmed with live-name errors after PROBE_TIMEOUT_S.
-    probe = {"ok": False, "dead": False, "why": None, "first_live": None, "live_err": 0}
+    #   confirmed alive: a COMPLETED Resolve-server tool event of ANY name form.
+    #   dead: bursts of "No tool named" rejections across any Resolve-* name form
+    #     (23c dropouts errored real underscore names; 23d dropouts errored mangled
+    #     hyphen forms — the model's naming varies, the dropout signature is MANY
+    #     rejections with ZERO completions) + an agent POOL_DEAD report; kill mid-run
+    #     at RESOLVE_ERR_KILL rejections with no completion, and re-check at EOF.
+    probe = {"ok": False, "dead": False, "why": None, "first_resolve": None,
+             "resolve_err": 0}
     lines = []
     deadline = t0 + 2400
     while True:
@@ -378,12 +380,12 @@ def _run_trial_attempt(name, full, sess_root, prior_attempts):
             probe["why"] = probe["why"] or "wall deadline 2400 s"
             probe["dead"] = True
             p.kill(); break
-        if not probe["ok"] and not probe["dead"] and now - t0 > PROBE_TIMEOUT_S:
-            probe["why"] = (f"live pool unconfirmed after {PROBE_TIMEOUT_S} s "
-                            f"(live-name errors: {probe['live_err']})")
-            probe["dead"] = probe["live_err"] > 0
-            if probe["dead"]:
-                p.kill(); break
+        if (not probe["ok"] and not probe["dead"] and now - t0 > PROBE_TIMEOUT_S
+                and probe["resolve_err"] > 0):
+            probe["why"] = (f"no Resolve completion after {PROBE_TIMEOUT_S} s "
+                            f"({probe['resolve_err']} rejections)")
+            probe["dead"] = True
+            p.kill(); break
         rlist, _, _ = select.select([p.stdout], [], [], 1.0)
         if not rlist:
             if p.poll() is not None:
@@ -401,26 +403,27 @@ def _run_trial_attempt(name, full, sess_root, prior_attempts):
         if e.get("type") == "tool_use":
             tool = pt.get("tool") or ""
             st = (pt.get("state") or {})
-            live = tool.startswith(LIVE_PREFIXES)
-            if live and probe["first_live"] is None:
-                probe["first_live"] = tool
-            if not probe["ok"] and live:
-                if st.get("status") == "completed":
-                    probe["ok"] = True
-                elif st.get("status") == "error" and POOL_DEAD_ERR in str(st.get("error") or "").lower():
-                    probe["live_err"] += 1
-                    # 2+ live-name rejections with zero live completions = dropout burst.
-                    # A healthy process may transiently race 1 rejection (MCP child still
-                    # starting when the model's first call lands) — 23c dropouts burst 5-6.
-                    if probe["live_err"] >= 2:
-                        probe["why"] = f"{probe['live_err']} live-name calls rejected: {tool}"
-                        probe["dead"] = True
-                        p.kill(); break
-                    probe["why"] = f"live-name call rejected once (watching): {tool}"
+            if tool.startswith(RESOLVE_PREFIX) and probe["first_resolve"] is None:
+                probe["first_resolve"] = tool
+            if not probe["ok"] and tool.startswith(LIVE_PREFIXES) and st.get("status") == "completed":
+                # only LIVE/builtin completions confirm the pool: an advanced-only
+                # session (23d T8r1) still cannot execute any live brief.
+                probe["ok"] = True
+            if (not probe["ok"] and not probe["dead"] and tool.startswith(RESOLVE_PREFIX)
+                    and st.get("status") == "error"
+                    and POOL_DEAD_ERR in str(st.get("error") or "").lower()):
+                probe["resolve_err"] += 1
+                if probe["resolve_err"] >= RESOLVE_ERR_KILL:
+                    probe["why"] = f"{probe['resolve_err']} Resolve-name rejections, no live completion: {tool}"
+                    probe["dead"] = True
+                    p.kill(); break
         elif e.get("type") == "text" and "POOL_DEAD" in (pt.get("text") or ""):
             probe["why"] = "agent reported POOL_DEAD"
             probe["dead"] = True
             p.kill(); break
+    if not probe["ok"] and not probe["dead"] and probe["resolve_err"] >= RESOLVE_ERR_KILL:
+        probe["why"] = f"EOF with {probe['resolve_err']} Resolve-name rejections, 0 completions"
+        probe["dead"] = True
     try:
         p.wait(timeout=30)
     except Exception:
