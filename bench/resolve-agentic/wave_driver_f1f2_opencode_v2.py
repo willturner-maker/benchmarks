@@ -305,15 +305,45 @@ def trial_agents():
     # (2026-11-16f) showed BOTH injected: the operator's global AGENTS.md leaks venv
     # paths, bench locations and OpenCV wheel state into every trial. So the global
     # file is renamed away for the wave (main()), and this neutral context replaces it.
+    # PROTOCOL probe (added 2026-11-23, pre-23d, declared driver stack move): on
+    # agbench-23c two sessions ran their WHOLE trial with the live Resolve MCP children
+    # absent from the per-session pool (per-session registration failure on the 2.4.1
+    # harness). The probe forces the first action to be an exact-name call on a KEEP
+    # server tool; run_trial streams the event log and kills+relaunches the session when
+    # the probe tool errors (tool absent from pool), POOL_DEAD is reported, or no tool
+    # event appears within PROBE_TIMEOUT_S. Briefs stay byte-identical — the probe lives
+    # only in this neutral context, and its outcome is recorded per trial.
     return ("BENCH-CONTEXT: You are running one isolated single-task benchmark trial.\n"
             "Work only from the BRIEF below and your Resolve MCP tools. No shell, files,\n"
             "web, or subagents are available. Ignore any environment note about local\n"
-            "venvs, package freshness, or API keys — none apply to this trial.\n")
+            "venvs, package freshness, or API keys — none apply to this trial.\n"
+            "PROTOCOL: Your very first action must be a single call to the MCP tool\n"
+            "davinci-resolve-builtin_get_resolve_status with no arguments. If that tool\n"
+            "is not available to you, reply with exactly POOL_DEAD and stop; do not\n"
+            "attempt the brief and do not substitute other tools.\n")
+
+PROBE_TOOL = "davinci-resolve-builtin_get_resolve_status"   # agent-directed STEP-0 hint only
+LIVE_PREFIXES = ("davinci-resolve_", "davinci-resolve-builtin_")  # real pool name forms
+POOL_DEAD_ERR = "no tool named"   # harness rejection for tools absent from the session pool
+PROBE_TIMEOUT_S = 180
+PROBE_MAX_ATTEMPTS = 3
 
 def run_trial(name, prompt, sess_root, GROUND_RULES):
+    full = prompt + "\n\n" + GROUND_RULES
+    attempts = []
+    for k in range(PROBE_MAX_ATTEMPTS):
+        attempt_name = name if k == 0 else f"{name}-probe-dead-attempt{k}"
+        rec = _run_trial_attempt(attempt_name, full, sess_root, attempts)
+        if not rec.get("probe", {}).get("dead"):
+            return rec
+        attempts.append(rec.get("probe", {}).get("why", "?"))
+        print(f"  !! POOL DEAD {name} attempt {k+1}: {attempts[-1]} — relaunching", flush=True)
+    rec["probe_attempts"] = attempts          # all attempts dead: keep the last as the trial
+    return rec
+
+def _run_trial_attempt(name, full, sess_root, prior_attempts):
     cwd = sess_root / name
     cwd.mkdir(parents=True, exist_ok=True)
-    full = prompt + "\n\n" + GROUND_RULES
     (cwd / "BRIEF_AS_SENT.md").write_text(full)
     (cwd / "AGENTS.md").write_text(trial_agents())
     (cwd / "opencode.json").write_text(json.dumps(trial_config(), indent=1))
@@ -329,13 +359,76 @@ def run_trial(name, prompt, sess_root, GROUND_RULES):
     env["OPENCODE_CONFIG"] = str((cwd / "opencode.json").resolve())
     cmd = ["opencode", "run", "--standalone", "--format", "json", full]
     t0 = time.time()
+    import select
+    p = subprocess.Popen(cmd, cwd=str(cwd), env=env, stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE, text=True)
+    # pool watch (signature-based, NOT compliance-based — medium effort ignores STEP-0):
+    #   confirmed alive: a COMPLETED tool event with a real live-server name form.
+    #   dead: an ERRORED tool event with a real live-server name form whose harness error
+    #     says the tool is not available (23c dropout signature: live MCP children never
+    #     registered in that session's process; a healthy process answers real names, only
+    #     mangled names get "No tool named"), or an agent POOL_DEAD report, or still
+    #     unconfirmed with live-name errors after PROBE_TIMEOUT_S.
+    probe = {"ok": False, "dead": False, "why": None, "first_live": None, "live_err": 0}
+    lines = []
+    deadline = t0 + 2400
+    while True:
+        now = time.time()
+        if now > deadline:
+            probe["why"] = probe["why"] or "wall deadline 2400 s"
+            probe["dead"] = True
+            p.kill(); break
+        if not probe["ok"] and not probe["dead"] and now - t0 > PROBE_TIMEOUT_S:
+            probe["why"] = (f"live pool unconfirmed after {PROBE_TIMEOUT_S} s "
+                            f"(live-name errors: {probe['live_err']})")
+            probe["dead"] = probe["live_err"] > 0
+            if probe["dead"]:
+                p.kill(); break
+        rlist, _, _ = select.select([p.stdout], [], [], 1.0)
+        if not rlist:
+            if p.poll() is not None:
+                break
+            continue
+        line = p.stdout.readline()
+        if not line:
+            break
+        lines.append(line)
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        pt = e.get("part") or {}
+        if e.get("type") == "tool_use":
+            tool = pt.get("tool") or ""
+            st = (pt.get("state") or {})
+            live = tool.startswith(LIVE_PREFIXES)
+            if live and probe["first_live"] is None:
+                probe["first_live"] = tool
+            if not probe["ok"] and live:
+                if st.get("status") == "completed":
+                    probe["ok"] = True
+                elif st.get("status") == "error" and POOL_DEAD_ERR in str(st.get("error") or "").lower():
+                    probe["live_err"] += 1
+                    # 2+ live-name rejections with zero live completions = dropout burst.
+                    # A healthy process may transiently race 1 rejection (MCP child still
+                    # starting when the model's first call lands) — 23c dropouts burst 5-6.
+                    if probe["live_err"] >= 2:
+                        probe["why"] = f"{probe['live_err']} live-name calls rejected: {tool}"
+                        probe["dead"] = True
+                        p.kill(); break
+                    probe["why"] = f"live-name call rejected once (watching): {tool}"
+        elif e.get("type") == "text" and "POOL_DEAD" in (pt.get("text") or ""):
+            probe["why"] = "agent reported POOL_DEAD"
+            probe["dead"] = True
+            p.kill(); break
     try:
-        p = subprocess.run(cmd, cwd=str(cwd), env=env, capture_output=True,
-                           text=True, timeout=2400)
-    except Exception as e:
-        return {"task": name, "error": str(e)[:200], "wall_s": round(time.time() - t0, 1)}
-    rec = {"task": name, "ok": p.returncode == 0, "wall_s": round(time.time() - t0, 1)}
-    ev = parse_events(p.stdout)
+        p.wait(timeout=30)
+    except Exception:
+        p.kill()
+    stdout = "".join(lines)
+    rec = {"task": name, "ok": p.returncode == 0 and not probe["dead"],
+           "wall_s": round(time.time() - t0, 1), "probe": probe}
+    ev = parse_events(stdout)
     # live seal audit: every tool event must be a KEEP MCP tool ("server_tool" naming).
     # NOTE: errored calls are stored as (name, "error") tuples (parse_events) — audit the NAME.
     # (2.3.2-era bug: str(tuple) starts with "(" so errored KEEP-server calls false-flagged;
@@ -346,12 +439,12 @@ def run_trial(name, prompt, sess_root, GROUND_RULES):
     rec.update({"seal_leaks": leaks})
     if leaks:
         print(f"  !! SEAL LEAK in {name}: {leaks}", flush=True)
-    rec.update({"result": ("\n".join(ev["texts"]))[:4000] or p.stderr[:2000],
+    rec.update({"result": ("\n".join(ev["texts"]))[:4000] or p.stderr.read()[:2000],
                 "num_turns": ev["steps"], "tool_use_count": len(ev["tool_uses"]),
                 "tools": ev["tool_uses"], "session_id": ev["session"],
                 "cost_usd": ev["cost"], "usage": ev["tokens"]})
     (cwd / "result.json").write_text(json.dumps(rec, indent=1))
-    (cwd / "events.json").write_text(p.stdout)
+    (cwd / "events.json").write_text(stdout)
     return rec
 
 def main():
@@ -360,6 +453,10 @@ def main():
     ap.add_argument("--out", default=str(DEFAULT_OUT))
     ap.add_argument("--render-root", default=DEFAULT_RENDER_ROOT)
     ap.add_argument("--check-harness", action="store_true")
+    ap.add_argument("--order", default=None,
+                    help="comma-separated task sequence; consecutive pairs run 2-lane, "
+                         "odd tail runs solo (order rotation across waves de-confounds "
+                         "pairing). Default: 23c order.")
     a = ap.parse_args()
     if not a.check_harness:
         seal_host_hygiene()
@@ -387,10 +484,15 @@ def main():
     try:
       drift = [  ]
       B = briefs(a.tl_base, a.render_root)
-      pairs = [("T1r1", "T1r2"), ("T1r3", "T2r1"), ("T2r2", "T2r3"), ("T3r1", "T3r2"),
-               ("T3r3", "F1r1"), ("F1r2", "F1r3"), ("T7r1", "T7r2"), ("T7r3", "T8r1"),
-               ("T8r2", "T8r3"), ("F2r1", "F2r2")]
-      solo = ["F2r3"]
+      seq = ([t.strip() for t in a.order.split(",")] if a.order else
+             ["T1r1", "T1r2", "T1r3", "T2r1", "T2r2", "T2r3", "T3r1", "T3r2",
+              "T3r3", "F1r1", "F1r2", "F1r3", "T7r1", "T7r2", "T7r3", "T8r1",
+              "T8r2", "T8r3", "F2r1", "F2r2", "F2r3"])
+      missing = [t for t in B if t not in seq]
+      if missing:
+          raise SystemExit(f"--order must cover every briefed task; missing {missing}")
+      pairs = [(seq[i], seq[i + 1]) for i in range(0, len(seq) - 1, 2)]
+      solo = seq[len(pairs) * 2:]
       results = []
       for a1, b1 in pairs:
           print(f"[{time.strftime('%H:%M:%S')}] pair {a1}+{b1}", flush=True)
@@ -411,7 +513,9 @@ def main():
               for n in (a1, b1):
                   f.write(json.dumps({"task": n, "ok": outmap[n].get("ok"),
                           "turns": outmap[n].get("num_turns"), "tools": outmap[n].get("tool_use_count"),
-                          "wall_s": outmap[n].get("wall_s")}) + "\n")
+                          "wall_s": outmap[n].get("wall_s"),
+                          "probe_ok": (outmap[n].get("probe") or {}).get("ok"),
+                          "probe_attempts": 1 + len(outmap[n].get("probe_attempts", []))}) + "\n")
           time.sleep(15)
       for n in solo:
           print(f"[{time.strftime('%H:%M:%S')}] solo {n}", flush=True)
@@ -419,7 +523,9 @@ def main():
           with open(out / "wave_summary.jsonl", "a") as f:
               f.write(json.dumps({"task": n, "ok": results[-1].get("ok"),
                       "turns": results[-1].get("num_turns"), "tools": results[-1].get("tool_use_count"),
-                      "wall_s": results[-1].get("wall_s")}) + "\n")
+                      "wall_s": results[-1].get("wall_s"),
+                      "probe_ok": (results[-1].get("probe") or {}).get("ok"),
+                      "probe_attempts": 1 + len(results[-1].get("probe_attempts", []))}) + "\n")
       (out / "wave_results.json").write_text(json.dumps(
           {"trials": results, "harness_start": harness0, "harness": "opencode",
            "harness_drift": drift,
