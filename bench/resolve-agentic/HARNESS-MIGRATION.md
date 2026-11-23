@@ -131,3 +131,19 @@ the local.AI one (327 MB, content unchanged) and the top-level directory removed
 published claims that cite the top-level paths now resolve one directory deeper. Historic
 briefs/RECORDs keep their original path strings by design; RUNBOOK §3 records the canonical
 render root for new waves.
+
+### Smoke pair on 2.4.1 + 5.4.0 (2026-11-23, fixture _mcp_AGBench-2026-11-23c) — PASS
+
+Scratch: the standard scratch volume's `local.AI/Scratch/wave-23c-smoke-2026-11-23/` (see
+global scratch rule). T1r1 ok 31 s/3 tools/
+0 errors; T2r1 ok 73.5 s/17 turns/24 tools/2 recovered MCP errors (params-shape misuse + stale
+timeline id — both are documented api_truths friction, not build regressions). Verdict per risk
+surface: (1) **event shape survived the 2.4.0 storage change** — step/tool/text/token/session
+events parse exactly as the driver expects, tokens/cost/session extracted (cache_read 1.04 M on
+the medium warm-cache run); (2) **seal holds on 2.4.1** — every tool event in both trials is a
+KEEP davinci-resolve-server tool, zero real leaks; (3) **5.4.0 server clean under agent traffic**.
+Driver fix found by the smoke: the live seal-audit false-flagged ERRORED KEEP-server calls
+(str(("name","error")) starts with "(") — pre-existing since 2.3.2, it fired 3x in agbench-171
+and was always handled as a false positive; audit now evaluates the tuple's name. Full wave on
+this build is GO, with the pre-registered attribution rule: MCP-error-rate moves attribute to
+the harness/MCP build first, never the model.

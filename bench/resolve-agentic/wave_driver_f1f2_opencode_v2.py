@@ -336,9 +336,13 @@ def run_trial(name, prompt, sess_root, GROUND_RULES):
         return {"task": name, "error": str(e)[:200], "wall_s": round(time.time() - t0, 1)}
     rec = {"task": name, "ok": p.returncode == 0, "wall_s": round(time.time() - t0, 1)}
     ev = parse_events(p.stdout)
-    # live seal audit: every tool event must be a KEEP MCP tool ("server_tool" naming)
+    # live seal audit: every tool event must be a KEEP MCP tool ("server_tool" naming).
+    # NOTE: errored calls are stored as (name, "error") tuples (parse_events) — audit the NAME.
+    # (2.3.2-era bug: str(tuple) starts with "(" so errored KEEP-server calls false-flagged;
+    #  seen 3x in agbench-171, fixed at the 2.4.1 smoke 2026-11-23.)
     allowed = tuple(f"{n}_" for n in KEEP)
-    leaks = [str(t) for t in ev["tool_uses"] if not str(t).startswith(allowed)]
+    leaks = [str(t) for t in ev["tool_uses"]
+             if not (t[0] if isinstance(t, (list, tuple)) else t).startswith(allowed)]
     rec.update({"seal_leaks": leaks})
     if leaks:
         print(f"  !! SEAL LEAK in {name}: {leaks}", flush=True)

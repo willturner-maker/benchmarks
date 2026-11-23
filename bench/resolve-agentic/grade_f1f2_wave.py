@@ -320,16 +320,15 @@ def main():
             post = {"grade_tools": sorted(grade_tools), "linked_item_count": len(lk.get("items", [])),
                     "transition_present": any(gs._is_transition(i) for i in v),
                     "audio_item_count": len(aud)}
-            # 2026-11-17g operator fixture deviation: the CDL meant for the third clip was
-            # addressed at item_index 1/2 AFTER the transition existed, so it landed on the
-            # transition; the sealed pre-state proves the third clip was never graded (both arms
-            # identically). The grade dimension is therefore UNMEASURABLE this wave — not scored
-            # for or against any agent. Geometry/link/transition checks are unaffected.
+            # NOTE history: 17g-era fixture deviation armed the CDL onto the transition (both arms),
+            # making the grade axis unmeasurable in THAT wave. Emit the note only when the sealed
+            # pre-state actually shows the tracked clip ungraded (was unconditional - 23c fix).
             spec = {"clip_durations": [221, 221, 101, 221], "audio_count": 4,
                     "gap_count": 0, "overlap_count": 2, "expect_lost": ["link"],
                     "tracked": ["transition", "link"]}
-            verdicts.setdefault("F2"+k, {}).setdefault("notes", []).append(
-                "grade dimension unmeasurable (operator arming bug; sealed pre-state shows third clip ungraded pre-op)")
+            if not pre["grade_tools"]:
+                verdicts.setdefault("F2"+k, {}).setdefault("notes", []).append(
+                    "grade dimension unmeasurable (operator arming bug; sealed pre-state shows third clip ungraded pre-op)")
             ok, why = gs.grade_f2(v, go.get("gaps", []), go.get("overlaps", []), pre, post,
                                   claims.get(f"F2{k}", {}), spec)
             verdicts.setdefault("F2"+k, {})["post"] = post

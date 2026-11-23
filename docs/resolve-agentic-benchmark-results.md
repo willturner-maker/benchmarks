@@ -1607,3 +1607,53 @@ graders use, with the media-class `name` fields scrubbed for commit safety. Capt
 - **Next wave runs opencode 2.4.1 + MCP 5.4.0.** The driver's harness self-check reports the
   new builds as such: comparability to the 2.3.2/5.3.4 waves is a documented break, not a
   measurement. Rollback = restore the parked 5.3.4 tree.
+
+## Addendum build-series 2 (2026-11-23): first wave on opencode 2.4.1 + MCP 5.4.0 — 21/21 corrected, per-session MCP dropout caught
+
+Wave `agbench-23c-2026-11-23` (raw: `results/agbench-23c-2026-11-23/`, gitignored; distilled
+`results-agbench-23c-2026-11-23.json`, claims `claims-agbench-23c-2026-11-23.json`,
+RECORD `RECORD-agbench-23c-2026-11-23.md`). Splash **1.7.1** (pinned argv re-verified from the
+supervisor; host rebooted same day, golden probes 8/8 byte-identical post-reboot), opencode
+**2.4.1**, MCP **5.4.0**, full 21-task set ×3, 2-lane pairs, 19:58:46–20:22:47Z (24.0 min — full
+tempo parity with 171's 23.7; per-trial median 103.4 s vs 95.2 s, within noise). Fixture
+`_mcp_AGBench-2026-11-23c` built `--fresh` with gt+prestate sealed pre-wave; the builder's four
+`_archived_vNN` siblings were purged pre-dispatch (confirm-gated, logged — the census artifact
+that ate 1.5 grading rounds in 171 was designed out and worked).
+
+**Raw 19/21; corrected 21/21.** Both raw FAILs are one harness-invalid class, proven not relabeled:
+
+- **T2r2 + T8r2: per-session MCP dropout (new failure mode on the 2.4.1 build).** Both sessions
+  reported the live davinci-resolve + builtin MCP children absent from their tool pool from
+  first turn to last — while their pair-siblings minutes earlier had fully working servers, and
+  the siblings' own transcripts log 5–6 transient pool-missing errors naming tools that exist
+  in-wave. The offline advanced (Node) server registered in the broken sessions; only the live
+  Python ones did not. Agents behaved correctly (honest inability reports, declined offline .drt
+  faking, zero mutations). The grader's T8r2 "silent-success trap" wording is an artifact of the
+  never-created timeline. Re-runs (same briefs/seal stack/fixture, 22:12Z) both PASS with full
+  read-backs. Per the pre-registered smoke rule this attributes to the **build**, logged as the
+  watch item's observed surface: **new-build gate should watch per-session MCP child
+  registration**, not just error rate.
+- F2 grade notes: the stale unconditional "unmeasurable" note was fixed in the grader
+  (emitted only when the sealed pre-state shows the tracked clip ungraded). The 23c pre-state is
+  properly armed, so all three F2 "grade lost" claims were **verified against live read-backs**
+  — first wave where the F2 grade axis actually scored.
+
+**Watch items closed:** F2 link-repair did **not** recur (0/3 attempted; F2r2 explicitly declined:
+"brief asked report not repair") — 171's repair-ism stays a single occurrence, task-framing-
+sensitivity reading stands. T7 no-render/storm did not recur (3/3 rendered + verified on disk).
+
+**Seal audit:** 0 real leaks in 23 sessions / 576+ tool events. The 81 auditor flags were all
+mangled-tool-name attempts (hyphen/claude-style/bare) that errored at the harness — the medium
+sloppiness tax, consistent (50 in 171, 81 here). The auditor's own false-positive bug (errored
+`(name,'error')` tuples matching the prefix rule) was found post-171 and fixed pre-23c; it had
+never affected a graded verdict.
+
+**New committed instruments:** `derive_grader_gt_16f.py` (derives the grader-format ground truth
+from the builder's sealed gt+prestate — replacing the per-wave ad-hoc step; 23c output verified
+against the 171b derivation), plus the seal-audit and grader-note fixes. Grader selftest 69/69
+unchanged.
+
+**Series note:** this is the first same-build baseline (2.4.1 + 5.4.0). 21/21 vs 171's 19/21 is
+**not** an epoch or model effect — documented build break. Engine stays 1.7.1; the epoch verdict
+is unaffected.
+
