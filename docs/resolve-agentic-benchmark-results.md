@@ -1579,3 +1579,31 @@ since 17h); every mutating call carried a pin and its response confirmed the tar
 cross-timeline writes. Comparison on this instrument (1.7.0 epoch): 17h 20/21, 17h2 21/21, 18k 20/21
 per arm — corrected 19/21 sits at the bottom of the range with one genuine miss, no established epoch
 effect at n=1.
+
+### Toolchain transition addendum (2026-11-24): MCP server 5.3.4 → 5.4.0 — clean, recorded
+
+Taken deliberately at the series boundary: the opencode harness already moved to 2.4.1, so the
+next wave is a fresh build series either way, and the MCP bump rides it as one recorded
+transition instead of a mid-series confound. Method mirrors the splash golden probes:
+`mcp_transition_capture.py` drives a fixed read-back surface (server version, 41-timeline
+inventory, `probe_timeline_structure` + gap/overlap scans on _T1/_base/_f1s1/_f2r1, node-graph
+and link read-backs on fixed indexes, grade evidence base) through the same stdio MCP client the
+graders use, with the media-class `name` fields scrubbed for commit safety. Captures:
+`mcp-5.3.4-pre-transition.json` / `mcp-5.4.0-post-transition.json`, same fixture project
+(_mcp_AGBench-2026-11-23b), Resolve 21.2.0.6 both sides.
+
+- **All 12 fixture read-backs byte-identical** after stripping `_operation` per-call telemetry
+  (execution_id/duration_ms move by design); the only other moved key is the server version.
+  The 5.4.0 changelog head is house-style/skill documentation work — no tool-behavior changes
+  claimed, and the read-back diff agrees.
+- Install note: `install.py --update-now` is a **git fast-forward** and silently no-ops on a
+  non-git install (the old tree had no `.git`) — the upgrade was done by parking 5.3.4
+  (`~/Library/Application Support/davinci-resolve-mcp-5.3.4.bak`) and cloning the v5.4.0 tag
+  into the same path `opencode.json` already points at, which rebuilt the venv from scratch.
+- The rebuild erased an old habit: the MCP venv once held the mediapipe/scenedetect/pedalboard
+  stack. That stack lives canonically in `~/resolve-vision-venv312` (per global notes), so the
+  rebuild costs nothing — but any stale script pointing at the MCP venv for CV work is broken
+  by design.
+- **Next wave runs opencode 2.4.1 + MCP 5.4.0.** The driver's harness self-check reports the
+  new builds as such: comparability to the 2.3.2/5.3.4 waves is a documented break, not a
+  measurement. Rollback = restore the parked 5.3.4 tree.

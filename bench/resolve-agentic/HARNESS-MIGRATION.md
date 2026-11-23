@@ -95,3 +95,31 @@ tool-loop-gate, splash-concurrency talk to the engine directly and are unaffecte
      service restart.
 - Standing check before the next full wave: `--check-harness`, then a smoke pair (T1+T2),
   then `opencode mcp list` shows all five servers connected.
+
+## 2026-11-24: community MCP server 5.3.4 → 5.4.0 (taken at the series boundary)
+
+With the harness already on 2.4.1 the next wave is a fresh build series either way, so the MCP
+bump rides the same boundary as one recorded transition instead of a mid-series confound.
+Captured like the splash golden probes: `mcp_transition_capture.py` drives a fixed read-back
+surface (server version, 41-timeline inventory, `probe_timeline_structure` + gap/overlap scans
+on _T1/_base/_f1s1/_f2r1, node-graph and link read-backs on fixed indexes, grade evidence base)
+through the suite's own stdio MCP client, `name` fields scrubbed for commit safety.
+`mcp-5.3.4-pre-transition.json` / `mcp-5.4.0-post-transition.json`, same fixture project
+(_mcp_AGBench-2026-11-23b), Resolve 21.2.0.6 both sides: **all 12 fixture read-backs
+byte-identical** after stripping `_operation` per-call telemetry; only the version moved. The
+5.4.0 changelog head is documentation/skill work — consistent with a silent behaviour surface.
+
+Install note (learned the hard way): `install.py --update-now` is a git fast-forward and
+silently no-ops on a non-git install (the old tree had no `.git`; it also printed a
+"not a commit" warning for the annotated tag). Done explicitly instead: parked 5.3.4 at
+`~/Library/Application Support/davinci-resolve-mcp-5.3.4.bak`, cloned the v5.4.0 tag into the
+path `opencode.json` already points at, rebuilt the venv (rollback = restore the parked tree).
+The rebuild also wiped an old habit: the MCP venv once carried the mediapipe/scenedetect/
+pedalboard stack — that stack lives in `~/resolve-vision-venv312` now, so nothing broke, but
+any stale script pointing at the MCP venv for CV work is broken by design.
+
+Post-restart verification (service on 2.4.1): `opencode mcp list` shows all five servers
+connected, including davinci-resolve-builtin — the 2.4.0 protocol-first probes (#65282) reach
+it cleanly and the old cosmetic "1 plugin failed" line is gone. Next wave pins:
+**opencode 2.4.1 + MCP 5.4.0**, one new series; comparability to 2.3.2/5.3.4 waves is a
+documented break, not a measurement.

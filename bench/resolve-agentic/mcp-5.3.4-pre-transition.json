@@ -1,0 +1,1165 @@
+{
+ "project": "_mcp_AGBench-2026-11-23b",
+ "surface": {
+  "gaps_mcp_AGBench-2026-11-23b_T1": {
+   "_operation": {
+    "duration_ms": 167,
+    "execution_id": "exec_0d08dc6ff80c",
+    "lifecycle": {
+     "drift_detection": {
+      "baseline_reset": true,
+      "drift_detected": false,
+      "notice": "Drift not evaluated: timeline_name changed from '_mcp_AGBench-2026-11-23b_T1' to '_mcp_AGBench-2026-11-23b_f2r3' during 'detect_gaps_overlaps', so the pre-state duration is no longer a baseline for the post-state duration.",
+      "reset_on": "timeline_name"
+     },
+     "provenance_trace": {
+      "duration_ms": 167,
+      "execution_id": null,
+      "risk_level": "medium"
+     }
+    },
+    "operation": "timeline.detect_gaps_overlaps",
+    "status": "success",
+    "timeline": {
+     "id": "f3979f0f-fc5c-4e23-bc1f-2cd324bbd406",
+     "pinned": true,
+     "restored_current": {
+      "id": "b07263c1-d383-43b5-b06c-65f028e4a1bf"
+     }
+    },
+    "verification": {
+     "checks": [],
+     "contradiction": false,
+     "status": "unverified"
+    }
+   },
+   "gap_count": 0,
+   "gaps": [],
+   "overlap_count": 0,
+   "overlaps": []
+  },
+  "gaps_mcp_AGBench-2026-11-23b_base": {
+   "_operation": {
+    "duration_ms": 199,
+    "execution_id": "exec_6edf7cd3f4bc",
+    "lifecycle": {
+     "drift_detection": {
+      "baseline_reset": true,
+      "drift_detected": false,
+      "notice": "Drift not evaluated: timeline_name changed from '_mcp_AGBench-2026-11-23b_base' to '_mcp_AGBench-2026-11-23b_f2r3' during 'detect_gaps_overlaps', so the pre-state duration is no longer a baseline for the post-state duration.",
+      "reset_on": "timeline_name"
+     },
+     "provenance_trace": {
+      "duration_ms": 199,
+      "execution_id": null,
+      "risk_level": "medium"
+     }
+    },
+    "operation": "timeline.detect_gaps_overlaps",
+    "status": "success",
+    "timeline": {
+     "id": "59bafc24-68f1-4692-afe0-7858c8d7c3e7",
+     "pinned": true,
+     "restored_current": {
+      "id": "b07263c1-d383-43b5-b06c-65f028e4a1bf"
+     }
+    },
+    "verification": {
+     "checks": [],
+     "contradiction": false,
+     "status": "unverified"
+    }
+   },
+   "gap_count": 0,
+   "gaps": [],
+   "overlap_count": 0,
+   "overlaps": []
+  },
+  "gaps_mcp_AGBench-2026-11-23b_f1s1": {
+   "_operation": {
+    "duration_ms": 211,
+    "execution_id": "exec_32b739ecf5d4",
+    "lifecycle": {
+     "drift_detection": {
+      "baseline_reset": true,
+      "drift_detected": false,
+      "notice": "Drift not evaluated: timeline_name changed from '_mcp_AGBench-2026-11-23b_f1s1' to '_mcp_AGBench-2026-11-23b_f2r3' during 'detect_gaps_overlaps', so the pre-state duration is no longer a baseline for the post-state duration.",
+      "reset_on": "timeline_name"
+     },
+     "provenance_trace": {
+      "duration_ms": 211,
+      "execution_id": null,
+      "risk_level": "medium"
+     }
+    },
+    "operation": "timeline.detect_gaps_overlaps",
+    "status": "success",
+    "timeline": {
+     "id": "09592c69-ad51-44ae-bf43-bbe17f25dbed",
+     "pinned": true,
+     "restored_current": {
+      "id": "b07263c1-d383-43b5-b06c-65f028e4a1bf"
+     }
+    },
+    "verification": {
+     "checks": [],
+     "contradiction": false,
+     "status": "unverified"
+    }
+   },
+   "gap_count": 0,
+   "gaps": [],
+   "overlap_count": 0,
+   "overlaps": []
+  },
+  "gaps_mcp_AGBench-2026-11-23b_f2r1": {
+   "_operation": {
+    "duration_ms": 185,
+    "execution_id": "exec_762947250a24",
+    "lifecycle": {
+     "drift_detection": {
+      "baseline_reset": true,
+      "drift_detected": false,
+      "notice": "Drift not evaluated: timeline_name changed from '_mcp_AGBench-2026-11-23b_f2r1' to '_mcp_AGBench-2026-11-23b_f2r3' during 'detect_gaps_overlaps', so the pre-state duration is no longer a baseline for the post-state duration.",
+      "reset_on": "timeline_name"
+     },
+     "provenance_trace": {
+      "duration_ms": 185,
+      "execution_id": null,
+      "risk_level": "medium"
+     }
+    },
+    "operation": "timeline.detect_gaps_overlaps",
+    "status": "success",
+    "timeline": {
+     "id": "b2054029-2612-4b50-8f68-4b013c5017c0",
+     "pinned": true,
+     "restored_current": {
+      "id": "b07263c1-d383-43b5-b06c-65f028e4a1bf"
+     }
+    },
+    "verification": {
+     "checks": [],
+     "contradiction": false,
+     "status": "unverified"
+    }
+   },
+   "gap_count": 0,
+   "gaps": [],
+   "overlap_count": 2,
+   "overlaps": [
+    {
+     "duration": 12,
+     "end": 108221,
+     "left": "ed761ec1-4de5-453a-915e-f264b57a10c2",
+     "right": "ed53fae6-7b96-4822-8d27-5b0468f74097",
+     "start": 108209,
+     "track_index": 1,
+     "track_type": "video"
+    },
+    {
+     "duration": 12,
+     "end": 108233,
+     "left": "ed53fae6-7b96-4822-8d27-5b0468f74097",
+     "right": "934797a8-1e9c-4f39-99f4-b86611c9096b",
+     "start": 108221,
+     "track_index": 1,
+     "track_type": "video"
+    }
+   ]
+  },
+  "grade_f1s1_item0": {
+   "_operation": {
+    "duration_ms": 221,
+    "execution_id": "exec_8206ca36b34f",
+    "lifecycle": {
+     "drift_detection": {
+      "baseline_reset": true,
+      "drift_detected": false,
+      "notice": "Drift not evaluated: timeline_name changed from '_mcp_AGBench-2026-11-23b_f1s1' to '_mcp_AGBench-2026-11-23b_f2r3' during 'grade_evidence_base', so the pre-state duration is no longer a baseline for the post-state duration.",
+      "reset_on": "timeline_name"
+     },
+     "provenance_trace": {
+      "duration_ms": 221,
+      "execution_id": null,
+      "risk_level": "medium"
+     }
+    },
+    "operation": "timeline_item_color.grade_evidence_base",
+    "status": "success",
+    "timeline": {
+     "id": "09592c69-ad51-44ae-bf43-bbe17f25dbed",
+     "pinned": true,
+     "restored_current": {
+      "id": "b07263c1-d383-43b5-b06c-65f028e4a1bf"
+     }
+    },
+    "verification": {
+     "checks": [],
+     "contradiction": false,
+     "status": "unverified"
+    },
+    "warnings": [
+     "coverage_report skipped: clip target requires clip_id or selected=true"
+    ]
+   },
+   "evidence_base": "evidence base: hero shot <media> graded (Version 1, 1 nodes)",
+   "notes": [
+    "grade_evidence_base is a pure read \u2014 it never mutates.",
+    "Lead any color recommendation with the `evidence_base` line."
+   ],
+   "structured": {
+    "capabilities": {
+     "boundaries": [
+      "Node graph internals are only partially inspectable through Resolve's public API.",
+      "ApplyGradeFromDRX replaces the target graph; there is no append mode.",
+      "LUT export writes files and is guarded to temp paths by default.",
+      "Stabilize, Smart Reframe, and Magic Mask can be asynchronous and page dependent."
+     ],
+     "color_group_count": 0,
+     "gallery_available": true,
+     "grade_modes": {
+      "no_keyframes": 0,
+      "source_timecode_aligned": 1,
+      "start_frames_aligned": 2
+     },
+     "graph_methods": [
+      "GetNumNodes",
+      "GetLUT",
+      "SetLUT",
+      "GetNodeCacheMode",
+      "SetNodeCacheMode",
+      "GetNodeLabel",
+      "GetToolsInNode",
+      "SetNodeEnabled",
+      "ApplyGradeFromDRX",
+      "ApplyArriCdlLut",
+      "ResetAllGrades"
+     ],
+     "graph_sources": [
+      "item",
+      "timeline",
+      "color_group_pre",
+      "color_group_post"
+     ],
+     "guards": {
+      "ai_tools_report_callability_but_are_not_forced_by_boundary_report": true,
+      "safe_apply_drx_requires_temp_path_by_default": true,
+      "safe_copy_grade_requires_target_timeline_item_ids": true,
+      "safe_export_lut_requires_temp_path": true
+     },
+     "item_methods": {
+      "AddVersion": true,
+      "AssignToColorGroup": true,
+      "CopyGrades": true,
+      "CreateMagicMask": true,
+      "DeleteVersionByName": true,
+      "ExportLUT": true,
+      "GetColorGroup": true,
+      "GetCurrentVersion": true,
+      "GetIsColorOutputCacheEnabled": true,
+      "GetIsFusionOutputCacheEnabled": true,
+      "GetNodeGraph": true,
+      "GetVersionNameList": true,
+      "LoadVersionByName": true,
+      "RegenerateMagicMask": true,
+      "RemoveFromColorGroup": true,
+      "RenameVersionByName": true,
+      "ResetAllNodeColors": true,
+      "SetCDL": true,
+      "SetColorOutputCache": true,
+      "SetFusionOutputCache": true,
+      "SmartReframe": true,
+      "Stabilize": true
+     },
+     "lut_export_types": [
+      "EXPORT_LUT_17PTCUBE",
+      "EXPORT_LUT_33PTCUBE",
+      "EXPORT_LUT_65PTCUBE",
+      "EXPORT_LUT_PANASONICVLUT"
+     ],
+     "version_types": {
+      "local": 0,
+      "remote": 1
+     }
+    },
+    "color_group": {},
+    "node_graph": {
+     "available": true,
+     "errors": [],
+     "methods": {
+      "ApplyArriCdlLut": true,
+      "ApplyGradeFromDRX": true,
+      "GetLUT": true,
+      "GetNodeCacheMode": true,
+      "GetNodeLabel": true,
+      "GetNumNodes": true,
+      "GetToolsInNode": true,
+      "ResetAllGrades": true,
+      "SetLUT": true,
+      "SetNodeCacheMode": true,
+      "SetNodeEnabled": true
+     },
+     "nodes": [
+      {
+       "cache_mode": -1,
+       "label": "",
+       "lut": "",
+       "node_index": 1,
+       "tools": [
+        "Primary Balance",
+        "Saturation, Hue & Lum Mix"
+       ]
+      }
+     ],
+     "num_nodes": 1,
+     "source": "item"
+    },
+    "version_snapshot": {
+     "current": {
+      "versionName": "Version 1",
+      "versionType": 0
+     },
+     "errors": [],
+     "local": [
+      "Version 1"
+     ],
+     "remote": [
+      "Version 1"
+     ]
+    }
+   },
+   "success": true,
+   "warnings": [
+    "coverage_report skipped: clip target requires clip_id or selected=true"
+   ]
+  },
+  "links_f2r1_item4": {
+   "_operation": {
+    "duration_ms": 1115,
+    "execution_id": "exec_70c21674c3ba",
+    "lifecycle": {
+     "drift_detection": {
+      "baseline_reset": true,
+      "drift_detected": false,
+      "notice": "Drift not evaluated: timeline_name changed from '_mcp_AGBench-2026-11-23b_f2r1' to '_mcp_AGBench-2026-11-23b_f2r3' during 'get_linked_items', so the pre-state duration is no longer a baseline for the post-state duration.",
+      "reset_on": "timeline_name"
+     },
+     "provenance_trace": {
+      "duration_ms": 1115,
+      "execution_id": null,
+      "risk_level": "low"
+     }
+    },
+    "operation": "timeline_item.get_linked_items",
+    "status": "success",
+    "timeline": {
+     "id": "b2054029-2612-4b50-8f68-4b013c5017c0",
+     "pinned": true,
+     "restored_current": {
+      "id": "b07263c1-d383-43b5-b06c-65f028e4a1bf"
+     }
+    },
+    "verification": {
+     "checks": [],
+     "contradiction": false,
+     "status": "unverified"
+    }
+   },
+   "items": [
+    {
+     "id": "42133c71-1358-417a-a7f9-e577de331a9f"
+    }
+   ]
+  },
+  "nodegraph_f2r1_item4": {
+   "_operation": {
+    "duration_ms": 179,
+    "execution_id": "exec_3d94c1cab5e2",
+    "lifecycle": {
+     "drift_detection": {
+      "baseline_reset": true,
+      "drift_detected": false,
+      "notice": "Drift not evaluated: timeline_name changed from '_mcp_AGBench-2026-11-23b_f2r1' to '_mcp_AGBench-2026-11-23b_f2r3' during 'probe_node_graph', so the pre-state duration is no longer a baseline for the post-state duration.",
+      "reset_on": "timeline_name"
+     },
+     "provenance_trace": {
+      "duration_ms": 179,
+      "execution_id": null,
+      "risk_level": "low"
+     }
+    },
+    "operation": "timeline_item_color.probe_node_graph",
+    "status": "success",
+    "timeline": {
+     "id": "b2054029-2612-4b50-8f68-4b013c5017c0",
+     "pinned": true,
+     "restored_current": {
+      "id": "b07263c1-d383-43b5-b06c-65f028e4a1bf"
+     }
+    },
+    "verification": {
+     "checks": [],
+     "contradiction": false,
+     "status": "unverified"
+    }
+   },
+   "available": true,
+   "errors": [],
+   "methods": {
+    "ApplyArriCdlLut": true,
+    "ApplyGradeFromDRX": true,
+    "GetLUT": true,
+    "GetNodeCacheMode": true,
+    "GetNodeLabel": true,
+    "GetNumNodes": true,
+    "GetToolsInNode": true,
+    "ResetAllGrades": true,
+    "SetLUT": true,
+    "SetNodeCacheMode": true,
+    "SetNodeEnabled": true
+   },
+   "nodes": [
+    {
+     "cache_mode": -1,
+     "label": "",
+     "lut": "",
+     "node_index": 1,
+     "tools": []
+    }
+   ],
+   "num_nodes": 1,
+   "source": "item"
+  },
+  "probe_mcp_AGBench-2026-11-23b_T1": {
+   "_operation": {
+    "duration_ms": 215,
+    "execution_id": "exec_7fb5c323eedb",
+    "lifecycle": {
+     "drift_detection": {
+      "baseline_reset": true,
+      "drift_detected": false,
+      "notice": "Drift not evaluated: timeline_name changed from '_mcp_AGBench-2026-11-23b_T1' to '_mcp_AGBench-2026-11-23b_f2r3' during 'probe_timeline_structure', so the pre-state duration is no longer a baseline for the post-state duration.",
+      "reset_on": "timeline_name"
+     },
+     "provenance_trace": {
+      "duration_ms": 215,
+      "execution_id": null,
+      "risk_level": "low"
+     }
+    },
+    "operation": "timeline.probe_timeline_structure",
+    "status": "success",
+    "timeline": {
+     "id": "f3979f0f-fc5c-4e23-bc1f-2cd324bbd406",
+     "pinned": true,
+     "restored_current": {
+      "id": "b07263c1-d383-43b5-b06c-65f028e4a1bf"
+     }
+    },
+    "verification": {
+     "checks": [],
+     "contradiction": false,
+     "status": "unverified"
+    }
+   },
+   "end_frame": 108442,
+   "id": "f3979f0f-fc5c-4e23-bc1f-2cd324bbd406",
+   "item_count": 4,
+   "markers": {},
+   "start_frame": 108000,
+   "start_timecode": "01:00:00:00",
+   "tracks": {
+    "audio": {
+     "track_count": 1,
+     "tracks": [
+      {
+       "item_count": 2,
+       "items": [
+        {
+         "duration": 221,
+         "end": 108221,
+         "file_exists": true,
+         "item_index": 0,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5256,
+         "source_end_seconds": 175.375,
+         "source_fps": 29.97,
+         "source_start": 5035,
+         "source_start_seconds": 168.001,
+         "start": 108000,
+         "timeline_item_id": "23a28c99-ade9-4683-8db0-f0099d97f0de",
+         "track_index": 1,
+         "track_type": "audio"
+        },
+        {
+         "duration": 221,
+         "end": 108442,
+         "file_exists": true,
+         "item_index": 1,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5477,
+         "source_end_seconds": 182.75,
+         "source_fps": 29.97,
+         "source_start": 5256,
+         "source_start_seconds": 175.375,
+         "start": 108221,
+         "timeline_item_id": "7427820c-4aac-49ac-9d3a-39decadf0601",
+         "track_index": 1,
+         "track_type": "audio"
+        }
+       ],
+       "track_index": 1
+      }
+     ]
+    },
+    "subtitle": {
+     "track_count": 0,
+     "tracks": []
+    },
+    "video": {
+     "track_count": 1,
+     "tracks": [
+      {
+       "item_count": 2,
+       "items": [
+        {
+         "duration": 221,
+         "end": 108221,
+         "file_exists": true,
+         "item_index": 0,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5256,
+         "source_end_seconds": 175.375,
+         "source_fps": 29.97,
+         "source_start": 5035,
+         "source_start_seconds": 168.001,
+         "start": 108000,
+         "timeline_item_id": "c6f5edbb-a410-49a3-9a99-34ba1aa2b8cb",
+         "track_index": 1,
+         "track_type": "video"
+        },
+        {
+         "duration": 221,
+         "end": 108442,
+         "file_exists": true,
+         "item_index": 1,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5477,
+         "source_end_seconds": 182.75,
+         "source_fps": 29.97,
+         "source_start": 5256,
+         "source_start_seconds": 175.375,
+         "start": 108221,
+         "timeline_item_id": "b6bd7fc4-ef86-4218-bdab-3ff02b44dd3c",
+         "track_index": 1,
+         "track_type": "video"
+        }
+       ],
+       "track_index": 1
+      }
+     ]
+    }
+   }
+  },
+  "probe_mcp_AGBench-2026-11-23b_base": {
+   "_operation": {
+    "duration_ms": 193,
+    "execution_id": "exec_1f981885a26d",
+    "lifecycle": {
+     "drift_detection": {
+      "baseline_reset": true,
+      "drift_detected": false,
+      "notice": "Drift not evaluated: timeline_name changed from '_mcp_AGBench-2026-11-23b_base' to '_mcp_AGBench-2026-11-23b_f2r3' during 'probe_timeline_structure', so the pre-state duration is no longer a baseline for the post-state duration.",
+      "reset_on": "timeline_name"
+     },
+     "provenance_trace": {
+      "duration_ms": 193,
+      "execution_id": null,
+      "risk_level": "low"
+     }
+    },
+    "operation": "timeline.probe_timeline_structure",
+    "status": "success",
+    "timeline": {
+     "id": "59bafc24-68f1-4692-afe0-7858c8d7c3e7",
+     "pinned": true,
+     "restored_current": {
+      "id": "b07263c1-d383-43b5-b06c-65f028e4a1bf"
+     }
+    },
+    "verification": {
+     "checks": [],
+     "contradiction": false,
+     "status": "unverified"
+    }
+   },
+   "end_frame": 108442,
+   "id": "59bafc24-68f1-4692-afe0-7858c8d7c3e7",
+   "item_count": 4,
+   "markers": {},
+   "start_frame": 108000,
+   "start_timecode": "01:00:00:00",
+   "tracks": {
+    "audio": {
+     "track_count": 1,
+     "tracks": [
+      {
+       "item_count": 2,
+       "items": [
+        {
+         "duration": 221,
+         "end": 108221,
+         "file_exists": true,
+         "item_index": 0,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5256,
+         "source_end_seconds": 175.375,
+         "source_fps": 29.97,
+         "source_start": 5035,
+         "source_start_seconds": 168.001,
+         "start": 108000,
+         "timeline_item_id": "b1e0f959-359c-4a33-bfc1-679f2b17087f",
+         "track_index": 1,
+         "track_type": "audio"
+        },
+        {
+         "duration": 221,
+         "end": 108442,
+         "file_exists": true,
+         "item_index": 1,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5477,
+         "source_end_seconds": 182.75,
+         "source_fps": 29.97,
+         "source_start": 5256,
+         "source_start_seconds": 175.375,
+         "start": 108221,
+         "timeline_item_id": "08e66cb0-f0c8-4fa9-905d-d4f24a7d3fed",
+         "track_index": 1,
+         "track_type": "audio"
+        }
+       ],
+       "track_index": 1
+      }
+     ]
+    },
+    "subtitle": {
+     "track_count": 0,
+     "tracks": []
+    },
+    "video": {
+     "track_count": 1,
+     "tracks": [
+      {
+       "item_count": 2,
+       "items": [
+        {
+         "duration": 221,
+         "end": 108221,
+         "file_exists": true,
+         "item_index": 0,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5256,
+         "source_end_seconds": 175.375,
+         "source_fps": 29.97,
+         "source_start": 5035,
+         "source_start_seconds": 168.001,
+         "start": 108000,
+         "timeline_item_id": "63793c13-fead-4169-aadb-adf00cf679bb",
+         "track_index": 1,
+         "track_type": "video"
+        },
+        {
+         "duration": 221,
+         "end": 108442,
+         "file_exists": true,
+         "item_index": 1,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5477,
+         "source_end_seconds": 182.75,
+         "source_fps": 29.97,
+         "source_start": 5256,
+         "source_start_seconds": 175.375,
+         "start": 108221,
+         "timeline_item_id": "ec8e27f7-109a-4512-b829-285924a61ec0",
+         "track_index": 1,
+         "track_type": "video"
+        }
+       ],
+       "track_index": 1
+      }
+     ]
+    }
+   }
+  },
+  "probe_mcp_AGBench-2026-11-23b_f1s1": {
+   "_operation": {
+    "duration_ms": 218,
+    "execution_id": "exec_b3e3e1278f72",
+    "lifecycle": {
+     "drift_detection": {
+      "baseline_reset": true,
+      "drift_detected": false,
+      "notice": "Drift not evaluated: timeline_name changed from '_mcp_AGBench-2026-11-23b_f1s1' to '_mcp_AGBench-2026-11-23b_f2r3' during 'probe_timeline_structure', so the pre-state duration is no longer a baseline for the post-state duration.",
+      "reset_on": "timeline_name"
+     },
+     "provenance_trace": {
+      "duration_ms": 218,
+      "execution_id": null,
+      "risk_level": "low"
+     }
+    },
+    "operation": "timeline.probe_timeline_structure",
+    "status": "success",
+    "timeline": {
+     "id": "09592c69-ad51-44ae-bf43-bbe17f25dbed",
+     "pinned": true,
+     "restored_current": {
+      "id": "b07263c1-d383-43b5-b06c-65f028e4a1bf"
+     }
+    },
+    "verification": {
+     "checks": [],
+     "contradiction": false,
+     "status": "unverified"
+    }
+   },
+   "end_frame": 108442,
+   "id": "09592c69-ad51-44ae-bf43-bbe17f25dbed",
+   "item_count": 4,
+   "markers": {},
+   "start_frame": 108000,
+   "start_timecode": "01:00:00:00",
+   "tracks": {
+    "audio": {
+     "track_count": 1,
+     "tracks": [
+      {
+       "item_count": 2,
+       "items": [
+        {
+         "duration": 221,
+         "end": 108221,
+         "file_exists": true,
+         "item_index": 0,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5256,
+         "source_end_seconds": 175.375,
+         "source_fps": 29.97,
+         "source_start": 5035,
+         "source_start_seconds": 168.001,
+         "start": 108000,
+         "timeline_item_id": "f1ebec27-6da4-4c0c-9beb-3a3dc44b8885",
+         "track_index": 1,
+         "track_type": "audio"
+        },
+        {
+         "duration": 221,
+         "end": 108442,
+         "file_exists": true,
+         "item_index": 1,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5477,
+         "source_end_seconds": 182.75,
+         "source_fps": 29.97,
+         "source_start": 5256,
+         "source_start_seconds": 175.375,
+         "start": 108221,
+         "timeline_item_id": "7dd7c0bc-3926-42b3-8fce-ac36fd0c7c62",
+         "track_index": 1,
+         "track_type": "audio"
+        }
+       ],
+       "track_index": 1
+      }
+     ]
+    },
+    "subtitle": {
+     "track_count": 0,
+     "tracks": []
+    },
+    "video": {
+     "track_count": 1,
+     "tracks": [
+      {
+       "item_count": 2,
+       "items": [
+        {
+         "duration": 221,
+         "end": 108221,
+         "file_exists": true,
+         "item_index": 0,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 6220,
+         "source_end_seconds": 207.541,
+         "source_fps": 29.97,
+         "source_start": 5999,
+         "source_start_seconds": 200.167,
+         "start": 108000,
+         "timeline_item_id": "cd0bc4d4-dee1-4fb7-b559-3ec06a54c0eb",
+         "track_index": 1,
+         "track_type": "video"
+        },
+        {
+         "duration": 221,
+         "end": 108442,
+         "file_exists": true,
+         "item_index": 1,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5477,
+         "source_end_seconds": 182.75,
+         "source_fps": 29.97,
+         "source_start": 5256,
+         "source_start_seconds": 175.375,
+         "start": 108221,
+         "timeline_item_id": "4fa98157-800c-41f6-a18c-2d9aff4af8b5",
+         "track_index": 1,
+         "track_type": "video"
+        }
+       ],
+       "track_index": 1
+      }
+     ]
+    }
+   }
+  },
+  "probe_mcp_AGBench-2026-11-23b_f2r1": {
+   "_operation": {
+    "duration_ms": 238,
+    "execution_id": "exec_f5dc85c1e365",
+    "lifecycle": {
+     "drift_detection": {
+      "baseline_reset": true,
+      "drift_detected": false,
+      "notice": "Drift not evaluated: timeline_name changed from '_mcp_AGBench-2026-11-23b_f2r1' to '_mcp_AGBench-2026-11-23b_f2r3' during 'probe_timeline_structure', so the pre-state duration is no longer a baseline for the post-state duration.",
+      "reset_on": "timeline_name"
+     },
+     "provenance_trace": {
+      "duration_ms": 238,
+      "execution_id": null,
+      "risk_level": "low"
+     }
+    },
+    "operation": "timeline.probe_timeline_structure",
+    "status": "success",
+    "timeline": {
+     "id": "b2054029-2612-4b50-8f68-4b013c5017c0",
+     "pinned": true,
+     "restored_current": {
+      "id": "b07263c1-d383-43b5-b06c-65f028e4a1bf"
+     }
+    },
+    "verification": {
+     "checks": [],
+     "contradiction": false,
+     "status": "unverified"
+    }
+   },
+   "end_frame": 108764,
+   "id": "b2054029-2612-4b50-8f68-4b013c5017c0",
+   "item_count": 9,
+   "markers": {},
+   "start_frame": 108000,
+   "start_timecode": "01:00:00:00",
+   "tracks": {
+    "audio": {
+     "track_count": 1,
+     "tracks": [
+      {
+       "item_count": 4,
+       "items": [
+        {
+         "duration": 221,
+         "end": 108221,
+         "file_exists": true,
+         "item_index": 0,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5256,
+         "source_end_seconds": 175.375,
+         "source_fps": 29.97,
+         "source_start": 5035,
+         "source_start_seconds": 168.001,
+         "start": 108000,
+         "timeline_item_id": "b2a9d3b4-4bad-44ac-9022-1d362589585b",
+         "track_index": 1,
+         "track_type": "audio"
+        },
+        {
+         "duration": 221,
+         "end": 108442,
+         "file_exists": true,
+         "item_index": 1,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5477,
+         "source_end_seconds": 182.75,
+         "source_fps": 29.97,
+         "source_start": 5256,
+         "source_start_seconds": 175.375,
+         "start": 108221,
+         "timeline_item_id": "3bbeaa27-2e20-4444-a1d3-467096922095",
+         "track_index": 1,
+         "track_type": "audio"
+        },
+        {
+         "duration": 101,
+         "end": 108543,
+         "file_exists": true,
+         "item_index": 2,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 25282,
+         "source_end_seconds": 843.577,
+         "source_fps": 29.97,
+         "source_start": 25181,
+         "source_start_seconds": 840.207,
+         "start": 108442,
+         "timeline_item_id": "7d845a64-a9e8-4fcd-8485-6c406f4fdd2c",
+         "track_index": 1,
+         "track_type": "audio"
+        },
+        {
+         "duration": 221,
+         "end": 108764,
+         "file_exists": true,
+         "item_index": 3,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5698,
+         "source_end_seconds": 190.123,
+         "source_fps": 29.97,
+         "source_start": 5477,
+         "source_start_seconds": 182.749,
+         "start": 108543,
+         "timeline_item_id": "42133c71-1358-417a-a7f9-e577de331a9f",
+         "track_index": 1,
+         "track_type": "audio"
+        }
+       ],
+       "track_index": 1
+      }
+     ]
+    },
+    "subtitle": {
+     "track_count": 0,
+     "tracks": []
+    },
+    "video": {
+     "track_count": 1,
+     "tracks": [
+      {
+       "item_count": 5,
+       "items": [
+        {
+         "duration": 221,
+         "end": 108221,
+         "file_exists": true,
+         "item_index": 0,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5268,
+         "source_end_seconds": 175.776,
+         "source_fps": 29.97,
+         "source_start": 5035,
+         "source_start_seconds": 168.001,
+         "start": 108000,
+         "timeline_item_id": "ed761ec1-4de5-453a-915e-f264b57a10c2",
+         "track_index": 1,
+         "track_type": "video"
+        },
+        {
+         "duration": 24,
+         "end": 108233,
+         "file_exists": false,
+         "item_index": 1,
+         "media_pool_item_id": null,
+         "media_status": null,
+         "source_end": null,
+         "source_end_seconds": null,
+         "source_fps": null,
+         "source_start": null,
+         "source_start_seconds": null,
+         "start": 108209,
+         "timeline_item_id": "ed53fae6-7b96-4822-8d27-5b0468f74097",
+         "track_index": 1,
+         "track_type": "video"
+        },
+        {
+         "duration": 221,
+         "end": 108442,
+         "file_exists": true,
+         "item_index": 2,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5489,
+         "source_end_seconds": 183.15,
+         "source_fps": 29.97,
+         "source_start": 5256,
+         "source_start_seconds": 175.375,
+         "start": 108221,
+         "timeline_item_id": "934797a8-1e9c-4f39-99f4-b86611c9096b",
+         "track_index": 1,
+         "track_type": "video"
+        },
+        {
+         "duration": 101,
+         "end": 108543,
+         "file_exists": true,
+         "item_index": 3,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 25282,
+         "source_end_seconds": 843.577,
+         "source_fps": 29.97,
+         "source_start": 25181,
+         "source_start_seconds": 840.207,
+         "start": 108442,
+         "timeline_item_id": "0d569626-36be-472d-ae16-fbfdb3881986",
+         "track_index": 1,
+         "track_type": "video"
+        },
+        {
+         "duration": 221,
+         "end": 108764,
+         "file_exists": true,
+         "item_index": 4,
+         "media_pool_item_id": "cd8f1115-346a-4bf9-a9ed-b7c55b295fdc",
+         "media_status": "Online",
+         "source_end": 5698,
+         "source_end_seconds": 190.123,
+         "source_fps": 29.97,
+         "source_start": 5477,
+         "source_start_seconds": 182.749,
+         "start": 108543,
+         "timeline_item_id": "c8d9c638-e75a-44ee-86da-4116ca2fd7d0",
+         "track_index": 1,
+         "track_type": "video"
+        }
+       ],
+       "track_index": 1
+      }
+     ]
+    }
+   }
+  },
+  "timeline_names": [
+   "_mcp_AGBench-2026-11-23b_T1",
+   "_mcp_AGBench-2026-11-23b_T1_archived_v01",
+   "_mcp_AGBench-2026-11-23b_T2r1",
+   "_mcp_AGBench-2026-11-23b_T2r1_archived_v01",
+   "_mcp_AGBench-2026-11-23b_T2r2",
+   "_mcp_AGBench-2026-11-23b_T2r2_archived_v01",
+   "_mcp_AGBench-2026-11-23b_T2r3",
+   "_mcp_AGBench-2026-11-23b_T2r3_archived_v01",
+   "_mcp_AGBench-2026-11-23b_T3r1",
+   "_mcp_AGBench-2026-11-23b_T3r1_archived_v01",
+   "_mcp_AGBench-2026-11-23b_T3r2",
+   "_mcp_AGBench-2026-11-23b_T3r2_archived_v01",
+   "_mcp_AGBench-2026-11-23b_T3r3",
+   "_mcp_AGBench-2026-11-23b_T3r3_archived_v01",
+   "_mcp_AGBench-2026-11-23b_T7r1",
+   "_mcp_AGBench-2026-11-23b_T7r2",
+   "_mcp_AGBench-2026-11-23b_T7r2_archived_v01",
+   "_mcp_AGBench-2026-11-23b_T8r1",
+   "_mcp_AGBench-2026-11-23b_T8r1_archived_v01",
+   "_mcp_AGBench-2026-11-23b_T8r2",
+   "_mcp_AGBench-2026-11-23b_T8r3",
+   "_mcp_AGBench-2026-11-23b_T8r3_archived_v01",
+   "_mcp_AGBench-2026-11-23b_base",
+   "_mcp_AGBench-2026-11-23b_base_archived_v01",
+   "_mcp_AGBench-2026-11-23b_f1m",
+   "_mcp_AGBench-2026-11-23b_f1m_archived_v01",
+   "_mcp_AGBench-2026-11-23b_f1s1",
+   "_mcp_AGBench-2026-11-23b_f1s1_archived_v01",
+   "_mcp_AGBench-2026-11-23b_f1s2",
+   "_mcp_AGBench-2026-11-23b_f1s2_archived_v01",
+   "_mcp_AGBench-2026-11-23b_f1s3",
+   "_mcp_AGBench-2026-11-23b_f1s3_archived_v01",
+   "_mcp_AGBench-2026-11-23b_f2m",
+   "_mcp_AGBench-2026-11-23b_f2m_archived_v01",
+   "_mcp_AGBench-2026-11-23b_f2r1",
+   "_mcp_AGBench-2026-11-23b_f2r1_archived_v01",
+   "_mcp_AGBench-2026-11-23b_f2r1_archived_v02",
+   "_mcp_AGBench-2026-11-23b_f2r2",
+   "_mcp_AGBench-2026-11-23b_f2r2_archived_v01",
+   "_mcp_AGBench-2026-11-23b_f2r3",
+   "_mcp_AGBench-2026-11-23b_f2r3_archived_v01"
+  ],
+  "version": {
+   "_operation": {
+    "duration_ms": 1,
+    "execution_id": "exec_1f295c16f01d",
+    "lifecycle": {
+     "provenance_trace": {
+      "duration_ms": 1,
+      "execution_id": null,
+      "risk_level": "low"
+     }
+    },
+    "operation": "resolve_control.get_version",
+    "status": "success",
+    "verification": {
+     "checks": [],
+     "contradiction": false,
+     "status": "unverified"
+    }
+   },
+   "build": {
+    "known_gates": 68,
+    "note": "This build clears every recorded version gate. That is not a promise about surfaces nobody has bisected \u2014 ask check_version_support for a specific symbol before offering it.",
+    "unavailable_on_this_build": []
+   },
+   "mcp": {
+    "update": {
+     "cached": true,
+     "channel": "stable",
+     "checked_at": 1795460026.2428281,
+     "checked_at_iso": "2026-11-23T18:53:46.242828Z",
+     "current_version": "5.3.4",
+     "latest_tag": "v5.4.0",
+     "latest_version": "5.4.0",
+     "next_check_at": 1795546426.2428281,
+     "next_check_at_iso": "2026-11-24T18:53:46.242828Z",
+     "prerelease": false,
+     "release_notes": "From #385.\n\n### Added\n\nOn Resolve 19.x the scripting API has no Play, Stop or IsPlaying. The server can see the playhead move, but can't tell playing from paused, can't press transport, and can't stop playback to take an exact frame. A site that has another way in (UI automation, a frame tap in the viewer, a control-surface bridge) can now plug it in without the server knowing how it works.\n\n- **`RESOLVE_MCP_TRANSPORT_PROVIDER`** names a local executable, or a JSON argv such as `[\"python3\", \"-m\", \"my_transport\"]`. `RESOLVE_MCP_TRANSPORT_PROVIDER_CWD` sets its working directory. The provider prints one JSON object per call. The contract is documented in `src/utils/transport_provider.py`.\n- **`resolve_control(action=\"transport_status\")`** returns the provider's play state (`playing_forward`, `playing_reverse`, `looping`, `paused` or `unknown`) and whether its channels agreed.\n- **`resolve_control(action=\"transport_press\", transport_action=...)`** presses forward, reverse, stop, play/pause, loop, mute, or a frame or second step. The action comes from a closed list, and a verdict of `ok` means the provider saw the effect, not just that it sent the press.\n- **`timeline_frame` capture takes `during_playback`.** `refuse` is the default and behaves exactly as before. `live` returns the provider's newest frame without stopping playback. `pause` has the provider pause (and confirm it), export the exact frame, and restore the play state. Playback is never paused unless `pause` is asked for. The provider's metadata follows the image as `{\"capture\": {...}}`.\n- When a provider is configured, the `PLAYBACK_ACTIVE` remediation names the two new capture options.\n\n### Fails closed\n\n- With no provider set, or with an empty value, a missing file or a malformed array, every transport call returns `PROVIDER_MISSING`. Nothing changes for servers that don't set the variable.\n- A provider's exit status is never read as success; its own verdict is returned as it is.\n- A capture is read only from the path the server gave the provider. A provider that names another file is refused (`PROVIDER_PATH_MISMATCH`), and one that reports `ok` with no file is downgraded.\n- `max_width` and ffmpeg are checked before the provider runs, so `pause` never stops playback for a capture that was going to fail anyway.\n\n### Not verified here\n\n- The provider path was run live on Resolve Studio 19.1.3 against a site provider before the review fixes: the paused state came back with two independent signals agreeing, and an unset variable returned `PROVIDER_MISSING`. The review fixes (path pinning, early refusals, error categories) are covered by offline tests only.\n- No provider ships with this package. Without one, the new actions return `PROVIDER_MISSING`.\n\n### Validation\n\n- Static release checks pass: import, lockfile sync, API parity, generated docs, agent rules, drift guards, CLI `--help`/`--version`, `npm pack --dry-run`.\n- Full offline suite: 4,521 tests, OK (6 skipped).\n- `docs/SKILL.md` documents `during_playback` and the transport actions.",
+     "release_notes_breaking": [],
+     "release_target_sha": "main",
+     "release_url": "https://github.com/samuelgursky/davinci-resolve-mcp/releases/tag/v5.4.0",
+     "status": "update_available",
+     "update_mode": "prompt"
+    },
+    "update_decision": {
+     "action": "prompt",
+     "latest_tag": "v5.4.0",
+     "latest_version": "5.4.0",
+     "reason": "update_available",
+     "update_mode": "prompt"
+    },
+    "version": "5.3.4"
+   },
+   "product": "DaVinci Resolve Studio",
+   "version": [
+    21,
+    2,
+    0,
+    6,
+    ""
+   ],
+   "version_string": "21.2.0.6"
+  }
+ }
+}
