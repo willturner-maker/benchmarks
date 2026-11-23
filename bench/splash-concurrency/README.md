@@ -16,8 +16,8 @@ in the leaderboard.
 | `run_clean_detached.sh` | runs `kv_bracket` in a window the operator can claim is single-tenant, then **proves** it by request attribution | 19c-clean |
 | `run_depth_detached.sh` | the same discipline around `depth_probe.py` | depth-2026-11-19 |
 | `engine_probe.py` · `width_ladder.py` · `width512.py` · `kv_pressure_v4.py` | the sealed primitives, kept for provenance | — |
-| `engine_fingerprint.py` | **version transitions**: hash the install tree + `/status` + `/metrics` series + the running supervisor's argv, then `diff` two captures with runtime counters suppressed. The method, committed — the 5.3.1→5.3.3 MCP pair was captured with ad-hoc greps nobody could re-run | 1.7.1 transition (Tier 0) |
-| `golden_probes.py` | did a version move the engine's **behaviour**: 13 fixed requests, `kind`-typed (`byte` byte-compared, `grammar` payload-compared, `timing` usage-only), each run twice so the within-build floor is measured before any cross-build claim | 1.7.0 baseline (Tier 0) |
+| `engine_fingerprint.py` | **version transitions**: hash the install tree + `/status` + `/metrics` series + the running supervisor's argv, then `diff` two captures with runtime counters suppressed. The method, committed — the 5.3.1→5.3.3 MCP pair was captured with ad-hoc greps nobody could re-run | 1.7.0 pre / 1.7.1 post, Tier 0+1 complete (2026-11-23) |
+| `golden_probes.py` | did a version move the engine's **behaviour**: 13 fixed requests, `kind`-typed (`byte` byte-compared, `grammar` payload-compared, `timing` usage-only), each run twice so the within-build floor is measured before any cross-build claim | both epochs: epoch behaviourally silent on byte/grammar probes (2026-11-23) |
 
 ## Rules (each one is here because a wave broke it)
 

@@ -565,12 +565,15 @@ banner, corroborating the probe from the engine side.
 (2) **238×3 replay** — pass^3 **0.6891** (vs 0.6933 old-epoch, 0.7059 new-epoch-1.7.0: replicated),
 pass^2 0.7521, flips 64/238 = 26.9 % (band intact), cleanest window ever (0 co-tenant, 0 spill,
 0 suspensions), drafter acceptance 63.7 % (in-line), wall 224 min vs 227 — the shared-head cache yields no
-τ² win because 1.7.0's persistent cache already covered those heads. But **pass^1 0.8109 is the lowest
-single draw on record**, 5+ pts under both 3-trial medium waves and just outside the ±4 pt band —
-*not* an established epoch effect (domain drops are roster-shuffle-shaped, the request-level lottery is
-stationary, CIs overlap the edge), but not noise-certain either. **A second 1.7.1 3-trial wave settles
-it.** Epoch bookkeeping: rows before 2026-11-22T22:30Z are 1.7.0-epoch, after are 1.7.1-epoch; the
-determinism corpus is now the standard ~25-min first measurement after any engine upgrade.
+τ² win because 1.7.0's persistent cache already covered those heads. **pass^1 came in at 0.8109, the lowest
+single draw on record** — so the pre-registered tiebreaker ran same day (`2026-11-23-pass3-171-confirm/`):
+**0.8403 / 0.7731 / 0.6933, flips 64/238** — pass^3 exactly equals the old-epoch 0.6933, flips are 64 in
+*both* 1.7.1 waves, but both 1.7.1 pass^1 draws sit below both 1.7.0 draws (epoch means 0.8256 vs 0.8634,
+−3.8 pts ≈ 1.2 SE at n=2 per epoch). Epoch verdict as published: **no distribution-shape change (pass^2/3,
+flip rates, request-level lottery all replicate); a possible 2–4 pt pass^1 epoch dip stays unresolved at
+n=2 and is disclosed, not adjusted away.** Epoch bookkeeping: rows before 2026-11-22T22:30Z are 1.7.0-epoch,
+after are 1.7.1-epoch; the determinism corpus is now the standard ~25-min first measurement after any
+engine upgrade.
 
 To publish a row, follow the numbered rules in `bench/tau2-bench/README.md` and send a PR — see
 [Community runs](leaderboard.md#community-runs--your-numbers).

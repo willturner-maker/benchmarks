@@ -1,0 +1,1996 @@
+03:51:53 Loading · ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+[transformers] You are using a model of type `qwen4_exp` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+[transformers] The tokenizer you are loading from '~/Library/Application Support/Splash/models/.resolved/f073087d1dff7edaf96fe2f5ee568630feced771f7d81c0484351ebe0eabc260/tokenizer' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+03:51:54 Chat template · patched to render later system messages in place (the original template rejects them), generation prompt 5-7 tokens
+03:51:56 Weights loaded in 1.99 s.
+03:51:56 Decode cycles verify the rows their cost line's floor passes (--verify-rows auto): greedy and seeded outputs can differ from run to run.
+03:51:56 SSD cache: up to 256.0 GiB of persistent files in ~/Library/Caches/Splash/prefix-cache/c1cb917d9d464d6595b9c2db5a834158 (its quota, while its volume has room beyond the 10.0 GiB it keeps free); KV pages of 416 KiB and states of 33 MiB, a state's write staging through 33 MiB of the memory plan; --max-cache-disk 0 turns it off.
+03:51:56 Table per_layer_token_embd.weight streams from its file: 27465 MiB stay on the SSD; row cache of 2097152 rows in 237 MiB, the most --ple-memory auto takes: the rows of every id a 128K-token prompt stages; 32 readers.
+03:51:56 Routed experts stream from their files: 23065 slots for 24576 experts (93%) in 46205 MiB, a store of 46935 MiB in 7 chunks, all that --expert-memory auto leaves it beside the floors and the KV kept resident; it gives none back, its floor, 46935 MiB, 100% of its slots, being all of it.
+03:51:56 Kernel policy for GPU family 10 with 64 cores.
+03:51:56 Long requests keep their KV on the SSD cache: 262144 tokens of context (bound: model; window 262144, resident 155633, spilled 262144, disk 262144); hot block cache 585 MiB (floor 585 MiB); history staging in 2 buffers; SSD room for active KV 256.0 GiB.
+03:51:56 Persistent cache ~/Library/Caches/Splash/prefix-cache/c1cb917d9d464d6595b9c2db5a834158: took back 6062 restore points over 138831 KV blocks (262129 MiB); left 0 copies behind.
+03:51:56 Warming up · 0 of 15 steps
+03:51:57 Warming up · 1 of 15 steps
+03:51:57 Warming up · 2 of 15 steps
+03:51:57 Warming up · 3 of 15 steps
+03:51:57 Warming up · 4 of 15 steps
+03:51:58 Warming up · 5 of 15 steps
+03:51:58 Warming up · 6 of 15 steps
+03:51:58 Warming up · 7 of 15 steps
+03:51:58 Warming up · 8 of 15 steps
+03:51:58 Warming up · 9 of 15 steps
+03:51:58 Warming up · 10 of 15 steps
+03:51:58 Warming up · 11 of 15 steps
+03:51:58 Warming up · 12 of 15 steps
+03:51:59 Warming up · 13 of 15 steps
+03:51:59 Warming up · 14 of 15 steps
+03:51:59 Warming up · 15 of 15 steps
+03:51:59 Ready · ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S · context 256K · http://127.0.0.1:8000
+03:52:00 Started · request 1 · input 200,959 · cached 0 · effort absent → medium · thinking on
+03:52:49 Memory: optional claim of request 1 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:52:49 Memory: in-service claim of request 1 needs 103.5 MiB, 128 pages: met, took engine release 162.5 (162.5 MiB now, 0.0 later)
+03:52:49 Memory: in-service claim of request 1: granted
+03:52:49 Metal created pipeline paged_kv_stage_layer while serving, in 0.152583 ms
+03:52:52 Memory: in-service claim of request 1 needs 103.5 MiB, 128 pages: met, took cache 0.0 engine release 91.5 (125.4 MiB now, 0.0 later)
+03:52:55 Memory: optional claim of request 1 needs 103.5 MiB, 128 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:52:57 Memory: optional claim of request 1 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:52:57 Memory: in-service claim of request 1 needs 103.5 MiB, 128 pages: met, took engine release 91.5 (91.5 MiB now, 0.0 later)
+03:52:57 Memory: in-service claim of request 1: granted
+03:53:00 Memory: optional claim of request 1 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:53:00 Memory: in-service claim of request 1: granted
+03:53:00 Memory: in-service claim of request 1 needs 16.2 MiB: met, took engine release 97.5 (97.5 MiB now, 0.0 later)
+03:53:00 Memory: optional claim of request 1 needs 103.5 MiB, 128 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:53:03 Memory: in-service claim of request 1 needs 103.5 MiB, 135 pages: met, took cache 0.0 engine release 91.5 (125.4 MiB now, 0.0 later)
+03:53:05 TTFT of request 1: 64606.5 ms: own prefill 64570, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 36.5124
+03:53:05 Memory: in-service claim of request 1 needs 585.0 MiB: met, took engine release 195.0 (195.0 MiB now, 0.0 later)
+03:53:05 Metal created pipeline attention_q8_sparse_located_kv2_g12 while serving, in 0.146292 ms
+03:53:06 Done · request 1 · input 200,959 · cached 0 · output 92 · tools 13·35e3c6cf · TTFT 64.6s · 88.0 tok/s · 4.1 tok/cycle
+03:53:06 Started · request 2 · input 201,708 · cached 200,928 · effort absent → medium · thinking on
+03:53:06 TTFT of request 2: 526.29 ms: own prefill 525.715, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.575374
+03:53:09 Done · request 2 · input 201,708 · cached 200,928 · deduplicated 96 · output 260 · tools 13·35e3c6cf · TTFT 0.5s · 93.7 tok/s · 2.9 tok/cycle
+03:53:09 Started · request 3 · input 202,889 · cached 201,696 · effort absent → medium · thinking on
+03:53:10 TTFT of request 3: 607.008 ms: own prefill 606.278, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.73
+03:53:22 Done · request 3 · input 202,889 · cached 201,696 · deduplicated 256 · output 1,374 · tools 13·35e3c6cf · TTFT 0.6s · 109.1 tok/s · 3.3 tok/cycle
+03:53:23 Started · request 4 · input 204,544 · cached 202,880 · effort absent → medium · thinking on
+03:53:24 TTFT of request 4: 628.75 ms: own prefill 628.03, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.719958
+03:53:35 Done · request 4 · input 204,544 · cached 202,880 · deduplicated 1,376 · output 1,266 · tools 13·35e3c6cf · TTFT 0.6s · 113.8 tok/s · 3.3 tok/cycle
+03:53:35 Started · request 5 · input 206,740 · cached 204,512 · effort absent → medium · thinking on
+03:53:36 TTFT of request 5: 884.933 ms: own prefill 884.149, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.783376
+03:53:44 Done · request 5 · input 206,740 · cached 204,512 · deduplicated 1,280 · output 889 · tools 13·35e3c6cf · TTFT 0.9s · 106.2 tok/s · 3.2 tok/cycle
+03:53:44 Started · request 6 · input 207,766 · cached 206,720 · effort absent → medium · thinking on
+03:53:45 TTFT of request 6: 450.101 ms: own prefill 449.494, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.607333
+03:53:49 Done · request 6 · input 207,766 · cached 206,720 · deduplicated 896 · output 457 · tools 13·35e3c6cf · TTFT 0.5s · 107.1 tok/s · 3.5 tok/cycle
+03:53:49 Started · request 7 · input 208,587 · cached 207,744 · effort absent → medium · thinking on
+03:53:49 TTFT of request 7: 410.316 ms: own prefill 409.824, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.491416
+03:53:54 Done · request 7 · input 208,587 · cached 207,744 · deduplicated 448 · output 460 · tools 13·35e3c6cf · TTFT 0.4s · 110.3 tok/s · 3.3 tok/cycle
+03:53:54 Started · request 8 · input 209,190 · cached 208,576 · effort absent → medium · thinking on
+03:53:54 TTFT of request 8: 344.903 ms: own prefill 344.411, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.492916
+03:53:54 Memory: in-service claim of request 8 needs 585.0 MiB: met, took cache 0.0 engine release 97.5 (131.4 MiB now, 0.0 later)
+03:53:57 Done · request 8 · input 209,190 · cached 208,576 · output 335 · tools 13·35e3c6cf · TTFT 0.3s · 122.5 tok/s · 3.9 tok/cycle
+03:53:57 Started · request 9 · input 209,756 · cached 209,184 · effort absent → medium · thinking on
+03:53:57 TTFT of request 9: 370.143 ms: own prefill 369.631, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.511667
+03:53:59 Done · request 9 · input 209,756 · cached 209,184 · deduplicated 320 · output 252 · tools 13·35e3c6cf · TTFT 0.4s · 126.9 tok/s · 4.0 tok/cycle
+03:53:59 Started · request 10 · input 210,362 · cached 209,728 · effort absent → medium · thinking on
+03:54:00 TTFT of request 10: 377.184 ms: own prefill 376.713, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.471042
+03:54:03 Done · request 10 · input 210,362 · cached 209,728 · deduplicated 256 · output 466 · tools 13·35e3c6cf · TTFT 0.4s · 129.1 tok/s · 3.9 tok/cycle
+03:54:03 Started · request 11 · input 211,149 · cached 210,336 · effort absent → medium · thinking on
+03:54:04 TTFT of request 11: 391.362 ms: own prefill 390.854, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.507583
+03:54:08 Done · request 11 · input 211,149 · cached 210,336 · deduplicated 480 · output 571 · tools 13·35e3c6cf · TTFT 0.4s · 116.1 tok/s · 3.7 tok/cycle
+03:54:09 Started · request 12 · input 212,718 · cached 211,136 · effort absent → medium · thinking on
+03:54:09 TTFT of request 12: 611.93 ms: own prefill 611.172, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.758041
+03:54:24 Done · request 12 · input 212,718 · cached 211,136 · deduplicated 576 · output 1,252 · tools 13·35e3c6cf · TTFT 0.6s · 83.6 tok/s · 2.4 tok/cycle
+03:54:24 Started · request 13 · input 214,027 · cached 212,704 · effort absent → medium · thinking on
+03:54:25 TTFT of request 13: 527.541 ms: own prefill 526.938, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.602291
+03:54:28 Done · request 13 · input 214,027 · cached 212,704 · deduplicated 1,248 · output 419 · tools 13·35e3c6cf · TTFT 0.5s · 122.4 tok/s · 3.9 tok/cycle
+03:54:29 Started · request 14 · input 919 · cached 0 · effort absent → medium · thinking on
+03:54:30 TTFT of request 14: 386.502 ms: own prefill 386.249, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.252916
+03:54:30 Started · request 15 · input 919 · cached 896 · effort absent → medium · thinking on
+03:54:30 Started · request 16 · input 49,751 · cached 0 · effort absent → medium · thinking on
+03:54:30 TTFT of request 15: 800.969 ms: own prefill 299.764, claim wait 0, decode 191.253, other prefill 309.241, unit wait 0, rest 0.710416
+03:54:32 Done · request 15 · input 919 · cached 896 · output 67 · TTFT 0.8s · 38.6 tok/s · 3.3 tok/cycle
+03:54:33 Done · request 14 · input 919 · cached 0 · output 133 · TTFT 0.4s · 39.6 tok/s · 3.0 tok/cycle
+03:54:37 Started · request 18 · input 214,562 · cached 214,016 · effort absent → medium · thinking on
+03:54:38 Memory: in-service claim of request 18 needs 33.9 MiB, 1 state buffers: met, took engine release 97.5 (97.5 MiB now, 0.0 later)
+03:54:38 Memory: optional claim of request 18 needs 103.5 MiB, 2 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:54:38 TTFT of request 18: 2230.69 ms: own prefill 456.612, claim wait 34.7784, decode 0, other prefill 1735.88, unit wait 0, rest 3.41133
+03:54:38 Memory: in-service claim of request 18 needs 585.0 MiB: met, took engine release 97.5 (97.5 MiB now, 0.0 later)
+03:54:39 Memory: optional claim of request 16 needs 103.5 MiB, 128 pages: short (0.0 MiB now, 0.0 later)
+03:54:39 Memory: optional claim of request 16: granted
+03:54:40 Memory: in-service claim of request 18 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:54:41 Memory: in-service claim of request 18 needs 103.5 MiB, 1 pages: met, took cache 0.0 engine release 0.0 (33.9 MiB now, 0.0 later)
+03:54:41 Memory: in-service claim of request 16 needs 103.5 MiB, 128 pages: met, took engine release 91.5 (91.5 MiB now, 0.0 later)
+03:54:45 Memory: optional claim of request 16 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:54:45 Memory: in-service claim of request 16 needs 103.5 MiB, 3 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:54:45 Memory: in-service claim of request 16: granted
+03:54:45 Memory: optional claim of request 16 needs 103.5 MiB, 128 pages: short (0.0 MiB now, 0.0 later)
+03:54:45 Memory: in-service claim of request 16: granted
+03:54:46 Memory: in-service claim of request 18 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:54:46 Memory: optional claim of request 16 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:54:47 Memory: in-service claim of request 18 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:54:47 Memory: in-service claim of request 16 needs 103.5 MiB, 128 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:54:47 Memory: in-service claim of request 16: granted
+03:54:47 Memory: in-service claim of request 18 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:54:48 Memory: in-service claim of request 18 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:54:48 Memory: optional claim of request 16 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:54:48 Memory: in-service claim of request 18 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:54:49 Memory: in-service claim of request 16 needs 103.5 MiB, 132 pages: met, took engine release 91.5 (91.5 MiB now, 0.0 later)
+03:54:49 Memory: in-service claim of request 16: granted
+03:54:49 Memory: optional claim of request 16 needs 103.5 MiB, 14 pages: short (0.0 MiB now, 0.0 later)
+03:54:49 Memory: in-service claim of request 16: granted
+03:54:49 Memory: in-service claim of request 18 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:54:50 Memory: in-service claim of request 18 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+03:54:50 Done · request 18 · input 214,562 · cached 214,016 · output 435 · tools 13·35e3c6cf · TTFT 2.2s · 37.8 tok/s · 3.2 tok/cycle
+03:54:50 Started · request 19 · input 216,170 · cached 214,528 · effort absent → medium · thinking on
+03:54:51 TTFT of request 19: 1255.37 ms: own prefill 853.486, claim wait 0, decode 0, other prefill 398.487, unit wait 0, rest 3.39721
+03:54:51 Started · request 17 · input 49,751 · cached 49,728 · effort absent → medium · thinking on
+03:54:51 Memory: in-service claim of request 19 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:54:51 Memory: in-service claim of request 19: granted
+03:54:51 Memory: in-service claim of request 19 needs 585.0 MiB: met, took cache 0.0 engine release 97.5 (395.1 MiB now, 0.0 later)
+03:54:52 TTFT of request 16: 22233.3 ms: own prefill 15543.3, claim wait 718.141, decode 5174.71, other prefill 756.389, unit wait 0, rest 40.7904
+03:54:52 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+03:54:53 Done · request 16 · input 49,751 · cached 0 · deduplicated 32 · output 118 · tools 74·ea4ee7fa · TTFT 22.2s · 105.1 tok/s · 4.2 tok/cycle
+03:54:53 TTFT of request 17: 23384.4 ms: own prefill 40.978, claim wait 0, decode 6964.75, other prefill 16296.8, unit wait 0, rest 81.8605
+03:54:53 Memory: growth available; resource wait cleared
+03:54:54 Done · request 17 · input 49,751 · cached 49,728 · output 110 · tools 74·ea4ee7fa · TTFT 23.4s · 72.5 tok/s · 2.8 tok/cycle
+03:54:54 Started · request 20 · input 50,408 · cached 49,728 · effort absent → medium · thinking on
+03:54:55 TTFT of request 20: 412.236 ms: own prefill 335.253, claim wait 0, decode 76.4907, other prefill 0, unit wait 0, rest 0.492043
+03:54:58 Done · request 20 · input 50,408 · cached 49,728 · deduplicated 128 · output 225 · tools 74·ea4ee7fa · TTFT 0.4s · 65.3 tok/s · 2.8 tok/cycle
+03:54:59 Started · request 21 · input 51,549 · cached 50,400 · effort absent → medium · thinking on
+03:54:59 TTFT of request 21: 691.134 ms: own prefill 523.075, claim wait 0, decode 167.448, other prefill 0, unit wait 0, rest 0.611042
+03:55:01 Done · request 19 · input 216,170 · cached 214,528 · output 725 · tools 13·35e3c6cf · TTFT 1.3s · 77.1 tok/s · 3.3 tok/cycle
+03:55:01 Started · request 22 · input 217,159 · cached 216,160 · effort absent → medium · thinking on
+03:55:01 Memory: start claim of request 23 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:01 Memory: growth available; waiting=1; suspended=0
+03:55:02 TTFT of request 22: 788.384 ms: own prefill 629.491, claim wait 0, decode 157.596, other prefill 0, unit wait 0, rest 1.29667
+03:55:02 Memory: start claim of request 23: granted
+03:55:02 Started · request 23 · input 50,112 · cached 49,728 · effort absent → medium · thinking on
+03:55:02 Memory: in-service claim of request 22 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:55:02 Memory: in-service claim of request 22: granted
+03:55:02 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+03:55:04 Done · request 21 · input 51,549 · cached 50,400 · deduplicated 224 · output 242 · tools 74·ea4ee7fa · TTFT 0.7s · 57.1 tok/s · 2.6 tok/cycle
+03:55:04 Memory: growth available; resource wait cleared
+03:55:04 Memory: start claim of request 24 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:04 TTFT of request 23: 3047.32 ms: own prefill 237.203, claim wait 0, decode 2210.59, other prefill 573.792, unit wait 0, rest 25.7384
+03:55:04 Memory: growth available; waiting=1; suspended=0
+03:55:05 Done · request 23 · input 50,112 · cached 49,728 · deduplicated 128 · output 100 · tools 74·ea4ee7fa · TTFT 3.0s · 110.6 tok/s · 4.1 tok/cycle
+03:55:05 Memory: start claim of request 24: granted
+03:55:05 Started · request 24 · input 51,986 · cached 51,520 · effort absent → medium · thinking on
+03:55:05 TTFT of request 24: 1430.14 ms: own prefill 256.807, claim wait 0, decode 969.033, other prefill 200.12, unit wait 0, rest 4.17658
+03:55:05 Memory: start claim of request 25 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:07 Done · request 24 · input 51,986 · cached 51,520 · deduplicated 256 · output 143 · tools 74·ea4ee7fa · TTFT 1.4s · 73.7 tok/s · 2.9 tok/cycle
+03:55:07 Memory: start claim of request 25: granted
+03:55:07 Started · request 25 · input 50,752 · cached 50,080 · effort absent → medium · thinking on
+03:55:07 TTFT of request 25: 2398.29 ms: own prefill 324.157, claim wait 0, decode 1922.59, other prefill 145.695, unit wait 0, rest 5.84334
+03:55:07 Memory: growth available; resource wait cleared
+03:55:07 Memory: start claim of request 26 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:08 Memory: growth available; waiting=1; suspended=0
+03:55:08 Done · request 25 · input 50,752 · cached 50,080 · deduplicated 128 · output 95 · tools 74·ea4ee7fa · TTFT 2.4s · 84.4 tok/s · 3.2 tok/cycle
+03:55:08 Memory: start claim of request 26: granted
+03:55:08 Started · request 26 · input 52,176 · cached 51,968 · effort absent → medium · thinking on
+03:55:09 TTFT of request 26: 1586.65 ms: own prefill 182.266, claim wait 0, decode 1110.26, other prefill 290.088, unit wait 0, rest 4.043
+03:55:09 Memory: start claim of request 27 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:12 Done · request 26 · input 52,176 · cached 51,968 · deduplicated 160 · output 241 · tools 74·ea4ee7fa · TTFT 1.6s · 78.1 tok/s · 3.1 tok/cycle
+03:55:12 Memory: start claim of request 27: granted
+03:55:12 Started · request 27 · input 51,017 · cached 50,720 · effort absent → medium · thinking on
+03:55:12 TTFT of request 27: 3438.93 ms: own prefill 217.683, claim wait 0, decode 3064.43, other prefill 147.753, unit wait 0, rest 9.06616
+03:55:12 Memory: start claim of request 28 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:13 Done · request 27 · input 51,017 · cached 50,720 · deduplicated 96 · output 97 · tools 74·ea4ee7fa · TTFT 3.4s · 85.5 tok/s · 3.3 tok/cycle
+03:55:13 Memory: start claim of request 28: granted
+03:55:13 Started · request 28 · input 52,761 · cached 52,160 · effort absent → medium · thinking on
+03:55:13 TTFT of request 28: 1588.26 ms: own prefill 290.97, claim wait 0, decode 1119.96, other prefill 173.525, unit wait 0, rest 3.79754
+03:55:13 Memory: growth available; resource wait cleared
+03:55:13 Memory: start claim of request 29 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:14 Memory: growth available; waiting=1; suspended=0
+03:55:15 Done · request 28 · input 52,761 · cached 52,160 · deduplicated 256 · output 122 · tools 74·ea4ee7fa · TTFT 1.6s · 94.5 tok/s · 3.6 tok/cycle
+03:55:15 Memory: start claim of request 29: granted
+03:55:15 Started · request 29 · input 51,413 · cached 51,008 · effort absent → medium · thinking on
+03:55:15 TTFT of request 29: 1787.93 ms: own prefill 252.121, claim wait 0, decode 1274.95, other prefill 255.399, unit wait 0, rest 5.45487
+03:55:15 Memory: growth available; resource wait cleared
+03:55:15 Memory: start claim of request 30 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:15 Memory: growth available; waiting=1; suspended=0
+03:55:18 Done · request 29 · input 51,413 · cached 51,008 · deduplicated 96 · output 226 · tools 74·ea4ee7fa · TTFT 1.8s · 75.0 tok/s · 3.0 tok/cycle
+03:55:18 Memory: start claim of request 30: granted
+03:55:18 Memory: optional claim of request 30 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:55:18 Started · request 30 · input 53,056 · cached 52,736 · effort absent → medium · thinking on
+03:55:18 Memory: start claim of request 31 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:18 Memory: in-service claim of request 30: granted
+03:55:18 TTFT of request 30: 3472.43 ms: own prefill 214.38, claim wait 0, decode 3033.05, other prefill 215.402, unit wait 0, rest 9.59292
+03:55:19 Done · request 30 · input 53,056 · cached 52,736 · output 146 · tools 74·ea4ee7fa · TTFT 3.5s · 124.1 tok/s · 4.4 tok/cycle
+03:55:19 Memory: start claim of request 31: granted
+03:55:19 Memory: optional claim of request 31 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:55:19 Started · request 31 · input 51,963 · cached 51,392 · effort absent → medium · thinking on
+03:55:19 Memory: start claim of request 32 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:19 Memory: in-service claim of request 31: granted
+03:55:20 TTFT of request 31: 1921.65 ms: own prefill 319.449, claim wait 0, decode 1382.39, other prefill 214.38, unit wait 0, rest 5.43133
+03:55:22 Done · request 31 · input 51,963 · cached 51,392 · output 211 · tools 74·ea4ee7fa · TTFT 1.9s · 75.7 tok/s · 3.0 tok/cycle
+03:55:22 Memory: start claim of request 32: granted
+03:55:23 Started · request 32 · input 53,557 · cached 53,024 · effort absent → medium · thinking on
+03:55:23 Memory: optional claim of request 32 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:55:23 Memory: in-service claim of request 32: granted
+03:55:23 Memory: growth available; resource wait cleared
+03:55:23 Memory: start claim of request 33 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:23 TTFT of request 32: 3771.3 ms: own prefill 294.81, claim wait 0, decode 3145.97, other prefill 319.449, unit wait 0, rest 11.0757
+03:55:23 Memory: growth available; waiting=1; suspended=0
+03:55:25 Done · request 32 · input 53,557 · cached 53,024 · output 146 · tools 74·ea4ee7fa · TTFT 3.8s · 93.3 tok/s · 3.6 tok/cycle
+03:55:25 Memory: start claim of request 33: granted
+03:55:25 Started · request 33 · input 52,337 · cached 51,936 · effort absent → medium · thinking on
+03:55:25 Memory: growth available; resource wait cleared
+03:55:25 Memory: optional claim of request 33 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:55:25 Memory: in-service claim of request 33: granted
+03:55:25 Memory: start claim of request 34 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:25 TTFT of request 33: 2428.54 ms: own prefill 256.565, claim wait 0, decode 1878.68, other prefill 285.768, unit wait 0, rest 7.52633
+03:55:25 Memory: growth available; waiting=1; suspended=0
+03:55:27 Done · request 33 · input 52,337 · cached 51,936 · output 130 · tools 74·ea4ee7fa · TTFT 2.4s · 64.9 tok/s · 3.3 tok/cycle
+03:55:27 Memory: start claim of request 34: granted
+03:55:27 Memory: optional claim of request 34 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:55:27 Started · request 34 · input 54,075 · cached 53,536 · effort absent → medium · thinking on
+03:55:27 Memory: in-service claim of request 34: granted
+03:55:27 Memory: in-service claim of request 34 needs 33.9 MiB, 1 state buffers: met, took engine release 97.5 (97.5 MiB now, 0.0 later)
+03:55:27 Memory: growth available; resource wait cleared
+03:55:27 TTFT of request 34: 2740.12 ms: own prefill 280.697, claim wait 0, decode 2204.24, other prefill 248.774, unit wait 0, rest 6.41492
+03:55:28 Memory: start claim of request 35 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:29 Memory: growth available; waiting=1; suspended=0
+03:55:29 Done · request 34 · input 54,075 · cached 53,536 · output 137 · tools 74·ea4ee7fa · TTFT 2.7s · 68.0 tok/s · 3.5 tok/cycle
+03:55:29 Memory: start claim of request 35: granted
+03:55:29 Started · request 35 · input 52,718 · cached 52,320 · effort absent → medium · thinking on
+03:55:30 TTFT of request 35: 1442.66 ms: own prefill 247.246, claim wait 0, decode 1191.77, other prefill 0, unit wait 0, rest 3.63683
+03:55:30 Memory: growth available; resource wait cleared
+03:55:30 Memory: start claim of request 36 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:30 Memory: growth available; waiting=1; suspended=0
+03:55:31 Done · request 35 · input 52,718 · cached 52,320 · deduplicated 128 · output 128 · tools 74·ea4ee7fa · TTFT 1.4s · 100.4 tok/s · 3.9 tok/cycle
+03:55:31 Memory: start claim of request 36: granted
+03:55:31 Started · request 36 · input 54,451 · cached 54,048 · effort absent → medium · thinking on
+03:55:31 TTFT of request 36: 1730.68 ms: own prefill 236.15, claim wait 0, decode 1260.64, other prefill 229.056, unit wait 0, rest 4.83175
+03:55:31 Memory: growth available; resource wait cleared
+03:55:31 Memory: start claim of request 37 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:32 Memory: growth available; waiting=1; suspended=0
+03:55:33 Done · request 36 · input 54,451 · cached 54,048 · deduplicated 160 · output 145 · tools 74·ea4ee7fa · TTFT 1.7s · 87.9 tok/s · 3.5 tok/cycle
+03:55:33 Memory: start claim of request 37: granted
+03:55:33 Started · request 37 · input 53,660 · cached 52,704 · effort absent → medium · thinking on
+03:55:33 Memory: start claim of request 38 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:33 TTFT of request 37: 2338.33 ms: own prefill 396.573, claim wait 0, decode 1739.24, other prefill 196.167, unit wait 0, rest 6.34787
+03:55:35 Done · request 22 · input 217,159 · cached 216,160 · deduplicated 704 · output 2,229 · tools 13·35e3c6cf · TTFT 0.8s · 66.4 tok/s · 3.1 tok/cycle
+03:55:35 Memory: start claim of request 38: granted
+03:55:35 Started · request 38 · input 55,053 · cached 54,432 · effort absent → medium · thinking on
+03:55:35 TTFT of request 38: 2569.51 ms: own prefill 303.909, claim wait 0, decode 1908.02, other prefill 351.053, unit wait 0, rest 6.53037
+03:55:35 Started · request 39 · input 219,446 · cached 217,152 · effort absent → medium · thinking on
+03:55:36 Memory: in-service claim of request 39 needs 438.8 MiB: short (0.0 MiB now, 0.0 later)
+03:55:36 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+03:55:36 Done · request 37 · input 53,660 · cached 52,704 · deduplicated 128 · output 171 · tools 74·ea4ee7fa · TTFT 2.3s · 72.0 tok/s · 3.9 tok/cycle
+03:55:36 Memory: start claim of request 39: granted
+03:55:36 Memory: start claim of request 40 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:36 Memory: growth available; waiting=1; suspended=0
+03:55:37 TTFT of request 39: 1668.99 ms: own prefill 880.04, claim wait 0, decode 554.298, other prefill 229.918, unit wait 0, rest 4.73642
+03:55:37 Memory: start claim of request 40: granted
+03:55:37 Started · request 40 · input 54,070 · cached 53,632 · effort absent → medium · thinking on
+03:55:37 Memory: in-service claim of request 39 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:55:37 Memory: in-service claim of request 39: granted
+03:55:37 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+03:55:39 Done · request 38 · input 55,053 · cached 54,432 · deduplicated 160 · output 195 · tools 74·ea4ee7fa · TTFT 2.6s · 49.1 tok/s · 2.7 tok/cycle
+03:55:39 Memory: start claim of request 41 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:40 TTFT of request 40: 3959.56 ms: own prefill 245.645, claim wait 0, decode 2860.86, other prefill 828.484, unit wait 0, rest 24.567
+03:55:40 Memory: growth available; waiting=1; suspended=0
+03:55:41 Done · request 40 · input 54,070 · cached 53,632 · deduplicated 192 · output 111 · tools 74·ea4ee7fa · TTFT 4.0s · 74.6 tok/s · 3.1 tok/cycle
+03:55:41 Memory: start claim of request 41: granted
+03:55:41 Started · request 41 · input 55,550 · cached 55,040 · effort absent → medium · thinking on
+03:55:41 TTFT of request 41: 2010.76 ms: own prefill 260.335, claim wait 0, decode 1535.87, other prefill 209.485, unit wait 0, rest 5.06825
+03:55:41 Memory: start claim of request 42 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:44 Done · request 39 · input 219,446 · cached 217,152 · output 650 · tools 13·35e3c6cf · TTFT 1.7s · 92.8 tok/s · 4.5 tok/cycle
+03:55:44 Memory: start claim of request 42: granted
+03:55:44 Started · request 42 · input 54,440 · cached 54,048 · effort absent → medium · thinking on
+03:55:44 TTFT of request 42: 2899.26 ms: own prefill 240.714, claim wait 0, decode 2426.23, other prefill 224.486, unit wait 0, rest 7.83108
+03:55:44 Started · request 43 · input 220,419 · cached 219,424 · effort absent → medium · thinking on
+03:55:44 Memory: growth available; resource wait cleared
+03:55:44 Memory: in-service claim of request 43 needs 438.8 MiB: short (0.0 MiB now, 0.0 later)
+03:55:45 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+03:55:47 Done · request 41 · input 55,550 · cached 55,040 · deduplicated 192 · output 400 · tools 74·ea4ee7fa · TTFT 2.0s · 66.9 tok/s · 2.7 tok/cycle
+03:55:47 Memory: start claim of request 43: granted
+03:55:48 Memory: growth available; resource wait cleared
+03:55:48 Memory: start claim of request 44 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:48 TTFT of request 43: 4305.89 ms: own prefill 657.503, claim wait 0, decode 3432.97, other prefill 187.513, unit wait 0, rest 27.911
+03:55:48 Memory: growth available; waiting=1; suspended=0
+03:55:48 Memory: start claim of request 44: granted
+03:55:48 Started · request 44 · input 56,049 · cached 55,520 · effort absent → medium · thinking on
+03:55:48 Memory: in-service claim of request 43 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:55:48 Memory: in-service claim of request 43: granted
+03:55:48 Done · request 42 · input 54,440 · cached 54,048 · output 325 · tools 74·ea4ee7fa · TTFT 2.9s · 73.3 tok/s · 2.8 tok/cycle
+03:55:49 Memory: optional claim of request 44 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:55:49 Memory: start claim of request 45 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:49 Memory: in-service claim of request 44: granted
+03:55:49 TTFT of request 44: 1611.65 ms: own prefill 281.832, claim wait 0, decode 724.113, other prefill 589.927, unit wait 0, rest 15.7825
+03:55:51 Done · request 43 · input 220,419 · cached 219,424 · output 196 · tools 13·35e3c6cf · TTFT 4.3s · 58.5 tok/s · 3.3 tok/cycle
+03:55:51 Memory: start claim of request 45: granted
+03:55:52 Started · request 45 · input 55,002 · cached 54,432 · effort absent → medium · thinking on
+03:55:52 Memory: growth available; resource wait cleared
+03:55:52 Started · request 46 · input 221,342 · cached 220,384 · effort absent → medium · thinking on
+03:55:52 TTFT of request 45: 3377.09 ms: own prefill 284.868, claim wait 0, decode 2799.9, other prefill 281.832, unit wait 0, rest 10.4892
+03:55:52 Memory: in-service claim of request 46 needs 455.0 MiB: short (0.0 MiB now, 0.0 later)
+03:55:52 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+03:55:57 Done · request 44 · input 56,049 · cached 55,520 · output 535 · tools 74·ea4ee7fa · TTFT 1.6s · 69.6 tok/s · 2.5 tok/cycle
+03:55:57 Memory: start claim of request 46: granted
+03:55:57 TTFT of request 46: 5776.8 ms: own prefill 659.154, claim wait 0, decode 4850.33, other prefill 235.611, unit wait 0, rest 31.7063
+03:55:57 Memory: growth available; resource wait cleared
+03:55:57 Memory: in-service claim of request 46 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:55:57 Started · request 47 · input 57,042 · cached 56,032 · effort absent → medium · thinking on
+03:55:57 Memory: in-service claim of request 46: granted
+03:55:57 Memory: in-service claim of request 46 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:55:57 Memory: in-service claim of request 46: granted
+03:55:58 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+03:55:59 Done · request 45 · input 55,002 · cached 54,432 · output 506 · tools 74·ea4ee7fa · TTFT 3.4s · 75.5 tok/s · 2.7 tok/cycle
+03:55:59 Memory: growth available; resource wait cleared
+03:55:59 Memory: optional claim of request 47 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:55:59 Memory: start claim of request 48 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:55:59 Memory: in-service claim of request 47: granted
+03:55:59 Memory: growth available; waiting=1; suspended=0
+03:55:59 TTFT of request 47: 2529.4 ms: own prefill 411.846, claim wait 0, decode 1502.85, other prefill 600.363, unit wait 0, rest 14.3392
+03:56:04 Done · request 46 · input 221,342 · cached 220,384 · output 721 · tools 13·35e3c6cf · TTFT 5.8s · 116.0 tok/s · 6.0 tok/cycle
+03:56:04 Memory: start claim of request 48: granted
+03:56:04 Started · request 48 · input 55,861 · cached 54,976 · effort absent → medium · thinking on
+03:56:04 Memory: growth available; resource wait cleared
+03:56:04 Started · request 49 · input 222,103 · cached 221,312 · effort absent → medium · thinking on
+03:56:04 TTFT of request 48: 5398.19 ms: own prefill 355.432, claim wait 0, decode 4614.45, other prefill 411.846, unit wait 0, rest 16.4595
+03:56:04 Memory: in-service claim of request 49 needs 455.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:05 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+03:56:10 Done · request 47 · input 57,042 · cached 56,032 · output 784 · tools 74·ea4ee7fa · TTFT 2.5s · 69.8 tok/s · 2.8 tok/cycle
+03:56:10 Memory: start claim of request 49: granted
+03:56:11 TTFT of request 49: 7509.94 ms: own prefill 618.379, claim wait 0, decode 6520.28, other prefill 329.746, unit wait 0, rest 41.5381
+03:56:11 Memory: growth available; resource wait cleared
+03:56:11 Memory: in-service claim of request 49 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:11 Started · request 50 · input 57,973 · cached 57,024 · effort absent → medium · thinking on
+03:56:11 Memory: in-service claim of request 49: granted
+03:56:11 Memory: in-service claim of request 49 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:11 Memory: in-service claim of request 49: granted
+03:56:12 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+03:56:17 Done · request 49 · input 222,103 · cached 221,312 · output 506 · tools 13·35e3c6cf · TTFT 7.5s · 80.3 tok/s · 3.4 tok/cycle
+03:56:18 Memory: growth available; resource wait cleared
+03:56:18 Started · request 51 · input 34,257 · cached 0 · effort absent → medium · thinking on
+03:56:18 TTFT of request 50: 7354.69 ms: own prefill 354.705, claim wait 0, decode 6406.78, other prefill 564.471, unit wait 0, rest 28.7359
+03:56:24 Done · request 48 · input 55,861 · cached 54,976 · output 1,043 · tools 74·ea4ee7fa · TTFT 5.4s · 52.5 tok/s · 2.4 tok/cycle
+03:56:24 Started · request 52 · input 56,951 · cached 55,840 · effort absent → medium · thinking on
+03:56:26 TTFT of request 52: 1988.27 ms: own prefill 927.366, claim wait 0, decode 571.964, other prefill 485.925, unit wait 0, rest 3.01017
+03:56:30 Done · request 52 · input 56,951 · cached 55,840 · deduplicated 1,056 · output 147 · tools 74·ea4ee7fa · TTFT 2.0s · 39.7 tok/s · 3.2 tok/cycle
+03:56:30 Started · request 53 · input 57,293 · cached 56,928 · effort absent → medium · thinking on
+03:56:30 TTFT of request 53: 342.05 ms: own prefill 219.133, claim wait 0, decode 122.343, other prefill 0, unit wait 0, rest 0.573876
+03:56:33 Done · request 50 · input 57,973 · cached 57,024 · output 406 · tools 74·ea4ee7fa · TTFT 7.4s · 27.5 tok/s · 2.4 tok/cycle
+03:56:33 Started · request 54 · input 58,890 · cached 57,952 · effort absent → medium · thinking on
+03:56:34 TTFT of request 51: 16950.4 ms: own prefill 10558.4, claim wait 59.8027, decode 5800.73, other prefill 506.362, unit wait 0, rest 25.1531
+03:56:34 TTFT of request 54: 1710.08 ms: own prefill 395.234, claim wait 0, decode 509.326, other prefill 802.157, unit wait 0, rest 3.35867
+03:56:34 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:34 Memory: in-service claim of request 51: granted
+03:56:34 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:34 Memory: in-service claim of request 51: granted
+03:56:34 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:35 Memory: in-service claim of request 51: granted
+03:56:35 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:36 Memory: in-service claim of request 51: granted
+03:56:36 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:37 Memory: in-service claim of request 51: granted
+03:56:37 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Done · request 53 · input 57,293 · cached 56,928 · deduplicated 160 · output 480 · tools 74·ea4ee7fa · TTFT 0.3s · 58.7 tok/s · 2.7 tok/cycle
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (263.7 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Started · request 55 · input 58,784 · cached 57,280 · effort absent → medium · thinking on
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (297.6 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:38 Memory: in-service claim of request 51: granted
+03:56:38 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:39 Memory: in-service claim of request 51: granted
+03:56:39 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:40 Memory: in-service claim of request 51: granted
+03:56:40 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Done · request 54 · input 58,890 · cached 57,952 · deduplicated 416 · output 650 · tools 74·ea4ee7fa · TTFT 1.7s · 102.1 tok/s · 2.9 tok/cycle
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:41 Memory: in-service claim of request 51 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+03:56:41 Memory: in-service claim of request 51: granted
+03:56:43 Done · request 51 · input 34,257 · cached 0 · deduplicated 8,288 · output 182 · tools 13·35e3c6cf · TTFT 17.0s · 21.4 tok/s · 2.7 tok/cycle
+03:56:43 Memory: growth available; resource wait cleared
+03:56:43 Started · request 56 · input 35,107 · cached 34,240 · effort absent → medium · thinking on
+03:56:43 TTFT of request 55: 5288.73 ms: own prefill 1049.08, claim wait 0, decode 4220.93, other prefill 0, unit wait 0, rest 18.7156
+03:56:44 TTFT of request 56: 1143.03 ms: own prefill 388.796, claim wait 0, decode 249.52, other prefill 503.005, unit wait 0, rest 1.70717
+03:56:47 Done · request 55 · input 58,784 · cached 57,280 · output 327 · tools 74·ea4ee7fa · TTFT 5.3s · 86.4 tok/s · 2.9 tok/cycle
+03:56:47 Started · request 57 · input 59,513 · cached 58,752 · effort absent → medium · thinking on
+03:56:48 TTFT of request 57: 329.249 ms: own prefill 327.877, claim wait 0, decode 1.15108, other prefill 0, unit wait 0, rest 0.221001
+03:56:54 Done · request 56 · input 35,107 · cached 34,240 · output 942 · tools 13·35e3c6cf · TTFT 1.1s · 94.5 tok/s · 3.0 tok/cycle
+03:56:54 Started · request 58 · input 36,103 · cached 35,072 · effort absent → medium · thinking on
+03:56:54 TTFT of request 58: 407.697 ms: own prefill 398.62, claim wait 0, decode 8.43179, other prefill 0, unit wait 0, rest 0.645126
+03:56:56 Done · request 57 · input 59,513 · cached 58,752 · deduplicated 352 · output 768 · tools 74·ea4ee7fa · TTFT 0.3s · 92.7 tok/s · 2.9 tok/cycle
+03:56:56 Done · request 58 · input 36,103 · cached 35,072 · output 225 · tools 13·35e3c6cf · TTFT 0.4s · 151.3 tok/s · 4.5 tok/cycle
+03:56:56 Started · request 59 · input 36,572 · cached 36,096 · effort absent → medium · thinking on
+03:56:56 TTFT of request 59: 266.103 ms: own prefill 265.883, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.220708
+03:57:00 Done · request 59 · input 36,572 · cached 36,096 · deduplicated 224 · output 511 · tools 13·35e3c6cf · TTFT 0.3s · 138.0 tok/s · 3.4 tok/cycle
+03:57:00 Started · request 60 · input 37,509 · cached 36,544 · effort absent → medium · thinking on
+03:57:00 TTFT of request 60: 373.643 ms: own prefill 373.269, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.374084
+03:57:03 Done · request 60 · input 37,509 · cached 36,544 · deduplicated 512 · output 556 · tools 13·35e3c6cf · TTFT 0.4s · 180.1 tok/s · 4.4 tok/cycle
+03:57:04 Started · request 61 · input 38,319 · cached 37,504 · effort absent → medium · thinking on
+03:57:04 TTFT of request 61: 335.516 ms: own prefill 335.299, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.216458
+03:57:09 Done · request 61 · input 38,319 · cached 37,504 · deduplicated 544 · output 645 · tools 13·35e3c6cf · TTFT 0.3s · 133.9 tok/s · 3.3 tok/cycle
+03:57:09 Started · request 62 · input 39,625 · cached 38,304 · effort absent → medium · thinking on
+03:57:09 TTFT of request 62: 470.799 ms: own prefill 470.492, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.306208
+03:57:12 Started · request 64 · input 963 · cached 0 · effort absent → medium · thinking on
+03:57:12 TTFT of request 64: 386.372 ms: own prefill 366.46, claim wait 0, decode 19.7625, other prefill 0, unit wait 0, rest 0.149208
+03:57:12 Started · request 63 · input 919 · cached 896 · effort absent → medium · thinking on
+03:57:12 Started · request 65 · input 49,739 · cached 0 · effort absent → medium · thinking on
+03:57:13 TTFT of request 63: 837.477 ms: own prefill 267.611, claim wait 0, decode 202.626, other prefill 366.46, unit wait 0, rest 0.779875
+03:57:17 Done · request 63 · input 919 · cached 896 · output 134 · TTFT 0.8s · 33.9 tok/s · 3.3 tok/cycle
+03:57:18 Done · request 64 · input 963 · cached 0 · deduplicated 416 · output 193 · TTFT 0.4s · 32.8 tok/s · 3.0 tok/cycle
+03:57:34 Started · request 66 · input 49,783 · cached 49,248 · effort absent → medium · thinking on
+03:57:35 TTFT of request 65: 22602.4 ms: own prefill 14479.9, claim wait 0, decode 7785.9, other prefill 306.693, unit wait 0, rest 29.9485
+03:57:35 TTFT of request 66: 22975.2 ms: own prefill 545.638, claim wait 32.4543, decode 7873.08, other prefill 14493.5, unit wait 0, rest 30.5397
+03:57:36 Done · request 65 · input 49,739 · cached 0 · deduplicated 8,192 · output 127 · tools 74·ea4ee7fa · TTFT 22.6s · 84.2 tok/s · 3.6 tok/cycle
+03:57:36 Started · request 67 · input 50,841 · cached 49,728 · effort absent → medium · thinking on
+03:57:37 TTFT of request 67: 559.396 ms: own prefill 431.794, claim wait 0, decode 127.013, other prefill 0, unit wait 0, rest 0.589541
+03:57:38 Done · request 66 · input 49,783 · cached 49,248 · output 234 · tools 74·ea4ee7fa · TTFT 23.0s · 96.6 tok/s · 4.0 tok/cycle
+03:57:38 Started · request 68 · input 54,815 · cached 49,760 · effort absent → medium · thinking on
+03:57:38 Memory: optional claim of request 68 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+03:57:38 Memory: in-service claim of request 68: granted
+03:57:40 Done · request 67 · input 50,841 · cached 49,728 · deduplicated 128 · output 186 · tools 74·ea4ee7fa · TTFT 0.6s · 57.1 tok/s · 4.2 tok/cycle
+03:57:40 Started · request 69 · input 51,267 · cached 50,816 · effort absent → medium · thinking on
+03:57:41 TTFT of request 68: 2926.68 ms: own prefill 1974.49, claim wait 0, decode 948.297, other prefill 0, unit wait 0, rest 3.89992
+03:57:41 TTFT of request 69: 411.87 ms: own prefill 288.107, claim wait 0, decode 123.226, other prefill 0, unit wait 0, rest 0.537458
+03:57:41 Done · request 69 · input 51,267 · cached 50,816 · deduplicated 192 · output 110 · tools 74·ea4ee7fa · TTFT 0.4s · 121.7 tok/s · 4.1 tok/cycle
+03:57:42 Started · request 70 · input 51,829 · cached 51,232 · effort absent → medium · thinking on
+03:57:42 TTFT of request 70: 312.034 ms: own prefill 298.4, claim wait 0, decode 13.4395, other prefill 0, unit wait 0, rest 0.1945
+03:57:43 Done · request 68 · input 54,815 · cached 49,760 · output 150 · tools 74·ea4ee7fa · TTFT 2.9s · 71.3 tok/s · 3.1 tok/cycle
+03:57:43 Started · request 71 · input 55,778 · cached 54,784 · effort absent → medium · thinking on
+03:57:43 TTFT of request 71: 414.664 ms: own prefill 404.988, claim wait 0, decode 9.48746, other prefill 0, unit wait 0, rest 0.187751
+03:57:44 Done · request 70 · input 51,829 · cached 51,232 · deduplicated 128 · output 111 · tools 74·ea4ee7fa · TTFT 0.3s · 63.1 tok/s · 2.9 tok/cycle
+03:57:44 Started · request 72 · input 52,103 · cached 51,808 · effort absent → medium · thinking on
+03:57:44 TTFT of request 72: 223.926 ms: own prefill 211.527, claim wait 0, decode 11.5997, other prefill 0, unit wait 0, rest 0.799501
+03:57:46 Done · request 62 · input 39,625 · cached 38,304 · deduplicated 512 · output 1,705 · tools 13·35e3c6cf · TTFT 0.5s · 46.6 tok/s · 2.8 tok/cycle
+03:57:46 Started · request 73 · input 43,802 · cached 39,616 · effort absent → medium · thinking on
+03:57:48 TTFT of request 73: 1806.75 ms: own prefill 1310.66, claim wait 0, decode 494.314, other prefill 0, unit wait 0, rest 1.78304
+03:57:49 Done · request 72 · input 52,103 · cached 51,808 · deduplicated 128 · output 341 · tools 74·ea4ee7fa · TTFT 0.2s · 65.9 tok/s · 3.4 tok/cycle
+03:57:49 Started · request 74 · input 52,868 · cached 52,096 · effort absent → medium · thinking on
+03:57:49 TTFT of request 74: 415.571 ms: own prefill 335.073, claim wait 0, decode 80.0312, other prefill 0, unit wait 0, rest 0.466749
+03:57:53 Done · request 71 · input 55,778 · cached 54,784 · deduplicated 160 · output 588 · tools 74·ea4ee7fa · TTFT 0.4s · 62.2 tok/s · 2.8 tok/cycle
+03:57:53 Started · request 75 · input 56,788 · cached 55,744 · effort absent → medium · thinking on
+03:57:53 TTFT of request 75: 401.665 ms: own prefill 398.381, claim wait 0, decode 2.39992, other prefill 0, unit wait 0, rest 0.884083
+03:58:00 Memory: in-service claim of request 73 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+03:58:00 Memory: in-service claim of request 74 needs 103.5 MiB, 1 pages: met, took cache in use 0.0 cache in use 0.0 (101.8 MiB now, 0.0 later)
+03:58:00 Memory: in-service claim of request 73: granted
+03:58:01 Done · request 74 · input 52,868 · cached 52,096 · deduplicated 320 · output 897 · tools 74·ea4ee7fa · TTFT 0.4s · 76.5 tok/s · 2.9 tok/cycle
+03:58:01 Memory: optional claim of request 76 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:58:01 Started · request 76 · input 53,960 · cached 52,832 · effort absent → medium · thinking on
+03:58:01 Memory: in-service claim of request 76: granted
+03:58:01 Memory: in-service claim of request 76 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:58:01 Memory: in-service claim of request 76: granted
+03:58:02 TTFT of request 76: 686.719 ms: own prefill 422.747, claim wait 0, decode 262.562, other prefill 0, unit wait 0, rest 1.41038
+03:58:10 Done · request 76 · input 53,960 · cached 52,832 · deduplicated 928 · output 622 · tools 74·ea4ee7fa · TTFT 0.7s · 75.9 tok/s · 2.7 tok/cycle
+03:58:10 Memory: optional claim of request 77 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:58:10 Started · request 77 · input 54,938 · cached 53,952 · effort absent → medium · thinking on
+03:58:10 Memory: in-service claim of request 77: granted
+03:58:10 Memory: in-service claim of request 77 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:58:10 Memory: in-service claim of request 77: granted
+03:58:11 TTFT of request 77: 642.85 ms: own prefill 415.048, claim wait 0, decode 225.475, other prefill 0, unit wait 0, rest 2.32625
+03:58:12 Done · request 73 · input 43,802 · cached 39,616 · deduplicated 1,696 · output 1,756 · tools 13·35e3c6cf · TTFT 1.8s · 72.2 tok/s · 2.8 tok/cycle
+03:58:12 Memory: optional claim of request 78 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:58:12 Started · request 78 · input 45,957 · cached 43,776 · effort absent → medium · thinking on
+03:58:12 Memory: in-service claim of request 78: granted
+03:58:12 Memory: in-service claim of request 78 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:58:12 Memory: in-service claim of request 78: granted
+03:58:13 TTFT of request 78: 1299.37 ms: own prefill 770.223, claim wait 0, decode 526.982, other prefill 0, unit wait 0, rest 2.16846
+03:58:14 Done · request 75 · input 56,788 · cached 55,744 · deduplicated 608 · output 1,390 · tools 74·ea4ee7fa · TTFT 0.4s · 67.4 tok/s · 2.6 tok/cycle
+03:58:14 Memory: optional claim of request 79 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:58:14 Started · request 79 · input 59,585 · cached 56,768 · effort absent → medium · thinking on
+03:58:14 Memory: in-service claim of request 79: granted
+03:58:14 Memory: in-service claim of request 79 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:58:14 Memory: in-service claim of request 79: granted
+03:58:16 TTFT of request 79: 1650.9 ms: own prefill 1009.74, claim wait 0, decode 638.482, other prefill 0, unit wait 0, rest 2.67758
+03:58:20 Done · request 77 · input 54,938 · cached 53,952 · deduplicated 608 · output 632 · tools 74·ea4ee7fa · TTFT 0.6s · 66.7 tok/s · 2.9 tok/cycle
+03:58:20 Memory: optional claim of request 80 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:58:20 Started · request 80 · input 56,148 · cached 54,912 · effort absent → medium · thinking on
+03:58:20 Memory: in-service claim of request 80: granted
+03:58:20 Memory: in-service claim of request 80 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+03:58:20 Memory: in-service claim of request 80: granted
+03:58:21 TTFT of request 80: 757.238 ms: own prefill 475.324, claim wait 0, decode 279.982, other prefill 0, unit wait 0, rest 1.93217
+03:58:23 Done · request 78 · input 45,957 · cached 43,776 · deduplicated 1,760 · output 680 · tools 13·35e3c6cf · TTFT 1.3s · 67.7 tok/s · 2.7 tok/cycle
+03:58:32 Done · request 79 · input 59,585 · cached 56,768 · deduplicated 1,408 · output 1,189 · tools 74·ea4ee7fa · TTFT 1.7s · 72.8 tok/s · 2.4 tok/cycle
+03:58:32 Started · request 81 · input 61,118 · cached 59,552 · effort absent → medium · thinking on
+03:58:33 TTFT of request 81: 618.74 ms: own prefill 520.516, claim wait 0, decode 97.6987, other prefill 0, unit wait 0, rest 0.525501
+03:58:37 Done · request 81 · input 61,118 · cached 59,552 · deduplicated 1,216 · output 449 · tools 74·ea4ee7fa · TTFT 0.6s · 111.4 tok/s · 3.3 tok/cycle
+03:58:37 Started · request 82 · input 61,900 · cached 61,088 · effort absent → medium · thinking on
+03:58:38 TTFT of request 82: 450.235 ms: own prefill 352.814, claim wait 0, decode 96.778, other prefill 0, unit wait 0, rest 0.643417
+03:58:40 Done · request 82 · input 61,900 · cached 61,088 · deduplicated 448 · output 217 · tools 74·ea4ee7fa · TTFT 0.5s · 93.6 tok/s · 2.9 tok/cycle
+03:58:40 Started · request 83 · input 63,264 · cached 61,888 · effort absent → medium · thinking on
+03:58:41 TTFT of request 83: 651.564 ms: own prefill 510.546, claim wait 0, decode 140.278, other prefill 0, unit wait 0, rest 0.740582
+03:58:43 Done · request 83 · input 63,264 · cached 61,888 · deduplicated 224 · output 226 · tools 74·ea4ee7fa · TTFT 0.7s · 98.6 tok/s · 3.1 tok/cycle
+03:58:43 Started · request 84 · input 64,053 · cached 63,232 · effort absent → medium · thinking on
+03:58:44 TTFT of request 84: 484.182 ms: own prefill 378.416, claim wait 0, decode 99.5465, other prefill 0, unit wait 0, rest 6.21925
+03:58:47 Done · request 80 · input 56,148 · cached 54,912 · deduplicated 640 · output 2,033 · tools 74·ea4ee7fa · TTFT 0.8s · 78.1 tok/s · 2.5 tok/cycle
+03:58:47 Started · request 85 · input 58,638 · cached 56,128 · effort absent → medium · thinking on
+03:58:48 TTFT of request 85: 1141.78 ms: own prefill 818.463, claim wait 0, decode 321.782, other prefill 0, unit wait 0, rest 1.54008
+03:58:54 Done · request 84 · input 64,053 · cached 63,232 · output 980 · tools 74·ea4ee7fa · TTFT 0.5s · 92.6 tok/s · 3.0 tok/cycle
+03:58:55 Started · request 86 · input 66,256 · cached 64,032 · effort absent → medium · thinking on
+03:58:56 TTFT of request 86: 1058.47 ms: own prefill 828.168, claim wait 0, decode 229.214, other prefill 0, unit wait 0, rest 1.08525
+03:58:59 Done · request 86 · input 66,256 · cached 64,032 · output 377 · tools 74·ea4ee7fa · TTFT 1.1s · 153.3 tok/s · 4.8 tok/cycle
+03:59:00 Started · request 87 · input 68,257 · cached 66,240 · effort absent → medium · thinking on
+03:59:01 TTFT of request 87: 892.174 ms: own prefill 694.809, claim wait 0, decode 196.48, other prefill 0, unit wait 0, rest 0.884793
+03:59:02 Done · request 85 · input 58,638 · cached 56,128 · output 1,153 · tools 74·ea4ee7fa · TTFT 1.1s · 83.0 tok/s · 2.8 tok/cycle
+03:59:02 Started · request 88 · input 59,872 · cached 58,624 · effort absent → medium · thinking on
+03:59:03 TTFT of request 88: 578.21 ms: own prefill 438.734, claim wait 0, decode 138.826, other prefill 0, unit wait 0, rest 0.650709
+03:59:05 Done · request 88 · input 59,872 · cached 58,624 · output 352 · tools 74·ea4ee7fa · TTFT 0.6s · 140.6 tok/s · 4.4 tok/cycle
+03:59:05 Started · request 89 · input 60,289 · cached 59,840 · effort absent → medium · thinking on
+03:59:06 TTFT of request 89: 246.33 ms: own prefill 244.016, claim wait 0, decode 2.09671, other prefill 0, unit wait 0, rest 0.218084
+03:59:07 Done · request 89 · input 60,289 · cached 59,840 · output 194 · tools 74·ea4ee7fa · TTFT 0.2s · 134.6 tok/s · 4.1 tok/cycle
+03:59:07 Started · request 90 · input 60,706 · cached 60,256 · effort absent → medium · thinking on
+03:59:07 TTFT of request 90: 273 ms: own prefill 255.735, claim wait 0, decode 17.0145, other prefill 0, unit wait 0, rest 0.250584
+03:59:11 Done · request 90 · input 60,706 · cached 60,256 · output 406 · tools 74·ea4ee7fa · TTFT 0.3s · 99.4 tok/s · 3.0 tok/cycle
+03:59:12 Done · request 87 · input 68,257 · cached 66,240 · output 887 · tools 74·ea4ee7fa · TTFT 0.9s · 75.9 tok/s · 2.5 tok/cycle
+03:59:13 Started · request 91 · input 69,791 · cached 68,224 · effort absent → medium · thinking on
+03:59:13 TTFT of request 91: 553.818 ms: own prefill 553.355, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.462707
+03:59:15 Done · request 91 · input 69,791 · cached 68,224 · deduplicated 896 · output 295 · tools 74·ea4ee7fa · TTFT 0.6s · 197.3 tok/s · 4.9 tok/cycle
+03:59:15 Started · request 92 · input 70,706 · cached 69,760 · effort absent → medium · thinking on
+03:59:15 TTFT of request 92: 391.734 ms: own prefill 391.295, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.439417
+03:59:17 Done · request 92 · input 70,706 · cached 69,760 · deduplicated 320 · output 371 · tools 74·ea4ee7fa · TTFT 0.4s · 237.5 tok/s · 6.2 tok/cycle
+03:59:17 Started · request 93 · input 72,757 · cached 70,688 · effort absent → medium · thinking on
+03:59:18 TTFT of request 93: 729.683 ms: own prefill 729.308, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.374666
+03:59:20 Done · request 93 · input 72,757 · cached 70,688 · deduplicated 384 · output 230 · tools 74·ea4ee7fa · TTFT 0.7s · 116.6 tok/s · 2.9 tok/cycle
+03:59:20 Started · request 94 · input 74,141 · cached 72,736 · effort absent → medium · thinking on
+03:59:20 TTFT of request 94: 516.424 ms: own prefill 515.989, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.43475
+03:59:32 Done · request 94 · input 74,141 · cached 72,736 · deduplicated 224 · output 1,378 · tools 74·ea4ee7fa · TTFT 0.5s · 115.2 tok/s · 2.8 tok/cycle
+03:59:32 Started · request 95 · input 93,342 · cached 74,112 · effort absent → medium · thinking on
+03:59:39 TTFT of request 95: 6383.58 ms: own prefill 6380.98, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 2.59138
+03:59:40 Done · request 95 · input 93,342 · cached 74,112 · output 298 · tools 74·ea4ee7fa · TTFT 6.4s · 179.7 tok/s · 4.5 tok/cycle
+03:59:41 Started · request 96 · input 94,115 · cached 93,312 · effort absent → medium · thinking on
+03:59:41 TTFT of request 96: 377.214 ms: own prefill 376.737, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.476875
+03:59:43 Done · request 96 · input 94,115 · cached 93,312 · output 415 · tools 74·ea4ee7fa · TTFT 0.4s · 228.5 tok/s · 5.9 tok/cycle
+03:59:43 Started · request 97 · input 95,494 · cached 94,080 · effort absent → medium · thinking on
+03:59:43 TTFT of request 97: 548.54 ms: own prefill 548.145, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.395168
+03:59:49 Done · request 97 · input 95,494 · cached 94,080 · output 738 · tools 74·ea4ee7fa · TTFT 0.5s · 121.8 tok/s · 3.0 tok/cycle
+03:59:50 Started · request 98 · input 96,982 · cached 95,488 · effort absent → medium · thinking on
+03:59:50 TTFT of request 98: 561.183 ms: own prefill 560.674, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.508501
+03:59:52 Done · request 98 · input 96,982 · cached 95,488 · output 190 · tools 74·ea4ee7fa · TTFT 0.6s · 113.5 tok/s · 2.8 tok/cycle
+03:59:52 Started · request 99 · input 61,148 · cached 60,672 · effort absent → medium · thinking on
+03:59:52 TTFT of request 99: 441.364 ms: own prefill 251.925, claim wait 169.002, decode 10.962, other prefill 0, unit wait 0, rest 9.47433
+03:59:52 Memory: growth available; waiting=1; suspended=0
+03:59:52 Started · request 100 · input 97,587 · cached 96,960 · effort absent → medium · thinking on
+03:59:52 TTFT of request 100: 637.765 ms: own prefill 324.214, claim wait 151.074, decode 61.552, other prefill 100.483, unit wait 0, rest 0.442293
+03:59:53 Memory: growth available; resource wait cleared
+03:59:53 Memory: start claim of request 101 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:59:54 Memory: growth available; waiting=1; suspended=0
+03:59:54 Done · request 100 · input 97,587 · cached 96,960 · output 180 · tools 74·ea4ee7fa · TTFT 0.6s · 127.3 tok/s · 4.1 tok/cycle
+03:59:54 Memory: start claim of request 101: granted
+03:59:54 Memory: start claim of request 101 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+03:59:54 Started · request 102 · input 98,314 · cached 97,568 · effort absent → medium · thinking on
+03:59:55 TTFT of request 102: 376.666 ms: own prefill 351.77, claim wait 0, decode 24.5895, other prefill 0, unit wait 0, rest 0.306416
+03:59:59 Done · request 99 · input 61,148 · cached 60,672 · output 671 · tools 74·ea4ee7fa · TTFT 0.4s · 90.4 tok/s · 3.0 tok/cycle
+03:59:59 Memory: start claim of request 101: granted
+03:59:59 Memory: start claim of request 101 needs 103.5 MiB, 796 pages: short (0.0 MiB now, 0.0 later)
+03:59:59 Memory: start claim of request 101: granted
+03:59:59 Memory: start claim of request 101 needs 103.5 MiB, 796 pages: short (0.0 MiB now, 0.0 later)
+04:00:00 Memory: start claim of request 101: granted
+04:00:00 Memory: start claim of request 101 needs 103.5 MiB, 797 pages: short (0.0 MiB now, 0.0 later)
+04:00:00 Memory: start claim of request 101: granted
+04:00:00 Memory: start claim of request 101 needs 103.5 MiB, 798 pages: short (0.0 MiB now, 0.0 later)
+04:00:00 Memory: start claim of request 101: granted
+04:00:00 Memory: start claim of request 101 needs 103.5 MiB, 799 pages: short (0.0 MiB now, 0.0 later)
+04:00:00 Memory: start claim of request 101: granted
+04:00:00 Memory: start claim of request 101 needs 103.5 MiB, 800 pages: short (0.0 MiB now, 0.0 later)
+04:00:00 Memory: start claim of request 101: granted
+04:00:00 Memory: start claim of request 101 needs 103.5 MiB, 801 pages: short (0.0 MiB now, 0.0 later)
+04:00:00 Memory: start claim of request 101: granted
+04:00:00 Memory: start claim of request 101 needs 103.5 MiB, 802 pages: short (0.0 MiB now, 0.0 later)
+04:00:00 Memory: start claim of request 101: granted
+04:00:00 Memory: start claim of request 101 needs 103.5 MiB, 803 pages: short (0.0 MiB now, 0.0 later)
+04:00:00 Memory: start claim of request 101: granted
+04:00:00 Memory: start claim of request 101 needs 103.5 MiB, 804 pages: short (0.0 MiB now, 0.0 later)
+04:00:00 Done · request 102 · input 98,314 · cached 97,568 · output 669 · tools 74·ea4ee7fa · TTFT 0.4s · 116.4 tok/s · 3.6 tok/cycle
+04:00:00 Memory: in-service claim of request 101: granted
+04:00:00 Memory: optional claim of request 101 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+04:00:00 Started · request 101 · input 46,982 · cached 45,952 · effort absent → medium · thinking on
+04:00:00 Memory: in-service claim of request 101: granted
+04:00:01 TTFT of request 101: 7537.82 ms: own prefill 395.109, claim wait 442.053, decode 6258.96, other prefill 351.77, unit wait 0, rest 89.925
+04:00:01 Memory: growth available; resource wait cleared
+04:00:01 Memory: growth available; waiting=1; suspended=0
+04:00:01 Memory: start claim of request 103 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+04:00:01 Memory: start claim of request 103: granted
+04:00:01 Memory: start claim of request 103 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+04:00:01 Memory: start claim of request 103: granted
+04:00:01 Memory: start claim of request 103 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+04:00:01 Memory: start claim of request 103 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:00:06 Done · request 101 · input 46,982 · cached 45,952 · output 559 · tools 13·35e3c6cf · TTFT 7.5s · 107.8 tok/s · 2.7 tok/cycle
+04:00:06 Memory: in-service claim of request 103: granted
+04:00:06 Started · request 103 · input 100,642 · cached 98,304 · effort absent → medium · thinking on
+04:00:07 Memory: start claim of request 104 needs 103.5 MiB, 515 pages: short (0.0 MiB now, 0.0 later)
+04:00:07 Memory: start claim of request 104: granted
+04:00:07 Memory: start claim of request 104 needs 103.5 MiB, 517 pages: short (0.0 MiB now, 0.0 later)
+04:00:07 TTFT of request 103: 6426.49 ms: own prefill 978.968, claim wait 243.306, decode 4918.7, other prefill 243.991, unit wait 0, rest 41.5162
+04:00:07 Memory: start claim of request 104: granted
+04:00:07 Memory: start claim of request 104 needs 103.5 MiB, 517 pages: short (0.0 MiB now, 0.0 later)
+04:00:07 Memory: start claim of request 104: granted
+04:00:07 Memory: start claim of request 104 needs 103.5 MiB, 517 pages: short (0.0 MiB now, 0.0 later)
+04:00:07 Memory: start claim of request 104: granted
+04:00:07 Memory: start claim of request 104 needs 103.5 MiB, 518 pages: short (0.0 MiB now, 0.0 later)
+04:00:07 Memory: start claim of request 104: granted
+04:00:07 Memory: start claim of request 104 needs 103.5 MiB, 518 pages: short (0.0 MiB now, 0.0 later)
+04:00:08 Memory: start claim of request 104: granted
+04:00:08 Memory: start claim of request 104 needs 103.5 MiB, 519 pages: short (0.0 MiB now, 0.0 later)
+04:00:08 Memory: start claim of request 104: granted
+04:00:08 Memory: start claim of request 104 needs 103.5 MiB, 519 pages: short (0.0 MiB now, 0.0 later)
+04:00:08 Memory: start claim of request 104: granted
+04:00:08 Memory: start claim of request 104 needs 103.5 MiB, 520 pages: short (0.0 MiB now, 0.0 later)
+04:00:08 Memory: start claim of request 104: granted
+04:00:08 Memory: start claim of request 104 needs 103.5 MiB, 520 pages: short (0.0 MiB now, 0.0 later)
+04:00:08 Memory: start claim of request 104: granted
+04:00:08 Memory: start claim of request 104 needs 103.5 MiB, 521 pages: short (0.0 MiB now, 0.0 later)
+04:00:08 Memory: start claim of request 104: granted
+04:00:08 Memory: start claim of request 104 needs 103.5 MiB, 522 pages: short (0.0 MiB now, 0.0 later)
+04:00:08 Memory: start claim of request 104: granted
+04:00:08 Memory: start claim of request 104 needs 103.5 MiB, 523 pages: short (0.0 MiB now, 0.0 later)
+04:00:08 Done · request 103 · input 100,642 · cached 98,304 · output 189 · tools 74·ea4ee7fa · TTFT 6.4s · 155.9 tok/s · 3.9 tok/cycle
+04:00:08 Memory: in-service claim of request 104: granted
+04:00:08 Memory: start claim of request 105 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:00:08 Memory: optional claim of request 104 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+04:00:08 Started · request 104 · input 47,760 · cached 46,976 · effort absent → medium · thinking on
+04:00:08 Memory: in-service claim of request 104: granted
+04:00:09 Memory: start claim of request 105: granted
+04:00:09 Memory: start claim of request 105 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+04:00:09 TTFT of request 104: 2578.46 ms: own prefill 381.648, claim wait 433.801, decode 1202.38, other prefill 509.746, unit wait 0, rest 50.8852
+04:00:09 Memory: start claim of request 105 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:00:09 Done · request 104 · input 47,760 · cached 46,976 · output 121 · tools 13·35e3c6cf · TTFT 2.6s · 173.3 tok/s · 4.5 tok/cycle
+04:00:09 Memory: in-service claim of request 105: granted
+04:00:09 Memory: start claim of request 106 needs 103.5 MiB, 540 pages: short (0.0 MiB now, 0.0 later)
+04:00:09 Started · request 105 · input 101,988 · cached 100,608 · effort absent → medium · thinking on
+04:00:09 Memory: start claim of request 106: granted
+04:00:09 Memory: start claim of request 106 needs 103.5 MiB, 540 pages: short (0.0 MiB now, 0.0 later)
+04:00:10 Memory: start claim of request 106: granted
+04:00:10 Memory: start claim of request 106 needs 103.5 MiB, 583 pages: short (0.0 MiB now, 0.0 later)
+04:00:10 TTFT of request 105: 1691.76 ms: own prefill 541.374, claim wait 287.529, decode 686.679, other prefill 124.295, unit wait 0, rest 51.8861
+04:00:10 Memory: start claim of request 106: granted
+04:00:10 Memory: start claim of request 106 needs 103.5 MiB, 583 pages: short (0.0 MiB now, 0.0 later)
+04:00:10 Memory: start claim of request 106: granted
+04:00:10 Memory: start claim of request 106 needs 103.5 MiB, 583 pages: short (0.0 MiB now, 0.0 later)
+04:00:10 Memory: start claim of request 106: granted
+04:00:10 Memory: start claim of request 106 needs 103.5 MiB, 584 pages: short (0.0 MiB now, 0.0 later)
+04:00:10 Memory: start claim of request 106: granted
+04:00:10 Memory: start claim of request 106 needs 103.5 MiB, 585 pages: short (0.0 MiB now, 0.0 later)
+04:00:10 Memory: start claim of request 106: granted
+04:00:10 Memory: start claim of request 106 needs 103.5 MiB, 585 pages: short (0.0 MiB now, 0.0 later)
+04:00:11 Memory: start claim of request 106: granted
+04:00:11 Memory: start claim of request 106 needs 103.5 MiB, 585 pages: short (0.0 MiB now, 0.0 later)
+04:00:11 Memory: start claim of request 106: granted
+04:00:11 Memory: start claim of request 106 needs 103.5 MiB, 586 pages: short (0.0 MiB now, 0.0 later)
+04:00:11 Memory: start claim of request 106: granted
+04:00:11 Memory: start claim of request 106 needs 103.5 MiB, 586 pages: short (0.0 MiB now, 0.0 later)
+04:00:11 Memory: start claim of request 106: granted
+04:00:11 Memory: start claim of request 106 needs 103.5 MiB, 586 pages: short (0.0 MiB now, 0.0 later)
+04:00:11 Memory: start claim of request 106: granted
+04:00:11 Memory: start claim of request 106 needs 103.5 MiB, 587 pages: short (0.0 MiB now, 0.0 later)
+04:00:11 Memory: start claim of request 106: granted
+04:00:11 Memory: start claim of request 106 needs 103.5 MiB, 587 pages: short (0.0 MiB now, 0.0 later)
+04:00:11 Memory: start claim of request 106: granted
+04:00:11 Memory: start claim of request 106 needs 103.5 MiB, 588 pages: short (0.0 MiB now, 0.0 later)
+04:00:11 Memory: start claim of request 106: granted
+04:00:11 Memory: start claim of request 106 needs 103.5 MiB, 588 pages: short (0.0 MiB now, 0.0 later)
+04:00:11 Memory: start claim of request 106: granted
+04:00:11 Memory: start claim of request 106 needs 103.5 MiB, 588 pages: short (0.0 MiB now, 0.0 later)
+04:00:12 Memory: start claim of request 106: granted
+04:00:12 Memory: start claim of request 106 needs 103.5 MiB, 589 pages: short (0.0 MiB now, 0.0 later)
+04:00:12 Memory: start claim of request 106: granted
+04:00:12 Memory: start claim of request 106 needs 103.5 MiB, 589 pages: short (0.0 MiB now, 0.0 later)
+04:00:12 Memory: start claim of request 106: granted
+04:00:12 Memory: start claim of request 106 needs 103.5 MiB, 589 pages: short (0.0 MiB now, 0.0 later)
+04:00:12 Memory: start claim of request 106: granted
+04:00:12 Memory: start claim of request 106 needs 103.5 MiB, 590 pages: short (0.0 MiB now, 0.0 later)
+04:00:12 Memory: start claim of request 106: granted
+04:00:12 Memory: start claim of request 106 needs 103.5 MiB, 590 pages: short (0.0 MiB now, 0.0 later)
+04:00:12 Memory: start claim of request 106: granted
+04:00:12 Memory: start claim of request 106 needs 103.5 MiB, 591 pages: short (0.0 MiB now, 0.0 later)
+04:00:12 Memory: start claim of request 106: granted
+04:00:12 Memory: start claim of request 106 needs 103.5 MiB, 591 pages: short (0.0 MiB now, 0.0 later)
+04:00:12 Memory: start claim of request 106: granted
+04:00:12 Memory: start claim of request 106 needs 103.5 MiB, 592 pages: short (0.0 MiB now, 0.0 later)
+04:00:12 Memory: start claim of request 106: granted
+04:00:12 Memory: start claim of request 106 needs 103.5 MiB, 592 pages: short (0.0 MiB now, 0.0 later)
+04:00:13 Memory: start claim of request 106: granted
+04:00:13 Memory: start claim of request 106 needs 103.5 MiB, 593 pages: short (0.0 MiB now, 0.0 later)
+04:00:13 Memory: start claim of request 106: granted
+04:00:13 Memory: start claim of request 106 needs 103.5 MiB, 593 pages: short (0.0 MiB now, 0.0 later)
+04:00:13 Memory: start claim of request 106: granted
+04:00:13 Memory: start claim of request 106 needs 103.5 MiB, 594 pages: short (0.0 MiB now, 0.0 later)
+04:00:13 Memory: start claim of request 106: granted
+04:00:13 Memory: start claim of request 106 needs 103.5 MiB, 594 pages: short (0.0 MiB now, 0.0 later)
+04:00:13 Memory: start claim of request 106: granted
+04:00:13 Memory: start claim of request 106 needs 103.5 MiB, 594 pages: short (0.0 MiB now, 0.0 later)
+04:00:13 Memory: start claim of request 106: granted
+04:00:13 Memory: start claim of request 106 needs 103.5 MiB, 595 pages: short (0.0 MiB now, 0.0 later)
+04:00:13 Memory: start claim of request 106: granted
+04:00:13 Memory: start claim of request 106 needs 103.5 MiB, 595 pages: short (0.0 MiB now, 0.0 later)
+04:00:13 Memory: start claim of request 106: granted
+04:00:13 Memory: start claim of request 106 needs 103.5 MiB, 596 pages: short (0.0 MiB now, 0.0 later)
+04:00:14 Memory: start claim of request 106: granted
+04:00:14 Memory: start claim of request 106 needs 103.5 MiB, 596 pages: short (0.0 MiB now, 0.0 later)
+04:00:14 Memory: start claim of request 106: granted
+04:00:14 Memory: start claim of request 106 needs 103.5 MiB, 597 pages: short (0.0 MiB now, 0.0 later)
+04:00:14 Memory: start claim of request 106: granted
+04:00:14 Memory: start claim of request 106 needs 103.5 MiB, 597 pages: short (0.0 MiB now, 0.0 later)
+04:00:14 Memory: start claim of request 106: granted
+04:00:14 Memory: start claim of request 106 needs 103.5 MiB, 598 pages: short (0.0 MiB now, 0.0 later)
+04:00:14 Memory: start claim of request 106: granted
+04:00:14 Memory: start claim of request 106 needs 103.5 MiB, 598 pages: short (0.0 MiB now, 0.0 later)
+04:00:14 Memory: start claim of request 106: granted
+04:00:14 Memory: start claim of request 106 needs 103.5 MiB, 598 pages: short (0.0 MiB now, 0.0 later)
+04:00:14 Memory: start claim of request 106: granted
+04:00:14 Memory: start claim of request 106 needs 103.5 MiB, 599 pages: short (0.0 MiB now, 0.0 later)
+04:00:14 Memory: start claim of request 106: granted
+04:00:14 Memory: start claim of request 106 needs 103.5 MiB, 599 pages: short (0.0 MiB now, 0.0 later)
+04:00:14 Memory: start claim of request 106: granted
+04:00:14 Memory: start claim of request 106 needs 103.5 MiB, 600 pages: short (0.0 MiB now, 0.0 later)
+04:00:15 Memory: start claim of request 106: granted
+04:00:15 Memory: start claim of request 106 needs 103.5 MiB, 601 pages: short (0.0 MiB now, 0.0 later)
+04:00:15 Memory: start claim of request 106: granted
+04:00:15 Memory: start claim of request 106 needs 103.5 MiB, 602 pages: short (0.0 MiB now, 0.0 later)
+04:00:15 Memory: start claim of request 106: granted
+04:00:15 Memory: start claim of request 106 needs 103.5 MiB, 603 pages: short (0.0 MiB now, 0.0 later)
+04:00:15 Memory: start claim of request 106: granted
+04:00:15 Memory: start claim of request 106 needs 103.5 MiB, 604 pages: short (0.0 MiB now, 0.0 later)
+04:00:15 Memory: start claim of request 106: granted
+04:00:15 Memory: start claim of request 106 needs 103.5 MiB, 605 pages: short (0.0 MiB now, 0.0 later)
+04:00:15 Memory: start claim of request 106: granted
+04:00:15 Memory: start claim of request 106 needs 103.5 MiB, 606 pages: short (0.0 MiB now, 0.0 later)
+04:00:15 Memory: start claim of request 106: granted
+04:00:15 Memory: start claim of request 106 needs 103.5 MiB, 606 pages: short (0.0 MiB now, 0.0 later)
+04:00:15 Memory: start claim of request 106: granted
+04:00:15 Memory: start claim of request 106 needs 103.5 MiB, 607 pages: short (0.0 MiB now, 0.0 later)
+04:00:15 Memory: start claim of request 106: granted
+04:00:15 Memory: start claim of request 106 needs 103.5 MiB, 608 pages: short (0.0 MiB now, 0.0 later)
+04:00:16 Memory: start claim of request 106: granted
+04:00:16 Memory: start claim of request 106 needs 103.5 MiB, 609 pages: short (0.0 MiB now, 0.0 later)
+04:00:16 Done · request 105 · input 101,988 · cached 100,608 · output 874 · tools 74·ea4ee7fa · TTFT 1.7s · 156.4 tok/s · 3.8 tok/cycle
+04:00:16 Memory: in-service claim of request 106: granted
+04:00:16 Memory: start claim of request 107 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:00:16 Memory: optional claim of request 106 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+04:00:16 Started · request 106 · input 47,977 · cached 47,744 · effort absent → medium · thinking on
+04:00:16 Memory: in-service claim of request 106: granted
+04:00:16 Memory: start claim of request 107: granted
+04:00:16 Memory: start claim of request 107 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+04:00:16 Memory: start claim of request 107: granted
+04:00:16 Memory: start claim of request 107 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+04:00:16 TTFT of request 106: 6513.27 ms: own prefill 263.416, claim wait 0, decode 5565.53, other prefill 541.374, unit wait 0, rest 142.952
+04:00:16 Memory: start claim of request 107 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:00:24 Done · request 106 · input 47,977 · cached 47,744 · output 930 · tools 13·35e3c6cf · TTFT 6.5s · 118.2 tok/s · 2.9 tok/cycle
+04:00:24 Memory: in-service claim of request 107: granted
+04:00:24 Started · request 107 · input 103,830 · cached 101,952 · effort absent → medium · thinking on
+04:00:24 Memory: start claim of request 108 needs 103.5 MiB, 647 pages: short (0.0 MiB now, 0.0 later)
+04:00:24 Memory: start claim of request 108: granted
+04:00:24 Memory: start claim of request 108 needs 103.5 MiB, 647 pages: short (0.0 MiB now, 0.0 later)
+04:00:25 TTFT of request 107: 8873 ms: own prefill 669.869, claim wait 12.9863, decode 7837.52, other prefill 263.416, unit wait 0, rest 89.2122
+04:00:25 Memory: start claim of request 108: granted
+04:00:25 Memory: start claim of request 108 needs 103.5 MiB, 647 pages: short (0.0 MiB now, 0.0 later)
+04:00:25 Memory: start claim of request 108: granted
+04:00:25 Memory: start claim of request 108 needs 103.5 MiB, 648 pages: short (0.0 MiB now, 0.0 later)
+04:00:25 Memory: start claim of request 108: granted
+04:00:25 Memory: start claim of request 108 needs 103.5 MiB, 648 pages: short (0.0 MiB now, 0.0 later)
+04:00:25 Memory: start claim of request 108: granted
+04:00:25 Memory: start claim of request 108 needs 103.5 MiB, 649 pages: short (0.0 MiB now, 0.0 later)
+04:00:25 Memory: start claim of request 108: granted
+04:00:25 Memory: start claim of request 108 needs 103.5 MiB, 649 pages: short (0.0 MiB now, 0.0 later)
+04:00:25 Memory: start claim of request 108: granted
+04:00:25 Memory: start claim of request 108 needs 103.5 MiB, 649 pages: short (0.0 MiB now, 0.0 later)
+04:00:25 Memory: start claim of request 108: granted
+04:00:25 Memory: start claim of request 108 needs 103.5 MiB, 650 pages: short (0.0 MiB now, 0.0 later)
+04:00:25 Memory: start claim of request 108: granted
+04:00:25 Memory: start claim of request 108 needs 103.5 MiB, 651 pages: short (0.0 MiB now, 0.0 later)
+04:00:25 Memory: start claim of request 108: granted
+04:00:25 Memory: start claim of request 108 needs 103.5 MiB, 651 pages: short (0.0 MiB now, 0.0 later)
+04:00:26 Memory: start claim of request 108: granted
+04:00:26 Memory: start claim of request 108 needs 103.5 MiB, 651 pages: short (0.0 MiB now, 0.0 later)
+04:00:26 Memory: start claim of request 108: granted
+04:00:26 Memory: start claim of request 108 needs 103.5 MiB, 652 pages: short (0.0 MiB now, 0.0 later)
+04:00:26 Memory: start claim of request 108: granted
+04:00:26 Memory: start claim of request 108 needs 103.5 MiB, 652 pages: short (0.0 MiB now, 0.0 later)
+04:00:26 Memory: start claim of request 108: granted
+04:00:26 Memory: start claim of request 108 needs 103.5 MiB, 653 pages: short (0.0 MiB now, 0.0 later)
+04:00:26 Memory: start claim of request 108: granted
+04:00:26 Memory: start claim of request 108 needs 103.5 MiB, 653 pages: short (0.0 MiB now, 0.0 later)
+04:00:26 Memory: start claim of request 108: granted
+04:00:26 Memory: start claim of request 108 needs 103.5 MiB, 653 pages: short (0.0 MiB now, 0.0 later)
+04:00:26 Memory: start claim of request 108: granted
+04:00:26 Memory: start claim of request 108 needs 103.5 MiB, 654 pages: short (0.0 MiB now, 0.0 later)
+04:00:26 Memory: start claim of request 108: granted
+04:00:26 Memory: start claim of request 108 needs 103.5 MiB, 654 pages: short (0.0 MiB now, 0.0 later)
+04:00:27 Memory: start claim of request 108: granted
+04:00:27 Memory: start claim of request 108 needs 103.5 MiB, 654 pages: short (0.0 MiB now, 0.0 later)
+04:00:27 Memory: start claim of request 108: granted
+04:00:27 Memory: start claim of request 108 needs 103.5 MiB, 655 pages: short (0.0 MiB now, 0.0 later)
+04:00:27 Memory: start claim of request 108: granted
+04:00:27 Memory: start claim of request 108 needs 103.5 MiB, 655 pages: short (0.0 MiB now, 0.0 later)
+04:00:27 Memory: start claim of request 108: granted
+04:00:27 Memory: start claim of request 108 needs 103.5 MiB, 655 pages: short (0.0 MiB now, 0.0 later)
+04:00:27 Memory: start claim of request 108: granted
+04:00:27 Memory: start claim of request 108 needs 103.5 MiB, 656 pages: short (0.0 MiB now, 0.0 later)
+04:00:27 Memory: start claim of request 108: granted
+04:00:27 Memory: start claim of request 108 needs 103.5 MiB, 656 pages: short (0.0 MiB now, 0.0 later)
+04:00:27 Memory: start claim of request 108: granted
+04:00:27 Memory: start claim of request 108 needs 103.5 MiB, 657 pages: short (0.0 MiB now, 0.0 later)
+04:00:27 Memory: start claim of request 108: granted
+04:00:27 Memory: start claim of request 108 needs 103.5 MiB, 657 pages: short (0.0 MiB now, 0.0 later)
+04:00:27 Memory: start claim of request 108: granted
+04:00:27 Memory: start claim of request 108 needs 103.5 MiB, 657 pages: short (0.0 MiB now, 0.0 later)
+04:00:28 Memory: start claim of request 108: granted
+04:00:28 Memory: start claim of request 108 needs 103.5 MiB, 658 pages: short (0.0 MiB now, 0.0 later)
+04:00:28 Memory: start claim of request 108: granted
+04:00:28 Memory: start claim of request 108 needs 103.5 MiB, 658 pages: short (0.0 MiB now, 0.0 later)
+04:00:28 Memory: start claim of request 108: granted
+04:00:28 Memory: start claim of request 108 needs 103.5 MiB, 658 pages: short (0.0 MiB now, 0.0 later)
+04:00:28 Memory: start claim of request 108: granted
+04:00:28 Memory: start claim of request 108 needs 103.5 MiB, 659 pages: short (0.0 MiB now, 0.0 later)
+04:00:28 Memory: start claim of request 108: granted
+04:00:28 Memory: start claim of request 108 needs 103.5 MiB, 659 pages: short (0.0 MiB now, 0.0 later)
+04:00:28 Memory: start claim of request 108: granted
+04:00:28 Memory: start claim of request 108 needs 103.5 MiB, 660 pages: short (0.0 MiB now, 0.0 later)
+04:00:28 Memory: start claim of request 108: granted
+04:00:28 Memory: start claim of request 108 needs 103.5 MiB, 660 pages: short (0.0 MiB now, 0.0 later)
+04:00:28 Memory: start claim of request 108: granted
+04:00:28 Memory: start claim of request 108 needs 103.5 MiB, 660 pages: short (0.0 MiB now, 0.0 later)
+04:00:28 Memory: start claim of request 108: granted
+04:00:28 Memory: start claim of request 108 needs 103.5 MiB, 661 pages: short (0.0 MiB now, 0.0 later)
+04:00:29 Memory: start claim of request 108: granted
+04:00:29 Memory: start claim of request 108 needs 103.5 MiB, 661 pages: short (0.0 MiB now, 0.0 later)
+04:00:29 Memory: start claim of request 108: granted
+04:00:29 Memory: start claim of request 108 needs 103.5 MiB, 661 pages: short (0.0 MiB now, 0.0 later)
+04:00:29 Memory: start claim of request 108: granted
+04:00:29 Memory: start claim of request 108 needs 103.5 MiB, 662 pages: short (0.0 MiB now, 0.0 later)
+04:00:29 Memory: start claim of request 108: granted
+04:00:29 Memory: start claim of request 108 needs 103.5 MiB, 662 pages: short (0.0 MiB now, 0.0 later)
+04:00:29 Memory: start claim of request 108: granted
+04:00:29 Memory: start claim of request 108 needs 103.5 MiB, 663 pages: short (0.0 MiB now, 0.0 later)
+04:00:29 Memory: start claim of request 108: granted
+04:00:29 Memory: start claim of request 108 needs 103.5 MiB, 663 pages: short (0.0 MiB now, 0.0 later)
+04:00:29 Memory: start claim of request 108: granted
+04:00:29 Memory: start claim of request 108 needs 103.5 MiB, 663 pages: short (0.0 MiB now, 0.0 later)
+04:00:29 Memory: start claim of request 108: granted
+04:00:29 Memory: start claim of request 108 needs 103.5 MiB, 664 pages: short (0.0 MiB now, 0.0 later)
+04:00:30 Memory: start claim of request 108: granted
+04:00:30 Memory: start claim of request 108 needs 103.5 MiB, 664 pages: short (0.0 MiB now, 0.0 later)
+04:00:30 Memory: start claim of request 108: granted
+04:00:30 Memory: start claim of request 108 needs 103.5 MiB, 664 pages: short (0.0 MiB now, 0.0 later)
+04:00:30 Memory: start claim of request 108: granted
+04:00:30 Memory: start claim of request 108 needs 103.5 MiB, 665 pages: short (0.0 MiB now, 0.0 later)
+04:00:30 Memory: start claim of request 108: granted
+04:00:30 Memory: start claim of request 108 needs 103.5 MiB, 665 pages: short (0.0 MiB now, 0.0 later)
+04:00:30 Memory: start claim of request 108: granted
+04:00:30 Memory: start claim of request 108 needs 103.5 MiB, 665 pages: short (0.0 MiB now, 0.0 later)
+04:00:30 Memory: start claim of request 108: granted
+04:00:30 Memory: start claim of request 108 needs 103.5 MiB, 666 pages: short (0.0 MiB now, 0.0 later)
+04:00:30 Memory: start claim of request 108: granted
+04:00:30 Memory: start claim of request 108 needs 103.5 MiB, 666 pages: short (0.0 MiB now, 0.0 later)
+04:00:30 Memory: start claim of request 108: granted
+04:00:30 Memory: start claim of request 108 needs 103.5 MiB, 667 pages: short (0.0 MiB now, 0.0 later)
+04:00:30 Memory: start claim of request 108: granted
+04:00:30 Memory: start claim of request 108 needs 103.5 MiB, 667 pages: short (0.0 MiB now, 0.0 later)
+04:00:31 Memory: start claim of request 108: granted
+04:00:31 Memory: start claim of request 108 needs 103.5 MiB, 667 pages: short (0.0 MiB now, 0.0 later)
+04:00:31 Memory: start claim of request 108: granted
+04:00:31 Memory: start claim of request 108 needs 103.5 MiB, 668 pages: short (0.0 MiB now, 0.0 later)
+04:00:31 Memory: start claim of request 108: granted
+04:00:31 Memory: start claim of request 108 needs 103.5 MiB, 668 pages: short (0.0 MiB now, 0.0 later)
+04:00:31 Memory: start claim of request 108: granted
+04:00:31 Memory: start claim of request 108 needs 103.5 MiB, 669 pages: short (0.0 MiB now, 0.0 later)
+04:00:31 Memory: start claim of request 108: granted
+04:00:31 Memory: start claim of request 108 needs 103.5 MiB, 669 pages: short (0.0 MiB now, 0.0 later)
+04:00:31 Memory: start claim of request 108: granted
+04:00:31 Memory: start claim of request 108 needs 103.5 MiB, 670 pages: short (0.0 MiB now, 0.0 later)
+04:00:31 Memory: start claim of request 108: granted
+04:00:31 Memory: start claim of request 108 needs 103.5 MiB, 670 pages: short (0.0 MiB now, 0.0 later)
+04:00:31 Memory: start claim of request 108: granted
+04:00:31 Memory: start claim of request 108 needs 103.5 MiB, 671 pages: short (0.0 MiB now, 0.0 later)
+04:00:31 Memory: start claim of request 108: granted
+04:00:31 Memory: start claim of request 108 needs 103.5 MiB, 671 pages: short (0.0 MiB now, 0.0 later)
+04:00:32 Memory: start claim of request 108: granted
+04:00:32 Memory: start claim of request 108 needs 103.5 MiB, 671 pages: short (0.0 MiB now, 0.0 later)
+04:00:32 Memory: start claim of request 108: granted
+04:00:32 Memory: start claim of request 108 needs 103.5 MiB, 672 pages: short (0.0 MiB now, 0.0 later)
+04:00:32 Memory: start claim of request 108: granted
+04:00:32 Memory: start claim of request 108 needs 103.5 MiB, 672 pages: short (0.0 MiB now, 0.0 later)
+04:00:32 Memory: start claim of request 108: granted
+04:00:32 Memory: start claim of request 108 needs 103.5 MiB, 673 pages: short (0.0 MiB now, 0.0 later)
+04:00:32 Memory: start claim of request 108: granted
+04:00:32 Memory: start claim of request 108 needs 103.5 MiB, 674 pages: short (0.0 MiB now, 0.0 later)
+04:00:32 Memory: start claim of request 108: granted
+04:00:32 Memory: start claim of request 108 needs 103.5 MiB, 675 pages: short (0.0 MiB now, 0.0 later)
+04:00:32 Memory: start claim of request 108: granted
+04:00:32 Memory: start claim of request 108 needs 103.5 MiB, 676 pages: short (0.0 MiB now, 0.0 later)
+04:00:32 Memory: start claim of request 108: granted
+04:00:32 Memory: start claim of request 108 needs 103.5 MiB, 676 pages: short (0.0 MiB now, 0.0 later)
+04:00:32 Memory: start claim of request 108: granted
+04:00:32 Memory: start claim of request 108 needs 103.5 MiB, 677 pages: short (0.0 MiB now, 0.0 later)
+04:00:33 Memory: start claim of request 108: granted
+04:00:33 Memory: start claim of request 108 needs 103.5 MiB, 678 pages: short (0.0 MiB now, 0.0 later)
+04:00:33 Done · request 107 · input 103,830 · cached 101,952 · output 983 · tools 74·ea4ee7fa · TTFT 8.9s · 121.8 tok/s · 3.0 tok/cycle
+04:00:33 Memory: in-service claim of request 108: granted
+04:00:33 Memory: optional claim of request 108 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+04:00:33 Memory: in-service claim of request 108: granted
+04:00:33 Started · request 108 · input 48,992 · cached 47,968 · effort absent → medium · thinking on
+04:00:33 Memory: start claim of request 109 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+04:00:33 Memory: start claim of request 109: granted
+04:00:33 Memory: start claim of request 109 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:33 Memory: in-service claim of request 108 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+04:00:33 Started · request 109 · input 105,483 · cached 103,808 · effort absent → medium · thinking on
+04:00:33 Memory: in-service claim of request 109 needs 211.2 MiB: met, took cache 0.0 engine release 97.5 (131.4 MiB now, 0.0 later)
+04:00:34 TTFT of request 109: 1023.26 ms: own prefill 698.302, claim wait 0, decode 0, other prefill 274.018, unit wait 0, rest 50.9386
+04:00:34 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:00:34 Memory: in-service claim of request 109 needs 585.0 MiB: met, took engine release 390.0 (390.0 MiB now, 0.0 later)
+04:00:36 Done · request 109 · input 105,483 · cached 103,808 · output 322 · tools 74·ea4ee7fa · TTFT 1.0s · 165.7 tok/s · 5.6 tok/cycle
+04:00:36 Memory: in-service claim of request 108: granted
+04:00:36 TTFT of request 108: 11917.3 ms: own prefill 444.188, claim wait 0, decode 9964.69, other prefill 1324.18, unit wait 0, rest 184.262
+04:00:36 Started · request 110 · input 107,477 · cached 105,472 · effort absent → medium · thinking on
+04:00:36 Memory: growth available; resource wait cleared
+04:00:37 TTFT of request 110: 949.003 ms: own prefill 705.125, claim wait 0, decode 242.483, other prefill 0, unit wait 0, rest 1.39467
+04:00:37 Memory: in-service claim of request 110 needs 487.5 MiB: met, took hot_kv unit 97.5 cache 0.0 engine release 195.0 (326.4 MiB now, 0.0 later)
+04:00:37 Done · request 108 · input 48,992 · cached 47,968 · output 114 · tools 13·35e3c6cf · TTFT 11.9s · 81.5 tok/s · 5.5 tok/cycle
+04:00:37 Started · request 111 · input 49,501 · cached 48,960 · effort absent → medium · thinking on
+04:00:38 TTFT of request 111: 388.913 ms: own prefill 300.413, claim wait 0, decode 87.9858, other prefill 0, unit wait 0, rest 0.51475
+04:00:40 Done · request 110 · input 107,477 · cached 105,472 · deduplicated 320 · output 293 · tools 74·ea4ee7fa · TTFT 0.9s · 93.2 tok/s · 4.4 tok/cycle
+04:00:40 Started · request 112 · input 108,259 · cached 107,456 · effort absent → medium · thinking on
+04:00:40 TTFT of request 112: 391.19 ms: own prefill 375.745, claim wait 0, decode 15.0948, other prefill 0, unit wait 0, rest 0.350249
+04:00:41 Done · request 111 · input 49,501 · cached 48,960 · deduplicated 128 · output 273 · tools 13·35e3c6cf · TTFT 0.4s · 88.6 tok/s · 4.1 tok/cycle
+04:00:41 Started · request 113 · input 50,250 · cached 49,472 · effort absent → medium · thinking on
+04:00:41 TTFT of request 113: 356.807 ms: own prefill 336.837, claim wait 0, decode 19.7611, other prefill 0, unit wait 0, rest 0.208875
+04:00:48 Done · request 113 · input 50,250 · cached 49,472 · deduplicated 288 · output 595 · tools 13·35e3c6cf · TTFT 0.4s · 84.3 tok/s · 2.9 tok/cycle
+04:00:50 Started · request 114 · input 51,090 · cached 50,240 · effort absent → medium · thinking on
+04:00:51 TTFT of request 114: 369.95 ms: own prefill 366.107, claim wait 0, decode 3.62817, other prefill 0, unit wait 0, rest 0.215333
+04:00:53 Done · request 114 · input 51,090 · cached 50,240 · deduplicated 576 · output 250 · tools 13·35e3c6cf · TTFT 0.4s · 102.2 tok/s · 3.4 tok/cycle
+04:00:53 Started · request 115 · input 52,500 · cached 51,072 · effort absent → medium · thinking on
+04:00:53 Memory: in-service claim of request 115 needs 103.5 MiB, 19 pages: met, took cache 0.0 engine release 0.0 (33.9 MiB now, 0.0 later)
+04:00:53 Memory: optional claim of request 115 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+04:00:53 Memory: in-service claim of request 115: granted
+04:00:54 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:54 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:54 TTFT of request 115: 933.972 ms: own prefill 590.967, claim wait 74.9257, decode 266.55, other prefill 0, unit wait 0, rest 1.52996
+04:00:54 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:54 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:54 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:55 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:55 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:55 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:55 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:55 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:56 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:56 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:56 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:56 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:56 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:57 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:57 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:57 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:57 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:57 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:58 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:58 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:58 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:58 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:58 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:59 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:59 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:59 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:00:59 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:00 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:00 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:00 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:00 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:00 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:00 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:01 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:01 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:01 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:01 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:02 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:02 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:02 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:02 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:02 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:02 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:02 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:03 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:03 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:03 Memory: in-service claim of request 112 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:03 Memory: in-service claim of request 115 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:01:03 Done · request 115 · input 52,500 · cached 51,072 · output 867 · tools 13·35e3c6cf · TTFT 0.9s · 96.2 tok/s · 3.2 tok/cycle
+04:01:03 Started · request 116 · input 54,118 · cached 52,480 · effort absent → medium · thinking on
+04:01:03 Memory: in-service claim of request 116 needs 103.5 MiB, 49 pages: met, took cache 0.0 cache 0.0 engine release 91.5 (125.4 MiB now, 0.0 later)
+04:01:04 TTFT of request 116: 793.748 ms: own prefill 587.21, claim wait 0, decode 205.529, other prefill 0, unit wait 0, rest 1.00929
+04:01:08 Done · request 116 · input 54,118 · cached 52,480 · output 506 · tools 13·35e3c6cf · TTFT 0.8s · 112.5 tok/s · 3.9 tok/cycle
+04:01:17 Done · request 112 · input 108,259 · cached 107,456 · deduplicated 288 · output 2,814 · tools 74·ea4ee7fa · TTFT 0.4s · 77.4 tok/s · 2.6 tok/cycle
+04:01:17 Started · request 117 · input 111,593 · cached 108,224 · effort absent → medium · thinking on
+04:01:18 TTFT of request 117: 1290.24 ms: own prefill 1115.65, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 174.585
+04:01:19 Done · request 117 · input 111,593 · cached 108,224 · output 123 · tools 74·ea4ee7fa · TTFT 1.3s · 133.3 tok/s · 3.5 tok/cycle
+04:01:21 Started · request 118 · input 112,936 · cached 111,584 · effort absent → medium · thinking on
+04:01:22 TTFT of request 118: 538.975 ms: own prefill 538.548, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.426416
+04:01:27 Done · request 118 · input 112,936 · cached 111,584 · deduplicated 128 · output 582 · tools 74·ea4ee7fa · TTFT 0.5s · 110.6 tok/s · 2.7 tok/cycle
+04:01:30 Started · request 119 · input 114,363 · cached 112,928 · effort absent → medium · thinking on
+04:01:30 TTFT of request 119: 550.371 ms: own prefill 549.933, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.438001
+04:01:31 Done · request 119 · input 114,363 · cached 112,928 · deduplicated 320 · output 178 · tools 74·ea4ee7fa · TTFT 0.6s · 153.9 tok/s · 3.7 tok/cycle
+04:01:34 Started · request 120 · input 116,527 · cached 114,336 · effort absent → medium · thinking on
+04:01:35 TTFT of request 120: 859.827 ms: own prefill 859.295, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.5315
+04:01:47 Done · request 120 · input 116,527 · cached 114,336 · output 1,407 · tools 74·ea4ee7fa · TTFT 0.9s · 114.4 tok/s · 2.8 tok/cycle
+04:01:49 Started · request 121 · input 119,337 · cached 116,512 · effort absent → medium · thinking on
+04:01:50 TTFT of request 121: 1016.29 ms: own prefill 1015.57, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.71675
+04:01:58 Done · request 121 · input 119,337 · cached 116,512 · deduplicated 1,408 · output 1,038 · tools 74·ea4ee7fa · TTFT 1.0s · 133.9 tok/s · 3.3 tok/cycle
+04:02:00 Started · request 122 · input 122,925 · cached 119,328 · effort absent → medium · thinking on
+04:02:01 TTFT of request 122: 1245.75 ms: own prefill 1245.02, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.735376
+04:02:11 Done · request 122 · input 122,925 · cached 119,328 · output 1,074 · tools 74·ea4ee7fa · TTFT 1.2s · 111.9 tok/s · 2.7 tok/cycle
+04:02:12 Started · request 123 · input 124,655 · cached 122,912 · effort absent → medium · thinking on
+04:02:13 TTFT of request 123: 641.392 ms: own prefill 640.935, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.457126
+04:02:17 Done · request 123 · input 124,655 · cached 122,912 · deduplicated 1,056 · output 839 · tools 74·ea4ee7fa · TTFT 0.6s · 182.7 tok/s · 4.7 tok/cycle
+04:02:18 Started · request 124 · input 127,388 · cached 124,640 · effort absent → medium · thinking on
+04:02:19 TTFT of request 124: 1008.72 ms: own prefill 1008.12, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.601374
+04:02:21 Done · request 124 · input 127,388 · cached 124,640 · deduplicated 832 · output 325 · tools 74·ea4ee7fa · TTFT 1.0s · 159.5 tok/s · 4.1 tok/cycle
+04:02:25 Started · request 125 · input 128,656 · cached 127,360 · effort absent → medium · thinking on
+04:02:25 TTFT of request 125: 515.698 ms: own prefill 515.211, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.486833
+04:02:29 Done · request 125 · input 128,656 · cached 127,360 · deduplicated 352 · output 471 · tools 74·ea4ee7fa · TTFT 0.5s · 123.9 tok/s · 3.1 tok/cycle
+04:02:31 Started · request 126 · input 129,579 · cached 128,640 · effort absent → medium · thinking on
+04:02:31 TTFT of request 126: 415.84 ms: own prefill 415.394, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.445666
+04:02:32 Done · request 126 · input 129,579 · cached 128,640 · deduplicated 480 · output 193 · tools 74·ea4ee7fa · TTFT 0.4s · 151.4 tok/s · 3.7 tok/cycle
+04:02:33 Started · request 127 · input 130,279 · cached 129,568 · effort absent → medium · thinking on
+04:02:34 TTFT of request 127: 355.687 ms: own prefill 355.273, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.414542
+04:02:37 Done · request 127 · input 130,279 · cached 129,568 · deduplicated 192 · output 463 · tools 74·ea4ee7fa · TTFT 0.4s · 138.0 tok/s · 3.5 tok/cycle
+04:02:40 Started · request 128 · input 131,688 · cached 130,272 · effort absent → medium · thinking on
+04:02:40 TTFT of request 128: 594.664 ms: own prefill 576.722, claim wait 16.0398, decode 0, other prefill 0, unit wait 0, rest 1.902
+04:02:49 Done · request 128 · input 131,688 · cached 130,272 · output 1,321 · tools 74·ea4ee7fa · TTFT 0.6s · 142.3 tok/s · 3.5 tok/cycle
+04:02:50 Started · request 129 · input 133,143 · cached 131,680 · effort absent → medium · thinking on
+04:02:50 TTFT of request 129: 563.73 ms: own prefill 550.846, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 12.8844
+04:02:54 Done · request 129 · input 133,143 · cached 131,680 · deduplicated 1,312 · output 816 · tools 74·ea4ee7fa · TTFT 0.6s · 222.3 tok/s · 5.8 tok/cycle
+04:02:54 Started · request 130 · input 134,005 · cached 133,120 · effort absent → medium · thinking on
+04:02:54 TTFT of request 130: 375.465 ms: own prefill 374.84, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.625458
+04:02:58 Done · request 130 · input 134,005 · cached 133,120 · deduplicated 832 · output 721 · tools 74·ea4ee7fa · TTFT 0.4s · 226.3 tok/s · 5.9 tok/cycle
+04:02:58 Started · request 131 · input 134,802 · cached 133,984 · effort absent → medium · thinking on
+04:02:58 TTFT of request 131: 368.319 ms: own prefill 367.89, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.428666
+04:03:02 Done · request 131 · input 134,802 · cached 133,984 · deduplicated 736 · output 569 · tools 74·ea4ee7fa · TTFT 0.4s · 150.2 tok/s · 3.7 tok/cycle
+04:03:04 Started · request 132 · input 135,604 · cached 134,784 · effort absent → medium · thinking on
+04:03:04 TTFT of request 132: 373.295 ms: own prefill 372.906, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.389167
+04:03:08 Done · request 132 · input 135,604 · cached 134,784 · deduplicated 576 · output 511 · tools 74·ea4ee7fa · TTFT 0.4s · 141.6 tok/s · 3.5 tok/cycle
+04:03:09 Started · request 133 · input 136,842 · cached 135,584 · effort absent → medium · thinking on
+04:03:09 TTFT of request 133: 521.394 ms: own prefill 520.782, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.611958
+04:03:13 Done · request 133 · input 136,842 · cached 135,584 · deduplicated 512 · output 838 · tools 74·ea4ee7fa · TTFT 0.5s · 192.7 tok/s · 4.9 tok/cycle
+04:03:14 Started · request 134 · input 138,320 · cached 136,832 · effort absent → medium · thinking on
+04:03:14 TTFT of request 134: 563.392 ms: own prefill 562.906, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.485875
+04:03:16 Done · request 134 · input 138,320 · cached 136,832 · deduplicated 832 · output 210 · tools 74·ea4ee7fa · TTFT 0.6s · 146.3 tok/s · 3.7 tok/cycle
+04:03:16 Started · request 135 · input 138,973 · cached 138,304 · effort absent → medium · thinking on
+04:03:17 TTFT of request 135: 367.141 ms: own prefill 366.638, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.503542
+04:03:18 Done · request 135 · input 138,973 · cached 138,304 · deduplicated 224 · output 141 · tools 74·ea4ee7fa · TTFT 0.4s · 156.1 tok/s · 4.0 tok/cycle
+04:03:21 Started · request 136 · input 139,791 · cached 138,944 · effort absent → medium · thinking on
+04:03:22 TTFT of request 136: 460.878 ms: own prefill 438.683, claim wait 21.2207, decode 0, other prefill 0, unit wait 0, rest 0.974542
+04:03:23 Done · request 136 · input 139,791 · cached 138,944 · output 143 · tools 74·ea4ee7fa · TTFT 0.5s · 147.3 tok/s · 3.7 tok/cycle
+04:03:23 Started · request 137 · input 140,232 · cached 139,776 · effort absent → medium · thinking on
+04:03:23 TTFT of request 137: 307.191 ms: own prefill 297.231, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 9.96008
+04:03:24 Done · request 137 · input 140,232 · cached 139,776 · deduplicated 128 · output 141 · tools 74·ea4ee7fa · TTFT 0.3s · 181.8 tok/s · 4.6 tok/cycle
+04:03:26 Started · request 138 · input 142,414 · cached 140,224 · effort absent → medium · thinking on
+04:03:27 TTFT of request 138: 861.453 ms: own prefill 860.823, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.63
+04:03:37 Done · request 138 · input 142,414 · cached 140,224 · deduplicated 128 · output 1,269 · tools 74·ea4ee7fa · TTFT 0.9s · 119.3 tok/s · 3.0 tok/cycle
+04:03:42 Started · request 139 · input 57,065 · cached 54,112 · effort absent → medium · thinking on
+04:03:43 TTFT of request 139: 1113.87 ms: own prefill 1011.53, claim wait 11.2333, decode 0, other prefill 0, unit wait 0, rest 91.1051
+04:03:55 Done · request 139 · input 57,065 · cached 54,112 · output 1,401 · tools 13·35e3c6cf · TTFT 1.1s · 117.4 tok/s · 2.8 tok/cycle
+04:07:06 Started · request 140 · input 59,888 · cached 57,056 · effort absent → medium · thinking on
+04:07:07 TTFT of request 140: 958.278 ms: own prefill 957.638, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.639832
+04:07:11 Done · request 140 · input 59,888 · cached 57,056 · deduplicated 1,408 · output 629 · tools 13·35e3c6cf · TTFT 1.0s · 154.3 tok/s · 3.8 tok/cycle
+04:07:12 Started · request 141 · input 919 · cached 896 · effort absent → medium · thinking on
+04:07:12 Memory: growth available; waiting=1; suspended=0; held=1
+04:07:12 Started · request 142 · input 919 · cached 896 · effort absent → medium · thinking on
+04:07:12 TTFT of request 141: 131.738 ms: own prefill 110.332, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 21.406
+04:07:12 TTFT of request 142: 188.789 ms: own prefill 36.8689, claim wait 0, decode 20.3503, other prefill 110.332, unit wait 0, rest 21.238
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 110 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 109 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 108 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 108 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 108 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 107 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 106 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 105 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 104 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 103 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 102 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 101 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 101 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 100 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 99 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 98 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 98 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 97 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 96 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 95 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 94 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 93 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 92 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 91 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 90 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 90 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 89 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 88 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 87 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 87 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 86 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 85 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 84 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 83 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 82 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Memory: start claim of request 143 needs 103.5 MiB, 82 pages: pending, took cache 0.0 (0.0 MiB now, 0.0 later)
+04:07:13 Memory: start claim of request 143: granted
+04:07:13 Done · request 142 · input 919 · cached 896 · output 164 · TTFT 0.2s · 122.5 tok/s · 3.6 tok/cycle
+04:07:14 Memory: growth available; waiting=1; suspended=0
+04:07:14 Started · request 143 · input 49,739 · cached 49,728 · effort absent → medium · thinking on
+04:07:14 Started · request 144 · input 49,739 · cached 49,728 · effort absent → medium · thinking on
+04:07:14 TTFT of request 143: 1629.28 ms: own prefill 51.8528, claim wait 1498.42, decode 78.3551, other prefill 0, unit wait 0, rest 0.652418
+04:07:14 TTFT of request 144: 1629.25 ms: own prefill 51.8528, claim wait 48.6678, decode 1377.12, other prefill 147.201, unit wait 0, rest 4.41167
+04:07:14 Done · request 141 · input 919 · cached 896 · output 202 · TTFT 0.1s · 100.8 tok/s · 3.1 tok/cycle
+04:07:14 Memory: growth available; resource wait cleared
+04:07:14 Done · request 144 · input 49,739 · cached 49,728 · output 83 · tools 74·ea4ee7fa · TTFT 1.6s · 122.4 tok/s · 4.2 tok/cycle
+04:07:14 Started · request 145 · input 49,982 · cached 49,728 · effort absent → medium · thinking on
+04:07:15 TTFT of request 145: 211.629 ms: own prefill 201.251, claim wait 0, decode 10.1976, other prefill 0, unit wait 0, rest 0.180666
+04:07:15 Done · request 143 · input 49,739 · cached 49,728 · output 120 · tools 74·ea4ee7fa · TTFT 1.6s · 99.4 tok/s · 4.0 tok/cycle
+04:07:15 Started · request 146 · input 51,430 · cached 49,728 · effort absent → medium · thinking on
+04:07:15 Done · request 145 · input 49,982 · cached 49,728 · deduplicated 64 · output 51 · tools 74·ea4ee7fa · TTFT 0.2s · 74.6 tok/s · 4.2 tok/cycle
+04:07:16 TTFT of request 146: 729.475 ms: own prefill 629.96, claim wait 0, decode 98.9065, other prefill 0, unit wait 0, rest 0.608874
+04:07:16 Started · request 147 · input 51,324 · cached 49,952 · effort absent → medium · thinking on
+04:07:16 TTFT of request 147: 1174.64 ms: own prefill 502.671, claim wait 0, decode 336.78, other prefill 333.097, unit wait 0, rest 2.08817
+04:07:17 Done · request 146 · input 51,430 · cached 49,728 · deduplicated 64 · output 68 · tools 74·ea4ee7fa · TTFT 0.7s · 73.9 tok/s · 4.1 tok/cycle
+04:07:17 Started · request 148 · input 51,717 · cached 51,424 · effort absent → medium · thinking on
+04:07:17 TTFT of request 148: 305.13 ms: own prefill 212.38, claim wait 0, decode 91.8028, other prefill 0, unit wait 0, rest 0.946874
+04:07:17 Done · request 148 · input 51,717 · cached 51,424 · deduplicated 64 · output 50 · tools 74·ea4ee7fa · TTFT 0.3s · 142.1 tok/s · 3.8 tok/cycle
+04:07:17 Started · request 149 · input 53,059 · cached 51,712 · effort absent → medium · thinking on
+04:07:18 TTFT of request 149: 613.448 ms: own prefill 488.549, claim wait 0, decode 124.213, other prefill 0, unit wait 0, rest 0.684916
+04:07:18 Done · request 147 · input 51,324 · cached 49,952 · deduplicated 64 · output 134 · tools 74·ea4ee7fa · TTFT 1.2s · 75.6 tok/s · 4.0 tok/cycle
+04:07:19 Started · request 150 · input 53,445 · cached 51,296 · effort absent → medium · thinking on
+04:07:20 TTFT of request 150: 972.128 ms: own prefill 762.768, claim wait 0, decode 208.431, other prefill 0, unit wait 0, rest 0.92925
+04:07:20 Done · request 149 · input 53,059 · cached 51,712 · deduplicated 32 · output 192 · tools 74·ea4ee7fa · TTFT 0.6s · 93.9 tok/s · 4.2 tok/cycle
+04:07:20 Started · request 151 · input 55,238 · cached 53,024 · effort absent → medium · thinking on
+04:07:21 TTFT of request 151: 1002.76 ms: own prefill 789.335, claim wait 0, decode 212.494, other prefill 0, unit wait 0, rest 0.931543
+04:07:22 Done · request 150 · input 53,445 · cached 51,296 · output 178 · tools 74·ea4ee7fa · TTFT 1.0s · 81.0 tok/s · 3.7 tok/cycle
+04:07:22 Started · request 152 · input 55,611 · cached 53,440 · effort absent → medium · thinking on
+04:07:23 TTFT of request 152: 964.009 ms: own prefill 752.898, claim wait 0, decode 210.293, other prefill 0, unit wait 0, rest 0.818501
+04:07:26 Done · request 151 · input 55,238 · cached 53,024 · output 569 · tools 74·ea4ee7fa · TTFT 1.0s · 120.3 tok/s · 4.4 tok/cycle
+04:07:27 Done · request 152 · input 55,611 · cached 53,440 · output 439 · tools 74·ea4ee7fa · TTFT 1.0s · 124.2 tok/s · 3.8 tok/cycle
+04:07:28 Started · request 153 · input 57,250 · cached 55,232 · effort absent → medium · thinking on
+04:07:29 TTFT of request 153: 658.952 ms: own prefill 658.512, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.440541
+04:07:30 Done · request 153 · input 57,250 · cached 55,232 · deduplicated 544 · output 210 · tools 74·ea4ee7fa · TTFT 0.7s · 182.6 tok/s · 4.8 tok/cycle
+04:07:31 Started · request 154 · input 58,346 · cached 57,216 · effort absent → medium · thinking on
+04:07:31 TTFT of request 154: 440.184 ms: own prefill 439.774, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.410501
+04:07:32 Done · request 154 · input 58,346 · cached 57,216 · deduplicated 224 · output 125 · tools 74·ea4ee7fa · TTFT 0.4s · 191.9 tok/s · 4.7 tok/cycle
+04:07:33 Started · request 155 · input 60,457 · cached 58,336 · effort absent → medium · thinking on
+04:07:33 TTFT of request 155: 758.984 ms: own prefill 758.562, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.422665
+04:07:37 Done · request 155 · input 60,457 · cached 58,336 · deduplicated 128 · output 479 · tools 74·ea4ee7fa · TTFT 0.8s · 153.9 tok/s · 3.7 tok/cycle
+04:07:53 Started · request 157 · input 919 · cached 896 · effort absent → medium · thinking on
+04:07:53 Started · request 156 · input 963 · cached 928 · effort absent → medium · thinking on
+04:07:53 Started · request 159 · input 49,739 · cached 49,728 · effort absent → medium · thinking on
+04:07:53 TTFT of request 157: 103.433 ms: own prefill 103.363, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.070124
+04:07:53 Started · request 158 · input 49,783 · cached 49,760 · effort absent → medium · thinking on
+04:07:53 TTFT of request 159: 245.922 ms: own prefill 132.928, claim wait 0, decode 36.5698, other prefill 76.1772, unit wait 0, rest 0.247457
+04:07:53 TTFT of request 158: 245.972 ms: own prefill 132.928, claim wait 53.4962, decode 36.5698, other prefill 22.7469, unit wait 0, rest 0.231208
+04:07:53 TTFT of request 156: 274.296 ms: own prefill 132.928, claim wait 0, decode 36.5698, other prefill 103.363, unit wait 0, rest 1.43512
+04:07:53 Done · request 159 · input 49,739 · cached 49,728 · output 48 · tools 74·ea4ee7fa · TTFT 0.2s · 83.2 tok/s · 3.6 tok/cycle
+04:07:53 Started · request 160 · input 51,079 · cached 49,728 · effort absent → medium · thinking on
+04:07:54 TTFT of request 160: 829.604 ms: own prefill 512.413, claim wait 37.183, decode 278.296, other prefill 0, unit wait 0, rest 1.71229
+04:07:55 Done · request 158 · input 49,783 · cached 49,760 · output 141 · tools 74·ea4ee7fa · TTFT 0.2s · 69.4 tok/s · 3.5 tok/cycle
+04:07:55 Started · request 161 · input 50,275 · cached 49,760 · effort absent → medium · thinking on
+04:07:55 TTFT of request 161: 320.159 ms: own prefill 269.569, claim wait 0, decode 50.2432, other prefill 0, unit wait 0, rest 0.346292
+04:07:55 Done · request 156 · input 963 · cached 928 · output 158 · TTFT 0.3s · 59.4 tok/s · 3.2 tok/cycle
+04:07:56 Done · request 160 · input 51,079 · cached 49,728 · output 137 · tools 74·ea4ee7fa · TTFT 0.8s · 75.2 tok/s · 4.0 tok/cycle
+04:07:56 Done · request 161 · input 50,275 · cached 49,760 · output 112 · tools 74·ea4ee7fa · TTFT 0.3s · 108.6 tok/s · 4.4 tok/cycle
+04:07:57 Done · request 157 · input 919 · cached 896 · output 291 · TTFT 0.1s · 71.4 tok/s · 3.3 tok/cycle
+04:07:57 Started · request 162 · input 53,205 · cached 51,072 · effort absent → medium · thinking on
+04:07:58 Started · request 163 · input 57,214 · cached 50,240 · effort absent → medium · thinking on
+04:07:58 TTFT of request 162: 772.977 ms: own prefill 764.572, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 8.40546
+04:08:01 Done · request 162 · input 53,205 · cached 51,072 · deduplicated 128 · output 145 · tools 74·ea4ee7fa · TTFT 0.8s · 54.0 tok/s · 3.7 tok/cycle
+04:08:01 TTFT of request 163: 3921.26 ms: own prefill 2214.21, claim wait 0, decode 951.026, other prefill 748.164, unit wait 0, rest 7.857
+04:08:01 Started · request 164 · input 55,336 · cached 53,184 · effort absent → medium · thinking on
+04:08:03 TTFT of request 164: 1243.54 ms: own prefill 749.302, claim wait 0, decode 480.762, other prefill 10.6306, unit wait 0, rest 2.84067
+04:08:05 Done · request 164 · input 55,336 · cached 53,184 · deduplicated 160 · output 289 · tools 74·ea4ee7fa · TTFT 1.2s · 123.0 tok/s · 3.6 tok/cycle
+04:08:05 Done · request 163 · input 57,214 · cached 50,240 · deduplicated 128 · output 309 · tools 74·ea4ee7fa · TTFT 3.9s · 82.6 tok/s · 3.0 tok/cycle
+04:08:06 Started · request 165 · input 59,510 · cached 57,184 · effort absent → medium · thinking on
+04:08:06 TTFT of request 165: 829.99 ms: own prefill 829.647, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.343292
+04:08:18 Done · request 165 · input 59,510 · cached 57,184 · deduplicated 320 · output 1,283 · tools 74·ea4ee7fa · TTFT 0.8s · 110.2 tok/s · 2.6 tok/cycle
+04:08:18 Started · request 166 · input 61,442 · cached 59,488 · effort absent → medium · thinking on
+04:08:19 TTFT of request 166: 641.282 ms: own prefill 640.779, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.503083
+04:08:22 Done · request 166 · input 61,442 · cached 59,488 · deduplicated 1,280 · output 624 · tools 74·ea4ee7fa · TTFT 0.6s · 230.6 tok/s · 5.8 tok/cycle
+04:08:22 Started · request 167 · input 63,967 · cached 61,408 · effort absent → medium · thinking on
+04:08:23 TTFT of request 167: 895.818 ms: own prefill 895.394, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.424499
+04:08:24 Done · request 167 · input 63,967 · cached 61,408 · deduplicated 640 · output 228 · tools 74·ea4ee7fa · TTFT 0.9s · 134.3 tok/s · 3.4 tok/cycle
+04:08:25 Started · request 168 · input 65,989 · cached 63,936 · effort absent → medium · thinking on
+04:08:25 TTFT of request 168: 679.094 ms: own prefill 678.685, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.408958
+04:08:33 Done · request 168 · input 65,989 · cached 63,936 · deduplicated 256 · output 1,029 · tools 74·ea4ee7fa · TTFT 0.7s · 130.0 tok/s · 3.1 tok/cycle
+04:08:33 Started · request 169 · input 67,496 · cached 65,984 · effort absent → medium · thinking on
+04:08:34 TTFT of request 169: 532.105 ms: own prefill 531.758, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.347291
+04:08:36 Done · request 169 · input 67,496 · cached 65,984 · deduplicated 1,024 · output 439 · tools 74·ea4ee7fa · TTFT 0.5s · 196.3 tok/s · 4.9 tok/cycle
+04:08:37 Started · request 170 · input 68,630 · cached 67,488 · effort absent → medium · thinking on
+04:08:37 TTFT of request 170: 449.056 ms: own prefill 448.708, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.348041
+04:08:39 Done · request 170 · input 68,630 · cached 67,488 · deduplicated 416 · output 347 · tools 74·ea4ee7fa · TTFT 0.4s · 188.6 tok/s · 4.8 tok/cycle
+04:08:39 Started · request 171 · input 69,828 · cached 68,608 · effort absent → medium · thinking on
+04:08:40 TTFT of request 171: 464.815 ms: own prefill 464.543, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.271708
+04:08:42 Done · request 171 · input 69,828 · cached 68,608 · deduplicated 352 · output 251 · tools 74·ea4ee7fa · TTFT 0.5s · 122.8 tok/s · 3.0 tok/cycle
+04:08:42 Started · request 172 · input 70,513 · cached 69,792 · effort absent → medium · thinking on
+04:08:42 TTFT of request 172: 334.236 ms: own prefill 333.97, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.266376
+04:08:43 Done · request 172 · input 70,513 · cached 69,792 · deduplicated 256 · output 216 · tools 74·ea4ee7fa · TTFT 0.3s · 172.5 tok/s · 4.3 tok/cycle
+04:08:43 Started · request 173 · input 71,404 · cached 70,496 · effort absent → medium · thinking on
+04:08:44 TTFT of request 173: 381.586 ms: own prefill 381.302, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.283458
+04:08:45 Done · request 173 · input 71,404 · cached 70,496 · deduplicated 224 · output 214 · tools 74·ea4ee7fa · TTFT 0.4s · 155.6 tok/s · 3.9 tok/cycle
+04:08:45 Started · request 174 · input 72,057 · cached 71,392 · effort absent → medium · thinking on
+04:08:46 TTFT of request 174: 325.115 ms: own prefill 324.846, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.269583
+04:08:47 Done · request 174 · input 72,057 · cached 71,392 · output 167 · tools 74·ea4ee7fa · TTFT 0.3s · 136.7 tok/s · 3.4 tok/cycle
+04:08:47 Started · request 175 · input 74,069 · cached 72,032 · effort absent → medium · thinking on
+04:08:48 TTFT of request 175: 670.451 ms: own prefill 669.992, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.458958
+04:08:54 Done · request 175 · input 74,069 · cached 72,032 · output 904 · tools 74·ea4ee7fa · TTFT 0.7s · 141.9 tok/s · 3.4 tok/cycle
+04:09:10 Started · request 176 · input 963 · cached 0 · effort absent → medium · thinking on
+04:09:10 TTFT of request 176: 340.64 ms: own prefill 340.372, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.268208
+04:09:10 Memory: growth available; waiting=1; suspended=0
+04:09:10 Started · request 178 · input 49,783 · cached 49,248 · effort absent → medium · thinking on
+04:09:11 Started · request 179 · input 49,783 · cached 49,344 · effort absent → medium · thinking on
+04:09:11 TTFT of request 178: 1113.68 ms: own prefill 510.008, claim wait 0, decode 277.278, other prefill 324.801, unit wait 0, rest 1.59675
+04:09:11 TTFT of request 179: 1113.52 ms: own prefill 358.307, claim wait 25.3894, decode 251.941, other prefill 476.262, unit wait 0, rest 1.61821
+04:09:11 Started · request 177 · input 963 · cached 0 · effort absent → medium · thinking on
+04:09:11 TTFT of request 177: 1582.46 ms: own prefill 310.745, claim wait 1012.73, decode 99.4522, other prefill 159.233, unit wait 0, rest 0.297666
+04:09:12 Memory: growth available; resource wait cleared
+04:09:12 Done · request 178 · input 49,783 · cached 49,248 · deduplicated 96 · output 115 · tools 74·ea4ee7fa · TTFT 1.1s · 80.5 tok/s · 4.3 tok/cycle
+04:09:12 Started · request 180 · input 49,996 · cached 49,760 · effort absent → medium · thinking on
+04:09:13 TTFT of request 180: 204.733 ms: own prefill 193.532, claim wait 0, decode 10.9995, other prefill 0, unit wait 0, rest 0.20175
+04:09:13 Done · request 179 · input 49,783 · cached 49,344 · output 129 · tools 74·ea4ee7fa · TTFT 1.1s · 64.9 tok/s · 3.5 tok/cycle
+04:09:13 Started · request 181 · input 57,091 · cached 49,760 · effort absent → medium · thinking on
+04:09:16 Done · request 177 · input 963 · cached 0 · deduplicated 512 · output 229 · TTFT 1.6s · 49.6 tok/s · 3.7 tok/cycle
+04:09:16 TTFT of request 181: 3387.24 ms: own prefill 2293, claim wait 0, decode 1091.03, other prefill 0, unit wait 0, rest 3.21166
+04:09:17 Done · request 176 · input 963 · cached 0 · output 266 · TTFT 0.3s · 39.8 tok/s · 3.1 tok/cycle
+04:09:21 Done · request 180 · input 49,996 · cached 49,760 · deduplicated 64 · output 657 · tools 74·ea4ee7fa · TTFT 0.2s · 78.4 tok/s · 3.5 tok/cycle
+04:09:21 Started · request 182 · input 50,709 · cached 49,984 · effort absent → medium · thinking on
+04:09:21 TTFT of request 182: 367.182 ms: own prefill 305.431, claim wait 0, decode 61.0757, other prefill 0, unit wait 0, rest 0.675125
+04:09:23 Done · request 182 · input 50,709 · cached 49,984 · deduplicated 480 · output 220 · tools 74·ea4ee7fa · TTFT 0.4s · 127.3 tok/s · 4.0 tok/cycle
+04:09:23 Started · request 183 · input 51,031 · cached 50,688 · effort absent → medium · thinking on
+04:09:23 TTFT of request 183: 227.583 ms: own prefill 208.491, claim wait 0, decode 18.9055, other prefill 0, unit wait 0, rest 0.186501
+04:09:26 Done · request 183 · input 51,031 · cached 50,688 · deduplicated 224 · output 279 · tools 74·ea4ee7fa · TTFT 0.2s · 118.5 tok/s · 3.5 tok/cycle
+04:09:26 Started · request 184 · input 58,345 · cached 51,008 · effort absent → medium · thinking on
+04:09:27 Done · request 181 · input 57,091 · cached 49,760 · output 923 · tools 74·ea4ee7fa · TTFT 3.4s · 90.1 tok/s · 3.1 tok/cycle
+04:09:27 Started · request 185 · input 59,707 · cached 57,056 · effort absent → medium · thinking on
+04:09:28 TTFT of request 184: 2586.81 ms: own prefill 2279.19, claim wait 0, decode 305.33, other prefill 0, unit wait 0, rest 2.28263
+04:09:30 TTFT of request 185: 3142.85 ms: own prefill 921.111, claim wait 0, decode 538.33, other prefill 1680.32, unit wait 0, rest 3.09559
+04:09:40 Done · request 185 · input 59,707 · cached 57,056 · deduplicated 928 · output 966 · tools 74·ea4ee7fa · TTFT 3.1s · 93.5 tok/s · 2.9 tok/cycle
+04:09:41 Started · request 186 · input 60,617 · cached 59,872 · effort absent → medium · thinking on
+04:09:42 Memory: start claim of request 187 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:09:42 Memory: growth available; waiting=1; suspended=0
+04:09:42 TTFT of request 186: 681.586 ms: own prefill 342.602, claim wait 135.557, decode 202.12, other prefill 0, unit wait 0, rest 1.30696
+04:09:47 Done · request 186 · input 60,617 · cached 59,872 · output 545 · tools 13·35e3c6cf · TTFT 0.7s · 98.6 tok/s · 3.0 tok/cycle
+04:09:47 Memory: start claim of request 187: granted
+04:09:47 Started · request 188 · input 61,269 · cached 60,608 · effort absent → medium · thinking on
+04:09:47 Memory: start claim of request 187 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:09:48 TTFT of request 188: 320.941 ms: own prefill 305.017, claim wait 0, decode 15.6828, other prefill 0, unit wait 0, rest 0.241
+04:09:53 Done · request 184 · input 58,345 · cached 51,008 · deduplicated 288 · output 2,265 · tools 74·ea4ee7fa · TTFT 2.6s · 91.5 tok/s · 3.0 tok/cycle
+04:09:53 Memory: start claim of request 187: granted
+04:09:53 Memory: optional claim of request 187 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+04:09:53 Started · request 187 · input 62,637 · cached 59,680 · effort absent → medium · thinking on
+04:09:53 Memory: in-service claim of request 187: granted
+04:09:53 Memory: in-service claim of request 187 needs 33.9 MiB, 1 state buffers: met, took cache in use 0.0 (0.0 MiB now, 0.0 later)
+04:09:54 Memory: growth available; resource wait cleared
+04:09:54 Memory: start claim of request 189 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:09:54 Memory: growth available; waiting=1; suspended=0
+04:09:55 TTFT of request 187: 13026.3 ms: own prefill 989.291, claim wait 62.357, decode 11449.5, other prefill 488.495, unit wait 0, rest 36.7246
+04:10:06 Done · request 187 · input 62,637 · cached 59,680 · output 1,350 · tools 74·ea4ee7fa · TTFT 13.0s · 114.1 tok/s · 3.6 tok/cycle
+04:10:06 Memory: start claim of request 189: granted
+04:10:06 Started · request 189 · input 64,039 · cached 58,336 · effort absent → medium · thinking on
+04:10:06 Memory: optional claim of request 189 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+04:10:06 Memory: in-service claim of request 189: granted
+04:10:07 Memory: growth available; resource wait cleared
+04:10:07 Memory: start claim of request 190 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:10:07 Memory: growth available; waiting=1; suspended=0
+04:10:08 Memory: optional claim of request 189 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+04:10:08 Memory: in-service claim of request 189: granted
+04:10:09 TTFT of request 189: 15643.1 ms: own prefill 1919.92, claim wait 0, decode 13020.6, other prefill 663.041, unit wait 0, rest 39.5139
+04:10:21 Done · request 189 · input 64,039 · cached 58,336 · output 1,223 · tools 74·ea4ee7fa · TTFT 15.6s · 107.6 tok/s · 3.5 tok/cycle
+04:10:21 Memory: start claim of request 190: granted
+04:10:21 Started · request 190 · input 64,644 · cached 62,624 · effort absent → medium · thinking on
+04:10:21 Memory: growth available; resource wait cleared
+04:10:22 TTFT of request 190: 14870.4 ms: own prefill 659.845, claim wait 0, decode 12573.8, other prefill 1595.24, unit wait 0, rest 41.4812
+04:10:22 Memory: start claim of request 191 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:10:22 Memory: growth available; waiting=1; suspended=0
+04:10:22 Done · request 190 · input 64,644 · cached 62,624 · output 149 · tools 74·ea4ee7fa · TTFT 14.9s · 168.1 tok/s · 5.4 tok/cycle
+04:10:22 Memory: start claim of request 191: granted
+04:10:22 Started · request 191 · input 66,418 · cached 64,032 · effort absent → medium · thinking on
+04:10:23 Memory: growth available; resource wait cleared
+04:10:23 Memory: start claim of request 192 needs 263.7 MiB, a state buffer no cached state holds: met, took cache 103.5 engine release 195.0 (298.5 MiB now, 0.0 later)
+04:10:23 Memory: start claim of request 192 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+04:10:23 Memory: growth available; waiting=1; suspended=0
+04:10:23 Memory: start claim of request 192 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:10:24 TTFT of request 191: 2466.09 ms: own prefill 864.66, claim wait 514.107, decode 1083.21, other prefill 0, unit wait 0, rest 4.10496
+04:10:24 Memory: start claim of request 192 needs 263.7 MiB, a state buffer no cached state holds: met, took kv_staging unit 146.2 engine release 97.5 (243.8 MiB now, 0.0 later)
+04:10:24 Memory: start claim of request 192: granted
+04:10:24 Memory: in-service claim of request 191 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+04:10:24 Started · request 192 · input 66,761 · cached 64,608 · effort absent → medium · thinking on
+04:10:24 Memory: in-service claim of request 191: granted
+04:10:24 Memory: in-service claim of request 191 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+04:10:24 Memory: in-service claim of request 191: granted
+04:10:24 Memory: in-service claim of request 191 needs 585.0 MiB: met, took cache 109.5 engine release 195.0 (602.1 MiB now, 0.0 later)
+04:10:25 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:10:26 Done · request 191 · input 66,418 · cached 64,032 · output 180 · tools 74·ea4ee7fa · TTFT 2.5s · 107.6 tok/s · 4.7 tok/cycle
+04:10:26 Memory: growth available; resource wait cleared
+04:10:26 Started · request 193 · input 68,394 · cached 66,400 · effort absent → medium · thinking on
+04:10:26 Done · request 188 · input 61,269 · cached 60,608 · output 3,248 · tools 13·35e3c6cf · TTFT 0.3s · 84.1 tok/s · 3.0 tok/cycle
+04:10:27 TTFT of request 192: 3732.64 ms: own prefill 795.098, claim wait 28.7283, decode 2031.74, other prefill 864.66, unit wait 0, rest 12.4117
+04:10:27 Memory: in-service claim of request 192 needs 585.0 MiB: short (0.0 MiB now, 0.0 later)
+04:10:27 Memory: in-service claim of request 192: granted
+04:10:27 Memory: optional claim of request 194 needs 33.9 MiB, 1 state buffers: short (0.0 MiB now, 0.0 later)
+04:10:27 Started · request 194 · input 64,612 · cached 61,248 · effort absent → medium · thinking on
+04:10:27 Memory: in-service claim of request 194: granted
+04:10:27 Memory: in-service claim of request 194 needs 33.9 MiB, 1 state buffers: met, took cache 6.0 engine release 97.5 (103.5 MiB now, 0.0 later)
+04:10:27 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:10:28 TTFT of request 194: 2063.52 ms: own prefill 1053.92, claim wait 0, decode 646.634, other prefill 357.073, unit wait 0, rest 5.88771
+04:10:34 Done · request 192 · input 66,761 · cached 64,608 · output 481 · tools 74·ea4ee7fa · TTFT 3.7s · 67.5 tok/s · 3.1 tok/cycle
+04:10:34 Memory: growth available; resource wait cleared
+04:10:35 TTFT of request 193: 8799.83 ms: own prefill 669.847, claim wait 0, decode 6284.03, other prefill 1816.32, unit wait 0, rest 29.6263
+04:10:35 Memory: start claim of request 195 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:10:35 Memory: growth available; waiting=1; suspended=0
+04:10:46 Done · request 194 · input 64,612 · cached 61,248 · output 1,939 · tools 13·35e3c6cf · TTFT 2.1s · 112.5 tok/s · 4.3 tok/cycle
+04:10:46 Memory: start claim of request 195: granted
+04:10:46 Started · request 195 · input 68,060 · cached 66,752 · effort absent → medium · thinking on
+04:10:46 Memory: start claim of request 196 needs 103.5 MiB, 1 pages: short (0.0 MiB now, 0.0 later)
+04:10:46 Memory: start claim of request 196 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:10:46 TTFT of request 195: 11651.4 ms: own prefill 512.597, claim wait 0, decode 11108.5, other prefill 0, unit wait 0, rest 30.2898
+04:10:46 Memory: start claim of request 196: granted
+04:10:46 Memory: start claim of request 196 needs 103.5 MiB, 63 pages: short (0.0 MiB now, 0.0 later)
+04:10:46 Memory: start claim of request 196: granted
+04:10:46 Memory: start claim of request 196 needs 103.5 MiB, 63 pages: short (0.0 MiB now, 0.0 later)
+04:10:47 Memory: start claim of request 196: granted
+04:10:47 Memory: start claim of request 196 needs 103.5 MiB, 63 pages: short (0.0 MiB now, 0.0 later)
+04:10:47 Memory: start claim of request 196 needs 263.7 MiB, a state buffer no cached state holds: met, took engine release 103.5 (103.5 MiB now, 0.0 later)
+04:10:47 Memory: start claim of request 196: granted
+04:10:47 Memory: start claim of request 196 needs 103.5 MiB, 11 pages: short (0.0 MiB now, 0.0 later)
+04:10:47 Memory: start claim of request 196: granted
+04:10:47 Memory: start claim of request 196 needs 103.5 MiB, 12 pages: short (0.0 MiB now, 0.0 later)
+04:10:47 Memory: start claim of request 196: granted
+04:10:47 Memory: start claim of request 196 needs 103.5 MiB, 12 pages: short (0.0 MiB now, 0.0 later)
+04:10:47 Memory: start claim of request 196: granted
+04:10:47 Memory: start claim of request 196 needs 103.5 MiB, 12 pages: short (0.0 MiB now, 0.0 later)
+04:10:47 Memory: start claim of request 196: granted
+04:10:47 Memory: start claim of request 196 needs 103.5 MiB, 13 pages: short (0.0 MiB now, 0.0 later)
+04:10:47 Memory: start claim of request 196: granted
+04:10:47 Memory: start claim of request 196 needs 103.5 MiB, 14 pages: short (0.0 MiB now, 0.0 later)
+04:10:47 Memory: start claim of request 196: granted
+04:10:47 Memory: start claim of request 196 needs 103.5 MiB, 14 pages: short (0.0 MiB now, 0.0 later)
+04:10:47 Memory: start claim of request 196: granted
+04:10:47 Memory: start claim of request 196 needs 103.5 MiB, 14 pages: short (0.0 MiB now, 0.0 later)
+04:10:47 Memory: start claim of request 196: granted
+04:10:47 Memory: start claim of request 196 needs 103.5 MiB, 14 pages: short (0.0 MiB now, 0.0 later)
+04:10:48 Memory: start claim of request 196: granted
+04:10:48 Memory: start claim of request 196 needs 103.5 MiB, 16 pages: short (0.0 MiB now, 0.0 later)
+04:10:48 Memory: start claim of request 196: granted
+04:10:48 Memory: start claim of request 196 needs 103.5 MiB, 16 pages: short (0.0 MiB now, 0.0 later)
+04:10:48 Memory: start claim of request 196: granted
+04:10:48 Memory: start claim of request 196 needs 103.5 MiB, 16 pages: short (0.0 MiB now, 0.0 later)
+04:10:48 Memory: start claim of request 196: granted
+04:10:48 Memory: start claim of request 196 needs 103.5 MiB, 16 pages: short (0.0 MiB now, 0.0 later)
+04:10:48 Memory: start claim of request 196: granted
+04:10:48 Memory: start claim of request 196 needs 103.5 MiB, 17 pages: short (0.0 MiB now, 0.0 later)
+04:10:48 Memory: start claim of request 196: granted
+04:10:48 Memory: start claim of request 196 needs 103.5 MiB, 17 pages: short (0.0 MiB now, 0.0 later)
+04:10:48 Memory: start claim of request 196: granted
+04:10:48 Memory: start claim of request 196 needs 103.5 MiB, 18 pages: short (0.0 MiB now, 0.0 later)
+04:10:48 Memory: start claim of request 196: granted
+04:10:48 Memory: start claim of request 196 needs 103.5 MiB, 19 pages: short (0.0 MiB now, 0.0 later)
+04:10:48 Memory: start claim of request 196: granted
+04:10:48 Memory: start claim of request 196 needs 103.5 MiB, 19 pages: short (0.0 MiB now, 0.0 later)
+04:10:48 Memory: start claim of request 196: granted
+04:10:48 Memory: start claim of request 196 needs 103.5 MiB, 19 pages: short (0.0 MiB now, 0.0 later)
+04:10:49 Memory: start claim of request 196: granted
+04:10:49 Memory: start claim of request 196 needs 103.5 MiB, 21 pages: short (0.0 MiB now, 0.0 later)
+04:10:49 Memory: start claim of request 196: granted
+04:10:49 Memory: start claim of request 196 needs 103.5 MiB, 21 pages: short (0.0 MiB now, 0.0 later)
+04:10:49 Memory: start claim of request 196: granted
+04:10:49 Memory: start claim of request 196 needs 103.5 MiB, 22 pages: short (0.0 MiB now, 0.0 later)
+04:10:49 Memory: start claim of request 196: granted
+04:10:49 Memory: start claim of request 196 needs 103.5 MiB, 23 pages: short (0.0 MiB now, 0.0 later)
+04:10:49 Memory: start claim of request 196: granted
+04:10:49 Memory: start claim of request 196 needs 103.5 MiB, 24 pages: short (0.0 MiB now, 0.0 later)
+04:10:49 Memory: start claim of request 196: granted
+04:10:49 Memory: start claim of request 196 needs 103.5 MiB, 25 pages: short (0.0 MiB now, 0.0 later)
+04:10:49 Memory: start claim of request 196: granted
+04:10:49 Memory: start claim of request 196 needs 103.5 MiB, 26 pages: short (0.0 MiB now, 0.0 later)
+04:10:49 Memory: start claim of request 196: granted
+04:10:49 Memory: start claim of request 196 needs 103.5 MiB, 27 pages: short (0.0 MiB now, 0.0 later)
+04:10:49 Memory: start claim of request 196: granted
+04:10:49 Memory: start claim of request 196 needs 103.5 MiB, 27 pages: short (0.0 MiB now, 0.0 later)
+04:10:49 Memory: start claim of request 196: granted
+04:10:49 Memory: start claim of request 196 needs 103.5 MiB, 28 pages: short (0.0 MiB now, 0.0 later)
+04:10:50 Memory: start claim of request 196: granted
+04:10:50 Memory: start claim of request 196 needs 103.5 MiB, 29 pages: short (0.0 MiB now, 0.0 later)
+04:10:50 Memory: start claim of request 196: granted
+04:10:50 Memory: start claim of request 196 needs 103.5 MiB, 30 pages: short (0.0 MiB now, 0.0 later)
+04:10:50 Memory: start claim of request 196: granted
+04:10:50 Memory: start claim of request 196 needs 103.5 MiB, 31 pages: short (0.0 MiB now, 0.0 later)
+04:10:50 Memory: start claim of request 196: granted
+04:10:50 Memory: start claim of request 196 needs 103.5 MiB, 31 pages: short (0.0 MiB now, 0.0 later)
+04:10:50 Done · request 195 · input 68,060 · cached 66,752 · output 473 · tools 74·ea4ee7fa · TTFT 11.7s · 128.5 tok/s · 4.7 tok/cycle
+04:10:50 Memory: start claim of request 196: granted
+04:10:51 Started · request 197 · input 69,508 · cached 68,032 · effort absent → medium · thinking on
+04:10:51 Started · request 196 · input 66,655 · cached 64,576 · effort absent → medium · thinking on
+04:10:51 Memory: growth available; resource wait cleared
+04:10:51 TTFT of request 197: 740.124 ms: own prefill 537.414, claim wait 0, decode 201.639, other prefill 0, unit wait 0, rest 1.07042
+04:10:51 Memory: in-service claim of request 197 needs 390.0 MiB: short (0.0 MiB now, 0.0 later)
+04:10:51 Memory: in-service claim of request 197: granted
+04:10:52 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:10:53 Done · request 193 · input 68,394 · cached 66,400 · output 1,359 · tools 74·ea4ee7fa · TTFT 8.8s · 74.0 tok/s · 3.0 tok/cycle
+04:10:53 Memory: growth available; resource wait cleared
+04:10:54 TTFT of request 196: 8182.15 ms: own prefill 696.399, claim wait 511.822, decode 5904.25, other prefill 1050.01, unit wait 0, rest 19.6669
+04:10:56 Memory: start claim of request 198 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:10:57 Memory: growth available; waiting=1; suspended=0
+04:10:57 Done · request 197 · input 69,508 · cached 68,032 · output 520 · tools 74·ea4ee7fa · TTFT 0.7s · 85.2 tok/s · 3.7 tok/cycle
+04:10:57 Memory: start claim of request 198: granted
+04:10:57 Started · request 198 · input 71,403 · cached 68,384 · effort absent → medium · thinking on
+04:10:58 Memory: growth available; resource wait cleared
+04:10:58 Started · request 199 · input 70,695 · cached 69,472 · effort absent → medium · thinking on
+04:10:59 TTFT of request 198: 2484.06 ms: own prefill 1007.07, claim wait 0, decode 1471.25, other prefill 0, unit wait 0, rest 5.73746
+04:10:59 Memory: in-service claim of request 198 needs 292.5 MiB: met, took hot_kv unit 97.5 cache 0.0 engine release 97.5 (228.9 MiB now, 0.0 later)
+04:10:59 Memory: in-service claim of request 199 needs 146.2 MiB: short (0.0 MiB now, 0.0 later)
+04:10:59 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:11:03 Done · request 198 · input 71,403 · cached 68,384 · output 425 · tools 74·ea4ee7fa · TTFT 2.5s · 92.4 tok/s · 3.6 tok/cycle
+04:11:03 Memory: start claim of request 199: granted
+04:11:04 Memory: growth available; resource wait cleared
+04:11:04 TTFT of request 199: 6423.21 ms: own prefill 468.566, claim wait 0, decode 5069.94, other prefill 862.798, unit wait 0, rest 21.9053
+04:11:05 Started · request 200 · input 72,655 · cached 71,392 · effort absent → medium · thinking on
+04:11:05 Memory: in-service claim of request 200 needs 146.2 MiB: short (0.0 MiB now, 0.0 later)
+04:11:05 Memory: in-service claim of request 200: granted
+04:11:05 Memory: in-service claim of request 200 needs 146.2 MiB: short (0.0 MiB now, 0.0 later)
+04:11:05 Done · request 199 · input 70,695 · cached 69,472 · output 212 · tools 74·ea4ee7fa · TTFT 6.4s · 149.4 tok/s · 6.6 tok/cycle
+04:11:05 Memory: start claim of request 200: granted
+04:11:06 TTFT of request 200: 852.361 ms: own prefill 476.811, claim wait 0, decode 373.799, other prefill 0, unit wait 0, rest 1.75033
+04:11:06 Started · request 201 · input 71,690 · cached 70,688 · effort absent → medium · thinking on
+04:11:06 Memory: in-service claim of request 201 needs 103.5 MiB, 23 pages: met, took cache 0.0 engine release 0.0 (33.9 MiB now, 0.0 later)
+04:11:06 Memory: in-service claim of request 201 needs 146.2 MiB: short (0.0 MiB now, 0.0 later)
+04:11:07 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:11:10 Done · request 200 · input 72,655 · cached 71,392 · deduplicated 160 · output 337 · tools 74·ea4ee7fa · TTFT 0.9s · 79.6 tok/s · 3.1 tok/cycle
+04:11:10 Memory: start claim of request 201: granted
+04:11:10 TTFT of request 201: 4410.81 ms: own prefill 416.957, claim wait 47.4228, decode 3927.32, other prefill 0, unit wait 0, rest 19.1075
+04:11:10 Memory: growth available; resource wait cleared
+04:11:11 Memory: start claim of request 202 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+04:11:12 Memory: growth available; waiting=1; suspended=0
+04:11:20 Done · request 201 · input 71,690 · cached 70,688 · output 726 · tools 74·ea4ee7fa · TTFT 4.4s · 74.8 tok/s · 2.8 tok/cycle
+04:11:20 Memory: start claim of request 202: granted
+04:11:20 Started · request 202 · input 84,496 · cached 72,640 · effort absent → medium · thinking on
+04:11:21 Started · request 203 · input 73,183 · cached 71,680 · effort absent → medium · thinking on
+04:11:21 Memory: growth available; resource wait cleared
+04:11:24 TTFT of request 203: 3480.8 ms: own prefill 540.418, claim wait 0, decode 1105.75, other prefill 1830.31, unit wait 0, rest 4.32141
+04:11:24 Memory: in-service claim of request 203 needs 390.0 MiB: short (0.0 MiB now, 0.0 later)
+04:11:24 Memory: in-service claim of request 203: granted
+04:11:24 Done · request 196 · input 66,655 · cached 64,576 · output 2,140 · tools 13·35e3c6cf · TTFT 8.2s · 71.0 tok/s · 3.3 tok/cycle
+04:11:24 Started · request 204 · input 68,899 · cached 66,624 · effort absent → medium · thinking on
+04:11:25 TTFT of request 204: 1107.55 ms: own prefill 808.506, claim wait 0, decode 297.703, other prefill 0, unit wait 0, rest 1.33883
+04:11:25 Memory: in-service claim of request 204 needs 292.5 MiB: met, took hot_kv unit 97.5 cache 0.0 engine release 97.5 (228.9 MiB now, 0.0 later)
+04:11:25 Memory: in-service claim of request 202 needs 103.5 MiB, 90 pages: short (0.0 MiB now, 0.0 later)
+04:11:26 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:11:27 Done · request 203 · input 73,183 · cached 71,680 · output 252 · tools 74·ea4ee7fa · TTFT 3.5s · 91.6 tok/s · 5.8 tok/cycle
+04:11:27 Memory: start claim of request 202: granted
+04:11:27 Memory: growth available; resource wait cleared
+04:11:27 Started · request 205 · input 74,037 · cached 73,152 · effort absent → medium · thinking on
+04:11:28 Done · request 204 · input 68,899 · cached 66,624 · output 168 · tools 13·35e3c6cf · TTFT 1.1s · 50.5 tok/s · 3.6 tok/cycle
+04:11:29 Started · request 206 · input 69,659 · cached 68,864 · effort absent → medium · thinking on
+04:11:29 TTFT of request 202: 18072.8 ms: own prefill 4222.47, claim wait 0, decode 12459.2, other prefill 1348.92, unit wait 0, rest 42.2605
+04:11:30 TTFT of request 206: 1586.22 ms: own prefill 361.699, claim wait 0, decode 322.643, other prefill 899.378, unit wait 0, rest 2.49925
+04:11:30 Memory: in-service claim of request 206 needs 390.0 MiB: met, took cache 0.0 engine release 97.5 (131.4 MiB now, 0.0 later)
+04:11:30 Memory: in-service claim of request 205 needs 103.5 MiB, 19 pages: met, took cache 0.0 engine release 0.0 (0.0 MiB now, 0.0 later)
+04:11:30 Memory: in-service claim of request 205 needs 162.5 MiB: short (0.0 MiB now, 0.0 later)
+04:11:31 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:11:37 Done · request 206 · input 69,659 · cached 68,864 · deduplicated 192 · output 604 · tools 13·35e3c6cf · TTFT 1.6s · 84.4 tok/s · 3.5 tok/cycle
+04:11:37 Memory: start claim of request 205: granted
+04:11:38 TTFT of request 205: 11030.1 ms: own prefill 389.212, claim wait 0, decode 8049.42, other prefill 2556.74, unit wait 0, rest 34.6835
+04:11:38 Memory: growth available; resource wait cleared
+04:11:38 Started · request 207 · input 70,423 · cached 69,632 · effort absent → medium · thinking on
+04:11:38 Memory: in-service claim of request 205 needs 390.0 MiB: met, took cache 0.0 engine release 103.5 (137.4 MiB now, 0.0 later)
+04:11:38 Memory: in-service claim of request 207 needs 103.5 MiB, 13 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+04:11:38 Memory: in-service claim of request 207 needs 146.2 MiB: short (0.0 MiB now, 0.0 later)
+04:11:38 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:11:39 Done · request 205 · input 74,037 · cached 73,152 · output 147 · tools 74·ea4ee7fa · TTFT 11.0s · 101.3 tok/s · 4.3 tok/cycle
+04:11:39 Memory: growth available; waiting=1; suspended=1
+04:11:39 Memory: start claim of request 207: granted
+04:11:39 TTFT of request 207: 2203.55 ms: own prefill 367.291, claim wait 0, decode 1467.11, other prefill 361.006, unit wait 0, rest 8.14042
+04:11:39 Started · request 208 · input 76,026 · cached 74,016 · effort absent → medium · thinking on
+04:11:40 Memory: in-service claim of request 207 needs 390.0 MiB: met, took engine release 97.5 (97.5 MiB now, 0.0 later)
+04:11:40 Memory: growth available; resource wait cleared
+04:11:40 Memory: in-service claim of request 208 needs 162.5 MiB: short (0.0 MiB now, 0.0 later)
+04:11:40 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:11:42 Done · request 202 · input 84,496 · cached 72,640 · output 933 · tools 74·ea4ee7fa · TTFT 18.1s · 72.2 tok/s · 3.2 tok/cycle
+04:11:42 Memory: start claim of request 208: granted
+04:11:43 Memory: growth available; resource wait cleared
+04:11:43 TTFT of request 208: 4027.16 ms: own prefill 673.95, claim wait 0, decode 2997.06, other prefill 342.814, unit wait 0, rest 13.3342
+04:11:43 Started · request 209 · input 86,444 · cached 84,480 · effort absent → medium · thinking on
+04:11:43 Memory: in-service claim of request 209 needs 178.8 MiB: short (0.0 MiB now, 0.0 later)
+04:11:44 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:11:44 Done · request 207 · input 70,423 · cached 69,632 · output 313 · tools 13·35e3c6cf · TTFT 2.2s · 74.5 tok/s · 3.8 tok/cycle
+04:11:44 Memory: start claim of request 209: granted
+04:11:44 Started · request 210 · input 71,232 · cached 70,400 · effort absent → medium · thinking on
+04:11:44 Memory: growth available; resource wait cleared
+04:11:45 TTFT of request 209: 1098.1 ms: own prefill 658.085, claim wait 0, decode 424.424, other prefill 0, unit wait 0, rest 15.5902
+04:11:45 Memory: in-service claim of request 210 needs 146.2 MiB: short (0.0 MiB now, 0.0 later)
+04:11:45 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:11:45 Done · request 209 · input 86,444 · cached 84,480 · output 133 · tools 74·ea4ee7fa · TTFT 1.1s · 134.9 tok/s · 5.5 tok/cycle
+04:11:45 Memory: start claim of request 210: granted
+04:11:46 Memory: growth available; resource wait cleared
+04:11:46 TTFT of request 210: 2231.85 ms: own prefill 362.933, claim wait 0, decode 1256.5, other prefill 602.267, unit wait 0, rest 10.1461
+04:11:46 Started · request 211 · input 88,627 · cached 86,432 · effort absent → medium · thinking on
+04:11:46 Memory: in-service claim of request 211 needs 103.5 MiB, 53 pages: met, took cache 0.0 engine release 0.0 (33.9 MiB now, 0.0 later)
+04:11:46 Memory: in-service claim of request 211 needs 178.8 MiB: short (0.0 MiB now, 0.0 later)
+04:11:47 Memory: growth available; waiting=1; suspended=1; waiting for resident requests to finish
+04:11:48 Done · request 210 · input 71,232 · cached 70,400 · output 272 · tools 13·35e3c6cf · TTFT 2.2s · 130.9 tok/s · 5.0 tok/cycle
+04:11:48 Memory: start claim of request 211: granted

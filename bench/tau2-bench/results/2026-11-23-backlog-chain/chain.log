@@ -1,0 +1,20 @@
+2026-11-23T07:41:33Z backlog chain start (S1 tau2-confirm, S2 gate, S3 tier1-fingerprint, S4 8-lane ladder, S5 MCP wave)
+2026-11-23T07:41:33Z S1: 238x3 confirmation wave on 1.7.1
+2026-11-23T11:25:57Z S1 exit=0
+2026-11-23T11:25:57Z S2: tool-loop-gate on 1.7.1 (upstream pin in runner/RECORD)
+2026-11-23T11:27:35Z S2 exit=0
+2026-11-23T11:27:35Z S3: fingerprint capture + golden probes on 1.7.1 pinned instance
+2026-11-23T11:27:36Z S3 fingerprint exit=0
+2026-11-23T11:27:52Z S3 golden probes exit=0
+2026-11-23T11:27:52Z S3 fingerprint diff exit=0
+2026-11-23T11:27:52Z S3 golden compare exit=0
+2026-11-23T11:27:52Z S4: stopped pinned instance pid 6987
+2026-11-23T11:27:53Z S4 8-lane supervisor pid 34368
+2026-11-23T11:51:52Z S4 kv_bracket exit=0
+2026-11-23T11:51:53Z pin supervisor pid 34982
+2026-11-23T11:52:00Z S4 pin restored and ready
+2026-11-23T11:52:00Z S5: MCP wave harness self-check
+2026-11-23T11:52:00Z S5 check-harness exit=0
+2026-11-23T11:52:00Z S5: MCP f1f2 opencode_v2 wave on 1.7.1
+2026-11-23T11:52:00Z S5 exit=1
+2026-11-23T11:52:00Z backlog chain complete

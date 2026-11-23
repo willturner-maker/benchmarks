@@ -1,0 +1,19 @@
+decode_greedy_64           byte     visible=True reasoning=True prompt=25 msg_target=None msg_got=None cached=0 compl=51 finish=stop ttft=None total=268.0
+thinking_crowdout_16       byte     visible=True reasoning=True prompt=13 msg_target=None msg_got=None cached=0 compl=16 finish=length ttft=None total=95.6
+thinking_room_256          byte     visible=True reasoning=True prompt=13 msg_target=None msg_got=None cached=0 compl=28 finish=stop ttft=None total=180.2
+toolcall_nested_forced     byte     visible=True reasoning=True prompt=394 msg_target=None msg_got=None cached=0 compl=152 finish=tool_calls ttft=None total=909.2
+toolcall_nested_stream     byte     visible=True reasoning=False prompt=390 msg_target=None msg_got=None cached=0 compl=142 finish=tool_calls ttft=300.4 total=823.4
+json_schema_crowdout_64    byte     visible=True reasoning=True prompt=55 msg_target=None msg_got=None cached=0 compl=64 finish=length ttft=None total=380.8
+json_schema_nested         grammar  visible=True reasoning=False prompt=56 msg_target=None msg_got=None cached=0 compl=196 finish=stop ttft=None total=1024.7
+json_schema_nested_stream  grammar  visible=True reasoning=False prompt=55 msg_target=None msg_got=None cached=0 compl=185 finish=stop ttft=125.2 total=937.3
+shared_head_session_a      timing   visible=None reasoning=None prompt=818 msg_target=None msg_got=None cached=0 compl=114 finish=stop ttft=None total=993.3
+shared_head_session_b      timing   visible=None reasoning=None prompt=818 msg_target=None msg_got=None cached=800 compl=160 finish=length ttft=None total=1063.1
+prefill_cold_2k            timing   visible=None reasoning=None prompt=1906 msg_target=None msg_got=None cached=0 compl=32 finish=length ttft=None total=705.9
+prefill_warm_2k            timing   visible=None reasoning=None prompt=1906 msg_target=None msg_got=None cached=1888 compl=32 finish=length ttft=None total=215.5
+followup_63                timing   visible=None reasoning=None prompt=2166 msg_target=63 msg_got=63 cached=0 compl=24 finish=length ttft=None total=846.3
+followup_72                timing   visible=None reasoning=None prompt=2174 msg_target=72 msg_got=71 cached=0 compl=24 finish=length ttft=None total=805.6
+
+byte-claim probes: 8; visible output reproduces on 8, reasoning on 5
+timing probes (usage/latency only, no byte claim): 6
+(a byte probe whose visible output does not reproduce cannot support a cross-version byte claim; reasoning hashes are reported separately because 1.7.1 shifts reasoning length, so their moving is expected and is not itself an output change)
+wrote ~/benchmarks/bench/splash-concurrency/results/splash-1.7.1-transition/golden-probes-1.7.1-post.json (84,750 chars)

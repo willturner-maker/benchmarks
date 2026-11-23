@@ -1,0 +1,1449 @@
+{
+ "captured_at_utc": "2026-11-23T11:27:36Z",
+ "nonce": "20261123T112736Z",
+ "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S",
+ "verify_rows": "auto",
+ "maximum_context_tokens": 262144,
+ "ane_ffn_state": "off",
+ "identity_cache": {
+  "loaded_model_layout_sha256": "aed100ae7c222db37a647acc6c36b9d0dbb405c48863c042e442c9e7a0d548bf",
+  "build_id": "src-1e92bb16e14d2f3d98edbe6deb2b9e8bb099ce3b95118b8cca1059d964b9c886",
+  "dtype": "q8s8_f32_scale_per_token_head_k_token_major_v_token_major",
+  "block_tokens": 32,
+  "rope_scaling": null
+ },
+ "scheduler_before": {
+  "queued": 0,
+  "waiting_resources": 0,
+  "waiting_prefix": 0,
+  "prefilling": 0,
+  "decoding": 0,
+  "waiting_mask": 0,
+  "terminal": 0,
+  "prefill_batches": 38301,
+  "prefill_rows": 9101496,
+  "decode_batches": 720763,
+  "decode_batches_by_width": {
+   "b1": 84367,
+   "b2": 87953,
+   "b3": 548443,
+   "b4": 0
+  },
+  "decode_gap_target_ms": 500,
+  "contended_prefill_ms": {
+   "p50": 145,
+   "p95": 230,
+   "p99": 311,
+   "max": 516.218583,
+   "total": 5780193.891,
+   "samples": 40526
+  },
+  "prefill_units": 42502,
+  "pass_commands": 3780,
+  "abandoned_pass_commands": 0,
+  "bound_cuts": 0,
+  "index_page_conflicts": 0,
+  "replans": 2221
+ },
+ "probes": {
+  "decode_greedy_64": {
+   "kind": "byte",
+   "byte_claim": true,
+   "compare_as": "byte",
+   "visible_output_reproducible": true,
+   "reasoning_reproducible": true,
+   "order_sensitive": false,
+   "target_msg_tokens": null,
+   "calibrated_msg_tokens": null,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 64,
+    "messages": [
+     {
+      "role": "user",
+      "content": "List the twelve months of the year, one per line, in order."
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "8b0dcff966ecb7dda6db9f10dea79456",
+     "content_len": 85,
+     "reasoning_sha": "b527eebeafd67600d4670395190e435e",
+     "content": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember",
+     "reasoning_head": "The user wants me to list the twelve months of the year, one per line, in order. This is straightforward.\n",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 25,
+      "completion_tokens": 51,
+      "total_tokens": 76,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 0,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 25
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 268.0,
+     "payload_sha": null
+    },
+    {
+     "content_sha": "8b0dcff966ecb7dda6db9f10dea79456",
+     "content_len": 85,
+     "reasoning_sha": "b527eebeafd67600d4670395190e435e",
+     "content": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember",
+     "reasoning_head": "The user wants me to list the twelve months of the year, one per line, in order. This is straightforward.\n",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 25,
+      "completion_tokens": 51,
+      "total_tokens": 76,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 0,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 25
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 235.8,
+     "payload_sha": null
+    }
+   ]
+  },
+  "thinking_crowdout_16": {
+   "kind": "byte",
+   "byte_claim": true,
+   "compare_as": "byte",
+   "visible_output_reproducible": true,
+   "reasoning_reproducible": true,
+   "order_sensitive": false,
+   "target_msg_tokens": null,
+   "calibrated_msg_tokens": null,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 16,
+    "messages": [
+     {
+      "role": "user",
+      "content": "Say READY."
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "5e45940a33317d75ec4982ac5278d6db",
+     "content": null,
+     "reasoning_head": "The user is asking me to say \"READY.\" This is a simple, straightforward",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 13,
+      "completion_tokens": 16,
+      "total_tokens": 29,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 0,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 16
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 95.6,
+     "payload_sha": null
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "5e45940a33317d75ec4982ac5278d6db",
+     "content": null,
+     "reasoning_head": "The user is asking me to say \"READY.\" This is a simple, straightforward",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 13,
+      "completion_tokens": 16,
+      "total_tokens": 29,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 0,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 16
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 94.5,
+     "payload_sha": null
+    }
+   ]
+  },
+  "thinking_room_256": {
+   "kind": "byte",
+   "byte_claim": true,
+   "compare_as": "byte",
+   "visible_output_reproducible": true,
+   "reasoning_reproducible": true,
+   "order_sensitive": false,
+   "target_msg_tokens": null,
+   "calibrated_msg_tokens": null,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 256,
+    "messages": [
+     {
+      "role": "user",
+      "content": "Say READY."
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "b59aa61bc9d935a7b927d275b3f595db",
+     "content_len": 6,
+     "reasoning_sha": "598e5998d790bb6b61212c6321a6aaf0",
+     "content": "READY.",
+     "reasoning_head": "The user is asking me to say \"READY.\" This is a simple, straightforward request. I'll comply.\n",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 13,
+      "completion_tokens": 28,
+      "total_tokens": 41,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 0,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 23
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 180.2,
+     "payload_sha": null
+    },
+    {
+     "content_sha": "b59aa61bc9d935a7b927d275b3f595db",
+     "content_len": 6,
+     "reasoning_sha": "598e5998d790bb6b61212c6321a6aaf0",
+     "content": "READY.",
+     "reasoning_head": "The user is asking me to say \"READY.\" This is a simple, straightforward request. I'll comply.\n",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 13,
+      "completion_tokens": 28,
+      "total_tokens": 41,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 0,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 23
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 179.6,
+     "payload_sha": null
+    }
+   ]
+  },
+  "toolcall_nested_forced": {
+   "kind": "byte",
+   "byte_claim": true,
+   "compare_as": "byte",
+   "visible_output_reproducible": true,
+   "reasoning_reproducible": true,
+   "order_sensitive": false,
+   "target_msg_tokens": null,
+   "calibrated_msg_tokens": null,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 256,
+    "tools": [
+     {
+      "type": "function",
+      "function": {
+       "name": "record_readings",
+       "description": "Return structured readings for the stations named in the message.",
+       "parameters": {
+        "type": "object",
+        "properties": {
+         "stations": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "id": {
+             "type": "string"
+            },
+            "pressures": {
+             "type": "array",
+             "items": {
+              "type": "number"
+             }
+            },
+            "flags": {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            }
+           },
+           "required": [
+            "id",
+            "pressures"
+           ]
+          }
+         }
+        },
+        "required": [
+         "stations"
+        ]
+       }
+      }
+     }
+    ],
+    "tool_choice": {
+     "type": "function",
+     "function": {
+      "name": "record_readings"
+     }
+    },
+    "messages": [
+     {
+      "role": "user",
+      "content": "Stations A7 and B2. A7 read 41 then 43; B2 read 38, 39, 44. B2 had flags 'surge' and 'reset'. Call the tool."
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "5a9a2c7703ddf9ee89795698845555fa",
+     "content": null,
+     "reasoning_head": "The user wants me to call the record_readings tool with the data they provided. Let me parse the information:\n\n- Station",
+     "tool_calls": [
+      {
+       "name": "record_readings",
+       "args_sha": "aeb6098ed44a714c4bbb5928b69f9bf5"
+      }
+     ],
+     "finish": "tool_calls",
+     "usage": {
+      "prompt_tokens": 394,
+      "completion_tokens": 152,
+      "total_tokens": 546,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 32,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 69
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 909.2,
+     "payload_sha": null
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "5a9a2c7703ddf9ee89795698845555fa",
+     "content": null,
+     "reasoning_head": "The user wants me to call the record_readings tool with the data they provided. Let me parse the information:\n\n- Station",
+     "tool_calls": [
+      {
+       "name": "record_readings",
+       "args_sha": "aeb6098ed44a714c4bbb5928b69f9bf5"
+      }
+     ],
+     "finish": "tool_calls",
+     "usage": {
+      "prompt_tokens": 394,
+      "completion_tokens": 152,
+      "total_tokens": 546,
+      "prompt_tokens_details": {
+       "cached_tokens": 384,
+       "prefix_tokens": 384,
+       "state_source": "memory",
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 69
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 619.5,
+     "payload_sha": null
+    }
+   ]
+  },
+  "toolcall_nested_stream": {
+   "kind": "byte",
+   "byte_claim": true,
+   "compare_as": "byte",
+   "visible_output_reproducible": true,
+   "reasoning_reproducible": false,
+   "order_sensitive": false,
+   "target_msg_tokens": null,
+   "calibrated_msg_tokens": null,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 256,
+    "tools": [
+     {
+      "type": "function",
+      "function": {
+       "name": "record_readings",
+       "description": "Return structured readings for the stations named in the message.",
+       "parameters": {
+        "type": "object",
+        "properties": {
+         "stations": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "id": {
+             "type": "string"
+            },
+            "pressures": {
+             "type": "array",
+             "items": {
+              "type": "number"
+             }
+            },
+            "flags": {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            }
+           },
+           "required": [
+            "id",
+            "pressures"
+           ]
+          }
+         }
+        },
+        "required": [
+         "stations"
+        ]
+       }
+      }
+     }
+    ],
+    "tool_choice": {
+     "type": "function",
+     "function": {
+      "name": "record_readings"
+     }
+    },
+    "messages": [
+     {
+      "role": "user",
+      "content": "Stations C1 and D9. C1 read 52 then 51; D9 read 60, 61, 62. D9 had flags 'overshoot'. Call the tool."
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "eaf2d51dd9ea21ba82e2b86807214369",
+     "content": "",
+     "reasoning_head": "The user wants me to call the record_readings tool with the specified data for stations C1 and D9.\n\nC1: pressures [52, 5",
+     "tool_calls": [
+      {
+       "name": "record_readings",
+       "args_sha": "e4d3945c8d9328a1927135fc247d3809"
+      }
+     ],
+     "finish": "tool_calls",
+     "usage": {
+      "prompt_tokens": 390,
+      "completion_tokens": 142,
+      "total_tokens": 532,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 320,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 62
+      }
+     },
+     "ttft_ms": 300.4,
+     "total_ms": 823.4,
+     "payload_sha": null
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "480b17395434509d9fee7df6446061bb",
+     "content": "",
+     "reasoning_head": "We need respond to user: \"Stations C1 and D9. C1 read 52 then 51; D9 read 60, 61, 62. D9 had flags 'overshoot'. Call the",
+     "tool_calls": [
+      {
+       "name": "record_readings",
+       "args_sha": "e4d3945c8d9328a1927135fc247d3809"
+      }
+     ],
+     "finish": "tool_calls",
+     "usage": {
+      "prompt_tokens": 390,
+      "completion_tokens": 183,
+      "total_tokens": 573,
+      "prompt_tokens_details": {
+       "cached_tokens": 384,
+       "prefix_tokens": 384,
+       "state_source": "memory",
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 103
+      }
+     },
+     "ttft_ms": 44.4,
+     "total_ms": 893.8,
+     "payload_sha": null
+    }
+   ]
+  },
+  "json_schema_crowdout_64": {
+   "kind": "byte",
+   "byte_claim": true,
+   "compare_as": "byte",
+   "visible_output_reproducible": true,
+   "reasoning_reproducible": true,
+   "order_sensitive": false,
+   "target_msg_tokens": null,
+   "calibrated_msg_tokens": null,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 64,
+    "response_format": {
+     "type": "json_schema",
+     "json_schema": {
+      "name": "readings",
+      "strict": true,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "stations": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "properties": {
+           "id": {
+            "type": "string"
+           },
+           "pressures": {
+            "type": "array",
+            "items": {
+             "type": "number"
+            }
+           },
+           "flags": {
+            "type": "array",
+            "items": {
+             "type": "string"
+            }
+           }
+          },
+          "required": [
+           "id",
+           "pressures"
+          ]
+         }
+        }
+       },
+       "required": [
+        "stations"
+       ]
+      }
+     }
+    },
+    "messages": [
+     {
+      "role": "user",
+      "content": "Stations E3 (readings 21, 22, 25) and F8 (readings 30, 31). F8 had flags 'cavitation'. Return them."
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "867fb1ebfc0b9baebed98ee2389bfa34",
+     "content": null,
+     "reasoning_head": "The user is asking me to return specific readings from stations E3 and F8. Let me parse the request:\n\n- Station E3: read",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 55,
+      "completion_tokens": 64,
+      "total_tokens": 119,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 0,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 64
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 380.8,
+     "payload_sha": null
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "867fb1ebfc0b9baebed98ee2389bfa34",
+     "content": null,
+     "reasoning_head": "The user is asking me to return specific readings from stations E3 and F8. Let me parse the request:\n\n- Station E3: read",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 55,
+      "completion_tokens": 64,
+      "total_tokens": 119,
+      "prompt_tokens_details": {
+       "cached_tokens": 32,
+       "prefix_tokens": 32,
+       "state_source": "memory",
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 64
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 314.5,
+     "payload_sha": null
+    }
+   ]
+  },
+  "json_schema_nested": {
+   "kind": "grammar",
+   "byte_claim": true,
+   "compare_as": "grammar",
+   "visible_output_reproducible": true,
+   "reasoning_reproducible": false,
+   "order_sensitive": false,
+   "target_msg_tokens": null,
+   "calibrated_msg_tokens": null,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 512,
+    "response_format": {
+     "type": "json_schema",
+     "json_schema": {
+      "name": "readings",
+      "strict": true,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "stations": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "properties": {
+           "id": {
+            "type": "string"
+           },
+           "pressures": {
+            "type": "array",
+            "items": {
+             "type": "number"
+            }
+           },
+           "flags": {
+            "type": "array",
+            "items": {
+             "type": "string"
+            }
+           }
+          },
+          "required": [
+           "id",
+           "pressures"
+          ]
+         }
+        }
+       },
+       "required": [
+        "stations"
+       ]
+      }
+     }
+    },
+    "messages": [
+     {
+      "role": "user",
+      "content": "Stations E3 (readings 21, 22, 25, flags 'cavitation') and F8 (readings 30, 31, flags 'idle'). Return both."
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "ab81d3bec1023a1eeb0408a27a776100",
+     "content_len": 200,
+     "reasoning_sha": "1a8e66fe28be7e7b41211679983002f6",
+     "content": "{\n  \"stations\": [\n    {\n      \"id\": \"E3\",\n      \"pressures\": [21, 22, 25],\n      \"flags\": [\"cavitation\"]\n    },\n    {\n      \"id\": \"F8\",\n      \"pressures\": [30, 31],\n      \"flags\": [\"idle\"]\n    }\n  ]\n}",
+     "reasoning_head": "The user is asking me to return data for two specific stations: E3 and F8, with specific readings and flags. Let me pars",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 56,
+      "completion_tokens": 196,
+      "total_tokens": 252,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 0,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 101
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 1024.7,
+     "payload_sha": "ebf68cf0d2aa9f6f1cfa63cbc9e1b6f4"
+    },
+    {
+     "content_sha": "ab81d3bec1023a1eeb0408a27a776100",
+     "content_len": 200,
+     "reasoning_sha": "954f546f28a9784a781286b3e21ad171",
+     "content": "{\n  \"stations\": [\n    {\n      \"id\": \"E3\",\n      \"pressures\": [21, 22, 25],\n      \"flags\": [\"cavitation\"]\n    },\n    {\n      \"id\": \"F8\",\n      \"pressures\": [30, 31],\n      \"flags\": [\"idle\"]\n    }\n  ]\n}",
+     "reasoning_head": "The user is asking me to return data from two specific stations: E3 and F8, with specific readings and flags. Let me par",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 56,
+      "completion_tokens": 208,
+      "total_tokens": 264,
+      "prompt_tokens_details": {
+       "cached_tokens": 32,
+       "prefix_tokens": 32,
+       "state_source": "memory",
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 113
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 1019.1,
+     "payload_sha": "ebf68cf0d2aa9f6f1cfa63cbc9e1b6f4"
+    }
+   ]
+  },
+  "json_schema_nested_stream": {
+   "kind": "grammar",
+   "byte_claim": true,
+   "compare_as": "grammar",
+   "visible_output_reproducible": true,
+   "reasoning_reproducible": false,
+   "order_sensitive": false,
+   "target_msg_tokens": null,
+   "calibrated_msg_tokens": null,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 512,
+    "response_format": {
+     "type": "json_schema",
+     "json_schema": {
+      "name": "readings",
+      "strict": true,
+      "schema": {
+       "type": "object",
+       "properties": {
+        "stations": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "properties": {
+           "id": {
+            "type": "string"
+           },
+           "pressures": {
+            "type": "array",
+            "items": {
+             "type": "number"
+            }
+           },
+           "flags": {
+            "type": "array",
+            "items": {
+             "type": "string"
+            }
+           }
+          },
+          "required": [
+           "id",
+           "pressures"
+          ]
+         }
+        }
+       },
+       "required": [
+        "stations"
+       ]
+      }
+     }
+    },
+    "messages": [
+     {
+      "role": "user",
+      "content": "Stations G5 (readings 47, 48, flags 'low') and H1 (readings 55, 56, 58, flags 'surge'). Return both."
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "e34d6d3645bcf29f346f6a798f13f972",
+     "content_len": 194,
+     "reasoning_sha": "7eefebe18c3b64931138315e839a978f",
+     "content": "{\n  \"stations\": [\n    {\n      \"id\": \"G5\",\n      \"pressures\": [47, 48],\n      \"flags\": [\"low\"]\n    },\n    {\n      \"id\": \"H1\",\n      \"pressures\": [55, 56, 58],\n      \"flags\": [\"surge\"]\n    }\n  ]\n}",
+     "reasoning_head": "The user is asking me to return data for two specific stations: G5 and H1, with their readings and flags. They want both",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 55,
+      "completion_tokens": 185,
+      "total_tokens": 240,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 0,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 91
+      }
+     },
+     "ttft_ms": 125.2,
+     "total_ms": 937.3,
+     "payload_sha": "ab9d1e1a43891273a8c1f94a2b5329ba"
+    },
+    {
+     "content_sha": "e34d6d3645bcf29f346f6a798f13f972",
+     "content_len": 194,
+     "reasoning_sha": "901f74b17c35e36572cc7a38362a9fc5",
+     "content": "{\n  \"stations\": [\n    {\n      \"id\": \"G5\",\n      \"pressures\": [47, 48],\n      \"flags\": [\"low\"]\n    },\n    {\n      \"id\": \"H1\",\n      \"pressures\": [55, 56, 58],\n      \"flags\": [\"surge\"]\n    }\n  ]\n}",
+     "reasoning_head": "The user is asking me to return data for two stations: G5 and H1. They've provided specific readings and flags for each ",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 55,
+      "completion_tokens": 189,
+      "total_tokens": 244,
+      "prompt_tokens_details": {
+       "cached_tokens": 32,
+       "prefix_tokens": 32,
+       "state_source": "memory",
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 95
+      }
+     },
+     "ttft_ms": 62.4,
+     "total_ms": 930.6,
+     "payload_sha": "ab9d1e1a43891273a8c1f94a2b5329ba"
+    }
+   ]
+  },
+  "shared_head_session_a": {
+   "kind": "timing",
+   "byte_claim": false,
+   "compare_as": "timing",
+   "visible_output_reproducible": null,
+   "reasoning_reproducible": null,
+   "order_sensitive": false,
+   "target_msg_tokens": null,
+   "calibrated_msg_tokens": null,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 160,
+    "tools": [
+     {
+      "type": "function",
+      "function": {
+       "name": "record_readings",
+       "description": "Return structured readings for the stations named in the message.",
+       "parameters": {
+        "type": "object",
+        "properties": {
+         "stations": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "id": {
+             "type": "string"
+            },
+            "pressures": {
+             "type": "array",
+             "items": {
+              "type": "number"
+             }
+            },
+            "flags": {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            }
+           },
+           "required": [
+            "id",
+            "pressures"
+           ]
+          }
+         }
+        },
+        "required": [
+         "stations"
+        ]
+       }
+      }
+     }
+    ],
+    "messages": [
+     {
+      "role": "system",
+      "content": "You are the duty engineer's assistant for a water district that runs pump stations. Rule 1: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 01, and never change a setpoint without a second confirmation. Rule 2: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 02, and never change a setpoint without a second confirmation. Rule 3: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 03, and never change a setpoint without a second confirmation. Rule 4: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 04, and never change a setpoint without a second confirmation. Rule 5: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 05, and never change a setpoint without a second confirmation. Rule 6: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 06, and never change a setpoint without a second confirmation. Rule 7: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 07, and never change a setpoint without a second confirmation. Rule 8: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 08, and never change a setpoint without a second confirmation. Rule 9: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 09, and never change a setpoint without a second confirmation. Rule 10: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 10, and never change a setpoint without a second confirmation."
+     },
+     {
+      "role": "user",
+      "content": "In one sentence: what should I check first if station A7 reads high?"
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "afbf4d5dbaa67487e5c017ecfce8ec5f",
+     "content_len": 251,
+     "reasoning_sha": "75f247c79f2a22fbadbfcefc8773a588",
+     "content": "First, cross-check A7 against its paired instrument and compare both gauges' calibration dates \u2014 trust whichever gauge was calibrated most recently, log the disagreement against station 07, and do not change any setpoint without a second confirmation.",
+     "reasoning_head": "The user asks a general question: what to check first if station A7 reads high. Per rules, when a station's reading disa",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 818,
+      "completion_tokens": 114,
+      "total_tokens": 932,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 320,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 63
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 993.3,
+     "payload_sha": null
+    },
+    {
+     "content_sha": "4d4e7541447a0c7588ac98127b415e7c",
+     "content_len": 230,
+     "reasoning_sha": "71453b0218ef06032a170d6acc16fd03",
+     "content": "First, compare A7's reading against its paired instrument and check which gauge was calibrated most recently \u2014 trust that one, log the disagreement against the station, and do not change any setpoint without a second confirmation.",
+     "reasoning_head": "The user asks a general question: what to check first if station A7 reads high. Per rules, when a station's reading disa",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 818,
+      "completion_tokens": 127,
+      "total_tokens": 945,
+      "prompt_tokens_details": {
+       "cached_tokens": 800,
+       "prefix_tokens": 800,
+       "state_source": "memory",
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 81
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 811.6,
+     "payload_sha": null
+    }
+   ]
+  },
+  "shared_head_session_b": {
+   "kind": "timing",
+   "byte_claim": false,
+   "compare_as": "timing",
+   "visible_output_reproducible": null,
+   "reasoning_reproducible": null,
+   "order_sensitive": false,
+   "target_msg_tokens": null,
+   "calibrated_msg_tokens": null,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 160,
+    "tools": [
+     {
+      "type": "function",
+      "function": {
+       "name": "record_readings",
+       "description": "Return structured readings for the stations named in the message.",
+       "parameters": {
+        "type": "object",
+        "properties": {
+         "stations": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "id": {
+             "type": "string"
+            },
+            "pressures": {
+             "type": "array",
+             "items": {
+              "type": "number"
+             }
+            },
+            "flags": {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            }
+           },
+           "required": [
+            "id",
+            "pressures"
+           ]
+          }
+         }
+        },
+        "required": [
+         "stations"
+        ]
+       }
+      }
+     }
+    ],
+    "messages": [
+     {
+      "role": "system",
+      "content": "You are the duty engineer's assistant for a water district that runs pump stations. Rule 1: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 01, and never change a setpoint without a second confirmation. Rule 2: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 02, and never change a setpoint without a second confirmation. Rule 3: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 03, and never change a setpoint without a second confirmation. Rule 4: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 04, and never change a setpoint without a second confirmation. Rule 5: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 05, and never change a setpoint without a second confirmation. Rule 6: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 06, and never change a setpoint without a second confirmation. Rule 7: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 07, and never change a setpoint without a second confirmation. Rule 8: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 08, and never change a setpoint without a second confirmation. Rule 9: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 09, and never change a setpoint without a second confirmation. Rule 10: when a station's reading disagrees with its paired instrument, trust the gauge that was calibrated most recently, log the disagreement against station 10, and never change a setpoint without a second confirmation."
+     },
+     {
+      "role": "user",
+      "content": "In one sentence: what should I check first if station Q4 reads low?"
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "d5601452969d051e5e4e95cc4687986e",
+     "content_len": 191,
+     "reasoning_sha": "054af056d843e5bbd4505c4dad5833bb",
+     "content": "First, cross-check Q4 against its paired instrument and compare calibration dates \u2014 trust the gauge that was calibrated most recently, log the disagreement against the applicable station, and",
+     "reasoning_head": "The user asks: \"In one sentence: what should I check first if station Q4 reads low?\"\n\nThis is a general question. The ru",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 818,
+      "completion_tokens": 160,
+      "total_tokens": 978,
+      "prompt_tokens_details": {
+       "cached_tokens": 800,
+       "prefix_tokens": 800,
+       "state_source": "memory",
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 125
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 1063.1,
+     "payload_sha": null
+    },
+    {
+     "content_sha": "f49d28d9c810f5b7026e36419d9b2412",
+     "content_len": 249,
+     "reasoning_sha": "f0dcdf9e0c05f3a2394e583b2fae724b",
+     "content": "First, cross-check Q4 against its paired instrument and compare their calibration dates \u2014 trust whichever gauge was calibrated most recently, log the disagreement against station 04, and don't touch any setpoint until you have a second confirmation.",
+     "reasoning_head": "The user asks: \"In one sentence: what should I check first if station Q4 reads low?\"\n\nThis is a general question. The ru",
+     "tool_calls": [],
+     "finish": "stop",
+     "usage": {
+      "prompt_tokens": 818,
+      "completion_tokens": 157,
+      "total_tokens": 975,
+      "prompt_tokens_details": {
+       "cached_tokens": 800,
+       "prefix_tokens": 800,
+       "state_source": "memory",
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 107
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 1068.6,
+     "payload_sha": null
+    }
+   ]
+  },
+  "prefill_cold_2k": {
+   "kind": "timing",
+   "byte_claim": false,
+   "compare_as": "timing",
+   "visible_output_reproducible": null,
+   "reasoning_reproducible": null,
+   "order_sensitive": true,
+   "target_msg_tokens": null,
+   "calibrated_msg_tokens": null,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 32,
+    "messages": [
+     {
+      "role": "user",
+      "content": "Capture reference 20261123T112736Z. The maintenance log for pump station 1 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 2 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 3 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 4 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 5 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 6 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 7 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 8 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 9 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 10 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 11 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 12 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 13 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 14 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 15 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 16 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 17 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 18 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 19 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 20 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 21 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 22 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 23 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 24 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 25 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 26 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 27 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 28 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 29 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 30 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 31 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 32 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 33 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 34 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 35 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 36 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 37 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 38 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 39 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 40 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 41 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 42 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 43 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 44 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 45 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 46 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 47 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 48 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 49 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 50 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 51 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 52 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 53 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 54 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 55 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 56 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 57 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 58 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 59 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 60 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 61 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 62 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 63 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 64 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 65 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 66 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 67 records the following observations, each one checked twice against the pressure gauge and the flow meter. \nSummarise the log in one sentence."
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "2a4661ce16cfee4aa617440a97243046",
+     "content": null,
+     "reasoning_head": "The user is asking me to summarize a maintenance log in one sentence. Let me analyze what's actually in this \"log.\"\n\nLoo",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 1906,
+      "completion_tokens": 32,
+      "total_tokens": 1938,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 0,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 32
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 705.9,
+     "payload_sha": null
+    }
+   ]
+  },
+  "prefill_warm_2k": {
+   "kind": "timing",
+   "byte_claim": false,
+   "compare_as": "timing",
+   "visible_output_reproducible": null,
+   "reasoning_reproducible": null,
+   "order_sensitive": true,
+   "target_msg_tokens": null,
+   "calibrated_msg_tokens": null,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 32,
+    "messages": [
+     {
+      "role": "user",
+      "content": "Capture reference 20261123T112736Z. The maintenance log for pump station 1 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 2 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 3 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 4 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 5 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 6 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 7 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 8 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 9 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 10 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 11 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 12 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 13 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 14 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 15 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 16 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 17 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 18 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 19 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 20 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 21 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 22 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 23 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 24 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 25 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 26 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 27 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 28 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 29 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 30 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 31 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 32 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 33 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 34 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 35 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 36 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 37 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 38 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 39 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 40 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 41 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 42 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 43 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 44 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 45 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 46 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 47 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 48 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 49 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 50 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 51 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 52 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 53 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 54 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 55 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 56 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 57 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 58 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 59 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 60 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 61 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 62 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 63 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 64 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 65 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 66 records the following observations, each one checked twice against the pressure gauge and the flow meter.  The maintenance log for pump station 67 records the following observations, each one checked twice against the pressure gauge and the flow meter. \nSummarise the log in one sentence."
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "2a4661ce16cfee4aa617440a97243046",
+     "content": null,
+     "reasoning_head": "The user is asking me to summarize a maintenance log in one sentence. Let me analyze what's actually in this \"log.\"\n\nLoo",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 1906,
+      "completion_tokens": 32,
+      "total_tokens": 1938,
+      "prompt_tokens_details": {
+       "cached_tokens": 1888,
+       "prefix_tokens": 1888,
+       "state_source": "memory",
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 32
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 215.5,
+     "payload_sha": null
+    }
+   ]
+  },
+  "followup_63": {
+   "kind": "timing",
+   "byte_claim": false,
+   "compare_as": "timing",
+   "visible_output_reproducible": null,
+   "reasoning_reproducible": null,
+   "order_sensitive": false,
+   "target_msg_tokens": 63,
+   "calibrated_msg_tokens": 63,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 24,
+    "messages": [
+     {
+      "role": "user",
+      "content": "Capture reference 20261123T112736Z. Inventory sheet 1 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 2 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 3 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 4 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 5 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 6 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 7 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 8 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 9 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 10 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 11 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 12 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 13 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 14 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 15 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 16 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 17 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 18 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 19 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 20 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 21 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 22 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 23 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 24 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 25 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 26 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 27 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 28 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 29 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 30 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 31 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 32 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 33 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 34 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 35 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 36 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 37 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 38 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 39 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 40 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 41 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 42 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 43 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 44 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 45 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 46 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 47 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 48 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 49 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 50 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 51 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 52 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 53 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 54 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 55 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 56 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 57 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 58 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 59 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 60 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 61 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 62 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 63 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 64 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 65 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 66 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 67 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register. "
+     },
+     {
+      "role": "assistant",
+      "content": "Logged."
+     },
+     {
+      "role": "user",
+      "content": "Roughly how many crates appear? Digits only. please recheck the gauge log now and then please recheck the gauge log now and then please recheck the gauge log now and then please recheck the gauge log now and then please recheck the gau"
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "94dd715741d2e29daa3589ce1bbfaf16",
+     "content": null,
+     "reasoning_head": "The user is asking me to count how many crates appear in the inventory sheets listed in the previous message. Let me cou",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 2166,
+      "completion_tokens": 24,
+      "total_tokens": 2190,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 0,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 24
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 846.3,
+     "payload_sha": null
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "94dd715741d2e29daa3589ce1bbfaf16",
+     "content": null,
+     "reasoning_head": "The user is asking me to count how many crates appear in the inventory sheets listed in the previous message. Let me cou",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 2166,
+      "completion_tokens": 24,
+      "total_tokens": 2190,
+      "prompt_tokens_details": {
+       "cached_tokens": 2144,
+       "prefix_tokens": 2144,
+       "state_source": "memory",
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 24
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 177.0,
+     "payload_sha": null
+    }
+   ]
+  },
+  "followup_72": {
+   "kind": "timing",
+   "byte_claim": false,
+   "compare_as": "timing",
+   "visible_output_reproducible": null,
+   "reasoning_reproducible": null,
+   "order_sensitive": false,
+   "target_msg_tokens": 72,
+   "calibrated_msg_tokens": 71,
+   "request": {
+    "temperature": 0,
+    "max_tokens": 24,
+    "messages": [
+     {
+      "role": "user",
+      "content": "Capture reference 20261123T112736Z. Inventory sheet 1 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 2 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 3 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 4 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 5 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 6 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 7 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 8 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 9 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 10 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 11 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 12 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 13 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 14 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 15 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 16 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 17 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 18 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 19 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 20 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 21 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 22 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 23 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 24 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 25 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 26 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 27 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 28 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 29 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 30 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 31 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 32 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 33 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 34 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 35 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 36 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 37 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 38 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 39 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 40 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 41 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 42 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 43 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 44 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 45 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 46 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 47 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 48 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 49 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 50 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 51 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 52 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 53 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 54 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 55 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 56 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 57 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 58 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 59 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 60 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 61 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 62 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 63 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 64 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 65 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 66 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register.  Inventory sheet 67 of the depot lists crates, each crate weighed on the platform scale and reconciled against the shipping manifest and the dock register. "
+     },
+     {
+      "role": "assistant",
+      "content": "Logged."
+     },
+     {
+      "role": "user",
+      "content": "Roughly how many crates appear in the list above? Digits only, nothing else. please recheck the gauge log now and then please recheck the gauge log now and then please recheck the gauge log now and then please recheck the gauge log now and then please recheck the gauge log"
+     }
+    ]
+   },
+   "runs": [
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "9ee967182da2410289140e8f72054514",
+     "content": null,
+     "reasoning_head": "The user is asking me to count the number of crates in the list above. Let me count the inventory sheets listed.",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 2174,
+      "completion_tokens": 24,
+      "total_tokens": 2198,
+      "prompt_tokens_details": {
+       "cached_tokens": 0,
+       "prefix_tokens": 2112,
+       "state_source": null,
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 24
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 805.6,
+     "payload_sha": null
+    },
+    {
+     "content_sha": "e3b0c44298fc1c149afbf4c8996fb924",
+     "content_len": 0,
+     "reasoning_sha": "9ee967182da2410289140e8f72054514",
+     "content": null,
+     "reasoning_head": "The user is asking me to count the number of crates in the list above. Let me count the inventory sheets listed.",
+     "tool_calls": [],
+     "finish": "length",
+     "usage": {
+      "prompt_tokens": 2174,
+      "completion_tokens": 24,
+      "total_tokens": 2198,
+      "prompt_tokens_details": {
+       "cached_tokens": 2144,
+       "prefix_tokens": 2144,
+       "state_source": "memory",
+       "lost_state": false
+      },
+      "completion_tokens_details": {
+       "reasoning_tokens": 24
+      }
+     },
+     "ttft_ms": null,
+     "total_ms": 155.6,
+     "payload_sha": null
+    }
+   ]
+  }
+ },
+ "scheduler_after": {
+  "queued": 0,
+  "waiting_resources": 0,
+  "waiting_prefix": 0,
+  "prefilling": 0,
+  "decoding": 0,
+  "waiting_mask": 0,
+  "terminal": 0,
+  "prefill_batches": 38337,
+  "prefill_rows": 9110061,
+  "decode_batches": 721283,
+  "decode_batches_by_width": {
+   "b1": 84887,
+   "b2": 87953,
+   "b3": 548443,
+   "b4": 0
+  },
+  "decode_gap_target_ms": 500,
+  "contended_prefill_ms": {
+   "p50": 145,
+   "p95": 230,
+   "p99": 311,
+   "max": 516.218583,
+   "total": 5780193.891,
+   "samples": 40526
+  },
+  "prefill_units": 42559,
+  "pass_commands": 3789,
+  "abandoned_pass_commands": 0,
+  "bound_cuts": 0,
+  "index_page_conflicts": 0,
+  "replans": 2225
+ },
+ "summary": {
+  "probes": 14,
+  "byte_claim_probes": [
+   "decode_greedy_64",
+   "thinking_crowdout_16",
+   "thinking_room_256",
+   "toolcall_nested_forced",
+   "toolcall_nested_stream",
+   "json_schema_crowdout_64",
+   "json_schema_nested",
+   "json_schema_nested_stream"
+  ],
+  "byte_probes_visible_reproducible": 8,
+  "byte_probes_visible_non_reproducible": [],
+  "byte_probes_reasoning_reproducible": 5,
+  "timing_probes": [
+   "shared_head_session_a",
+   "shared_head_session_b",
+   "prefill_cold_2k",
+   "prefill_warm_2k",
+   "followup_63",
+   "followup_72"
+  ]
+ }
+}

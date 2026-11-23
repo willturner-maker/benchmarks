@@ -1,0 +1,10 @@
+wave started 2026-11-23T07:41:33Z
+===== airline 07:41:36Z =====
+  exit=0 08:28:40Z
+===== retail 08:28:40Z =====
+  exit=0 09:21:45Z
+===== telecom 09:21:45Z =====
+  exit=0 11:25:57Z
+wave finished 2026-11-23T11:25:57Z
+~/benchmarks/bench/tau2-bench/run_wave.sh: line 129: 26124 Terminated: 15          python3 "$HERE/sample_engine.py" "$WAVE/engine_samples.jsonl" "${TAU2_SAMPLE_SECONDS:-21600}" 10 > "$WAVE/sampler.log" 2>&1
+next: python3 ~/benchmarks/bench/tau2-bench/summarize.py --tau2-dir ~/tau2-bench --wave-dir ~/benchmarks/bench/tau2-bench/results/2026-11-23-pass3-171-confirm --domains 'airline retail telecom'

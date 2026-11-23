@@ -1,0 +1,10 @@
+[04:07:11] agent harness: opencode opencode v2.3.2
+  same opencode build as wave tier4-2026-11-18m.
+!! global AGENTS.md already renamed away by an earlier aborted run; leaving it hidden for this wave
+[04:07:11] pair T1r1+T1r2
+  !! SEAL LEAK in T1r1: ["('davinci-resolve_timeline', 'error')", "('davinci-resolve_timeline', 'error')"]
+[04:07:52] pair T1r3+T2r1
+[04:09:09] pair T2r2+T2r3
+  !! SEAL LEAK in T2r3: ["('davinci-resolve-media_pool', 'error')", "('davinci-resolve-project_manager', 'error')", "('davinci-resolve-mcp_media_pool', 'error')", "('davinci-resolve-resolve_control', 'error')", "('davinci-resolve-mcp-resolve_control', 'error')"]
+  !! SEAL LEAK in T2r2: ["('davinci-resolve_timeline', 'error')"]
+[04:12:18] pair T3r1+T3r2

@@ -1,0 +1,16 @@
+== ~/benchmarks/bench/splash-concurrency/results/splash-1.7.1-transition/golden-probes-1.7.0-pre.json (2026-11-23T01:23:49Z, nonce pre1700)
+-> ~/benchmarks/bench/splash-concurrency/results/splash-1.7.1-transition/golden-probes-1.7.1-post.json (2026-11-23T11:27:36Z, nonce 20261123T112736Z)
+  decode_greedy_64           SAME  prompt 25->25 cached 0->0 
+  followup_63                usage prompt 2154->2166 cached 0->0 reasoning moved
+  followup_72                SAME  prompt 2162->2174 cached 0->0 
+  json_schema_crowdout_64    SAME  prompt 55->55 cached 32->0 
+  json_schema_nested         DIFF  prompt 56->56 cached 0->0 reasoning moved completion 198->196
+  json_schema_nested_stream  DIFF  prompt 55->55 cached 0->0 reasoning moved completion 189->185
+  prefill_cold_2k            usage prompt 1894->1906 cached 0->0 reasoning moved
+  prefill_warm_2k            usage prompt 1894->1906 cached 1888->1888 reasoning moved
+  shared_head_session_a      SAME  prompt 818->818 cached 800->0 
+  shared_head_session_b      usage prompt 818->818 cached 800->800 output differs (timing probe: no byte claim) reasoning moved
+  thinking_crowdout_16       SAME  prompt 13->13 cached 0->0 
+  thinking_room_256          SAME  prompt 13->13 cached 0->0 
+  toolcall_nested_forced     DIFF  prompt 394->394 cached 384->0 reasoning moved completion 162->152
+  toolcall_nested_stream     DIFF  prompt 390->390 cached 384->0 reasoning moved completion 184->142

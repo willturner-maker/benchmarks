@@ -74,6 +74,26 @@ Published protocol on 1.7.1: 238 judge-free tasks × 3 trials, seed 300, conc 3,
 3. Open question queued: second 1.7.1 3-trial wave to settle the pass^1 question (and give n=2 for the
    1.7.1 epoch).
 
+## Follow-up (2026-11-23): the confirmation wave — n=2 for the 1.7.1 epoch
+
+`../2026-11-23-pass3-171-confirm/` (714/714 scored, re-derivation agrees, 0 co-tenant/0 spill/0 suspensions,
+03:41→11:25Z backlog chain S1, same instance family):
+
+| 1.7.1 wave | airline | retail | telecom | AGG p^1/p^2/p^3 | flips |
+|---|---|---|---|---|---|
+| replay (11-23) | 0.840/0.760/0.740 | 0.757/0.716/0.622 | 0.833/0.772/0.711 | 0.8109 / 0.7521 / 0.6891 | 64 |
+| confirm (11-23) | 0.840/0.840/0.760 | 0.770/0.676/0.568 | 0.886/0.807/0.746 | **0.8403 / 0.7731 / 0.6933** | **64** |
+
+- **pass^3 0.6933 exactly equals the old-epoch 0.6933**; the two 1.7.1 means (0.6912) vs 1.7.0 means (0.6996)
+  differ 0.8 pts. pass^2 means 0.7626 vs 0.7689 (0.6 pts). **Flips: 64 in both 1.7.1 waves** (26.9 %, band intact).
+- **pass^1: both 1.7.1 draws (0.8109, 0.8403) sit below both 1.7.0 draws (0.8613, 0.8655)**; epoch means
+  0.8256 vs 0.8634 = **−3.8 pts**. With n=2 per epoch (SE ≈2.2 pts per wave) the difference of means is
+  ~1.2 SE — *suggestive, still not established*. The shape is odd if read as a regression (pass^1 down,
+  pass^2/3 flat), which fits "slightly lower first-trial success, same all-pass consistency" — lottery
+  draws, not a mechanism. Published as: no distribution-shape change; a possible 2–4 pt pass^1 epoch dip
+  unresolved at n=2. An n=3 tiebreaker is possible but low priority; the epoch boundary is disclosed
+  regardless.
+
 Files: `chain.log`, status edges (start/mid/end — same instance), `probe_rows_*.jsonl` + `requery_summary_*.txt`
 (both corpora), samplers; replay dir `../2026-11-23-pass3-replay-171/` (`tasks.jsonl` 714 rows, wave logs,
 status edges, samples). Captures remain local (`captures.jsonl` gitignored).

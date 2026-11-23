@@ -1,0 +1,43 @@
+[stack] queue-size=64 (explicit=True) kv_budget=155648 max_batch_width=8 lifetime_at_start={'resource_suspensions': 0, 'priority_suspensions': 0, 'capacity_failures': 0, 'kv_demotions_refused': 0, 'spill_moves': 0}
+[gate] ladder-prompt w1 pass 1: 167.7 tok/s
+[gate] ladder-prompt w1 pass 2: 296.4 tok/s
+[gate] ladder-prompt w1 pass 3: 302.1 tok/s
+[gate] spread 1.801 -> cold (11-19 ladder w1 median was 294.4)
+[ladder] w1 r1: 305.3 tok/s aggregate, per-stream 305.3, peak waiting 0
+[ladder] w1 r2: 303.4 tok/s aggregate, per-stream 303.4, peak waiting 0
+[ladder] width 1 baseline: 304.35 tok/s
+[ladder] w2 r1: 484.5 tok/s aggregate, per-stream 242.2, peak waiting 0
+[ladder] w2 r2: 477.4 tok/s aggregate, per-stream 238.7, peak waiting 0
+[ladder] width 2: median 480.95 tok/s (1.58x w1)
+[ladder] w3 r1: 579.1 tok/s aggregate, per-stream 193.0, peak waiting 0
+[ladder] w3 r2: 578.8 tok/s aggregate, per-stream 192.9, peak waiting 0
+[ladder] width 3: median 578.95 tok/s (1.902x w1)
+[ladder] w4 r1: 707.5 tok/s aggregate, per-stream 176.9, peak waiting 0
+[ladder] w4 r2: 693.8 tok/s aggregate, per-stream 173.5, peak waiting 0
+[ladder] width 4: median 700.65 tok/s (2.302x w1)
+[ladder] w6 r1: 709.8 tok/s aggregate, per-stream 118.3, peak waiting 0
+[ladder] w6 r2: 686.0 tok/s aggregate, per-stream 114.3, peak waiting 0
+[ladder] width 6: median 697.9 tok/s (2.293x w1)
+[ladder] w8 r1: 688.6 tok/s aggregate, per-stream 86.1, peak waiting 0
+[ladder] w8 r2: 695.3 tok/s aggregate, per-stream 86.9, peak waiting 0
+[ladder] width 8: median 691.95 tok/s (2.274x w1)
+[ladder] w12 r1: 700.5 tok/s aggregate, per-stream 58.4, peak waiting 4
+[ladder] w12 r2: 699.9 tok/s aggregate, per-stream 58.3, peak waiting 4
+[ladder] width 12: median 700.2 tok/s (2.301x w1)
+[ladder] w16 r1: 689.2 tok/s aggregate, per-stream 43.1, peak waiting 8
+[ladder] w16 r2: 687.2 tok/s aggregate, per-stream 43.0, peak waiting 8
+[ladder] width 16: median 688.2 tok/s (2.261x w1)
+[ladder] w24 r1: 679.3 tok/s aggregate, per-stream 28.3, peak waiting 16
+[ladder] w24 r2: 681.9 tok/s aggregate, per-stream 28.4, peak waiting 16
+[ladder] width 24: median 680.5999999999999 tok/s (2.236x w1)
+[ladder] w32 r1: 683.2 tok/s aggregate, per-stream 21.4, peak waiting 24
+[ladder] w32 r2: 677.8 tok/s aggregate, per-stream 21.2, peak waiting 24
+[ladder] width 32: median 680.5 tok/s (2.236x w1)
+[kv] calib: 300 lines = 14087 prompt tokens -> using 425 lines/request
+[kv] w1: 55265 tok (0.36x budget) in 15.6s | ok=1 refused=0 prefill_rows+55265 susp_peak=0 waitmem_peak=0 pages_act=1728 spill+0 demote+0 demote_refused+0
+[kv] w2: 110530 tok (0.71x budget) in 31.4s | ok=2 refused=0 prefill_rows+110530 susp_peak=0 waitmem_peak=0 pages_act=1728 spill+0 demote+0 demote_refused+0
+[kv] w4: 221060 tok (1.42x budget) in 63.2s | ok=4 refused=0 prefill_rows+221060 susp_peak=0 waitmem_peak=0 pages_act=1920 spill+0 demote+0 demote_refused+0
+[kv] w8: 442120 tok (2.84x budget) in 126.6s | ok=8 refused=0 prefill_rows+442120 susp_peak=0 waitmem_peak=0 pages_act=1920 spill+0 demote+0 demote_refused+0
+[kv] w16: 884240 tok (5.68x budget) in 253.2s | ok=16 refused=0 prefill_rows+884240 susp_peak=0 waitmem_peak=0 pages_act=1920 spill+0 demote+0 demote_refused+0
+[kv] w32: 1768480 tok (11.36x budget) in 506.7s | ok=32 refused=0 prefill_rows+1768480 susp_peak=0 waitmem_peak=0 pages_act=1920 spill+0 demote+0 demote_refused+0
+{"SUMMARY": {"run": "splash-1.7.0-2026-11-19b", "model": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S", "queue_size": 64, "warmth_gate": {"decode_tok_s": [167.7, 296.4, 302.1], "spread_ratio": 1.801, "gate": "cold"}, "width_ladder": {"medians_by_width": {"1": 304.35, "2": 480.95, "3": 578.95, "4": 700.65, "6": 697.9, "8": 691.95, "12": 700.2, "16": 688.2, "24": 680.5999999999999, "32": 680.5}, "stopped_at_width": null, "peak_width": 4, "peak_tok_s": 700.65, "collapse_width": null, "w1_baseline": 304.35}, "kv_pressure": {"rounds": 6, "widths_run": [1, 2, 4, 8, 16, 32], "cache_served_rounds": [], "max_total_tokens": 1768480, "prefill_tok_s_by_width": {"1": 3534.5, "2": 3514.7, "4": 3495.5, "8": 3493.2, "16": 3492.3, "32": 3490.4}, "trip": null, "resident_kv_budget_tokens": 155648, "lifetime_final": {"resource_suspensions": 0, "priority_suspensions": 0, "capacity_failures": 0, "kv_demotions_refused": 0, "spill_moves": 0}}}}

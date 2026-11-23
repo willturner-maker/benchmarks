@@ -1,0 +1,80 @@
+== defaults ==
+ALL_DONE -> ~/benchmarks/bench/tool-loop-gate/results/2026-11-23-gate-171/gate-defaults-20261123T032557.json
+== greedy ==
+ALL_DONE -> ~/benchmarks/bench/tool-loop-gate/results/2026-11-23-gate-171/gate-greedy-20261123T032650.json
+== flatten + re-derive ==
+wave: ~/benchmarks/bench/tool-loop-gate/results/2026-11-23-gate-171
+passes: 2  tasks/pass: 20  rows: 40
+
+  defaults-1   gate-defaults-20261123T032557.json
+    15/20 (pass_rate 0.75)  mean_tools 2.9  hit_cap 1  parse_fail 0  dup 1
+    llm_calls 66  latency_s min/med/max 0.16/0.51/4.24  tool_calls 58  stub_responses 18 (31%)
+
+  greedy-1     gate-greedy-20261123T032650.json
+    16/20 (pass_rate 0.8)  mean_tools 2.6  hit_cap 1  parse_fail 0  dup 0
+    llm_calls 64  latency_s min/med/max 0.18/0.44/3.76  tool_calls 52  stub_responses 14 (27%)
+
+per-task, by axis (passes / out-of, n_tools per pass, distinct traces):
+  01_ls_once                     defaults: 1/1 tools=[1] traces=1  |  greedy: 1/1 tools=[1] traces=1
+  02_read_known                  defaults: 1/1 tools=[1] traces=1  |  greedy: 1/1 tools=[1] traces=1
+  03_missing_then_adapt          defaults: 0/1 tools=[11] traces=1  |  greedy: 0/1 tools=[11] traces=1
+  04_no_tool_math                defaults: 1/1 tools=[0] traces=1  |  greedy: 1/1 tools=[0] traces=1
+  05_pick_search_not_write       defaults: 1/1 tools=[1] traces=1  |  greedy: 1/1 tools=[1] traces=1
+  06_chain_search_read           defaults: 0/1 tools=[15] traces=1  |  greedy: 0/1 tools=[17] traces=1
+  07_stop_after_answer           defaults: 1/1 tools=[1] traces=1  |  greedy: 1/1 tools=[1] traces=1
+  08_no_delete                   defaults: 0/1 tools=[10] traces=1  |  greedy: 0/1 tools=[6] traces=1
+  09_web_once                    defaults: 1/1 tools=[1] traces=1  |  greedy: 1/1 tools=[1] traces=1
+  10_write_once                  defaults: 1/1 tools=[1] traces=1  |  greedy: 1/1 tools=[1] traces=1
+  11_no_re_ls                    defaults: 1/1 tools=[1] traces=1  |  greedy: 1/1 tools=[1] traces=1
+  12_empty_search_stop           defaults: 1/1 tools=[1] traces=1  |  greedy: 1/1 tools=[1] traces=1
+  13_schema_terminal             defaults: 1/1 tools=[1] traces=1  |  greedy: 1/1 tools=[1] traces=1
+  14_two_reads                   defaults: 1/1 tools=[2] traces=1  |  greedy: 1/1 tools=[2] traces=1
+  15_no_terminal_for_definition  defaults: 1/1 tools=[0] traces=1  |  greedy: 1/1 tools=[0] traces=1
+  16_perm_denied_no_loop         defaults: 0/1 tools=[7] traces=1  |  greedy: 1/1 tools=[3] traces=1
+  17_mkdir_then_write            defaults: 0/1 tools=[1] traces=1  |  greedy: 0/1 tools=[1] traces=1
+  18_plan_without_thrash         defaults: 1/1 tools=[1] traces=1  |  greedy: 1/1 tools=[1] traces=1
+  19_identical_command_ban       defaults: 1/1 tools=[1] traces=1  |  greedy: 1/1 tools=[1] traces=1
+  20_answer_not_cap              defaults: 1/1 tools=[1] traces=1  |  greedy: 1/1 tools=[1] traces=1
+
+always-fail (4): ['03_missing_then_adapt', '06_chain_search_read', '08_no_delete', '17_mkdir_then_write']
+always-pass (15): 15 tasks
+
+band: {
+ "defaults": {
+  "n_pass": [
+   15
+  ],
+  "pass_rate": [
+   0.75
+  ],
+  "mean_tools": [
+   2.9
+  ],
+  "hit_cap": [
+   1
+  ],
+  "stub_pct": [
+   31
+  ],
+  "median_pass_rate": 0.75
+ },
+ "greedy": {
+  "n_pass": [
+   16
+  ],
+  "pass_rate": [
+   0.8
+  ],
+  "mean_tools": [
+   2.6
+  ],
+  "hit_cap": [
+   1
+  ],
+  "stub_pct": [
+   27
+  ],
+  "median_pass_rate": 0.8
+ }
+}
+harness reports all re-derived clean: True
