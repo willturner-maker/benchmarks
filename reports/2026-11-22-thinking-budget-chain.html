@@ -1,0 +1,257 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thinking-token budget chain — engine arms 8192 / 65536 / 32768</title>
+<title>Splash queue-size 64 — engine waves 2026-11-19</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#fcfcfd; --fg:#14171c; --fg-2:#4d555f; --mut:#7b848f;
+  --line:#dfe3e8; --accent:#2a78d6; --s2:#eb6834; --s3:#8a5fc9;
+  --good:#0f7a4d; --warn:#b26a00;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',Inter,system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#15171b; --panel:#1d2025; --fg:#eceef1; --fg-2:#b7bec7; --mut:#8a929c;
+  --line:#2c3138; --accent:#3987e5; --s2:#d95926; --s3:#a884dd;
+  --good:#3fae7c; --warn:#d0902f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 56px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.5vw,38px);font-weight:700;letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 var(--mono);color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.lede{color:var(--fg-2);max-width:65ch;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:9px 13px}
+.chip b{font-family:var(--disp);font-size:16px}
+.chip span{font-size:12.5px;color:var(--fg-2)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--good);flex:none;align-self:center}
+.dot.warn{background:var(--warn)}
+section{margin-top:44px;border-top:1px solid var(--line);padding-top:26px}
+h2{font-size:22px;font-weight:600;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 .tag{font:500 11px/1 var(--mono);color:var(--mut);letter-spacing:.06em;border:1px solid var(--line);
+  border-radius:6px;padding:4px 7px}
+p.note{color:var(--fg-2);max-width:65ch}
+.tbl-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;min-width:0}
+th{font:600 12px/1.3 var(--body);color:var(--fg-2)}
+td.num,th.num{text-align:right;font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--good);font-weight:600}
+.warn{color:var(--warn);font-weight:600}
+.dim{color:var(--mut)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:18px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.stat .v{font-family:var(--disp);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12.5px;color:var(--fg-2);margin-top:2px}
+ul.tight{margin:12px 0 0;padding-left:20px;color:var(--fg-2)}
+ul.tight li{margin:5px 0}
+code{font:500 12.5px/1.4 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.viz-root{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;margin-top:18px}
+.viz-root .vtitle{font:600 14px/1.3 var(--disp)}
+.viz-root .vsub{font-size:12.5px;color:var(--fg-2);margin-top:3px}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:12.5px;color:var(--fg-2)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.chartwrap{position:relative;margin-top:10px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:8px 10px;font:500 12px/1.5 var(--mono);box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:0;transition:opacity .12s;white-space:nowrap;z-index:5}
+@media (prefers-reduced-motion:reduce){.tip{transition:none}}
+svg{width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--fg-2)}
+.grid{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--mut);stroke-width:1}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--mut)}
+.foot code{font-size:11.5px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+<style>
+.bar{display:grid;grid-template-columns:78px 1fr 74px;align-items:center;gap:10px;margin-top:9px}
+.bl{font:500 12.5px/1 var(--mono);color:var(--fg-2)}
+.bt{display:block;height:14px;background:var(--bg);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.bt i{display:block;height:100%}
+.bv{font:600 13px/1 var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+</style>
+<div class="wrap">
+  <div class="eyebrow">Will's local AI pipeline · Splash 1.7.0 · τ²-bench 238 judge-free tasks · thinking-budget chain</div>
+  <h1>The thinking-budget A/B could not bind — so it publishes the noise floor instead</h1>
+  <p class="lede">Three waves of the same 238 tasks, one per engine <code>--thinking-token-budget</code>
+  (8192, 65536, and the pinned 32,768 relaunched last as a same-session control). The flag was set
+  differently three times and changed nothing: the harness caps completion at <code>max_tokens 4,096</code>,
+  and <b>thinking tokens count inside that cap</b>, so every arm's budget sat above the ceiling the model was
+  allowed to reach. What is left is the measurement the suite actually needed — <b>how much τ² moves when
+  nothing is varied</b>: pass^1 spreads <b>3.8 points</b> and <b>17.6–19.7 % of tasks flip</b>, with no
+  pair separable by an exact sign test.</p>
+
+  <div class="chips">
+    <div class="chip"><span class="dot "></span><b>3.8 pts spread</b><span>pass^1 across three arms that cannot differ — 0.8782 / 0.8697 / 0.8403</span></div>
+    <div class="chip"><span class="dot "></span><b>inert by construction</b><span>budgets 8,192 / 32,768 / 65,536 all sit above the harness cap of 4,096 tokens</span></div>
+    <div class="chip"><span class="dot warn"></span><b>17.6–19.7 % of tasks flip</b><span>with nothing varied — ±4 pts of single-wave pass^1 is the noise floor</span></div>
+    <div class="chip"><span class="dot "></span><b>0 crowd-out messages</b><span>thinking never ate a completion in 714 sims; 1 agent turn hit the cap</span></div>
+  </div>
+
+  <section>
+    <h2>1 · The three arms <span class="tag">trials 1 · seed 300 · temperature 0 · self-play</span></h2>
+    <div class="viz-root">
+      <div class="vtitle">pass^1 by arm — an inert manipulation, spread 3.8 pts</div>
+      <div class="vsub">8192 and 65536 are the treatment arms; 32,768 is the pinned value, relaunched last so a
+      mid-chain failure still leaves the engine pinned, which makes it the same-session control</div>
+      <div class="bar"><span class="bl">8192</span><span class="bt"><i style="width:87.82%;background:var(--accent)"></i></span><span class="bv">0.8782</span></div>
+      <div class="bar"><span class="bl">65536</span><span class="bt"><i style="width:86.97%;background:var(--accent)"></i></span><span class="bv">0.8697</span></div>
+      <div class="bar"><span class="bl">32768</span><span class="bt"><i style="width:84.03%;background:var(--s2)"></i></span><span class="bv">0.8403</span></div>
+    </div>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>arm</th><th class="num">pass^1</th><th class="num">airline (50)</th>
+      <th class="num">retail (74)¹</th><th class="num">telecom (114)</th><th class="num">any-pass tasks</th>
+      <th class="num">tool calls</th><th class="num">sims scored</th></tr></thead>
+      <tbody>
+      <tr><td>8192</td><td class="num">0.8782</td><td class="num">0.900</td><td class="num">0.811</td><td class="num">0.912</td><td class="num">209</td><td class="num">1,531</td><td class="num">238</td></tr>
+      <tr><td>65536</td><td class="num">0.8697</td><td class="num">0.860</td><td class="num">0.824</td><td class="num">0.903</td><td class="num">207</td><td class="num">1,518</td><td class="num">238</td></tr>
+      <tr><td  class="ok">32768 (pin-restore control)</td><td class="num">0.8403</td><td class="num">0.860</td><td class="num">0.784</td><td class="num">0.868</td><td class="num">200</td><td class="num">1,480</td><td class="num">238</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">¹ retail is the published judge-free subset: 74 of 114 ids via upstream's own
+    <code>--task-ids</code>, re-verified in these waves — 0 of the 74 carry <code>nl_assertions</code>, so the NL
+    evaluator short-circuits and no judge is reachable. Never pool domains: different task counts and different
+    graded components.</p>
+  </section>
+
+  <section>
+    <h2>2 · The number worth keeping — flips between arms that cannot differ</h2>
+    <p class="note">With <code>--num-trials 1</code> the only thing that can differ per task is pass/fail, so the
+    discordant counts <i>are</i> the noise floor. Exact two-sided sign test on the discordants (no normal
+    approximation).</p>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>pair</th><th class="num">tasks</th><th class="num">both pass</th><th class="num">both fail</th>
+      <th class="num">only first</th><th class="num">only second</th><th class="num">flip rate</th><th class="num">sign test</th></tr></thead>
+      <tbody>
+      <tr><td>32768 vs 8192</td><td class="num">238</td><td class="num">183</td><td class="num">12</td><td class="num">17</td><td class="num">26</td><td class="num">18.1 %</td><td class="num">p = 0.222</td></tr>
+      <tr><td>32768 vs 65536</td><td class="num">238</td><td class="num">180</td><td class="num">11</td><td class="num">20</td><td class="num">27</td><td class="num">19.8 %</td><td class="num">p = 0.382</td></tr>
+      <tr><td>8192 vs 65536</td><td class="num">238</td><td class="num">187</td><td class="num">9</td><td class="num">22</td><td class="num">20</td><td class="num">17.6 %</td><td class="num">p = 0.878</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="kv">
+      <div class="stat"><div class="v">±4 pts</div><div class="l">the working rule for a single 238-task wave:
+      ≈19 task flips of pass^1 is noise</div></div>
+      <div class="stat"><div class="v">1 / 8,986</div><div class="l">agent turns that reached
+      the cap across all three arms — the cap binds rarely, the engine budget never</div></div>
+      <div class="stat"><div class="v">15.1 %</div><div class="l">independent same-seed flip floor
+      (2026-11-21 pair) — same band as these 17.6–19.7 %</div></div>
+      <div class="stat"><div class="v">18.9 %</div><div class="l">independent 2-trial flip rate (2026-11-19a) —
+      also the same band</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3 · Why the arms were inert — arithmetic, not measurement <span class="tag">the correction</span></h2>
+    <p class="note">On this stack, reasoning tokens are billed inside <code>completion_tokens</code>. Measured
+    directly the same day: <code>max_tokens=16</code> → <code>completion_tokens=16</code> with
+    <code>reasoning_tokens=16</code> and <code>content=null</code>; the same prompt at 200 answered correctly with
+    23 reasoning tokens. So completion ≤ 4,096 always, and an engine budget above 4,096 can never be the
+    binding constraint. Each arm's budget below is read from <code>supervisor_pins.txt</code> — the live
+    supervisor's argv at wave start, not the chain script's intent.</p>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>arm</th><th class="num">budget (live argv)</th><th class="num">harness cap</th>
+      <th class="num">largest agent completion</th><th class="num">agent turns at cap</th><th class="num">verdict</th></tr></thead>
+      <tbody>
+      <tr><td>8192</td><td class="num">8,192</td><td class="num">4,096</td><td class="num">3,106</td><td class="num">0</td><td class="warn">inert</td></tr>
+      <tr><td>65536</td><td class="num">65,536</td><td class="num">4,096</td><td class="num">2,781</td><td class="num">0</td><td class="warn">inert</td></tr>
+      <tr><td>32768</td><td class="num">32,768</td><td class="num">4,096</td><td class="num">4,096</td><td class="num">1</td><td class="warn">inert</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>arm</th><th class="num">agent turns</th><th class="num">completion mean</th>
+      <th class="num">median</th><th class="num">max</th><th class="num">thinking mean²</th>
+      <th class="num">thinking max²</th><th class="num">thinking share</th><th class="num">crowd-out³</th></tr></thead>
+      <tbody>
+      <tr><td>8192</td><td class="num">2,988</td><td class="num">237.5</td><td class="num">171.5</td><td class="num">3,106</td><td class="num">153.4</td><td class="num">2,688</td><td class="num">0.646</td><td class="num">0</td></tr>
+      <tr><td>65536</td><td class="num">2,988</td><td class="num">244.8</td><td class="num">173.0</td><td class="num">2,781</td><td class="num">162.5</td><td class="num">2,768</td><td class="num">0.664</td><td class="num">0</td></tr>
+      <tr><td>32768</td><td class="num">3,010</td><td class="num">240.0</td><td class="num">171.0</td><td class="num">4,096</td><td class="num">157.6</td><td class="num">3,562</td><td class="num">0.657</td><td class="num">0</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">² τ² records <code>completion_tokens</code> only, with no reasoning breakdown, so thinking is
+    <i>derived</i>: completion − estimated visible (chars / 4). It is labelled an estimate and nothing above
+    depends on it — the inertness conclusion comes from the cap arithmetic. ³ crowd-out = completion &gt; 0 with
+    empty visible content <b>and no tool call</b>: the first version of the detector counted 642 / 655 / 689
+    tool-call turns as truncations, because a tool-call turn has empty content by design. True crowd-out: zero,
+    in every arm.</p>
+  </section>
+
+  <section>
+    <h2>4 · Engine side — τ² is a prefix-cache workload, and it never touches the queue</h2>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>arm</th><th class="num">samples</th><th class="num">samples with live requests</th>
+      <th class="num">pages_active max</th><th class="num">…in tokens</th><th class="num">queued max</th>
+      <th class="num">decoding max</th><th class="num">decode width high-water (lifetime)</th>
+      <th class="num">spill / demote / susp (Δ window)</th></tr></thead>
+      <tbody>
+      <tr><td>8192</td><td class="num">443</td><td class="num">441</td><td class="num">752</td><td class="num">24,064</td><td class="num">1</td><td class="num">3</td><td class="num">b1 2,702 · b2 12,674 · b3 87,684 · b4 0</td><td class="num">0 / 3,164 / 0</td></tr>
+      <tr><td>65536 <span class="warn">(excluded)</span></td><td class="num">552</td><td class="num">30</td><td class="num">4,533</td><td class="num">145,056</td><td class="num">32</td><td class="num">1</td><td class="num">b1 8,724 · b2 0 · b3 6 · b4 120</td><td class="num">0 / 0 / 0</td></tr>
+      <tr><td>32768</td><td class="num">438</td><td class="num">436</td><td class="num">816</td><td class="num">26,112</td><td class="num">1</td><td class="num">3</td><td class="num">b1 3,383 · b2 11,717 · b3 88,028 · b4 0</td><td class="num">0 / 2,595 / 0</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <ul class="tight">
+      <li>Residency tops out at <b>0.155× / 0.168× of the 155,648-token KV budget</b> — τ² is not a KV-stress
+      suite, and it never was.</li>
+      <li><code>queued</code> never exceeded <b>1</b>: a single-tenant τ² wave does not queue, which is why the
+      <code>--queue-size 64</code> stack move is invisible to this suite in both directions.</li>
+      <li>The wave's own <code>--max-concurrency 3</code> shows up in the engine's counters: decode width b3
+      dominates by an order of magnitude and <b>b4 is never reached</b>, so <code>maximum_batch_width: 4</code>
+      is never filled here.</li>
+      <li>Memory-path engagement: spill 0, suspensions 0, and <code>kv_demotions</code> +3,164 / +2,595 —
+      persistent-cache churn without pressure.</li>
+      <li><b>The 65536 arm's engine samples are excluded, not averaged in.</b> Its directory was re-entered by a
+      stalled re-run: 30 of 552 samples show live requests, <code>queued</code> max 32, and
+      <code>max_new_tokens</code> of 8 / 32,768 where the harness declares 4,096 — that is foreign traffic. Its
+      outcome data is verified intact; only its console and engine evidence degraded.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5 · Provenance: what went wrong, stated in the record</h2>
+    <ul class="tight">
+      <li>Five chain launches. The first failed its own argv guard because the guard looked at the engine
+      <i>child</i>, whose argv carries no options at all — the supervisor carries them. Two more launches aborted
+      on the engine-idle guard rather than killing a busy engine. The last one stalled on τ²'s interactive
+      "resume the run? (y/n)" prompt for 84 minutes with the engine idle, which is how the runner got hardened:
+      <code>&lt;/dev/null</code> stdin, a pre-flight check on <code>--save-to</code>, a completed-arm skip guard, and
+      a stall watchdog that watches <b>engine</b> batch counters rather than τ²'s CPU.</li>
+      <li>Four analyzer bugs are published in the record because each would have printed plausible numbers:
+      reward lives under <code>reward_info.reward</code>; τ² task ids are numeric <i>per domain</i>, so keying on
+      <code>task_id</code> alone merged airline task 3 with retail task 3; the crowd-out detector counted tool-call
+      turns as truncations; and deriving the harness cap from engine samples is wrong for a contaminated arm.</li>
+      <li>One operator-caused tenancy sample inside the 65536 window is recorded rather than suppressed
+      (active 36 / queued 32 / decoding 0, spill/demote/suspensions 0). The arm was characterised, not voided.</li>
+      <li>Every number on this page was diffed against <code>arm_readout.json</code> programmatically
+      (74 checks). One FAIL in that check was the checker, not the data — it subtracted an airline-only count.</li>
+    </ul>
+    <p class="note">Records: <code>bench/tau2-bench/results/2026-11-22-thinkbudget-chain/RECORD.md</code> ·
+    arm evidence in <code>results/2026-11-22-thinkbudget-{8192,65536,32768}/</code> ·
+    stall and tenancy detail in <code>results/2026-11-22-thinkbudget-65536/TENANCY.md</code> ·
+    regenerate with <code>python3 bench/tau2-bench/thinkbudget_summary.py</code> then
+    <code>python3 tools/make-thinkbudget-report.py</code>.</p>
+  </section>
+</div>

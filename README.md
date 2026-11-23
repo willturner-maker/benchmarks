@@ -51,6 +51,7 @@ before a row can be ranked.
 The scorecards themselves are self-contained HTML (no external assets, no build step) and
 render on Pages:
 
+- [τ² thinking-budget chain — the A/B could not bind, so it publishes the noise floor — 2026-11-22](https://willturner-maker.github.io/benchmarks/reports/2026-11-22-thinking-budget-chain.html)
 - [τ²-bench — an agent benchmark you can actually reproduce — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-bench.html)
 - [τ² width control — the flip rate is not batching — 2026-11-19](https://willturner-maker.github.io/benchmarks/reports/2026-11-19-tau2-width-control.html)
 - [τ² three trials — pass^3 and why the flip list moved — 2026-11-20](https://willturner-maker.github.io/benchmarks/reports/2026-11-20-tau2-pass3.html)
