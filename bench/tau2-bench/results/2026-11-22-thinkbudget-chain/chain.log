@@ -7,3 +7,18 @@
 2026-11-22T19:01:59Z engine still busy after 10 min before arm 65536 - aborting, engine untouched
 2026-11-22T19:16:22Z thinkbudget chain start (arms: 8192, 65536, 32768-pin-restore + control wave)
 2026-11-22T19:26:29Z engine still busy after 10 min before arm 8192 - aborting, engine untouched
+2026-11-22T19:41:00Z thinkbudget chain start (arms: 65536, then pin-restore 32768 + control wave if not an arm)
+2026-11-22T19:41:00Z stopped live engine pid 83029 for arm 65536
+2026-11-22T19:41:01Z arm 65536: launching engine
+2026-11-22T19:41:01Z arm 65536 supervisor pid 89280
+2026-11-22T19:41:10Z arm 65536: engine ready, identity + argv verified
+2026-11-22T20:54:57Z arm 65536 wave exit=0
+2026-11-22T20:54:59Z arm 32768: launching engine
+2026-11-22T20:54:59Z arm 32768 supervisor pid 91017
+2026-11-22T20:55:08Z arm 32768: engine ready, identity + argv verified
+2026-11-22T22:08:04Z arm 32768 wave exit=0
+2026-11-22T22:08:05Z thinkbudget chain complete: pin restored (32768) and control wave done
+2026-11-22T22:42:49Z thinkbudget chain start (arms: 65536, then pin-restore 32768 + control wave if not an arm)
+2026-11-22T22:42:49Z arm 65536: launching engine
+2026-11-22T22:42:49Z arm 65536 supervisor pid 93518
+2026-11-22T22:42:58Z arm 65536: engine ready, identity + argv verified
