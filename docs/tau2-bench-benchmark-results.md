@@ -45,6 +45,7 @@ hiding it.
 - [Retail-40 closure 2026-11-21 — the judge gap measured without a judge](#retail-40-closure-2026-11-21--the-judge-gap-measured-without-a-judge-raw-benchtau2-benchresults2026-11-21-retail40-env)
 - [Determinism probe 2026-11-22 — byte-identical requests are a ~50 % action coin flip; messages never reproduce](#determinism-probe-2026-11-22--byte-identical-requests-are-a-50-action-coin-flip-messages-never-reproduce-raw-benchtau2-benchresults2026-11-21-determinism-probe-benchtau2-benchresults2026-11-22-determinism-probe-telecom)
 - [Thinking-budget chain 2026-11-22 — an inert manipulation, published as the noise floor](#thinking-budget-chain-2026-11-22--an-inert-manipulation-published-as-the-noise-floor-raw-benchtau2-benchresults2026-11-22-thinkbudget-chain)
+- [Splash 1.7.1 epoch 2026-11-23 — the lottery is version-stationary; pass^3/flip replicate; pass^1's lowest draw is unresolved](#splash-171-epoch-2026-11-23--the-lottery-is-version-stationary-pass3flip-replicate-pass1s-lowest-draw-is-unresolved-raw-benchtau2-benchresults2026-11-23-epoch171)
 
 ## Why this instrument, and why pinned at 1.0.1
 
@@ -550,6 +551,26 @@ truncations until it required no tool calls, after which crowd-out is **0 in eve
 harness cap from engine samples is wrong for a contaminated arm (it reported 8) — the declared cap is
 authoritative and a disagreement is now reported as evidence of foreign traffic. Regenerate with
 `python3 bench/tau2-bench/thinkbudget_summary.py`.
+
+## Splash 1.7.1 epoch 2026-11-23 — the lottery is version-stationary; pass^3/flip replicate; pass^1's lowest draw is unresolved (raw: `bench/tau2-bench/results/2026-11-23-epoch171/`)
+
+The operator upgraded the engine (pinned argv verified on the replacement supervisor, `ane_ffn` still
+**off** so 1.7.1's int8-FFN "outputs can differ" clause never engaged, int8 MoE prefill scoped to resident
+MLX while we are GGUF-streamed). Two measurements rode one 1.7.1 instance, no restarts:
+(1) **determinism corpus re-run** — the same captured wire bodies re-POSTed into 1.7.1: agent identity
+airline 50→55/55→57.5 %, telecom 52.5→42.5/45→37.5 % (mean −2.5 pts, inside the n=40 bands);
+cross-epoch match-to-original sits on the same ~60 % plateau. **The ~50/50 action lottery is version-
+stationary** — 1.7.1 also now prints "greedy and seeded outputs can differ from run to run" in its boot
+banner, corroborating the probe from the engine side.
+(2) **238×3 replay** — pass^3 **0.6891** (vs 0.6933 old-epoch, 0.7059 new-epoch-1.7.0: replicated),
+pass^2 0.7521, flips 64/238 = 26.9 % (band intact), cleanest window ever (0 co-tenant, 0 spill,
+0 suspensions), drafter acceptance 63.7 % (in-line), wall 224 min vs 227 — the shared-head cache yields no
+τ² win because 1.7.0's persistent cache already covered those heads. But **pass^1 0.8109 is the lowest
+single draw on record**, 5+ pts under both 3-trial medium waves and just outside the ±4 pt band —
+*not* an established epoch effect (domain drops are roster-shuffle-shaped, the request-level lottery is
+stationary, CIs overlap the edge), but not noise-certain either. **A second 1.7.1 3-trial wave settles
+it.** Epoch bookkeeping: rows before 2026-11-22T22:30Z are 1.7.0-epoch, after are 1.7.1-epoch; the
+determinism corpus is now the standard ~25-min first measurement after any engine upgrade.
 
 To publish a row, follow the numbered rules in `bench/tau2-bench/README.md` and send a PR — see
 [Community runs](leaderboard.md#community-runs--your-numbers).
