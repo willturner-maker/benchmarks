@@ -1657,3 +1657,48 @@ unchanged.
 **not** an epoch or model effect — documented build break. Engine stays 1.7.1; the epoch verdict
 is unaffected.
 
+## Addendum build-series 2, wave 2 (2026-11-23): agbench-23d repeats 23c exactly — dropout confirmed, watchdog built and proven
+
+Wave `agbench-23d-2026-11-23` (raw: `results/agbench-23d-2026-11-23/`, gitignored; distilled
+`results-agbench-23d-2026-11-23.json`, claims + RECORD at suite root). Same builds as 23c
+(opencode 2.4.1, MCP 5.4.0, Splash 1.7.1 pinned argv), rotated task order (opened F2, soloed
+T8r3). 22:54:12–23:20:44Z (26.5 min; per-trial median 100.6 s vs 23c's 108.1 — parity).
+
+**Raw 19/21; corrected 21/21 — bit-for-bit the same shape as 23c.** The within-series band at
+n=2: the raw floor is set entirely by the per-session MCP dropout (2/21 in BOTH waves — the
+2.4.1 build bug is confirmed, rate ~10%/session), and behind it there are **zero genuine model
+misses in 42 same-build trials**. This is the cleanest picture the suite has ever had of its own
+harness tax.
+
+**Dropout signature varies per session** (why the first watchdog missed it): 23c's dropouts
+errored REAL underscore tool names ("No tool named davinci-resolve_timeline…"); 23d's T1r1/T8r1
+errored mangled hyphen forms with ZERO Resolve completions (T8r1 kept an alive advanced/offline
+server — a live-only failure). Driver v2.2 (committed): pool confirmed only by a completed
+live/builtin-named call; "No tool named" rejections across any `davinci-resolve*` form counted
+while unconfirmed, kill at 6 with no completion; EOF re-check catches give-up agents. Offline
+replay over all 21 sealed 23d sessions classified exactly T1r1/T8r1 as DEAD; then it caught one
+live — the T8r1 re-run's first session was killed at the 6th rejection and its replacement
+PASSed. Dropout agents were again honest (T1r1: "values unavailable", 12 rejected calls, zero
+changes) — the model handles this failure mode correctly; the harness causes it.
+
+**New fixture/grading hygiene, all committed:** `purge_fixture_archives.py` ran pre-dispatch
+(14→10 timelines, logged — the archive-sibling census artifact stayed designed-out), and
+`derive_grader_gt_16f.py` derived the grader gt from the sealed builder files. Builder arm-checks
+were green pre-wave (f2: transition + both grades), so the F2 grade axis scored for the second
+wave running — F2r3 even at value level (`describe_grade` CDL numbers byte-identical on the kept
+clip).
+
+**Behavioral counts this wave:** F2 link-repair 0/3 (`set_clips_linked` never called; 0/6 across
+both same-build waves — 171's single occurrence stands as task-framing sensitivity). T7 3/3
+rendered+verified. One notable agent-side save: **F2r2** tripped a `ripple_insert` double-offset
+(`record_frame` treated as elapsed-from-start AND re-added — first execute landed at absolute
+216442, a 107,779-frame gap), disclosed it, deleted the two misplaced items, verified the
+baseline restored, then inserted correctly — geometry graded PASS. New api_truths friction row
+for the action. Seal: 0 real leaks / 24 sessions; sloppiness tax 50 mangled-name attempts
+(23c: 81).
+
+**Series state:** working ceiling on 2.4.1+5.4.0 = **21/21 corrected** (n=2, no variance); the
+next score-moving variable is an engine build or fixing/working around the harness dropout —
+not the model.
+
+

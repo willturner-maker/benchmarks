@@ -333,9 +333,15 @@ def run_trial(name, prompt, sess_root, GROUND_RULES):
     full = prompt + "\n\n" + GROUND_RULES
     attempts = []
     for k in range(PROBE_MAX_ATTEMPTS):
-        attempt_name = name if k == 0 else f"{name}-probe-dead-attempt{k}"
-        rec = _run_trial_attempt(attempt_name, full, sess_root, attempts)
+        rec = _run_trial_attempt(f"{name}-attempt{k}", full, sess_root, attempts)
         if not rec.get("probe", {}).get("dead"):
+            # winner takes the canonical session dir name; dead attempts keep -attemptK.
+            dead_dirs = [sess_root / f"{name}-attempt{j}" for j in range(k)]
+            (sess_root / f"{name}-attempt{k}").rename(sess_root / name)
+            for d in dead_dirs:
+                d.rename(pathlib.Path(str(d) + "-probe-dead"))
+            rec["task"] = name
+            rec["probe_attempts"] = attempts
             return rec
         attempts.append(rec.get("probe", {}).get("why", "?"))
         print(f"  !! POOL DEAD {name} attempt {k+1}: {attempts[-1]} — relaunching", flush=True)
