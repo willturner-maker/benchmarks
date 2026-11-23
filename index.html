@@ -49,6 +49,14 @@
 
   <h2>Scorecards</h2>
   <ul>
+    <li><a class="card" href="reports/2026-11-22-thinking-budget-chain.html">
+      <span class="name">The thinking-budget A/B could not bind — so it publishes the noise floor</span><span class="tag">null result · τ²-bench · 3 engine arms</span>
+      <div class="sub">Engine <code>--thinking-token-budget</code> set three ways (8192 / 65536 / pinned-32768
+        control), one 238-task wave each — and <b>inert by construction</b>: the harness caps completion at
+        <b>4,096</b> tokens and thinking is billed <i>inside</i> that cap, so no arm's budget could ever bind.
+        What survives is the calibration the suite needed: pass^1 <b>0.8782 / 0.8697 / 0.8403</b> across arms that
+        cannot differ, <b>17.6–19.7 % of tasks flip</b> with nothing varied (exact sign tests p = 0.222 / 0.382 /
+        0.878) — so <b>±4 pts of single-wave pass^1 is noise</b>.</div></a></li>
     <li><a class="card" href="reports/2026-11-19-tau2-bench.html">
       <span class="name">An agent benchmark you can actually reproduce</span><span class="tag">new suite · τ²-bench · tag-pinned v1.0.1</span>
       <div class="sub">The second suite here another machine can run — <b>238 tasks × 2 trials = 476 simulations,
