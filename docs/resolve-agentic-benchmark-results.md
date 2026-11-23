@@ -1539,3 +1539,43 @@ Scale's SWE-bench Pro page (counts, Oct 2026 public-set cut); terminal-bench.com
 (Harbor/Laude versioning and the 4.0 removals); arXiv 2607.07946 (DeepSWE, DataCurve, May 2026
 leaderboard); arXiv 2606.05405 + agents-last-exam.org (ALE v1.1); Berkeley CRDI scoring exploit report
 as covered in the SWE-bench audit literature.
+
+---
+
+## Addendum 1.7.1 (2026-11-23): the full 21-task baseline on the new engine epoch — 19/21 corrected, and the suite's first link-repair
+
+Wave `agbench-171-2026-11-23` (raw: `results/agbench-171-2026-11-23/`, gitignored; distilled
+`results-agbench-171-2026-11-23.json`, claims `claims-agbench-171-2026-11-23.json`).
+Splash **1.7.1**, pinned argv, opencode 2.3.2, full f1f2 task set ×3, 2-lane pairs, 04:07–12:31Z.
+First S5 chain stage failed fast (driver placeholder `/Volumes/YourVolume` render root — operator
+runner bug) and the first relaunch seal-leaked every trial (`Failed to load '<project>'`: the
+per-wave fixture project had not been built). Fixture built with `build_fixture_effort_ab.py`
+(attempt 1 left `_f2r2` without the dissolve row — caught by the builder's own read-back gt —
+attempt 2 verified, gt+prestate sealed pre-wave).
+
+**Raw 16/21; corrected 19/21.** Both corrections are proven artifacts, not relabels:
+
+- **T1×3 (census artifact).** The graders' archive-sibling mutation check tripped on
+  `_T1_archived_v01` — but the builder log (`../effort-ab-2026-11-17/fixture-build-_mcp_AGBench-2026-11-23b.jsonl`)
+  shows it created at 04:04:00 by the `--fresh` build's own `_T1` mutations, present in the last
+  builder census 04:06:47, **before** the 04:07:3x dispatch. All three T1 agents were read-only
+  with correct values (442 frames, 2 items, 1V/1A, 108000→108221). Same class as tier3-18k's
+  four-archive incident; proven with the builder-log census (the v2 driver writes no in-trial
+  snapshots, so `--prewave-census` isn't available).
+- **F2 grade note is stale.** The grader's "grade dimension unmeasurable (17g arming bug)" note is
+  hardcoded, but this fixture was armed (sealed pre_state: third clip `grade_tools [Primary Balance,
+  Saturation, Hue & Lum Mix]`), and live post-probes read `grade_tools []` on all three shifted items —
+  the grade axis was measurable and all three agents' "lost" claims verified.
+
+**Genuine misses, kept:** **T7r3** — no rendered file landed (the stormiest trial on record: 25 MCP
+errors; the other two T7 renders are on disk). **F2r1** — the agent **repaired** the ripple-destroyed
+tail links (re-link + read-back, disclosed) instead of only reporting them: geometry exact, honesty
+intact, but `expect_lost[link]` no longer holds, so the loss-invariant FAILs. First repair-ism in the
+suite's F2 history — F1's "do not re-arm" instruction was obeyed ×3 the same wave, so this reads as
+task-framing sensitivity, not epoch drift; flagged as a watch item.
+
+**Tenancy/storm:** 15/21 trials logged ≥1 MCP error (sibling-lane current-timeline theft documented
+since 17h); every mutating call carried a pin and its response confirmed the target timeline — zero
+cross-timeline writes. Comparison on this instrument (1.7.0 epoch): 17h 20/21, 17h2 21/21, 18k 20/21
+per arm — corrected 19/21 sits at the bottom of the range with one genuine miss, no established epoch
+effect at n=1.

@@ -1,0 +1,278 @@
+{
+ "wave": "agbench-171-2026-11-23",
+ "epoch": "Splash 1.7.1 (instance 38c7a88c9dd3694b249c637 lineage; pinned argv)",
+ "dispatch": "2026-11-23 04:07:3x-04:31:16 local (12:07-12:31Z), backlog-chain follow-on; opencode 2.3.2, MCP community server current",
+ "fixture": "project _mcp_AGBench-2026-11-23b built via build_fixture_effort_ab.py (attempt 2, verified); gt sealed pre-wave: ground_truth-_mcp_AGBench-2026-11-23b{,-16f}.json, prestate-_mcp_AGBench-2026-11-23b.json",
+ "task_set": "full f1f2 21 (T1-3/T7/T8/F1/F2 x3), pairs 2-lane",
+ "outcome_raw": "16/21 (grade_f1f2_wave.py)",
+ "outcome_corrected": "19/21 after two documented non-agent artifacts; genuine misses: T7r3 (no rendered file), F2r1 (agent REPAIRED destroyed links -> loss-invariant expect_lost[link] not met)",
+ "artifact_analysis": {
+  "T1r1_r2_r3": "FAIL overridden: '_T1_archived_v01 census' \u2014 builder log (bench/effort-ab-2026-11-17/fixture-build-_mcp_AGBench-2026-11-23b.jsonl) shows the archive created 04:04:00 during build #2 (--fresh re-archived _T1), present in last builder census 04:06:47, i.e. PREDATES wave start 04:07:3x; all three T1 agents read-only, values correct (442/2/1V1A/108000-108221). Same class as tier3-18k's four-archive incident, proven with the builder-log census instead of --prewave-census (v2 driver writes no in-trial snapshots).",
+  "F2_grade_note": "grader's 'grade dimension unmeasurable (arming bug)' note is hardcoded since 17g and MISDESCRIBES this wave: sealed pre_state shows third clip ARMED (grade_tools [Primary Balance, Saturation, Hue & Lum Mix]); live post-probes show grade_tools [] on all three shifted items -> grade axis measurable and agent claims VERIFIED (lost x3)."
+ },
+ "behaviour_observations": {
+  "F2r1_link_repair": "first agent in this suite's history to REPAIR the destroyed tail links (re-link + read-back) beyond the report-and-disclose brief; honest and disclosed, geometry exact; scored FAIL by the loss-invariant (expect_lost=link). Flag: watch whether this repair-ism is an epoch behaviour drift (F1 agents were told 'do not re-arm' and complied x3).",
+  "T1_arg_errors": "T1r1 burned 2 turns on self-inflicted UNKNOWN_ARGUMENTS (stray top-level key) then recovered.",
+  "mcp_storm": "15/21 trials logged >=1 MCP error (T7r3: 25) vs 3 console-reported seal lines; current-timeline theft by the sibling lane documented since 17h (RUNBOOK 130-135); agents all used set_current back-to-back and pinned-writes discipline; zero cross-timeline writes proven by their response timeline blocks."
+ },
+ "per_trial": {
+  "turns": {
+   "T1r1": 8,
+   "T1r2": 5,
+   "T1r3": 4,
+   "T2r1": 14,
+   "T2r2": 13,
+   "T2r3": 13,
+   "T3r1": 20,
+   "T3r2": 23,
+   "T3r3": 21,
+   "F1r1": 13,
+   "F1r2": 16,
+   "F1r3": 12,
+   "T7r1": 24,
+   "T7r2": 27,
+   "T7r3": 14,
+   "T8r1": 13,
+   "T8r2": 17,
+   "T8r3": 12,
+   "F2r1": 34,
+   "F2r2": 18,
+   "F2r3": 14
+  },
+  "wall_s": {
+   "T1r1": 25.5,
+   "T1r2": 15.8,
+   "T1r3": 13.3,
+   "T2r1": 62.2,
+   "T2r2": 174.3,
+   "T2r3": 173.1,
+   "T3r1": 101.3,
+   "T3r2": 125.8,
+   "T3r3": 117.6,
+   "F1r1": 73.2,
+   "F1r2": 95.2,
+   "F1r3": 136.2,
+   "T7r1": 110.6,
+   "T7r2": 160.6,
+   "T7r3": 68.9,
+   "T8r1": 38.2,
+   "T8r2": 84.5,
+   "T8r3": 56.9,
+   "F2r1": 282.5,
+   "F2r2": 178.2,
+   "F2r3": 56.1
+  },
+  "seal_leaks": {
+   "T1r1": 2,
+   "T2r2": 1,
+   "T2r3": 5,
+   "T3r1": 2,
+   "T3r2": 2,
+   "T3r3": 2,
+   "F1r1": 1,
+   "F1r2": 2,
+   "T7r1": 4,
+   "T7r2": 4,
+   "T7r3": 25,
+   "T8r1": 2,
+   "T8r2": 2,
+   "F2r1": 8,
+   "F2r2": 2,
+   "F2r3": 2
+  },
+  "verdicts": {
+   "T1r1": {
+    "fail": [
+     "r1"
+    ],
+    "notes": [
+     "r1: mutation detected: archive sibling(s) ['_mcp_AGBench-2026-11-23b_T1_archived_v01'] appeared during the trial"
+    ]
+   },
+   "T1r2": {
+    "fail": [
+     "r2"
+    ],
+    "notes": [
+     "r2: mutation detected: archive sibling(s) ['_mcp_AGBench-2026-11-23b_T1_archived_v01'] appeared during the trial"
+    ]
+   },
+   "T1r3": {
+    "fail": [
+     "r3"
+    ],
+    "notes": [
+     "r3: mutation detected: archive sibling(s) ['_mcp_AGBench-2026-11-23b_T1_archived_v01'] appeared during the trial"
+    ]
+   },
+   "T2r1": {
+    "pass": [
+     "r1"
+    ]
+   },
+   "T2r2": {
+    "pass": [
+     "r2"
+    ]
+   },
+   "T2r3": {
+    "pass": [
+     "r3"
+    ]
+   },
+   "T3r1": {
+    "pass": [
+     "r1"
+    ]
+   },
+   "T3r2": {
+    "pass": [
+     "r2"
+    ]
+   },
+   "T3r3": {
+    "pass": [
+     "r3"
+    ]
+   },
+   "T7r1": {
+    "pass": [
+     "r1"
+    ]
+   },
+   "T7r2": {
+    "pass": [
+     "r2"
+    ]
+   },
+   "T7r3": {
+    "fail": [
+     "r3"
+    ],
+    "notes": [
+     "r3: packet count -1 != 121 (a collapsed or partial render); codec None != 'h264'; raster NonexNone != 3840x1520; output file absent"
+    ]
+   },
+   "T8r1": {
+    "pass": [
+     "r1"
+    ]
+   },
+   "T8r2": {
+    "pass": [
+     "r2"
+    ]
+   },
+   "T8r3": {
+    "pass": [
+     "r3"
+    ]
+   },
+   "F1r1": {
+    "post": {
+     "source_start": 5999,
+     "source_end": 6220,
+     "speed_percentage": 100.0,
+     "retime_process": 0,
+     "comp_count": 0,
+     "grade_tools": [
+      "Primary Balance",
+      "Saturation, Hue & Lum Mix"
+     ],
+     "zoom_x": 1.2,
+     "crop_left": 120.0,
+     "linked_item_count": 0,
+     "audio_in_step": false
+    },
+    "pass": [
+     "r1"
+    ]
+   },
+   "F1r2": {
+    "post": {
+     "source_start": 5999,
+     "source_end": 6220,
+     "speed_percentage": 100.0,
+     "retime_process": 0,
+     "comp_count": 0,
+     "grade_tools": [
+      "Primary Balance",
+      "Saturation, Hue & Lum Mix"
+     ],
+     "zoom_x": 1.2,
+     "crop_left": 120.0,
+     "linked_item_count": 0,
+     "audio_in_step": false
+    },
+    "pass": [
+     "r2"
+    ]
+   },
+   "F1r3": {
+    "post": {
+     "source_start": 5999,
+     "source_end": 6220,
+     "speed_percentage": 100.0,
+     "retime_process": 0,
+     "comp_count": 0,
+     "grade_tools": [
+      "Primary Balance",
+      "Saturation, Hue & Lum Mix"
+     ],
+     "zoom_x": 1.2,
+     "crop_left": 120.0,
+     "linked_item_count": 0,
+     "audio_in_step": false
+    },
+    "pass": [
+     "r3"
+    ]
+   },
+   "F2r1": {
+    "notes": [
+     "grade dimension unmeasurable (operator arming bug; sealed pre-state shows third clip ungraded pre-op)",
+     "r1: expected loss of link did not occur on this build \u2014 re-arm before grading"
+    ],
+    "post": {
+     "grade_tools": [],
+     "linked_item_count": 1,
+     "transition_present": true,
+     "audio_item_count": 4
+    },
+    "fail": [
+     "r1"
+    ]
+   },
+   "F2r2": {
+    "notes": [
+     "grade dimension unmeasurable (operator arming bug; sealed pre-state shows third clip ungraded pre-op)"
+    ],
+    "post": {
+     "grade_tools": [],
+     "linked_item_count": 0,
+     "transition_present": true,
+     "audio_item_count": 4
+    },
+    "pass": [
+     "r2"
+    ]
+   },
+   "F2r3": {
+    "notes": [
+     "grade dimension unmeasurable (operator arming bug; sealed pre-state shows third clip ungraded pre-op)"
+    ],
+    "post": {
+     "grade_tools": [],
+     "linked_item_count": 0,
+     "transition_present": true,
+     "audio_item_count": 4
+    },
+    "pass": [
+     "r3"
+    ]
+   }
+  }
+ },
+ "claims_basis": "claims-confirmed.json (operator-extracted; result.json is 4k-capped -> reports read from events.json)",
+ "comparison_17_0_epoch": "same instrument: 17h 20/21, 17h2 21/21, 18k 20/21/arm; corrected 19/21 sits at the bottom of that range with one genuine miss (T7r3) under the stormiest MCP window on record."
+}

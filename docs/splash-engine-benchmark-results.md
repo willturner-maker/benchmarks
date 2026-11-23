@@ -1045,3 +1045,24 @@ Reusable harvest: the restart tooling now has an instance-identity kill gate and
 ordering (`run_drafter_arm.sh`), directly applicable to the flag-class A/Bs that *are* supported
 (`--thinking-token-budget`, `--queue-size`, …).
 
+
+## Transition 1.7.0 → 1.7.1 (2026-11-23): fingerprint + golden probes Tier 0/1, and the 8-lane ladder
+
+The committed transition method (`bench/splash-concurrency/engine_fingerprint.py`, `golden_probes.py`,
+plan in `1401ae6`) run end to end for the first time: pre-captures before the upgrade (Tier 0), post-captures
+on the pinned 1.7.1 instance + diffs (Tier 1), then the one new axis (`results/splash-1.7.1-transition/`,
+`results/ladder-8lane-2026-11-23/`, RECORDs in both).
+
+- **Structural diff:** only the version string and the cache-build src hash moved. Model layout hash,
+  262,144-token context, batch width 4 and `ane_ffn=off` all identical.
+- **Behaviour:** all 8 byte/grammar golden probes **cross-epoch byte-identical** (content sha, finish
+  reason, tool-argument shas), each stable within its own build. The compare tool's four "DIFF" labels are
+  reasoning-text/completion-length movement — which also occurs within one build (toolcall_nested_stream:
+  142 vs 183 completion tokens on 1.7.1 alone), i.e. the pre-registered within-build floor, not an epoch
+  effect. 1.7.1's #790 nested-schema validator fix does not change probe payloads.
+- **8-lane ladder** (`--max-concurrent-requests=8`, identity-gated relaunch, pin restored after): launches
+  as Tier-0's memory arithmetic predicted (engine boot line: 8 lanes stream experts through 45.5 GiB,
+  *less* than 4 lanes' 45.8). Decode plateau identical to 1.7.0's 4-lane stack (~700 tok/s from w4;
+  w8 692) — the lane ceiling buys nothing below saturation. Above the ceiling, requests park in
+  `admission_waiting` (exactly width−8), request queue stays 0 until w32. KV pressure to 32×55k-token
+  prompts (11.4× lane budget): zero refusals, suspensions, spills or demotes; prefill flat ~3,490 tok/s.

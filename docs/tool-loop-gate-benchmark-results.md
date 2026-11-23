@@ -25,6 +25,7 @@ venv (Python 3.12.16 + `httpx` only). Our contribution is `bench/tool-loop-gate/
 
 - [What the gate scores, and what it is for](#what-the-gate-scores-and-what-it-is-for)
 - [Wave 2026-11-19a — the band](#wave-2026-11-19a--the-band-6-passes-120-task-runs)
+- [Wave 2026-11-23 on Splash 1.7.1](#wave-2026-11-23-gate-171-the-171-epoch-row)
 - [Task-level structure](#task-level-structure-stable-across-six-passes)
 - [Grader-shape failures vs model failures](#grader-shape-failures-vs-model-failures)
 - [The stub confound](#the-stub-confound-91-of-301-calls)
@@ -181,3 +182,13 @@ which is the point of choosing an instrument with no containers in it.
 tool-call traces, no model free text), `summary.json`, `engine_config.json`, `supervisor_pins.txt`,
 `status_before.json` / `status_after.json`, `RECORD.md`. Re-derive with
 `python3 bench/tool-loop-gate/summarize.py results/2026-11-19a --from-rows`.
+
+## Wave 2026-11-23 (gate-171): the 1.7.1 epoch row
+
+Same upstream pin (`6dc6f0e5…`), same runner, two arms (defaults/greedy), 20 tasks each, on the pinned
+Splash **1.7.1** stack (backlog chain S2, clean window). **defaults 15/20 (mean_tools 2.9, 1 hit_cap, 1 dup),
+greedy 16/20 (mean_tools 2.6, 1 hit_cap).** The 1.7.0 repeat band from 19a was defaults 14–15/20, greedy
+15/20 — +1 task is inside the suite's single-wave noise rule at n=20, so **no epoch effect**; `parse_ok`
+holds at 0 parse failures across the epoch (tool-call emission unbroken — the same conclusion the splash
+golden probes reach from the other side). Evidence: `results/2026-11-23-gate-171/` (wave.jsonl 40 rows,
+re-derivable with `summarize.py`), RECORD in the same dir.
