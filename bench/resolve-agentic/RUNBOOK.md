@@ -171,6 +171,12 @@ anyway), left stray files in the render dir, and ran **+119% wall / +29 turns** 
 same MCP and harness builds. Both drivers now pre-create `{RENDER_ROOT}/T7r{k}/` before dispatch and the
 brief says the directory exists. Cross-check every brief line against the deny-list before dispatch.
 
+Render root convention (since 2026-11-24): pass `--render-root /Volumes/<volume>/local.AI/resolve-audio-analysis/agbench_<date><letter>`
+— the `local.AI/resolve-audio-analysis/` tree under the external editing volume is the single scratch home; the
+top-level `resolve-audio-analysis/` copy of the older waves' renders (17g…23b) was moved INTO it on 2026-11-24,
+so published claims that cite the old top-level paths resolve there now (content unchanged, paths shifted one
+directory deeper). Historic briefs and RECORDs keep their original paths by design — do not rewrite them.
+
 ## 4. Grade — read-backs only
 
 Never score from the agent's own numbers. Check the fixture and the mutated timelines:

@@ -123,3 +123,11 @@ connected, including davinci-resolve-builtin — the 2.4.0 protocol-first probes
 it cleanly and the old cosmetic "1 plugin failed" line is gone. Next wave pins:
 **opencode 2.4.1 + MCP 5.4.0**, one new series; comparability to 2.3.2/5.3.4 waves is a
 documented break, not a measurement.
+
+Render-root housekeeping (same day): the wave renders for 17g/17h/17h2/18k/18l/18m/23b lived at
+the external volume's TOP level (`resolve-audio-analysis/agbench_*`) while the driver convention
+always wrote `local.AI/resolve-audio-analysis/agbench_*`. The old top-level tree was moved into
+the local.AI one (327 MB, content unchanged) and the top-level directory removed, so old
+published claims that cite the top-level paths now resolve one directory deeper. Historic
+briefs/RECORDs keep their original path strings by design; RUNBOOK §3 records the canonical
+render root for new waves.
