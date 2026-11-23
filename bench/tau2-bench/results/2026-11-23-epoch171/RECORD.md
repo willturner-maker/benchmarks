@@ -97,3 +97,13 @@ Published protocol on 1.7.1: 238 judge-free tasks × 3 trials, seed 300, conc 3,
 Files: `chain.log`, status edges (start/mid/end — same instance), `probe_rows_*.jsonl` + `requery_summary_*.txt`
 (both corpora), samplers; replay dir `../2026-11-23-pass3-replay-171/` (`tasks.jsonl` 714 rows, wave logs,
 status edges, samples). Captures remain local (`captures.jsonl` gitignored).
+
+## Follow-up 2 (2026-11-23, n=3): the tiebreaker closes the dip as NOISE
+
+`../2026-11-23-pass3-171-n3/` (third 238×3 medium wave, cold-chain P5 — runner, cold-cache corpus
+check and gate in `../2026-11-23-coldchain/RECORD.md`): **pass^1 0.8613**, at the top of the 1.7.0
+draw range, gate ≥0.85 ⇒ noise branch fires. Epoch means at n=3 per side: pass^1 −2.2 pts (0.7 SE),
+pass^2 +0.5, pass^3 −0.8 (0.5 SE). The cold-cache corpus re-POST separately rules out cache state as a
+mechanism (lottery distribution stationary cold vs warm). **Final: 1.7.0→1.7.1 is statistically quiet
+on every measured layer; medium-effort pass^1 is a single 0.81–0.87 band across both epochs.** The
+question raised at n=2 is recorded as closed, not deleted.

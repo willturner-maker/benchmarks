@@ -570,8 +570,9 @@ single draw on record** — so the pre-registered tiebreaker ran same day (`2026
 **0.8403 / 0.7731 / 0.6933, flips 64/238** — pass^3 exactly equals the old-epoch 0.6933, flips are 64 in
 *both* 1.7.1 waves, but both 1.7.1 pass^1 draws sit below both 1.7.0 draws (epoch means 0.8256 vs 0.8634,
 −3.8 pts ≈ 1.2 SE at n=2 per epoch). Epoch verdict as published: **no distribution-shape change (pass^2/3,
-flip rates, request-level lottery all replicate); a possible 2–4 pt pass^1 epoch dip stays unresolved at
-n=2 and is disclosed, not adjusted away.** Epoch bookkeeping: rows before 2026-11-22T22:30Z are 1.7.0-epoch,
+flip rates, request-level lottery all replicate); the possible 2–4 pt pass^1 dip was put to a
+pre-registered n=3 tiebreaker (`2026-11-23-pass3-171-n3/`: **0.8613**, top of the 1.7.0 range) and
+**closed as noise** — six draws per-epoch-side, one overlapping 0.81–0.87 band.** Epoch bookkeeping: rows before 2026-11-22T22:30Z are 1.7.0-epoch,
 after are 1.7.1-epoch; the determinism corpus is now the standard ~25-min first measurement after any
 engine upgrade.
 
