@@ -114,6 +114,22 @@ one relaunch to get back to the pinned `--thinking-token-budget=32768`; that is 
 the operator, since `stop.sh`/`start.sh` also take OpenCode down and bring it back up, and running
 `start.sh` from inside the session it serves would start a second instance inside the first.
 
+**Closed 2026-11-22:** the operator relaunched the stack, and the live supervisor was read back rather
+than assumed:
+
+```
+--max-memory=60129542144 --max-cache-disk=274877906944 --persistent-cache
+--default-reasoning-effort=medium --thinking-token-budget=32768 --queue-size=64
+ready true · ctx 262144 · queued 0 · waiting 0 · lifetime suspensions 0
+```
+
+Both 2026-11-19 stack moves are now live together — the restored 32,768 thinking budget and
+`--queue-size 64` — and the fresh instance reset the lifetime counters to 0, which is instance state,
+not an improvement: any later wave in this directory must read counters as window deltas, as it always
+has. A side observation from the verification probe, kept because it will mislead the next reader:
+a `max_tokens=16` request came back with `content=null`, because all 16 completion tokens went to
+`reasoning_tokens`. Same prompt at 200 tokens answered correctly with 23 reasoning tokens.
+
 **The fixes from §4 are now applied** (after the processes were stopped, never mid-execution), with
 `selftest_wave_hardening.sh` covering them — 8/8 pass, `shellcheck -S warning` clean on all three files:
 
