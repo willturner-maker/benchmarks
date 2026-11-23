@@ -1,0 +1,969 @@
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+14:42:50 Loading · ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S
+[transformers] You are using a model of type `qwen4_exp` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+[transformers] The tokenizer you are loading from '~/Library/Application Support/Splash/models/.resolved/f073087d1dff7edaf96fe2f5ee568630feced771f7d81c0484351ebe0eabc260/tokenizer' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+14:42:50 Chat template · patched to render later system messages in place (the original template rejects them), generation prompt 5-7 tokens
+14:42:53 Weights loaded in 2.56 s.
+14:42:53 Decode cycles verify the rows their cost line's floor passes (--verify-rows auto): greedy and seeded outputs can differ from run to run.
+14:42:53 SSD cache: up to 256.0 GiB of persistent files in ~/Library/Caches/Splash/prefix-cache/c1cb917d9d464d6595b9c2db5a834158 (its quota, while its volume has room beyond the 10.0 GiB it keeps free); KV pages of 416 KiB and states of 33 MiB, a state's write staging through 33 MiB of the memory plan; --max-cache-disk 0 turns it off.
+14:42:53 Table per_layer_token_embd.weight streams from its file: 27465 MiB stay on the SSD; row cache of 2097152 rows in 237 MiB, the most --ple-memory auto takes: the rows of every id a 128K-token prompt stages; 32 readers.
+14:42:53 Routed experts stream from their files: 23007 slots for 24576 experts (93%) in 46090 MiB, a store of 46820 MiB in 7 chunks, all that --expert-memory auto leaves it beside the floors and the KV kept resident; it gives none back, its floor, 46820 MiB, 100% of its slots, being all of it.
+14:42:53 Kernel policy for GPU family 10 with 64 cores.
+14:42:53 Long requests keep their KV on the SSD cache: 262144 tokens of context (bound: model; window 262144, resident 155633, spilled 262144, disk 262144); hot block cache 585 MiB (floor 585 MiB); history staging in 2 buffers; SSD room for active KV 256.0 GiB.
+14:42:53 Persistent cache ~/Library/Caches/Splash/prefix-cache/c1cb917d9d464d6595b9c2db5a834158: took back 7141 restore points over 48719 KV blocks (262139 MiB); left 0 copies behind.
+14:42:53 Warming up · 0 of 14 steps
+14:42:55 Warming up · 1 of 14 steps
+14:42:55 Warming up · 2 of 14 steps
+14:42:55 Warming up · 3 of 14 steps
+14:42:55 Warming up · 4 of 14 steps
+14:42:55 Warming up · 5 of 14 steps
+14:42:55 Warming up · 6 of 14 steps
+14:42:55 Warming up · 7 of 14 steps
+14:42:55 Warming up · 8 of 14 steps
+14:42:55 Warming up · 9 of 14 steps
+14:42:55 Warming up · 10 of 14 steps
+14:42:56 Warming up · 11 of 14 steps
+14:42:56 Warming up · 12 of 14 steps
+14:42:56 Warming up · 13 of 14 steps
+14:42:56 Warming up · 14 of 14 steps
+14:42:57 Ready · ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S · context 256K · http://127.0.0.1:8000
+14:52:57 Weights released after 600 s without a request; the next request restores them
+15:48:00 Weights restored in 1.51 s
+15:48:00 Started · request 1 · input 103,916 · cached 0 · effort absent → medium · thinking on
+15:48:36 TTFT of request 1: 38219 ms: own prefill 36687.8, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 1531.18
+15:48:42 Done · request 1 · input 103,916 · cached 0 · output 750 · tools 13·35e3c6cf · TTFT 38.2s · 115.5 tok/s · 3.0 tok/cycle
+15:48:43 Started · request 2 · input 105,349 · cached 103,904 · effort absent → medium · thinking on
+15:48:43 TTFT of request 2: 625.965 ms: own prefill 625.613, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.352334
+15:48:55 Done · request 2 · input 105,349 · cached 103,904 · deduplicated 736 · output 1,485 · tools 13·35e3c6cf · TTFT 0.6s · 129.7 tok/s · 3.3 tok/cycle
+15:48:55 Started · request 3 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 TTFT of request 3: 47.4845 ms: own prefill 47.3276, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.156917
+15:48:55 Done · request 3 · input 22 · cached 0 · output 8 · TTFT 0.0s · 154.3 tok/s · 4.0 tok/cycle
+15:48:55 Started · request 4 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 TTFT of request 4: 35.432 ms: own prefill 35.3348, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.097126
+15:48:55 Started · request 5 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Started · request 6 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Memory: growth available; waiting=1; suspended=0; held=1
+15:48:55 Started · request 9 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 TTFT of request 5: 207.39 ms: own prefill 134.323, claim wait 0, decode 39.9634, other prefill 32.831, unit wait 0, rest 0.271916
+15:48:55 TTFT of request 6: 207.408 ms: own prefill 134.323, claim wait 0, decode 39.9634, other prefill 32.831, unit wait 0, rest 0.290624
+15:48:55 TTFT of request 9: 206.233 ms: own prefill 134.323, claim wait 40.1193, decode 0, other prefill 31.6511, unit wait 0, rest 0.139001
+15:48:55 Started · request 8 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Done · request 4 · input 22 · cached 0 · output 8 · TTFT 0.0s · 33.1 tok/s · 4.0 tok/cycle
+15:48:55 Started · request 7 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Started · request 10 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Started · request 11 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Done · request 5 · input 22 · cached 0 · output 8 · TTFT 0.2s · 120.0 tok/s · 4.0 tok/cycle
+15:48:55 Done · request 6 · input 22 · cached 0 · output 8 · TTFT 0.2s · 120.0 tok/s · 4.0 tok/cycle
+15:48:55 Done · request 9 · input 22 · cached 0 · output 8 · TTFT 0.2s · 120.0 tok/s · 4.0 tok/cycle
+15:48:55 TTFT of request 8: 373.8 ms: own prefill 111.291, claim wait 0, decode 98.1183, other prefill 163.849, unit wait 0, rest 0.541542
+15:48:55 TTFT of request 7: 373.302 ms: own prefill 111.291, claim wait 0, decode 98.1183, other prefill 163.325, unit wait 0, rest 0.567958
+15:48:55 TTFT of request 10: 372.881 ms: own prefill 111.291, claim wait 0, decode 98.1183, other prefill 162.899, unit wait 0, rest 0.572874
+15:48:55 TTFT of request 11: 372.615 ms: own prefill 111.291, claim wait 0, decode 98.1183, other prefill 162.63, unit wait 0, rest 0.575666
+15:48:55 Started · request 12 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Started · request 13 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Started · request 14 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Started · request 15 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Done · request 8 · input 22 · cached 0 · output 8 · TTFT 0.4s · 122.0 tok/s · 4.0 tok/cycle
+15:48:55 Done · request 7 · input 22 · cached 0 · output 8 · TTFT 0.4s · 122.1 tok/s · 4.0 tok/cycle
+15:48:55 Done · request 10 · input 22 · cached 0 · output 8 · TTFT 0.4s · 122.1 tok/s · 4.0 tok/cycle
+15:48:55 Done · request 11 · input 22 · cached 0 · output 8 · TTFT 0.4s · 122.1 tok/s · 4.0 tok/cycle
+15:48:55 TTFT of request 12: 541.393 ms: own prefill 112.106, claim wait 0, decode 155.272, other prefill 273.188, unit wait 0, rest 0.826792
+15:48:55 TTFT of request 13: 540.891 ms: own prefill 112.106, claim wait 0, decode 155.272, other prefill 272.667, unit wait 0, rest 0.844917
+15:48:55 TTFT of request 14: 540.501 ms: own prefill 112.106, claim wait 0, decode 155.272, other prefill 272.274, unit wait 0, rest 0.8485
+15:48:55 TTFT of request 15: 540.341 ms: own prefill 112.106, claim wait 0, decode 155.272, other prefill 272.105, unit wait 0, rest 0.857709
+15:48:55 Started · request 16 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Started · request 17 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Started · request 18 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Started · request 19 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:55 Done · request 12 · input 22 · cached 0 · output 8 · TTFT 0.5s · 122.3 tok/s · 4.0 tok/cycle
+15:48:55 Done · request 13 · input 22 · cached 0 · output 8 · TTFT 0.5s · 122.3 tok/s · 4.0 tok/cycle
+15:48:55 Done · request 14 · input 22 · cached 0 · output 8 · TTFT 0.5s · 122.3 tok/s · 4.0 tok/cycle
+15:48:55 Done · request 15 · input 22 · cached 0 · output 8 · TTFT 0.5s · 122.3 tok/s · 4.0 tok/cycle
+15:48:56 TTFT of request 16: 709.414 ms: own prefill 111.969, claim wait 0, decode 212.331, other prefill 384.031, unit wait 0, rest 1.083
+15:48:56 TTFT of request 17: 709.333 ms: own prefill 111.969, claim wait 0, decode 212.331, other prefill 383.932, unit wait 0, rest 1.10092
+15:48:56 TTFT of request 18: 708.584 ms: own prefill 111.969, claim wait 0, decode 212.331, other prefill 383.179, unit wait 0, rest 1.10462
+15:48:56 TTFT of request 19: 708.234 ms: own prefill 111.969, claim wait 0, decode 212.331, other prefill 382.826, unit wait 0, rest 1.10804
+15:48:56 Memory: growth available; resource wait cleared
+15:48:56 Started · request 20 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 21 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 22 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 23 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Done · request 16 · input 22 · cached 0 · output 8 · TTFT 0.7s · 121.1 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 17 · input 22 · cached 0 · output 8 · TTFT 0.7s · 121.2 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 18 · input 22 · cached 0 · output 8 · TTFT 0.7s · 121.2 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 19 · input 22 · cached 0 · output 8 · TTFT 0.7s · 121.2 tok/s · 4.0 tok/cycle
+15:48:56 TTFT of request 20: 876.594 ms: own prefill 111.247, claim wait 0, decode 269.808, other prefill 494.073, unit wait 0, rest 1.46554
+15:48:56 TTFT of request 21: 876.23 ms: own prefill 111.247, claim wait 0, decode 269.808, other prefill 493.691, unit wait 0, rest 1.48325
+15:48:56 TTFT of request 22: 875.148 ms: own prefill 111.247, claim wait 0, decode 269.808, other prefill 492.606, unit wait 0, rest 1.48729
+15:48:56 TTFT of request 23: 874.959 ms: own prefill 111.247, claim wait 0, decode 269.808, other prefill 492.413, unit wait 0, rest 1.49058
+15:48:56 Started · request 24 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 25 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 26 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 27 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Done · request 20 · input 22 · cached 0 · output 8 · TTFT 0.9s · 121.6 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 21 · input 22 · cached 0 · output 8 · TTFT 0.9s · 121.7 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 22 · input 22 · cached 0 · output 8 · TTFT 0.9s · 121.7 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 23 · input 22 · cached 0 · output 8 · TTFT 0.9s · 121.7 tok/s · 4.0 tok/cycle
+15:48:56 TTFT of request 24: 1044.22 ms: own prefill 112.067, claim wait 0, decode 327.145, other prefill 603.259, unit wait 0, rest 1.75054
+15:48:56 TTFT of request 25: 1043.48 ms: own prefill 112.067, claim wait 0, decode 327.145, other prefill 602.498, unit wait 0, rest 1.76912
+15:48:56 TTFT of request 26: 1042.96 ms: own prefill 112.067, claim wait 0, decode 327.145, other prefill 601.976, unit wait 0, rest 1.77362
+15:48:56 TTFT of request 27: 1042.78 ms: own prefill 112.067, claim wait 0, decode 327.145, other prefill 601.782, unit wait 0, rest 1.78158
+15:48:56 Started · request 28 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 29 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 30 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 31 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Done · request 24 · input 22 · cached 0 · output 8 · TTFT 1.0s · 122.4 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 25 · input 22 · cached 0 · output 8 · TTFT 1.0s · 122.4 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 26 · input 22 · cached 0 · output 8 · TTFT 1.0s · 122.4 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 27 · input 22 · cached 0 · output 8 · TTFT 1.0s · 122.4 tok/s · 4.0 tok/cycle
+15:48:56 TTFT of request 28: 1211.82 ms: own prefill 112.398, claim wait 0, decode 384.051, other prefill 713.257, unit wait 0, rest 2.11383
+15:48:56 TTFT of request 29: 1210.38 ms: own prefill 112.398, claim wait 0, decode 384.051, other prefill 711.798, unit wait 0, rest 2.132
+15:48:56 TTFT of request 30: 1210.26 ms: own prefill 112.398, claim wait 0, decode 384.051, other prefill 711.68, unit wait 0, rest 2.13583
+15:48:56 TTFT of request 31: 1209.98 ms: own prefill 112.398, claim wait 0, decode 384.051, other prefill 711.393, unit wait 0, rest 2.13983
+15:48:56 Started · request 32 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 33 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 34 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 35 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Done · request 28 · input 22 · cached 0 · output 8 · TTFT 1.2s · 122.4 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 29 · input 22 · cached 0 · output 8 · TTFT 1.2s · 122.4 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 30 · input 22 · cached 0 · output 8 · TTFT 1.2s · 122.4 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 31 · input 22 · cached 0 · output 8 · TTFT 1.2s · 122.4 tok/s · 4.0 tok/cycle
+15:48:56 TTFT of request 32: 1377.58 ms: own prefill 110.543, claim wait 0, decode 441.078, other prefill 823.598, unit wait 0, rest 2.36046
+15:48:56 TTFT of request 33: 1377.3 ms: own prefill 110.543, claim wait 0, decode 441.078, other prefill 823.295, unit wait 0, rest 2.38342
+15:48:56 TTFT of request 34: 1376.97 ms: own prefill 110.543, claim wait 0, decode 441.078, other prefill 822.961, unit wait 0, rest 2.38479
+15:48:56 TTFT of request 35: 1376.78 ms: own prefill 110.543, claim wait 0, decode 441.078, other prefill 822.769, unit wait 0, rest 2.38808
+15:48:56 Started · request 36 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 37 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 38 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 39 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Done · request 32 · input 22 · cached 0 · output 8 · TTFT 1.4s · 123.6 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 33 · input 22 · cached 0 · output 8 · TTFT 1.4s · 123.6 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 34 · input 22 · cached 0 · output 8 · TTFT 1.4s · 123.6 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 35 · input 22 · cached 0 · output 8 · TTFT 1.4s · 123.6 tok/s · 4.0 tok/cycle
+15:48:56 TTFT of request 36: 1542.33 ms: own prefill 109.945, claim wait 0, decode 497.49, other prefill 932.216, unit wait 0, rest 2.68112
+15:48:56 TTFT of request 37: 1542.23 ms: own prefill 109.945, claim wait 0, decode 497.49, other prefill 932.092, unit wait 0, rest 2.7
+15:48:56 TTFT of request 38: 1542.05 ms: own prefill 109.945, claim wait 0, decode 497.49, other prefill 931.907, unit wait 0, rest 2.70512
+15:48:56 TTFT of request 39: 1541.88 ms: own prefill 109.945, claim wait 0, decode 497.49, other prefill 931.734, unit wait 0, rest 2.71117
+15:48:56 Started · request 40 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 41 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 42 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Started · request 43 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:56 Done · request 36 · input 22 · cached 0 · output 8 · TTFT 1.5s · 123.3 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 37 · input 22 · cached 0 · output 8 · TTFT 1.5s · 123.3 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 38 · input 22 · cached 0 · output 8 · TTFT 1.5s · 123.3 tok/s · 4.0 tok/cycle
+15:48:56 Done · request 39 · input 22 · cached 0 · output 8 · TTFT 1.5s · 123.3 tok/s · 4.0 tok/cycle
+15:48:57 TTFT of request 40: 1708.87 ms: own prefill 110.101, claim wait 0, decode 554.064, other prefill 1041.63, unit wait 0, rest 3.07391
+15:48:57 TTFT of request 41: 1708.82 ms: own prefill 110.101, claim wait 0, decode 554.064, other prefill 1041.56, unit wait 0, rest 3.09229
+15:48:57 TTFT of request 42: 1708.54 ms: own prefill 110.101, claim wait 0, decode 554.064, other prefill 1041.27, unit wait 0, rest 3.09779
+15:48:57 TTFT of request 43: 1708.48 ms: own prefill 110.101, claim wait 0, decode 554.064, other prefill 1041.22, unit wait 0, rest 3.1005
+15:48:57 Started · request 44 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 45 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 46 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 47 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Done · request 40 · input 22 · cached 0 · output 8 · TTFT 1.7s · 124.4 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 41 · input 22 · cached 0 · output 8 · TTFT 1.7s · 124.4 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 42 · input 22 · cached 0 · output 8 · TTFT 1.7s · 124.4 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 43 · input 22 · cached 0 · output 8 · TTFT 1.7s · 124.4 tok/s · 4.0 tok/cycle
+15:48:57 TTFT of request 44: 1876.05 ms: own prefill 111.248, claim wait 0, decode 610.151, other prefill 1151.29, unit wait 0, rest 3.35742
+15:48:57 TTFT of request 45: 1876.02 ms: own prefill 111.248, claim wait 0, decode 610.151, other prefill 1151.24, unit wait 0, rest 3.37737
+15:48:57 TTFT of request 46: 1875.99 ms: own prefill 111.248, claim wait 0, decode 610.151, other prefill 1151.21, unit wait 0, rest 3.38125
+15:48:57 TTFT of request 47: 1875.92 ms: own prefill 111.248, claim wait 0, decode 610.151, other prefill 1151.13, unit wait 0, rest 3.38533
+15:48:57 Started · request 48 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 49 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 50 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 51 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Done · request 44 · input 22 · cached 0 · output 8 · TTFT 1.9s · 123.3 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 45 · input 22 · cached 0 · output 8 · TTFT 1.9s · 123.3 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 46 · input 22 · cached 0 · output 8 · TTFT 1.9s · 123.3 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 47 · input 22 · cached 0 · output 8 · TTFT 1.9s · 123.3 tok/s · 4.0 tok/cycle
+15:48:57 TTFT of request 48: 2043.73 ms: own prefill 111.02, claim wait 0, decode 666.745, other prefill 1262.35, unit wait 0, rest 3.61675
+15:48:57 TTFT of request 49: 2043.7 ms: own prefill 111.02, claim wait 0, decode 666.745, other prefill 1262.3, unit wait 0, rest 3.63312
+15:48:57 TTFT of request 50: 2043.65 ms: own prefill 111.02, claim wait 0, decode 666.745, other prefill 1262.25, unit wait 0, rest 3.63712
+15:48:57 TTFT of request 51: 2043.64 ms: own prefill 111.02, claim wait 0, decode 666.745, other prefill 1262.23, unit wait 0, rest 3.64608
+15:48:57 Started · request 52 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 53 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 54 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 55 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Done · request 48 · input 22 · cached 0 · output 8 · TTFT 2.0s · 124.9 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 49 · input 22 · cached 0 · output 8 · TTFT 2.0s · 124.9 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 50 · input 22 · cached 0 · output 8 · TTFT 2.0s · 125.0 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 51 · input 22 · cached 0 · output 8 · TTFT 2.0s · 125.0 tok/s · 4.0 tok/cycle
+15:48:57 TTFT of request 52: 2209.63 ms: own prefill 109.922, claim wait 0, decode 722.477, other prefill 1373.24, unit wait 0, rest 3.98329
+15:48:57 TTFT of request 53: 2209.6 ms: own prefill 109.922, claim wait 0, decode 722.477, other prefill 1373.2, unit wait 0, rest 4.00008
+15:48:57 TTFT of request 54: 2209.6 ms: own prefill 109.922, claim wait 0, decode 722.477, other prefill 1373.2, unit wait 0, rest 4.00287
+15:48:57 TTFT of request 55: 2209.56 ms: own prefill 109.922, claim wait 0, decode 722.477, other prefill 1373.16, unit wait 0, rest 4.0065
+15:48:57 Started · request 56 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 57 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 58 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 59 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Done · request 52 · input 22 · cached 0 · output 8 · TTFT 2.2s · 125.2 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 53 · input 22 · cached 0 · output 8 · TTFT 2.2s · 125.2 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 54 · input 22 · cached 0 · output 8 · TTFT 2.2s · 125.2 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 55 · input 22 · cached 0 · output 8 · TTFT 2.2s · 125.2 tok/s · 4.0 tok/cycle
+15:48:57 TTFT of request 56: 2375.59 ms: own prefill 110.124, claim wait 0, decode 778.232, other prefill 1483.02, unit wait 0, rest 4.21691
+15:48:57 TTFT of request 57: 2375.55 ms: own prefill 110.124, claim wait 0, decode 778.232, other prefill 1482.96, unit wait 0, rest 4.23371
+15:48:57 TTFT of request 58: 2375.52 ms: own prefill 110.124, claim wait 0, decode 778.232, other prefill 1482.93, unit wait 0, rest 4.23725
+15:48:57 TTFT of request 59: 2375.5 ms: own prefill 110.124, claim wait 0, decode 778.232, other prefill 1482.91, unit wait 0, rest 4.24079
+15:48:57 Started · request 60 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 61 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 62 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Started · request 63 · input 22 · cached 0 · effort absent → medium · thinking on
+15:48:57 Done · request 56 · input 22 · cached 0 · output 8 · TTFT 2.4s · 124.6 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 57 · input 22 · cached 0 · output 8 · TTFT 2.4s · 124.6 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 58 · input 22 · cached 0 · output 8 · TTFT 2.4s · 124.7 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 59 · input 22 · cached 0 · output 8 · TTFT 2.4s · 124.7 tok/s · 4.0 tok/cycle
+15:48:57 TTFT of request 60: 2543.01 ms: own prefill 111.31, claim wait 0, decode 834.206, other prefill 1593.01, unit wait 0, rest 4.479
+15:48:57 TTFT of request 61: 2542.98 ms: own prefill 111.31, claim wait 0, decode 834.206, other prefill 1592.96, unit wait 0, rest 4.49916
+15:48:57 TTFT of request 62: 2542.97 ms: own prefill 111.31, claim wait 0, decode 834.206, other prefill 1592.95, unit wait 0, rest 4.50283
+15:48:57 TTFT of request 63: 2542.94 ms: own prefill 111.31, claim wait 0, decode 834.206, other prefill 1592.92, unit wait 0, rest 4.50996
+15:48:57 Done · request 60 · input 22 · cached 0 · output 8 · TTFT 2.5s · 120.9 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 61 · input 22 · cached 0 · output 8 · TTFT 2.5s · 120.9 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 62 · input 22 · cached 0 · output 8 · TTFT 2.5s · 120.9 tok/s · 4.0 tok/cycle
+15:48:57 Done · request 63 · input 22 · cached 0 · output 8 · TTFT 2.5s · 120.9 tok/s · 4.0 tok/cycle
+15:49:01 Started · request 64 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 TTFT of request 64: 48.9016 ms: own prefill 48.6525, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.249124
+15:49:02 Started · request 65 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 66 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 67 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 TTFT of request 65: 172.802 ms: own prefill 109.203, claim wait 0, decode 24.6665, other prefill 38.7317, unit wait 0, rest 0.201042
+15:49:02 TTFT of request 66: 172.818 ms: own prefill 109.203, claim wait 0, decode 24.6665, other prefill 38.7317, unit wait 0, rest 0.217667
+15:49:02 TTFT of request 67: 172.822 ms: own prefill 109.203, claim wait 0, decode 24.6665, other prefill 38.7317, unit wait 0, rest 0.221624
+15:49:02 Started · request 68 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Done · request 64 · input 22 · cached 0 · output 8 · TTFT 0.0s · 41.2 tok/s · 4.0 tok/cycle
+15:49:02 Started · request 69 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 70 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 71 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Done · request 65 · input 22 · cached 0 · output 8 · TTFT 0.2s · 122.6 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 66 · input 22 · cached 0 · output 8 · TTFT 0.2s · 122.6 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 67 · input 22 · cached 0 · output 8 · TTFT 0.2s · 122.6 tok/s · 4.0 tok/cycle
+15:49:02 TTFT of request 68: 336.367 ms: own prefill 111.467, claim wait 0, decode 81.5521, other prefill 142.87, unit wait 0, rest 0.477792
+15:49:02 TTFT of request 69: 335.56 ms: own prefill 111.467, claim wait 0, decode 81.5521, other prefill 142.045, unit wait 0, rest 0.495251
+15:49:02 TTFT of request 70: 334.994 ms: own prefill 111.467, claim wait 0, decode 81.5521, other prefill 141.475, unit wait 0, rest 0.500209
+15:49:02 TTFT of request 71: 333.128 ms: own prefill 111.467, claim wait 0, decode 81.5521, other prefill 139.605, unit wait 0, rest 0.504209
+15:49:02 Started · request 72 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 73 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 74 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 75 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Done · request 68 · input 22 · cached 0 · output 8 · TTFT 0.3s · 121.1 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 69 · input 22 · cached 0 · output 8 · TTFT 0.3s · 121.2 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 70 · input 22 · cached 0 · output 8 · TTFT 0.3s · 121.2 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 71 · input 22 · cached 0 · output 8 · TTFT 0.3s · 121.2 tok/s · 4.0 tok/cycle
+15:49:02 TTFT of request 72: 501.401 ms: own prefill 110.638, claim wait 0, decode 139.142, other prefill 250.878, unit wait 0, rest 0.742626
+15:49:02 TTFT of request 73: 501.059 ms: own prefill 110.638, claim wait 0, decode 139.142, other prefill 250.516, unit wait 0, rest 0.762042
+15:49:02 TTFT of request 74: 500.703 ms: own prefill 110.638, claim wait 0, decode 139.142, other prefill 250.153, unit wait 0, rest 0.769542
+15:49:02 TTFT of request 75: 499.692 ms: own prefill 110.638, claim wait 0, decode 139.142, other prefill 249.14, unit wait 0, rest 0.771292
+15:49:02 Started · request 76 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 77 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 78 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 80 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Done · request 72 · input 22 · cached 0 · output 8 · TTFT 0.5s · 121.4 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 73 · input 22 · cached 0 · output 8 · TTFT 0.5s · 121.4 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 74 · input 22 · cached 0 · output 8 · TTFT 0.5s · 121.4 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 75 · input 22 · cached 0 · output 8 · TTFT 0.5s · 121.4 tok/s · 4.0 tok/cycle
+15:49:02 TTFT of request 76: 666.462 ms: own prefill 110.436, claim wait 0, decode 196.49, other prefill 358.392, unit wait 0, rest 1.14404
+15:49:02 TTFT of request 77: 666.234 ms: own prefill 110.436, claim wait 0, decode 196.49, other prefill 358.147, unit wait 0, rest 1.16179
+15:49:02 TTFT of request 78: 665.689 ms: own prefill 110.436, claim wait 0, decode 196.49, other prefill 357.599, unit wait 0, rest 1.16467
+15:49:02 TTFT of request 80: 665.439 ms: own prefill 110.436, claim wait 0, decode 196.49, other prefill 357.345, unit wait 0, rest 1.16871
+15:49:02 Started · request 79 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 81 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 82 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 83 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Done · request 76 · input 22 · cached 0 · output 8 · TTFT 0.7s · 121.0 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 77 · input 22 · cached 0 · output 8 · TTFT 0.7s · 121.0 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 78 · input 22 · cached 0 · output 8 · TTFT 0.7s · 121.0 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 80 · input 22 · cached 0 · output 8 · TTFT 0.7s · 121.1 tok/s · 4.0 tok/cycle
+15:49:02 TTFT of request 79: 834.32 ms: own prefill 111.034, claim wait 0, decode 253.781, other prefill 467.737, unit wait 0, rest 1.76854
+15:49:02 TTFT of request 81: 834.289 ms: own prefill 111.034, claim wait 0, decode 253.781, other prefill 467.683, unit wait 0, rest 1.79208
+15:49:02 TTFT of request 82: 833.994 ms: own prefill 111.034, claim wait 0, decode 253.781, other prefill 467.383, unit wait 0, rest 1.79592
+15:49:02 TTFT of request 83: 833.953 ms: own prefill 111.034, claim wait 0, decode 253.781, other prefill 467.338, unit wait 0, rest 1.80042
+15:49:02 Started · request 84 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 85 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 86 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Started · request 87 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:02 Done · request 79 · input 22 · cached 0 · output 8 · TTFT 0.8s · 121.8 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 81 · input 22 · cached 0 · output 8 · TTFT 0.8s · 121.9 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 82 · input 22 · cached 0 · output 8 · TTFT 0.8s · 121.9 tok/s · 4.0 tok/cycle
+15:49:02 Done · request 83 · input 22 · cached 0 · output 8 · TTFT 0.8s · 121.9 tok/s · 4.0 tok/cycle
+15:49:02 TTFT of request 84: 1001.39 ms: own prefill 111.068, claim wait 0, decode 311.029, other prefill 577.243, unit wait 0, rest 2.04904
+15:49:02 TTFT of request 85: 1001.24 ms: own prefill 111.068, claim wait 0, decode 311.029, other prefill 577.081, unit wait 0, rest 2.06671
+15:49:02 TTFT of request 86: 1001.01 ms: own prefill 111.068, claim wait 0, decode 311.029, other prefill 576.84, unit wait 0, rest 2.07158
+15:49:02 TTFT of request 87: 1000.42 ms: own prefill 111.068, claim wait 0, decode 311.029, other prefill 576.25, unit wait 0, rest 2.07758
+15:49:03 Started · request 88 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 89 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 90 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 91 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Done · request 84 · input 22 · cached 0 · output 8 · TTFT 1.0s · 121.8 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 85 · input 22 · cached 0 · output 8 · TTFT 1.0s · 121.8 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 86 · input 22 · cached 0 · output 8 · TTFT 1.0s · 121.8 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 87 · input 22 · cached 0 · output 8 · TTFT 1.0s · 121.8 tok/s · 4.0 tok/cycle
+15:49:03 TTFT of request 88: 1167.99 ms: own prefill 110.483, claim wait 0, decode 368.233, other prefill 686.871, unit wait 0, rest 2.40617
+15:49:03 TTFT of request 89: 1166.22 ms: own prefill 110.483, claim wait 0, decode 368.233, other prefill 685.084, unit wait 0, rest 2.42396
+15:49:03 TTFT of request 90: 1166.11 ms: own prefill 110.483, claim wait 0, decode 368.233, other prefill 684.964, unit wait 0, rest 2.4275
+15:49:03 TTFT of request 91: 1166 ms: own prefill 110.483, claim wait 0, decode 368.233, other prefill 684.852, unit wait 0, rest 2.43133
+15:49:03 Started · request 92 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 93 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 94 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 95 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Done · request 88 · input 22 · cached 0 · output 8 · TTFT 1.2s · 122.5 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 89 · input 22 · cached 0 · output 8 · TTFT 1.2s · 122.5 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 90 · input 22 · cached 0 · output 8 · TTFT 1.2s · 122.5 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 91 · input 22 · cached 0 · output 8 · TTFT 1.2s · 122.5 tok/s · 4.0 tok/cycle
+15:49:03 TTFT of request 92: 1333.78 ms: own prefill 110.776, claim wait 0, decode 425.205, other prefill 795.155, unit wait 0, rest 2.64675
+15:49:03 TTFT of request 93: 1333.69 ms: own prefill 110.776, claim wait 0, decode 425.205, other prefill 795.049, unit wait 0, rest 2.66242
+15:49:03 TTFT of request 94: 1333.67 ms: own prefill 110.776, claim wait 0, decode 425.205, other prefill 795.024, unit wait 0, rest 2.66634
+15:49:03 TTFT of request 95: 1332.94 ms: own prefill 110.776, claim wait 0, decode 425.205, other prefill 794.284, unit wait 0, rest 2.67021
+15:49:03 Started · request 96 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 97 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 98 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 99 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Done · request 92 · input 22 · cached 0 · output 8 · TTFT 1.3s · 122.2 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 93 · input 22 · cached 0 · output 8 · TTFT 1.3s · 122.2 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 94 · input 22 · cached 0 · output 8 · TTFT 1.3s · 122.2 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 95 · input 22 · cached 0 · output 8 · TTFT 1.3s · 122.2 tok/s · 4.0 tok/cycle
+15:49:03 TTFT of request 96: 1499.82 ms: own prefill 110.05, claim wait 0, decode 482.304, other prefill 904.572, unit wait 0, rest 2.89684
+15:49:03 TTFT of request 97: 1499.59 ms: own prefill 110.05, claim wait 0, decode 482.304, other prefill 904.32, unit wait 0, rest 2.91392
+15:49:03 TTFT of request 98: 1498.8 ms: own prefill 110.05, claim wait 0, decode 482.304, other prefill 903.527, unit wait 0, rest 2.91779
+15:49:03 TTFT of request 99: 1498.72 ms: own prefill 110.05, claim wait 0, decode 482.304, other prefill 903.444, unit wait 0, rest 2.92388
+15:49:03 Started · request 100 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 101 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 102 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 103 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Done · request 96 · input 22 · cached 0 · output 8 · TTFT 1.5s · 121.0 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 97 · input 22 · cached 0 · output 8 · TTFT 1.5s · 121.0 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 98 · input 22 · cached 0 · output 8 · TTFT 1.5s · 121.0 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 99 · input 22 · cached 0 · output 8 · TTFT 1.5s · 121.0 tok/s · 4.0 tok/cycle
+15:49:03 TTFT of request 100: 1667.63 ms: own prefill 111.237, claim wait 0, decode 539.855, other prefill 1013.27, unit wait 0, rest 3.26909
+15:49:03 TTFT of request 101: 1667.49 ms: own prefill 111.237, claim wait 0, decode 539.855, other prefill 1013.11, unit wait 0, rest 3.29017
+15:49:03 TTFT of request 102: 1667.42 ms: own prefill 111.237, claim wait 0, decode 539.855, other prefill 1013.03, unit wait 0, rest 3.29459
+15:49:03 TTFT of request 103: 1667.27 ms: own prefill 111.237, claim wait 0, decode 539.855, other prefill 1012.88, unit wait 0, rest 3.29838
+15:49:03 Started · request 104 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 105 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 106 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 107 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Done · request 100 · input 22 · cached 0 · output 8 · TTFT 1.7s · 121.4 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 101 · input 22 · cached 0 · output 8 · TTFT 1.7s · 121.5 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 102 · input 22 · cached 0 · output 8 · TTFT 1.7s · 121.5 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 103 · input 22 · cached 0 · output 8 · TTFT 1.7s · 121.5 tok/s · 4.0 tok/cycle
+15:49:03 TTFT of request 104: 1836.11 ms: own prefill 111.259, claim wait 0, decode 597.315, other prefill 1124.02, unit wait 0, rest 3.51538
+15:49:03 TTFT of request 105: 1836.11 ms: own prefill 111.259, claim wait 0, decode 597.315, other prefill 1124, unit wait 0, rest 3.53484
+15:49:03 TTFT of request 106: 1836.09 ms: own prefill 111.259, claim wait 0, decode 597.315, other prefill 1123.97, unit wait 0, rest 3.539
+15:49:03 TTFT of request 107: 1836.05 ms: own prefill 111.259, claim wait 0, decode 597.315, other prefill 1123.94, unit wait 0, rest 3.54309
+15:49:03 Started · request 108 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 109 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 110 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Started · request 111 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:03 Done · request 104 · input 22 · cached 0 · output 8 · TTFT 1.8s · 122.4 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 105 · input 22 · cached 0 · output 8 · TTFT 1.8s · 122.4 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 106 · input 22 · cached 0 · output 8 · TTFT 1.8s · 122.4 tok/s · 4.0 tok/cycle
+15:49:03 Done · request 107 · input 22 · cached 0 · output 8 · TTFT 1.8s · 122.4 tok/s · 4.0 tok/cycle
+15:49:04 TTFT of request 108: 2004.81 ms: own prefill 111.564, claim wait 0, decode 654.325, other prefill 1235.15, unit wait 0, rest 3.777
+15:49:04 TTFT of request 109: 2004.77 ms: own prefill 111.564, claim wait 0, decode 654.325, other prefill 1235.08, unit wait 0, rest 3.79596
+15:49:04 TTFT of request 110: 2004.76 ms: own prefill 111.564, claim wait 0, decode 654.325, other prefill 1235.07, unit wait 0, rest 3.80038
+15:49:04 TTFT of request 111: 2004.72 ms: own prefill 111.564, claim wait 0, decode 654.325, other prefill 1235.02, unit wait 0, rest 3.80429
+15:49:04 Started · request 112 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Started · request 113 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Started · request 114 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Started · request 115 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Done · request 108 · input 22 · cached 0 · output 8 · TTFT 2.0s · 122.7 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 109 · input 22 · cached 0 · output 8 · TTFT 2.0s · 122.8 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 110 · input 22 · cached 0 · output 8 · TTFT 2.0s · 122.8 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 111 · input 22 · cached 0 · output 8 · TTFT 2.0s · 122.8 tok/s · 4.0 tok/cycle
+15:49:04 TTFT of request 112: 2172.31 ms: own prefill 110.603, claim wait 0, decode 711.078, other prefill 1346.51, unit wait 0, rest 4.11892
+15:49:04 TTFT of request 113: 2172.33 ms: own prefill 110.603, claim wait 0, decode 711.078, other prefill 1346.51, unit wait 0, rest 4.13571
+15:49:04 TTFT of request 114: 2172.19 ms: own prefill 110.603, claim wait 0, decode 711.078, other prefill 1346.37, unit wait 0, rest 4.13996
+15:49:04 TTFT of request 115: 2172.15 ms: own prefill 110.603, claim wait 0, decode 711.078, other prefill 1346.33, unit wait 0, rest 4.14384
+15:49:04 Started · request 116 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Started · request 120 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Started · request 118 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Started · request 119 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Done · request 112 · input 22 · cached 0 · output 8 · TTFT 2.2s · 121.4 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 113 · input 22 · cached 0 · output 8 · TTFT 2.2s · 121.4 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 114 · input 22 · cached 0 · output 8 · TTFT 2.2s · 121.4 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 115 · input 22 · cached 0 · output 8 · TTFT 2.2s · 121.4 tok/s · 4.0 tok/cycle
+15:49:04 TTFT of request 116: 2340.48 ms: own prefill 110.604, claim wait 0, decode 768.561, other prefill 1456.92, unit wait 0, rest 4.39884
+15:49:04 TTFT of request 120: 2340.48 ms: own prefill 110.604, claim wait 0, decode 768.561, other prefill 1456.9, unit wait 0, rest 4.41688
+15:49:04 TTFT of request 118: 2340.42 ms: own prefill 110.604, claim wait 0, decode 768.561, other prefill 1456.83, unit wait 0, rest 4.42096
+15:49:04 TTFT of request 119: 2340.4 ms: own prefill 110.604, claim wait 0, decode 768.561, other prefill 1456.81, unit wait 0, rest 4.42438
+15:49:04 Started · request 121 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Started · request 117 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Started · request 122 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Started · request 123 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Done · request 116 · input 22 · cached 0 · output 8 · TTFT 2.3s · 121.7 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 120 · input 22 · cached 0 · output 8 · TTFT 2.3s · 121.7 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 118 · input 22 · cached 0 · output 8 · TTFT 2.3s · 121.7 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 119 · input 22 · cached 0 · output 8 · TTFT 2.3s · 121.7 tok/s · 4.0 tok/cycle
+15:49:04 TTFT of request 121: 2508.84 ms: own prefill 110.883, claim wait 0, decode 825.907, other prefill 1567.39, unit wait 0, rest 4.65004
+15:49:04 TTFT of request 117: 2508.83 ms: own prefill 110.883, claim wait 0, decode 825.907, other prefill 1567.37, unit wait 0, rest 4.66867
+15:49:04 TTFT of request 122: 2508.83 ms: own prefill 110.883, claim wait 0, decode 825.907, other prefill 1567.36, unit wait 0, rest 4.67313
+15:49:04 TTFT of request 123: 2508.81 ms: own prefill 110.883, claim wait 0, decode 825.907, other prefill 1567.34, unit wait 0, rest 4.67688
+15:49:04 Started · request 124 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Started · request 125 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Started · request 126 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Started · request 127 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:04 Done · request 121 · input 22 · cached 0 · output 8 · TTFT 2.5s · 121.5 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 117 · input 22 · cached 0 · output 8 · TTFT 2.5s · 121.6 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 122 · input 22 · cached 0 · output 8 · TTFT 2.5s · 121.6 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 123 · input 22 · cached 0 · output 8 · TTFT 2.5s · 121.6 tok/s · 4.0 tok/cycle
+15:49:04 TTFT of request 124: 2677.15 ms: own prefill 110.707, claim wait 0, decode 883.219, other prefill 1678.2, unit wait 0, rest 5.0235
+15:49:04 TTFT of request 125: 2677.13 ms: own prefill 110.707, claim wait 0, decode 883.219, other prefill 1678.16, unit wait 0, rest 5.04
+15:49:04 TTFT of request 126: 2677.09 ms: own prefill 110.707, claim wait 0, decode 883.219, other prefill 1678.12, unit wait 0, rest 5.04413
+15:49:04 TTFT of request 127: 2677.05 ms: own prefill 110.707, claim wait 0, decode 883.219, other prefill 1678.08, unit wait 0, rest 5.04767
+15:49:04 Done · request 124 · input 22 · cached 0 · output 8 · TTFT 2.7s · 121.9 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 125 · input 22 · cached 0 · output 8 · TTFT 2.7s · 122.0 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 126 · input 22 · cached 0 · output 8 · TTFT 2.7s · 122.0 tok/s · 4.0 tok/cycle
+15:49:04 Done · request 127 · input 22 · cached 0 · output 8 · TTFT 2.7s · 122.0 tok/s · 4.0 tok/cycle
+15:49:08 Started · request 128 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:08 Error · frontend_overloaded · POST /v1/chat/completions
+15:49:08 Error · frontend_overloaded · POST /v1/chat/completions
+15:49:08 TTFT of request 128: 49.6981 ms: own prefill 49.435, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.263043
+15:49:08 Started · request 129 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:08 Started · request 130 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:08 Started · request 131 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:08 Started · request 132 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:08 Done · request 128 · input 22 · cached 0 · output 8 · TTFT 0.0s · 163.9 tok/s · 4.0 tok/cycle
+15:49:08 TTFT of request 129: 193.66 ms: own prefill 111.313, claim wait 0, decode 42.5426, other prefill 39.5467, unit wait 0, rest 0.258208
+15:49:08 TTFT of request 130: 193.677 ms: own prefill 111.313, claim wait 0, decode 42.5426, other prefill 39.5467, unit wait 0, rest 0.274584
+15:49:08 TTFT of request 131: 193.68 ms: own prefill 111.313, claim wait 0, decode 42.5426, other prefill 39.5467, unit wait 0, rest 0.278167
+15:49:08 TTFT of request 132: 193.683 ms: own prefill 111.313, claim wait 0, decode 42.5426, other prefill 39.5467, unit wait 0, rest 0.281209
+15:49:09 Started · request 134 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 133 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 135 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 136 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Done · request 129 · input 22 · cached 0 · output 8 · TTFT 0.2s · 121.4 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 130 · input 22 · cached 0 · output 8 · TTFT 0.2s · 121.4 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 131 · input 22 · cached 0 · output 8 · TTFT 0.2s · 121.4 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 132 · input 22 · cached 0 · output 8 · TTFT 0.2s · 121.4 tok/s · 4.0 tok/cycle
+15:49:09 TTFT of request 134: 362.462 ms: own prefill 111.072, claim wait 0, decode 99.9048, other prefill 150.86, unit wait 0, rest 0.626041
+15:49:09 TTFT of request 133: 362.482 ms: own prefill 111.072, claim wait 0, decode 99.9048, other prefill 150.86, unit wait 0, rest 0.64525
+15:49:09 TTFT of request 135: 362.245 ms: own prefill 111.072, claim wait 0, decode 99.9048, other prefill 150.616, unit wait 0, rest 0.652624
+15:49:09 TTFT of request 136: 360.379 ms: own prefill 111.072, claim wait 0, decode 99.9048, other prefill 148.748, unit wait 0, rest 0.654125
+15:49:09 Started · request 137 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 138 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 139 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 140 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Done · request 134 · input 22 · cached 0 · output 8 · TTFT 0.4s · 122.0 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 133 · input 22 · cached 0 · output 8 · TTFT 0.4s · 122.1 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 135 · input 22 · cached 0 · output 8 · TTFT 0.4s · 122.1 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 136 · input 22 · cached 0 · output 8 · TTFT 0.4s · 122.1 tok/s · 4.0 tok/cycle
+15:49:09 TTFT of request 137: 527.578 ms: own prefill 110.559, claim wait 0, decode 157.071, other prefill 259.051, unit wait 0, rest 0.896458
+15:49:09 TTFT of request 138: 527.547 ms: own prefill 110.559, claim wait 0, decode 157.071, other prefill 259.004, unit wait 0, rest 0.913541
+15:49:09 TTFT of request 139: 527.505 ms: own prefill 110.559, claim wait 0, decode 157.071, other prefill 258.958, unit wait 0, rest 0.916916
+15:49:09 TTFT of request 140: 527.299 ms: own prefill 110.559, claim wait 0, decode 157.071, other prefill 258.749, unit wait 0, rest 0.920333
+15:49:09 Started · request 141 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 142 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 143 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 144 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Done · request 137 · input 22 · cached 0 · output 8 · TTFT 0.5s · 122.2 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 138 · input 22 · cached 0 · output 8 · TTFT 0.5s · 122.2 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 139 · input 22 · cached 0 · output 8 · TTFT 0.5s · 122.2 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 140 · input 22 · cached 0 · output 8 · TTFT 0.5s · 122.2 tok/s · 4.0 tok/cycle
+15:49:09 TTFT of request 141: 695.945 ms: own prefill 111.514, claim wait 0, decode 214.173, other prefill 369.107, unit wait 0, rest 1.15058
+15:49:09 TTFT of request 142: 695.733 ms: own prefill 111.514, claim wait 0, decode 214.173, other prefill 368.876, unit wait 0, rest 1.17033
+15:49:09 TTFT of request 143: 692.492 ms: own prefill 111.514, claim wait 0, decode 214.173, other prefill 365.63, unit wait 0, rest 1.17513
+15:49:09 TTFT of request 144: 692.084 ms: own prefill 111.514, claim wait 0, decode 214.173, other prefill 365.219, unit wait 0, rest 1.17838
+15:49:09 Started · request 145 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 146 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 147 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 148 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Done · request 141 · input 22 · cached 0 · output 8 · TTFT 0.7s · 121.6 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 142 · input 22 · cached 0 · output 8 · TTFT 0.7s · 121.6 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 143 · input 22 · cached 0 · output 8 · TTFT 0.7s · 121.6 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 144 · input 22 · cached 0 · output 8 · TTFT 0.7s · 121.6 tok/s · 4.0 tok/cycle
+15:49:09 TTFT of request 145: 858.967 ms: own prefill 110.727, claim wait 0, decode 271.455, other prefill 475.262, unit wait 0, rest 1.52283
+15:49:09 TTFT of request 146: 857.452 ms: own prefill 110.727, claim wait 0, decode 271.455, other prefill 473.728, unit wait 0, rest 1.54154
+15:49:09 TTFT of request 147: 855.335 ms: own prefill 110.727, claim wait 0, decode 271.455, other prefill 471.606, unit wait 0, rest 1.54588
+15:49:09 TTFT of request 148: 854.837 ms: own prefill 110.727, claim wait 0, decode 271.455, other prefill 471.105, unit wait 0, rest 1.55038
+15:49:09 Started · request 149 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 150 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 151 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 152 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Done · request 145 · input 22 · cached 0 · output 8 · TTFT 0.9s · 122.3 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 146 · input 22 · cached 0 · output 8 · TTFT 0.9s · 122.3 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 147 · input 22 · cached 0 · output 8 · TTFT 0.9s · 122.3 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 148 · input 22 · cached 0 · output 8 · TTFT 0.9s · 122.3 tok/s · 4.0 tok/cycle
+15:49:09 TTFT of request 149: 1022.99 ms: own prefill 110.93, claim wait 0, decode 328.515, other prefill 581.76, unit wait 0, rest 1.78138
+15:49:09 TTFT of request 150: 1021.93 ms: own prefill 110.93, claim wait 0, decode 328.515, other prefill 580.684, unit wait 0, rest 1.80042
+15:49:09 TTFT of request 151: 1021.61 ms: own prefill 110.93, claim wait 0, decode 328.515, other prefill 580.36, unit wait 0, rest 1.80533
+15:49:09 TTFT of request 152: 1018.98 ms: own prefill 110.93, claim wait 0, decode 328.515, other prefill 577.723, unit wait 0, rest 1.80863
+15:49:09 Started · request 153 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 154 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 155 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Started · request 156 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:09 Done · request 149 · input 22 · cached 0 · output 8 · TTFT 1.0s · 121.9 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 150 · input 22 · cached 0 · output 8 · TTFT 1.0s · 121.9 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 151 · input 22 · cached 0 · output 8 · TTFT 1.0s · 121.9 tok/s · 4.0 tok/cycle
+15:49:09 Done · request 152 · input 22 · cached 0 · output 8 · TTFT 1.0s · 121.9 tok/s · 4.0 tok/cycle
+15:49:09 TTFT of request 153: 1187.46 ms: own prefill 111.192, claim wait 0, decode 385.755, other prefill 688.466, unit wait 0, rest 2.04604
+15:49:09 TTFT of request 154: 1186.96 ms: own prefill 111.192, claim wait 0, decode 385.755, other prefill 687.947, unit wait 0, rest 2.06354
+15:49:09 TTFT of request 155: 1186.61 ms: own prefill 111.192, claim wait 0, decode 385.755, other prefill 687.59, unit wait 0, rest 2.06954
+15:49:09 TTFT of request 156: 1185.64 ms: own prefill 111.192, claim wait 0, decode 385.755, other prefill 686.619, unit wait 0, rest 2.07021
+15:49:10 Started · request 157 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 158 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 159 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 160 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Done · request 153 · input 22 · cached 0 · output 8 · TTFT 1.2s · 121.9 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 154 · input 22 · cached 0 · output 8 · TTFT 1.2s · 121.9 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 155 · input 22 · cached 0 · output 8 · TTFT 1.2s · 121.9 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 156 · input 22 · cached 0 · output 8 · TTFT 1.2s · 121.9 tok/s · 4.0 tok/cycle
+15:49:10 TTFT of request 157: 1353.42 ms: own prefill 110.47, claim wait 0, decode 442.906, other prefill 797.626, unit wait 0, rest 2.421
+15:49:10 TTFT of request 158: 1353.05 ms: own prefill 110.47, claim wait 0, decode 442.906, other prefill 797.235, unit wait 0, rest 2.43913
+15:49:10 TTFT of request 159: 1352.57 ms: own prefill 110.47, claim wait 0, decode 442.906, other prefill 796.752, unit wait 0, rest 2.44358
+15:49:10 TTFT of request 160: 1352.27 ms: own prefill 110.47, claim wait 0, decode 442.906, other prefill 796.448, unit wait 0, rest 2.44763
+15:49:10 Started · request 161 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 162 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 163 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 164 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Done · request 157 · input 22 · cached 0 · output 8 · TTFT 1.4s · 122.1 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 158 · input 22 · cached 0 · output 8 · TTFT 1.4s · 122.2 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 159 · input 22 · cached 0 · output 8 · TTFT 1.4s · 122.2 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 160 · input 22 · cached 0 · output 8 · TTFT 1.4s · 122.2 tok/s · 4.0 tok/cycle
+15:49:10 TTFT of request 161: 1519.65 ms: own prefill 110.387, claim wait 0, decode 500.011, other prefill 906.561, unit wait 0, rest 2.69358
+15:49:10 TTFT of request 162: 1519.22 ms: own prefill 110.387, claim wait 0, decode 500.011, other prefill 906.11, unit wait 0, rest 2.71125
+15:49:10 TTFT of request 163: 1519.03 ms: own prefill 110.387, claim wait 0, decode 500.011, other prefill 905.916, unit wait 0, rest 2.716
+15:49:10 TTFT of request 164: 1518.92 ms: own prefill 110.387, claim wait 0, decode 500.011, other prefill 905.799, unit wait 0, rest 2.71921
+15:49:10 Started · request 165 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 166 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 167 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 168 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Done · request 161 · input 22 · cached 0 · output 8 · TTFT 1.5s · 124.6 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 162 · input 22 · cached 0 · output 8 · TTFT 1.5s · 124.6 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 163 · input 22 · cached 0 · output 8 · TTFT 1.5s · 124.6 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 164 · input 22 · cached 0 · output 8 · TTFT 1.5s · 124.6 tok/s · 4.0 tok/cycle
+15:49:10 TTFT of request 165: 1686.32 ms: own prefill 111.844, claim wait 0, decode 556.012, other prefill 1015.51, unit wait 0, rest 2.96079
+15:49:10 TTFT of request 166: 1686.05 ms: own prefill 111.844, claim wait 0, decode 556.012, other prefill 1015.21, unit wait 0, rest 2.98046
+15:49:10 TTFT of request 167: 1685.96 ms: own prefill 111.844, claim wait 0, decode 556.012, other prefill 1015.11, unit wait 0, rest 2.98508
+15:49:10 TTFT of request 168: 1685.76 ms: own prefill 111.844, claim wait 0, decode 556.012, other prefill 1014.92, unit wait 0, rest 2.98783
+15:49:10 Started · request 169 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 170 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 171 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 172 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Done · request 165 · input 22 · cached 0 · output 8 · TTFT 1.7s · 119.9 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 166 · input 22 · cached 0 · output 8 · TTFT 1.7s · 120.0 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 167 · input 22 · cached 0 · output 8 · TTFT 1.7s · 120.0 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 168 · input 22 · cached 0 · output 8 · TTFT 1.7s · 120.0 tok/s · 4.0 tok/cycle
+15:49:10 TTFT of request 169: 1856.06 ms: own prefill 112.009, claim wait 0, decode 614.084, other prefill 1126.62, unit wait 0, rest 3.35258
+15:49:10 TTFT of request 170: 1856.02 ms: own prefill 112.009, claim wait 0, decode 614.084, other prefill 1126.55, unit wait 0, rest 3.37375
+15:49:10 TTFT of request 171: 1855.98 ms: own prefill 112.009, claim wait 0, decode 614.084, other prefill 1126.51, unit wait 0, rest 3.37825
+15:49:10 TTFT of request 172: 1855.88 ms: own prefill 112.009, claim wait 0, decode 614.084, other prefill 1126.4, unit wait 0, rest 3.38342
+15:49:10 Started · request 173 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 174 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 175 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 179 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Done · request 169 · input 22 · cached 0 · output 8 · TTFT 1.9s · 122.1 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 170 · input 22 · cached 0 · output 8 · TTFT 1.9s · 122.2 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 171 · input 22 · cached 0 · output 8 · TTFT 1.9s · 122.2 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 172 · input 22 · cached 0 · output 8 · TTFT 1.9s · 122.2 tok/s · 4.0 tok/cycle
+15:49:10 TTFT of request 173: 2025.4 ms: own prefill 112.205, claim wait 0, decode 671.204, other prefill 1238.36, unit wait 0, rest 3.62783
+15:49:10 TTFT of request 174: 2025.38 ms: own prefill 112.205, claim wait 0, decode 671.204, other prefill 1238.32, unit wait 0, rest 3.64554
+15:49:10 TTFT of request 175: 2025.31 ms: own prefill 112.205, claim wait 0, decode 671.204, other prefill 1238.25, unit wait 0, rest 3.65133
+15:49:10 TTFT of request 179: 2025.22 ms: own prefill 112.205, claim wait 0, decode 671.204, other prefill 1238.16, unit wait 0, rest 3.65437
+15:49:10 Started · request 177 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 183 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 176 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Started · request 184 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:10 Done · request 173 · input 22 · cached 0 · output 8 · TTFT 2.0s · 122.8 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 174 · input 22 · cached 0 · output 8 · TTFT 2.0s · 122.8 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 175 · input 22 · cached 0 · output 8 · TTFT 2.0s · 122.8 tok/s · 4.0 tok/cycle
+15:49:10 Done · request 179 · input 22 · cached 0 · output 8 · TTFT 2.0s · 122.8 tok/s · 4.0 tok/cycle
+15:49:10 TTFT of request 177: 2194.5 ms: own prefill 112.366, claim wait 0, decode 728.051, other prefill 1350.22, unit wait 0, rest 3.85933
+15:49:10 TTFT of request 183: 2194.49 ms: own prefill 112.366, claim wait 0, decode 728.051, other prefill 1350.19, unit wait 0, rest 3.87621
+15:49:10 TTFT of request 176: 2194.46 ms: own prefill 112.366, claim wait 0, decode 728.051, other prefill 1350.17, unit wait 0, rest 3.88042
+15:49:10 TTFT of request 184: 2194.43 ms: own prefill 112.366, claim wait 0, decode 728.051, other prefill 1350.13, unit wait 0, rest 3.88417
+15:49:11 Started · request 181 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:11 Started · request 182 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:11 Started · request 178 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:11 Started · request 180 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:11 Done · request 177 · input 22 · cached 0 · output 8 · TTFT 2.2s · 121.7 tok/s · 4.0 tok/cycle
+15:49:11 Done · request 183 · input 22 · cached 0 · output 8 · TTFT 2.2s · 121.8 tok/s · 4.0 tok/cycle
+15:49:11 Done · request 176 · input 22 · cached 0 · output 8 · TTFT 2.2s · 121.8 tok/s · 4.0 tok/cycle
+15:49:11 Done · request 184 · input 22 · cached 0 · output 8 · TTFT 2.2s · 121.8 tok/s · 4.0 tok/cycle
+15:49:11 TTFT of request 181: 2363.92 ms: own prefill 111.983, claim wait 0, decode 785.249, other prefill 1462.46, unit wait 0, rest 4.22921
+15:49:11 TTFT of request 182: 2363.9 ms: own prefill 111.983, claim wait 0, decode 785.249, other prefill 1462.41, unit wait 0, rest 4.24971
+15:49:11 TTFT of request 178: 2363.82 ms: own prefill 111.983, claim wait 0, decode 785.249, other prefill 1462.33, unit wait 0, rest 4.25437
+15:49:11 TTFT of request 180: 2363.8 ms: own prefill 111.983, claim wait 0, decode 785.249, other prefill 1462.31, unit wait 0, rest 4.25842
+15:49:11 Started · request 188 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:11 Started · request 186 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:11 Started · request 187 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:11 Started · request 191 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:11 Done · request 181 · input 22 · cached 0 · output 8 · TTFT 2.4s · 122.4 tok/s · 4.0 tok/cycle
+15:49:11 Done · request 182 · input 22 · cached 0 · output 8 · TTFT 2.4s · 122.4 tok/s · 4.0 tok/cycle
+15:49:11 Done · request 178 · input 22 · cached 0 · output 8 · TTFT 2.4s · 122.4 tok/s · 4.0 tok/cycle
+15:49:11 Done · request 180 · input 22 · cached 0 · output 8 · TTFT 2.4s · 122.4 tok/s · 4.0 tok/cycle
+15:49:11 TTFT of request 188: 2532.5 ms: own prefill 111.538, claim wait 0, decode 842.277, other prefill 1574.21, unit wait 0, rest 4.47396
+15:49:11 TTFT of request 186: 2532.47 ms: own prefill 111.538, claim wait 0, decode 842.277, other prefill 1574.16, unit wait 0, rest 4.49375
+15:49:11 TTFT of request 187: 2532.38 ms: own prefill 111.538, claim wait 0, decode 842.277, other prefill 1574.07, unit wait 0, rest 4.49704
+15:49:11 TTFT of request 191: 2532.28 ms: own prefill 111.538, claim wait 0, decode 842.277, other prefill 1573.96, unit wait 0, rest 4.50112
+15:49:11 Started · request 189 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:11 Started · request 190 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:11 Started · request 185 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:11 Done · request 188 · input 22 · cached 0 · output 8 · TTFT 2.5s · 122.7 tok/s · 4.0 tok/cycle
+15:49:11 Done · request 186 · input 22 · cached 0 · output 8 · TTFT 2.5s · 122.7 tok/s · 4.0 tok/cycle
+15:49:11 Done · request 187 · input 22 · cached 0 · output 8 · TTFT 2.5s · 122.7 tok/s · 4.0 tok/cycle
+15:49:11 Done · request 191 · input 22 · cached 0 · output 8 · TTFT 2.5s · 122.7 tok/s · 4.0 tok/cycle
+15:49:11 TTFT of request 189: 2697.78 ms: own prefill 108.423, claim wait 0, decode 899.121, other prefill 1685.47, unit wait 0, rest 4.76467
+15:49:11 TTFT of request 190: 2697.76 ms: own prefill 108.423, claim wait 0, decode 899.121, other prefill 1685.43, unit wait 0, rest 4.78442
+15:49:11 TTFT of request 185: 2697.73 ms: own prefill 108.423, claim wait 0, decode 899.121, other prefill 1685.4, unit wait 0, rest 4.78862
+15:49:11 Done · request 189 · input 22 · cached 0 · output 8 · TTFT 2.7s · 129.0 tok/s · 4.0 tok/cycle
+15:49:11 Done · request 190 · input 22 · cached 0 · output 8 · TTFT 2.7s · 129.0 tok/s · 4.0 tok/cycle
+15:49:11 Done · request 185 · input 22 · cached 0 · output 8 · TTFT 2.7s · 129.0 tok/s · 4.0 tok/cycle
+15:49:15 Started · request 192 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Error · frontend_overloaded · POST /v1/chat/completions
+15:49:15 Error · frontend_overloaded · POST /v1/chat/completions
+15:49:15 Error · frontend_overloaded · POST /v1/chat/completions
+15:49:15 Error · frontend_overloaded · POST /v1/chat/completions
+15:49:15 Error · frontend_overloaded · POST /v1/chat/completions
+15:49:15 Error · frontend_overloaded · POST /v1/chat/completions
+15:49:15 TTFT of request 192: 50.1345 ms: own prefill 49.8148, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.31975
+15:49:15 Started · request 193 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Started · request 194 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Started · request 195 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Started · request 196 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Done · request 192 · input 22 · cached 0 · output 8 · TTFT 0.1s · 164.2 tok/s · 4.0 tok/cycle
+15:49:15 TTFT of request 193: 193.702 ms: own prefill 111.738, claim wait 0, decode 42.4659, other prefill 39.2283, unit wait 0, rest 0.269416
+15:49:15 TTFT of request 194: 193.717 ms: own prefill 111.738, claim wait 0, decode 42.4659, other prefill 39.2283, unit wait 0, rest 0.284833
+15:49:15 TTFT of request 195: 193.721 ms: own prefill 111.738, claim wait 0, decode 42.4659, other prefill 39.2283, unit wait 0, rest 0.288666
+15:49:15 TTFT of request 196: 193.724 ms: own prefill 111.738, claim wait 0, decode 42.4659, other prefill 39.2283, unit wait 0, rest 0.291833
+15:49:15 Started · request 197 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Started · request 198 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Started · request 199 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Started · request 200 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Done · request 193 · input 22 · cached 0 · output 8 · TTFT 0.2s · 121.1 tok/s · 4.0 tok/cycle
+15:49:15 Done · request 194 · input 22 · cached 0 · output 8 · TTFT 0.2s · 121.2 tok/s · 4.0 tok/cycle
+15:49:15 Done · request 195 · input 22 · cached 0 · output 8 · TTFT 0.2s · 121.2 tok/s · 4.0 tok/cycle
+15:49:15 Done · request 196 · input 22 · cached 0 · output 8 · TTFT 0.2s · 121.2 tok/s · 4.0 tok/cycle
+15:49:15 TTFT of request 197: 362.887 ms: own prefill 111.333, claim wait 0, decode 100.047, other prefill 150.967, unit wait 0, rest 0.539416
+15:49:15 TTFT of request 198: 361.447 ms: own prefill 111.333, claim wait 0, decode 100.047, other prefill 149.507, unit wait 0, rest 0.558958
+15:49:15 TTFT of request 199: 359.919 ms: own prefill 111.333, claim wait 0, decode 100.047, other prefill 147.976, unit wait 0, rest 0.562667
+15:49:15 TTFT of request 200: 359.495 ms: own prefill 111.333, claim wait 0, decode 100.047, other prefill 147.548, unit wait 0, rest 0.566208
+15:49:15 Started · request 201 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Started · request 202 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Started · request 203 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Started · request 204 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:15 Done · request 197 · input 22 · cached 0 · output 8 · TTFT 0.4s · 119.4 tok/s · 4.0 tok/cycle
+15:49:15 Done · request 198 · input 22 · cached 0 · output 8 · TTFT 0.4s · 119.4 tok/s · 4.0 tok/cycle
+15:49:15 Done · request 199 · input 22 · cached 0 · output 8 · TTFT 0.4s · 119.4 tok/s · 4.0 tok/cycle
+15:49:15 Done · request 200 · input 22 · cached 0 · output 8 · TTFT 0.4s · 119.4 tok/s · 4.0 tok/cycle
+15:49:16 TTFT of request 201: 529.669 ms: own prefill 111.807, claim wait 0, decode 157.34, other prefill 258.563, unit wait 0, rest 1.95775
+15:49:16 TTFT of request 202: 529.139 ms: own prefill 111.807, claim wait 0, decode 157.34, other prefill 258.014, unit wait 0, rest 1.978
+15:49:16 TTFT of request 203: 528.445 ms: own prefill 111.807, claim wait 0, decode 157.34, other prefill 257.317, unit wait 0, rest 1.98112
+15:49:16 TTFT of request 204: 527.794 ms: own prefill 111.807, claim wait 0, decode 157.34, other prefill 256.662, unit wait 0, rest 1.98508
+15:49:16 Started · request 205 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 206 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 207 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 208 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Done · request 201 · input 22 · cached 0 · output 8 · TTFT 0.5s · 121.1 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 202 · input 22 · cached 0 · output 8 · TTFT 0.5s · 121.2 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 203 · input 22 · cached 0 · output 8 · TTFT 0.5s · 121.2 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 204 · input 22 · cached 0 · output 8 · TTFT 0.5s · 121.2 tok/s · 4.0 tok/cycle
+15:49:16 TTFT of request 205: 696.764 ms: own prefill 111.928, claim wait 0, decode 214.932, other prefill 367.678, unit wait 0, rest 2.22475
+15:49:16 TTFT of request 206: 696.414 ms: own prefill 111.928, claim wait 0, decode 214.932, other prefill 367.308, unit wait 0, rest 2.24475
+15:49:16 TTFT of request 207: 696.145 ms: own prefill 111.928, claim wait 0, decode 214.932, other prefill 367.035, unit wait 0, rest 2.24933
+15:49:16 TTFT of request 208: 694.177 ms: own prefill 111.928, claim wait 0, decode 214.932, other prefill 365.064, unit wait 0, rest 2.25304
+15:49:16 Started · request 209 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 210 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 211 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 212 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Done · request 205 · input 22 · cached 0 · output 8 · TTFT 0.7s · 120.4 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 206 · input 22 · cached 0 · output 8 · TTFT 0.7s · 120.5 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 207 · input 22 · cached 0 · output 8 · TTFT 0.7s · 120.5 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 208 · input 22 · cached 0 · output 8 · TTFT 0.7s · 120.5 tok/s · 4.0 tok/cycle
+15:49:16 TTFT of request 209: 861.595 ms: own prefill 111.668, claim wait 0, decode 272.866, other prefill 474.571, unit wait 0, rest 2.49116
+15:49:16 TTFT of request 210: 861.35 ms: own prefill 111.668, claim wait 0, decode 272.866, other prefill 474.308, unit wait 0, rest 2.50767
+15:49:16 TTFT of request 211: 859.36 ms: own prefill 111.668, claim wait 0, decode 272.866, other prefill 472.313, unit wait 0, rest 2.51258
+15:49:16 TTFT of request 212: 857.617 ms: own prefill 111.668, claim wait 0, decode 272.866, other prefill 470.566, unit wait 0, rest 2.51712
+15:49:16 Started · request 213 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 214 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 215 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 216 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Done · request 209 · input 22 · cached 0 · output 8 · TTFT 0.9s · 121.3 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 210 · input 22 · cached 0 · output 8 · TTFT 0.9s · 121.4 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 211 · input 22 · cached 0 · output 8 · TTFT 0.9s · 121.4 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 212 · input 22 · cached 0 · output 8 · TTFT 0.9s · 121.4 tok/s · 4.0 tok/cycle
+15:49:16 TTFT of request 213: 1026.67 ms: own prefill 112.253, claim wait 0, decode 330.26, other prefill 581.303, unit wait 0, rest 2.85383
+15:49:16 TTFT of request 214: 1026.68 ms: own prefill 112.253, claim wait 0, decode 330.26, other prefill 581.293, unit wait 0, rest 2.87287
+15:49:16 TTFT of request 215: 1023.95 ms: own prefill 112.253, claim wait 0, decode 330.26, other prefill 578.556, unit wait 0, rest 2.88204
+15:49:16 TTFT of request 216: 1023.62 ms: own prefill 112.253, claim wait 0, decode 330.26, other prefill 578.218, unit wait 0, rest 2.88541
+15:49:16 Started · request 217 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 218 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 219 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 220 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Done · request 213 · input 22 · cached 0 · output 8 · TTFT 1.0s · 122.4 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 214 · input 22 · cached 0 · output 8 · TTFT 1.0s · 122.4 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 215 · input 22 · cached 0 · output 8 · TTFT 1.0s · 122.4 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 216 · input 22 · cached 0 · output 8 · TTFT 1.0s · 122.5 tok/s · 4.0 tok/cycle
+15:49:16 TTFT of request 217: 1190.98 ms: own prefill 111.588, claim wait 0, decode 387.248, other prefill 689.022, unit wait 0, rest 3.12391
+15:49:16 TTFT of request 218: 1190.73 ms: own prefill 111.588, claim wait 0, decode 387.248, other prefill 688.752, unit wait 0, rest 3.14187
+15:49:16 TTFT of request 219: 1190.64 ms: own prefill 111.588, claim wait 0, decode 387.248, other prefill 688.657, unit wait 0, rest 3.14712
+15:49:16 TTFT of request 220: 1190.22 ms: own prefill 111.588, claim wait 0, decode 387.248, other prefill 688.233, unit wait 0, rest 3.15029
+15:49:16 Started · request 221 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 222 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 223 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 224 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Done · request 217 · input 22 · cached 0 · output 8 · TTFT 1.2s · 122.1 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 218 · input 22 · cached 0 · output 8 · TTFT 1.2s · 122.1 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 219 · input 22 · cached 0 · output 8 · TTFT 1.2s · 122.1 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 220 · input 22 · cached 0 · output 8 · TTFT 1.2s · 122.1 tok/s · 4.0 tok/cycle
+15:49:16 TTFT of request 221: 1359.13 ms: own prefill 111.924, claim wait 0, decode 444.422, other prefill 799.415, unit wait 0, rest 3.36821
+15:49:16 TTFT of request 222: 1359.01 ms: own prefill 111.924, claim wait 0, decode 444.422, other prefill 799.282, unit wait 0, rest 3.38354
+15:49:16 TTFT of request 223: 1357.29 ms: own prefill 111.924, claim wait 0, decode 444.422, other prefill 797.551, unit wait 0, rest 3.38833
+15:49:16 TTFT of request 224: 1357.02 ms: own prefill 111.924, claim wait 0, decode 444.422, other prefill 797.287, unit wait 0, rest 3.39112
+15:49:16 Started · request 225 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 226 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 227 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Started · request 228 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:16 Done · request 221 · input 22 · cached 0 · output 8 · TTFT 1.4s · 121.3 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 222 · input 22 · cached 0 · output 8 · TTFT 1.4s · 121.4 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 223 · input 22 · cached 0 · output 8 · TTFT 1.4s · 121.4 tok/s · 4.0 tok/cycle
+15:49:16 Done · request 224 · input 22 · cached 0 · output 8 · TTFT 1.4s · 121.4 tok/s · 4.0 tok/cycle
+15:49:17 TTFT of request 225: 1525.31 ms: own prefill 111.06, claim wait 0, decode 501.793, other prefill 908.692, unit wait 0, rest 3.76262
+15:49:17 TTFT of request 226: 1524.96 ms: own prefill 111.06, claim wait 0, decode 501.793, other prefill 908.322, unit wait 0, rest 3.77996
+15:49:17 TTFT of request 227: 1524.85 ms: own prefill 111.06, claim wait 0, decode 501.793, other prefill 908.217, unit wait 0, rest 3.78421
+15:49:17 TTFT of request 228: 1524.74 ms: own prefill 111.06, claim wait 0, decode 501.793, other prefill 908.101, unit wait 0, rest 3.78791
+15:49:17 Started · request 229 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 230 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 231 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 232 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Done · request 225 · input 22 · cached 0 · output 8 · TTFT 1.5s · 121.9 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 226 · input 22 · cached 0 · output 8 · TTFT 1.5s · 121.9 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 227 · input 22 · cached 0 · output 8 · TTFT 1.5s · 121.9 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 228 · input 22 · cached 0 · output 8 · TTFT 1.5s · 121.9 tok/s · 4.0 tok/cycle
+15:49:17 TTFT of request 229: 1693.74 ms: own prefill 111.581, claim wait 0, decode 559.031, other prefill 1019.09, unit wait 0, rest 4.04225
+15:49:17 TTFT of request 230: 1693.71 ms: own prefill 111.581, claim wait 0, decode 559.031, other prefill 1019.04, unit wait 0, rest 4.05971
+15:49:17 TTFT of request 231: 1693.63 ms: own prefill 111.581, claim wait 0, decode 559.031, other prefill 1018.95, unit wait 0, rest 4.06375
+15:49:17 TTFT of request 232: 1693.55 ms: own prefill 111.581, claim wait 0, decode 559.031, other prefill 1018.86, unit wait 0, rest 4.06933
+15:49:17 Started · request 233 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 234 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 235 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 236 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Done · request 229 · input 22 · cached 0 · output 8 · TTFT 1.7s · 122.7 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 230 · input 22 · cached 0 · output 8 · TTFT 1.7s · 122.8 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 231 · input 22 · cached 0 · output 8 · TTFT 1.7s · 122.8 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 232 · input 22 · cached 0 · output 8 · TTFT 1.7s · 122.8 tok/s · 4.0 tok/cycle
+15:49:17 TTFT of request 233: 1862.4 ms: own prefill 111.782, claim wait 0, decode 615.876, other prefill 1130.45, unit wait 0, rest 4.29196
+15:49:17 TTFT of request 234: 1862.35 ms: own prefill 111.782, claim wait 0, decode 615.876, other prefill 1130.38, unit wait 0, rest 4.3105
+15:49:17 TTFT of request 235: 1862.31 ms: own prefill 111.782, claim wait 0, decode 615.876, other prefill 1130.34, unit wait 0, rest 4.31512
+15:49:17 TTFT of request 236: 1862.24 ms: own prefill 111.782, claim wait 0, decode 615.876, other prefill 1130.26, unit wait 0, rest 4.31867
+15:49:17 Started · request 237 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 238 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 239 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 240 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Done · request 233 · input 22 · cached 0 · output 8 · TTFT 1.9s · 122.2 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 234 · input 22 · cached 0 · output 8 · TTFT 1.9s · 122.2 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 235 · input 22 · cached 0 · output 8 · TTFT 1.9s · 122.2 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 236 · input 22 · cached 0 · output 8 · TTFT 1.9s · 122.2 tok/s · 4.0 tok/cycle
+15:49:17 TTFT of request 237: 2030.84 ms: own prefill 111.31, claim wait 0, decode 672.89, other prefill 1242, unit wait 0, rest 4.64067
+15:49:17 TTFT of request 238: 2030.8 ms: own prefill 111.31, claim wait 0, decode 672.89, other prefill 1241.95, unit wait 0, rest 4.65687
+15:49:17 TTFT of request 239: 2030.74 ms: own prefill 111.31, claim wait 0, decode 672.89, other prefill 1241.88, unit wait 0, rest 4.66192
+15:49:17 TTFT of request 240: 2030.67 ms: own prefill 111.31, claim wait 0, decode 672.89, other prefill 1241.81, unit wait 0, rest 4.66554
+15:49:17 Started · request 243 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 242 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 241 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 244 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Done · request 237 · input 22 · cached 0 · output 8 · TTFT 2.0s · 124.2 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 238 · input 22 · cached 0 · output 8 · TTFT 2.0s · 124.3 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 239 · input 22 · cached 0 · output 8 · TTFT 2.0s · 124.3 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 240 · input 22 · cached 0 · output 8 · TTFT 2.0s · 124.3 tok/s · 4.0 tok/cycle
+15:49:17 TTFT of request 243: 2197.88 ms: own prefill 110.915, claim wait 0, decode 729.048, other prefill 1353.02, unit wait 0, rest 4.89983
+15:49:17 TTFT of request 242: 2197.86 ms: own prefill 110.915, claim wait 0, decode 729.048, other prefill 1352.98, unit wait 0, rest 4.91788
+15:49:17 TTFT of request 241: 2197.85 ms: own prefill 110.915, claim wait 0, decode 729.048, other prefill 1352.97, unit wait 0, rest 4.92225
+15:49:17 TTFT of request 244: 2197.74 ms: own prefill 110.915, claim wait 0, decode 729.048, other prefill 1352.85, unit wait 0, rest 4.92763
+15:49:17 Started · request 247 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 246 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 249 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Started · request 248 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:17 Done · request 243 · input 22 · cached 0 · output 8 · TTFT 2.2s · 123.8 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 242 · input 22 · cached 0 · output 8 · TTFT 2.2s · 123.8 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 241 · input 22 · cached 0 · output 8 · TTFT 2.2s · 123.8 tok/s · 4.0 tok/cycle
+15:49:17 Done · request 244 · input 22 · cached 0 · output 8 · TTFT 2.2s · 123.8 tok/s · 4.0 tok/cycle
+15:49:17 TTFT of request 247: 2366.39 ms: own prefill 112.155, claim wait 0, decode 785.398, other prefill 1463.68, unit wait 0, rest 5.15275
+15:49:17 TTFT of request 246: 2366.32 ms: own prefill 112.155, claim wait 0, decode 785.398, other prefill 1463.59, unit wait 0, rest 5.171
+15:49:17 TTFT of request 249: 2366.23 ms: own prefill 112.155, claim wait 0, decode 785.398, other prefill 1463.5, unit wait 0, rest 5.17458
+15:49:17 TTFT of request 248: 2366.07 ms: own prefill 112.155, claim wait 0, decode 785.398, other prefill 1463.34, unit wait 0, rest 5.17733
+15:49:18 Started · request 245 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:18 Started · request 250 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:18 Started · request 251 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:18 Started · request 252 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:18 Done · request 247 · input 22 · cached 0 · output 8 · TTFT 2.4s · 120.4 tok/s · 4.0 tok/cycle
+15:49:18 Done · request 246 · input 22 · cached 0 · output 8 · TTFT 2.4s · 120.5 tok/s · 4.0 tok/cycle
+15:49:18 Done · request 249 · input 22 · cached 0 · output 8 · TTFT 2.4s · 120.5 tok/s · 4.0 tok/cycle
+15:49:18 Done · request 248 · input 22 · cached 0 · output 8 · TTFT 2.4s · 120.5 tok/s · 4.0 tok/cycle
+15:49:18 TTFT of request 245: 2535.44 ms: own prefill 111.244, claim wait 0, decode 843.218, other prefill 1575.46, unit wait 0, rest 5.52458
+15:49:18 TTFT of request 250: 2535.45 ms: own prefill 111.244, claim wait 0, decode 843.218, other prefill 1575.44, unit wait 0, rest 5.54212
+15:49:18 TTFT of request 251: 2535.41 ms: own prefill 111.244, claim wait 0, decode 843.218, other prefill 1575.4, unit wait 0, rest 5.54679
+15:49:18 TTFT of request 252: 2535.4 ms: own prefill 111.244, claim wait 0, decode 843.218, other prefill 1575.38, unit wait 0, rest 5.55083
+15:49:18 Started · request 253 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:18 Started · request 254 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:18 Started · request 255 · input 22 · cached 0 · effort absent → medium · thinking on
+15:49:18 Done · request 245 · input 22 · cached 0 · output 8 · TTFT 2.5s · 122.5 tok/s · 4.0 tok/cycle
+15:49:18 Done · request 250 · input 22 · cached 0 · output 8 · TTFT 2.5s · 122.5 tok/s · 4.0 tok/cycle
+15:49:18 Done · request 251 · input 22 · cached 0 · output 8 · TTFT 2.5s · 122.6 tok/s · 4.0 tok/cycle
+15:49:18 Done · request 252 · input 22 · cached 0 · output 8 · TTFT 2.5s · 122.6 tok/s · 4.0 tok/cycle
+15:49:18 TTFT of request 253: 2700.79 ms: own prefill 108.313, claim wait 0, decode 900.173, other prefill 1686.52, unit wait 0, rest 5.78546
+15:49:18 TTFT of request 254: 2700.72 ms: own prefill 108.313, claim wait 0, decode 900.173, other prefill 1686.43, unit wait 0, rest 5.80379
+15:49:18 TTFT of request 255: 2700.65 ms: own prefill 108.313, claim wait 0, decode 900.173, other prefill 1686.35, unit wait 0, rest 5.80817
+15:49:18 Done · request 253 · input 22 · cached 0 · output 8 · TTFT 2.7s · 131.8 tok/s · 4.0 tok/cycle
+15:49:18 Done · request 254 · input 22 · cached 0 · output 8 · TTFT 2.7s · 131.9 tok/s · 4.0 tok/cycle
+15:49:18 Done · request 255 · input 22 · cached 0 · output 8 · TTFT 2.7s · 131.9 tok/s · 4.0 tok/cycle
+15:49:22 Started · request 256 · input 106,998 · cached 105,344 · effort absent → medium · thinking on
+15:49:22 TTFT of request 256: 606.705 ms: own prefill 579.384, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 27.3204
+15:49:28 Done · request 256 · input 106,998 · cached 105,344 · output 746 · tools 13·35e3c6cf · TTFT 0.6s · 125.0 tok/s · 3.1 tok/cycle
+15:49:29 Started · request 257 · input 108,121 · cached 106,976 · effort absent → medium · thinking on
+15:49:29 TTFT of request 257: 450.599 ms: own prefill 450.14, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.459168
+15:49:34 Done · request 257 · input 108,121 · cached 106,976 · deduplicated 736 · output 694 · tools 13·35e3c6cf · TTFT 0.5s · 131.5 tok/s · 3.2 tok/cycle
+15:49:34 Started · request 258 · input 109,188 · cached 108,096 · effort absent → medium · thinking on
+15:49:35 TTFT of request 258: 433.143 ms: own prefill 432.79, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.352708
+15:49:43 Done · request 258 · input 109,188 · cached 108,096 · deduplicated 704 · output 1,031 · tools 13·35e3c6cf · TTFT 0.4s · 121.6 tok/s · 3.0 tok/cycle
+15:49:43 Started · request 259 · input 110,611 · cached 109,152 · effort absent → medium · thinking on
+15:49:44 TTFT of request 259: 539.069 ms: own prefill 538.544, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.524874
+15:49:48 Done · request 259 · input 110,611 · cached 109,152 · deduplicated 1,056 · output 593 · tools 13·35e3c6cf · TTFT 0.5s · 139.6 tok/s · 3.5 tok/cycle
+15:49:48 Started · request 260 · input 114,015 · cached 110,592 · effort absent → medium · thinking on
+15:49:49 TTFT of request 260: 1204.05 ms: own prefill 1203.43, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.614875
+15:49:57 Done · request 260 · input 114,015 · cached 110,592 · deduplicated 608 · output 1,033 · tools 13·35e3c6cf · TTFT 1.2s · 133.2 tok/s · 3.2 tok/cycle
+15:49:57 Started · request 261 · input 116,651 · cached 113,984 · effort absent → medium · thinking on
+15:49:58 TTFT of request 261: 975.836 ms: own prefill 975.268, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.567833
+15:50:10 Done · request 261 · input 116,651 · cached 113,984 · deduplicated 1,056 · output 1,414 · tools 13·35e3c6cf · TTFT 1.0s · 120.7 tok/s · 2.9 tok/cycle
+15:50:10 Started · request 262 · input 119,757 · cached 116,640 · effort absent → medium · thinking on
+15:50:11 TTFT of request 262: 1113 ms: own prefill 1112.26, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.744792
+15:50:18 Done · request 262 · input 119,757 · cached 116,640 · deduplicated 1,408 · output 907 · tools 13·35e3c6cf · TTFT 1.1s · 134.0 tok/s · 3.3 tok/cycle
+15:50:18 Started · request 263 · input 120,723 · cached 119,744 · effort absent → medium · thinking on
+15:50:18 TTFT of request 263: 381.361 ms: own prefill 380.941, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.42
+15:50:20 Done · request 263 · input 120,723 · cached 119,744 · deduplicated 896 · output 365 · tools 13·35e3c6cf · TTFT 0.4s · 200.0 tok/s · 5.1 tok/cycle
+15:50:20 Started · request 264 · input 121,437 · cached 120,704 · effort absent → medium · thinking on
+15:50:20 TTFT of request 264: 339.156 ms: own prefill 338.798, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.358042
+15:50:35 Done · request 264 · input 121,437 · cached 120,704 · deduplicated 352 · output 1,961 · tools 13·35e3c6cf · TTFT 0.3s · 137.3 tok/s · 3.3 tok/cycle
+16:00:35 Weights released after 600 s without a request; the next request restores them
+16:06:04 Weights restored in 1.50 s
+16:06:04 Started · request 265 · input 123,410 · cached 121,408 · effort absent → medium · thinking on
+16:06:08 TTFT of request 265: 6150.65 ms: own prefill 4647.35, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 1503.3
+16:06:09 Done · request 265 · input 123,410 · cached 121,408 · deduplicated 1,984 · output 183 · tools 13·35e3c6cf · TTFT 6.2s · 110.3 tok/s · 3.2 tok/cycle
+16:06:09 Started · request 266 · input 123,645 · cached 123,392 · effort absent → medium · thinking on
+16:06:10 TTFT of request 266: 226.164 ms: own prefill 225.731, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.432833
+16:06:11 Done · request 266 · input 123,645 · cached 123,392 · deduplicated 192 · output 165 · tools 13·35e3c6cf · TTFT 0.2s · 152.7 tok/s · 4.3 tok/cycle
+16:06:11 Started · request 267 · input 125,016 · cached 123,616 · effort absent → medium · thinking on
+16:06:11 TTFT of request 267: 637.625 ms: own prefill 637.094, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.531375
+16:06:14 Done · request 267 · input 125,016 · cached 123,616 · deduplicated 192 · output 340 · tools 13·35e3c6cf · TTFT 0.6s · 155.6 tok/s · 3.8 tok/cycle
+16:06:14 Started · request 268 · input 126,303 · cached 124,992 · effort absent → medium · thinking on
+16:06:14 TTFT of request 268: 557.24 ms: own prefill 556.687, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.552251
+16:06:19 Done · request 268 · input 126,303 · cached 124,992 · deduplicated 352 · output 655 · tools 13·35e3c6cf · TTFT 0.6s · 143.8 tok/s · 3.6 tok/cycle
+16:06:19 Started · request 269 · input 129,480 · cached 126,272 · effort absent → medium · thinking on
+16:06:20 TTFT of request 269: 1164.14 ms: own prefill 1163.41, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.734501
+16:06:33 Done · request 269 · input 129,480 · cached 126,272 · deduplicated 672 · output 1,744 · tools 13·35e3c6cf · TTFT 1.2s · 133.3 tok/s · 3.3 tok/cycle
+16:06:33 Started · request 270 · input 131,607 · cached 129,472 · effort absent → medium · thinking on
+16:06:34 TTFT of request 270: 764.009 ms: own prefill 763.387, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.622459
+16:06:40 Done · request 270 · input 131,607 · cached 129,472 · deduplicated 1,728 · output 875 · tools 13·35e3c6cf · TTFT 0.8s · 143.5 tok/s · 3.5 tok/cycle
+16:06:40 Started · request 271 · input 132,891 · cached 131,584 · effort absent → medium · thinking on
+16:06:41 TTFT of request 271: 507.742 ms: own prefill 507.288, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.453709
+16:06:47 Done · request 271 · input 132,891 · cached 131,584 · deduplicated 896 · output 861 · tools 13·35e3c6cf · TTFT 0.5s · 129.4 tok/s · 3.2 tok/cycle
+16:06:59 Started · request 272 · input 134,048 · cached 132,864 · effort absent → medium · thinking on
+16:07:00 TTFT of request 272: 468.551 ms: own prefill 468.157, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.393584
+16:07:09 Done · request 272 · input 134,048 · cached 132,864 · deduplicated 864 · output 1,261 · tools 13·35e3c6cf · TTFT 0.5s · 129.7 tok/s · 3.2 tok/cycle
+16:07:11 Started · request 273 · input 135,450 · cached 134,016 · effort absent → medium · thinking on
+16:07:11 Memory: start claim of request 274 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+16:07:11 TTFT of request 273: 534.257 ms: own prefill 532.644, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 1.61263
+16:07:11 Memory: growth available; waiting=1; suspended=0
+16:07:33 Done · request 273 · input 135,450 · cached 134,016 · deduplicated 1,280 · output 2,674 · tools 13·35e3c6cf · TTFT 0.5s · 124.1 tok/s · 3.1 tok/cycle
+16:07:33 Memory: in-service claim of request 274: granted
+16:07:33 Started · request 274 · input 134,751 · cached 134,016 · effort absent → medium · thinking on
+16:07:33 Memory: growth available; resource wait cleared
+16:07:33 Memory: start claim of request 275 needs 263.7 MiB, a state buffer no cached state holds: short (0.0 MiB now, 0.0 later)
+16:07:33 TTFT of request 274: 22361.2 ms: own prefill 383.227, claim wait 0, decode 21454.2, other prefill 426.845, unit wait 0, rest 96.9161
+16:07:33 Memory: growth available; waiting=1; suspended=0
+16:07:55 Done · request 274 · input 134,751 · cached 134,016 · output 3,032 · tools 13·35e3c6cf · TTFT 22.4s · 136.9 tok/s · 3.5 tok/cycle
+16:07:55 Memory: in-service claim of request 275: granted
+16:07:55 Started · request 275 · input 138,177 · cached 135,424 · effort absent → medium · thinking on
+16:07:56 Memory: growth available; resource wait cleared
+16:07:56 TTFT of request 275: 23411.8 ms: own prefill 939.85, claim wait 0, decode 22049.7, other prefill 318.341, unit wait 0, rest 103.901
+16:07:58 Done · request 275 · input 138,177 · cached 135,424 · deduplicated 32 · output 234 · tools 13·35e3c6cf · TTFT 23.4s · 130.4 tok/s · 3.3 tok/cycle
+16:07:58 Started · request 276 · input 138,548 · cached 138,144 · effort absent → medium · thinking on
+16:07:58 TTFT of request 276: 243.87 ms: own prefill 243.363, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.506666
+16:08:05 Done · request 276 · input 138,548 · cached 138,144 · output 1,019 · tools 13·35e3c6cf · TTFT 0.2s · 145.2 tok/s · 3.6 tok/cycle
+16:08:07 Started · request 277 · input 139,745 · cached 138,528 · effort absent → medium · thinking on
+16:08:08 TTFT of request 277: 484.484 ms: own prefill 483.87, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.614125
+16:08:19 Done · request 277 · input 139,745 · cached 138,528 · deduplicated 1,024 · output 1,541 · tools 13·35e3c6cf · TTFT 0.5s · 141.6 tok/s · 3.5 tok/cycle
+16:14:36 Started · request 278 · input 141,299 · cached 139,712 · effort absent → medium · thinking on
+16:14:36 TTFT of request 278: 558.852 ms: own prefill 558.251, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.600167
+16:14:52 Done · request 278 · input 141,299 · cached 139,712 · deduplicated 1,568 · output 1,811 · tools 13·35e3c6cf · TTFT 0.6s · 116.5 tok/s · 2.8 tok/cycle
+16:14:52 Started · request 279 · input 144,747 · cached 141,280 · effort absent → medium · thinking on
+16:14:53 TTFT of request 279: 1156.43 ms: own prefill 1155.49, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.940918
+16:14:59 Done · request 279 · input 144,747 · cached 141,280 · deduplicated 1,824 · output 892 · tools 13·35e3c6cf · TTFT 1.2s · 153.9 tok/s · 3.8 tok/cycle
+16:15:04 Started · request 280 · input 145,715 · cached 144,736 · effort absent → medium · thinking on
+16:15:04 TTFT of request 280: 404.966 ms: own prefill 404.486, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.479668
+16:15:05 Done · request 280 · input 145,715 · cached 144,736 · deduplicated 896 · output 130 · tools 13·35e3c6cf · TTFT 0.4s · 169.4 tok/s · 4.4 tok/cycle
+16:15:05 Started · request 281 · input 146,727 · cached 145,696 · effort absent → medium · thinking on
+16:15:06 TTFT of request 281: 483.332 ms: own prefill 482.908, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.424291
+16:15:11 Memory: in-service claim of request 281 needs 103.5 MiB, 1 pages: met, took cache 0.0 engine release 97.5 (131.4 MiB now, 0.0 later)
+16:15:11 Metal created pipeline attention_q8_sparse_located_kv2_g12 while serving, in 0.134667 ms
+16:15:23 Done · request 281 · input 146,727 · cached 145,696 · deduplicated 128 · output 1,828 · tools 13·35e3c6cf · TTFT 0.5s · 106.4 tok/s · 2.8 tok/cycle
+16:15:23 Started · request 282 · input 149,815 · cached 146,720 · effort absent → medium · thinking on
+16:15:23 Metal created pipeline paged_kv_stage_layer while serving, in 0.159917 ms
+16:15:24 TTFT of request 282: 1078.39 ms: own prefill 1077.5, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.894417
+16:15:37 Done · request 282 · input 149,815 · cached 146,720 · deduplicated 960 · output 1,634 · tools 13·35e3c6cf · TTFT 1.1s · 128.2 tok/s · 3.6 tok/cycle
+16:15:37 Started · request 283 · input 152,413 · cached 149,792 · effort absent → medium · thinking on
+16:15:38 TTFT of request 283: 988.916 ms: own prefill 988.142, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.773835
+16:15:45 Done · request 283 · input 152,413 · cached 149,792 · deduplicated 1,632 · output 1,213 · tools 13·35e3c6cf · TTFT 1.0s · 173.8 tok/s · 5.1 tok/cycle
+16:15:46 Started · request 284 · input 153,657 · cached 152,384 · effort absent → medium · thinking on
+16:15:46 TTFT of request 284: 501.197 ms: own prefill 500.606, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.590709
+16:15:48 Done · request 284 · input 153,657 · cached 152,384 · deduplicated 1,216 · output 219 · tools 13·35e3c6cf · TTFT 0.5s · 144.6 tok/s · 4.2 tok/cycle
+16:15:49 Started · request 285 · input 153,907 · cached 153,632 · effort absent → medium · thinking on
+16:15:49 TTFT of request 285: 295.009 ms: own prefill 294.534, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.474291
+16:15:51 Done · request 285 · input 153,907 · cached 153,632 · deduplicated 224 · output 315 · tools 13·35e3c6cf · TTFT 0.3s · 135.6 tok/s · 3.9 tok/cycle
+16:15:52 Started · request 286 · input 154,256 · cached 153,888 · effort absent → medium · thinking on
+16:15:52 TTFT of request 286: 260.693 ms: own prefill 260.251, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.442749
+16:15:58 Done · request 286 · input 154,256 · cached 153,888 · deduplicated 320 · output 819 · tools 13·35e3c6cf · TTFT 0.3s · 139.8 tok/s · 4.1 tok/cycle
+16:15:59 Started · request 287 · input 155,109 · cached 154,240 · effort absent → medium · thinking on
+16:16:00 TTFT of request 287: 405.346 ms: own prefill 404.785, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.560833
+16:16:03 Memory: in-service claim of request 287 needs 103.5 MiB, 1 pages: met, took cache 0.0 engine release 91.5 (125.4 MiB now, 0.0 later)
+16:16:04 Done · request 287 · input 155,109 · cached 154,240 · deduplicated 512 · output 865 · tools 13·35e3c6cf · TTFT 0.4s · 181.0 tok/s · 5.9 tok/cycle
+16:16:04 Started · request 288 · input 156,420 · cached 155,104 · effort absent → medium · thinking on
+16:16:05 TTFT of request 288: 525.726 ms: own prefill 525.034, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.69175
+16:16:07 Done · request 288 · input 156,420 · cached 155,104 · deduplicated 864 · output 317 · tools 13·35e3c6cf · TTFT 0.5s · 154.1 tok/s · 4.7 tok/cycle
+16:16:08 Started · request 289 · input 156,771 · cached 156,384 · effort absent → medium · thinking on
+16:16:08 TTFT of request 289: 311.599 ms: own prefill 310.87, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.729708
+16:16:10 Done · request 289 · input 156,771 · cached 156,384 · deduplicated 352 · output 282 · tools 13·35e3c6cf · TTFT 0.3s · 197.2 tok/s · 6.0 tok/cycle
+16:16:11 Started · request 290 · input 157,087 · cached 156,736 · effort absent → medium · thinking on
+16:16:11 TTFT of request 290: 256.917 ms: own prefill 256.457, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.460001
+16:16:16 Done · request 290 · input 157,087 · cached 156,736 · deduplicated 288 · output 624 · tools 13·35e3c6cf · TTFT 0.3s · 127.0 tok/s · 3.7 tok/cycle
+16:16:16 Started · request 291 · input 158,026 · cached 157,056 · effort absent → medium · thinking on
+16:16:16 TTFT of request 291: 418.188 ms: own prefill 417.639, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.548417
+16:16:19 Done · request 291 · input 158,026 · cached 157,056 · deduplicated 640 · output 275 · tools 13·35e3c6cf · TTFT 0.4s · 104.4 tok/s · 3.1 tok/cycle
+16:16:19 Started · request 292 · input 158,455 · cached 158,016 · effort absent → medium · thinking on
+16:16:19 TTFT of request 292: 270.596 ms: own prefill 270.138, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.457833
+16:16:23 Done · request 292 · input 158,455 · cached 158,016 · deduplicated 256 · output 410 · tools 13·35e3c6cf · TTFT 0.3s · 116.8 tok/s · 3.4 tok/cycle
+16:16:24 Started · request 293 · input 158,896 · cached 158,432 · effort absent → medium · thinking on
+16:16:24 TTFT of request 293: 276.124 ms: own prefill 275.625, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.499541
+16:16:25 Done · request 293 · input 158,896 · cached 158,432 · deduplicated 416 · output 171 · tools 13·35e3c6cf · TTFT 0.3s · 120.4 tok/s · 3.8 tok/cycle
+16:16:26 Started · request 294 · input 159,098 · cached 158,880 · effort absent → medium · thinking on
+16:16:27 TTFT of request 294: 214.668 ms: own prefill 214.213, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.454833
+16:16:35 Done · request 294 · input 159,098 · cached 158,880 · deduplicated 160 · output 1,034 · tools 13·35e3c6cf · TTFT 0.2s · 125.3 tok/s · 3.7 tok/cycle
+16:16:36 Started · request 295 · input 160,165 · cached 159,072 · effort absent → medium · thinking on
+16:16:36 TTFT of request 295: 468.494 ms: own prefill 467.796, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.697791
+16:16:37 Done · request 295 · input 160,165 · cached 159,072 · deduplicated 1,056 · output 144 · tools 13·35e3c6cf · TTFT 0.5s · 122.1 tok/s · 3.8 tok/cycle
+16:16:38 Started · request 296 · input 160,543 · cached 160,160 · effort absent → medium · thinking on
+16:16:38 TTFT of request 296: 265.598 ms: own prefill 265.11, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.488125
+16:16:42 Done · request 296 · input 160,543 · cached 160,160 · deduplicated 128 · output 493 · tools 13·35e3c6cf · TTFT 0.3s · 114.3 tok/s · 3.3 tok/cycle
+16:16:43 Started · request 297 · input 161,070 · cached 160,512 · effort absent → medium · thinking on
+16:16:43 TTFT of request 297: 315.39 ms: own prefill 314.866, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.523583
+16:16:45 Done · request 297 · input 161,070 · cached 160,512 · deduplicated 512 · output 185 · tools 13·35e3c6cf · TTFT 0.3s · 117.4 tok/s · 3.9 tok/cycle
+16:16:45 Started · request 298 · input 161,451 · cached 161,056 · effort absent → medium · thinking on
+16:16:46 TTFT of request 298: 286.76 ms: own prefill 286.288, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.472416
+16:16:49 Done · request 298 · input 161,451 · cached 161,056 · deduplicated 192 · output 525 · tools 13·35e3c6cf · TTFT 0.3s · 159.8 tok/s · 4.8 tok/cycle
+16:16:50 Started · request 299 · input 162,010 · cached 161,440 · effort absent → medium · thinking on
+16:16:50 TTFT of request 299: 323.901 ms: own prefill 323.421, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.479167
+16:16:53 Done · request 299 · input 162,010 · cached 161,440 · deduplicated 512 · output 326 · tools 13·35e3c6cf · TTFT 0.3s · 115.7 tok/s · 3.5 tok/cycle
+16:16:53 Started · request 300 · input 162,476 · cached 161,984 · effort absent → medium · thinking on
+16:16:54 TTFT of request 300: 292.84 ms: own prefill 292.381, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.459292
+16:17:06 Memory: in-service claim of request 300 needs 103.5 MiB, 1 pages: met, took cache 0.0 engine release 0.0 (33.9 MiB now, 0.0 later)
+16:17:07 Memory: in-service claim of request 300 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+16:17:07 Memory: in-service claim of request 300 needs 103.5 MiB, 1 pages: met, took engine release 0.0 (0.0 MiB now, 0.0 later)
+16:17:07 Done · request 300 · input 162,476 · cached 161,984 · deduplicated 320 · output 1,462 · tools 13·35e3c6cf · TTFT 0.3s · 110.4 tok/s · 3.2 tok/cycle
+16:17:07 Started · request 301 · input 163,992 · cached 162,464 · effort absent → medium · thinking on
+16:17:07 TTFT of request 301: 559.707 ms: own prefill 558.936, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.771167
+16:17:07 Memory: in-service claim of request 301 needs 585.0 MiB: met, took engine release 97.5 (97.5 MiB now, 0.0 later)
+16:17:15 Done · request 301 · input 163,992 · cached 162,464 · output 904 · tools 13·35e3c6cf · TTFT 0.6s · 124.0 tok/s · 3.6 tok/cycle
+16:17:17 Started · request 302 · input 165,082 · cached 163,968 · effort absent → medium · thinking on
+16:17:17 TTFT of request 302: 482.114 ms: own prefill 481.406, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.707875
+16:17:19 Done · request 302 · input 165,082 · cached 163,968 · deduplicated 896 · output 209 · tools 13·35e3c6cf · TTFT 0.5s · 101.5 tok/s · 2.9 tok/cycle
+16:17:19 Started · request 303 · input 165,365 · cached 165,056 · effort absent → medium · thinking on
+16:17:20 TTFT of request 303: 242.943 ms: own prefill 242.495, claim wait 0, decode 0, other prefill 0, unit wait 0, rest 0.448458
+16:17:29 Done · request 303 · input 165,365 · cached 165,056 · deduplicated 224 · output 1,192 · tools 13·35e3c6cf · TTFT 0.2s · 129.8 tok/s · 3.7 tok/cycle
+16:19:39 Stopping · releasing engine resources

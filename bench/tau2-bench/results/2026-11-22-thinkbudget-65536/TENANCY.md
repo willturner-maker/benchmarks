@@ -13,8 +13,8 @@ A concurrency-ceiling probe run from a different session touched this engine mid
            spill=0  demote=0  suspensions=0
 ```
 
-- **1 sample out of 501** in this arm's window (14:42:58 → 16:06:24) exceeds the wave's own footprint
-  (`run_wave.sh` → `tau2 run … --max-concurrency 3`).
+- **1 sample out of 501** in this arm's window (14:42:58 → 16:06:24 as read; the sampler's last write
+  was 16:14:55) exceeds the wave's own footprint (`run_wave.sh` → `tau2 run … --max-concurrency 3`).
 - Max active in the whole window: 36. Max queued: 32. Both come from that single sample.
 - The burst was tiny-prompt (≤32 completion tokens) and short: one round every ~4 s, ~3 s per round,
   4 rounds — so prefill-side contention for on the order of 10–15 s, nothing held after that.
@@ -62,18 +62,38 @@ sampler and `serve.log` keep writing (16:06), which makes a stalled wave look li
 ## 3. Dir reuse mixes two runs of the same arm, silently
 
 The resumed arm reuses `results/2026-11-22-thinkbudget-65536/`, so files from the completed 11:41→12:54
-run and the stalled 14:42→ run coexist with no marker:
+run and the stalled 14:42→ run coexist with no marker. As observed at note-writing time (before the
+sanitizing below changed every mtime — the timestamps here are **as-observed, not re-derivable**):
 
-| file | mtime | belongs to |
+| file | mtime then | belongs to |
 |---|---|---|
-| `retail.log` | 12:15:23 | earlier run |
-| `telecom.log` | 12:54:57 | earlier run |
-| `status_after.json` | 12:54:57 | earlier run — **will be overwritten** if this wave ever completes |
-| `airline.log`, `wave.log`, `sampler.log`, `status_before.json`, `supervisor_pins.txt` | 14:42:58–14:43:02 | current run |
-| `engine_samples.jsonl` | 16:06:24 | current run (starts at 14:42:58, earlier samples gone) |
-| `wave.log` | — | appended: `wave started` and `===== airline =====` lines appear **twice**, once per run |
+| `telecom.log` | 12:54:57 (its run began 12:15:23) | **completed run** — the only one of its three domain logs still intact |
+| `status_after.json` | 12:54:57 | **completed run** |
+| `airline.log` | 14:43:02 | stalled run — it **replaced** the completed run's airline log |
+| `retail.log` | 12:15:23 → rewritten 16:14:59 | completed run's log **lost** — see below |
+| `wave.log`, `sampler.log`, `status_before.json`, `supervisor_pins.txt` | 14:42:58–14:43:02 | stalled run |
+| `engine_samples.jsonl` | last write 16:14:55 | stalled run (starts 14:42:58; the completed run's samples are gone) |
+| `wave.log` | — | appended: `wave started` and `===== airline =====` appear **twice**, once per run |
 
-So `retail.log`/`telecom.log` in this directory are **not** from the wave that is nominally running.
+**How the retail log was lost, owned plainly.** The kill order was chain → wave → tau2 leaves → sampler,
+but `run_wave.sh` survived its kill long enough that when the airline leaf died, the loop advanced:
+
+```
+  exit=1 00:14:59Z
+===== retail 00:14:59Z =====        (16:14:59 local)
+```
+
+That retail attempt hit the same resume prompt and died with `OSError: [Errno 5] Input/output error`
+in `tau2/runner/checkpoint.py:try_resume` → `rich/console.py:input` → `input()` — i.e. the
+no-stdin failure mode the new `</dev/null` change makes explicit and fast. Its stdout went to
+`retail.log`, overwriting the completed run's copy. The lesson is procedural: kill the **leaf processes
+first**, then the loop, so a supervisor can't advance into the next domain while being torn down.
+
+**What still exists.** The wave's own logs are partial, but the measured data is intact — all three
+`results.json` files in `~/tau2-bench/data/simulations/wave-2026-11-22-thinkbudget-65536-{airline,
+retail,telecom}/` are present and untouched after 16:00 (verified by mtime scan). The 65536 arm is
+therefore still analysable; only its console evidence is degraded.
+
 
 ## 4. What the fix is (deliberately not applied yet)
 
@@ -88,8 +108,11 @@ patch can corrupt the live wave. Once the chain is stopped, the changes to make 
    data.
 ## 5. Disposition (same day, after the note above was written)
 
-**The stalled chain was cleared.** Order mattered: chain → wave → tau2 leaves → sampler, so the chain
-could not advance to another arm while its children died.
+**The stalled chain was cleared.** Intended order: chain → wave → tau2 leaves → sampler, so the chain
+could not advance to another arm while its children died. **That did not fully work**: `run_wave.sh`
+outlived its kill signal, and when the airline leaf died the domain loop advanced to retail (see §3),
+which cost the completed run's retail console log and added a second aborted attempt to the record.
+Correct order for next time: leaves first, then the loop, then the chain.
 
 ```
 killed 93454 (run_thinkbudget_chain.sh) → 93539 (run_wave.sh) → 93565/93566 (tau2 airline) → 93555 (sampler)

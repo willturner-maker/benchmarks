@@ -1,0 +1,66 @@
+2026-11-22 14:43:02.006 | WARNING  | tau2.utils.utils:<module>:15 - No .env file found
+2026-11-22 14:43:02.006 | INFO     | tau2.utils.utils:<module>:28 - Using data directory from source: ~/tau2-bench/data
+2026-11-22 14:43:02.731 | INFO     | tau2.utils.llm_utils:<module>:102 - LiteLLM: Cache is disabled
+2026-11-22 14:43:02.779 | DEBUG    | tau2.registry:<module>:281 - Registering default components...
+2026-11-22 14:43:02.780 | DEBUG    | tau2.registry:<module>:292 - Voice dependencies not installed, skipping voice user registration
+2026-11-22 14:43:02.780 | DEBUG    | tau2.registry:<module>:350 - Default components registered successfully. Registry info: {
+  "domains": [
+    "mock",
+    "airline",
+    "retail",
+    "telecom",
+    "telecom-workflow",
+    "banking_knowledge"
+  ],
+  "agents": [
+    "llm_agent",
+    "llm_agent_gt",
+    "llm_agent_solo",
+    "discrete_time_audio_native_agent"
+  ],
+  "users": [
+    "user_simulator",
+    "dummy_user"
+  ],
+  "task_sets": [
+    "mock",
+    "airline",
+    "retail",
+    "telecom_full",
+    "telecom_small",
+    "telecom",
+    "telecom-workflow",
+    "banking_knowledge"
+  ]
+}
+╭────────────────────────────────────────────── Simulation Configuration ──────────────────────────────────────────────╮
+│ Domain: airline  Task Set: Default  Tasks: All                                                                       │
+│ Trials: 1  Max Steps: 200  Max Errors: 10                                                                            │
+│                                                                                                                      │
+│ Agent: llm_agent → openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S                                          │
+│ User:  user_simulator → openai/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S                                     │
+│                                                                                                                      │
+│ Save: wave-2026-11-22-thinkbudget-65536-airline  Concurrency: 3  Verbose: False                                      │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+File ~/tau2-bench/data/simulations/wave-2026-11-22-thinkbudget-65536-airline/results.json already 
+exists. Do you want to resume the run? (y/n) Traceback (most recent call last):
+  File "~/tau2-bench/.venv/bin/tau2", line 10, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "~/tau2-bench/src/tau2/cli.py", line 969, in main
+    args.func(args)
+  File "~/tau2-bench/src/tau2/cli.py", line 683, in run_command
+    return run_domain(config)
+           ^^^^^^^^^^^^^^^^^^
+  File "~/tau2-bench/src/tau2/runner/batch.py", line 907, in run_domain
+    simulation_results = run_tasks(
+                         ^^^^^^^^^^
+  File "~/tau2-bench/src/tau2/runner/batch.py", line 587, in run_tasks
+    simulation_results, done_runs, tasks = try_resume(
+                                           ^^^^^^^^^^^
+  File "~/tau2-bench/src/tau2/runner/checkpoint.py", line 82, in try_resume
+    ConsoleDisplay.console.input(
+  File "~/tau2-bench/.venv/lib/python3.12/site-packages/rich/console.py", line 2170, in input
+    result = input()
+             ^^^^^^^
+OSError: [Errno 5] Input/output error
