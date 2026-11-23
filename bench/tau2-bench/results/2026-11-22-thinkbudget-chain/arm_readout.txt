@@ -1,0 +1,61 @@
+
+=== arm 8192 ===
+  outcome: sims 238 over 238 tasks, trials [1], mean reward 0.8782, pass^1 0.8782, any-pass tasks 209
+  termination {'user_stop': 238}  tool calls 1531
+  per-domain: airline=50 sims pass1=0.9; retail=74 sims pass1=0.8108; telecom=114 sims pass1=0.9123
+  agent msgs 2988: completion(incl thinking) mean 237.5 med 171.5 max 3106 total 709,545; derived thinking mean 153.4 max 2688 (share 0.646); visible est mean 84.0
+  crowd-out (completion>0, no visible content, NO tool calls): 0   [tool-call turns with empty content, excluded: 642]
+  simulator msgs: completion mean 110.1 max 1450
+  messages at the harness cap (4096): 0   (the cap binds; the arm budget does not)
+  budget reachability: arm budget 8192, harness cap 4096, largest agent completion 3106 -> inert: budget 8192 > harness cap 4096: completion cannot exceed the cap, and thinking counts inside the cap, so the budget cannot bind
+  engine samples 443 over 4424.1s: pages_active max 752 (24,064 tok), queued max 1, prefilling max 2, decoding max 3, widths {'b1': 2702, 'b2': 12674, 'b3': 87684, 'b4': 0}, counters {'spill_moves': 0, 'kv_demotions': 3164, 'suspensions': 0}, kv modes {'resident': 1296}
+
+=== arm 65536 ===
+  outcome: sims 238 over 238 tasks, trials [1], mean reward 0.8697, pass^1 0.8697, any-pass tasks 207
+  termination {'user_stop': 238}  tool calls 1518
+  per-domain: airline=50 sims pass1=0.86; retail=74 sims pass1=0.8243; telecom=114 sims pass1=0.9035
+  agent msgs 2988: completion(incl thinking) mean 244.8 med 173.0 max 2781 total 731,394; derived thinking mean 162.5 max 2768 (share 0.664); visible est mean 82.3
+  crowd-out (completion>0, no visible content, NO tool calls): 0   [tool-call turns with empty content, excluded: 655]
+  simulator msgs: completion mean 110.4 max 2561
+  messages at the harness cap (4096): 0   (the cap binds; the arm budget does not)
+  budget reachability: arm budget 65536, harness cap 4096, largest agent completion 2781 -> inert: budget 65536 > harness cap 4096: completion cannot exceed the cap, and thinking counts inside the cap, so the budget cannot bind
+  !! samples show max_new_tokens [8, 32768], but the harness declares 4096: those samples are not this wave's traffic
+  engine samples 552 over 5516.5s: pages_active max 4533 (145,056 tok), queued max 32, prefilling max 4, decoding max 1, widths {'b1': 8724, 'b2': 0, 'b3': 6, 'b4': 120}, counters {'spill_moves': 0, 'kv_demotions': 0, 'suspensions': 0}, kv modes {'resident': 64, 'spill': 6}
+  !! only 30/552 samples show live requests: this file is not a serving wave's record and its engine numbers must not be compared with the other arms (see the arm dir's TENANCY.md)
+
+=== arm 32768 ===
+  outcome: sims 238 over 238 tasks, trials [1], mean reward 0.8403, pass^1 0.8403, any-pass tasks 200
+  termination {'user_stop': 238}  tool calls 1480
+  per-domain: airline=50 sims pass1=0.86; retail=74 sims pass1=0.7838; telecom=114 sims pass1=0.8684
+  agent msgs 3010: completion(incl thinking) mean 240.0 med 171.0 max 4096 total 722,536; derived thinking mean 157.6 max 3562 (share 0.657); visible est mean 82.4
+  crowd-out (completion>0, no visible content, NO tool calls): 0   [tool-call turns with empty content, excluded: 689]
+  simulator msgs: completion mean 108.0 max 1125
+  messages at the harness cap (4096): 1   (the cap binds; the arm budget does not)
+  budget reachability: arm budget 32768, harness cap 4096, largest agent completion 4096 -> inert: budget 32768 > harness cap 4096: completion cannot exceed the cap, and thinking counts inside the cap, so the budget cannot bind
+  engine samples 438 over 4374.1s: pages_active max 816 (26,112 tok), queued max 1, prefilling max 2, decoding max 3, widths {'b1': 3383, 'b2': 11717, 'b3': 88028, 'b4': 0}, counters {'spill_moves': 0, 'kv_demotions': 2595, 'suspensions': 0}, kv modes {'resident': 1278}
+
+=== vs the 32768 control (same-session, relaunched last) ===
+metric                                   32768 ctl        8192         d       65536         d
+mean reward                                 0.8403      0.8782   +0.0379      0.8697   +0.0294
+pass^1                                      0.8403      0.8782   +0.0379      0.8697   +0.0294
+tasks with any pass                            200         209        +9         207        +7
+agent tool calls                             1,480       1,531       +51       1,518       +38
+agent completion tok (mean)                  240.0       237.5      -2.5       244.8      +4.8
+agent completion tok (max)                   4,096       3,106      -990       2,781     -1315
+derived thinking tok (mean)                  157.6       153.4      -4.2       162.5      +4.9
+derived thinking tok (max)                   3,562       2,688      -874       2,768      -794
+thinking share of completion                 0.657       0.646    -0.011       0.664    +0.007
+crowd-out messages                               0           0        +0           0        +0
+messages at harness cap                          1           0        -1           0        -1
+queued max                                       1           1        +0          32       +31
+pages_active max                               816         752       -64       4,533     +3717
+
+  budget reachability per arm (computed, not asserted):
+    8192: inert - budget 8192 > harness cap 4096: completion cannot exceed the cap, and thinking counts inside the cap, so the budget cannot bind
+    65536: inert - budget 65536 > harness cap 4096: completion cannot exceed the cap, and thinking counts inside the cap, so the budget cannot bind
+    32768: inert - budget 32768 > harness cap 4096: completion cannot exceed the cap, and thinking counts inside the cap, so the budget cannot bind
+
+  per-task agreement (trials=1, so flips are the whole story):
+    32768 vs 8192: 238 tasks | both pass 183, both fail 12, only-first 17, only-second 26 | flip rate 0.1807 | sign test p=0.2221
+    32768 vs 65536: 238 tasks | both pass 180, both fail 11, only-first 20, only-second 27 | flip rate 0.1975 | sign test p=0.3817
+    8192 vs 65536: 238 tasks | both pass 187, both fail 9, only-first 22, only-second 20 | flip rate 0.1765 | sign test p=0.8776

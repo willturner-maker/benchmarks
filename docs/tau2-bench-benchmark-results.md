@@ -44,6 +44,7 @@ hiding it.
 - [Pass^3 replay 2026-11-21 — the new epoch reproduces the headline](#pass3-replay-2026-11-21--the-new-engine-epoch-reproduces-the-old-epoch-headline-raw-benchtau2-benchresults2026-11-21-pass3-replay)
 - [Retail-40 closure 2026-11-21 — the judge gap measured without a judge](#retail-40-closure-2026-11-21--the-judge-gap-measured-without-a-judge-raw-benchtau2-benchresults2026-11-21-retail40-env)
 - [Determinism probe 2026-11-22 — byte-identical requests are a ~50 % action coin flip; messages never reproduce](#determinism-probe-2026-11-22--byte-identical-requests-are-a-50-action-coin-flip-messages-never-reproduce-raw-benchtau2-benchresults2026-11-21-determinism-probe-benchtau2-benchresults2026-11-22-determinism-probe-telecom)
+- [Thinking-budget chain 2026-11-22 — an inert manipulation, published as the noise floor](#thinking-budget-chain-2026-11-22--an-inert-manipulation-published-as-the-noise-floor-raw-benchtau2-benchresults2026-11-22-thinkbudget-chain)
 
 ## Why this instrument, and why pinned at 1.0.1
 
@@ -489,6 +490,66 @@ rescored `ALL_WITH_NL_ASSERTIONS` without rerunning a single conversation.
 
 Engine: same instance as the replay (`08d662f6`), drafter **on** (Δdrafted 332,715 over the wave —
 the drafter-off comparison is a separate arm). Wave 20:17:08Z → 20:38:34Z, 80/80 scored, 0 infra errors.
+
+## Thinking-budget chain 2026-11-22 — an inert manipulation, published as the noise floor (raw: `bench/tau2-bench/results/2026-11-22-thinkbudget-chain/`)
+
+Three waves of the 238 judge-free tasks, one per engine-level `--thinking-token-budget` value — **8192,
+65536, and the pinned 32768 relaunched last so a mid-chain failure still leaves the engine pinned and the
+last wave doubles as a same-session control**. Each arm is an identity-gated engine relaunch, and each
+arm's budget is read off the **live supervisor argv** (`supervisor_pins.txt`), not off what the chain
+script intended. 714 sims, 0 unscored, all `user_stop`.
+
+**The arms could not differ, and the reason is arithmetic, not measurement.** The harness sends
+`max_tokens: 4096`, and thinking tokens are counted *inside* `completion_tokens` on this stack — measured
+the same day: `max_tokens=16` → `completion_tokens=16` with `reasoning_tokens=16` and `content=null`; the
+same prompt at 200 answered correctly with 23 reasoning tokens. So no completion can exceed 4096, and
+**every arm's budget (8,192 / 32,768 / 65,536) was above the ceiling the model was allowed to reach.**
+Observed maxima confirm it from the other side: largest agent completion 3,106 / 2,781 / 4,096, with
+**exactly one agent message at the cap** across 8,986 agent turns (control arm; the 8,900 user-simulator
+turns are reported separately and were not cap-checked). Derived thinking (estimate: completion −
+visible chars/4) means 153.4 / 162.5 / 157.6 tokens, share of completion 0.646 / 0.664 / 0.657.
+
+| arm | pass^1 | airline | retail | telecom | any-pass tasks | tool calls |
+|---|---|---|---|---|---|---|
+| 8192 | 0.8782 | 0.900 | 0.811 | 0.912 | 209 | 1,531 |
+| 65536 | 0.8697 | 0.860 | 0.824 | 0.904 | 207 | 1,518 |
+| **32768 control** | 0.8403 | 0.860 | 0.784 | 0.868 | 200 | 1,480 |
+
+With `--num-trials 1` the per-task flip counts *are* the noise floor of an inert manipulation:
+
+| pair | both pass | both fail | only first | only second | flip rate | sign test |
+|---|---|---|---|---|---|---|
+| 32768 vs 8192 | 183 | 12 | 17 | 26 | 18.1 % | p = 0.222 |
+| 32768 vs 65536 | 180 | 11 | 20 | 27 | 19.7 % | p = 0.382 |
+| 8192 vs 65536 | 187 | 9 | 22 | 20 | 17.6 % | p = 0.878 |
+
+**What this suite should take from it:** at 238 tasks × 1 trial, **pass^1 spread of 3.8 points and 17.6–19.7 %
+task flips come from changing nothing**, and it sits on the same band as the two independent measurements —
+the same-seed flip floor (15.1 %) and the 2-trial flip rate (18.9 %). So **±4 points of single-wave pass^1
+(≈19 flips) is noise**: this is the bound to read against the flat effort A/B (16/18 in both arms) and any
+other one-wave comparison here. A real budget A/B needs the harness cap above the budget under test, or
+budgets **below 4096**, which do bind — worth doing, since observed thinking tops out around 150–3,500 tokens
+and the pinned 32,768 has never been the binding constraint in this suite.
+
+**Engine side, the arms that served** (`pages_active` max 752 / 816 pages = 24,064 / 26,112 tokens =
+**0.155× / 0.168×** of the 155,648-token KV budget; `queued` max **1**, so single-tenant waves never touch
+the queue and the `--queue-size 64` move is invisible to this suite; decode width high-water
+**b3 87,684 / 88,028 with b4 never reached** — the suite's own `--max-concurrency 3` showing up in the
+engine's counters; spill 0, suspensions 0, `kv_demotions` +3,164 / +2,595). The **65536 arm's samples are
+excluded from the engine join**, not averaged in: its directory was re-entered by a stalled re-run, so that
+file shows 30/552 samples with live requests, `queued` max 32 and `max_new_tokens` `[8, 32768]` against the
+harness's declared 4096. Its outcome data is verified intact; only its console and engine evidence degraded,
+and the stall, the operator tenancy sample, and a teardown mistake of ours are recorded in
+`results/2026-11-22-thinkbudget-65536/TENANCY.md`.
+
+Four analyzer bugs are documented in the record because each one would have printed plausible numbers:
+reward lives under `reward_info.reward` (reading `reward` scores every arm 0.0000); **task ids are numeric
+per domain**, so keying on `task_id` alone merged airline task 3 with retail task 3 (the "207 tasks,
+trials [1, 2]" artifact); the thinking-crowdout detector counted **642/655/689 tool-call turns** as
+truncations until it required no tool calls, after which crowd-out is **0 in every arm**; and deriving the
+harness cap from engine samples is wrong for a contaminated arm (it reported 8) — the declared cap is
+authoritative and a disagreement is now reported as evidence of foreign traffic. Regenerate with
+`python3 bench/tau2-bench/thinkbudget_summary.py`.
 
 To publish a row, follow the numbered rules in `bench/tau2-bench/README.md` and send a PR — see
 [Community runs](leaderboard.md#community-runs--your-numbers).

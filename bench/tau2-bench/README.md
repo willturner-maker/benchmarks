@@ -114,6 +114,28 @@ To publish your own record: `python3 build_rows.py --out tasks.jsonl <save-dir> 
 script, and running it on wave 2026-11-19a regenerates the published 476-row `tasks.jsonl`
 **byte-identically** — that check is how a reviewer confirms the published rows came from these rules.
 
+### Engine-flag chains (`run_thinkbudget_chain.sh`)
+
+For axes that live on the engine command line rather than in `--agent-llm-args` (measured 2026-11-22:
+`--thinking-token-budget` has no per-request equivalent that this harness can set), each arm is an
+identity-gated engine relaunch and the last arm is the pinned value, relaunched so a mid-chain failure
+still leaves the engine pinned. Read the arm's flag from `supervisor_pins.txt` — the **supervisor** carries
+the options, and the engine child's argv carries none, which is what run 0's argv guard caught.
+
+| knob | effect |
+|---|---|
+| `TB_ARMS="65536"` | which arms to run (resume support) |
+| `TB_RERUN_ARM=1` | re-run an arm that already has a `status_after.json` (otherwise it is skipped, with its timestamp logged) |
+| `TAU2_RESUME=1` | resume into an existing `--save-to` via `--auto-resume`; without it, an existing save dir is moved to `<save>.pre-<UTC>` and the run starts clean |
+| `TAU2_STALL_SECONDS` | stall watchdog threshold (default 420). It watches **engine** progress — `prefill_batches + decode_batches` — because τ²'s own CPU idles legitimately while the engine generates. It never kills when `/status` is unreachable |
+
+**The harness cap matters for any thinking/reasoning axis:** completion is capped at `max_tokens` (default
+4096) and thinking tokens count **inside** that cap, so an engine budget of 8192 or more can never bind
+under these defaults. To make the axis live, raise the cap through `TAU2_LLM_ARGS` (both roles) or
+`TAU2_AGENT_LLM_ARGS` (agent only, the shape the 2026-11-21 effort A/B used) — or test budgets below
+4096, which do bind. `results/2026-11-22-thinkbudget-chain/RECORD.md` is the worked example of getting
+this wrong and publishing it honestly.
+
 ## Wave directory layout
 
 | file | what it is |
@@ -136,6 +158,8 @@ script, and running it on wave 2026-11-19a regenerates the published 476-row `ta
 | `results/2026-11-19a/` | the scored wave: 238 tasks × 2 trials, `tasks.jsonl` (476 rows), `summary.json`, `flip_triage.json`, engine samples, `RECORD.md` |
 | `results/2026-11-19b-width-control/` | the control experiment on flipping tasks at `--max-concurrency 1` vs `3` (32 rows, per-arm engine decode widths, RECORD.md) — the record behind "batching is not the mechanism" |
 | `results/2026-11-19-smoke/` | the pre-wave smoke run (mock 4 + airline 5 + retail 5 + telecom 3, one task per component). This is the record behind the "3 of 5 retail tasks die as `infrastructure_error`" claim, and behind the co-tenancy counter-example (the operator session was 94 % of peak residency there). No transcripts |
+| `results/2026-11-22-thinkbudget-chain/` | the thinking-budget chain record: `RECORD.md`, `arm_readout.json` / `.txt` (from `thinkbudget_summary.py`), `chain.log`, `chain_run0_argvcheckfail.log`, per-arm `status_ready_*.json`. The other dated waves (`2026-11-20-pass3`, `2026-11-21-pass3-xhigh`, `2026-11-21-sameseed-*`, `2026-11-21-retail40-env`, `2026-11-21/22-determinism-probe*`, `2026-11-22-pass3-xhigh2`) keep their raw files here and their narrative in `docs/tau2-bench-benchmark-results.md` |
+| `results/2026-11-22-thinkbudget-65536/TENANCY.md` | not a score: the stall, the operator tenancy sample, a teardown mistake of ours, and the runner hardening that came out of them — read it before trusting any engine file in that arm's directory |
 
 ## What τ² is *not* good for on this machine
 

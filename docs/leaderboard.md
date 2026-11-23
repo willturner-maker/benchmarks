@@ -871,6 +871,23 @@ a path 48 concurrent 55 k-token synthetic requests did not. Benchmark traffic st
 store churned **428.7 GB written** and reclaimed **206.4 GB of KV blocks** (`disk.kv_blocks` 520,304 →
 35,692) — worth knowing before running this suite on a laptop.
 
+**The 2026-11-22 thinking-budget chain is a null result published on purpose, and it calibrates every
+single-wave row above.** Three waves of the same 238 tasks, one per engine `--thinking-token-budget`
+(8192 / 65536 / pinned-32768 relaunched last as the same-session control), each arm's budget read off the
+live supervisor argv. The manipulation was **inert by construction**: the harness caps completion at
+`max_tokens: 4096` and thinking counts *inside* `completion_tokens`, so all three budgets sat above the
+ceiling the model could reach (observed max completion 3,106 / 2,781 / 4,096; one agent message at the cap
+in 8,986 agent turns). What is left is the noise floor: pass^1 **0.8782 / 0.8697 / 0.8403** across arms
+that cannot
+differ, task flips **17.6–19.7 %** (43, 47, 42 of 238; exact sign tests p = 0.222 / 0.382 / 0.878), which
+sits on the same band as the same-seed floor (15.1 %) and the 2-trial flip rate (18.9 %). Working rule for
+this suite: **±4 points of single-wave pass^1 ≈ 19 flips is noise**. Engine side, the serving arms confirm
+the prefix-cache reading — residency peaked at 0.155×/0.168× of the KV budget, `queued` never exceeded 1,
+and decode width b4 was never reached. The 65536 arm's engine samples are excluded rather than averaged in
+(its directory was re-entered by a stalled re-run: 30/552 live samples, foreign `max_new_tokens`), with the
+stall, one operator tenancy sample and a teardown error recorded in that arm's `TENANCY.md`. Record:
+`bench/tau2-bench/results/2026-11-22-thinkbudget-chain/RECORD.md`.
+
 Rerun: `bench/tau2-bench/run_wave.sh <wave-dir>` (judge-free task scope baked in) — re-derive the published
 numbers with `python3 bench/tau2-bench/summarize.py --wave-dir bench/tau2-bench/results/2026-11-19a
 --from-rows bench/tau2-bench/results/2026-11-19a/tasks.jsonl`. Details:

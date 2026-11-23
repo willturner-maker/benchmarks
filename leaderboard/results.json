@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-21T07:56:16Z",
+  "updated": "2026-11-23T00:32:04Z",
   "read_this_first": [
     "Rows are only comparable within the same media_class and the same tenant conditions.",
     "class A media = HEVC Main 10 >= 8128x4288, 29.97-class rate, 3840x1520 timeline (see bench/resolve-agentic/MEDIA.md).",
@@ -1739,6 +1739,20 @@
         "engine_context": "tenancy-cleanest tau2 windows here: 0 co-tenant samples, 0 spill moves, 0 suspensions; disk.kv_demotions +3,345/+2,726 persistent-cache churn (informational); cache.reused_tokens +38.4M/+39.9M",
         "confounds_disclosed": "first pair on the new epoch; both telecom arms +3.5/+4.4 pts over the medium wave on single-trial waves - no epoch effect claimed; arm-vs-arm cache warmth differs (A cold, B warm)",
         "evidence": "bench/tau2-bench/results/2026-11-21-sameseed-pair/ (RECORD.md, same_seed_pairs.json 238 rows) + raw arms results/2026-11-21-sameseed-{a,b}/ (tasks.jsonl 238 rows each, logs, engine samples, status edges)"
+      },
+      {
+        "date": "2026-11-22-thinkbudget-chain (control experiment, not a scored row: engine-level --thinking-token-budget A/B, arms 8192 / 65536 / pinned-32768 relaunched last as the same-session control)",
+        "pin": "tau2-bench v1.0.1 = fc0055dc4e0a316c3f83133267fbd6faaa770992; judge-free scope (238 tasks); one wave per arm at --num-trials 1 --max-concurrency 3 --seed 300, temperature 0, self-play; 1.7.0 stack with --queue-size 64 and --default-reasoning-effort=medium; each arm an identity-gated engine relaunch, and the arm's budget read off the LIVE supervisor argv (supervisor_pins.txt), not off the chain script's intent",
+        "design": "arm 8192 17:37:55Z->18:51:50Z; arm 65536 19:41:10Z->20:54:57Z; arm 32768 control 20:55:08Z->22:08:04Z; 238 x 1 sims per arm, 714 sims total, 0 unscored, all termination_reason user_stop. Two earlier chain launches aborted on their own guards (argv check; engine-busy) and one re-run stalled on tau2's resume prompt - all four recorded in chain.log / chain_run0_argvcheckfail.log",
+        "findings": {
+          "pass1_per_arm": "8192 0.8782 (airline 0.900 / retail 0.811 / telecom 0.912), 65536 0.8697 (0.860 / 0.824 / 0.904), 32768 control 0.8403 (0.860 / 0.784 / 0.868); spread 3.8 pts between arms that cannot differ",
+          "per_task_flips": "32768 vs 8192 43/238 (18.1%, sign test p=0.222); 32768 vs 65536 47/238 (19.7%, p=0.382); 8192 vs 65536 42/238 (17.6%, p=0.878); no pair separable",
+          "derived_thinking": "agent completion tokens mean 237.5 / 244.8 / 240.0 (max 3,106 / 2,781 / 4,096); thinking = completion - estimated visible (4 chars/token, labelled as an estimate): mean 153.4 / 162.5 / 157.6, share of completion 0.646 / 0.664 / 0.657; 0 thinking-crowdout messages in every arm; agent turns 2,988 / 2,988 / 3,010 = 8,986, user-simulator turns 8,900",
+          "engine_join": "arms that served: pages_active max 752 / 816 pages = 24,064 / 26,112 tok = 0.155x / 0.168x of the 155,648-token KV budget; queued max 1 (single-tenant waves never touch the queue, so --queue-size 64 is invisible here); decode width high-water b3 87,684 / 88,028 with b4 never reached (the suite's own --max-concurrency 3); spill 0, suspensions 0, kv_demotions +3,164 / +2,595"
+        },
+        "correction": "THE CHAIN WAS INERT BY CONSTRUCTION, and the honest output is a noise floor, not a budget effect. The harness caps completion at max_tokens 4096 and thinking counts INSIDE completion_tokens on this stack (measured same day: max_tokens=16 -> completion_tokens=16 with reasoning_tokens=16 and content=null), so all three budgets (8,192 / 32,768 / 65,536) sat above the ceiling the model was allowed to reach; the only cap hit across 8,986 agent turns was one control-arm agent message at exactly 4,096 (user-simulator turns are reported separately and were not cap-checked). Consequence for the suite: at 238 tasks x 1 trial, 17.6-19.7% of tasks flip and pass^1 spreads 3.8 pts with nothing varied, so treat about +/-4 pts of single-wave pass^1 as noise (~19 task flips). It agrees with two independent measurements: the 2026-11-21 same-seed flip floor of 15.1% and the 2-trial flip rate of 18.9%. A real budget A/B needs the harness cap above the budget under test, or budgets below 4096, which do bind under the current harness.",
+        "confounds_disclosed": "the 65536 arm's engine-side evidence is NOT the wave's: its directory was re-entered by a stalled re-run, so engine_samples.jsonl shows 30/552 samples with live requests, queued max 32 and max_new_tokens [8, 32768] against the harness's declared 4096 - foreign traffic, and it is excluded from the engine join rather than averaged in. Its outcome data is intact (all three results.json verified untouched), as is its retail console log's replacement by a later aborted attempt. One operator-caused tenancy sample (15:49:03 local, active 36 / queued 32 / decoding 0, spill/demote/suspensions 0) is recorded in the arm's TENANCY.md. First chain launch failed its own argv guard because the engine child carries no flags - guard now reads the supervisor line.",
+        "evidence": "bench/tau2-bench/results/2026-11-22-thinkbudget-chain/ (RECORD.md, arm_readout.json, arm_readout.txt, chain.log, chain_run0_argvcheckfail.log, status_ready_*.json) + bench/tau2-bench/results/2026-11-22-thinkbudget-{8192,65536,32768}/ (domain logs, wave.log, engine_samples.jsonl, status_before/after.json, supervisor_pins.txt; the 65536 dir also carries TENANCY.md) + instrument bench/tau2-bench/thinkbudget_summary.py"
       }
     ],
     "splash_depth_probe": [
