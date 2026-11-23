@@ -67,3 +67,31 @@ the benchmark rotation and the Resolve agent path (`resolve-ai-workflow`), nothi
 - `RUNBOOK.md` §2 — the V2 seal stack operators must run
 - Published analysis: *The Local Ceiling* (wave-16f writeup, on the publishing volume — off-repo by convention)
 - Workflow-side companion: `willturner-maker/resolve-ai-workflow` → `HARNESS-MIGRATION.md`
+
+## 2026-11-23: opencode 2.3.2 → 2.4.1 (binary upgraded; service NOT yet restarted)
+
+`opencode upgrade` installed 2.4.1 after the 1.7.1 benchmark epoch closed. Backups:
+`~/.config/opencode/opencode.json.pre-2.4.1.bak` (+ `cli.json` same suffix). The background
+service serving this session still runs 2.3.2 until restarted - the restart must wait until no
+live sessions matter, and is operator-run.
+
+Impact on this suite (the only benchmark family using the opencode harness - tau2,
+tool-loop-gate, splash-concurrency talk to the engine directly and are unaffected):
+- The next MCP wave starts a **new harness-build series** (the v2 driver's
+  `--check-harness` will report `same_build_as_previous_opencode_wave: false` vs
+  tier4-18m/agbench-171 by design). Expect no cross-build pass-rate comparisons until a
+  second same-build wave exists.
+- Watch items from the 2.4.0 release notes, in order of relevance to us:
+  1. **MCP protocol-first probing (#65282)**: servers without `protocol` are probed on the
+     newest protocol before the legacy handshake. Our trio (Resolve builtin MCP, community
+     python server, advanced node server) and the known-benign `resources/templates/list`
+     gap in davinci-resolve-builtin live exactly in this surface. If seal-leak/MCP-error
+     rates move in the next wave, attribute to harness build BEFORE model/epoch.
+  2. **Storage write path change** (assistant parts as own rows; 2.4.1 hotfixes macOS-12
+     SQLite): the driver consumes `opencode run --format json` streams, not the DB, but the
+     first smoke pair should confirm events/result extraction shape is unchanged.
+  3. **Plugin loading made asynchronous again** + auto-update semantics: the LSP-support
+     plugin (targets v2.0.23, last verified on 2.3.2) needs a diagnostics re-check after the
+     service restart.
+- Standing check before the next full wave: `--check-harness`, then a smoke pair (T1+T2),
+  then `opencode mcp list` shows all five servers connected.
