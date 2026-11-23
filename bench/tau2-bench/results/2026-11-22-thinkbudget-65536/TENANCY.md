@@ -86,5 +86,48 @@ patch can corrupt the live wave. Once the chain is stopped, the changes to make 
    (`TB_RESUME=1`) or record a skip with the existing dir's mtime — never let the two runs blend.
 3. tag `--save-to` (and the wave dir) per attempt, so a resumed arm cannot land on a completed arm's
    data.
-4. have `wait_ready`/`run_arm` treat a wave with a zero-CPU-delta tau2 process as failed, so a blocked
-   wave cannot masquerade as a running one behind a live sampler.
+## 5. Disposition (same day, after the note above was written)
+
+**The stalled chain was cleared.** Order mattered: chain → wave → tau2 leaves → sampler, so the chain
+could not advance to another arm while its children died.
+
+```
+killed 93454 (run_thinkbudget_chain.sh) → 93539 (run_wave.sh) → 93565/93566 (tau2 airline) → 93555 (sampler)
+post-check: no run_thinkbudget_chain|run_wave|tau2 run|sample_engine processes
+engine after: ready true, queued 0, prefilling 0, decoding 0, admission.waiting 0
+```
+
+Nothing useful was lost. The chain had **already completed in full earlier today**:
+
+```
+2026-11-22T20:54:57Z  arm 65536 wave exit=0
+2026-11-22T22:08:04Z  arm 32768 wave exit=0
+2026-11-22T22:08:05Z  thinkbudget chain complete: pin restored (32768) and control wave done
+```
+
+with all six arm/domain `tau2` save dirs present (8192 airline/retail/telecom, 65536 airline 11:58 /
+retail 12:15 / telecom 12:54, 32768 airline 13:10 / retail 13:27 / telecom 14:08). The 14:42 run was a
+redundant re-run of a completed arm — and it is what put the **live pin back on 65536**.
+
+**Open item:** the pin restore is not automatic any more, because the chain is gone. The engine needs
+one relaunch to get back to the pinned `--thinking-token-budget=32768`; that is deliberately left to
+the operator, since `stop.sh`/`start.sh` also take OpenCode down and bring it back up, and running
+`start.sh` from inside the session it serves would start a second instance inside the first.
+
+**The fixes from §4 are now applied** (after the processes were stopped, never mid-execution), with
+`selftest_wave_hardening.sh` covering them — 8/8 pass, `shellcheck -S warning` clean on all three files:
+
+| fix | where |
+|---|---|
+| `tau2 run` gets `< /dev/null`, so an unexpected prompt fails fast instead of parking the chain | `run_wave.sh` |
+| pre-flight on `--save-to`: existing dir is moved to `<save>.pre-<UTC>` and the run starts clean, or `TAU2_RESUME=1` chooses `--auto-resume` deliberately — never a silent blend | `run_wave.sh` |
+| stall watchdog on **engine progress** (`prefill_batches + decode_batches`, 20 s polls, `TAU2_STALL_SECONDS` default 420): kills a wave that serves nothing and logs `STALL KILL`, so the chain reaches its pin-restore step | `run_wave.sh` |
+| the watchdog never kills on an unreachable `/status` (reads `-1`, resets) | `run_wave.sh` |
+| chain's stdout goes to `wave.stdout.log`, ending the two-writers-one-file doubling and the cross-run appending of `wave.log` | `run_thinkbudget_chain.sh` |
+| a completed arm is skipped with a logged timestamp unless `TB_RERUN_ARM=1` — and the guard never applies to the 32768 pin-restore arm | `run_thinkbudget_chain.sh` |
+
+Two bugs surfaced while writing the test, both in the test rather than the runner: one `local` line
+referencing its own earlier assignment (expansions resolve before the assignment lands, so `$save` was
+unbound), and a `local` variable read from outside its function. Both fixed; recorded here because a
+green test that tests nothing is the failure mode this whole suite exists to avoid.
+

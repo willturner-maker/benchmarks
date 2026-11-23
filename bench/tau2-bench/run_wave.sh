@@ -58,16 +58,63 @@ python3 "$HERE/sample_engine.py" "$WAVE/engine_samples.jsonl" "${TAU2_SAMPLE_SEC
 SAMPLER=$!
 sleep 3
 
+# Engine progress signal for the stall watchdog: lifetime scheduler batch counters.
+engine_prog(){
+  curl -s --max-time 5 "http://127.0.0.1:${TAU2_ENGINE_PORT:-8000}/status" \
+    | python3 -c 'import json,sys
+s=json.load(sys.stdin)["scheduler"]
+print(s.get("prefill_batches",0)+s.get("decode_batches",0))' 2>/dev/null || echo -1
+}
+
 run_domain() {
   local dom=$1; shift
+  local save; save="wave-$(basename "$WAVE")-$dom"
+  local simdir="$TAU2/data/simulations/$save"
+  local resume=()
+  # Pre-flight on --save-to. tau2 PROMPTS when the target already exists ("Do you want to resume
+  # the run? (y/n)"), and an unattended chain has no stdin to answer it. Measured 2026-11-22: the
+  # arm-65536 wave parked 84 min on that prompt with the engine idle and the sampler still writing,
+  # so a dead wave looked alive and the chain never reached its pin-restore step.
+  if [ -e "$simdir/results.json" ]; then
+    if [ "${TAU2_RESUME:-0}" = "1" ]; then
+      resume=(--auto-resume)
+      echo "  pre-flight: $save exists -> --auto-resume (TAU2_RESUME=1)" | tee -a "$WAVE/wave.log"
+    else
+      local moved; moved="$simdir.pre-$(date -u +%Y%m%dT%H%M%SZ)"
+      mv "$simdir" "$moved"
+      echo "  pre-flight: existing $save moved to $(basename "$moved"); this run starts clean (TAU2_RESUME=1 to resume instead)" | tee -a "$WAVE/wave.log"
+    fi
+  fi
   echo "===== $dom $(date -u +%H:%M:%SZ) =====" | tee -a "$WAVE/wave.log"
   uv run tau2 run --domain "$dom" \
     --agent-llm "$MODEL" --user-llm "$MODEL" \
     --agent-llm-args "$AGENT_ARGS" --user-llm-args "$LLM_ARGS" \
     --num-trials "$TRIALS" --max-concurrency "$CONC" --seed "$SEED" \
-    --save-to "wave-$(basename "$WAVE")-$dom" "$@" \
-    > "$WAVE/$dom.log" 2>&1
-  echo "  exit=$? $(date -u +%H:%M:%SZ)" | tee -a "$WAVE/wave.log"
+    --save-to "$save" ${resume[@]+"${resume[@]}"} "$@" \
+    < /dev/null > "$WAVE/$dom.log" 2>&1 &
+  local pid=$! stall=0 prev prog rc=0 stall_note=""
+  prev=$(engine_prog)
+  while kill -0 "$pid" 2>/dev/null; do
+    sleep 20
+    prog=$(engine_prog)
+    [ "$prog" = "-1" ] && continue     # /status unreachable: unknown, not a stall - never kill on it
+    if [ "$prog" = "$prev" ]; then
+      stall=$((stall + 20))
+      if [ "$stall" -ge "${TAU2_STALL_SECONDS:-420}" ]; then
+        echo "  STALL: zero engine-batch progress for ${stall}s during $dom - killing pid $pid" | tee -a "$WAVE/wave.log"
+        pkill -P "$pid" 2>/dev/null; kill "$pid" 2>/dev/null
+        stall_note=" (STALL KILL after ${stall}s idle)"
+        break
+      fi
+    else
+      stall=0; prev=$prog
+    fi
+  done
+  wait "$pid"; rc=$?
+  # Engine progress, not tau2 CPU, is the stall signal: tau2's own CPU idles legitimately while the
+  # engine is generating, so flat CPU says nothing. prefill_batches + decode_batches only move when
+  # requests are actually being served.
+  echo "  exit=$rc $(date -u +%H:%M:%SZ)$stall_note" | tee -a "$WAVE/wave.log"
 }
 
 for dom in "${DOMS[@]}"; do

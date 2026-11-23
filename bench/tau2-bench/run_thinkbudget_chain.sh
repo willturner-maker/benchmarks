@@ -98,7 +98,10 @@ run_arm(){  # $1 budget
   if ! wait_ready "ready_$1" "$SUP"; then log "arm $1: launch/identity failed - aborting chain"; return 1; fi
   verify_argv "$SUP" "$B" || return 1
   log "arm $1: engine ready, identity + argv verified"
-  TAU2_TRIALS=1 TAU2_SAMPLE_SECONDS=7200 bash "$BENCH/bench/tau2-bench/run_wave.sh" "$W" >> "$W/wave.log" 2>&1
+  # NOTE the separate stdout file: run_wave.sh writes $W/wave.log itself, and the chain used to
+  # append this process's stdout into the same file. Two writers, one name = every line doubled and
+  # every re-run of an arm appended onto the previous run's log with no marker.
+  TAU2_TRIALS=1 TAU2_SAMPLE_SECONDS=7200 bash "$BENCH/bench/tau2-bench/run_wave.sh" "$W" >> "$W/wave.stdout.log" 2>&1
   log "arm $1 wave exit=$?"
   curl -s --max-time 10 "http://127.0.0.1:$PORT/status" > "$W/status_after.json"
   kill_ours "$SUP" "$1"
@@ -111,6 +114,15 @@ ARM_LIST=${TB_ARMS:-"8192 65536 32768"}
 log "thinkbudget chain start (arms: $ARM_LIST, then pin-restore 32768 + control wave if not an arm)"
 for B in $ARM_LIST; do
   [ "$B" = "32768" ] && continue   # the 32768 arm IS the pin-restore step, run at the end
+  # A completed arm is not silently re-run: re-running lands on the previous run's wave dir AND on
+  # tau2's existing --save-to (that is how the 2026-11-22 chain came to stall - arm 65536 had already
+  # finished with exit=0 at 20:54Z, and the 22:42Z resume walked straight into its prompt).
+  _W="$BENCH/bench/tau2-bench/results/2026-11-22-thinkbudget-$B"
+  if [ -s "$_W/status_after.json" ] && [ "${TB_RERUN_ARM:-0}" != 1 ]; then
+    # BSD date takes SECONDS for -r, not a path, so stat the file first.
+    log "arm $B already complete (status_after.json $(date -u -r "$(stat -f %m "$_W/status_after.json")" +%Y-%m-%dT%H:%M:%SZ)) - skipping; TB_RERUN_ARM=1 to redo it"
+    continue
+  fi
   if ! wait_idle; then log "engine live-but-busy >10 min before arm $B - skipping to pin restore"; break; fi
   CUR=$(inst_pid)
   if [ -n "$CUR" ]; then
