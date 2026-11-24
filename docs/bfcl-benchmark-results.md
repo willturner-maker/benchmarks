@@ -19,7 +19,10 @@ natively; reasoning stays on its separate stream, `content` is clean).
 
 ## The score (4,441 task-runs, 17 categories, 3 h 37 m)
 
-**Overall 40.85%** — their weighted composite of non-live AST + live + multi-turn + relevance.
+**Overall 40.85%** — their scorer's composite **over the categories run** (non-live AST + live +
+multi-turn + irrelevance/relevance). Note the live board's *Overall* column additionally folds in
+**Web Search + Memory** (the two groups excluded here) — see board context below; 40.85 is not the
+board's Overall formula.
 
 | group | categories (acc %) | group acc |
 |---|---|---|
@@ -43,10 +46,20 @@ p95 6.6 s; entry-level, multi-turn entries (20–30 env steps) run 16–60 s typ
    small quant trips, not call structure.
 3. **Long-context cost at IQ3_S is mild:** long_context 57.5 vs base 64.0 — the multi-turn drop is
    mostly task difficulty, not context length.
-4. **Board context (secondary sources, Nov 2026):** the v4 leader sits ~88.5%; our 40.85 is a
-   small-open-model-band score. The number's value is that it is *board-shaped*: same instrument,
-   same inputs, same scoring — directly rankable against published rows, unlike every private
-   suite here.
+4. **Board context (verified against live board data, fetched 2026-11-24; corrects our earlier
+   secondary-source claim):** the live board (snapshot 2026-04-12, rows evaluated at their commit
+   `f7cf735` = `bfcl-eval==2025.12.17` — a slightly older checkpoint than our pin `6ea5797`, so
+   treat as approximate) is led by **Claude-Opus-4-5 at 77.47 overall**. Our earlier "~88.5%
+   leader" line was wrong — that number is the leader's *non-live AST column*, not its overall.
+   Apples-to-apples on the groups we share: **Non-Live AST (board def, `simple` pooled across
+   languages n-weighted) 89.50 → ~7th of 109**, above the current leader's 88.58; **Multi-Turn
+   55.50 → ~13th**; **Live 71.15 (4-AST-sub average; the board's column also folds live
+   irrelevance/relevance case-weighted, which lifts us into the mid-70s → rank ~45–54)** — our
+   genuinely weak board axis. Shared-three-group average **72.05 → ~15th of 110**, sitting between
+   Claude-Haiku-4-5 (72.93) and Qwen3-32B (72.88). The 40.85-vs-77.47 gap is mostly *structural*:
+   board Overall is a 5-way average including Web Search + Memory, which crush small models
+   (Qwen3-8B: WS 12.0 / MEM 14.6 drag a ~70 profile to 42.6 overall). If we ever run those groups
+   at Qwen3-8B class, our estimated board Overall ~48.6 (~rank 35).
 
 ## Comparability rules
 

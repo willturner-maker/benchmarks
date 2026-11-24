@@ -924,10 +924,13 @@ endpoint; `temperature 0`, `--num-threads 3` (inside engine batch-width 4). Stan
 |---|---|---|---|---|---|---|---|
 | **2026-11-24 (bfcl-23a)** | `6ea5797` | **40.85%** | 86.88 | 77.79 | 55.50 | 4,441 | 0 |
 
-Board note: rows compare against published BFCL v4 rows (same instrument + inputs; Nov 2026 board leader
-~88.5% per secondary sources). Decode-regime caveat per the τ² determinism probe: temp-0 hosted rows decode
-near-deterministically; ours samples — category deltas under ~5 pts are single-wave noise until repeats
-band it.
+Board note (verified vs live board data 2026-11-24): the board's Overall column folds in Web Search +
+Memory (excluded here — the 40.85 is the composite over categories run). On the three shared groups we
+rank **~7th (Non-Live AST 89.50, above leader Claude-Opus-4-5's 88.58)**, ~13th (multi-turn 55.50),
+~45–54 (live); shared-groups average 72.05 ≈ **15th of 110**, between Claude-Haiku-4-5 and Qwen3-32B.
+Board leader overall 77.47 (snapshot 2026-04-12, rows at their `f7cf735` checkpoint). Decode-regime
+caveat per the τ² determinism probe: temp-0 hosted rows decode near-deterministically; ours samples —
+category deltas under ~5 pts are single-wave noise until repeats band it.
 
 ## Reports — what's in each scorecard
 
