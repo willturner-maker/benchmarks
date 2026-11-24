@@ -1,0 +1,57 @@
+{
+ "wave": "bfcl-23a-2026-11-23",
+ "suite": "BFCL v4 (Berkeley Function Calling Leaderboard)",
+ "instrument": "ShishirPatil/gorilla @ 6ea57973c7a6097fd7c5915698c54c17c5b1b6c8 (2026-03-23; repo has no tags - commit is the pin), unmodified. Our model registered at RUNTIME by bench/bfcl/bfcl_splash.py (in-place MODEL_CONFIG_MAPPING injection -> their OpenAICompletionsHandler, is_fc_model=True, underscore_to_dot=True). Scoring/test data untouched.",
+ "epoch": "Splash 1.7.1 pinned argv unchanged (--max-memory=60129542144 --max-cache-disk=274877906944 --persistent-cache --default-reasoning-effort=medium --thinking-token-budget=32768 --queue-size=64; warm cache). Harness: python 3.12 venv, BFCL CLI generate/evaluate, temperature 0, --num-threads 3 (inside engine maximum_batch_width=4).",
+ "window_utc": "2026-11-24T01:03:32Z-04:40:36Z (3 h 37 m generate; ~6 min evaluate)",
+ "scope": "full official BFCL v4 scoring set, 17 categories, 4,441 task-runs (4,427 + 14 smoke entries carried by resume)",
+ "outcome_overall": "40.85% overall (their weighted composite)",
+ "categories": {
+  "non_live_ast_overall": 86.88,
+  "simple_python": 94.5, "simple_java": 60.0, "simple_javascript": 66.0,
+  "multiple": 92.5, "parallel": 92.5, "parallel_multiple": 89.0,
+  "irrelevance_nonlive": 79.17,
+  "live_overall": 77.79,
+  "live_simple": 79.46, "live_multiple": 77.97, "live_parallel": 68.75,
+  "live_parallel_multiple": 58.33, "live_irrelevance": 75.57, "live_relevance": 81.25,
+  "multi_turn_overall": 55.50,
+  "multi_turn_base": 64.0, "multi_turn_miss_func": 53.0,
+  "multi_turn_miss_param": 47.5, "multi_turn_long_context": 57.5,
+  "irrelevance_detection_combined": 77.37
+ },
+ "task_counts": {
+  "simple_python": 400, "simple_java": 100, "simple_javascript": 50,
+  "multiple": 200, "parallel": 200, "parallel_multiple": 200, "irrelevance": 240,
+  "live_simple": 258, "live_multiple": 1053, "live_parallel": 16,
+  "live_parallel_multiple": 24, "live_irrelevance": 884, "live_relevance": 16,
+  "multi_turn_base": 200, "multi_turn_miss_func": 200,
+  "multi_turn_miss_param": 200, "multi_turn_long_context": 200
+ },
+ "infrastructure": {
+  "errors": 0,
+  "no_response_entries": "1 (live_multiple, model returned empty; counted as a miss, not an infra error)",
+  "decode_failures": "multi-turn step-level 'Failed to decode' lines are the model's own malformed/no-call steps; recorded by the harness and the turn proceeds - capability signal, not plumbing",
+  "engine_tenancy": "engine_samples.jsonl every 30 s across the wave: memory_pressure normal, thermal nominal, admission waiting 0 throughout; 3 threads never congested the queue-size-64 pool"
+ },
+ "latency_s": {
+  "per_entry_mean": 8.43, "per_entry_median": 2.53, "p95": 35.25, "max": 1143.5,
+  "note": "entry-level sums; single-turn ~1 s, multi_turn 16-60 s typical (20-30 env steps); max 1143 s is a long_context entry. Their CSV latency columns are per-request: mean 2.77, sd 7.79, p95 6.6.",
+  "cost_note": "their Total Cost $2.49 is a synthetic rate-card default (we register price=None); real marginal cost is 0 (self-hosted engine)"
+ },
+ "deviations": [
+  "memory_kv / memory_rec_sum / memory_vector NOT run this wave (deferred; vector backend embedder dependency unverified)",
+  "web_search_* excluded by design (external engine breaks reproducibility)",
+  "format_sensitivity excluded (non-scoring, prompting-mode-only)",
+  "14 of the entries were generated earlier as the smoke gate (2026-11-23, same build, same engine) and carried into this wave by BFCL resume; listed in artifact continuity"
+ ],
+ "continuity_smoke": "smoke 2026-11-23 (14 runs, same build): simple_python 100 (n=4), irrelevance 100 (n=2), multi_turn_base 75 (n=4), miss_func 50 (n=4). Full-wave: 94.5 / 79.17 / 64 / 53 - smoke small-n optimism, same shape, no plumbing surprise.",
+ "behaviour_observations": {
+  "language_axis": "non-live simple aggregate 73.5 is dragged by java 60 / javascript 66 while python is 94.5 - the same function is trivially right in Python and frequently mis-typed in java/js AST conventions.",
+  "prediction_confirmed": "the hermes loop-gate's two fixed misses materialized on the board as designed: error-recovery multi-turn (miss_func 53, miss_param 47.5 = weakest categories) and abstain discipline (irrelevance combined 77.4 = the model calls something ~23% of the time when the right answer is no call).",
+  "long_context_quant": "multi_turn_long_context 57.5 vs base 64.0 - mild IQ3_S long-context cost, smaller than feared.",
+  "live_parallel": "smallest live categories (parallel n=16, parallel_multiple n=24) carry high per-entry variance; treat their 68.75/58.33 as noisy."
+ },
+ "comparability": "rows are directly comparable to published BFCL v4 leaderboard rows (same pin, same harness, same inputs) with two stated deltas: our runtime model registration (no scoring-code change) and self-hosted temp-0 GGUF IQ3_S decoding (hosted rows decode near-deterministically; ours is the same engine lottery documented in the tau2 determinism probe). Board context (Nov 2026, secondary sources): BFCL v4 leader ~88.5% - our 40.85 sits in the small-open-model band.",
+ "artifacts": "raw results live inside the pinned clone (result/splash-qwen3.8-flash-iq3s-FC/, score/*.csv; gitignored scratch); wave scratch (launch.md, run_wave.sh, driver.out, generate.log, engine_samples.jsonl, score CSV copies) under <volume>/local.AI/bench/waves/bfcl-23a-2026-11-23/ on the bench volume; layout + pins in bench/README.md",
+ "claims_basis": "environment-graded AST/state scoring by the pinned harness itself; no LLM judge in v4 AST/multi-turn paths we ran"
+}

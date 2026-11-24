@@ -908,6 +908,27 @@ and the record). Do not substitute `--task-split-name train`: that split is also
 per-basis breakdown, DB match, annotated-action and assertion counts, tool calls, depth, duration — but no
 message content, no tool arguments, no model free text. Reviewers recompute every headline from the rows.
 
+## BFCL v4 — public-board tool calling, reference host
+
+Sixth live suite, and the only row set here that is **directly rankable against an external
+leaderboard**: instrument is **third-party and unmodified**
+([`ShishirPatil/gorilla`](https://github.com/ShishirPatil/gorilla) `berkeley-function-call-leaderboard/`,
+Apache-2.0), pinned to commit **`6ea57973…`** (upstream publishes no tags). Our model enters through a
+**runtime registry injection** (`bench/bfcl/bfcl_splash.py` — the clone stays byte-identical to the pin;
+scoring code and test data untouched). FC-mode build series: native `tools=` calls via the OpenAI-compatible
+endpoint; `temperature 0`, `--num-threads 3` (inside engine batch-width 4). Standing exclusions: `web_search_*`
+(external engine), `format_sensitivity` (non-scoring); `memory_*` deferred. Details:
+[`docs/bfcl-benchmark-results.md`](bfcl-benchmark-results.md).
+
+| Date | Pin | Overall | Non-live AST | Live | Multi-turn | runs | infra errors |
+|---|---|---|---|---|---|---|---|
+| **2026-11-24 (bfcl-23a)** | `6ea5797` | **40.85%** | 86.88 | 77.79 | 55.50 | 4,441 | 0 |
+
+Board note: rows compare against published BFCL v4 rows (same instrument + inputs; Nov 2026 board leader
+~88.5% per secondary sources). Decode-regime caveat per the τ² determinism probe: temp-0 hosted rows decode
+near-deterministically; ours samples — category deltas under ~5 pts are single-wave noise until repeats
+band it.
+
 ## Reports — what's in each scorecard
 
 Self-contained HTML (no external assets, no build step). GitHub's file view shows source;
