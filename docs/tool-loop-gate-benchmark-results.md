@@ -17,8 +17,12 @@ engine's lifetime counters continue across both suites: `prefill_rows` +32,309 a
 **Instrument (third-party, unmodified, commit-pinned):**
 [`vcruz305/hermes-agentic-bench`](https://github.com/vcruz305/hermes-agentic-bench) →
 `hermes_loop_gate.py`, commit `6dc6f0e570850c196c8bda6e5e1f8ad5f7082910` (2026-08-14), MIT,
-sha256 `d108937b8cdee86e…`. The clone lives **outside this repo** at `~/hermes-agentic-bench`, in its own
-venv (Python 3.12.16 + `httpx` only). Our contribution is `bench/tool-loop-gate/run_gate.sh` and
+sha256 `d108937b8cdee86e…`. The clone lives **outside this repo** at
+`/Volumes/YourVolume/local.AI/bench/hermes/hermes-agentic-bench` (moved there 2026-11-23
+from `~/hermes-agentic-bench`; gate file byte-identical across the move). Its venv was
+deleted in the move (moved venvs never work — internals hardcode absolute paths); rebuild
+with `python3.12 -m venv .venv && pip install -r requirements.txt`. Our contribution is
+`bench/tool-loop-gate/run_gate.sh` and
 `summarize.py`.
 
 ## Contents

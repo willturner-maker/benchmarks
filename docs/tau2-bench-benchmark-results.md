@@ -1,7 +1,10 @@
 # τ²-bench — Results (suite debut 2026-11-19)
 
 **Instrument:** `sierra-research/tau2-bench` @ **`v1.0.1`** = `fc0055dc4e0a316c3f83133267fbd6faaa770992`,
-**unmodified**, cloned outside this repo. **Engine:** Splash 1.7.0 serving
+**unmodified**, cloned outside this repo (this host's clone:
+`/Volumes/YourVolume/local.AI/bench/tau2/tau2-bench` since 2026-11-23; the moved `.venv` was
+deleted — rebuild with `uv sync`, deps rebuild from the committed `uv.lock`, record the
+resulting lock revision as a comparability fact). **Engine:** Splash 1.7.0 serving
 `ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S`, the same launch as splash wave `19b`
 (`--queue-size=64`, `--thinking-token-budget=32768`, `--default-reasoning-effort=medium`,
 `--persistent-cache`), **not restarted**. **Wave:** 2026-11-19a, 238 tasks × 2 trials = **476 simulations,
