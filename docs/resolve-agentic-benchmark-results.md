@@ -1674,6 +1674,11 @@ harness tax.
 errored REAL underscore tool names ("No tool named davinci-resolve_timeline…"); 23d's T1r1/T8r1
 errored mangled hyphen forms with ZERO Resolve completions (T8r1 kept an alive advanced/offline
 server — a live-only failure). Reported upstream as **anomalyco/opencode#65932** (2026-11-23),
+and a follow-up log analysis (upstream comment, 2026-11-24) **corrected the suspected mechanism**:
+in failing sessions the opencode serve child logs all three servers `mcp connected` (tools 18/18/37,
+initialize spans 330–805 ms — well inside the first-turn wait), yet the session's tool pool is
+empty/partial for its whole life (43.9 s partial-dropout session still rejecting at +31.5 s).
+Server spawn/health is exonerated; the failure is downstream, in pool binding.
 with the named-server config shapes, verbatim `--format json` event excerpts for the total- and
 partial-dropout forms, and same-pair sibling timing (failing session 0 completions vs the
 sibling's 34 completed `davinci-resolve*` calls). Driver v2.2 (committed): pool confirmed only by a completed
