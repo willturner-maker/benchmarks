@@ -1713,4 +1713,16 @@ deliberate build bump). Seal: 0 real leaks / 24 sessions; sloppiness tax 50 mang
 next score-moving variable is an engine build or fixing/working around the harness dropout —
 not the model.
 
+**Build bump staged (2026-11-24):** the live davinci-resolve-mcp install moved to **tag
+`v5.4.3` (`79d68de`)** — ships the #389 fix (AMBIGUOUS_RECORD_FRAME refusal + plan echoes,
+source-verified; `fast-xml-parser` bumped to 5.12.1 in resolve-advanced deps, installed).
+Verified: server.py imports clean on the existing venv (5.4.3), advanced mjs syntax-checks.
+The NEXT resolve-agentic wave is a new build series on 5.4.3 — **but it is deliberately held
+pending an opencode release fixing anomalyco/opencode#65932** (the per-session MCP dropout:
+with 5.4.3 + fixed opencode, the raw floor could be 21/21 outright — the dropout was the only
+score-limiting factor). First continuity probes when that wave runs: (1) ripple_insert dry-run
+`record_frame: 108442` no-mode on a start-offset fixture → expect AMBIGUOUS_RECORD_FRAME,
+then `mode:'absolute'` → expect 108442 (api_truths row flips from trap to refusal); (2)
+watchdog stats become the dropout-fix scoreboard (kill count per wave should go to 0).
+
 
