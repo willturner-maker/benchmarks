@@ -1724,5 +1724,9 @@ score-limiting factor). First continuity probes when that wave runs: (1) ripple_
 `record_frame: 108442` no-mode on a start-offset fixture → expect AMBIGUOUS_RECORD_FRAME,
 then `mode:'absolute'` → expect 108442 (api_truths row flips from trap to refusal); (2)
 watchdog stats become the dropout-fix scoreboard (kill count per wave should go to 0).
+Corpus baseline for that scoreboard (full-log pass, 2026-11-24): **5 dropouts / 47 wave serve
+children (~11%)**; every serve child logged `mcp connected` 3/3 — the connection path never
+failed anywhere — and 4 of 5 dropouts sat in 0–2 ms co-launch pairs (5th was sequential, so
+concurrency isn't required). Upstream follow-ups filed with the repro recipe (issue #65932).
 
 
