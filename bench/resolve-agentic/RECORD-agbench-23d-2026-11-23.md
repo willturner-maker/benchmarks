@@ -44,7 +44,9 @@ band at n=2: raw {19,19}/21 (both raw misses are harness dropouts), corrected {2
    absolute 216442, leaving a 107,779-frame gap. The agent disclosed it, deleted the two
    misplaced items, verified the baseline restored (0 gaps / 2 overlaps), then inserted
    correctly at 108442. Geometry graded PASS. New api_truths friction row for the action
-   (reported upstream: samuelgursky/davinci-resolve-mcp#389).
+   (reported upstream: samuelgursky/davinci-resolve-mcp#389; fixed in MCP v5.4.3 —
+   unmodeled record_frame >= timeline start now refused as AMBIGUOUS_RECORD_FRAME with
+   mode/start-frame echoes; our series stays 5.4.0, flip rides the next build bump).
 
 **Seal audit**: 0 real leaks across 24 sessions; 50 flagged mangled-name attempts (23c: 81).
 

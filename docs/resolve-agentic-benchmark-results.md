@@ -1702,7 +1702,11 @@ rendered+verified. One notable agent-side save: **F2r2** tripped a `ripple_inser
 (`record_frame` treated as elapsed-from-start AND re-added — first execute landed at absolute
 216442, a 107,779-frame gap), disclosed it, deleted the two misplaced items, verified the
 baseline restored, then inserted correctly — geometry graded PASS. New api_truths friction row
-for the action (reported upstream: samuelgursky/davinci-resolve-mcp#389). Seal: 0 real leaks / 24 sessions; sloppiness tax 50 mangled-name attempts
+for the action (reported upstream: samuelgursky/davinci-resolve-mcp#389; fixed upstream in MCP
+v5.4.3 — unmodeled record_frame >= timeline start refused as AMBIGUOUS_RECORD_FRAME, plan echoes
+record_frame_mode_used + timeline_start_frame + insert_frame_relative, past-the-end inserts refused;
+verified from source diff v5.4.0..v5.4.3 — our published series stays 5.4.0, the flip rides the next
+deliberate build bump). Seal: 0 real leaks / 24 sessions; sloppiness tax 50 mangled-name attempts
 (23c: 81).
 
 **Series state:** working ceiling on 2.4.1+5.4.0 = **21/21 corrected** (n=2, no variance); the
