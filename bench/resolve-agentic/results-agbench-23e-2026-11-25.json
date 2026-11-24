@@ -1,0 +1,466 @@
+{
+ "wave": "agbench-23e-2026-11-25",
+ "epoch": "Splash 1.7.1 (pinned argv unchanged: --max-memory=60129542144 --max-cache-disk=274877906944 --persistent-cache --default-reasoning-effort=medium --thinking-token-budget=32768 --queue-size=64; warm cache). Splash 1.7.2 released mid-wave; deliberately NOT adopted (see docs addendum).",
+ "dispatch": {
+  "harness": "opencode v2.4.1",
+  "same_build_as_previous": true,
+  "resolve_mcp_server": "5.4.3 (NEW BUILD SERIES: first run on v5.4.3, tag 79d68de; fingerprint mcp-fingerprint-post5.4.3.json, server_py sha 8a9e61e9...)",
+  "resolve": "21.2.0.6",
+  "window_local": "2026-11-24 09:29-09:51 (-0800; wave LABEL says 2026-11-25 - launch-day label drift, disclosed here; fixture/results/GT all consistently labeled 2026-11-25e/23e)",
+  "order": "rotated vs 23d: opened T7r1+T7r2, cycled T8,F2,T1,T2,T3,F1; F1r3 solo",
+  "reruns": "T8r2 (2 probe-dead attempts) and T8r3 (1) restarted by watchdog before task start; no operator re-runs needed"
+ },
+ "fixture": "_mcp_AGBench-2026-11-25e (--fresh build, gt+prestate sealed; archive siblings purged via purge_fixture_archives.py 14->10 logged; grader GT ground_truth-_mcp_AGBench-2026-11-25e-16f.json)",
+ "task_set": "full 21-task set x3 (T1,T2,T3,F1,F2,T7,T8)",
+ "outcome_raw": "21/21 first good attempt (0 harness-invalid sessions - first wave in the series with zero per-session confabulation deaths)",
+ "outcome_corrected": "21/21 (no corrections needed); across the series the raw/corrected band is now {19,21}/21 at n=3 waves",
+ "pre_wave_probes": {
+  "mcp_fingerprint": "sealed method applied to live 5.4.3 tree (committed mcp-fingerprint-post5.4.3.json): server_py_sha256 8a9e61e9... (5.3.4: 1d061c96...), server_py_lines 36689 vs 36542; registry/action diffs recorded -> new build series by definition",
+  "ripple_insert_389": "PASS on the fixture via direct stdio JSON-RPC (probe_543_ripple_insert.py, dry-run only): ambiguous record_frame 108100 -> refused AMBIGUOUS_RECORD_FRAME (the 5.4.0 version planned 216442 with success:true); mode:absolute -> insert_frame_absolute 108100, insert_frame_relative 100, timeline_start_frame 108000, record_frame_mode_used absolute. api_truths row flips trap->refusal for the 5.4.3 series.",
+  "probe_harness_note": "the probe's first attempt routed through opencode confabulated every MCP tool name and reported UNAVAILABLE - the documented model-side mechanism caught live; the server-side claim is therefore instrumented harness-free (the right instrument for an API-behavior claim anyway)"
+ },
+ "artifact_analysis": {
+  "confabulation_scoreboard": "34 flagged mangled-name attempts across 5/21 sessions (T7r1:2, T7r3:3, T3r2:4, T8r2:23, T8r3:2). For the first time ZERO session deaths: 3 sessions confabulated at probe stage only and were killed+restarted by the watchdog (T8r2 x2, T8r3 x1), the other 2 self-recovered mid-session. Compare 23c: 81 flagged + 2 invalid; 23d: 50 flagged + 2 invalid. Mechanism reframe (opencode#65932 closed as model-side name confabulation) turns the watchdog from an invalid-session classifier into a confabulation-catcher, and this wave shows the restart-at-probe policy converting 3 former invalids into PASSes.",
+  "seal_audit": "0 real seal leaks across 24 sessions (incl. 3 probe-dead attempts): all 34 flags are hyphen-mangled tool names rejected by the harness before reaching the server; cross_project_placements {} - zero cross-timeline/project writes.",
+  "t8_reruns": "T8r2 needed 3 attempts (2 probe-dead) - its failing sessions were 100% mangled at probe stage then clean after restart; consistent with the session-level lottery framing (fresh session = fresh draw)."
+ },
+ "behaviour_observations": {
+  "F2_link_repair": "0/3 set_clips_linked again (0/9 across 3 waves; watch item effectively closed).",
+  "F1_F2_value_level": "F1/F2 read-backs value-level again (CDL numbers quoted before/after); F2r2 disclosed read-back-ordering caveat unprompted.",
+  "T7": "3/3 rendered + verified on disk (16.4/16.4/15.4 MB under render root agbench_23e-2026-11-25); no storm in any of the three waves.",
+  "wall_times": "whole wave ~22 min (23c 24.0, 23d 26.5); per-trial median 96.7 s (23c 108.1, 23d 100.6) - fastest wave of the series; 376 turns / 582 tool calls total.",
+  "intrusions": "current-timeline theft again observed+disclosed (all 3 F1 sessions + F2r2 unpinned misreads, all read-only, pin-then-read discipline held); 0 cross-timeline writes.",
+  "F1_source_offbyone": "all 3 F1 trials reported the tool's own 'source start reads 5999, not 6000' off-by-one and left it unrepaired (3/3 disclosure) - consistent api_truths-class friction for replace_source_range on 5.4.3."
+ },
+ "per_trial": [
+  {
+   "task": "F1r1",
+   "ok": true,
+   "verdict": {
+    "post": {
+     "source_start": 5999,
+     "source_end": 6220,
+     "speed_percentage": 100.0,
+     "retime_process": 0,
+     "comp_count": 0,
+     "grade_tools": [
+      "Primary Balance",
+      "Saturation, Hue & Lum Mix"
+     ],
+     "zoom_x": 1.2,
+     "crop_left": 120.0,
+     "linked_item_count": 0,
+     "audio_in_step": false
+    },
+    "pass": [
+     "r1"
+    ]
+   },
+   "turns": 15,
+   "tools": 29,
+   "wall_s": 130.1,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "F1r2",
+   "ok": true,
+   "verdict": {
+    "post": {
+     "source_start": 5999,
+     "source_end": 6220,
+     "speed_percentage": 100.0,
+     "retime_process": 0,
+     "comp_count": 0,
+     "grade_tools": [
+      "Primary Balance",
+      "Saturation, Hue & Lum Mix"
+     ],
+     "zoom_x": 1.2,
+     "crop_left": 120.0,
+     "linked_item_count": 0,
+     "audio_in_step": false
+    },
+    "pass": [
+     "r2"
+    ]
+   },
+   "turns": 21,
+   "tools": 37,
+   "wall_s": 140.9,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "F1r3",
+   "ok": true,
+   "verdict": {
+    "post": {
+     "source_start": 5999,
+     "source_end": 6220,
+     "speed_percentage": 100.0,
+     "retime_process": 0,
+     "comp_count": 0,
+     "grade_tools": [
+      "Primary Balance",
+      "Saturation, Hue & Lum Mix"
+     ],
+     "zoom_x": 1.2,
+     "crop_left": 120.0,
+     "linked_item_count": 0,
+     "audio_in_step": false
+    },
+    "pass": [
+     "r3"
+    ]
+   },
+   "turns": 9,
+   "tools": 23,
+   "wall_s": 41.2,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "F2r1",
+   "ok": true,
+   "verdict": {
+    "post": {
+     "grade_tools": [],
+     "linked_item_count": 0,
+     "transition_present": true,
+     "audio_item_count": 4
+    },
+    "pass": [
+     "r1"
+    ]
+   },
+   "turns": 22,
+   "tools": 45,
+   "wall_s": 144.1,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "F2r2",
+   "ok": true,
+   "verdict": {
+    "post": {
+     "grade_tools": [],
+     "linked_item_count": 0,
+     "transition_present": true,
+     "audio_item_count": 4
+    },
+    "pass": [
+     "r2"
+    ]
+   },
+   "turns": 26,
+   "tools": 25,
+   "wall_s": 118.4,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "F2r3",
+   "ok": true,
+   "verdict": {
+    "post": {
+     "grade_tools": [],
+     "linked_item_count": 0,
+     "transition_present": true,
+     "audio_item_count": 4
+    },
+    "pass": [
+     "r3"
+    ]
+   },
+   "turns": 15,
+   "tools": 32,
+   "wall_s": 66.1,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T1r1",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r1"
+    ]
+   },
+   "turns": 6,
+   "tools": 7,
+   "wall_s": 16.6,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T1r2",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r2"
+    ]
+   },
+   "turns": 6,
+   "tools": 6,
+   "wall_s": 13.1,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T1r3",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r3"
+    ]
+   },
+   "turns": 7,
+   "tools": 8,
+   "wall_s": 17.3,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T2r1",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r1"
+    ]
+   },
+   "turns": 11,
+   "tools": 21,
+   "wall_s": 72.2,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T2r2",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r2"
+    ]
+   },
+   "turns": 10,
+   "tools": 19,
+   "wall_s": 86.0,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T2r3",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r3"
+    ]
+   },
+   "turns": 11,
+   "tools": 18,
+   "wall_s": 80.6,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T3r1",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r1"
+    ]
+   },
+   "turns": 16,
+   "tools": 26,
+   "wall_s": 67.9,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T3r2",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r2"
+    ]
+   },
+   "turns": 15,
+   "tools": 28,
+   "wall_s": 133.7,
+   "probe_ok": true,
+   "resolve_err": 4,
+   "rerun": null,
+   "mangled_name_attempts": 4,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T3r3",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r3"
+    ]
+   },
+   "turns": 15,
+   "tools": 30,
+   "wall_s": 109.2,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T7r1",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r1"
+    ]
+   },
+   "turns": 23,
+   "tools": 31,
+   "wall_s": 227.4,
+   "probe_ok": true,
+   "resolve_err": 2,
+   "rerun": null,
+   "mangled_name_attempts": 2,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T7r2",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r2"
+    ]
+   },
+   "turns": 37,
+   "tools": 50,
+   "wall_s": 228.6,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T7r3",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r3"
+    ]
+   },
+   "turns": 40,
+   "tools": 52,
+   "wall_s": 96.7,
+   "probe_ok": true,
+   "resolve_err": 3,
+   "rerun": null,
+   "mangled_name_attempts": 3,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T8r1",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r1"
+    ]
+   },
+   "turns": 11,
+   "tools": 25,
+   "wall_s": 67.6,
+   "probe_ok": true,
+   "resolve_err": 0,
+   "rerun": null,
+   "mangled_name_attempts": 0,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T8r2",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r2"
+    ]
+   },
+   "turns": 41,
+   "tools": 52,
+   "wall_s": 144.6,
+   "probe_ok": true,
+   "resolve_err": 3,
+   "rerun": "attempts 0+1 probe-dead (name-confabulation at probe stage, watchdog kill per v2.2), attempt 2 PASS",
+   "mangled_name_attempts": 23,
+   "real_seal_leaks": []
+  },
+  {
+   "task": "T8r3",
+   "ok": true,
+   "verdict": {
+    "pass": [
+     "r3"
+    ]
+   },
+   "turns": 19,
+   "tools": 18,
+   "wall_s": 96.7,
+   "probe_ok": true,
+   "resolve_err": 1,
+   "rerun": "attempt 0 probe-dead (same), attempt 1 PASS",
+   "mangled_name_attempts": 2,
+   "real_seal_leaks": []
+  }
+ ],
+ "totals": {
+  "turns": 376,
+  "tool_calls": 582,
+  "median_wall_s": 96.7,
+  "mangled_attempts": 34,
+  "invalid_sessions": 0,
+  "probe_dead_attempts": 3
+ },
+ "grading": "grading.json via grade_f1f2_wave.py (grader_selftest predicates, live stdio read-backs on the wave fixture); claims operator-extracted (claims-agbench-23e-2026-11-25.json, full report quotes)"
+}

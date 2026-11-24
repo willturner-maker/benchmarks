@@ -1,0 +1,43 @@
+{
+ "_meta": {
+  "wave": "agbench-23e-2026-11-25",
+  "extracted_by": "operator, reading each trial's full final report (sessions/<task>/events.json text parts; result.json is 4k-capped)",
+  "note": "All 21 sessions completed on first good attempt: 0 invalid, 0 watchdog kills. 3 probe-dead attempts (T8r2 x2, T8r3 x1) were model name-confabulation at probe stage, restarted per protocol; final attempts clean. F2 links: no repair this wave (0/3 set_clips_linked). Source-clip names scrubbed from quotes per precommit rules."
+ },
+ "T1r1": {
+  "reported": {"duration_frames": 442, "video_items": 2, "video_tracks": 1, "audio_tracks": 1, "item1_record": [108000, 108221]},
+  "_quote": "442 frames 108000-108442; 2 video items 221f each on V1; 1V/1A; first item 108000-108221; pinned set_current(id)+probe final pass, both agree; no mutations; drifted-current noticed and re-pinned"
+ },
+ "T1r2": {
+  "reported": {"duration_frames": 442, "video_items": 2, "video_tracks": 1, "audio_tracks": 1, "item1_record": [108000, 108221]},
+  "_quote": "442 frames (start 108000 end 108442); 2 video items 221f each; 1V/1A (2 audio items); first video item 108000-108221; set_current then probe then get_current final read; read-only only"
+ },
+ "T1r3": {
+  "reported": {"duration_frames": 442, "video_items": 2, "video_tracks": 1, "audio_tracks": 1, "item1_record": [108000, 108221]},
+  "_quote": "442 frames (108000->108442); 2 video items; 1V/1A; first item 108000-108221 (end exclusive noted); pinned set_current(id) then probe + get_current final; snapshot agrees; nothing mutated"
+ },
+ "F1r1": {
+  "speed": "lost", "retime": "lost", "grade": "kept", "transform": "kept", "crop": "kept", "link": "lost", "audio_in_step": "lost",
+  "_quote": "speed LOST get_speed 100.0, PitchCorrection key absent; retime LOST process 0/ME 0 (plan listed retime not_carried); grade kept describe_grade slope 1.1/1.05/0.95 sat 1.3 on own timeline after re-pin; Zoom 1.2 gang kept; CropLeft 120.0 kept; link LOST items [] (was af9e035c-...); audio left at source 5035-5256 vs video 5999-6220 -> alignment lost; off-by-one source read-back 5999/6220 disclosed, not repaired"
+ },
+ "F1r2": {
+  "speed": "lost", "retime": "lost", "grade": "kept", "transform": "kept", "crop": "kept", "link": "lost", "audio_in_step": "lost",
+  "_quote": "speed LOST 100.0 no pitch (was 80+pitch); retime LOST 0/0 (was 3/2, plan warned not_carried); grade kept slope/offset/sat identical + DB hasGrade true; Zoom 1.2 kept; CropLeft 120.0 kept; link LOST items [] (was 32ade36c-...); audio 32ade36c still 5035-5256 vs video 5999-6220 -> relationship broken; steps transform re-copy success:false disclosed (defaults); 5999 off-by-one disclosed with DB sourceIn 6000"
+ },
+ "F1r3": {
+  "speed": "lost", "retime": "lost", "grade": "kept", "transform": "kept", "crop": "kept", "link": "lost", "audio_in_step": "lost",
+  "_quote": "speed LOST 100.0 pitch absent; retime LOST 0/0 (plan not_carried); grade kept probe_node_graph num_nodes 1 tools identical; transform kept in value 1.2 despite props_to_final.transform.success:false (disclosed); CropLeft 120.0 kept; link LOST items [] (was aef22339-...); audio untouched 5035-5256 vs video 5999-6220 mismatch disclosed; verified:false + 5999 warning disclosed, no repair"
+ },
+ "F2r1": {
+  "transition": "kept", "grade": "lost", "link": "lost",
+  "_quote": "Cross Dissolve intact unmoved same id e017be1e 108209-108233 dur 24, overlaps 2 = its edges only; shifted clip 3 re-created new id grade LOST tools [] (warning foretold re-created from pool); untouched head pairs kept links (control), shifted pair link lost + inserted pair never linked items []; no repair; archive v01 holds pre-state"
+ },
+ "F2r2": {
+  "transition": "kept", "grade": "lost", "link": "lost",
+  "_quote": "clip 2 grade survived (kept id+position, node graph identical); third clip grade LOST re-created; links: shifted pair lost, inserted pair not linked; Cross Dissolve survived; caveats disclosed honestly: first 2 unpinned probes read wrong timelines (read-only, discarded), grade/link read-backs taken just before final structure re-read; CONFIRMATION_REQUIRED dry wrote nothing"
+ },
+ "F2r3": {
+  "transition": "kept", "grade": "lost", "link": "lost",
+  "_quote": "clip 2 head item kept CDL (control); clip 3 grade destroyed 27cac593 tools [...] -> 31da99d1 tools []; head pairs kept links (6a0c4269, f553a40e), shifted pair unlinked, inserted video f6165fb1 + audio e755b44d created but not auto-linked; Cross Dissolve same id/span/dur 108209-108233; offered relink, did not perform"
+ }
+}

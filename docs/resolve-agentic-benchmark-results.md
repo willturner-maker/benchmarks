@@ -1744,4 +1744,46 @@ serve children (~11%)**; every serve child logged `mcp connected` 3/3 — the co
 failed anywhere — and 4 of 5 signature sessions sat in 0–2 ms co-launch pairs (5th sequential).
 Upstream thread closed out with the payload evidence (issue #65932).
 
+## Addendum build-series 3 (2026-11-24): agbench-23e — first wave on MCP 5.4.3, 21/21 raw, and the confabulation scoreboard's first clean sheet
+
+Wave `agbench-23e-2026-11-25` (raw: `results/agbench-23e-2026-11-25/`, gitignored; distilled
+`results-agbench-23e-2026-11-25.json`, claims + RECORD at suite root). **Build series 3 opens**:
+opencode **2.4.1** (unchanged) + davinci-resolve MCP **5.4.3** (`79d68de`), Splash **1.7.1**
+pinned. Wave label says 2026-11-25 but dispatch was 2026-11-24 09:29–09:51 local — label drift
+disclosed in the RECORD; all artifacts carry the label consistently.
+
+**Pre-wave probes (committed before dispatch, `f0b590f`)**: sealed fingerprint on the 5.4.3 tree
+(`server_py_sha256 8a9e61e9…`, new anchor) and the pre-registered ripple_insert continuity probe
+**PASS**: ambiguous `record_frame` on the start-108000 fixture → refused `AMBIGUOUS_RECORD_FRAME`
+(5.4.0 planned 216442 with `success:true`); `mode:'absolute'` → plan echoes all three new fields.
+The #389 api_truths row flips **trap → refusal** for this series. Honest methodology note: the
+probe's first attempt *through opencode* confabulated every MCP tool name — the exact model-side
+mechanism we documented closing #65932 — so the server-behavior claim is instrumented harness-free
+(direct stdio JSON-RPC), which is the right instrument for an API claim anyway.
+
+**Result: raw 21/21, corrected 21/21** — the series' first wave with **zero invalid sessions and
+zero operator re-runs**. Across series 2+3 (three waves, 63 trials): raw {19,19,21}/21, corrected
+{21,21,21}/21, zero genuine model misses.
+
+**The confabulation scoreboard, first wave under the corrected framing**: 34 flagged mangled-name
+attempts in **5/21 sessions** (23c: 81 flagged/2 invalid; 23d: 50/2) — but **zero deaths**: three
+sessions confabulated at probe stage only and were killed+restarted by the watchdog before task
+start (T8r2 ×2, T8r3 ×1), two self-recovered mid-session. The restart-at-probe policy converted
+what would have been 2 invalids in series 2 into PASSes, exactly as the session-lottery model
+predicts (fresh session = fresh draw; T8r2's two dead attempts were 100% mangled, its third clean
+to PASS). Seal audit: **0 real leaks across 24 sessions**; all 34 flags were harness-side
+`No tool named` rejections that never reached the server; `cross_project_placements {}`.
+
+**Behaviour deltas on 5.4.3**: F2 link-repair 0/3 again (0/9 across three waves — watch item
+closed); F1 `replace_source_range` still returns the "source start reads 5999, not 6000"
+off-by-one, now disclosed by 3/3 trials without prompting; T7 renders 3/3 verified (16.4/16.4/15.4 MB);
+fastest wave of the series (22 min wall, per-trial median 96.7 s vs 108.1/100.6).
+
+**Engine boundary note**: Splash **1.7.2** shipped mid-wave and was **deliberately not adopted** —
+its own release notes warn of output drift on 32+ core Apple10 GPUs (wide-format projection split
+order at near-ties) and INT8 Q8_0-activation prefill on long prompts, plus a cold SSD-cache reset
+named for Qwen3.8-Flash-Next; nothing in it changes capability for our subject. Adoption candidate
+is a *measured* efficiency wave (agent prompt-cache reuse), never a silent bump. This series stays
+pinned 1.7.1.
+
 
