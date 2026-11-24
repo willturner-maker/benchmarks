@@ -1,0 +1,65 @@
+{
+ "wave": "bfcl-24a-2026-11-23",
+ "suite": "BFCL v4",
+ "purpose": "repeat wave at identical build - product is the temp-0 wave-to-wave band",
+ "instrument": "gorilla @ 6ea57973c7a6097fd7c5915698c54c17c5b1b6c8 (identical to 23a); wrapper bfcl_splash.py unchanged",
+ "window_utc": "2026-11-23T06:15:07Z (launch) - generate done 2026-11-24T09:42:20Z (3 h 27 m); evaluate done 09:42:22Z (scoring fast this wave)",
+ "flags": "temperature 0, --num-threads 3; 17 categories; 4,441 task-runs fresh (no smoke carry-in, unlike 23a)",
+ "outcome_overall": "40.12% (their scorer over run categories); 23a=40.85; delta -0.73",
+ "categories": {
+  "simple_python": 94.5,
+  "simple_java": 60.0,
+  "simple_javascript": 64.0,
+  "multiple": 92.5,
+  "parallel": 92.0,
+  "parallel_multiple": 89.0,
+  "irrelevance_nonlive": 78.75,
+  "live_simple": 79.84,
+  "live_multiple": 77.4,
+  "live_parallel": 68.75,
+  "live_parallel_multiple": 62.5,
+  "live_irrelevance": 76.02,
+  "live_relevance": 81.25,
+  "multi_turn_base": 61.0,
+  "multi_turn_miss_func": 49.5,
+  "multi_turn_miss_param": 46.5,
+  "multi_turn_long_context": 56.0
+ },
+ "groups": {
+  "non_live_ast_overall": 86.58,
+  "live_overall": 77.5,
+  "multi_turn_overall": 53.25
+ },
+ "delta_vs_23a": {
+  "simple_python": 0.0,
+  "simple_java": 0.0,
+  "simple_javascript": -2.0,
+  "multiple": 0.0,
+  "parallel": -0.5,
+  "parallel_multiple": 0.0,
+  "irrelevance_nonlive": -0.42,
+  "live_simple": 0.38,
+  "live_multiple": -0.57,
+  "live_parallel": 0.0,
+  "live_parallel_multiple": 4.17,
+  "live_irrelevance": 0.45,
+  "live_relevance": 0.0,
+  "multi_turn_base": -3.0,
+  "multi_turn_miss_func": -3.5,
+  "multi_turn_miss_param": -1.0,
+  "multi_turn_long_context": -1.5
+ },
+ "band_read": "15/17 categories |delta|<=2.0; worst n>=200 deltas: multi_turn_miss_func -3.5, multi_turn_base -3.0 (multi_turn group shifted -2.25 as a block); live_parallel_multiple +4.17 is n=24 (tiny-n expected). Single-wave category band at n>=200: ~+/-3.5 pts; composite overall ~+/-1 pt (single pair - preliminary).",
+ "infrastructure": {
+  "errors": 0,
+  "empty_response_entries": 1,
+  "task_entries_parsed": 4441,
+  "engine_tenancy": "415 samples: normal/nominal throughout; 13/415 samples showed admission waiting>0 (23a had 0) - light tenancy drift, no effect established"
+ },
+ "deviations": [
+  "fully fresh results (23a carried 14 smoke entries; minor confound in multi_turn_base/miss comparisons)",
+  "admission waits in 13 samples (tenancy drift vs 23a's zero)"
+ ],
+ "comparability": "Same build series as 23a by construction (pin, venv, wrapper, flags, threads). Deltas across these two waves are NOISE samples, not capability changes.",
+ "artifacts": "raw result/+score/ in pinned clone; wave scratch bench waves/bfcl-24a-2026-11-23/ (driver.out GENERATE_EXIT=0 EVALUATE_EXIT=0, generate.log, evaluate.log, engine_samples.jsonl, score CSV copies, prev-23a archive)"
+}

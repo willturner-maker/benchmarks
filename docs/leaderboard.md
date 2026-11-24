@@ -930,7 +930,8 @@ rank **~7th (Non-Live AST 89.50, above leader Claude-Opus-4-5's 88.58)**, ~13th 
 ~45–54 (live); shared-groups average 72.05 ≈ **15th of 110**, between Claude-Haiku-4-5 and Qwen3-32B.
 Board leader overall 77.47 (snapshot 2026-04-12, rows at their `f7cf735` checkpoint). Decode-regime
 caveat per the τ² determinism probe: temp-0 hosted rows decode near-deterministically; ours samples —
-category deltas under ~5 pts are single-wave noise until repeats band it.
+category deltas inside a category must clear the measured band (~±3.5 pts at n≥200 per the
+bfcl-24a repeat wave; composite overall ±1 pt) to count as real.
 
 ## Reports — what's in each scorecard
 

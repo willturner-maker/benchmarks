@@ -74,7 +74,10 @@ p95 6.6 s; entry-level, multi-turn entries (20–30 env steps) run 16–60 s typ
 - **Decode-regime disclosure travels with the row:** hosted rows decode near-deterministically at
   temp 0; our engine's temp-0 action lottery (documented in the
   [tau2 determinism probe](tau2-bench-benchmark-results.md)) means repeated waves would spread;
-  single-wave deltas under ~5 pts inside a category are noise until a repeat measures the band.
+  single-wave deltas inside a category are noise: **measured band from the bfcl-24a repeat
+  wave is ~±3.5 pts at n≥200** (multi-turn moves are block-correlated, not per-task), with
+  the composite overall moving only ~±1 pt wave-to-wave. A future category delta must clear
+  ~3.5 pts to count as real.
 - **Their cost column is synthetic** for price=None rows; ours is self-hosted (marginal ≈ 0).
 
 ## Reproduce
@@ -88,7 +91,7 @@ one evaluate command. The whole instrument (clone, venv, wrapper, smoke evidence
 | wave | date | scope | overall | notes |
 |---|---|---|---|---|
 | bfcl-23a | 2026-11-24 (launched 2026-11-23) | full v4 scoring set (17 cats, 4,441 runs) | **40.85%** | debut; memory cats deferred |
-| bfcl-24a | 2026-11-23 (queued 22:15 PST) | repeat of 23a, identical build — temp-0 wave-to-wave band | (pending) | delta table is the product |
+| bfcl-24a | 2026-11-24 | repeat of 23a, identical build — temp-0 band measurement | 40.12% (Δ-0.73 vs 23a) | band: ±3.5 pts/category at n≥200, ±1 overall; RECORD-bfcl-24a |
 
 Row submission to the public board filed: **gorilla issue [#1400](https://github.com/ShishirPatil/gorilla/issues/1400)**
 (artifacts gist + repro block; open questions on checkpoint `f7cf735` vs our pin, partial-row rendering,
