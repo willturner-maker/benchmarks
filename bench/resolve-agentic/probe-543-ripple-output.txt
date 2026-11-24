@@ -1,0 +1,46 @@
+== clip used: 83055536-bf59-4947-968e-86aa5bc7f83a
+== INIT ok: True
+== STEP1 (ambiguous, dry-run):
+{
+  "error": {
+    "message": "record_frame 108100 is ambiguous on a timeline that starts at frame 108000: as an offset from the start it is absolute frame 216100; as an absolute frame it is offset 100.",
+    "code": "AMBIGUOUS_RECORD_FRAME",
+    "category": "invalid_input",
+    "retryable": false,
+    "remediation": "Name the frame origin. A frame read from get_items, probe_timeline_structure or detect_gaps_overlaps is absolute: pass record_frame_mode='absolute'. An offset from the timeline start: pass record_frame_mode='relative'. Or pass record_timecode instead.",
+    "state": {
+      "timeline_start_frame": 108000
+    }
+  },
+  "_operation": {
+    "status": "failed",
+    "operation": "tim
+== STEP2 (absolute, dry-run):
+{
+  "success": false,
+  "dry_run": true,
+  "plan": {
+    "insert_frame_absolute": 108100,
+    "insert_frame_relative": 100,
+    "timeline_start_frame": 108000,
+    "content_end_frame": 108442,
+    "record_frame_mode_used": "absolute",
+    "shift_frames": 100,
+    "inserts": [
+      {
+        "clip_id": "83055536-bf59-4947-968e-86aa5bc7f83a",
+        "record_frame": 108100,
+        "duration": 100,
+        "track_index": 1,
+        "media_type": 1
+      }
+    ],
+    "tail_item_count": 2,
+    "head_item_count": 0,
+    "tail_items": [
+      {
+        "clip_id": "fe69f7f4-711b-4323-b04b-be33918a8ec7",
+        "name": "<source-clip>",
+        "track_type": "audio",
+        "track_index": 1,
+      
