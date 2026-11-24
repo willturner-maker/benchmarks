@@ -1782,8 +1782,14 @@ fastest wave of the series (22 min wall, per-trial median 96.7 s vs 108.1/100.6)
 **Engine boundary note**: Splash **1.7.2** shipped mid-wave and was **deliberately not adopted** —
 its own release notes warn of output drift on 32+ core Apple10 GPUs (wide-format projection split
 order at near-ties) and INT8 Q8_0-activation prefill on long prompts, plus a cold SSD-cache reset
-named for Qwen3.8-Flash-Next; nothing in it changes capability for our subject. Adoption candidate
-is a *measured* efficiency wave (agent prompt-cache reuse), never a silent bump. This series stays
-pinned 1.7.1.
+named for Qwen3.8-Flash-Next; nothing in it changes capability for our subject. Supporting evidence
+from a tensor-table scan of the pinned GGUF itself (split part-1, 1,219 records): **zero Q6_K/Q8_0
+tensors on disk** — attention sits on Q4_K_S/Q4_K_M/Q5_K_S, experts on Q1_0/IQ1_S/IQ2_XS/IQ3_XS/
+IQ3_XXS/Q4_K_*/Q5_K_* — so both drift triggers are likely inert for this exact file; unresolved:
+491 tensors carry quant type IDs 30/42 newer than gguf-py's enum (indexer/hyper-connection
+projections and 9 expert tensors), the 32-core M5 Max kernel choices are shipped with an explicit
+unvalidated-Known-issue, and the upgrade guarantees one cold persistent-cache launch. Adoption
+candidate is a *measured* efficiency wave (agent prompt-cache reuse), never a silent bump. This
+series stays pinned 1.7.1.
 
 
