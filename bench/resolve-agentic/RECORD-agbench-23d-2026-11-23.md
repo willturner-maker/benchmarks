@@ -22,6 +22,7 @@ band at n=2: raw {19,19}/21 (both raw misses are harness dropouts), corrected {2
 
 **Deviations (all recorded)**:
 1. **T1r1 + T8r1 harness-invalid re-runs.** The 2.4.1 per-session MCP registration failure
+   (reported upstream: anomalyco/opencode#65932)
    recurred at the same 2/21 rate (build bug confirmed). Burst form varies: 23c dropouts
    errored real underscore tool names; 23d's T1r1/T8r1 errored mangled hyphen forms with
    zero Resolve completions (T8r1's advanced server stayed alive). Agents again honest:

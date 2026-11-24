@@ -1673,7 +1673,10 @@ harness tax.
 **Dropout signature varies per session** (why the first watchdog missed it): 23c's dropouts
 errored REAL underscore tool names ("No tool named davinci-resolve_timeline…"); 23d's T1r1/T8r1
 errored mangled hyphen forms with ZERO Resolve completions (T8r1 kept an alive advanced/offline
-server — a live-only failure). Driver v2.2 (committed): pool confirmed only by a completed
+server — a live-only failure). Reported upstream as **anomalyco/opencode#65932** (2026-11-23),
+with the named-server config shapes, verbatim `--format json` event excerpts for the total- and
+partial-dropout forms, and same-pair sibling timing (failing session 0 completions vs the
+sibling's 34 completed `davinci-resolve*` calls). Driver v2.2 (committed): pool confirmed only by a completed
 live/builtin-named call; "No tool named" rejections across any `davinci-resolve*` form counted
 while unconfirmed, kill at 6 with no completion; EOF re-check catches give-up agents. Offline
 replay over all 21 sealed 23d sessions classified exactly T1r1/T8r1 as DEAD; then it caught one
