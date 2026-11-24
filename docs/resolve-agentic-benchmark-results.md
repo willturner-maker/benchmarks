@@ -1678,7 +1678,18 @@ and a follow-up log analysis (upstream comment, 2026-11-24) **corrected the susp
 in failing sessions the opencode serve child logs all three servers `mcp connected` (tools 18/18/37,
 initialize spans 330–805 ms — well inside the first-turn wait), yet the session's tool pool is
 empty/partial for its whole life (43.9 s partial-dropout session still rejecting at +31.5 s).
-Server spawn/health is exonerated; the failure is downstream, in pool binding.
+Server spawn/health is exonerated; the failure is downstream, in pool binding. **FINAL
+CORRECTION (2026-11-25, upstream comment 7136830305): the pool-binding reading was also wrong.**
+A tee-proxy capture (every `/v1/chat/completions` request logged) shows failing-signature
+sessions receive the **full 74-tool array on every task request** (title-gen call legitimately
+carries `tools: 0`), and an engine probe with that captured array enumerates the exact tool
+names correctly at temp 0. A 18-session wave-brief replay produced zero reproductions. The real
+mechanism is **model-side, session-level tool-name grounding failure** (whole-session
+confabulation of hyphen-mangled names; 12/12 and 21/21 attempts mangled in the archived failing
+sessions vs 37/37 correct in a sibling 1 ms apart). Rate is brief-sensitive: 2/2 short prompts,
+5/~47 in the original waves, 0/18 replay. Scoring semantics unchanged (sessions still invalid +
+re-run — a session-level lottery, not task-specific) but the label is model failure, not harness
+dropout; the watchdog signature (rejections-with-no-completions) remains the right catcher.
 with the named-server config shapes, verbatim `--format json` event excerpts for the total- and
 partial-dropout forms, and same-pair sibling timing (failing session 0 completions vs the
 sibling's 34 completed `davinci-resolve*` calls). Driver v2.2 (committed): pool confirmed only by a completed
@@ -1717,16 +1728,20 @@ not the model.
 `v5.4.3` (`79d68de`)** — ships the #389 fix (AMBIGUOUS_RECORD_FRAME refusal + plan echoes,
 source-verified; `fast-xml-parser` bumped to 5.12.1 in resolve-advanced deps, installed).
 Verified: server.py imports clean on the existing venv (5.4.3), advanced mjs syntax-checks.
-The NEXT resolve-agentic wave is a new build series on 5.4.3 — **but it is deliberately held
-pending an opencode release fixing anomalyco/opencode#65932** (the per-session MCP dropout:
-with 5.4.3 + fixed opencode, the raw floor could be 21/21 outright — the dropout was the only
-score-limiting factor). First continuity probes when that wave runs: (1) ripple_insert dry-run
+The NEXT resolve-agentic wave is a new build series on 5.4.3 — **hold lifted 2026-11-25**:
+the wave was gated on an opencode fix for anomalyco/opencode#65932, but the tee-proxy capture
+(upstream comment 7136830305) showed the "per-session MCP dropout" is a **model-side name-
+grounding lottery, not a harness bug** — no opencode fix is needed, the 5.4.3 series wave can
+run any time. Raw-floor expectation is revised: model confabulation sessions remain a live
+score factor (~11% wave rate in 23c/23d conditions), watchdog kills + re-runs stay part of the
+protocol. First continuity probes when that wave runs: (1) ripple_insert dry-run
 `record_frame: 108442` no-mode on a start-offset fixture → expect AMBIGUOUS_RECORD_FRAME,
 then `mode:'absolute'` → expect 108442 (api_truths row flips from trap to refusal); (2)
-watchdog stats become the dropout-fix scoreboard (kill count per wave should go to 0).
-Corpus baseline for that scoreboard (full-log pass, 2026-11-24): **5 dropouts / 47 wave serve
-children (~11%)**; every serve child logged `mcp connected` 3/3 — the connection path never
-failed anywhere — and 4 of 5 dropouts sat in 0–2 ms co-launch pairs (5th was sequential, so
-concurrency isn't required). Upstream follow-ups filed with the repro recipe (issue #65932).
+watchdog stats now measure the MODEL confabulation rate per wave (baseline: 5/47 sessions,
+0/18 in yesterday's brief-condition replay).
+Corpus baseline details (full-log pass, 2026-11-24): **5 dropout-signature sessions / 47 wave
+serve children (~11%)**; every serve child logged `mcp connected` 3/3 — the connection path never
+failed anywhere — and 4 of 5 signature sessions sat in 0–2 ms co-launch pairs (5th sequential).
+Upstream thread closed out with the payload evidence (issue #65932).
 
 
