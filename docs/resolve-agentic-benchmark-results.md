@@ -1697,7 +1697,7 @@ rendered+verified. One notable agent-side save: **F2r2** tripped a `ripple_inser
 (`record_frame` treated as elapsed-from-start AND re-added — first execute landed at absolute
 216442, a 107,779-frame gap), disclosed it, deleted the two misplaced items, verified the
 baseline restored, then inserted correctly — geometry graded PASS. New api_truths friction row
-for the action. Seal: 0 real leaks / 24 sessions; sloppiness tax 50 mangled-name attempts
+for the action (reported upstream: samuelgursky/davinci-resolve-mcp#389). Seal: 0 real leaks / 24 sessions; sloppiness tax 50 mangled-name attempts
 (23c: 81).
 
 **Series state:** working ceiling on 2.4.1+5.4.0 = **21/21 corrected** (n=2, no variance); the

@@ -43,7 +43,8 @@ band at n=2: raw {19,19}/21 (both raw misses are harness dropouts), corrected {2
    `record_frame` (elapsed-from-start PLUS the 108000 offset): the first execute landed at
    absolute 216442, leaving a 107,779-frame gap. The agent disclosed it, deleted the two
    misplaced items, verified the baseline restored (0 gaps / 2 overlaps), then inserted
-   correctly at 108442. Geometry graded PASS. New api_truths friction row for the action.
+   correctly at 108442. Geometry graded PASS. New api_truths friction row for the action
+   (reported upstream: samuelgursky/davinci-resolve-mcp#389).
 
 **Seal audit**: 0 real leaks across 24 sessions; 50 flagged mangled-name attempts (23c: 81).
 
