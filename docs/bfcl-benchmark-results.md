@@ -88,3 +88,8 @@ one evaluate command. The whole instrument (clone, venv, wrapper, smoke evidence
 | wave | date | scope | overall | notes |
 |---|---|---|---|---|
 | bfcl-23a | 2026-11-24 (launched 2026-11-23) | full v4 scoring set (17 cats, 4,441 runs) | **40.85%** | debut; memory cats deferred |
+| bfcl-24a | 2026-11-23 (queued 22:15 PST) | repeat of 23a, identical build — temp-0 wave-to-wave band | (pending) | delta table is the product |
+
+Row submission to the public board filed: **gorilla issue [#1400](https://github.com/ShishirPatil/gorilla/issues/1400)**
+(artifacts gist + repro block; open questions on checkpoint `f7cf735` vs our pin, partial-row rendering,
+handler form). If a re-run at their checkpoint is required, it's the same scripted ~4 h wave.
