@@ -1519,7 +1519,10 @@ before writing a reward (`RewardFileNotFoundError`). The recorded one-line-each 
 (`chmod 1777`, log mounts *and* their parents) took the sandboxed-grader tasks from erroring to
 **17/17 clean at reward 1.0**; it changes no task content, no scoring, and no agent-visible
 state, and any scored wave records it as a pin deviation. Phase B (upstream's own gate: oracle
-`-k 5` over the 58-task clean subset) precedes any model pilot; no model token until that passes.
+`-k 5` over the 58-task clean subset) ran 2026-11-25 at `-n 3`: **290/290 trials completed, zero
+errored, zero missing rewards, 56 of 58 tasks 5/5 at reward 1.0** — and it is precisely that
+run's two failures that exposed the concurrency confound below, so the gate is being re-run at the
+scoring concurrency (gate 2C) before any model pilot; no model token until that passes.
 The runner bug and the arm64-excluded tasks were filed upstream (harbor#4469 for the log-mount
 `chmod 777` vs rewardkit parent-trust conflict; terminal-bench#2922 `ks-solver-cpp` x86-only
 verifier wheels, #2923 a dead `files.rcsb.org` fetch in a reference solution, #2924 a reference
@@ -1537,7 +1540,13 @@ deadline (3.0 ms in a passing trial) while its actual measurement still cleared 
 threshold. Since `-n` is global per Harbor job (no per-task concurrency exists), the response is not
 a retry policy: the gate is re-run at the one concurrency the wave will be scored at, that
 concurrency chosen by a rule fixed before the flake numbers existed, and any task still flaking
-there is excluded or pinned, never rescued by retries.
+there is excluded or pinned, never rescued by retries. A second local tenancy fact follows from
+serving a benchmark and the agent harness from one engine: **the operator's own inference traffic
+shares the engine under test**, so global engine counters are not attributable to a benchmark run
+(the counters moved +64 requests during a sweep that contained no model calls at all). Attributable
+evidence is used instead — the engine log's monotonic request numbering over the run window, minus a
+measured idle-session baseline, plus per-trial agent artifacts — and gaps between trials are not
+free, since the engine releases weights after 600 s idle (~1.5 s restore, first post-gap TTFT 9.5 s).
 DeepSWE and ALE assume API token budgets: one ALE leaderboard run of a frontier config burned ~21.5 M
 output tokens, and this engine decodes at 149–245 tok/s (see the *Quant memory accounting* section of
 the Splash doc), so a single long-horizon task is hours of decode before the horizon even completes.
