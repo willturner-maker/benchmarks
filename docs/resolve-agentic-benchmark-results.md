@@ -1526,7 +1526,8 @@ scoring concurrency (gate 2C) before any model pilot; no model token until that 
 The runner bug and the arm64-excluded tasks were filed upstream (harbor#4469 for the log-mount
 `chmod 777` vs rewardkit parent-trust conflict; terminal-bench#2922 `ks-solver-cpp` x86-only
 verifier wheels, #2923 a dead `files.rcsb.org` fetch in a reference solution, #2924 a reference
-solution whose `npm test` step fails while its verifier scores 1.0), with confirming comments added
+solution whose `npm test` step fails while its verifier scores 1.0, #2925 an oracle solution that
+cannot boot its own image on arm64), with confirming comments added
 to the two pre-existing issues that already covered `cad-model` (#2077) and `gsea-proteomics`
 (#1805, bundled x86-64 JDK) — duplicate-checking is what turned those two from new issues into
 comments. **Trial concurrency is a measured variable, not a speed knob.** Raising Harbor's `-n` from
@@ -1540,7 +1541,14 @@ deadline (3.0 ms in a passing trial) while its actual measurement still cleared 
 threshold. Since `-n` is global per Harbor job (no per-task concurrency exists), the response is not
 a retry policy: the gate is re-run at the one concurrency the wave will be scored at, that
 concurrency chosen by a rule fixed before the flake numbers existed, and any task still flaking
-there is excluded or pinned, never rescued by retries. A second local tenancy fact follows from
+there is excluded or pinned, never rescued by retries. The follow-up probe showed the two tasks are
+**not** the same fault: the watchdog task is clean at `-n 1` and `-n 2` (one stall at `-n 3`), while
+the QEMU task fails at `-n 1` with nothing else running and with a **bimodal** wall distribution
+(passes 76–135 s, failures 331–394 s, nothing between) — so for it the cause is TCG emulation under
+a `cpus = 2` cap against fixed boot windows that the previous upstream fix had already widened to
+300/700 s (terminal-bench#2925). Local candidate set for a scored wave: **57 of the 66 in-tree tasks**
+(8 arm64/CUDA/broken-reference-solution exclusions plus this one), gated at `-n 2`. A second local
+tenancy fact follows from
 serving a benchmark and the agent harness from one engine: **the operator's own inference traffic
 shares the engine under test**, so global engine counters are not attributable to a benchmark run
 (the counters moved +64 requests during a sweep that contained no model calls at all). Attributable
