@@ -1519,8 +1519,14 @@ before writing a reward (`RewardFileNotFoundError`). The recorded one-line-each 
 (`chmod 1777`, log mounts *and* their parents) took the sandboxed-grader tasks from erroring to
 **17/17 clean at reward 1.0**; it changes no task content, no scoring, and no agent-visible
 state, and any scored wave records it as a pin deviation. Phase B (upstream's own gate: oracle
-`-k 5` over the 58-task clean subset, projected 4–6 h) precedes any model pilot; no model token
-until that passes.
+`-k 5` over the 58-task clean subset) precedes any model pilot; no model token until that passes.
+The runner bug and the arm64-excluded tasks were filed upstream (harbor#4469 for the log-mount
+`chmod 777` vs rewardkit parent-trust conflict; terminal-bench#2922 `ks-solver-cpp` x86-only
+verifier wheels, #2923 a dead `files.rcsb.org` fetch in a reference solution, #2924 a reference
+solution whose `npm test` step fails while its verifier scores 1.0), with confirming comments added
+to the two pre-existing issues that already covered `cad-model` (#2077) and `gsea-proteomics`
+(#1805, bundled x86-64 JDK) — duplicate-checking is what turned those two from new issues into
+comments.
 DeepSWE and ALE assume API token budgets: one ALE leaderboard run of a frontier config burned ~21.5 M
 output tokens, and this engine decodes at 149–245 tok/s (see the *Quant memory accounting* section of
 the Splash doc), so a single long-horizon task is hours of decode before the horizon even completes.
