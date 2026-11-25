@@ -1521,8 +1521,13 @@ before writing a reward (`RewardFileNotFoundError`). The recorded one-line-each 
 state, and any scored wave records it as a pin deviation. Phase B (upstream's own gate: oracle
 `-k 5` over the 58-task clean subset) ran 2026-11-25 at `-n 3`: **290/290 trials completed, zero
 errored, zero missing rewards, 56 of 58 tasks 5/5 at reward 1.0** — and it is precisely that
-run's two failures that exposed the concurrency confound below, so the gate is being re-run at the
-scoring concurrency (gate 2C) before any model pilot; no model token until that passes.
+run's two failures that exposed the concurrency confound below, so the gate was re-run at the scoring
+concurrency: **gate 2C, oracle `-k 5 -n 2 -r 0` over a 57-task digest-pinned candidate set, 2026-11-25
+00:17→07:57 — 285/285 trials run, zero errored, zero missing rewards, all 57 tasks 5/5 at reward 1.0**
+(cumulative trial-time 54 539 s, mean 191 s, effective concurrency 1.97 of 2). Zero model tokens for
+that sweep is asserted three ways: the job config carries `agents == [("oracle", None)]`; the engine
+released its weights twice mid-sweep (≥600 s with no request); and its counters moved only +40
+requests across 7 h 40 m, which is the harness session's own inference rather than the benchmark's.
 The runner bug and the arm64-excluded tasks were filed upstream (harbor#4469 for the log-mount
 `chmod 777` vs rewardkit parent-trust conflict; terminal-bench#2922 `ks-solver-cpp` x86-only
 verifier wheels, #2923 a dead `files.rcsb.org` fetch in a reference solution, #2924 a reference

@@ -1,0 +1,47 @@
+--- patches/harbor-0.27.0-base.py.orig	2026-11-24 14:41:23
++++ patches/harbor-0.27.0-base.py.patched	2026-11-24 14:57:10
+@@ -2,6 +2,7 @@
+ import contextlib
+ import contextvars
+ import logging
++import os
+ import shlex
+ import shutil
+ import tarfile
+@@ -799,7 +800,25 @@
+         create_args = " ".join(q(path) for path in dirs)
+         command = f"mkdir -p {create_args}"
+         if chmod:
+-            command += f" && chmod 777 {create_args}"
++            # [bench patch tb-log-dirs-sticky] Log mounts and *their parents* get a
++            # sticky mode, like /tmp. rewardkit >=0.2.4 validates the whole parent
++            # chain of /logs/verifier (`root-owned and not writable by others, or
++            # sticky like /tmp`); Harbor's plain 777 left /logs 0777 non-sticky, so
++            # sandboxed verifier runs died before writing a reward file.
++            parents = sorted(
++                {str(Path(str(d)).parent) for d in dirs if str(d).count("/") > 1}
++            )
++            if os.environ.get("TB_DIR_DEBUG"):
++                import sys
++
++                print(
++                    f"[tb-dir-debug] ensure: {[str(d) for d in dirs]}"
++                    f" parents: {parents}",
++                    file=sys.stderr,
++                )
++            command += f" && chmod 1777 {create_args}"
++            if parents:
++                command += f" && chmod 1777 {' '.join(q(p) for p in parents)}"
+         return command
+ 
+     def _empty_dirs_command(
+@@ -838,7 +857,8 @@
+                 ]
+             )
+             if chmod:
+-                commands.append(f"chmod 777 {quoted}")
++                # [bench patch tb-log-dirs-sticky] see _ensure_dirs_command.
++                commands.append(f"chmod 1777 {quoted}")
+         return " && ".join(commands)
+ 
+     def _reset_dirs_user(self) -> str | None:
