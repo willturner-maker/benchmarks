@@ -42,6 +42,19 @@ assert '$MODEL_ID' in ids, 'served model id does not match the pin — stop'
 " || { echo "engine not answering at $ENGINE_URL"; exit 4; }
 ps -Ao command | grep -i "engine/splash" | grep -v grep | head -1 | cut -c1-220 | sed 's/^/argv: /'
 
+# Routing prefix. Harbor's split_provider_model_name() treats the first "/"-separated
+# component as a provider, so the HF-style served id "ISTA-DASLab/Qwen3.8-…:IQ3_S" parses as
+# provider "ista-daslab" and litellm raises "LLM Provider NOT provided" (this is what voided the
+# first pilot: 3/3 BadRequestError in 2m38s). The `openai/` prefix is a CLIENT-SIDE routing label
+# only: verified below, the engine receives and echoes the pinned id unchanged
+# (response.model == "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S").
+LITELLM_MODEL="openai/${MODEL_ID}"
+
+# Routing self-test: one request through the exact client path the agent uses (litellm + api_base),
+# asserting the engine's reported model equals the pin. Cheaper than discovering this again via a
+# whole pilot of void trials.
+./tb-venv/bin/python scripts/routing_selftest.py "$MODEL_ID" "$ENGINE_URL" || exit 4
+
 echo "== runner patch check"
 grep -c "chmod 1777" tb-venv/lib/python3.12/site-packages/harbor/environments/base.py \
   | sed 's/^/chmod-1777 sites: /'
@@ -78,7 +91,7 @@ echo "== pilot run: terminus-2, k=1, n=2, no retries, max_turns=$MAX_TURNS, agen
 ./tb-venv/bin/harbor run \
   -p probe-dataset-pilot \
   --agent terminus-2 \
-  --model "$MODEL_ID" \
+  --model "$LITELLM_MODEL" \
   --skip-model-parsing-and-provider-mapping \
   --base-url "$ENGINE_URL" \
   --ak "max_turns=$MAX_TURNS" \
@@ -90,30 +103,9 @@ STATUS=$?
 
 R1=$(lastreq); T1=$(date +%s)
 snap > "$OUT/engine-metrics-after.txt"
-{ echo "request_window: $R0 -> $R1"; echo "session_baseline: $RCTL per ${TCTL}s"; } > "$OUT/engine-attribution.txt"
-echo "== engine attribution (log-numbered requests, not global counters):"
-./tb-venv/bin/python - "$R1" "$RC0" "$RCTL" "$TCTL" "$T1" "$T0" "$OUT" <<'PY'
-import sys, glob, os
-r1, rc0, rctl, tctl, t1, t0 = (int(sys.argv[i]) for i in range(1, 7))
-out = sys.argv[7]
-window = r1 - rc0
-run_secs = max(t1 - t0, 1)
-baseline = rctl / max(tctl, 1) * run_secs
-attributable = window - baseline
-print(f"   requests in run window: {window} over {run_secs}s; session baseline predicts {baseline:.1f}")
-print(f"   attributable to the run: {attributable:.1f}")
-trials = glob.glob(os.path.join(out, "*", "*__*/result.json"))
-print(f"   trials: {len(trials)}")
-for f in trials:
-    d = os.path.dirname(f)
-    agent_logs = [p for p in glob.glob(os.path.join(d, "agent", "*")) if os.path.getsize(p) > 0] if os.path.isdir(os.path.join(d, "agent")) else []
-    print(f"      {os.path.basename(d):<34} agent artifacts: {len(agent_logs)} non-empty")
-if attributable < len(trials) * 3:
-    print("\nFATAL: too few attributable requests for an agentic run — this run likely never")
-    print("reached the model (routing/proxy/parser failure). Treat every reward from it as void.")
-    sys.exit(5)
-print("\nmodel activity confirmed by attributable request window + per-trial agent artifacts")
-PY
+{ echo "request_window: $R0 -> $R1"; echo "session_baseline_raw: $RCTL over ${TCTL}s (NOT extrapolated — see below)"; } > "$OUT/engine-attribution.txt"
+echo "== attribution: Harbor's own per-trial model_usage is the authority, engine counters are context"
+./tb-venv/bin/python scripts/pilot_verdict.py "$OUT" "$MODEL_ID"
 echo "== engine token counters (context for cost sizing; includes this session's inference):"
 sed 's/^/   /' "$OUT/engine-metrics-after.txt" 2>/dev/null
 exit $STATUS
