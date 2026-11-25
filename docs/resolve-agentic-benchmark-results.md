@@ -1526,7 +1526,18 @@ verifier wheels, #2923 a dead `files.rcsb.org` fetch in a reference solution, #2
 solution whose `npm test` step fails while its verifier scores 1.0), with confirming comments added
 to the two pre-existing issues that already covered `cad-model` (#2077) and `gsea-proteomics`
 (#1805, bundled x86-64 JDK) — duplicate-checking is what turned those two from new issues into
-comments.
+comments. **Trial concurrency is a measured variable, not a speed knob.** Raising Harbor's `-n` from
+2 to 3 (to make the 58-task ×5 gate affordable) **flipped two task outcomes at oracle**, in both
+cases through fixed time budgets rather than any verifier fault: `uefi-bootkit` runs
+`qemu-system-x86_64 -machine q35,smm=off,accel=kvm:tcg`, and on Apple Silicon there is no KVM for an
+x86 guest, so QEMU falls back to TCG software emulation whose throughput tracks free cores — passing
+trials ran 131/135 s, failing trials 370/394 s, after which the boot checks fail as a cascade in
+`ctrf.json`; `kv-live-surgery`'s own watchdog logged `watchdog_max_gap_ms = 2500.6` against a 1000 ms
+deadline (3.0 ms in a passing trial) while its actual measurement still cleared 10.8× against a 5.0×
+threshold. Since `-n` is global per Harbor job (no per-task concurrency exists), the response is not
+a retry policy: the gate is re-run at the one concurrency the wave will be scored at, that
+concurrency chosen by a rule fixed before the flake numbers existed, and any task still flaking
+there is excluded or pinned, never rescued by retries.
 DeepSWE and ALE assume API token budgets: one ALE leaderboard run of a frontier config burned ~21.5 M
 output tokens, and this engine decodes at 149–245 tok/s (see the *Quant memory accounting* section of
 the Splash doc), so a single long-horizon task is hours of decode before the horizon even completes.
