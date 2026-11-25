@@ -1497,6 +1497,30 @@ solving the task) is the nearest published analogue to what our transcripts catc
 **Feasibility, if anyone wanted to run theirs here.** Terminal-Bench needs a container runtime: the
 2026-11-05 attempt on 4.0 produced **66/66 errored trials** and the whole stack (OrbStack, harbor, the
 dataset) was deliberately torn down — the plumbing lessons are recorded, and a retry is not cheap.
+**Re-scoped 2026-11-25 (instrument staged; oracle gate run; still no model run)**: 2.0 is
+upstream-legacy and off the table — the adoption target is the **4.x line pinned at tag
+`v4.1.0`** (`4070d6c…`, **66 task directories** in-tree; run against the in-tree dataset via
+`harbor run -p tasks`, which pins content by git tag rather than by a moving Hub pointer).
+Gate 1 (container runtime) passed: OrbStack 2.2.5 / Docker 29.8.2, deliberately capped at
+30 CPU / 15.66 GiB as the tenancy guard against the engine's ~56 GB serving footprint.
+Gate 2 phase A — full-tree oracle sweep (`-k 1 -n 2 -r 0`, 1 h 46 m, zero model tokens):
+**58 of 66 tasks clean at reward 1.0**, 8 errored, every failure root-caused and **none** a
+fault of this host's configuration: 3 need NVIDIA CUDA (`could not select device driver
+"nvidia"` — exactly the three `gpus = 1` tasks, unrunnable on Apple Silicon by hardware),
+1 ships x86-only verifier wheels (`ks-solver-cpp` extracts bundled
+`numpy…manylinux_2_17_x86_64.whl`, so numpy's extension cannot load on arm64), and 4 have the
+reference solution itself exiting nonzero (`build123d` missing from the solution env; GSEA
+producing no parsable results; a dead `files.rcsb.org/.../12GC.pdb` 404; a vitest run with no
+test files). One genuine runner bug was found and fixed along the way, and it is the leading
+explanation of the earlier **66/66 errored** attempt: Harbor 0.27.0 chmods its verifier log
+mounts `777` **without** the sticky bit, and `harbor-rewardkit 0.2.4` refuses to run a
+sandboxed grader under a parent that is other-writable and non-sticky, so the grader dies
+before writing a reward (`RewardFileNotFoundError`). The recorded one-line-each patch
+(`chmod 1777`, log mounts *and* their parents) took the sandboxed-grader tasks from erroring to
+**17/17 clean at reward 1.0**; it changes no task content, no scoring, and no agent-visible
+state, and any scored wave records it as a pin deviation. Phase B (upstream's own gate: oracle
+`-k 5` over the 58-task clean subset, projected 4–6 h) precedes any model pilot; no model token
+until that passes.
 DeepSWE and ALE assume API token budgets: one ALE leaderboard run of a frontier config burned ~21.5 M
 output tokens, and this engine decodes at 149–245 tok/s (see the *Quant memory accounting* section of
 the Splash doc), so a single long-horizon task is hours of decode before the horizon even completes.
