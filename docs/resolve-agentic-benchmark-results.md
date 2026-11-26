@@ -1900,8 +1900,12 @@ visibly *before* any new scored row, not smuggled in with one:
   across the bump, so no dependency refresh.
 - mcp-for-blender pin **2.3.1 → 2.3.3**, moved server-pin and addon copies together per the
   drift rule; both Blender addon copies were already protocol-current.
+- opencode harness **2.4.1 → 2.4.2** (standalone-installer self-upgrade at `~/.opencode/bin/
+  opencode`; same minor line as the build-series 2 pin, fixes only — and 2.4.2 is the version
+  the held Terminal-Bench/hermes restart will run, so its gate re-stamp must cite it).
 
-Every published row before this addendum stays attributed to Splash 1.7.1 / Resolve MCP 5.4.3.
+Every published row before this addendum stays attributed to Splash 1.7.1 / Resolve MCP 5.4.3
+/ opencode 2.4.1.
 Any resuming wave — agentic, davinci, or splash — re-verifies pinned argv and stamps these
 pins in its gate record before the first scored trial.
 
