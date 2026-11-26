@@ -77,7 +77,9 @@ log — it has **no date field**, and doing so reported 6250 requests for a swee
 harbor#4469 (log-mount `chmod 777` vs rewardkit parent-trust — the `RewardFileNotFoundError` class,
 with the sticky-bit fix); terminal-bench#2922 (`ks-solver-cpp` x86-only verifier wheels), #2923 (dead
 RCSB fetch in a reference solution), #2924 (reference solution errors while scoring 1.0), #2925
-(oracle cannot boot on arm64); confirming comments on the two pre-existing issues #2077 (`cad-model`)
+(`uefi-bootkit` flake — the follow-up comment root-causes it as a serial chunk-boundary race in the
+task's steady-state detector, not a boot failure), #2926 (a verifier whose pytest report reads
+"1/1 passed" for a 0.0-scored submission); confirming comments on the two pre-existing issues #2077 (`cad-model`)
 and #1805 (`gsea-proteomics`).
 
 ## Gate history on this host (why the older attempt failed)
