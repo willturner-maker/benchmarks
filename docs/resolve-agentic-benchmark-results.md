@@ -1497,7 +1497,8 @@ solving the task) is the nearest published analogue to what our transcripts catc
 **Feasibility, if anyone wanted to run theirs here.** Terminal-Bench needs a container runtime: the
 2026-11-05 attempt on 4.0 produced **66/66 errored trials** and the whole stack (OrbStack, harbor, the
 dataset) was deliberately torn down — the plumbing lessons are recorded, and a retry is not cheap.
-**Re-scoped 2026-11-25 (instrument staged; oracle gate run; still no model run)**: 2.0 is
+**Re-scoped 2026-11-25 (instrument staged; oracle gate run; model wave run the same day — results
+below)**: 2.0 is
 upstream-legacy and off the table — the adoption target is the **4.x line pinned at tag
 `v4.1.0`** (`4070d6c…`, **66 task directories** in-tree; run against the in-tree dataset via
 `harbor run -p tasks`, which pins content by git tag rather than by a moving Hub pointer).
@@ -1564,6 +1565,29 @@ DeepSWE and ALE assume API token budgets: one ALE leaderboard run of a frontier 
 output tokens, and this engine decodes at 149–245 tok/s (see the *Quant memory accounting* section of
 the Splash doc), so a single long-horizon task is hours of decode before the horizon even completes.
 The limit is budget, not methodology.
+
+**Run complete 2026-11-25 — the limit held, and the instrument held too.** Gate 2C passed as the
+gate of record (57 tasks × 5 oracle attempts at `-n 2`: **285/285 trials, 0 errored, 0 retries**;
+`bench/terminal-bench/RECORD-gate2c-2026-11-25.md`). The model wave — terminus-2 against the pinned
+local engine, 57 tasks × 1 attempt, agent horizon 1440 s — took 10 h 31 m and spent 36.07 M input
+tokens (**93.4 % served from prompt cache**, which is what makes this scale affordable locally) and
+4.75 M output tokens: **0/57 passed**, 30/57 hitting the horizon, every trial attributable to the
+pinned model id via per-trial `model_usage` accounting. Partial-credit accounting shows it was not
+random failure: 41/57 tasks passed at least one verifier check (`wal-recovery-ordering` 96/97,
+`production-planning` 18/20 criteria). A pre-declared targeted repeat — top-6 near-misses × 3
+attempts, same pins — flipped **2 tasks to pass once each in three** (wal 97/97 clean;
+embedding-drift-monitor 11/11 in 494 s), while `photonic-waveguide-routing` hit an identical 12/14
+plateau three times while timing out — horizon-limited, not variance-limited — and
+`production-planning`'s k=1 near-miss did not reproduce (18/20 → 1/20-ish). So: **pass probability
+low but nonzero; single-attempt scores on boundary tasks are ~1/3 stable in both directions.**
+Along the way the instrument caught two of its own errors (a baseline-extrapolation guard voiding a
+run that had made 48 model calls; a partial-credit pass conflating verifier reporting conventions and
+showing a 0.0-scored trial at "100%"), both fixed in the open, plus six upstream filings with root
+causes (harbor#4469; terminal-bench#2922–#2926, the last being a verifier whose pytest report reads
+"1/1 passed" for a zero-score submission regardless of outcome). Full records:
+`bench/terminal-bench/RECORD-gate2c-2026-11-25.md`,
+`bench/terminal-bench/RECORD-stage3-pilot-2026-11-25.md`,
+`bench/terminal-bench/RECORD-wave-model-2026-11-25.md`.
 
 **Method changes worth taking, and where they would land in this repo** (proposed, not yet applied):
 1. **Report intervals, not pass counts.** Add a `stats` block to `results-*.json` and a `stats.py`: per
