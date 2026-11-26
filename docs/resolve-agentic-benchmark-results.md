@@ -1547,12 +1547,18 @@ deadline (3.0 ms in a passing trial) while its actual measurement still cleared 
 threshold. Since `-n` is global per Harbor job (no per-task concurrency exists), the response is not
 a retry policy: the gate is re-run at the one concurrency the wave will be scored at, that
 concurrency chosen by a rule fixed before the flake numbers existed, and any task still flaking
-there is excluded or pinned, never rescued by retries. The follow-up probe showed the two tasks are
-**not** the same fault: the watchdog task is clean at `-n 1` and `-n 2` (one stall at `-n 3`), while
-the QEMU task fails at `-n 1` with nothing else running and with a **bimodal** wall distribution
-(passes 76–135 s, failures 331–394 s, nothing between) — so for it the cause is TCG emulation under
-a `cpus = 2` cap against fixed boot windows that the previous upstream fix had already widened to
-300/700 s (terminal-bench#2925). Local candidate set for a scored wave: **57 of the 66 in-tree tasks**
+there is excluded or pinned, never rescued by retries. The follow-up probe separated the two tasks:
+the watchdog task is clean at `-n 1` and `-n 2` (one stall at `-n 3`), while the QEMU task fails at
+`-n 1` with nothing else running and with a **bimodal** wall distribution. The initial reading —
+TCG emulation too slow for fixed boot windows — was **disproved by a later diagnostic** (2026-11-26,
+posted to terminal-bench#2925): with widened windows, *every* boot reached the login prompt (all
+15 captured serial logs end at `localhost login:`), yet 7/8 still timed out — the task's
+steady-state detector only matches the getty prompt when it arrives as its own serial chunk or is
+newline-terminated, so the flake is a **chunk-boundary race in `harness.py` detection**, not boot
+speed, and window widenings cannot fix it (also found: `boot_timeout` is capped by
+`task.toml [verifier] timeout_sec = 700`, so widening windows alone converts scored failures into
+unscored killed trials). The task stays excluded on this host as unmeasurable-until-fixed. Local
+candidate set for a scored wave: **57 of the 66 in-tree tasks**
 (8 arm64/CUDA/broken-reference-solution exclusions plus this one), gated at `-n 2`. A second local
 tenancy fact follows from
 serving a benchmark and the agent harness from one engine: **the operator's own inference traffic
