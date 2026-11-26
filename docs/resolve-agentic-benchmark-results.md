@@ -1886,3 +1886,22 @@ candidate is a *measured* efficiency wave (agent prompt-cache reuse), never a si
 series stays pinned 1.7.1.
 
 
+## Addendum — pin change (2026-11-26): engine 1.7.3 + Resolve MCP 5.5.3 + Blender MCP 2.3.3 — recorded, not yet measured
+
+No wave ran today (Terminal-Bench 4.x and the hermes track held until an upstream OpenCode
+patch lands), but the host's pins moved, and house rule #1 says a pin change is recorded
+visibly *before* any new scored row, not smuggled in with one:
+
+- Splash **1.7.1 → 1.7.3** (brew formula bump; relevant upstream notes: agent prompt-cache
+  reuse improvements and a Qwen3.8-family warmup crash fix — the cache-reuse change is the
+  efficiency lever the previous addendum flagged as *measured-wave candidate only*).
+- davinci-resolve MCP **v5.4.3 → v5.5.3** (`7491c3e9`): 5.5.x is the subtitle word-highlight
+  feature set plus Windows CI/test portability; `resolve-advanced/package.json` unchanged
+  across the bump, so no dependency refresh.
+- mcp-for-blender pin **2.3.1 → 2.3.3**, moved server-pin and addon copies together per the
+  drift rule; both Blender addon copies were already protocol-current.
+
+Every published row before this addendum stays attributed to Splash 1.7.1 / Resolve MCP 5.4.3.
+Any resuming wave — agentic, davinci, or splash — re-verifies pinned argv and stamps these
+pins in its gate record before the first scored trial.
+
