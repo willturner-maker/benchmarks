@@ -36,15 +36,29 @@ measurement, not a routing artifact.
 
 ## Partial credit — and the backend distinction that had to be made first
 
-Every trial exposes one of two verifier backends, and they report differently:
+Every trial writes `reward-details.json` **or** a plain ctrf, and the mix is subtler than it first
+looks (42 of 57 wave trials carry `reward-details.json`):
 
-* **ctrf/pytest — 34 tasks**: `passed/total` tests is a genuine per-check count.
-* **rewardkit — 23 tasks**: ctrf shows a single *wrapper* pytest result which can read **1/1
-  passed while every weighted criterion scores 0** (caught on `vba-userform-port`: wrapper passed,
-  all 23 criteria 0.0 with reasoning `app_startup: Missing /workspace/generated_app/run.sh`).
-  Correct source is `reward-details.json` criteria. Several rewardkit tasks gate later criteria on
-  an early one: `bun-sourcemap-leak` had **27/37 criteria with nonzero value yet weighted score
-  0.0**. "Checks passed" here means value>0, not weighted credit.
+* **Per-check ctrf — usable directly (the majority).** Most rewardkit-flavoured tasks emit **one
+  pytest test per scored check**, so ctrf `passed/total` matches the criteria list (e.g.
+  `bun-sourcemap-leak` ctrf 27/37 == 37 criteria). Plain pytest tasks (34) likewise carry genuine
+  per-test ctrf; some also write a `reward-details.json` *stub* with an empty criteria list, which
+  must not be mistaken for rewardkit scoring.
+* **Single-test rewardkit verifiers — ctrf lies.** `vba-userform-port` is the pathological case:
+  one test, `test_generated_app_behavior`, that swallows every `run_traces` failure, writes
+  `reward.json` 0.0, and asserts only that the reward file *exists*. Its ctrf reads **1/1 passed**
+  for a 0.0-scored trial (all **29** hidden-trace criteria 0.0, reasoning `app_startup: Missing
+  /workspace/generated_app/run.sh`) and also 1/1 for the oracle at 1.0 — constant regardless of
+  score. Filed upstream as **terminal-bench#2926**. (`lake-temp-glm`, `live-database-cutover` share
+  the single-test shape but at least fail their test when the score is 0.)
+* Rewardkit criteria can **gate** later ones: `bun-sourcemap-leak` had 27/37 criteria with nonzero
+  value yet **weighted score 0.0**. "Checks passed" means value>0, not weighted credit.
+
+Safe reading order: reward-details criteria when non-empty; otherwise ctrf per-test — **except**
+single-test verifiers, where ctrf status is meaningless and `trace_results.json` is the truth. My
+first partial-credit pass read ctrf naively and reported `vba-userform-port` at "100% checks
+passed" on a 0.0 — caught before anything was published; #2926 documents the same trap for the
+next person.
 
 With backend precedence fixed (reward-details > ctrf), the failure profile is:
 
@@ -55,8 +69,8 @@ With backend precedence fixed (reward-details > ctrf), the failure profile is:
 |---|---|---|---|
 | `wal-recovery-ordering` | **96/97** | ctrf | one check from a pass; 28 steps, clean finish |
 | `distributed-dedup` | 12/13 | ctrf | timed out at horizon |
-| `embedding-drift-monitor` | 10/11 | rewardkit | weighted score 0 (gated) |
-| `production-planning` | 18/20 | rewardkit | timed out |
+| `embedding-drift-monitor` | 10/11 | rewardkit (per-check) | weighted score 0 (gated) |
+| `production-planning` | 18/20 | rewardkit (per-check) | timed out |
 | `photonic-waveguide-routing` | 12/14 | ctrf | timed out at only 9 steps |
 | `foodstuff-beta-activity` | 11/13 | ctrf | clean finish |
 | `kv-live-surgery` | 5/6 | ctrf | 7th by fraction — excluded from the repeat by the pre-declared top-6 rule |
