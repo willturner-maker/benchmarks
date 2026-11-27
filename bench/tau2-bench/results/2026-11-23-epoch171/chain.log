@@ -1,8 +1,0 @@
-2026-11-23T01:49:13Z epoch171 chain start (engine untouched)
-2026-11-23T01:49:13Z determinism re-run: 2026-11-21-determinism-probe on 1.7.1 (engine direct)
-2026-11-23T02:10:55Z determinism re-run 2026-11-21-determinism-probe exit=0
-2026-11-23T02:10:55Z determinism re-run: 2026-11-22-determinism-probe-telecom on 1.7.1 (engine direct)
-2026-11-23T02:21:37Z determinism re-run 2026-11-22-determinism-probe-telecom exit=0
-2026-11-23T02:21:37Z replay wave: 238 x 3 trials, seed 300, published args, on the live 1.7.1 instance
-2026-11-23T06:06:01Z replay wave exit=0
-2026-11-23T06:06:01Z epoch171 chain complete

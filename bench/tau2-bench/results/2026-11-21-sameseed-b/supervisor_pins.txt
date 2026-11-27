@@ -1,3 +1,0 @@
-pin fc0055dc4e0a316c3f83133267fbd6faaa770992 2026-07-16 15:24:56 -0700 chore: prepare release v1.0.1 — banking_knowledge grading fixes (#408)
- M uv.lock
-67940 /opt/homebrew/Cellar/splash/1.7.0/libexec/python/bin/python3 -u -P -m server.server ~/Library/Application Support/Splash/models/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S --model ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S --binary /opt/homebrew/Cellar/splash/1.7.0/libexec/engine/splash --port 8000 --serve-record ~/Library/Application Support/Splash/runtime/serve-8000.json --max-memory=60129542144 --max-cache-disk=274877906944 --persistent-cache --default-reasoning-effort=medium --thinking-token-budget=32768 --queue-size=64

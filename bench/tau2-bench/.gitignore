@@ -1,0 +1,8 @@
+# Raw per-run data (json/jsonl/log/out/txt) is NEVER committed — house rule:
+# distilled records live in docs/ + per-wave PROTOCOL/summary .md files.
+# Raw history through 2026-11-23 remains recoverable from git history
+# (untracking commit, 2026-11-27); future waves write only .md here.
+results/**
+!results/**/
+!results/**/*.md
+!results/**/*.py
