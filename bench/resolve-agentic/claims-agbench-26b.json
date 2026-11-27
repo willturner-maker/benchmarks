@@ -1,0 +1,116 @@
+{
+ "T1r1": {
+  "reported": {
+   "duration_frames": 442,
+   "video_items": 2,
+   "video_tracks": 1,
+   "audio_tracks": 1,
+   "item1_record": [
+    108000,
+    108221
+   ]
+  },
+  "_review": false
+ },
+ "T1r2": {
+  "reported": {
+   "duration_frames": 442,
+   "video_items": 2,
+   "video_tracks": 1,
+   "audio_tracks": 1,
+   "item1_record": [
+    108000,
+    108221
+   ]
+  },
+  "_review": false
+ },
+ "T1r3": {
+  "reported": {
+   "duration_frames": 442,
+   "video_items": 2,
+   "video_tracks": 1,
+   "audio_tracks": 1,
+   "item1_record": [
+    108000,
+    108221
+   ]
+  },
+  "_review": false
+ },
+ "T2r1": {
+  "_review": false
+ },
+ "T2r2": {
+  "_review": false
+ },
+ "T2r3": {
+  "_review": false
+ },
+ "T3r1": {
+  "_review": false
+ },
+ "T3r2": {
+  "_review": false
+ },
+ "T3r3": {
+  "_review": false
+ },
+ "F1r1": {
+  "_review": false,
+  "speed": "lost",
+  "retime": "lost",
+  "audio_in_step": "lost",
+  "link": "lost",
+  "grade": "kept"
+ },
+ "F1r2": {
+  "_review": false,
+  "speed": "lost",
+  "retime": "lost",
+  "audio_in_step": "lost",
+  "link": "lost",
+  "grade": "kept"
+ },
+ "F1r3": {
+  "_review": false,
+  "speed": "lost",
+  "retime": "lost",
+  "audio_in_step": "lost",
+  "link": "lost",
+  "grade": "kept"
+ },
+ "T7r1": {
+  "_review": false
+ },
+ "T7r2": {
+  "_review": false
+ },
+ "T7r3": {
+  "_review": false
+ },
+ "T8r1": {
+  "_review": false
+ },
+ "T8r2": {
+  "_review": false
+ },
+ "T8r3": {
+  "_review": false
+ },
+ "F2r1": {
+  "_review": false,
+  "grade": "lost",
+  "link": "lost"
+ },
+ "F2r2": {
+  "_review": false,
+  "grade": "lost",
+  "link": "lost"
+ },
+ "F2r3": {
+  "_review": false,
+  "grade": "lost",
+  "link": "lost"
+ }
+}
