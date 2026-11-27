@@ -1,0 +1,20 @@
+[23:16:31] agent harness: opencode opencode v2.4.2
+  same opencode build as wave agbench-26d.
+[23:16:31] pair T3r1+T3r2
+[23:19:03] pair T3r3+T1r1
+[23:20:25] pair T1r2+T1r3
+[23:21:01] pair F2r1+F2r2
+[23:23:01] pair F2r3+T8r1
+[23:24:35] pair T8r2+T8r3
+[23:25:50] solo T7r1
+  render-queue gate T7r1: idle {'rendering': False, 'queued': 0, 'waited_s': 0.0}
+[23:27:27] solo T7r2
+  render-queue gate T7r2: idle {'rendering': False, 'queued': 0, 'waited_s': 0.0}
+[23:28:58] solo T7r3
+  render-queue gate T7r3: idle {'rendering': False, 'queued': 0, 'waited_s': 0.0}
+[23:32:16] pair F1r1+F1r2
+[23:34:08] pair F1r3+T2r1
+[23:37:42] pair T2r2+T2r3
+tool manifest: {"davinci-resolve": {"underscore": 393, "dash": 0, "concat": 0}, "davinci-resolve-builtin": {"underscore": 45, "dash": 0, "concat": 0}, "davinci-resolve-advanced": {"underscore": 11, "dash": 0, "concat": 0}}
+WAVE DONE — results/agbench-26e
+global AGENTS.md restored

@@ -1,0 +1,169 @@
+{
+ "project": "_mcp_26d_rearm",
+ "at": "2026-11-26T22:14:45-0800",
+ "traps": {
+  "F1": {
+   "trials": [
+    {
+     "tl": "_mcp_26d_rearm_f1s1",
+     "op_ok": true,
+     "lost": [
+      "audio_in_step",
+      "link",
+      "retime",
+      "speed"
+     ],
+     "unreadable": [],
+     "item_id": "70850168-0c5f-4a29-8499-c3820b948d54",
+     "source_pre_post": [
+      [
+       5035,
+       5212
+      ],
+      [
+       5999,
+       6220
+      ]
+     ]
+    },
+    {
+     "tl": "_mcp_26d_rearm_f1s2",
+     "op_ok": true,
+     "lost": [
+      "audio_in_step",
+      "link",
+      "retime",
+      "speed"
+     ],
+     "unreadable": [],
+     "item_id": "57596b0e-c822-46c5-a2f6-70212b003df0",
+     "source_pre_post": [
+      [
+       5035,
+       5212
+      ],
+      [
+       5999,
+       6220
+      ]
+     ]
+    },
+    {
+     "tl": "_mcp_26d_rearm_f1s3",
+     "op_ok": true,
+     "lost": [
+      "audio_in_step",
+      "link",
+      "retime",
+      "speed"
+     ],
+     "unreadable": [],
+     "item_id": "4b3ef48d-1711-431d-90a3-6da47a9cd6f8",
+     "source_pre_post": [
+      [
+       5035,
+       5212
+      ],
+      [
+       5999,
+       6220
+      ]
+     ]
+    }
+   ]
+  },
+  "F2": {
+   "trials": [
+    {
+     "tl": "_mcp_26d_rearm_f2r1",
+     "op_ok": true,
+     "same_item_after_shift": false,
+     "lost": [
+      "grade",
+      "link"
+     ],
+     "unreadable": []
+    },
+    {
+     "tl": "_mcp_26d_rearm_f2r2",
+     "op_ok": true,
+     "same_item_after_shift": false,
+     "lost": [
+      "grade",
+      "link"
+     ],
+     "unreadable": []
+    },
+    {
+     "tl": "_mcp_26d_rearm_f2r3",
+     "op_ok": true,
+     "same_item_after_shift": false,
+     "lost": [
+      "grade",
+      "link"
+     ],
+     "unreadable": []
+    }
+   ]
+  },
+  "T8": {
+   "add_ok": true,
+   "comp_count": 1
+  },
+  "T2": {
+   "add_ok": true,
+   "marker_count": 1,
+   "dict_shape": true,
+   "payload_keys": [
+    "color",
+    "customData",
+    "duration",
+    "frame",
+    "name",
+    "note"
+   ]
+  },
+  "verdict": {
+   "f1_lost_per_trial": [
+    [
+     "audio_in_step",
+     "link",
+     "retime",
+     "speed"
+    ],
+    [
+     "audio_in_step",
+     "link",
+     "retime",
+     "speed"
+    ],
+    [
+     "audio_in_step",
+     "link",
+     "retime",
+     "speed"
+    ]
+   ],
+   "f1_lost_stable": true,
+   "f2_lost_per_trial": [
+    [
+     "grade",
+     "link"
+    ],
+    [
+     "grade",
+     "link"
+    ],
+    [
+     "grade",
+     "link"
+    ]
+   ],
+   "f2_lost_stable": true,
+   "f1_matches_sealed": true,
+   "f2_matches_sealed": true,
+   "t8_count_is_one": true,
+   "all_hold": true
+  }
+ }
+}

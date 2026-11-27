@@ -1,0 +1,19 @@
+[18:42:12] agent harness: opencode opencode v2.4.2
+  same opencode build as wave agbench-26b.
+[18:42:12] pair T8r1+T8r2
+[18:43:36] pair T8r3+F2r1
+[18:45:39] pair F2r2+F2r3
+[18:47:58] pair T7r1+T7r2
+  !! POOL DEAD T7r1 attempt 1: 6 Resolve-name rejections, no live completion: davinci-resolve-timeline — relaunching
+  !! POOL DEAD T7r2 attempt 1: 6 Resolve-name rejections, no live completion: davinci-resolve-project_manager — relaunching
+[19:14:18] pair T7r3+T1r1
+  !! POOL DEAD T7r3 attempt 1: 6 Resolve-name rejections, no live completion: davinci-resolve-timeline — relaunching
+[19:30:18] pair T1r2+T1r3
+[19:30:54] pair T2r1+T2r2
+[19:32:47] pair T2r3+T3r1
+[19:35:00] pair T3r2+T3r3
+[19:36:50] pair F1r1+F1r2
+[19:38:43] solo F1r3
+tool manifest: {"davinci-resolve": {"underscore": 521, "dash": 0, "concat": 0}, "davinci-resolve-builtin": {"underscore": 146, "dash": 0, "concat": 0}}
+WAVE DONE — results/agbench-26c
+global AGENTS.md restored
