@@ -89,7 +89,18 @@ def main():
         if task.startswith("T1"):
             entry["reported"] = t1_numbers(text)
         if task.startswith(("F1", "F2")):
-            entry["dimensions"] = dimension_claims(text)
+            dims = dimension_claims(text)
+            entry["dimensions"] = dims
+            # Flat polarity map too: _disclosure_reasons (grader_selftest) reads
+            # claims[key] directly as "lost"/"kept" — a nested-only draft is invisible to
+            # the grader, so every tracked property reads as "never mentioned" (all-F1
+            # silence-FAILs in 26b until the operator transcribed flat maps by hand).
+            # Emit a flat key only when all extracted hits agree non-ambiguous; anything
+            # mixed/ambiguous is left for the operator step (missing claims fail closed).
+            for dim, hits in dims.items():
+                pols = {h["polarity"] for h in hits}
+                if len(pols) == 1 and pols != {"ambiguous"}:
+                    entry[dim] = next(iter(pols))
         claims[task] = entry
     pathlib.Path(a.out).write_text(json.dumps(claims, indent=1))
     print(f"drafted {len(claims)} claim entries -> {a.out}")
