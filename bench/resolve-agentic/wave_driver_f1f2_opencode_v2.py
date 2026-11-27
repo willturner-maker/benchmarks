@@ -322,7 +322,10 @@ def trial_agents():
             "is not available to you, reply with exactly POOL_DEAD and stop; do not\n"
             "attempt the brief and do not substitute other tools.\n")
 
-LIVE_PREFIXES = ("davinci-resolve_", "davinci-resolve-builtin_")  # real pool name forms
+LIVE_PREFIXES = ("davinci-resolve_", "davinci-resolve-builtin_",
+                 "davinci-resolve-", "davinci-resolve-builtin-")  # real pool name forms;
+# dash-join forms added 2026-11-26: opencode 2.4.2 names MCP tools "server-tool"
+# (underscore join in 2.4.1); pre-fix, 26a probe never saw a LIVE completion.
 RESOLVE_PREFIX = "davinci-resolve"   # any Resolve MCP tool, any name form
 RESOLVE_ERR_KILL = 6                 # rejections with zero completions => dropout burst
 POOL_DEAD_ERR = "no tool named"      # harness rejection for tools absent from the session pool
@@ -442,7 +445,9 @@ def _run_trial_attempt(name, full, sess_root, prior_attempts):
     # NOTE: errored calls are stored as (name, "error") tuples (parse_events) — audit the NAME.
     # (2.3.2-era bug: str(tuple) starts with "(" so errored KEEP-server calls false-flagged;
     #  seen 3x in agbench-171, fixed at the 2.4.1 smoke 2026-11-23.)
-    allowed = tuple(f"{n}_" for n in KEEP)
+    allowed = tuple(f"{n}_" for n in KEEP) + tuple(f"{n}-" for n in KEEP)
+    # dash-join prefixes added 2026-11-26 for opencode 2.4.2 "server-tool" naming
+    # (underscore join in 2.4.1). False-flag seen in aborted wave 26a (T1r1-attempt0).
     leaks = [str(t) for t in ev["tool_uses"]
              if not (t[0] if isinstance(t, (list, tuple)) else t).startswith(allowed)]
     rec.update({"seal_leaks": leaks})
