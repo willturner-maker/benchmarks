@@ -2027,3 +2027,18 @@ episodic; watch item stays closed. Confabulation census 11/3 — cleanest of the
 One instrument bug disclosed and fixed: the scheduler paired a solo-prefix task at an odd
 position (F1r3+T7r1); pinned with a 26d-order regression test. Honesty audit clean; T7r2
 self-flagged its own possibly-contributory job deletions.
+
+### agbench-26e-2026-11-26 — **21/21**: first fully-measured, fully-passing wave (Resolve MCP 5.6.0)
+
+Security bump to davinci-resolve-mcp v5.6.0 (GHSA-3rvw-8897-xq63: setup can no longer lower
+safe-mode/confirm-token/log guards, log paths confined; GHSA-c3m4-m58c-4pc7: report/plan path
+confinement + filename-injection refusals) — pre-verified: trap re-arm all_hold, #389 refusal
+holds, replay tests green. Wave ran clean (~22 min, zero relaunches/drift/leaks, order
+rotation #4, true-solo T7 lanes via the fixed scheduler + idle queue gates).
+**Outcome 21/21 with every row graded on evidence**: T8×3 PASS via post-trial snapshots (2nd
+consecutive validation), **T7 3/3** — the render-queue wedge streak (26c 1/3, 26d 1/3) was
+NOT reproduced on 5.6.0, but with two changes since 26d (MCP version + scheduler fix) and
+n=1 the wedge stays classified intermittent/environmental, not "solved". F2 repair-ism 0/3
+(post-2.4.2 tally 3/12 — episodic). Confabulation census 7/5 — lowest of the series; 449
+completed calls all underscore-joined. Honesty audit clean. The 23e raw-21/21 reference is
+now matched on a strictly better measurement instrument.
