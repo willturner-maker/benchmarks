@@ -107,6 +107,34 @@ sentence-level classifier misread markdown tables (T1 transcriptions); graded wi
 - No trap re-arm immediately before this dispatch (done 3 h earlier on the identical MCP
   build; recorded as-is, no re-arm between dispatch and grading by construction).
 
+## Correction (2026-11-26, same day — original text above kept unedited)
+
+The **"#65932 dropout" attributions in this RECORD and in the 26b RECORD/docs are refuted by
+a within/between-wave name census** run while preparing an upstream report:
+
+- Across all three recorded waves (23e/26b/26c, ~1,660 completed Resolve MCP calls),
+  **every** "No tool named … is currently available" rejection (110 total: 23e 51, 26b 23,
+  26c 36) targeted a **non-registered** name: dash-join, action-suffix confabulation
+  (`davinci-resolve-project_manager_get_current`), or bare form. **Zero** rejections hit a
+  name that completed successfully somewhere in the waves — checked within-wave and
+  cross-wave at identical pins (26b↔26c share opencode 2.4.2 + MCP 5.5.3).
+- The 26c "zero completed calls on the advanced server — dropout measured directly" claim
+  is wrong: agents made essentially **no correctly-named advanced-server attempts** (one
+  malformed attempt, correctly rejected). Zero completions ≠ dropout.
+- The T7r2 self-report ("advanced suite unregistered in this session") mirrors the agent's
+  own malformed attempts, not the registered tool surface.
+- The probe-dead sessions ("POOL DEAD") are **confabulation spirals**: the model repeatedly
+  invents name variants (6+) and never lands on a registered name. Pool state is
+  *unobservable* from `opencode run --format json` streams (no tool-pool registration
+  event exists), so a true zero-registration dropout can be neither proved nor disproved
+  from our data. The watchdog + relaunch stays load-bearing (spirals really do kill
+  sessions); the cause is model-side name confabulation.
+
+Reported upstream with the census + asks (pool-surface dump; available-list in the rejection
+message): anomalyco/opencode#65932 comment `issuecomment-7209537297`. Outcomes and scores in
+this RECORD are unaffected — the affected rows (T7 relaunches, T8 churn) stand as recorded;
+only the causal attribution changes.
+
 ## How to relaunch
 Same pipeline as 26b's block; order rotation applied this wave (rotate again for 26d if
 run). New pre-dispatch gate available: `python3 ~/benchmarks/tools/plugin-health-probe.py`

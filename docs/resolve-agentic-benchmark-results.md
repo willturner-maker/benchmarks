@@ -1995,3 +1995,17 @@ non-canonical attempts) confirms it as persistent model-side behavior, not harne
 plugin health probe + replay test ran green pre-dispatch. Honesty audit clean across 21
 sessions. 26b↔26c are band-comparable (15/18 vs 16/18, pins identical, order rotated);
 23e's 21/21 stays the pre-dropout-era reference.
+
+**Correction to the dropout attribution in the 23e/26b/26c sections above (2026-11-26, same
+day — originals kept unedited)**: preparing an upstream report forced a stricter name
+census, and the "pool dropout" reading is refuted by our data. All 110
+"no tool named … currently available" rejections across the three recorded waves hit
+**non-registered** name forms (dash-join, action-suffix, bare) — never a name that
+completed anywhere in the waves, checked within-wave and cross-wave at identical pins.
+26c's "zero completed advanced-server calls" reflects essentially no correctly-named
+attempts, not unregistering; the "POOL DEAD" sessions are confabulation spirals. Pool state
+is not observable from `opencode run` event streams (no tool-pool registration event), so
+true zero-registration dropout is neither proved nor disproved by our waves — the watchdog
+stays (spirals kill sessions), but the label changes from "harness dropout" to "model-side
+name confabulation". Census + repro asks posted upstream on issue #65932
+(comment 7209537297). No score changes.
