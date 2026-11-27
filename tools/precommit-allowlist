@@ -8,3 +8,6 @@
 # the strict-seal driver READS the stock Claude Code config filename at runtime
 # (server definitions; credentials are never written to the tree — filename alone leaks nothing)
 \.claude\.json
+# generic placeholder path in MODEL TRANSCRIPT text (tool-loop gate task answers discuss
+# example working dirs); "/home/user/..." is the model's own example, never a real host path
+[/]home/user/[A-Za-z0-9._/-]*

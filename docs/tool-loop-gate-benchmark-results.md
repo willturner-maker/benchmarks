@@ -196,3 +196,18 @@ greedy 16/20 (mean_tools 2.6, 1 hit_cap).** The 1.7.0 repeat band from 19a was d
 holds at 0 parse failures across the epoch (tool-call emission unbroken — the same conclusion the splash
 golden probes reach from the other side). Evidence: `results/2026-11-23-gate-171/` (wave.jsonl 40 rows,
 re-derivable with `summarize.py`), RECORD in the same dir.
+
+## Wave 2026-11-27: the 1.7.3 epoch row (first row after the 11-26 hold)
+
+The 11-26 hold ("until an upstream OpenCode patch lands") is satisfied: opencode 2.4.2 installed and
+exercised across agbench-26b/27a/27b, and the loop gate is engine-direct HTTP — the harness is not in
+its path. Same instrument (clone HEAD drifted to `b11371d6` but `hermes_loop_gate.py` sha256 is
+**byte-identical** to the pinned `6dc6f0e5…` commit — verified, instrument unmodified). On pinned
+Splash **1.7.3**: **defaults 16/20 (mean_tools 3.55, 1 hit_cap, 2 dup), greedy 14/20 (mean_tools 2.50,
+1 hit_cap, 1 dup)** vs 1.7.1's 15/16 — defaults +1, greedy −2: at n=20 the −2 sits at the band edge,
+**no epoch effect claimed** (task-level movement is churn at the four known suspects; `17_mkdir_then_write`
+recovered on defaults, shrinking the always-fail core to `03`/`06`/`08`). **parse_fail = 0 again — the
+unbroken tool-emission streak now spans three engine epochs (1.7.0/1.7.1/1.7.3).** Instrument deviation
+disclosed in the RECORD: `run_gate.sh` needs an absolute wave dir (the gate runs with cwd in the clone;
+two aborted attempts ran tasks but lost the output write). Evidence: `results/2026-11-27/` (wave.jsonl
+40 rows, supervisor pins, status before/after), RECORD in the same dir.
