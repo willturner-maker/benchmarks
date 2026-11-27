@@ -1,0 +1,406 @@
+== structural delta (132 fields, plus 382 runtime-counter fields suppressed)
+  cellar
+    - /opt/homebrew/Cellar/splash/1.7.1
+    + /opt/homebrew/Cellar/splash/1.7.3
+  files_sha256.INSTALL_RECEIPT.json
+    - 10fca8395df825dc58eea6ccd0053d96f3b3ff97a2af275f7c25b8fe5fbe41ef
+    + d5f5100f35737392de92700740c2c230a4b7596766134d00401690fcfc7c34eb
+  files_sha256.libexec/engine/splash
+    - a20152bf09f86b7143d8f76ab3a01fc84ce58d30b150b56008fdd79d08ba4dfc
+    + 06c55c7c3b2a615712825e5cc641161b3ad82e66b86217e03c160318b1d08f9b
+  files_sha256.libexec/release.json
+    - a54e26b2343042fbb7aa553be16222656d15794b522d62b89c963082566186ff
+    + 8f473f91a37f4d044d8dee3c6c2475db1edd457a4bc7e8e3b828b27b29c7dca8
+  files_sha256.sbom.spdx.json
+    - 1c9dd77eec4a9d606293af1919d94ac78f05e6002472b81b01dd19a8276d13ee
+    + 031d5d1284018d2a32b6bbf28a691277beb29ea79b734a839d92fb6b62470c83
+  install_receipt.source.tap_git_head
+    - 63967268fcd7abf9bcf0a80e864e6a4a5d3ca8d1
+    + 04137c321d7b86239055f392d3462e69184db051
+  install_receipt.source.versions.stable
+    - 1.7.1
+    + 1.7.3
+  install_receipt.time
+    - 1795397951
+    + 1795724134
+  server_tree.libexec/server.digest
+    - 50912a1d4ea1193d597cf9f53a47dd6ca45e012d07a513d47171e2f669ed87fb
+    + 7e34b11000f0711934fb5ccf797fd448bbf1cf619b3e419a18bd3b9eded0b1be
+  splash_version
+    - Splash 1.7.1
+    + Splash 1.7.3
+  status.cache.capture_cuts
+    - 1034
+    + 89
+  status.cache.checkpoint_publications
+    - 39
+    + 61
+  status.cache.cold_misses
+    - 68
+    + 23
+  status.cache.deduplicated_kv_tokens
+    - 195776
+    + 262592
+  status.cache.disk_state_publications
+    - 278
+    + 51
+  status.cache.hit_rate
+    - 0.9982432118
+    + 0.9812703583
+  status.cache.junction_materializations
+    - 14
+    + 10
+  status.cache.kv_disk_hit_tokens
+    - 2795840
+    + 1020032
+  status.cache.kv_hit_tokens
+    - 252142080
+    + 79721248
+  status.cache.lazy_junctions
+    - 2436
+    + 40
+  status.cache.lost_state_misses
+    - 19
+    + 0
+  status.cache.probe_hashed_blocks
+    - 8417684
+    + 3083770
+  status.cache.recycled_state_publications
+    - 30589
+    + 637
+  status.cache.replay_state_publications
+    - 33529
+    + 1156
+  status.cache.resource_replay_tokens
+    - 0
+    + 17717
+  status.cache.resource_resumptions
+    - 0
+    + 12
+  status.cache.resource_suspensions
+    - 0
+    + 12
+  status.cache.reused_tokens
+    - 251817888
+    + 79308416
+  status.cache.state_captures
+    - 33085
+    + 1140
+  status.draft_context.avoided_rows
+    - 263744
+    + 370688
+  status.draft_context.materialization_rows
+    - 8047904
+    + 1345504
+  status.draft_context.prompt_end_rows
+    - 792240
+    + 27779
+  status.draft_context.resets
+    - 283
+    + 346
+  status.draft_context.restore_skipped
+    - 120
+    + 218
+  status.draft_context.target_prefill_rows
+    - 9103888
+    + 1743971
+  status.identity.cache.build_id
+    - src-1e92bb16e14d2f3d98edbe6deb2b9e8bb099ce3b95118b8cca1059d964b9c886
+    + src-0fd8c23ce45286249feff235b54ac706213a2529db67daf572a21f3290240cf0
+  status.identity.cache.loaded_model_layout_sha256
+    - aed100ae7c222db37a647acc6c36b9d0dbb405c48863c042e442c9e7a0d548bf
+    + fff49a5c1ed2d5d53f417e8ee747f4f6c0a5c761d7982614422cea9222e64cbd
+  status.identity.kv.target_model_sha256
+    - 1ecb13cf67d477f171376a4c3bb19228d62d8866bd79b80ba08cc8e2e44a9844
+    + 318d3277a6d815edaeea712026ca063392ad9366f899ae5bb8ccbc4cd1cc33c6
+  status.memory_governor.charged_bytes
+    - 60118221584
+    + 60094382864
+  status.memory_governor.count_checks.covered
+    - 108141
+    + 5228
+  status.memory_governor.denied_reservations
+    - 113059
+    + 5888
+  status.memory_governor.headroom_bytes
+    - 11320560
+    + 35159280
+  status.memory_governor.host_available_bytes
+    - 29167976448
+    + 30447484928
+  status.memory_governor.host_headroom_bytes
+    - 17027499295
+    + 20347258143
+  status.memory_governor.host_spare_bytes
+    - 24243044352
+    + 27562803200
+  status.memory_governor.host_telemetry.compressed_bytes
+    - 0
+    + 362086400
+  status.memory_governor.host_telemetry.file_backed_bytes
+    - 17029627904
+    + 13252509696
+  status.memory_governor.host_telemetry.filecache_min_bytes
+    - 13907886080
+    + 10919051264
+  status.memory_governor.host_telemetry.inactive_bytes
+    - 18521227264
+    + 12533956608
+  status.memory_governor.host_telemetry.phys_footprint_bytes
+    - 60477447944
+    + 60412174208
+  status.memory_plan.budget.dynamic_budget_bytes
+    - 2362244336
+    + 2362883312
+  status.memory_plan.budget.fixed_runtime_bytes
+    - 57767297808
+    + 57766658832
+  status.memory_plan.budget.minimum_required_bytes
+    - 58153050896
+    + 58152411920
+  status.memory_plan.budget.shared_prefill_bytes
+    - 1660977152
+    + 1683783680
+  status.memory_plan.budget.target_weights_bytes
+    - 53175780112
+    + 53152334608
+  status.memory_plan.model.memory.shared_prefill_bytes
+    - 1660977152
+    + 1683783680
+  status.memory_plan.model.memory.target_weights_bytes
+    - 53175780112
+    + 53152334608
+  status.streamed_experts.arena_bytes
+    - 48449486848
+    + 48425254912
+  status.streamed_experts.cap_bytes
+    - 49215226640
+    + 49190994704
+  status.streamed_experts.decode.hit_rate
+    - 0.9998810835
+    + 0.9994433242
+  status.streamed_experts.decode.host_steps.pickup_ms.max
+    - 8.314958
+    + 6.346125
+  status.streamed_experts.decode.host_steps.pickup_ms.samples
+    - 33155328
+    + 5177944
+  status.streamed_experts.decode.host_steps.pickup_ms.total
+    - 636268.1018
+    + 99858.51006
+  status.streamed_experts.decode.host_steps.resume_ms.max
+    - 3.196667
+    + 1.733166
+  status.streamed_experts.decode.host_steps.resume_ms.p95
+    - 0.512
+    + 0.256
+  status.streamed_experts.decode.host_steps.resume_ms.samples
+    - 33155328
+    + 5177944
+  status.streamed_experts.decode.host_steps.resume_ms.total
+    - 7247771.818
+    + 703891.822
+  status.streamed_experts.decode.host_steps.work_ms.max
+    - 8.471083
+    + 9.517208
+  status.streamed_experts.decode.host_steps.work_ms.p50
+    - 0.004
+    + 0.002
+  status.streamed_experts.decode.host_steps.work_ms.p95
+    - 0.008
+    + 0.004
+  status.streamed_experts.decode.host_steps.work_ms.p99
+    - 0.008
+    + 0.512
+  status.streamed_experts.decode.host_steps.work_ms.samples
+    - 33155328
+    + 5177944
+  status.streamed_experts.decode.host_steps.work_ms.total
+    - 162887.4351
+    + 39073.70832
+  status.streamed_experts.decode.loads
+    - 33155328
+    + 5177944
+  status.streamed_experts.decode.prefetched
+    - 86464
+    + 33537
+  status.streamed_experts.decode.read
+    - 272097
+    + 111250
+  status.streamed_experts.decode.read_ahead
+    - 4702592
+    + 806159
+  status.streamed_experts.decode.read_bytes
+    - 10442349428736
+    + 1936027893760
+  status.streamed_experts.decode.routed
+    - 2288135782
+    + 199847011
+  status.streamed_experts.floor_bytes
+    - 49215226640
+    + 49190994704
+  status.streamed_experts.prefill.hit_rate
+    - 0.9972580264
+    + 0.9752486741
+  status.streamed_experts.prefill.host_steps.pickup_ms.max
+    - 6.816957
+    + 6.28154
+  status.streamed_experts.prefill.host_steps.pickup_ms.p95
+    - 0.032
+    + 0.128
+  status.streamed_experts.prefill.host_steps.pickup_ms.p99
+    - 0.064
+    + 0.128
+  status.streamed_experts.prefill.host_steps.pickup_ms.samples
+    - 7365034
+    + 275124
+  status.streamed_experts.prefill.host_steps.pickup_ms.total
+    - 54937.59707
+    + 3927.153961
+  status.streamed_experts.prefill.host_steps.resume_ms.max
+    - 3.848
+    + 5.954666
+  status.streamed_experts.prefill.host_steps.resume_ms.p95
+    - 1.024
+    + 4.096
+  status.streamed_experts.prefill.host_steps.resume_ms.p99
+    - 2.048
+    + 4.096
+  status.streamed_experts.prefill.host_steps.resume_ms.samples
+    - 7365034
+    + 275124
+  status.streamed_experts.prefill.host_steps.resume_ms.total
+    - 1721928.897
+    + 103132.9054
+  status.streamed_experts.prefill.host_steps.work_ms.max
+    - 62.551542
+    + 49.729416
+  status.streamed_experts.prefill.host_steps.work_ms.p95
+    - 0.008
+    + 1.024
+  status.streamed_experts.prefill.host_steps.work_ms.p99
+    - 1.024
+    + 4.096
+  status.streamed_experts.prefill.host_steps.work_ms.samples
+    - 7365034
+    + 275124
+  status.streamed_experts.prefill.host_steps.work_ms.total
+    - 212928.574
+    + 40851.33824
+  status.streamed_experts.prefill.loads
+    - 1762858
+    + 61462
+  status.streamed_experts.prefill.prefetched
+    - 417569
+    + 356717
+  status.streamed_experts.prefill.read
+    - 1079804
+    + 537514
+  status.streamed_experts.prefill.read_ahead
+    - 7872515
+    + 989199
+  status.streamed_experts.prefill.read_bytes
+    - 18346520543232
+    + 2446371160064
+  status.streamed_experts.prefill.routed
+    - 393805397
+    + 21716574
+  status.streamed_experts.resident
+    - 23065
+    + 23053
+  status.streamed_experts.slots
+    - 23065
+    + 23053
+  status.streamed_table.decode.hit_rate
+    - 0.9063119388
+    + 0.6980467631
+  status.streamed_table.decode.hit_rows
+    - 140156772
+    + 8022204
+  status.streamed_table.decode.read_rows
+    - 14488407
+    + 3470155
+  status.streamed_table.decode.requested_rows
+    - 200196864
+    + 16490976
+  status.streamed_table.decode.stage_ms.max
+    - 13.766542
+    + 11.137583
+  status.streamed_table.decode.stage_ms.samples
+    - 720768
+    + 112564
+  status.streamed_table.decode.stage_ms.total
+    - 230953.6447
+    + 45889.39938
+  status.streamed_table.decode.stages
+    - 720768
+    + 112564
+  status.streamed_table.decode.unique_rows
+    - 154645179
+    + 11492359
+  status.streamed_table.evictions
+    - 14877672
+    + 2970627
+  status.streamed_table.prefetch_read_rows
+    - 1544279
+    + 514276
+  status.streamed_table.prefetch_requested_rows
+    - 7391040
+    + 4383856
+  status.streamed_table.prefill.hit_rate
+    - 0.9913982701
+    + 0.9281698956
+  status.streamed_table.prefill.hit_rows
+    - 108586760
+    + 13998844
+  status.streamed_table.prefill.read_rows
+    - 942138
+    + 1083356
+  status.streamed_table.prefill.requested_rows
+    - 145699040
+    + 28043792
+  status.streamed_table.prefill.stage_ms.max
+    - 137.47475
+    + 149.992959
+  status.streamed_table.prefill.stage_ms.p50
+    - 0.256
+    + 2.048
+  status.streamed_table.prefill.stage_ms.p95
+    - 1.024
+    + 32.768
+  status.streamed_table.prefill.stage_ms.p99
+    - 8.192
+    + 131.072
+  status.streamed_table.prefill.stage_ms.samples
+    - 38595
+    + 1715
+  status.streamed_table.prefill.stage_ms.total
+    - 16633.32707
+    + 9749.128454
+  status.streamed_table.prefill.stages
+    - 38595
+    + 1715
+  status.streamed_table.prefill.unique_rows
+    - 109528898
+    + 15082200
+  status.streamed_table.read_bytes
+    - 1527734160
+    + 456100830
+  status.streamed_table.read_ms.max
+    - 13.604667
+    + 8.569958
+  status.streamed_table.read_ms.samples
+    - 16974824
+    + 5067787
+  status.streamed_table.read_ms.total
+    - 4182868.947
+    + 1212592.64
+  anchor version        : MOVED  Splash 1.7.1 -> Splash 1.7.3
+  anchor engine binary  : SAME  None -> None
+  anchor server tree    : SAME  None -> None
+  anchor release.json   : SAME  None -> None
+  anchor model layout   : MOVED  aed100ae7c222db37a647acc6c36b9d0dbb405c48863c042 -> fff49a5c1ed2d5d53f417e8ee747f4f6c0a5c761d7982614
+  anchor cache build    : MOVED  src-1e92bb16e14d2f3d98edbe6deb2b9e8bb099ce3b9511 -> src-0fd8c23ce45286249feff235b54ac706213a2529db67
+  anchor maximum context: SAME  262144 -> 262144
+  anchor batch width    : SAME  4 -> 4
+  anchor ANE FFN state  : SAME  off -> off

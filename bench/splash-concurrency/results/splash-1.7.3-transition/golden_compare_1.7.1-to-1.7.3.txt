@@ -1,0 +1,18 @@
+== results/splash-1.7.1-transition/golden-probes-1.7.1-post.json (2026-11-23T11:27:36Z, nonce 20261123T112736Z)
+-> results/splash-1.7.3-transition/golden-probes-1.7.3.json (2026-11-27T20:55:39Z, nonce t173-20261127)
+  decode_greedy_64           SAME  prompt 25->25 cached 0->0 
+  followup_63                usage prompt 2166->2162 cached 0->0 reasoning moved
+  followup_72                SAME  prompt 2174->2170 cached 0->0 
+  json_schema_crowdout_64    SAME  prompt 55->55 cached 0->0 
+  json_schema_nested         DIFF  prompt 56->56 cached 0->0 reasoning moved completion 196->212
+  json_schema_nested_stream  DIFF  prompt 55->55 cached 0->0 reasoning moved completion 185->189
+  prefill_cold_2k            usage prompt 1906->1902 cached 0->0 reasoning moved
+  prefill_warm_2k            usage prompt 1906->1902 cached 1888->1888 reasoning moved
+  shared_head_session_a      usage prompt 818->818 cached 0->0 output differs (timing probe: no byte claim) reasoning moved completion 114->160
+  shared_head_session_b      usage prompt 818->818 cached 800->800 output differs (timing probe: no byte claim) reasoning moved
+  thinking_crowdout_16       SAME  prompt 13->13 cached 0->0 
+  thinking_room_256          SAME  prompt 13->13 cached 0->0 
+  toolcall_nested_forced     DIFF  prompt 394->394 cached 0->0 reasoning moved completion 152->202
+  toolcall_nested_stream     DIFF  prompt 390->390 cached 0->0 OUTPUT MOVED (compared as byte) reasoning moved completion 142->205
+      prev content=e3b0c44298fc1c149afbf4c8996fb924 tools=(('record_readings', 'e4d3945c8d9328a1927135fc247d3809'),)
+      cur  content=e3b0c44298fc1c149afbf4c8996fb924 tools=(('record_readings', '9db4ecc198655597663867bf58d10032'),)

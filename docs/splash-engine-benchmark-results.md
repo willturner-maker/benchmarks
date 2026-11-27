@@ -1066,3 +1066,18 @@ on the pinned 1.7.1 instance + diffs (Tier 1), then the one new axis (`results/s
   w8 692) — the lane ceiling buys nothing below saturation. Above the ceiling, requests park in
   `admission_waiting` (exactly width−8), request queue stays 0 until w32. KV pressure to 32×55k-token
   prompts (11.4× lane budget): zero refusals, suspensions, spills or demotes; prefill flat ~3,490 tok/s.
+
+## Splash 1.7.1 -> 1.7.3 transition (2026-11-27) — Tier-1, behaviourally quiet (`results/splash-1.7.3-transition/`)
+
+- **Structural diff:** version/binary/server-tree moved as expected; context 262,144, batch width 4 and
+  `ane_ffn=off` unchanged. The model **layout** hash and `kv.target_model_sha256` moved this time
+  (they were SAME on 1.7.1) — but model *content* is proven unchanged: the resolved store's `model.json`
+  GGUF digests equal the HF content-addressed blob hashes whose snapshot links date to Oct 24. The move
+  co-moves with `shared_prefill_bytes` +22.8 MiB: an engine-side layout/memory-plan change, not model drift.
+- **Behaviour:** 7/8 byte/grammar golden probes reproduce visible output vs 1.7.1 (reasoning move = the
+  documented within-build floor). The flagged probe `toolcall_nested_stream` is **bimodal at temp 0 within
+  1.7.3** (capture run 0 deviates, run 1 = the exact 1.7.1 args sha); 8 direct repeats of the captured
+  body: 7/8 canonical (1.7.1-mode), 1/8 deviant, and the variants differ *only* in emitting C1's optional
+  `"flags":[]` — schema-valid, semantically identical. The request-level lottery, at an optional-field
+  boundary, 7:1 — exactly the phenomenon 1.7.1's own boot banner documents. Verdict: 1.7.3 quiet on the
+  pinned config; the tau2 238x3 replay the same day is the distribution-level companion test.
