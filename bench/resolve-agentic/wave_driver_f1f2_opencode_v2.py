@@ -430,6 +430,11 @@ def build_schedule(seq, solo_prefixes=()):
     while i < len(seq):
         if is_solo(seq[i]) or i + 1 >= len(seq):
             lanes.append(("solo", seq[i])); i += 1
+        elif is_solo(seq[i + 1]):
+            # 26d BUG (found live: order F1...,T7r1,... paired F1r3+T7r1): a
+            # solo-prefix task as the SECOND member of a would-be pair must also
+            # break the pair, not just as the first member.
+            lanes.append(("solo", seq[i])); i += 1
         else:
             lanes.append(("pair", seq[i], seq[i + 1])); i += 2
     return lanes

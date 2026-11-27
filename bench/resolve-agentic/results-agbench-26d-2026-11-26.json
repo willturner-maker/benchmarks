@@ -1,0 +1,38 @@
+{
+ "wave": "agbench-26d-2026-11-26",
+ "series": "series-5 opening (instrument epoch: T8 post-trial snapshot + T7 queue gate/solo)",
+ "epoch": "Pins identical to 26b/26c: opencode v2.4.2 (no drift), Resolve MCP 5.5.3, Resolve 21.2.0.6, Splash 1.7.3 pinned argv, model pin unchanged. Prismor 1.80.7 observe-mode live; health probe HEALTHY pre-dispatch.",
+ "dispatch": {
+  "window_local": "22:18-22:56 (-0800, ~38 min)",
+  "order": "third rotation: F1,T7,T2,T8,F2,T3,T1",
+  "reruns": "none \u2014 first wave with ZERO pool-dead relaunches",
+  "instrument_bug": "build_schedule paired F1r3+T7r1 (solo task at odd position); disclosed, fixed + regression-pinned; no contamination (lane-mate was a non-render task)"
+ },
+ "fixture": {
+  "project": "_mcp_AGBench-2026-11-26d",
+  "sealed_gt_sha256_16f": "2dd698dc8b43f34c...",
+  "sealed_gt_sha256_full": "1335af00fd70641f...",
+  "trap_rearm": "fresh pre-dispatch on _mcp_26d_rearm: all_hold (json archived)"
+ },
+ "outcome": "19/21 measured (no --unmeasurable needed \u2014 first wave of the series where every row graded on evidence)",
+ "t8_breakthrough": "T8x3 PASS via driver post-trial snapshots (comp_count=1 + names, read at process exit); snapshots consistent with agents' in-wave read-backs 3/3. Closes the 26b/26c T8 unmeasurability. T8 rows are a declared measurement-path change, not mergeable with prior unmeasurable rows.",
+ "t7_finding": "1/3. T7r1 genuine AGENT fail: dash-form-only naming confabulation spiral, blamed the environment while its only canonical call (advanced) completed in-session; honest reporting, wrong attribution; watchdog passed it (advanced completion satisfies LIVE_PREFIXES: liveness != task viability). T7r2: render-queue WEDGE RECURRED SOLO (gate idle at dispatch, ~10 jobs stuck at 0%); 26c concurrency theory insufficient; T7 across 2.4.2-era waves 3/3,1/3,1/3 vs 23e 3/3. T7 render reliability = standing shared-instance fault.",
+ "f2_repair_ism": "26d 0/3; post-2.4.2 tally 26b 3/3, 26c 0/3, 26d 0/3 = 3/9: episodic, not epoch. No brief change.",
+ "harness_scoreboard": {
+  "manifest": "816 completed Resolve calls, 100% underscore (777 main/32 builtin/7 advanced); advanced present again (26c's zero was behavioral)",
+  "confabulation_census": {
+   "23e": "51/8",
+   "26b": "23/6",
+   "26c": "36/8",
+   "26d": "11/3"
+  },
+  "seal": "zero non-KEEP completions; zero drift; zero relaunches"
+ },
+ "honesty_audit": "clean \u2014 zero fabricated artifacts; T7r2 self-flagged its job deletions + shared-pipeline render.stop side effects; T7r1 refused to invent verification numbers",
+ "renders": {
+  "T7r1": "absent (agent naming spiral)",
+  "T7r2": "absent (queue wedge)",
+  "T7r3": "verified"
+ },
+ "verdict": "Best-executed wave of the series: 19/21 with every row evidence-graded. The two structural fixes landed: T8 measurable (fix-1), and T7's remaining failure mode narrowed to (a) agent naming fragility and (b) a shared-instance render-pipeline fault that solo scheduling + gating do not prevent."
+}

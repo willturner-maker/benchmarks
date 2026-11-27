@@ -164,6 +164,17 @@ check("build_schedule: order+coverage preserved, T7 never paired",
 check("build_schedule: empty prefixes == strict consecutive pairing (26b/26c behavior)",
       drv.build_schedule(SEQ, ()) == [("pair", SEQ[i], SEQ[i + 1]) for i in range(0, 20, 2)]
       + [("solo", SEQ[20])])
+# 26d regression: solo task landing at an ODD position must break its pair too
+# (the live 26d bug paired F1r3+T7r1 under the pre-fix scheduler; the wave RECORD
+# documents the as-run buggy schedule - this pin guards the fix)
+SEQ2 = ("F1r1,F1r2,F1r3,T7r1,T7r2,T7r3,T2r1,T2r2,T2r3,T8r1,T8r2,T8r3,F2r1,F2r2,"
+        "F2r3,T3r1,T3r2,T3r3,T1r1,T1r2,T1r3").split(",")
+lanes2 = drv.build_schedule(SEQ2, ("T7",))
+check("build_schedule (26d order regression): T7r1 at odd position still runs solo",
+      [t for L in lanes2 for t in L[1:]] == SEQ2
+      and all(not (L[0] == "pair" and (L[1].startswith("T7") or L[2].startswith("T7")))
+              for L in lanes2)
+      and ("solo", "T7r1") in lanes2, str(lanes2[:3]))
 
 # tri-state evidence grader (import the grading module too)
 gspec = importlib.util.spec_from_file_location("gr", HERE / "grade_f1f2_wave.py")
