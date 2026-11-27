@@ -100,6 +100,32 @@ def flat(st, kind):
     return out
 
 
+def grade_t8_evidence(ev):
+    """Fix 1 (2026-11-26): T8 from the driver post-trial snapshot + the agent's
+    in-wave read-backs, instead of the churn-vulnerable post-hoc read. Pure, so
+    instrument_replay_test.py can pin it offline. Returns (state, why) with state
+    in {'pass','fail','unmeasurable'}. Fail-closed order:
+      pass        snapshot comp_count == 1 (driver read, immune to later churn)
+      fail        snapshot 0 AND no in-wave read-back >= 1  (silent-success trap)
+      unmeasurable snapshot 0 but the agent read >=1 in-wave (churn beat the
+                  snapshot: e.g. a relaunch loaded the project before the driver
+                  read), or the snapshot read itself errored."""
+    cc, inwave = ev.get("comp_count"), ev.get("agent_inwave_readbacks") or []
+    if ev.get("error"):
+        return "unmeasurable", f"post-trial snapshot read failed: {ev['error']}"
+    if cc == 1:
+        return "pass", ("driver post-trial snapshot: comp_count=1 "
+                        f"(names={ev.get('comp_names')}); in-wave read-backs={inwave}")
+    if cc == 0:
+        if any(n >= 1 for n in inwave):
+            return "unmeasurable", ("post-trial snapshot comp_count=0 but the agent read >=1 "
+                                    f"in-wave ({inwave}) — project churn beat the driver's "
+                                    "immediate read-back; in-wave evidence kept (17g-style)")
+        return "fail", ("post-trial snapshot comp_count=0 and no in-wave read-back >=1 "
+                        f"({inwave or 'none'}) — silent-success trap (comp never landed)")
+    return "unmeasurable", f"unexpected post-trial comp_count={cc!r}"
+
+
 def ffprobe_render(path):
     if not path or not os.path.exists(path):
         return {"file_exists": False}
@@ -215,6 +241,17 @@ def main():
             queued += c.tool("render", "list_jobs").get("jobs", [])
         load(tl_base)
         for k in ("r1", "r2", "r3"):
+            eb = next((t.get("env_blocked") for t in wr.get("trials", [])
+                       if t.get("task") == f"T7{k}" and t.get("env_blocked")), None)
+            if eb:
+                # fix-2 gate: the trial was never dispatched because the shared
+                # render queue was busy/wedged at dispatch time — env-blocked,
+                # not an agent failure.
+                verdicts.setdefault("T7"+k, {})["unmeasurable"] = True
+                verdicts["T7"+k]["notes"] = [
+                    f"never dispatched: driver render-queue gate found the shared queue "
+                    f"busy/wedged at dispatch ({eb}); recorded ENV-BLOCKED, not agent failure"]
+                continue
             files = glob.glob(os.path.join(args.render_root, f"T7{k}", "*.mov"))
             files += glob.glob(os.path.join(args.render_root, f"T7{k}", "*.mp4"))
             fp = ffprobe_render(files[0] if files else None)
@@ -229,6 +266,20 @@ def main():
             if args.unmeasurable and "T8" in args.unmeasurable:
                 verdicts.setdefault("T8"+k, {})["unmeasurable"] = True
                 verdicts["T8"+k]["notes"] = ["post-hoc read-back impossible: Fusion comps attached in-wave did not survive the project close/load churn of the wave (confirmed 2026-11-17g: comp_count reads 0 on every T8 timeline after grading loads projects, even with set_current); in-wave read-backs (events.json) reported comp count 1 / 'Composition 1' for ALL six trials in both arms"]
+                continue
+            evp = wdir / "sessions" / f"T8{k}" / "post_trial_evidence.json"
+            if evp.exists():
+                # fix-1 path (2026-11-26): score from the driver's immediate
+                # post-trial snapshot (immune to later project churn) + the
+                # agent's in-wave read-backs; pure logic in grade_t8_evidence.
+                state, why = grade_t8_evidence(json.loads(evp.read_text()))
+                if state == "pass":
+                    rec(f"T8{k}", True, why)
+                elif state == "fail":
+                    rec(f"T8{k}", False, why)
+                else:
+                    verdicts.setdefault("T8"+k, {})["unmeasurable"] = True
+                    verdicts["T8"+k]["notes"] = [why]
                 continue
             name = f"{tl_base}_T8{k}"
             cc = c.tool("timeline_item_fusion", "get_comp_count",

@@ -404,6 +404,165 @@ def manifest_report(opencode_version):
             "distinct_tool_names": len(TOOL_NAMES),
             "top_names": dict(sorted(TOOL_NAMES.items(), key=lambda kv: -kv[1])[:25])}
 
+
+# ---- fix 1 (2026-11-26): driver-side post-trial evidence snapshot -----------
+# Why: T8's Fusion comp is only verifiable BEFORE anything else loads the project.
+# Post-hoc grading loads projects and comp_count reads 0 on every T8 timeline
+# (confirmed 17g) -> T8 was UNMEASURABLE in 26b AND 26c (in 26c the churn came
+# from the wave's OWN watchdog relaunches, not operator sequencing: ANY project
+# load after T8 playback, by anyone, destroys the evidence). Fix: the driver
+# makes a pinned MCP read-back the MOMENT a trial process exits - before the
+# next trial or any watchdog relaunch can load the project - and writes it to
+# sessions/<task>/post_trial_evidence.json. The grader (fix: grade_f1f2_wave.py
+# grade_t8_evidence) scores T8 from this snapshot + the in-wave read-back, so
+# T8 is measurable regardless of later churn. Fail-closed preserved: a missing
+# snapshot falls back to the old post-hoc read (which stays honest about churn).
+def build_schedule(seq, solo_prefixes=()):
+    """Pure: consecutive-pair scheduling with forced-solo prefixes. A task whose
+    name starts with any solo prefix runs alone (its lane is never paired), so an
+    expensive/queue-wedging task class (T7 render trials) can run without a
+    concurrent partner. Preserves seq order otherwise. Returns list of lanes:
+    ("pair", a, b) or ("solo", x)."""
+    solo = [p for p in solo_prefixes if p]
+    def is_solo(t):
+        return any(t.startswith(p) for p in solo)
+    lanes, i = [], 0
+    while i < len(seq):
+        if is_solo(seq[i]) or i + 1 >= len(seq):
+            lanes.append(("solo", seq[i])); i += 1
+        else:
+            lanes.append(("pair", seq[i], seq[i + 1])); i += 2
+    return lanes
+
+
+def agent_inwave_readbacks(events_path, want="comp_count"):
+    """Pure: scan a trial's recorded events.json for the agent's OWN numeric
+    read-backs of `want` (status=completed tool_use states only, in order).
+    Used as the fallback grading evidence for T8 when the driver post-trial
+    snapshot is absent or empty (17g: events.json in-wave read-backs are the
+    only surviving signal once project churn has wiped live state).
+    KEY SHAPE (verified on 26b/26c recorded events): MCP tool output is a string
+    under state.output, and get_comp_count answers with key "count", not
+    "comp_count" - the same dual-key quirk grade_f1f2_wave defends with
+    .get("comp_count", .get("count")). Accept both."""
+    out = []
+    pats = [re.compile(r'"' + w + r'"\s*:\s*(\d+)')
+            for w in {want, "count", "comp_count"}]
+    try:
+        for line in pathlib.Path(events_path).read_text().splitlines():
+            if not line.strip().startswith("{"):
+                continue
+            try:
+                e = json.loads(line)
+            except Exception:
+                continue
+            p = e.get("part") or {}
+            if e.get("type") != "tool_use":
+                continue
+            st = (p.get("state") or {})
+            if st.get("status") != "completed":
+                continue
+            blob = st.get("output") if isinstance(st.get("output"), str) \
+                else json.dumps(st.get("output") or st.get("result") or "")
+            for pat in pats:
+                found = pat.findall(blob)
+                if found:
+                    out += [int(m) for m in found]
+                    break
+    except Exception:
+        return []
+    return out
+
+
+def post_trial_snapshot(name, tl_base, sess_root, out, mcp_log):
+    """Fix 1: pinned MCP read-back of this trial's T8 timeline, made immediately
+    after its process exits. Writes sessions/<name>/post_trial_evidence.json.
+    Returns the evidence dict (comp_count + the agent's own in-wave read-backs)."""
+    from build_fixture_effort_ab import Client  # lazy: offline MCP stdio client
+    task = name  # e.g. T8r1
+    tl_name = f"{tl_base}_{task}"  # fixture T8 timelines are <base>_T8r1
+    ev = {"task": task, "captured_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+          "source": "driver_post_trial"}
+    tid = None
+    try:
+        c = Client(str(mcp_log))
+        try:
+            tl = c.tool("timeline", "list")
+            tids = tl.get("timelines") or []
+            for t in tids:
+                if (t.get("name") if isinstance(t, dict) else t) == tl_name:
+                    tid = t.get("id") if isinstance(t, dict) else None
+                    break
+            if tid is None:
+                ev["error"] = f"timeline {tl_name} not found"
+            else:
+                cc = c.tool("timeline_item_fusion", "get_comp_count",
+                            {"track_type": "video", "track_index": 1, "item_index": 0,
+                             "timeline_id": tid})
+                cn = c.tool("timeline_item_fusion", "get_comp_names",
+                            {"track_type": "video", "track_index": 1, "item_index": 0,
+                             "timeline_id": tid})
+                ev["comp_count"] = cc.get("comp_count", cc.get("count"))
+                ev["comp_names"] = cn.get("comp_names", cn.get("names"))
+                ev["timeline_id"] = tid
+        finally:
+            try:
+                c.p.terminate()
+            except Exception:
+                pass
+    except Exception as e:
+        ev["error"] = str(e)[:200]
+    ev["agent_inwave_readbacks"] = agent_inwave_readbacks(sess_root / task / "events.json")
+    try:
+        (sess_root / task).mkdir(parents=True, exist_ok=True)
+        (sess_root / task / "post_trial_evidence.json").write_text(json.dumps(ev, indent=1))
+    except Exception as e:
+        print(f"  !! snapshot write failed {task}: {e}", flush=True)
+    return ev
+
+
+# ---- fix 2 (2026-11-26): render-queue gate + T7 solo scheduling -------------
+# 26c confound: a shared-instance render-queue WEDGE (all jobs stuck at 0%,
+# IsRenderingInProgress flip-flopping, quick-export refused) after T7r1's render
+# completed - probable trigger, self-disclosed by an agent, was deleting a job
+# while IsRenderingInProgress (the exact hazard the MCP's own close() docs warn
+# about), aggravated by two T7 trials rendering concurrently. Mitigation without
+# forking the task surface: (a) T7 trials run SOLO (never two renders at once),
+# (b) before each T7 trial the driver checks the queue is idle (is_rendering
+# false, no jobs) and REFUSES to dispatch into a wedged queue (refuse, not
+# mutate - we never repair the shared instance mid-measurement).
+def render_queue_gate(mcp_log, wait_s=300, poll_s=5):
+    """Read-only shared-Resolve render-queue check: return (idle_ok, detail).
+    Waits up to wait_s for is_rendering to clear; if jobs are queued or the flag
+    is stuck, idle_ok is False so the caller skips/defers the render trial
+    instead of feeding a wedged pipeline."""
+    from build_fixture_effort_ab import Client
+    c = Client(str(mcp_log))
+    detail, idle = None, False
+    try:
+        t0 = time.time()
+        while True:
+            ir = c.tool("render", "is_rendering")
+            jobs = c.tool("render", "list_jobs")
+            rendering = bool(ir.get("rendering"))
+            njobs = len(jobs.get("jobs") or [])
+            detail = {"rendering": rendering, "queued": njobs,
+                      "waited_s": round(time.time() - t0, 1)}
+            if not rendering and njobs == 0:
+                idle = True
+                break
+            if time.time() - t0 > wait_s:
+                break  # wedged: leave idle=False, caller defers the trial
+            time.sleep(poll_s)
+    except Exception as e:
+        detail = {"error": str(e)[:200]}
+    finally:
+        try:
+            c.p.terminate()
+        except Exception:
+            pass
+    return idle, detail
+
 GLOBAL_AGENTS = pathlib.Path.home() / ".config" / "opencode" / "AGENTS.md"
 
 def trial_agents():
@@ -570,6 +729,17 @@ def main():
     ap.add_argument("--tl-base", default=DEFAULT_TL_BASE)
     ap.add_argument("--out", default=str(DEFAULT_OUT))
     ap.add_argument("--render-root", default=DEFAULT_RENDER_ROOT)
+    ap.add_argument("--solo-prefixes", default="T7",
+                    help="comma-separated task prefixes that always run SOLO, never paired "
+                         "(fix 2, 2026-11-26: T7 render trials wedged the shared render queue "
+                         "when run concurrently in 26c). Default: T7. Empty string = old "
+                         "strict-pairing schedule (fork-compare only).")
+    ap.add_argument("--no-queue-gate", action="store_true",
+                    help="skip the pre-T7 read-only render-queue idle gate (NOT recommended; "
+                         "a wedged queue invalidates T7 renders)")
+    ap.add_argument("--no-snapshot", action="store_true",
+                    help="skip the driver post-trial evidence snapshot (fix 1; T8 grading "
+                         "then falls back to the churn-vulnerable post-hoc read)")
     ap.add_argument("--check-harness", action="store_true")
     ap.add_argument("--order", default=None,
                     help="comma-separated task sequence; consecutive pairs run 2-lane, "
@@ -609,41 +779,61 @@ def main():
       missing = [t for t in B if re.search(r"r\d+$", t) and t not in seq]
       if missing:
           raise SystemExit(f"--order must cover every briefed task; missing {missing}")
-      pairs = [(seq[i], seq[i + 1]) for i in range(0, len(seq) - 1, 2)]
-      solo = seq[len(pairs) * 2:]
+      solo_prefixes = tuple(p.strip() for p in a.solo_prefixes.split(",") if p.strip())
+      lanes = build_schedule(seq, solo_prefixes)
+      mcp_log = out / "gate_mcp_log.jsonl"
       results = []
-      for a1, b1 in pairs:
-          print(f"[{time.strftime('%H:%M:%S')}] pair {a1}+{b1}", flush=True)
+
+      def run_one(n):
+          """One trial with its fix-1/fix-2 instrumentation around it."""
+          if n.startswith("T7") and not a.no_queue_gate:
+              idle, detail = render_queue_gate(mcp_log)
+              print(f"  render-queue gate {n}: {'idle' if idle else 'BUSY/WEDGED'} {detail}",
+                    flush=True)
+              with open(out / "gate_log.jsonl", "a") as f:
+                  f.write(json.dumps({"task": n, "idle": idle, **detail}) + "\n")
+              if not idle:
+                  return {"task": n, "ok": False, "env_blocked": "render_queue_wedge",
+                          "gate": detail, "num_turns": 0, "tool_use_count": 0, "wall_s": 0,
+                          "probe": {"ok": True, "dead": False}, "seal_leaks": [],
+                          "probe_attempts": []}
+          rec = run_trial(n, B[n], sess, GROUND_RULES)
+          if n.startswith("T8") and not a.no_snapshot:
+              # fix 1: snapshot the instant the trial process exits, BEFORE any
+              # later trial/relaunch can load the project (T8-comp churn source)
+              ev = post_trial_snapshot(n, a.tl_base, sess, out, mcp_log)
+              rec["post_trial_evidence"] = {k: ev.get(k) for k in
+                                           ("comp_count", "comp_names", "error")}
+          return rec
+
+      for lane in lanes:
+          kind = lane[0]
+          label = f"{lane[1]}+{lane[2]}" if kind == "pair" else lane[1]
+          print(f"[{time.strftime('%H:%M:%S')}] {kind} {label}", flush=True)
           ver_now = harness_state()
           with open(out / "harness_log.jsonl", "a") as f:
-              f.write(json.dumps({"pair": f"{a1}+{b1}", "opencode": ver_now,
+              f.write(json.dumps({kind: label, "opencode": ver_now,
                                   "ts": time.strftime("%H:%M:%S")}) + "\n")
           if ver_now != harness0 and not any(d.get("to") == ver_now for d in drift):
-              drift.append({"pair": f"{a1}+{b1}", "from": harness0, "to": ver_now})
-              print(f"  !! HARNESS DRIFT: {harness0} -> {ver_now} at pair {a1}+{b1}.", flush=True)
+              drift.append({kind: label, "from": harness0, "to": ver_now})
+              print(f"  !! HARNESS DRIFT: {harness0} -> {ver_now} at {kind} {label}.", flush=True)
+          names = (lane[1], lane[2]) if kind == "pair" else (lane[1],)
           outmap = {}
-          def go(n):
-              outmap[n] = run_trial(n, B[n], sess, GROUND_RULES)
-          ta = threading.Thread(target=go, args=(a1,)); tb = threading.Thread(target=go, args=(b1,))
-          ta.start(); tb.start(); ta.join(); tb.join()
-          results.extend([outmap[a1], outmap[b1]])
-          with open(out / "wave_summary.jsonl", "a") as f:
-              for n in (a1, b1):
+          threads = [threading.Thread(target=lambda n=n: outmap.__setitem__(
+                         n, run_one(n))) for n in names]
+          for t in threads:
+              t.start()
+          for t in threads:
+              t.join()
+          for n in names:
+              results.append(outmap[n])
+              with open(out / "wave_summary.jsonl", "a") as f:
                   f.write(json.dumps({"task": n, "ok": outmap[n].get("ok"),
                           "turns": outmap[n].get("num_turns"), "tools": outmap[n].get("tool_use_count"),
                           "wall_s": outmap[n].get("wall_s"),
                           "probe_ok": (outmap[n].get("probe") or {}).get("ok"),
                           "probe_attempts": 1 + len(outmap[n].get("probe_attempts", []))}) + "\n")
           time.sleep(15)
-      for n in solo:
-          print(f"[{time.strftime('%H:%M:%S')}] solo {n}", flush=True)
-          results.append(run_trial(n, B[n], sess, GROUND_RULES))
-          with open(out / "wave_summary.jsonl", "a") as f:
-              f.write(json.dumps({"task": n, "ok": results[-1].get("ok"),
-                      "turns": results[-1].get("num_turns"), "tools": results[-1].get("tool_use_count"),
-                      "wall_s": results[-1].get("wall_s"),
-                      "probe_ok": (results[-1].get("probe") or {}).get("ok"),
-                      "probe_attempts": 1 + len(results[-1].get("probe_attempts", []))}) + "\n")
       (out / "wave_results.json").write_text(json.dumps(
           {"trials": results, "harness_start": harness0, "harness": "opencode",
            "harness_drift": drift,

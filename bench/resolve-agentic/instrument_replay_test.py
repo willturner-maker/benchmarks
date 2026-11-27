@@ -152,5 +152,35 @@ for era, wdir in present.items():
         return max(t, key=t.get) if any_completed else "none"
     print(f"        dominant completed-call join form: {dominant(forms)}")
 
+# ---------- 4) fix-1/fix-2 instruments (2026-11-26) --------------------------
+# schedule: forced-solo prefixes keep T7 out of every pair, order preserved
+SEQ = ("T8r1,T8r2,T8r3,F2r1,F2r2,F2r3,T7r1,T7r2,T7r3,T1r1,T1r2,T1r3,"
+       "T2r1,T2r2,T2r3,T3r1,T3r2,T3r3,F1r1,F1r2,F1r3").split(",")
+lanes = drv.build_schedule(SEQ, ("T7",))
+flat = [t for L in lanes for t in L[1:]]
+check("build_schedule: order+coverage preserved, T7 never paired",
+      flat == SEQ and all(not (L[0] == "pair" and (L[1].startswith("T7") or L[2].startswith("T7")))
+                          for L in lanes))
+check("build_schedule: empty prefixes == strict consecutive pairing (26b/26c behavior)",
+      drv.build_schedule(SEQ, ()) == [("pair", SEQ[i], SEQ[i + 1]) for i in range(0, 20, 2)]
+      + [("solo", SEQ[20])])
+
+# tri-state evidence grader (import the grading module too)
+gspec = importlib.util.spec_from_file_location("gr", HERE / "grade_f1f2_wave.py")
+gr = importlib.util.module_from_spec(gspec); gspec.loader.exec_module(gr)
+tri = [({"comp_count": 1, "comp_names": ["Composition 1"]}, "pass"),
+       ({"comp_count": 0, "agent_inwave_readbacks": [1, 1]}, "unmeasurable"),
+       ({"comp_count": 0, "agent_inwave_readbacks": []}, "fail"),
+       ({"comp_count": 0, "agent_inwave_readbacks": [0]}, "fail"),
+       ({"error": "timeline not found"}, "unmeasurable")]
+check("grade_t8_evidence: tri-state (pass / churn-unmeasurable / trap-fail)",
+      all(gr.grade_t8_evidence(ev)[0] == want for ev, want in tri))
+
+# in-wave scanner against RECORDED sessions: T8 read-backs must be found in both eras
+for era in present:
+    rb = drv.agent_inwave_readbacks(present[era] / "sessions" / "T8r1" / "events.json")
+    check(f"{era}: T8r1 in-wave comp read-backs found via events.json",
+          bool(rb) and any(v >= 1 for v in rb), str(rb[:6]))
+
 print("RESULT:", "ALL PASS" if not fails else f"{len(fails)} FAILURES: {fails}")
 sys.exit(1 if fails else 0)
