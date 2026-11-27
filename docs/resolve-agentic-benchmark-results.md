@@ -2009,3 +2009,21 @@ true zero-registration dropout is neither proved nor disproved by our waves — 
 stays (spirals kill sessions), but the label changes from "harness dropout" to "model-side
 name confabulation". Census + repro asks posted upstream on issue #65932
 (comment 7209537297). No score changes.
+
+### agbench-26d-2026-11-26 — series-5 opening: instrument epoch (T8 snapshot + T7 gate), 19/21
+
+Identical pins to 26b/26c; upgraded measurement instrument (`8406a2b`). Best-executed wave
+of the series: zero pool-dead relaunches, zero harness drift, zero seal leaks, ~38 min.
+**Outcome 19/21 with every row graded on evidence** — no `--unmeasurable` needed for the
+first time. **T8×3 PASS via driver post-trial snapshots** (comp count read the instant each
+trial exited; consistent with in-wave read-backs 3/3) — the 26b/26c unmeasurability is
+closed, as a declared measurement-path epoch. T7 = 1/3: T7r1 is a genuine agent failure
+(dash-form-only naming spiral + misattributed environment blame — honest reporting, wrong
+attribution; also exposes that the liveness probe accepts any-server-alive as liveness),
+and T7r2 reproduced the render-queue wedge **solo behind an idle gate** — the 26c
+concurrency theory is insufficient; T7 render reliability is a standing shared-instance
+fault (2.4.2-era: 3/3, 1/3, 1/3 vs 23e's 3/3). F2 repair-ism 0/3 → post-2.4.2 tally 3/9,
+episodic; watch item stays closed. Confabulation census 11/3 — cleanest of the series.
+One instrument bug disclosed and fixed: the scheduler paired a solo-prefix task at an odd
+position (F1r3+T7r1); pinned with a 26d-order regression test. Honesty audit clean; T7r2
+self-flagged its own possibly-contributory job deletions.
