@@ -298,6 +298,112 @@ def parse_events(stdout):
             rec["texts"].append(p.get("text", ""))
     return rec
 
+
+# Name-join FORMS a harness build may emit for MCP tools, newest policy last:
+#   underscore: opencode <= 2.4.1 ("server_tool")
+#   dash:       opencode >= 2.4.2 ("server-tool")  — added after 26a false flags
+#   concat:     opencode >= 2.4.2 model-side form with the join char dropped
+#               ("davinci-resolveproject_manager", seen 26a/26b probe-dead
+#               streams). The name->server boundary is unreconstructable under
+#               dash naming, so a KEEP-server prefix with no separator is also
+#               allowed: the seal is a NAME-PATTERN guard; true pool provenance
+#               is the OPENCODE_CONFIG sealed config (only KEEP servers defined).
+SEAL_FORMS = ("underscore", "dash", "concat")
+
+def _allowed_prefixes(forms=SEAL_FORMS):
+    out = []
+    for n in KEEP:
+        if "underscore" in forms:
+            out.append(n + "_")
+        if "dash" in forms:
+            out.append(n + "-")
+        if "concat" in forms:
+            out.append(n)
+    return tuple(out)
+
+def seal_audit(tool_uses, forms=SEAL_FORMS):
+    """Pure: tool events not belonging to a KEEP server (errored calls come as
+    (name,"error") tuples from parse_events — audit the NAME; the 2.3.2-era bug
+    str(tuple)-started-with "(" and false-flagged errored KEEP calls, seen 3x in
+    171). `forms` is the versioned naming policy; instrument_replay_test.py
+    replays each recorded wave under the forms in force at its dispatch
+    (23e: underscore-only — its 36 recorded "leaks" were the mangled-name
+    confabulation attempts the underscore-only allow-list could not match)."""
+    allowed = _allowed_prefixes(forms)
+    return [str(t) for t in tool_uses
+            if not (t[0] if isinstance(t, (list, tuple)) else t).startswith(allowed)]
+
+
+def classify_pool(stdout):
+    """Pure mirror of the inline probe in _run_trial_attempt (shared constants,
+    minus streaming/kill machinery). The replay test pins this against recorded
+    probe verdicts — if the inline probe and these constants ever drift, the
+    replay test goes red first."""
+    probe = {"ok": False, "dead": False, "why": None, "resolve_err": 0}
+    for line in stdout.splitlines():
+        try:
+            e = json.loads(line)
+        except Exception:
+            continue
+        pt = e.get("part") or {}
+        if e.get("type") == "tool_use":
+            tool = pt.get("tool") or ""
+            st = (pt.get("state") or {})
+            if not probe["ok"] and tool.startswith(LIVE_PREFIXES) and st.get("status") == "completed":
+                probe["ok"] = True
+            if (not probe["ok"] and not probe["dead"] and tool.startswith(RESOLVE_PREFIX)
+                    and st.get("status") == "error"
+                    and POOL_DEAD_ERR in str(st.get("error") or "").lower()):
+                probe["resolve_err"] += 1
+                if probe["resolve_err"] >= RESOLVE_ERR_KILL:
+                    probe["why"] = f"{probe['resolve_err']} Resolve-name rejections, no live completion"
+                    probe["dead"] = True
+        elif e.get("type") == "text" and "POOL_DEAD" in (pt.get("text") or ""):
+            probe["why"] = "agent reported POOL_DEAD"
+            probe["dead"] = True
+    if not probe["ok"] and not probe["dead"] and probe["resolve_err"] >= RESOLVE_ERR_KILL:
+        probe["why"] = f"EOF with {probe['resolve_err']} Resolve-name rejections, 0 completions"
+        probe["dead"] = True
+    return probe
+
+
+# ---- tool-pool manifest (behaviour pin) --------------------------------------
+# The join form of MCP tool names is a HARNESS behaviour, not a server one:
+# 23e (opencode 2.4.1) joined "server_tool"; 26b (2.4.2) joined "server-tool"
+# AND emitted concat forms ("davinci-resolveproject_manager") where the join
+# char vanished. The version stamp did not predict it — the wave discovered it
+# via seal-audit noise. This manifest makes the join form a visible per-wave
+# diff: for every completed (non-errored) Resolve tool name, the longest
+# matching KEEP server prefix decides the form.
+_form_lock = threading.Lock()
+TOOL_FORMS = {}   # server -> {"underscore": n, "dash": n, "concat": n}
+TOOL_NAMES = {}   # raw name -> count over all trials (incl. errored, incl. non-Resolve)
+
+def manifest_observe(tool_uses):
+    with _form_lock:
+        for t in tool_uses:
+            name = t[0] if isinstance(t, (list, tuple)) else t
+            if not name:
+                continue
+            TOOL_NAMES[name] = TOOL_NAMES.get(name, 0) + 1
+            if isinstance(t, (list, tuple)):
+                continue   # join-form census only counts completed calls
+            hits = [s for s in KEEP if name.startswith(s + "_") or name.startswith(s + "-")
+                    or (name.startswith(s) and len(name) > len(s))]
+            if not hits:
+                continue
+            s = max(hits, key=len)
+            form = ("underscore" if name.startswith(s + "_")
+                    else "dash" if name.startswith(s + "-") else "concat")
+            TOOL_FORMS.setdefault(s, {"underscore": 0, "dash": 0, "concat": 0})[form] += 1
+
+def manifest_report(opencode_version):
+    return {"captured_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+            "opencode": opencode_version,
+            "join_forms_completed_only": TOOL_FORMS,
+            "distinct_tool_names": len(TOOL_NAMES),
+            "top_names": dict(sorted(TOOL_NAMES.items(), key=lambda kv: -kv[1])[:25])}
+
 GLOBAL_AGENTS = pathlib.Path.home() / ".config" / "opencode" / "AGENTS.md"
 
 def trial_agents():
@@ -323,9 +429,13 @@ def trial_agents():
             "attempt the brief and do not substitute other tools.\n")
 
 LIVE_PREFIXES = ("davinci-resolve_", "davinci-resolve-builtin_",
-                 "davinci-resolve-", "davinci-resolve-builtin-")  # real pool name forms;
-# dash-join forms added 2026-11-26: opencode 2.4.2 names MCP tools "server-tool"
-# (underscore join in 2.4.1); pre-fix, 26a probe never saw a LIVE completion.
+                 "davinci-resolve-", "davinci-resolve-builtin-")
+# Dash forms added 2026-11-26 to accept confabulated name variants in liveness/
+# seal matching. CORRECTION (replay evidence, instrument_replay_test.py, 2026-11-26):
+# the completed-call manifest shows COMPLETED tool names stayed UNDERSCORE-joined
+# in both 23e (2.4.1) and 26b (2.4.2) — the dash/concat forms occur only in
+# ERRORED model-side attempts (confabulation/dropout signature), NOT a harness
+# rename as first recorded in 26b's RECORD. Broad acceptance kept defensively.
 RESOLVE_PREFIX = "davinci-resolve"   # any Resolve MCP tool, any name form
 RESOLVE_ERR_KILL = 6                 # rejections with zero completions => dropout burst
 POOL_DEAD_ERR = "no tool named"      # harness rejection for tools absent from the session pool
@@ -441,15 +551,9 @@ def _run_trial_attempt(name, full, sess_root, prior_attempts):
     rec = {"task": name, "ok": p.returncode == 0 and not probe["dead"],
            "wall_s": round(time.time() - t0, 1), "probe": probe}
     ev = parse_events(stdout)
-    # live seal audit: every tool event must be a KEEP MCP tool ("server_tool" naming).
-    # NOTE: errored calls are stored as (name, "error") tuples (parse_events) — audit the NAME.
-    # (2.3.2-era bug: str(tuple) starts with "(" so errored KEEP-server calls false-flagged;
-    #  seen 3x in agbench-171, fixed at the 2.4.1 smoke 2026-11-23.)
-    allowed = tuple(f"{n}_" for n in KEEP) + tuple(f"{n}-" for n in KEEP)
-    # dash-join prefixes added 2026-11-26 for opencode 2.4.2 "server-tool" naming
-    # (underscore join in 2.4.1). False-flag seen in aborted wave 26a (T1r1-attempt0).
-    leaks = [str(t) for t in ev["tool_uses"]
-             if not (t[0] if isinstance(t, (list, tuple)) else t).startswith(allowed)]
+    # live seal audit + tool-pool manifest (see seal_audit / manifest_observe above).
+    manifest_observe(ev["tool_uses"])
+    leaks = seal_audit(ev["tool_uses"])
     rec.update({"seal_leaks": leaks})
     if leaks:
         print(f"  !! SEAL LEAK in {name}: {leaks}", flush=True)
@@ -545,6 +649,9 @@ def main():
            "harness_drift": drift,
            "task_set": {"hard": ["T3", "T7", "T8", "F1", "F2"], "smoke": ["T1", "T2"]},
            "tl_base": a.tl_base, "render_root": a.render_root}, indent=1))
+      (out / "tool_manifest.json").write_text(json.dumps(
+          manifest_report(harness0), indent=1))
+      print(f"tool manifest: {json.dumps(manifest_report(harness0)['join_forms_completed_only'])}", flush=True)
       print(f"WAVE DONE — {out}", flush=True)
 
     finally:
