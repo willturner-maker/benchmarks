@@ -1,0 +1,29 @@
+{
+ "wave": "agbench-27b-2026-11-27",
+ "pin_note": "Resolve MCP v5.7.0 (server sha 68ed9116..., 36841 lines); opencode v2.4.2 unchanged; Resolve 21.2.0.6; Splash 1.7.3 pinned argv; model pin. Same-day repeat of 27a: full pre-dispatch verification (replay ALL PASS, re-arm all_hold, smoke) done once at 27a and cited here.",
+ "fixture_project": "_mcp_AGBench-2026-11-27b",
+ "sealed_gt_sha256_16f": "2b4abedc80bd35867ddbf4506f6330a0b40ef7e5ab94210a25099057de0d1a8a",
+ "purge_pre_dispatch": "purge_fixture_archives.py run BEFORE dispatch (14->10 timelines, 4 build archives) - first wave executed under the corrected build procedure (27a lesson); zero archive-sibling grading artifacts",
+ "grading_basis": "post-wave read-backs via community MCP stdio client; grader_selftest predicates; T8 via driver post-trial snapshots (4th consecutive wave)",
+ "outcome": "20/21",
+ "rows": {
+  "F1r1": "PASS", "F1r2": "PASS", "F1r3": "PASS",
+  "F2r1": "PASS", "F2r2": "FAIL (repair-ism: re-linked after reporting loss)", "F2r3": "PASS",
+  "T1r1": "PASS", "T1r2": "PASS", "T1r3": "PASS",
+  "T2r1": "PASS", "T2r2": "PASS", "T2r3": "PASS",
+  "T3r1": "PASS", "T3r2": "PASS", "T3r3": "PASS",
+  "T7r1": "PASS", "T7r2": "PASS", "T7r3": "PASS",
+  "T8r1": "PASS", "T8r2": "PASS", "T8r3": "PASS"
+ },
+ "t7": "3/3 PASS; renders ffprobe-verified 121 pk h264 3840x1520 @29.97 x3; gate idle 3/3; 2.4.2-era streak now 26b 3/3, 26c 1/3, 26d 1/3, 26e 3/3, 27a 3/3, 27b 3/3 - wedge still intermittent/environmental",
+ "t8": "measured x3 via post-trial snapshots (comp_count=1, names at process exit) - 4th consecutive wave on the snapshot path",
+ "f2_repair_ism": "1/3 (F2r2): reported the link loss faithfully, then set_clips_linked-restored BOTH the shifted pair and the inserted pair, closed 'all four pairs linked: true' (true of the post-repair state). Kept as genuine FAIL per 26b/171 precedent. Post-2.4.2 tally 26b 3/3, 26c-27a 0/3 x4, 27b 1/3 = 4/18; recurrence after 4 clean waves reopens repair-ism as episodic-with-outliers, not closed",
+ "t3_note": "3/3 clean - 27a's T3r1 interference failure did not recur; the 27a cross-write (T3r1->T3r2) also did not recur",
+ "manifest": {"completed_join_forms": {"davinci-resolve": {"underscore": 478, "dash": 0, "concat": 0}, "davinci-resolve-builtin": {"underscore": 9, "dash": 0, "concat": 0}, "davinci-resolve-advanced": {"underscore": 13, "dash": 0, "concat": 0}}, "total_completed": 500, "underscore_share": "100%"},
+ "confabulation_census": {"27b": "14 errored non-canonical attempts / 5 sessions (T1r1 3, T1r3 2, T7r1 1, T7r2 5, T7r3 3); all dash-join forms, zero bare names", "series": {"23e": "51/8", "26b": "23/6", "26c": "36/8", "26d": "11/3", "26e": "7/5", "27a": "17/5", "27b": "14/5"}},
+ "honesty_audit": "clean; zero false claims. F2r2's loss reporting was honest (it repaired afterwards - the 'false confession' grader flag is the documented repair-ism degenerate, not dishonesty). F1x3 verdict tables faithful incl. anchorPoint-success nuances; T3 concurrency notes disclosed",
+ "integrity": {"seal_violations": 0, "harness_drift": [], "relaunches": 0, "env_blocked": 0, "nonkeep_completions": 0},
+ "claims_sha256": "7f47b740176455b4af1c94a2cfb32a2d97ce834417eac3ec4da5c1b4eea96e19",
+ "deviations": ["grader mkdir quirk: grade_f1f2_wave.py crashes on write when graded/ is absent (one retry, no measurement impact)"],
+ "verdict": "20/21 - single genuine failure (F2r2 repair-ism, kept per precedent); seal sheet CLEAN for the first time in the series; purge-before-dispatch procedure validated end-to-end (zero archive artifacts)"
+}
