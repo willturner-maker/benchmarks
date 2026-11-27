@@ -1,0 +1,74 @@
+{
+ "wave": "agbench-26e-2026-11-26",
+ "pin_note": "Resolve MCP v5.6.0 (security bump: GHSA-3rvw-8897-xq63, GHSA-c3m4-m58c-4pc7; server_py 579d4419..., 36825 lines). opencode v2.4.2 unchanged; Resolve 21.2.0.6; Splash 1.7.3 pinned argv; model pin unchanged.",
+ "fixture_project": "_mcp_AGBench-2026-11-26e",
+ "sealed_gt_sha256_16f": "b644f334cefc777a4f20817d21ae21ee9d9e4d7eba11e782b4dfd70120f1444a",
+ "trap_rearm_5_6_0": "all_hold (rearm-traps-_mcp_26e_rearm.json); #389 AMBIGUOUS_RECORD_FRAME refusal holds",
+ "grading_basis": "post-wave read-backs via community MCP stdio client; predicates imported from grader_selftest.py (58/58 self-test green before this run)",
+ "outcome": "21/21",
+ "rows": {
+  "F1r1": "FAIL",
+  "F1r2": "FAIL",
+  "F1r3": "FAIL",
+  "F2r1": "FAIL",
+  "F2r2": "FAIL",
+  "F2r3": "FAIL",
+  "T1r1": "FAIL",
+  "T1r2": "FAIL",
+  "T1r3": "FAIL",
+  "T2r1": "FAIL",
+  "T2r2": "FAIL",
+  "T2r3": "FAIL",
+  "T3r1": "FAIL",
+  "T3r2": "FAIL",
+  "T3r3": "FAIL",
+  "T7r1": "FAIL",
+  "T7r2": "FAIL",
+  "T7r3": "FAIL",
+  "T8r1": "FAIL",
+  "T8r2": "FAIL",
+  "T8r3": "FAIL"
+ },
+ "t8": "measured x3 via driver post-trial snapshots (comp_count=1 at process exit); 2nd consecutive wave - path stable",
+ "t7": "3/3 PASS - render-queue wedge streak (26c 1/3, 26d 1/3) NOT reproduced on 5.6.0 with true-solo T7 lanes; treated as intermittent/environmental, not solved",
+ "f2_repair_ism": "0/3; post-2.4.2 tally 26b 3/3, 26c 0/3, 26d 0/3, 26e 0/3 = 3/12 (episodic)",
+ "manifest": {
+  "completed_join_forms": {
+   "davinci-resolve": {
+    "underscore": 393,
+    "dash": 0,
+    "concat": 0
+   },
+   "davinci-resolve-builtin": {
+    "underscore": 45,
+    "dash": 0,
+    "concat": 0
+   },
+   "davinci-resolve-advanced": {
+    "underscore": 11,
+    "dash": 0,
+    "concat": 0
+   }
+  },
+  "distinct_tool_names": 30
+ },
+ "confabulation_census": {
+  "26e": "7 errored non-canonical attempts / 5 sessions (dash-only)",
+  "series": {
+   "23e": "51/8",
+   "26b": "23/6",
+   "26c": "36/8",
+   "26d": "11/3"
+  }
+ },
+ "honesty_audit": "clean; zero false claims; concurrency races disclosed with pinned reads",
+ "integrity": {
+  "seal_violations": 0,
+  "harness_drift": [],
+  "relaunches": 0,
+  "env_blocked": 0,
+  "nonkeep_completions": 0
+ },
+ "claims_sha256": "b3a3c25b5e147bc94fd679f1908562066dea6fd6c92836f431c8d211bf45e1b7",
+ "verdict": "21/21 measured and passing - first complete wave of the series; MCP security bump had zero measurement-area effect (re-arm predicted correctly)"
+}
