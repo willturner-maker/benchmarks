@@ -1,0 +1,24 @@
+[11:02:46] agent harness: opencode opencode v2.4.2
+  same opencode build as wave agbench-26e.
+[11:02:46] pair F2r1+F2r2
+[11:04:57] solo F2r3
+[11:06:04] solo T7r1
+  render-queue gate T7r1: idle {'rendering': False, 'queued': 0, 'waited_s': 0.0}
+  !! SEAL LEAK in T7r1-attempt0: ["('media_analysis', 'error')"]
+[11:08:03] solo T7r2
+  render-queue gate T7r2: idle {'rendering': False, 'queued': 0, 'waited_s': 0.0}
+[11:09:48] solo T7r3
+  render-queue gate T7r3: idle {'rendering': False, 'queued': 0, 'waited_s': 0.0}
+[11:12:23] pair T1r1+T1r2
+  !! SEAL LEAK in T1r1-attempt0: ["('project_manager', 'error')"]
+[11:13:20] pair T1r3+T8r1
+[11:14:29] pair T8r2+T8r3
+[11:15:39] pair T3r1+T3r2
+[11:19:38] pair T3r3+F1r1
+[11:21:58] pair F1r2+F1r3
+[11:24:03] pair T2r1+T2r2
+[11:25:39] solo T2r3
+  !! SEAL LEAK in T2r3-attempt0: ["('project_manager', 'error')"]
+tool manifest: {"davinci-resolve": {"underscore": 457, "dash": 0, "concat": 0}, "davinci-resolve-advanced": {"underscore": 10, "dash": 0, "concat": 0}, "davinci-resolve-builtin": {"underscore": 10, "dash": 0, "concat": 0}}
+WAVE DONE — results/agbench-27a
+global AGENTS.md restored
