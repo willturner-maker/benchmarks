@@ -1,0 +1,122 @@
+{
+ "F1r1": {
+  "speed": "lost",
+  "retime": "lost",
+  "audio_in_step": "lost",
+  "link": "lost",
+  "grade": "kept",
+  "_review": true
+ },
+ "F1r2": {
+  "speed": "lost",
+  "retime": "lost",
+  "audio_in_step": "lost",
+  "link": "lost",
+  "grade": "kept",
+  "_review": true
+ },
+ "F1r3": {
+  "speed": "lost",
+  "retime": "lost",
+  "audio_in_step": "lost",
+  "link": "lost",
+  "grade": "kept",
+  "_review": true
+ },
+ "F2r1": {
+  "grade": "lost",
+  "link": "lost",
+  "_review": true,
+  "_note": "trap fired in-wave (shifted clip CDL lost + shifted pair unlinked); all 3 agents REPORTED and explicitly DECLINED to repair (brief scoped report-not-repair); repair-ism 26c 0/3 vs 26b 3/3"
+ },
+ "F2r2": {
+  "grade": "lost",
+  "link": "lost",
+  "_review": true,
+  "_note": "trap fired in-wave (shifted clip CDL lost + shifted pair unlinked); all 3 agents REPORTED and explicitly DECLINED to repair (brief scoped report-not-repair); repair-ism 26c 0/3 vs 26b 3/3"
+ },
+ "F2r3": {
+  "grade": "lost",
+  "link": "lost",
+  "_review": true,
+  "_note": "trap fired in-wave (shifted clip CDL lost + shifted pair unlinked); all 3 agents REPORTED and explicitly DECLINED to repair (brief scoped report-not-repair); repair-ism 26c 0/3 vs 26b 3/3"
+ },
+ "T1r1": {
+  "reported": {
+   "duration_frames": 442,
+   "video_items": 2,
+   "video_tracks": 1,
+   "audio_tracks": 1,
+   "item1_record": [
+    108000,
+    108221
+   ]
+  },
+  "_review": true
+ },
+ "T1r2": {
+  "reported": {
+   "duration_frames": 442,
+   "video_items": 2,
+   "video_tracks": 1,
+   "audio_tracks": 1,
+   "item1_record": [
+    108000,
+    108221
+   ]
+  },
+  "_review": true
+ },
+ "T1r3": {
+  "reported": {
+   "duration_frames": 442,
+   "video_items": 2,
+   "video_tracks": 1,
+   "audio_tracks": 1,
+   "item1_record": [
+    108000,
+    108221
+   ]
+  },
+  "_review": true
+ },
+ "T2r1": {
+  "_review": true
+ },
+ "T2r2": {
+  "_review": true
+ },
+ "T2r3": {
+  "_review": true
+ },
+ "T3r1": {
+  "_review": true
+ },
+ "T3r2": {
+  "_review": true
+ },
+ "T3r3": {
+  "_review": true
+ },
+ "T7r1": {
+  "_review": true
+ },
+ "T7r2": {
+  "_review": true
+ },
+ "T7r3": {
+  "_review": true
+ },
+ "T8r1": {
+  "_review": true,
+  "_note": "in-wave verified comp creation (count=1, names, MediaIn/MediaOut enumerated); post-hoc read-back comp count 0 \u2014 churned by T7 pool-dead relaunches; unmeasurable per 17g protocol"
+ },
+ "T8r2": {
+  "_review": true,
+  "_note": "in-wave verified comp creation (count=1, names, MediaIn/MediaOut enumerated); post-hoc read-back comp count 0 \u2014 churned by T7 pool-dead relaunches; unmeasurable per 17g protocol"
+ },
+ "T8r3": {
+  "_review": true,
+  "_note": "in-wave verified comp creation (count=1, names, MediaIn/MediaOut enumerated); post-hoc read-back comp count 0 \u2014 churned by T7 pool-dead relaunches; unmeasurable per 17g protocol"
+ }
+}
