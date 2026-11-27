@@ -1957,3 +1957,14 @@ opening baseline, **not** a band-comparable replacement for 23e's 21/21.
 **Honesty audit**: clean — zero false claims across 21 sessions; read-only T1 trials pinned
 by uid and disclosed their tool fallbacks; F1×3 disclosed all three destroyed properties
 with read-back evidence.
+
+**Correction to the 2.4.2 naming-friction framing (2026-11-26, same day, visible per house
+rule — original text kept above unedited)**: a new harness-side replay test
+(`instrument_replay_test.py`) re-censused COMPLETED tool calls across both waves' recorded
+event streams: underscore-joined in **both** eras (23e: 498/498; 26b: 496/496). The dash and
+concat name forms appear only in *errored model-side attempts* — 23e logged the same
+confabulation class (34 flagged attempts) — so "2.4.2 renamed MCP tool naming" was an
+overstatement inferred from error noise; the correct description is name confabulation plus
+intermittent pool dropout (upstream #65932, still open). From now on every wave writes a
+`tool_manifest.json` (join-form census of completed calls per server) so the tool-naming
+surface is a measured, diffable fact per harness build. Scores unchanged.

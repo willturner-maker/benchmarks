@@ -109,3 +109,19 @@ _mcp_AGBench-<next> --fresh` → `purge_fixture_archives.py <proj>` → `derive_
 results/agbench-<next> --render-root <RUNBOOK §3 path> --order "<rotation>"` (dispatch in a
 shell with a long-enough timeout) → `extract_claims_17h.py` + operator review →
 `grade_f1f2_wave.py` (add `--unmeasurable T8` only if churn is unavoidable).
+
+**Correction (2026-11-26, visible per house rule — original text above kept unedited)**: the
+"naming friction" story in this RECORD overstated the cause. `instrument_replay_test.py`
+(commit `7d63773`) replayed both waves' event streams through the harness-side instrument
+and censused the COMPLETED tool-call names: **underscore-joined in both eras** (23e/2.4.1:
+498 completed Resolve calls, all `server_tool`; 26b/2.4.2: 496 completed, all `server_tool`).
+The dash/concat name forms (`davinci-resolve-project_manager`,
+`davinci-resolveproject_manager`) occur **only in errored model-side attempts** — the same
+confabulation class 23e itself logged (34 flagged attempts) — and the pool-rejection pattern
+matches the still-open #65932 dropout, not a harness rename. Opencode 2.4.2 therefore did
+NOT rename MCP tool registration as first recorded here. The driver's dash/concat
+acceptance (`10089cf`) stays as defensive broadening against confabulated names, and the
+from-now-on tool-pool manifest (`tool_manifest.json`, per wave) makes the join form of
+completed calls a directly-diffable fact instead of an inference from error noise. Score and
+deviations above are unaffected: the failures attributed to "naming friction" are correctly
+described as model-side name confabulation + intermittent pool dropout.
