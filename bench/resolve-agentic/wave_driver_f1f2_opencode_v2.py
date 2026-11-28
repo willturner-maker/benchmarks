@@ -32,9 +32,13 @@ RESULTS_ROOT = REPO / "bench" / "resolve-agentic" / "results"
 DEFAULT_TL_BASE = "_mcp_AGBench-YYYY-MM-DDb"
 DEFAULT_OUT = REPO / "bench" / "resolve-agentic" / "results" / "YYYY-MM-DDb-opencode-f1f2-wave"
 DEFAULT_RENDER_ROOT = "/Volumes/YourVolume/local.AI/resolve-audio-analysis/agbench_YYYY-MM-DDb"
-MODEL = "splash/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S"
+# Cross-model rows (2026-11-27): AGBENCH_MODEL overrides the served model id, keeping the
+# 'splash/<repo>:<quant>' form so the seal/usage attribution works unchanged; AGBENCH_CONTEXT
+# aligns the client context limit with the swap model's engine limit. Defaults are the pinned
+# rows — every previously published wave stays reproducible untouched.
+MODEL = os.environ.get("AGBENCH_MODEL", "splash/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF:IQ3_S")
 PROVIDER_BASE_URL = "http://127.0.0.1:8000/v1"
-CONTEXT_TOKENS = 262144
+CONTEXT_TOKENS = int(os.environ.get("AGBENCH_CONTEXT", "262144"))
 # Output ceiling for trial configs. 16384 is the SEALED value for the tier-4 series
 # (waves 18l/18m ran under it); do not change it mid-series. The engine-side thinking
 # budget moved 16384 -> 32768 on 2026-11-19, so the next brief family opts in to the
