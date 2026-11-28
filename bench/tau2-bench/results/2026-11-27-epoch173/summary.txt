@@ -1,0 +1,51 @@
+
+### airline: 50 tasks x 3 trials = 150 sims (150 scored, 0 unscored)
+  mean reward 0.8733  pass^1 0.8733  pass^2 0.8200  pass^3 0.7800   (independent-trials pass^2 would print 0.8378)
+  tasks both-pass 39  trials disagree 8  all-trials-fail 3
+  termination {'user_stop': 150}
+  tool calls 1066 (mean 7.11/sim)  completions 2279  prompt 11,749,842 tok  completion 755,885 tok
+  per-call depth max 20,578 tok = 0.132x KV budget, 0.078x window
+  reward_basis present {'DB': 150, 'COMMUNICATE': 150}  |  db_match 135/150 (scored component)
+  upstream printed reward 0.8733 pass^1 0.873 pass^2 0.820 -> re-derivation AGREES
+
+### retail: 74 tasks x 3 trials = 222 sims (222 scored, 0 unscored)
+  mean reward 0.7703  pass^1 0.7703  pass^2 0.6306  pass^3 0.5405   (independent-trials pass^2 would print 0.6772)
+  tasks both-pass 40  trials disagree 31  all-trials-fail 3
+  termination {'user_stop': 222}
+  tool calls 1542 (mean 6.95/sim)  completions 3499  prompt 18,016,192 tok  completion 761,083 tok
+  per-call depth max 14,432 tok = 0.093x KV budget, 0.055x window
+  reward_basis present {'DB': 222, 'NL_ASSERTION': 216}  |  db_match 171/222 (scored component)
+  upstream printed reward 0.7703 pass^1 0.770 pass^2 0.631 -> re-derivation AGREES
+
+### telecom: 114 tasks x 3 trials = 342 sims (342 scored, 0 unscored)
+  mean reward 0.9240  pass^1 0.9240  pass^2 0.8567  pass^3 0.7982   (independent-trials pass^2 would print 0.8791)
+  tasks both-pass 91  trials disagree 23  all-trials-fail 0
+  termination {'user_stop': 342}
+  tool calls 5497 (mean 16.07/sim)  completions 11695  prompt 83,189,709 tok  completion 1,615,943 tok
+  per-call depth max 15,300 tok = 0.098x KV budget, 0.058x window
+  reward_basis present {'ENV_ASSERTION': 342, 'ACTION': 60}  |  db_match 90/342 (INFORMATIONAL ONLY - not in reward_basis)
+  upstream printed reward 0.9240 pass^1 0.924 pass^2 0.857 -> re-derivation AGREES
+
+### engine samples: 1352 over 225 min
+  benchmark request-samples 3961, prompt_tokens 379..18,637, kv_mode {'resident': 3961}
+  benchmark concurrency histogram {0: 4, 1: 12, 2: 62, 3: 1272, 4: 1, 5: 1}
+  co-tenant request-samples 45, max 173,458 tokens, kv_mode {'resident': 6, 'spill': 39}
+  pages_active 0..5946 (190,272 tok = 1.22x KV budget)
+  queued max 1  prefilling max 3  decoding max 4
+  decode_batches_by_width lifetime high-water {'b1': 95411, 'b2': 65024, 'b3': 262837, 'b4': 3971}
+  spill_moves: delta 9365
+  kv_demotions: delta 8962
+  suspensions: delta 8
+  admission peaks {'waiting': 2, 'waiting_memory': 1, 'waiting_concurrency': 2, 'held_behind_refusal': 1, 'suspended': 1, 'restoring': 1}
+
+### engine lifetime-counter deltas over the wave
+  metrics.prefill_input_tokens     1,814,904 -> 6,284,240  delta 4,469,336
+  metrics.decode_output_tokens     492,789 -> 3,645,212  delta 3,152,423
+  metrics.drafted_tokens           601,603 -> 4,163,246  delta 3,561,643
+  metrics.accepted_draft_tokens    345,525 -> 2,596,567  delta 2,251,042
+  cache.reused_tokens            81,175,776 -> 193,897,760  delta 112,721,984
+  cache.hits                     1,247 -> 18,773  delta 17,526
+  cache.hit_rate                 0.967416602 -> 0.9972906927  delta 0.0299
+  disk.kv_demotions             995 -> 9,957  delta 8,962
+  disk.kv_restores              31,876 -> 64,847  delta 32,971
+  disk.written_bytes            67,570,073,600 -> 692,715,913,216  delta 625,145,839,616

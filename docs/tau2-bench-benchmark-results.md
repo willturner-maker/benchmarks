@@ -579,5 +579,20 @@ pre-registered n=3 tiebreaker (`2026-11-23-pass3-171-n3/`: **0.8613**, top of th
 after are 1.7.1-epoch; the determinism corpus is now the standard ~25-min first measurement after any
 engine upgrade.
 
+## Splash 1.7.3 epoch (2026-11-27) — band-top row, no tiebreaker needed (`2026-11-27-epoch173/`)
+
+Standard replay on the pinned 1.7.3 instance: **238 x 3, seed 300, conc 3 — 714/714 scored, 0
+unscored, upstream rewards re-derived and AGREED; wall 3 h 45 m.** AGG
+**0.8656 / 0.7787 / 0.7143, flips 62/238 (26.1 %)** — top of the historical band on all three
+pass^k (prior bests 0.8655/0.7731/0.7059) but only +0.6-0.8 pts, claimed band-consistent, not
+improved; flip rate mid-band. Domain rosters churned in opposite directions (telecom p1 0.9240
+best-ever; retail p2/p3 0.6306/0.5405 worst-ever; retail p1 ties 21-replay exactly) — the rule-9
+signature of lottery noise at n=50-114 with a stationary aggregate. No 1.7.1-style anomaly to
+test: that dip was already closed 11-23 as noise, and the same-day Tier-1 transition probes show
+1.7.1->1.7.3 quiet, so no tiebreaker was pre-registered. Window quality disclosed: not the
+zero-co-tenant standard (45 co-tenant samples, max 173k tok = operator agent-session traffic,
+unambiguously size-separated from the <=18.6k benchmark prompts; spill/demote/suspension deltas
+recorded) — no expected reward-path effect. Evidence: `RECORD.md` + `summary.txt` in the wave dir.
+
 To publish a row, follow the numbered rules in `bench/tau2-bench/README.md` and send a PR — see
 [Community runs](leaderboard.md#community-runs--your-numbers).
