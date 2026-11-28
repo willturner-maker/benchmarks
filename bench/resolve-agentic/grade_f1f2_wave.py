@@ -397,7 +397,12 @@ def main():
            "claims_basis": "operator-extracted per-trial claim maps from the archived reports (full text in sessions/<trial>/events.json)",
            "verdicts": verdicts,
            "outcome": f"{total_pass}/{total_pass+total_fail}"}
-    pathlib.Path(args.out).write_text(json.dumps(out, indent=1))
+    # agbench-27b deviation fix: the write crashed when the parent dir didn't exist
+    # (grade_f1f2_wave.py has always required a pre-made graded/; 27b hit it, 27a patched
+    # with an mkdir+retry). Absolutize + mkdir -p so any --out path works in one pass.
+    out_path = pathlib.Path(args.out).expanduser().resolve()
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(out, indent=1))
     for task in sorted(verdicts):
         v = verdicts[task]
         print(task, "PASS" if "pass" in v else "FAIL", v.get("notes", ""))
